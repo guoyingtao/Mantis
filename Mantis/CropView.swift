@@ -8,10 +8,24 @@
 
 import UIKit
 
+enum CropViewOverlayEdge {
+    case none
+    case topLeft
+    case top
+    case topRight
+    case right
+    case bottomRight
+    case bottom
+    case bottomLeft
+    case left
+}
+
 protocol CropViewDelegate {
     func cropViewDidBecomeResettable(_ cropView: CropView)
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
+
+typealias UpdateCropBoxFrameInfo = (aspectHorizontal: Bool, aspectVertical: Bool, clampMinFromTop: Bool, clampMinFromLeft: Bool)
 
 class CropView: UIView {
     let cropViewMinimumBoxSize = CGFloat(42)
@@ -271,12 +285,6 @@ class CropView: UIView {
         foregroundImageView.frame = superview.convert(backgroundContainerView.frame, to: foregroundContainerView)
     }
     
-    //Note whether we're being aspect transformed horizontally or vertically
-    //Depending on which corner we drag from, set the appropriate min flag to
-    //ensure we can properly clamp the XY value of the box if it overruns the minimum size
-    //(Otherwise the image itself will slide with the drag gesture)
-    typealias UpdateCropBoxFrameInfo = (aspectHorizontal: Bool, aspectVertical: Bool, clampMinFromTop: Bool, clampMinFromLeft: Bool)
-    
     fileprivate func updateCropBoxFrame(withGesturePoint point: CGPoint) {
         let contentFrame = contentBounds()
         
@@ -288,117 +296,23 @@ class CropView: UIView {
         let xDelta = ceil(point.x - panOriginPoint.x)
         let yDelta = ceil(point.y - panOriginPoint.y)
         
-        let info = updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
-        cropBoxFrame = clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
-        checkForCanReset()
-    }
-    
-    fileprivate func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) -> UpdateCropBoxFrameInfo {
-        
         var info = UpdateCropBoxFrameInfo(false, false, false, false)
         
-        func newAspectRatioValid(withNewSize newSize: CGSize) -> Bool {
-            return min(newSize.width, newSize.height) / max(newSize.width, newSize.height) >= minimumAspectRatio
+        if aspectRatioLockEnabled {
+            var cropBoxLockedAspectFrameUpdater = CropBoxLockedAspectFrameUpdater()
+            let aspectInfo = cropBoxLockedAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
+            info.aspectHorizontal = aspectInfo.aspectHorizontal
+            info.aspectVertical = aspectInfo.aspectVertical
+        } else {
+            var cropBoxFreeAspectFrameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: tappedEdge, contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
+            let clampInfo = cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
+            info.clampMinFromLeft = clampInfo.clampMinFromLeft
+            info.clampMinFromTop = clampInfo.clampMinFromTop
         }
         
-        func handleLeftEdgeFrameUpdate(newSize: CGSize) {
-            if newAspectRatioValid(withNewSize: newSize) {
-                cropBoxFrame.origin.x = cropOrignFrame.origin.x + xDelta
-                cropBoxFrame.size.width = newSize.width
-            }
-            
-            info.clampMinFromLeft = true
-        }
-        
-        func handleRightEdgeFrameUpdate(newSize: CGSize) {
-            if newAspectRatioValid(withNewSize: newSize) {
-                cropBoxFrame.size.width = newSize.width
-            }
-        }
-        
-        func handleTopEdgeFrameUpdate(newSize: CGSize) {
-            if newAspectRatioValid(withNewSize: newSize) {
-                cropBoxFrame.origin.y = cropOrignFrame.origin.y + yDelta
-                cropBoxFrame.size.height = newSize.height
-            }
-            
-            info.clampMinFromTop = true
-        }
-        
-        func handleBottomEdgeFrameUpdate(newSize: CGSize) {
-            if newAspectRatioValid(withNewSize: newSize) {
-                cropBoxFrame.size.height = newSize.height
-            }
-        }
-        
-        func getNewCropFrameSize(byTappedEdge tappedEdge: CropViewOverlayEdge) -> CGSize {
-            let tappedEdgeCropFrameUpdateRule: [CropViewOverlayEdge: (xDelta: CGFloat, yDelta: CGFloat)] = [.left: (-xDelta, 0), .right: (xDelta, 0), .top: (0, -yDelta), .bottom: (0, yDelta), .topLeft: (-xDelta, -yDelta), .topRight: (xDelta, -yDelta), .bottomLeft: (-xDelta, yDelta), .bottomRight: (xDelta, yDelta)]
-
-            guard let delta = tappedEdgeCropFrameUpdateRule[tappedEdge] else {
-                return cropOrignFrame.size
-            }
-            
-            return CGSize(width: cropOrignFrame.width + delta.xDelta, height: cropOrignFrame.height + delta.yDelta)
-        }
-        
-        //Current aspect ratio of the crop box in case we need to clamp it
-        let aspectRatio = (cropOrignFrame.size.width / cropOrignFrame.size.height);
-        
-        let newSize = getNewCropFrameSize(byTappedEdge: tappedEdge)
-        switch tappedEdge {
-        case .left:
-            handleLeftEdgeFrameUpdate(newSize: newSize)
-        case .right:
-            handleRightEdgeFrameUpdate(newSize: newSize)
-        case .top:
-            handleTopEdgeFrameUpdate(newSize: newSize)
-        case .bottom:
-            handleBottomEdgeFrameUpdate(newSize: newSize)
-        case .topLeft:
-            handleTopEdgeFrameUpdate(newSize: newSize)
-            handleLeftEdgeFrameUpdate(newSize: newSize)
-        case .topRight:
-            handleTopEdgeFrameUpdate(newSize: newSize)
-            handleRightEdgeFrameUpdate(newSize: newSize)
-        case .bottomLeft:
-            handleBottomEdgeFrameUpdate(newSize: newSize)
-            handleLeftEdgeFrameUpdate(newSize: newSize)
-        case .bottomRight:
-            handleBottomEdgeFrameUpdate(newSize: newSize)
-            handleRightEdgeFrameUpdate(newSize: newSize)
-        default:
-            print("none")
-        }
-        
-        return info
-    }
-    
-    fileprivate func clamp(cropBoxFrame: CGRect, withOriginalFrame originalFrame: CGRect, andUpdateCropBoxFrameInfo info: UpdateCropBoxFrameInfo) -> CGRect {
-        var cropBoxFrame = cropBoxFrame
-        let contentFrame = contentBounds()
-        
-        //The absolute max/min size the box may be in the bounds of the crop view
-        let minSize = CGSize(width: cropViewMinimumBoxSize, height: cropViewMinimumBoxSize)
-        let maxSize = contentFrame.size
-        
-        //clamp the box to ensure it doesn't go beyond the bounds we've set
-        
-        
-        // Clamp the width if it goes over
-        
-        //Clamp the minimum size
-        
-        //Clamp the maximum size
-        
-        //Clamp the X position of the box to the interior of the cropping bounds
-        
-        //Clamp the Y postion of the box to the interior of the cropping bounds
-        
-        //Once the box is completely shrunk, clamp its ability to move
-        
-        //Once the box is completely shrunk, clamp its ability to move
-        
-        return cropBoxFrame
+        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame)
+        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
+        checkForCanReset()
     }
     
     fileprivate func resetLayoutToDefault(animated: Bool = false) {
@@ -518,20 +432,6 @@ extension CropView: UIGestureRecognizerDelegate {
         }
         
         return true
-    }
-}
-
-extension CropView {
-    enum CropViewOverlayEdge {
-        case none
-        case topLeft
-        case top
-        case topRight
-        case right
-        case bottomRight
-        case bottom
-        case bottomLeft
-        case left
     }
 }
 

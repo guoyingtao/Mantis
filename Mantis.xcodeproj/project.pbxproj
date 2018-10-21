@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		5F0629A4217BAF5C0064A5E7 /* CropScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */; };
 		5F0629A6217BB05F0064A5E7 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A5217BB05F0064A5E7 /* CropView.swift */; };
+		5F0629A8217D353F0064A5E7 /* CropBoxFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A7217D353F0064A5E7 /* CropBoxFrameUpdater.swift */; };
+		5F0629AA217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */; };
+		5F0629AC217D41680064A5E7 /* CropBoxClamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */; };
 		5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B14217A9EDF00582874 /* AppDelegate.swift */; };
 		5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B16217A9EDF00582874 /* ViewController.swift */; };
 		5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B18217A9EDF00582874 /* Main.storyboard */; };
@@ -31,6 +34,9 @@
 /* Begin PBXFileReference section */
 		5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropScrollView.swift; sourceTree = "<group>"; };
 		5F0629A5217BB05F0064A5E7 /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
+		5F0629A7217D353F0064A5E7 /* CropBoxFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFrameUpdater.swift; sourceTree = "<group>"; };
+		5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdater.swift; sourceTree = "<group>"; };
+		5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxClamper.swift; sourceTree = "<group>"; };
 		5FC10B11217A9EDF00582874 /* Mantis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mantis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC10B14217A9EDF00582874 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5FC10B16217A9EDF00582874 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +98,9 @@
 				5FC10B34217AB85A00582874 /* CropOverlayView.swift */,
 				5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */,
 				5F0629A5217BB05F0064A5E7 /* CropView.swift */,
+				5F0629A7217D353F0064A5E7 /* CropBoxFrameUpdater.swift */,
+				5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */,
+				5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";
@@ -206,10 +215,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F0629AC217D41680064A5E7 /* CropBoxClamper.swift in Sources */,
 				5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */,
 				5F0629A4217BAF5C0064A5E7 /* CropScrollView.swift in Sources */,
 				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,
+				5F0629A8217D353F0064A5E7 /* CropBoxFrameUpdater.swift in Sources */,
 				5FC10B35217AB85A00582874 /* CropOverlayView.swift in Sources */,
+				5F0629AA217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
 				5F0629A6217BB05F0064A5E7 /* CropView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
