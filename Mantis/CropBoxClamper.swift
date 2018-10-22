@@ -71,12 +71,12 @@ struct CropBoxClamper {
         cropBoxFrame.origin.y = min(cropBoxFrame.origin.y, contentFrame.maxY - minSize.height)
 
         //Once the box is completely shrunk, clamp its ability to move
-        if (info.clampMinFromLeft && cropBoxFrame.width <= minSize.width + CGFloat(Float.ulpOfOne)) {
+        if (info.clampMinFromLeft && cropBoxFrame.width <= minSize.width + CGFloat.ulpOfOne) {
             cropBoxFrame.origin.x = cropOriginFrame.maxX - minSize.width;
         }
         
         //Once the box is completely shrunk, clamp its ability to move
-        if (info.clampMinFromTop && cropBoxFrame.height <= minSize.height + CGFloat(Float.ulpOfOne)) {
+        if (info.clampMinFromTop && cropBoxFrame.height <= minSize.height + CGFloat.ulpOfOne) {
             cropBoxFrame.origin.y = cropOriginFrame.maxY - minSize.height;
         }
         
