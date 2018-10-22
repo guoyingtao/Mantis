@@ -303,14 +303,18 @@ class CropView: UIView {
             let aspectInfo = cropBoxLockedAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             info.aspectHorizontal = aspectInfo.aspectHorizontal
             info.aspectVertical = aspectInfo.aspectVertical
+            
+            cropBoxFrame = cropBoxLockedAspectFrameUpdater.cropBoxFrame
         } else {
             var cropBoxFreeAspectFrameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: tappedEdge, contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
             let clampInfo = cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             info.clampMinFromLeft = clampInfo.clampMinFromLeft
             info.clampMinFromTop = clampInfo.clampMinFromTop
+            
+            cropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }
         
-        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame)
+        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
         cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
         checkForCanReset()
     }
