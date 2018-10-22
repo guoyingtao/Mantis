@@ -30,8 +30,6 @@ struct CropBoxFreeAspectFrameUpdater {
     
     mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) -> CropBoxFrameClampInfo {
         var info = CropBoxFrameClampInfo(false, false)
-        //Current aspect ratio of the crop box in case we need to clamp it
-        let aspectRatio = (cropOriginFrame.size.width / cropOriginFrame.size.height);
         
         func newAspectRatioValid(withNewSize newSize: CGSize) -> Bool {
             return min(newSize.width, newSize.height) / max(newSize.width, newSize.height) >= minimumAspectRatio
@@ -77,7 +75,7 @@ struct CropBoxFreeAspectFrameUpdater {
             return CGSize(width: cropOriginFrame.width + delta.xDelta, height: cropOriginFrame.height + delta.yDelta)
         }
         
-        func handleFreeAspectRatio() {
+        func updateCropBoxFrame() {
             let newSize = getNewCropFrameSize(byTappedEdge: tappedEdge)
             switch tappedEdge {
             case .left:
@@ -104,6 +102,8 @@ struct CropBoxFreeAspectFrameUpdater {
                 print("none")
             }
         }
+        
+        updateCropBoxFrame()
         
         return info
     }

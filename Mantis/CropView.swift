@@ -299,7 +299,7 @@ class CropView: UIView {
         var info = UpdateCropBoxFrameInfo(false, false, false, false)
         
         if aspectRatioLockEnabled {
-            var cropBoxLockedAspectFrameUpdater = CropBoxLockedAspectFrameUpdater()
+            var cropBoxLockedAspectFrameUpdater = CropBoxLockedAspectFrameUpdater(tappedEdge: tappedEdge, contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
             let aspectInfo = cropBoxLockedAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             info.aspectHorizontal = aspectInfo.aspectHorizontal
             info.aspectVertical = aspectInfo.aspectVertical
