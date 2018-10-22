@@ -163,13 +163,27 @@ class CropView: UIView {
     
     var imageViewFrame: CGRect {
         get {
-            return CGRect.zero
+            var frame = CGRect.zero
+            frame.origin.x = -scrollView.contentOffset.x
+            frame.origin.y = -scrollView.contentOffset.y
+            frame.size = scrollView.contentSize
+            return frame;
         }
     }
     
+    var delegate: CropViewDelegate?
+    
     var canBeReset: Bool = true {
         didSet {
+            if canBeReset == oldValue {
+                return
+            }
             
+            if canBeReset {
+                delegate?.cropViewDidBecomeResettable(self)
+            } else {
+                delegate?.cropViewDidBecomeNonResettable(self)
+            }
         }
     }
     
@@ -184,7 +198,30 @@ class CropView: UIView {
     
     fileprivate var angle = 0 {
         didSet {
+            var newAngle = angle
             
+            if newAngle % 90 != 0 {
+                newAngle = 0
+            }
+            
+            if initialSetupPerformed == false {
+                restoreAngle = newAngle
+                return
+            }
+            
+            // Negative values are allowed, so rotate clockwise or counter clockwise depending
+            // on direction
+            if (newAngle >= 0) {
+                while (labs(self.angle) != labs(newAngle)) {
+                    rotateImageNinetyDegrees(animated: false, clockwise: true)
+                }
+            }
+            else {
+                while (-labs(self.angle) != -labs(newAngle)) {
+                    rotateImageNinetyDegrees(animated: false, clockwise: false)
+                }
+            }
+
         }
     }
     
@@ -235,7 +272,6 @@ class CropView: UIView {
     
     fileprivate var resetTimer: Timer?
     
-    // Fix-Me
     init(image: UIImage) {
         super.init(frame: CGRect.zero)
         self.image = image
@@ -251,10 +287,10 @@ class CropView: UIView {
         
         setupScrollView()
         setupBackgroundContainer(parentView: scrollView)
+        setupForegroundContainer(parentView: self)
         setupOverlayView()
         setGridOverlayView()
         setupTranslucencyView()
-        setupForegroundContainer(parentView: self)
         
         // The pan controller to recognize gestures meant to resize the grid view
         gridPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gridPanGestureRecognized))

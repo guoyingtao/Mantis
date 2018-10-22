@@ -14,9 +14,21 @@ class ViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    guard let image = UIImage(named: "sunflower.jpg") else {
+        return
+    }
+    
+    let cropView = CropView(image: image)
+    cropView.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+    view.addSubview(cropView)
+    
+//    cropView.translatesAutoresizingMaskIntoConstraints = false
+//    cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//    cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//    cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//    cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
   }
-
 
 }
 
