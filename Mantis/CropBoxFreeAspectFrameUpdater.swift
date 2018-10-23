@@ -1,5 +1,5 @@
 //
-//  CropBoxFrameUpdater.swift
+//  CropBoxFreeAspectFrameUpdater.swift
 //  Mantis
 //
 //  Created by Echo on 10/21/18.
@@ -77,6 +77,7 @@ struct CropBoxFreeAspectFrameUpdater {
         
         func updateCropBoxFrame() {
             let newSize = getNewCropFrameSize(byTappedEdge: tappedEdge)
+//            print("new size w is \(newSize.width)")
             switch tappedEdge {
             case .left:
                 handleLeftEdgeFrameUpdate(newSize: newSize)

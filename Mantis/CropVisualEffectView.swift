@@ -26,7 +26,7 @@ class CropVisualEffectView: UIVisualEffectView {
 
 extension CropVisualEffectView: CropMaskProtocal {
     func setMask() {
-        let layer = createOverLayer(opacity: 1.0)
+        let layer = createOverLayer(opacity: 0.98)
         
         let maskView = UIView(frame: self.bounds)
         maskView.clipsToBounds = true

@@ -10,8 +10,6 @@ import UIKit
 
 class CropOverlayView: UIView {
     
-    var didFrameChange: (CGRect) -> Void = { _ in }
-    
     let cropOverLayerCornerWidth = CGFloat(20.0)
     var gridHidden = false
     
@@ -21,6 +19,8 @@ class CropOverlayView: UIView {
     fileprivate var verticalGridLines: [CALayer] = []
     fileprivate var borderLineLayer: CALayer = CALayer()
     fileprivate var cornerLayers: [CALayer] = []
+    
+    fileprivate let borderThickness = CGFloat(1.0)
     
     var displayHorizontalGridLine = true {
         didSet {
@@ -55,11 +55,7 @@ class CropOverlayView: UIView {
         didSet {
             if cornerLayers.count > 0 {
                 layoutLines()
-            }
-            
-            if frame != oldValue {
-                didFrameChange(frame)
-            }
+            }            
         }
     }
     
@@ -83,8 +79,11 @@ class CropOverlayView: UIView {
     
     fileprivate func setup() {
         gridHidden = false
+        
         borderLineLayer = createNewLineLayer()
-//        cornerLayers = Array(repeating: createNewLineLayer(), count: 8)
+        borderLineLayer.backgroundColor = UIColor.clear.cgColor
+        borderLineLayer.borderWidth = borderThickness
+        borderLineLayer.borderColor = UIColor.white.cgColor
         
         for _ in 0..<8 {
             cornerLayers.append(createNewLineLayer())
@@ -104,12 +103,20 @@ class CropOverlayView: UIView {
             return
         }
         
-        layoutOuterLines()
-        layoutCornerLines()
+        changeLayerWithoutActions {
+            layoutOuterLines()
+            layoutCornerLines()
+        }        
+    }
+    
+    fileprivate func changeLayerWithoutActions(run: ()-> Void ) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        run()
+        CATransaction.commit()
     }
     
     fileprivate func layoutOuterLines() {
-        let borderThickness = CGFloat(1.0)
         borderLineLayer.frame = CGRect(x: -borderThickness, y: -borderThickness, width: bounds.width + 2 * borderThickness, height: bounds.height + 2 * borderThickness)
         borderLineLayer.backgroundColor = UIColor.clear.cgColor
         borderLineLayer.borderWidth = borderThickness
@@ -121,11 +128,7 @@ class CropOverlayView: UIView {
         
         let topLeftHorizonalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: cropOverLayerCornerWidth, height: borderThickness)
         let topLeftVerticalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: borderThickness, height: cropOverLayerCornerWidth)
-        
-        print(borderLineLayer.frame)
-        print(topLeftHorizonalLayerFrame)
-        print(topLeftVerticalLayerFrame)
-        
+                
         let horizontalDistanceForHCorner = bounds.width + 2 * borderThickness - cropOverLayerCornerWidth
         let verticalDistanceForHCorner = bounds.height + borderThickness
         let horizontalDistanceForVCorner = bounds.width + borderThickness

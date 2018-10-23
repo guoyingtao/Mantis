@@ -52,11 +52,7 @@ class CropView: UIView {
     fileprivate var cropBoxFrame = CGRect.zero {
         didSet {
             if oldValue.equalTo(cropBoxFrame) { return }
-            
-            // Upon init, sometimes the box size is still 0 (or NaN), which can result in CALayer issues
-            if cropBoxFrame.width < CGFloat.ulpOfOne || cropBoxFrame.height < CGFloat.ulpOfOne { return }
-            if cropBoxFrame.width.isNaN || cropBoxFrame.height.isNaN { return }
-            
+
             //clamp the cropping region to the inset boundaries of the screen
             let contentFrame = contentBounds
             let xOrigin = ceil(contentFrame.origin.x)
@@ -71,7 +67,7 @@ class CropView: UIView {
             let yOrigin = ceil(contentFrame.origin.y)
             let yDelta = cropBoxFrame.origin.y - yOrigin
             cropBoxFrame.origin.y = floor(max(cropBoxFrame.origin.y, yOrigin))
-            
+
             if yDelta < CGFloat.ulpOfOne {
                 cropBoxFrame.size.height += yDelta
             }
@@ -79,36 +75,35 @@ class CropView: UIView {
             //given the clamped X/Y values, make sure we can't extend the crop box beyond the edge of the screen in the current state
             let maxWidth = (contentFrame.size.width + contentFrame.origin.x) - cropBoxFrame.origin.x
             cropBoxFrame.size.width = floor(min(cropBoxFrame.size.width, maxWidth))
-            
+
             let maxHeight = (contentFrame.size.height + contentFrame.origin.y) - cropBoxFrame.origin.y
             cropBoxFrame.size.height = floor(min(cropBoxFrame.size.height, maxHeight))
             
             //Make sure we can't make the crop box too small
             cropBoxFrame.size.width  = max(cropBoxFrame.size.width, cropViewMinimumBoxSize)
             cropBoxFrame.size.height = max(cropBoxFrame.size.height, cropViewMinimumBoxSize)
-
-            foregroundContainerView.frame = cropBoxFrame; //set the clipping view to match the new rect
-            gridOverlayView.frame = cropBoxFrame; //set the new overlay view to match the same region
             
+            gridOverlayView.frame = cropBoxFrame
+            dimmingView.adaptMaskTo(match: cropBoxFrame)
+            visualEffectView.adaptMaskTo(match: cropBoxFrame)
+            
+            /*
             //reset the scroll view insets to match the region of the new crop rect
             scrollView.contentInset = UIEdgeInsets(top: cropBoxFrame.minY, left: cropBoxFrame.minX, bottom: bounds.maxY - cropBoxFrame.maxY, right: bounds.minX - cropBoxFrame.maxX)
             
             //if necessary, work out the new minimum size of the scroll view so it fills the crop box
-            let imageSize = backgroundContainerView.bounds.size
+            let imageSize = imageView.bounds.size
             let scale = max(cropBoxFrame.size.height/imageSize.height, cropBoxFrame.size.width/imageSize.width)
             scrollView.minimumZoomScale = scale
             
             //make sure content isn't smaller than the crop box
-            var size = self.scrollView.contentSize;
-            size.width = floor(size.width);
-            size.height = floor(size.height);
-            scrollView.contentSize = size;
+            var size = self.scrollView.contentSize
+            size.width = floor(size.width)
+            size.height = floor(size.height)
+            scrollView.contentSize = size
 
-            //IMPORTANT: Force the scroll view to update its content after changing the zoom scale
-            scrollView.zoomScale = scrollView.zoomScale;
-
-            //re-align the background content to match
-            matchForegroundToBackground()
+//            //IMPORTANT: Force the scroll view to update its content after changing the zoom scale
+            scrollView.zoomScale = scrollView.zoomScale */
         }
     }
     
@@ -296,6 +291,7 @@ class CropView: UIView {
         return rect
     } ()
     
+    fileprivate var imageView: UIImageView!
     fileprivate var dimmingView: CropDimmingView!
     fileprivate var visualEffectView: CropVisualEffectView!
     fileprivate var angleDashboard: AngleDashboard!
@@ -322,9 +318,9 @@ class CropView: UIView {
     
     private func setup() {
         setupScrollView()
-        
-        backgroundImageView = createImageView(image: image)
-        scrollView.addSubview(backgroundImageView)
+
+        imageView = createImageView(image: image)
+        scrollView.addSubview(imageView)
         
         setupTranslucencyView()
         setupOverlayView()
@@ -338,18 +334,17 @@ class CropView: UIView {
     }
     
     func adaptForCropBox() {
-        gridOverlayView.frame = initialCropBoxRect
+        cropBoxFrame = initialCropBoxRect
+        self.backgroundColor = .blue
         scrollView.frame = CGRect(origin: .zero, size: bounds.size)
-        dimmingView.adaptMaskTo(match: initialCropBoxRect)
-        visualEffectView.adaptMaskTo(match: initialCropBoxRect)
-        backgroundImageView.frame = initialCropBoxRect
+        imageView.frame = initialCropBoxRect
     }
     
     private func setupScrollView() {
         scrollView = CropScrollView(frame: bounds)
         scrollView.touchesBegan = { [weak self] in self?.startEditing() }
         scrollView.touchesEnded = { [weak self] in self?.startResetTimer() }
-        scrollView.backgroundColor = .red
+//        scrollView.backgroundColor = .red
         addSubview(scrollView)
     }
     
@@ -363,6 +358,7 @@ class CropView: UIView {
     private func setupOverlayView() {
         dimmingView = CropDimmingView()
         addSubview(dimmingView)
+        dimmingView.alpha = 0
     }
     
     private func setupTranslucencyView() {
@@ -370,29 +366,11 @@ class CropView: UIView {
         addSubview(visualEffectView)
     }
     
-    private func setupForegroundContainer(parentView: UIView) {
-        foregroundImageView = createImageView(image: image)
-        foregroundContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-        foregroundContainerView.clipsToBounds = true
-        foregroundContainerView.isUserInteractionEnabled = false
-        foregroundContainerView.addSubview(foregroundImageView)
-        parentView.addSubview(foregroundContainerView)
-    }
-    
     private func setGridOverlayView() {
         gridOverlayView = CropOverlayView()
         gridOverlayView.isUserInteractionEnabled = false
         gridOverlayView.gridHidden = true
         addSubview(gridOverlayView)
-        
-        gridOverlayView.didFrameChange = {[weak self] targetRect in
-            guard let self = self else {
-                return
-            }
-            
-            self.dimmingView.adaptMaskTo(match: targetRect)
-            self.visualEffectView.adaptMaskTo(match: targetRect)
-        }
     }
     
     func performInitialSetup() {
@@ -467,7 +445,6 @@ class CropView: UIView {
         originalContentOffset = scrollView.contentOffset
         
         checkForCanReset()
-        matchForegroundToBackground()
     }
     
     fileprivate func prepareforRotation() {
@@ -520,24 +497,10 @@ class CropView: UIView {
         offset.x = min(offset.x, maximumOffset.x)
         offset.y = min(offset.y, maximumOffset.y)
         scrollView.contentOffset = offset
-        
-        matchForegroundToBackground()
-    }
-    
-    fileprivate func matchForegroundToBackground() {
-        guard disableForgroundMatching == false else {
-            return
-        }
-        
-        //We can't simply match the frames since if the images are rotated, the frame property becomes unusable
-        guard let superview = backgroundContainerView.superview else {
-            return
-        }
-        
-        foregroundImageView.frame = superview.convert(backgroundContainerView.frame, to: foregroundContainerView)
     }
     
     fileprivate func updateCropBoxFrame(withGesturePoint point: CGPoint) {
+
         let contentFrame = contentBounds
         
         var point = point
@@ -566,9 +529,9 @@ class CropView: UIView {
             cropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }
         
-        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
-        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
-        checkForCanReset()
+//        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
+//        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
+//        checkForCanReset()
     }
     
     fileprivate func resetLayoutToDefault(animated: Bool = false) {
@@ -633,7 +596,6 @@ class CropView: UIView {
         frame.origin.x = (scaledOffset.x * scale) - scrollView.contentInset.left
         frame.origin.y = (scaledOffset.y * scale) - scrollView.contentInset.top
         scrollView.contentOffset = frame.origin
-        print("========")
     }
     
     fileprivate func update(toImageCropFrame imageCropframe: CGRect) {
@@ -686,8 +648,14 @@ class CropView: UIView {
         let topRect = CGRect(origin: touchRect.origin, size: CGSize(width: touchRect.width, height: touchUnit))
         if topRect.contains(point) { return .top }
         
-        let leftRect = CGRect(origin: touchRect.origin, size: CGSize(width: touchRect.width, height: touchUnit))
-        if leftRect.contains(point) { return .top }
+        let leftRect = CGRect(origin: touchRect.origin, size: CGSize(width: touchUnit, height: touchRect.height))
+        if leftRect.contains(point) { return .left }
+        
+        let rightRect = CGRect(origin: CGPoint(x: touchRect.maxX - touchUnit, y: touchRect.origin.y), size: CGSize(width: touchUnit, height: touchRect.height))
+        if rightRect.contains(point) { return .right }
+        
+        let bottomRect = CGRect(origin: CGPoint(x: touchRect.origin.x, y: touchRect.maxY - touchUnit), size: CGSize(width: touchRect.width, height: touchUnit))
+        if bottomRect.contains(point) { return .bottom }
         
         return .none
     }
@@ -761,7 +729,7 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        matchForegroundToBackground()
+        
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -799,18 +767,53 @@ extension CropView: UIScrollViewDelegate {
 }
 
 extension CropView {
+    func showDimmingBackground() {
+        UIView.animate(withDuration: 0.1) {
+            self.dimmingView.alpha = 1
+            self.visualEffectView.alpha = 0
+        }
+    }
+    
+    func showVisualEffectBackground() {
+        UIView.animate(withDuration: 0.5) {
+            self.dimmingView.alpha = 0
+            self.visualEffectView.alpha = 1
+        }
+    }
+}
+
+extension CropView {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        showDimmingBackground()
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        showVisualEffectBackground()
+    }
+}
+
+extension CropView {
     @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: self)
         
+        
         if recognizer.state == .began {
             startEditing()
+            panOriginPoint = point
             cropOrignFrame = cropBoxFrame
             tappedEdge = cropEdge(forPoint: point)
+            
+            showDimmingBackground()
         }
         
         if recognizer.state == .ended {
             startResetTimer()
+            showVisualEffectBackground()
         }
+        
+        updateCropBoxFrame(withGesturePoint: point)
     }
 }
 
@@ -948,8 +951,6 @@ extension CropView {
             
             disableForgroundMatching = false
             
-            //Explicitly update the matching at the end of the calculations
-            matchForegroundToBackground()
         }
         
         if animated == false {
@@ -1201,7 +1202,6 @@ extension CropView {
         //if the scroll view's new scale is 1 and the new offset is equal to the old, will not trigger the delegate 'scrollViewDidScroll:'
         //so we should call the method manually to update the foregroundImageView's frame
         if (offset.x == self.scrollView.contentOffset.x && offset.y == self.scrollView.contentOffset.y && scale == 1) {
-            matchForegroundToBackground()
         }
         scrollView.contentOffset = offset
         
