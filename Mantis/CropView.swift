@@ -286,11 +286,11 @@ class CropView: UIView {
         backgroundColor = UIColor(white: 0.12, alpha: 1)
         
         setupScrollView()
-        setupBackgroundContainer(parentView: scrollView)
-        setupForegroundContainer(parentView: self)
-        setupOverlayView()
-        setGridOverlayView()
+        setupBackgroundContainer(parentView: scrollView)        
         setupTranslucencyView()
+        setupOverlayView()
+        setupForegroundContainer(parentView: self)
+        setGridOverlayView()
         
         // The pan controller to recognize gestures meant to resize the grid view
         gridPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gridPanGestureRecognized))
@@ -371,7 +371,7 @@ class CropView: UIView {
             restoreAngle = 0
         }
         
-        if (restoreImageCropFrame.isEmpty) {
+        if (!restoreImageCropFrame.isEmpty) {
             imageCropFrame = restoreImageCropFrame
             restoreImageCropFrame = .zero
         }
@@ -594,6 +594,7 @@ class CropView: UIView {
         frame.origin.x = (scaledOffset.x * scale) - scrollView.contentInset.left
         frame.origin.y = (scaledOffset.y * scale) - scrollView.contentInset.top
         scrollView.contentOffset = frame.origin
+        print("========")
     }
     
     fileprivate func update(toImageCropFrame imageCropframe: CGRect) {
@@ -841,7 +842,7 @@ extension CropView {
         }
     }
     
-    fileprivate func moveCroppedContentToCenter(animated: Bool = false) {
+    func moveCroppedContentToCenter(animated: Bool = false) {
         if internalLayoutDisabled { return }
 
         var cropBoxFrame = self.cropBoxFrame

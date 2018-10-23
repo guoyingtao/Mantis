@@ -20,8 +20,13 @@ class ViewController: UIViewController {
     }
     
     let cropView = CropView(image: image)
-    cropView.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+    cropView.frame = view.frame
+    cropView.delegate = self
+    cropView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     view.addSubview(cropView)
+    
+    cropView.moveCroppedContentToCenter()
+    cropView.performInitialSetup()
     
 //    cropView.translatesAutoresizingMaskIntoConstraints = false
 //    cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -32,3 +37,12 @@ class ViewController: UIViewController {
 
 }
 
+extension ViewController: CropViewDelegate {
+    func cropViewDidBecomeResettable(_ cropView: CropView) {
+        
+    }
+    
+    func cropViewDidBecomeNonResettable(_ cropView: CropView) {
+        
+    }
+}
