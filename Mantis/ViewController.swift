@@ -23,11 +23,7 @@ class ViewController: UIViewController {
         cropView = CropView(image: image)
         cropView.frame = view.frame
         cropView.delegate = self
-        //    cropView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(cropView)
-        
-        //    cropView.moveCroppedContentToCenter()
-        //    cropView.performInitialSetup()
         
         cropView.translatesAutoresizingMaskIntoConstraints = false
         cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true

@@ -73,13 +73,6 @@ class CropOverlayView: UIView {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func createNewLineView() -> UIView {
-        let view = UIView(frame: CGRect.zero)
-        view.backgroundColor = .white
-        addSubview(view)
-        return view
-    }
-    
     fileprivate func createNewLineLayer() -> CALayer {
         let layer = CALayer()
         layer.frame = CGRect.zero
@@ -91,7 +84,11 @@ class CropOverlayView: UIView {
     fileprivate func setup() {
         gridHidden = false
         borderLineLayer = createNewLineLayer()
-        cornerLayers = Array(repeating: createNewLineLayer(), count: 8)
+//        cornerLayers = Array(repeating: createNewLineLayer(), count: 8)
+        
+        for _ in 0..<8 {
+            cornerLayers.append(createNewLineLayer())
+        }
     }
     
     override func didMoveToSuperview() {
@@ -103,6 +100,10 @@ class CropOverlayView: UIView {
     }
     
     fileprivate func layoutLines() {
+        guard bounds.isEmpty == false else {
+            return
+        }
+        
         layoutOuterLines()
         layoutCornerLines()
     }
@@ -120,10 +121,15 @@ class CropOverlayView: UIView {
         
         let topLeftHorizonalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: cropOverLayerCornerWidth, height: borderThickness)
         let topLeftVerticalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: borderThickness, height: cropOverLayerCornerWidth)
-        let horizontalCornerHorizontalDistance = bounds.width + 2 * borderThickness - 2 * cropOverLayerCornerWidth
-        let horizontalCornerVerticalDistance = bounds.height + borderThickness
-        let veticalCornerHorizontalDistance = bounds.width + borderThickness
-        let veticalCornerVetticalDistance = bounds.height + 2 * borderThickness - 2 * cropOverLayerCornerWidth
+        
+        print(borderLineLayer.frame)
+        print(topLeftHorizonalLayerFrame)
+        print(topLeftVerticalLayerFrame)
+        
+        let horizontalDistanceForHCorner = bounds.width + 2 * borderThickness - cropOverLayerCornerWidth
+        let verticalDistanceForHCorner = bounds.height + borderThickness
+        let horizontalDistanceForVCorner = bounds.width + borderThickness
+        let veticalDistanceForVCorner = bounds.height + 2 * borderThickness - cropOverLayerCornerWidth
         
         for (i, line) in cornerLayers.enumerated() {
             let lineType: CornerLineType = CropOverlayView.CornerLineType(rawValue: i) ?? .topLeftVertical
@@ -133,17 +139,17 @@ class CropOverlayView: UIView {
             case .topLeftVertical:
                 line.frame = topLeftVerticalLayerFrame
             case .topRightHorizontal:
-                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: horizontalCornerHorizontalDistance, dy: horizontalCornerVerticalDistance)
+                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: horizontalDistanceForHCorner, dy: 0)
             case .topRightVertical:
-                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: veticalCornerHorizontalDistance, dy: 0)
+                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: horizontalDistanceForVCorner, dy: 0)
             case .bottomRightHorizontal:
-                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: horizontalCornerHorizontalDistance, dy: veticalCornerVetticalDistance)
+                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: horizontalDistanceForHCorner, dy: verticalDistanceForHCorner)
             case .bottomRightVertical:
-                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: veticalCornerHorizontalDistance, dy: 0)
+                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: horizontalDistanceForVCorner, dy: veticalDistanceForVCorner)
             case .bottomLeftHorizontal:
-                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: 0, dy: horizontalCornerVerticalDistance)
+                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: 0, dy: verticalDistanceForHCorner)
             case .bottomLeftVertical:
-                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: 0, dy: veticalCornerVetticalDistance)
+                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: 0, dy: veticalDistanceForVCorner)
             }
         }
     }
