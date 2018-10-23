@@ -272,6 +272,34 @@ class CropView: UIView {
     
     fileprivate var resetTimer: Timer?
     
+    private lazy var initialCropBoxRect: CGRect = {
+        guard let image = image else { return .zero }
+        guard image.size.width > 0 && image.size.height > 0 else { return .zero }
+        
+        let frame = CGRect(x: cropViewPadding, y: cropViewPadding, width: self.bounds.width - cropViewPadding * 2, height: self.bounds.height - cropViewPadding * 2)
+        
+        let imageRatio = image.size.width / image.size.height
+        let viewRatio = frame.width / frame.height
+        
+        var rect = CGRect(origin: .zero, size: image.size)
+        if viewRatio > imageRatio {
+            rect.size.width *= frame.height / rect.height
+            rect.size.height = frame.height
+        } else {
+            rect.size.height *= frame.width / rect.width
+            rect.size.width = frame.width
+        }
+        
+        rect.origin.x = frame.midX - rect.width / 2
+        rect.origin.y = frame.midY - rect.height / 2
+        
+        return rect
+    } ()
+    
+    fileprivate var dimmingView: CropDimmingView!
+    fileprivate var visualEffectView: CropVisualEffectView!
+    fileprivate var angleDashboard: AngleDashboard!
+    
     init(image: UIImage) {
         super.init(frame: CGRect.zero)
         self.image = image
@@ -282,14 +310,24 @@ class CropView: UIView {
         super.init(coder: aDecoder)
     }
     
-    private func setup() {
-        backgroundColor = UIColor(white: 0.12, alpha: 1)
+    func reset() {
+        scrollView.removeFromSuperview()
+        dimmingView.removeFromSuperview()
+        visualEffectView.removeFromSuperview()
+        gridOverlayView.removeFromSuperview()
+        angleDashboard.removeFromSuperview()
         
+        setup()
+    }
+    
+    private func setup() {
         setupScrollView()
-        setupBackgroundContainer(parentView: scrollView)        
+        
+        backgroundImageView = createImageView(image: image)
+        scrollView.addSubview(backgroundImageView)
+        
         setupTranslucencyView()
         setupOverlayView()
-        setupForegroundContainer(parentView: self)
         setGridOverlayView()
         
         // The pan controller to recognize gestures meant to resize the grid view
@@ -299,10 +337,20 @@ class CropView: UIView {
         addGestureRecognizer(gridPanGestureRecognizer)
     }
     
+    func adaptForCropBox() {
+        gridOverlayView.frame = initialCropBoxRect
+        scrollView.frame = CGRect(origin: .zero, size: bounds.size)
+        dimmingView.adaptMaskTo(match: initialCropBoxRect)
+        visualEffectView.adaptMaskTo(match: initialCropBoxRect)
+        backgroundImageView.frame = initialCropBoxRect
+    }
+    
     private func setupScrollView() {
         scrollView = CropScrollView(frame: bounds)
         scrollView.touchesBegan = { [weak self] in self?.startEditing() }
         scrollView.touchesEnded = { [weak self] in self?.startResetTimer() }
+        scrollView.backgroundColor = .red
+        addSubview(scrollView)
     }
     
     private func createImageView(image: UIImage) -> UIImageView {
@@ -312,32 +360,14 @@ class CropView: UIView {
         return imageView
     }
     
-    private func setupBackgroundContainer(parentView: UIView) {
-        backgroundImageView = createImageView(image: image)
-        backgroundContainerView = UIView(frame: backgroundImageView.bounds)
-        backgroundContainerView.addSubview(backgroundImageView)
-        parentView.addSubview(backgroundContainerView)
-    }
-    
     private func setupOverlayView() {
-        overlayView = UIView(frame: bounds)
-        overlayView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        overlayView.backgroundColor = backgroundColor?.withAlphaComponent(0.35)
-        overlayView.isUserInteractionEnabled = false
-        addSubview(overlayView)
+        dimmingView = CropDimmingView()
+        addSubview(dimmingView)
     }
     
     private func setupTranslucencyView() {
-        translucencyEffect = UIBlurEffect(style: .dark)
-        translucencyView = UIVisualEffectView(effect: translucencyEffect)
-        
-        guard let translucencyView = self.translucencyView else { return }
-        
-        translucencyView.frame = self.bounds
-        translucencyView.isHidden = false
-        translucencyView.isUserInteractionEnabled = false
-        translucencyView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        addSubview(translucencyView)
+        visualEffectView = CropVisualEffectView()
+        addSubview(visualEffectView)
     }
     
     private func setupForegroundContainer(parentView: UIView) {
@@ -350,10 +380,19 @@ class CropView: UIView {
     }
     
     private func setGridOverlayView() {
-        gridOverlayView = CropOverlayView(frame: foregroundContainerView.frame)
+        gridOverlayView = CropOverlayView()
         gridOverlayView.isUserInteractionEnabled = false
         gridOverlayView.gridHidden = true
         addSubview(gridOverlayView)
+        
+        gridOverlayView.didFrameChange = {[weak self] targetRect in
+            guard let self = self else {
+                return
+            }
+            
+            self.dimmingView.adaptMaskTo(match: targetRect)
+            self.visualEffectView.adaptMaskTo(match: targetRect)
+        }
     }
     
     func performInitialSetup() {

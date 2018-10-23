@@ -10,6 +10,8 @@ import UIKit
 
 class CropOverlayView: UIView {
     
+    var didFrameChange: (CGRect) -> Void = { _ in }
+    
     let cropOverLayerCornerWidth = CGFloat(20.0)
     var gridHidden = false
     
@@ -53,6 +55,10 @@ class CropOverlayView: UIView {
         didSet {
             if cornerLayers.count > 0 {
                 layoutLines()
+            }
+            
+            if frame != oldValue {
+                didFrameChange(frame)
             }
         }
     }

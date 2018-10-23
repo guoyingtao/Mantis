@@ -6,26 +6,26 @@
 //  Copyright © 2018 Echo. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
+fileprivate let minOverLayerUnit: CGFloat = 30
+fileprivate let initialFrameLength: CGFloat = 1000
+
 protocol CropMaskProtocal where Self: UIView {
-    func initialize(targetCropRect cropRect: CGRect)
+    func initialize()
     func setMask()
     func adaptMaskTo(match cropRect: CGRect)
 }
 
 extension CropMaskProtocal {
-    func initialize(targetCropRect cropRect: CGRect) {
+    func initialize() {
         setInitialFrame()
         setMask()
-        adaptMaskTo(match: cropRect)
     }
     
     private func setInitialFrame() {
-        let initialLength: CGFloat = 10000
-        let width = initialLength
-        let height = initialLength
+        let width = initialFrameLength
+        let height = initialFrameLength
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         
@@ -36,17 +36,22 @@ extension CropMaskProtocal {
     }
     
     func adaptMaskTo(match cropRect: CGRect) {
-        
+        let scaleX = cropRect.width / minOverLayerUnit
+        let scaleY = cropRect.height / minOverLayerUnit
+
+        transform = CGAffineTransform(scaleX: scaleX, y: scaleY)
+
+        self.frame.origin.x = cropRect.midX - self.frame.width / 2
+        self.frame.origin.y = cropRect.midY - self.frame.height / 2
     }
     
     func createOverLayer(opacity: Float) -> CAShapeLayer {
-        let minOverLayerUnit: CGFloat = 10
-        let x = self.frame.midX - minOverLayerUnit / 2
-        let y = self.frame.midY - minOverLayerUnit / 2
+        let x = bounds.midX - minOverLayerUnit / 2
+        let y = bounds.midY - minOverLayerUnit / 2
         let initialRect = CGRect(x: x, y: y, width: minOverLayerUnit, height: minOverLayerUnit)
         
         let path = UIBezierPath(rect: self.bounds)
-        let innerPath = UIBezierPath(ovalIn: initialRect)
+        let innerPath = UIBezierPath(rect: initialRect)
         path.append(innerPath)
         path.usesEvenOddFillRule = true
         

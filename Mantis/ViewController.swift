@@ -11,30 +11,35 @@ import UIKit
 // https://www.youtube.com/watch?v=AxN7HmKcKgE
 
 class ViewController: UIViewController {
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
+    var cropView: CropView!
     
-    guard let image = UIImage(named: "sunflower.jpg") else {
-        return
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        guard let image = UIImage(named: "sunflower.jpg") else {
+            return
+        }
+        
+        cropView = CropView(image: image)
+        cropView.frame = view.frame
+        cropView.delegate = self
+        //    cropView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(cropView)
+        
+        //    cropView.moveCroppedContentToCenter()
+        //    cropView.performInitialSetup()
+        
+        cropView.translatesAutoresizingMaskIntoConstraints = false
+        cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
-    let cropView = CropView(image: image)
-    cropView.frame = view.frame
-    cropView.delegate = self
-    cropView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    view.addSubview(cropView)
+    override func viewDidLayoutSubviews() {
+        cropView.adaptForCropBox()
+    }
     
-    cropView.moveCroppedContentToCenter()
-    cropView.performInitialSetup()
-    
-//    cropView.translatesAutoresizingMaskIntoConstraints = false
-//    cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//    cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//    cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//    cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-  }
-
 }
 
 extension ViewController: CropViewDelegate {

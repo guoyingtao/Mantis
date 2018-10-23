@@ -9,9 +9,9 @@
 import UIKit
 
 class CropDimmingView: UIView {
-    convenience init(targetCropRect cropRect: CGRect) {
+    convenience init() {
         self.init(frame: CGRect.zero)
-        initialize(targetCropRect: cropRect)
+        initialize()
     }
 }
 

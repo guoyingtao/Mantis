@@ -12,11 +12,11 @@ class CropVisualEffectView: UIVisualEffectView {
     
     fileprivate var translucencyEffect: UIVisualEffect?
     
-    convenience init(targetCropRect cropRect: CGRect) {
+    convenience init() {
         let translucencyEffect = UIBlurEffect(style: .dark)
         self.init(effect: translucencyEffect)
         self.translucencyEffect = translucencyEffect
-        initialize(targetCropRect: cropRect)
+        initialize()
     }
         
     func toggle(visible: Bool) {
