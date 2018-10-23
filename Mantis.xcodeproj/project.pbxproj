@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		5F0629A4217BAF5C0064A5E7 /* CropScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */; };
 		5F0629A6217BB05F0064A5E7 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A5217BB05F0064A5E7 /* CropView.swift */; };
-		5F0629A8217D353F0064A5E7 /* CropBoxFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A7217D353F0064A5E7 /* CropBoxFrameUpdater.swift */; };
+		5F0629A8217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A7217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift */; };
 		5F0629AA217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */; };
 		5F0629AC217D41680064A5E7 /* CropBoxClamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */; };
 		5F0629AE217D81500064A5E7 /* AngleDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629AD217D81500064A5E7 /* AngleDashboard.swift */; };
@@ -39,7 +39,7 @@
 /* Begin PBXFileReference section */
 		5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropScrollView.swift; sourceTree = "<group>"; };
 		5F0629A5217BB05F0064A5E7 /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
-		5F0629A7217D353F0064A5E7 /* CropBoxFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFrameUpdater.swift; sourceTree = "<group>"; };
+		5F0629A7217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFreeAspectFrameUpdater.swift; sourceTree = "<group>"; };
 		5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdater.swift; sourceTree = "<group>"; };
 		5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxClamper.swift; sourceTree = "<group>"; };
 		5F0629AD217D81500064A5E7 /* AngleDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleDashboard.swift; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 				5FC10B34217AB85A00582874 /* CropOverlayView.swift */,
 				5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */,
 				5F0629A5217BB05F0064A5E7 /* CropView.swift */,
-				5F0629A7217D353F0064A5E7 /* CropBoxFrameUpdater.swift */,
+				5F0629A7217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift */,
 				5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */,
 				5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */,
 				5F0629AD217D81500064A5E7 /* AngleDashboard.swift */,
@@ -238,7 +238,7 @@
 				5F0629E7217EAC1A0064A5E7 /* CropVisualEffectView.swift in Sources */,
 				5F0629AE217D81500064A5E7 /* AngleDashboard.swift in Sources */,
 				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,
-				5F0629A8217D353F0064A5E7 /* CropBoxFrameUpdater.swift in Sources */,
+				5F0629A8217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
 				5FC10B35217AB85A00582874 /* CropOverlayView.swift in Sources */,
 				5F0629EB217EADC20064A5E7 /* CropMaskProtocal.swift in Sources */,
 				5F0629AA217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
