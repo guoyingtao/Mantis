@@ -311,12 +311,15 @@ class CropView: UIView {
         dimmingView.removeFromSuperview()
         visualEffectView.removeFromSuperview()
         gridOverlayView.removeFromSuperview()
-        angleDashboard.removeFromSuperview()
+//        angleDashboard.removeFromSuperview()
         
         setup()
+        adaptForCropBox()
     }
     
     private func setup() {
+        backgroundColor =  UIColor(white: 0.12, alpha: 1)
+        
         setupScrollView()
 
         imageView = createImageView(image: image)
@@ -331,19 +334,32 @@ class CropView: UIView {
         gridPanGestureRecognizer.delegate = self
         scrollView.panGestureRecognizer.require(toFail: gridPanGestureRecognizer)
         addGestureRecognizer(gridPanGestureRecognizer)
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        addGestureRecognizer(doubleTap)
+    }
+    
+    @objc func handleDoubleTap(recognizer: UIPanGestureRecognizer) {
+        reset()
     }
     
     func adaptForCropBox() {
         cropBoxFrame = initialCropBoxRect
-        self.backgroundColor = .blue
         scrollView.frame = CGRect(origin: .zero, size: bounds.size)
         imageView.frame = initialCropBoxRect
     }
     
     private func setupScrollView() {
         scrollView = CropScrollView(frame: bounds)
-        scrollView.touchesBegan = { [weak self] in self?.startEditing() }
-        scrollView.touchesEnded = { [weak self] in self?.startResetTimer() }
+        scrollView.touchesBegan = { [weak self] in
+            self?.startEditing()
+            self?.showDimmingBackground()
+        }
+        scrollView.touchesEnded = { [weak self] in
+            self?.startResetTimer()
+            self?.showVisualEffectBackground()
+        }
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 15.0
         scrollView.delegate = self
@@ -739,16 +755,19 @@ extension CropView: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 //        startEditing()
         canBeReset = true
+        showDimmingBackground()
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
 //        startEditing()
         canBeReset = true
+        showDimmingBackground()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 //        startResetTimer()
         checkForCanReset()
+        showVisualEffectBackground()
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -761,9 +780,11 @@ extension CropView: UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         startResetTimer()
         checkForCanReset()
+        showVisualEffectBackground()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        showVisualEffectBackground()
         if decelerate == false {
             startResetTimer()
         }
@@ -802,7 +823,6 @@ extension CropView {
     @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: self)
         
-        
         if recognizer.state == .began {
             startEditing()
             panOriginPoint = point
@@ -823,7 +843,19 @@ extension CropView {
 
 extension CropView: UIGestureRecognizerDelegate {
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
+        guard gestureRecognizer == self.gridPanGestureRecognizer else { return true }
+        
+        let tapPoint = gestureRecognizer.location(in: self)
+        
+        let frame = gridOverlayView.frame
+        let innerFrame = frame.insetBy(dx: 22, dy: 22)
+        let outerFrame = frame.insetBy(dx: -22, dy: -22)
+        
+        if (innerFrame.contains(tapPoint) || !outerFrame.contains(tapPoint)) {
+            return false
+        }
+        
+        return true
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
