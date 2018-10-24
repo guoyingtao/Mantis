@@ -803,24 +803,57 @@ extension CropView {
     }
 }
 
+private var forCrop = true
+private var currentPoint: CGPoint?
+private var previousPoint: CGPoint?
+private var rotationCal: RotationCalculator?
+
 extension CropView {
     @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: self)
         
         if recognizer.state == .began {
-            startEditing()
-            panOriginPoint = point
-            cropOrignFrame = cropBoxFrame
-            tappedEdge = cropEdge(forPoint: point)
-            showDimmingBackground()
+            if isAngleDashboardTouched(forPoint: point) {
+                forCrop = false
+                rotationCal = RotationCalculator(midPoint: point)
+                currentPoint = point
+                previousPoint = point
+            } else {
+                startEditing()
+                panOriginPoint = point
+                cropOrignFrame = cropBoxFrame
+                tappedEdge = cropEdge(forPoint: point)
+                showDimmingBackground()
+            }
         }
         
         if recognizer.state == .ended {
-            startResetTimer()
+            if forCrop {
+                startResetTimer()
+            } else {
+                currentPoint = nil
+                previousPoint = nil
+                rotationCal = nil
+            }
+            
+            forCrop = true
             showVisualEffectBackground()
         }
         
-        updateCropBoxFrame(withGesturePoint: point)
+        if recognizer.state == .changed {
+            if forCrop {
+                updateCropBoxFrame(withGesturePoint: point)
+            } else {
+                currentPoint = point
+                let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!)
+                print("rotation is \(rotation!)")
+                
+                angleDashboard.rotateDailPlate(by: rotation ?? 0)
+                imageView.transform = imageView.transform.rotated(by: rotation ?? 0)
+                
+                previousPoint = currentPoint
+            }
+        }
     }
 }
 
