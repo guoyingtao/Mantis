@@ -31,12 +31,6 @@ class CropView: UIView {
     let cropViewMinimumBoxSize = CGFloat(42)
     var minimumAspectRatio = CGFloat(0)
     
-    var simpleRenderMode = true {
-        didSet {
-            set(simpleRenderMode: simpleRenderMode, animated: false)
-        }
-    }
-    
     fileprivate var panOriginPoint = CGPoint.zero
     
     fileprivate var contentBounds: CGRect {
@@ -237,7 +231,6 @@ class CropView: UIView {
     fileprivate var restoreImageCropFrame = CGRect.zero
     
     fileprivate var applyInitialCroppedImageFrame = false
-    fileprivate var internalLayoutDisabled = false
     
     fileprivate var cropAdjustingDelay = 0.8
     fileprivate var cropViewPadding = CGFloat(14.0)
@@ -258,24 +251,9 @@ class CropView: UIView {
         guard let image = image else { return .zero }
         guard image.size.width > 0 && image.size.height > 0 else { return .zero }
         
-        let frame = CGRect(x: cropViewPadding, y: cropViewPadding, width: self.bounds.width - cropViewPadding * 2, height: self.bounds.height - cropViewPadding * 2)
-        
-        let imageRatio = image.size.width / image.size.height
-        let viewRatio = frame.width / frame.height
-        
-        var rect = CGRect(origin: .zero, size: image.size)
-        if viewRatio > imageRatio {
-            rect.size.width *= frame.height / rect.height
-            rect.size.height = frame.height
-        } else {
-            rect.size.height *= frame.width / rect.width
-            rect.size.width = frame.width
-        }
-        
-        rect.origin.x = frame.midX - rect.width / 2
-        rect.origin.y = frame.midY - rect.height / 2
-        
-        return rect
+        let outsideRect = contentBounds
+        let insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        return GeometryTools.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
     } ()
     
     fileprivate var imageView: UIImageView!
@@ -400,9 +378,6 @@ class CropView: UIView {
         angleDashboard.frame.origin.y = gridOverlayView.frame.maxY
     }
     
-    func performInitialSetup() {
-        _ = initialSetup
-    }
     // Make sure that it is execued only once
     lazy var initialSetup: Void = {
         layoutInitialImage()
@@ -565,7 +540,7 @@ class CropView: UIView {
         
 //        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
 //        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
-//        checkForCanReset()
+        checkForCanReset()
     }
     
     fileprivate func resetLayoutToDefault(animated: Bool = false) {
@@ -912,10 +887,6 @@ extension CropView {
     }
 
     fileprivate func set(editing: Bool, resetCropbox: Bool, animated: Bool = false) {
-//        if editing == self.editing { return }
-//
-//        self.editing = editing
-        
         gridOverlayView.setGrid(hidden: !editing, animated: animated)
         
         if (resetCropbox) {
@@ -926,8 +897,6 @@ extension CropView {
     }
     
     func moveCroppedContentToCenter(animated: Bool = false) {
-        if internalLayoutDisabled { return }
-
         var cropBoxFrame = self.cropBoxFrame
         
         // Ensure we only proceed after the crop frame has been setup for the first time
@@ -988,21 +957,6 @@ extension CropView {
                 UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: { [weak self] _ in
                     self?.angleDashboard.isHidden = false
                 })
-            }
-        }
-    }
-    
-    fileprivate func set(simpleRenderMode: Bool, animated: Bool = false) {
-        if simpleRenderMode == self.simpleRenderMode { return }
-        
-        self.simpleRenderMode = simpleRenderMode
-        editing = false
-        
-        if animated == false {
-//            toggleTranslucencyView(visible: !simpleRenderMode)
-        } else {
-            UIView.animate(withDuration: 0.25) {
-//                self.toggleTranslucencyView(visible: !simpleRenderMode)
             }
         }
     }
