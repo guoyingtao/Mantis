@@ -28,8 +28,9 @@ protocol CropViewDelegate {
 typealias UpdateCropBoxFrameInfo = (aspectHorizontal: Bool, aspectVertical: Bool, clampMinFromTop: Bool, clampMinFromLeft: Bool)
 
 class CropView: UIView {
-    let cropViewMinimumBoxSize = CGFloat(42)
-    var minimumAspectRatio = CGFloat(0)
+    let cropViewMinimumBoxSize: CGFloat = 42
+    var minimumAspectRatio: CGFloat = 0
+    let angleDashboardHeight: CGFloat = 50
     
     fileprivate var panOriginPoint = CGPoint.zero
     
@@ -38,7 +39,7 @@ class CropView: UIView {
         contentRect.origin.x = cropViewPadding
         contentRect.origin.y = cropViewPadding
         contentRect.size.width = bounds.width - 2 * cropViewPadding
-        contentRect.size.height = bounds.height - 2 * cropViewPadding
+        contentRect.size.height = bounds.height - 2 * cropViewPadding - angleDashboardHeight
     
         return contentRect
     }
@@ -278,6 +279,7 @@ class CropView: UIView {
         gridOverlayView.removeFromSuperview()
         angleDashboard.removeFromSuperview()
         
+        cancelResetTimer()
         setup()
         adaptForCropBox()
     }
@@ -370,7 +372,7 @@ class CropView: UIView {
         let boardLength = min(bounds.width, bounds.height) * 0.8
         let x = (bounds.width - boardLength) / 2
         let y = gridOverlayView.frame.maxY
-        angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: 50))
+        angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
     }
     

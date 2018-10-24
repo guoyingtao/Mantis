@@ -9,25 +9,23 @@
 import UIKit
 
 class CropOverlayView: UIView {
-    
     let cropOverLayerCornerWidth = CGFloat(20.0)
     var gridHidden = false
     
     private var gridLineNumberType: GridLineNumberType = .crop
     
-    fileprivate var horizontalGridLines: [CALayer] = []
-    fileprivate var verticalGridLines: [CALayer] = []
-    fileprivate var borderLineLayer: CALayer = CALayer()
-    fileprivate var cornerLayers: [CALayer] = []
-    
+    fileprivate var horizontalGridLines: [UIView] = []
+    fileprivate var verticalGridLines: [UIView] = []
+    fileprivate var borderLine: UIView = UIView()
+    fileprivate var corner: [UIView] = []
     fileprivate let borderThickness = CGFloat(1.0)
     
     var displayHorizontalGridLine = true {
         didSet {
-            horizontalGridLines.forEach { $0.removeFromSuperlayer() }
+            horizontalGridLines.forEach { $0.removeFromSuperview() }
             
             if displayHorizontalGridLine {
-                horizontalGridLines = Array(repeating: createNewLineLayer(), count: gridLineNumberType.rawValue)
+                horizontalGridLines = Array(repeating: createNewLine(), count: gridLineNumberType.rawValue)
 
             } else {
                 horizontalGridLines = []
@@ -39,10 +37,10 @@ class CropOverlayView: UIView {
     
     var displayVerticalGridLines = true {
         didSet {
-            verticalGridLines.forEach { $0.removeFromSuperlayer() }
+            verticalGridLines.forEach { $0.removeFromSuperview() }
             
             if displayVerticalGridLines {
-                verticalGridLines = Array(repeating: createNewLineLayer(), count:  gridLineNumberType.rawValue)
+                verticalGridLines = Array(repeating: createNewLine(), count:  gridLineNumberType.rawValue)
             } else {
                 verticalGridLines = []
             }
@@ -53,7 +51,7 @@ class CropOverlayView: UIView {
     
     override var frame: CGRect {
         didSet {
-            if cornerLayers.count > 0 {
+            if corner.count > 0 {
                 layoutLines()
             }            
         }
@@ -69,31 +67,31 @@ class CropOverlayView: UIView {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func createNewLineLayer() -> CALayer {
-        let layer = CALayer()
-        layer.frame = CGRect.zero
-        layer.backgroundColor = UIColor.white.cgColor
-        self.layer.addSublayer(layer)
-        return layer
+    fileprivate func createNewLine() -> UIView {
+        let view = UIView()
+        view.frame = CGRect.zero
+        view.backgroundColor = .white
+        addSubview(view)
+        return view
     }
     
     fileprivate func setup() {
         gridHidden = false
         
-        borderLineLayer = createNewLineLayer()
-        borderLineLayer.backgroundColor = UIColor.clear.cgColor
-        borderLineLayer.borderWidth = borderThickness
-        borderLineLayer.borderColor = UIColor.white.cgColor
+        borderLine = createNewLine()
+        borderLine.layer.backgroundColor = UIColor.clear.cgColor
+        borderLine.layer.borderWidth = borderThickness
+        borderLine.layer.borderColor = UIColor.white.cgColor
         
         for _ in 0..<8 {
-            cornerLayers.append(createNewLineLayer())
+            corner.append(createNewLine())
         }
     }
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        if cornerLayers.count > 0 {
+        if corner.count > 0 {
             layoutLines()
         }
     }
@@ -103,24 +101,15 @@ class CropOverlayView: UIView {
             return
         }
         
-        changeLayerWithoutActions {
-            layoutOuterLines()
-            layoutCornerLines()
-        }        
-    }
-    
-    fileprivate func changeLayerWithoutActions(run: ()-> Void ) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        run()
-        CATransaction.commit()
+        layoutOuterLines()
+        layoutCornerLines()
     }
     
     fileprivate func layoutOuterLines() {
-        borderLineLayer.frame = CGRect(x: -borderThickness, y: -borderThickness, width: bounds.width + 2 * borderThickness, height: bounds.height + 2 * borderThickness)
-        borderLineLayer.backgroundColor = UIColor.clear.cgColor
-        borderLineLayer.borderWidth = borderThickness
-        borderLineLayer.borderColor = UIColor.white.cgColor
+        borderLine.frame = CGRect(x: -borderThickness, y: -borderThickness, width: bounds.width + 2 * borderThickness, height: bounds.height + 2 * borderThickness)
+        borderLine.layer.backgroundColor = UIColor.clear.cgColor
+        borderLine.layer.borderWidth = borderThickness
+        borderLine.layer.borderColor = UIColor.white.cgColor
     }
     
     fileprivate func layoutCornerLines() {
@@ -134,7 +123,7 @@ class CropOverlayView: UIView {
         let horizontalDistanceForVCorner = bounds.width + borderThickness
         let veticalDistanceForVCorner = bounds.height + 2 * borderThickness - cropOverLayerCornerWidth
         
-        for (i, line) in cornerLayers.enumerated() {
+        for (i, line) in corner.enumerated() {
             let lineType: CornerLineType = CropOverlayView.CornerLineType(rawValue: i) ?? .topLeftVertical
             switch lineType {
             case .topLeftHorizontal:
@@ -161,8 +150,8 @@ class CropOverlayView: UIView {
         gridHidden = hidden
         
         func setGridLinesShowStatus () {
-            horizontalGridLines.forEach { $0.opacity = hidden ? 0 : 1 }
-            verticalGridLines.forEach { $0.opacity = hidden ? 0 : 1}
+            horizontalGridLines.forEach { $0.alpha = hidden ? 0 : 1 }
+            verticalGridLines.forEach { $0.alpha = hidden ? 0 : 1}
         }
         
         if animated {

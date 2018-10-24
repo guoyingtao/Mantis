@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         view.addSubview(cropView)
 
         cropView.translatesAutoresizingMaskIntoConstraints = false
-        cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        cropView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
         cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
