@@ -82,6 +82,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5F0629F02180FE100064A5E7 /* AngleRiot */ = {
+			isa = PBXGroup;
+			children = (
+				5F0629AD217D81500064A5E7 /* AngleDashboard.swift */,
+				5F0629EE2180F7B60064A5E7 /* AngleDialPlate.swift */,
+			);
+			path = AngleRiot;
+			sourceTree = "<group>";
+		};
+		5F0629F12180FE2B0064A5E7 /* MaskBackground */ = {
+			isa = PBXGroup;
+			children = (
+				5F0629EA217EADC20064A5E7 /* CropMaskProtocal.swift */,
+				5F0629E6217EAC1A0064A5E7 /* CropVisualEffectView.swift */,
+				5F0629E8217EAC350064A5E7 /* CropDimmingView.swift */,
+			);
+			path = MaskBackground;
+			sourceTree = "<group>";
+		};
 		5FC10B08217A9EDF00582874 = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +122,8 @@
 		5FC10B13217A9EDF00582874 /* Mantis */ = {
 			isa = PBXGroup;
 			children = (
+				5F0629F12180FE2B0064A5E7 /* MaskBackground */,
+				5F0629F02180FE100064A5E7 /* AngleRiot */,
 				5FC10B14217A9EDF00582874 /* AppDelegate.swift */,
 				5FC10B16217A9EDF00582874 /* ViewController.swift */,
 				5FC10B18217A9EDF00582874 /* Main.storyboard */,
@@ -116,12 +137,7 @@
 				5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */,
 				5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */,
 				5F0629EC2180CB2A0064A5E7 /* CoreGraphicsExtensions.swift */,
-				5F0629AD217D81500064A5E7 /* AngleDashboard.swift */,
-				5F0629EE2180F7B60064A5E7 /* AngleDialPlate.swift */,
 				5F0629AF217D81A50064A5E7 /* CircleGestureRecognizer.swift */,
-				5F0629EA217EADC20064A5E7 /* CropMaskProtocal.swift */,
-				5F0629E6217EAC1A0064A5E7 /* CropVisualEffectView.swift */,
-				5F0629E8217EAC350064A5E7 /* CropDimmingView.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";
