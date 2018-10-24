@@ -8,9 +8,6 @@
 
 import UIKit
 
-fileprivate let bigDegreeScaleNumber = 36
-fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 4
-
 class AngleDashboard: UIView {
     
     var dialPlate: AngleDialPlate!
@@ -19,7 +16,6 @@ class AngleDashboard: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .gray
         clipsToBounds = true
         
         let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.85, width: frame.width, height: frame.width)
@@ -53,4 +49,7 @@ class AngleDashboard: UIView {
         layer.addSublayer(pointer)
     }
     
+    func rotateDailPlate(by angle: CGFloat) {
+        dialPlate.transform = dialPlate.transform.rotated(by: angle)
+    }    
 }

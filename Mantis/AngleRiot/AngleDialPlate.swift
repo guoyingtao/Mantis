@@ -9,7 +9,7 @@
 import UIKit
 
 fileprivate let bigDegreeScaleNumber = 36
-fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 4
+fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
 
 class AngleDialPlate: UIView {
 
@@ -118,8 +118,6 @@ class AngleDialPlate: UIView {
     }
     
     private func setup() {
-        self.backgroundColor = .gray
-        
         setupSmallScaleMarks()
         setupBigScaleMarks()
         setupAngleNumber()

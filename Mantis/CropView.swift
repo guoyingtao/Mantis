@@ -298,7 +298,7 @@ class CropView: UIView {
         dimmingView.removeFromSuperview()
         visualEffectView.removeFromSuperview()
         gridOverlayView.removeFromSuperview()
-//        angleDashboard.removeFromSuperview()
+        angleDashboard.removeFromSuperview()
         
         setup()
         adaptForCropBox()
@@ -336,6 +336,8 @@ class CropView: UIView {
         cropOrignFrame = cropBoxFrame
         scrollView.frame = CGRect(origin: .zero, size: bounds.size)
         imageView.frame = initialCropBoxRect
+        
+        setupAngleDashboard()
     }
     
     private func setupScrollView() {
@@ -380,6 +382,22 @@ class CropView: UIView {
         gridOverlayView.isUserInteractionEnabled = false
         gridOverlayView.gridHidden = true
         addSubview(gridOverlayView)
+    }
+    
+    private func setupAngleDashboard() {
+        if angleDashboard != nil {
+            angleDashboard.removeFromSuperview()
+        }
+        
+        let boardLength = min(bounds.width, bounds.height) * 0.8
+        let x = (bounds.width - boardLength) / 2
+        let y = gridOverlayView.frame.maxY
+        angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: 50))
+        addSubview(angleDashboard)
+    }
+    
+    private func adaptAngleDashboardToCropBox() {
+        angleDashboard.frame.origin.y = gridOverlayView.frame.maxY
     }
     
     func performInitialSetup() {
@@ -509,6 +527,7 @@ class CropView: UIView {
     }
     
     fileprivate func updateCropBoxFrame(withGesturePoint point: CGPoint) {
+        angleDashboard.isHidden = true
 
         let contentFrame = contentBounds
         
@@ -544,9 +563,9 @@ class CropView: UIView {
             cropBoxFrame = newCropBoxFrame
         }
         
-        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
-        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
-        checkForCanReset()
+//        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
+//        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
+//        checkForCanReset()
     }
     
     fileprivate func resetLayoutToDefault(animated: Bool = false) {
@@ -627,6 +646,10 @@ class CropView: UIView {
         frame.origin.x = (scaledOffset.x * scale) - scrollView.contentInset.left
         frame.origin.y = (scaledOffset.y * scale) - scrollView.contentInset.top
         scrollView.contentOffset = frame.origin
+    }
+    
+    fileprivate func isAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
+        return angleDashboard.frame.contains(point)
     }
     
     fileprivate func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
@@ -789,7 +812,6 @@ extension CropView {
             panOriginPoint = point
             cropOrignFrame = cropBoxFrame
             tappedEdge = cropEdge(forPoint: point)
-            
             showDimmingBackground()
         }
         
@@ -922,13 +944,17 @@ extension CropView {
             }
             
             self.cropBoxFrame = cropBoxFrame
+            
+            adaptAngleDashboardToCropBox()
         }
         
         if animated == false {
             translate()
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
-                UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: nil)
+                UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: { [weak self] _ in
+                    self?.angleDashboard.isHidden = false
+                })
             }
         }
     }
