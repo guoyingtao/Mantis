@@ -109,6 +109,7 @@ class CropView: UIView {
     
     fileprivate var editing = false {
         didSet {
+            if editing == oldValue { return }
             set(editing: editing, resetCropbox: false, animated: false)
         }
     }
@@ -332,6 +333,7 @@ class CropView: UIView {
     
     func adaptForCropBox() {
         cropBoxFrame = initialCropBoxRect
+        cropOrignFrame = cropBoxFrame
         scrollView.frame = CGRect(origin: .zero, size: bounds.size)
         imageView.frame = initialCropBoxRect
     }
@@ -356,6 +358,7 @@ class CropView: UIView {
         let imageView = UIImageView(image: image)
         imageView.layer.minificationFilter = .trilinear
         imageView.accessibilityIgnoresInvertColors = true
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }
     
@@ -519,25 +522,31 @@ class CropView: UIView {
         
         var info = UpdateCropBoxFrameInfo(false, false, false, false)
         
+        let newCropBoxFrame: CGRect
         if aspectRatioLockEnabled {
             var cropBoxLockedAspectFrameUpdater = CropBoxLockedAspectFrameUpdater(tappedEdge: tappedEdge, contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
             let aspectInfo = cropBoxLockedAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             info.aspectHorizontal = aspectInfo.aspectHorizontal
             info.aspectVertical = aspectInfo.aspectVertical
             
-            cropBoxFrame = cropBoxLockedAspectFrameUpdater.cropBoxFrame
+            newCropBoxFrame = cropBoxLockedAspectFrameUpdater.cropBoxFrame
         } else {
             var cropBoxFreeAspectFrameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: tappedEdge, contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
             let clampInfo = cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             info.clampMinFromLeft = clampInfo.clampMinFromLeft
             info.clampMinFromTop = clampInfo.clampMinFromTop
             
-            cropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
+            newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }
         
-//        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
-//        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
-//        checkForCanReset()
+        let imageRefFrame = CGRect(x: imageView.frame.origin.x - 1, y: imageView.frame.origin.y - 1, width: imageView.frame.width + 2, height: imageView.frame.height + 2 )
+        if imageRefFrame.contains(newCropBoxFrame) {
+            cropBoxFrame = newCropBoxFrame
+        }
+        
+        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
+        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
+        checkForCanReset()
     }
     
     fileprivate func resetLayoutToDefault(animated: Bool = false) {
@@ -705,13 +714,13 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//        startEditing()
+        startEditing()
         canBeReset = true
         showDimmingBackground()
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-//        startEditing()
+        startEditing()
         canBeReset = true
         showDimmingBackground()
     }
@@ -827,7 +836,7 @@ extension CropView {
             return
         }
         
-        resetTimer = Timer(timeInterval: cropAdjustingDelay, target: self, selector: #selector(timerTriggered), userInfo: nil, repeats: false)
+        resetTimer = Timer.scheduledTimer(timeInterval: cropAdjustingDelay, target: self, selector: #selector(timerTriggered), userInfo: nil, repeats: false)
     }
 
     @objc private func timerTriggered() {
@@ -843,14 +852,14 @@ extension CropView {
 
 extension CropView {
     fileprivate func startEditing() {
-//        cancelResetTimer()
-//        set(editing: true, resetCropbox: false, animated: true)
+        cancelResetTimer()
+        set(editing: true, resetCropbox: false, animated: true)
     }
 
     fileprivate func set(editing: Bool, resetCropbox: Bool, animated: Bool = false) {
-        if editing == self.editing { return }
-        
-        self.editing = editing
+//        if editing == self.editing { return }
+//
+//        self.editing = editing
         
         gridOverlayView.setGrid(hidden: !editing, animated: animated)
         
@@ -858,17 +867,6 @@ extension CropView {
             moveCroppedContentToCenter(animated: animated)
             captureStateForImageRotation()
             cropBoxLastEditedAngle = angle
-        }
-        
-        if animated == false {
-//            toggleTranslucencyView(visible: !editing)
-        } else {
-            let duration = editing ? 0.05 : 0.35
-            let delay = editing ? 0 : 0.35
-            
-            UIView.animateKeyframes(withDuration: duration, delay: delay, options: [], animations: {
-//                self.toggleTranslucencyView(visible: !editing)
-            })
         }
     }
     
@@ -910,16 +908,6 @@ extension CropView {
         offset.y = max(-cropBoxFrame.origin.y, offset.y)
         
         func translate() {
-            // Setting these scroll view properties will trigger
-            // the foreground matching method via their delegates,
-            // multiple times inside the same animation block, resulting
-            // in glitchy animations.
-            //
-            
-            // Slight hack. This method needs to be called during `[UIViewController viewDidLayoutSubviews]`
-            // in order for the crop view to resize itself during iPad split screen events.
-            // On the first run, even though scale is exactly 1.0f, performing this multiplication introduces
-            // a floating point noise that zooms the image in by about 5 pixels. This fixes that issue.
             if (scale < CGFloat(1.0) - CGFloat.ulpOfOne || scale > CGFloat(1.0) + CGFloat.ulpOfOne) {
                 scrollView.zoomScale *= scale
                 scrollView.zoomScale = min(scrollView.maximumZoomScale, scrollView.zoomScale)
@@ -940,7 +928,7 @@ extension CropView {
             translate()
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
-                UIView.animate(withDuration: 0.5, delay: 1.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: nil)
+                UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: nil)
             }
         }
     }

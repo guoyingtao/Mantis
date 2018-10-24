@@ -23,13 +23,17 @@ class ViewController: UIViewController {
         cropView = CropView(image: image)
         cropView.frame = view.frame
         cropView.delegate = self
-        view.addSubview(cropView)
+//        view.addSubview(cropView)
+//
+//        cropView.translatesAutoresizingMaskIntoConstraints = false
+//        cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//        cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        cropView.translatesAutoresizingMaskIntoConstraints = false
-        cropView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        self.view.backgroundColor = .black
+        let dashBoard = AngleDashboard(frame: CGRect(x: 60, y: 100, width: 300, height: 100))
+        view.addSubview(dashBoard)
     }
     
     override func viewDidLayoutSubviews() {
