@@ -325,7 +325,7 @@ class CropView: UIView {
         setupTranslucencyView()
         setupOverlayView()
         setGridOverlayView()
-        
+
         // The pan controller to recognize gestures meant to resize the grid view
         gridPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gridPanGestureRecognized))
         gridPanGestureRecognizer.delegate = self
@@ -344,7 +344,9 @@ class CropView: UIView {
         scrollView = CropScrollView(frame: bounds)
         scrollView.touchesBegan = { [weak self] in self?.startEditing() }
         scrollView.touchesEnded = { [weak self] in self?.startResetTimer() }
-//        scrollView.backgroundColor = .red
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 15.0
+        scrollView.delegate = self
         addSubview(scrollView)
     }
     
@@ -357,12 +359,14 @@ class CropView: UIView {
     
     private func setupOverlayView() {
         dimmingView = CropDimmingView()
+        dimmingView.isUserInteractionEnabled = false
         addSubview(dimmingView)
         dimmingView.alpha = 0
     }
     
     private func setupTranslucencyView() {
         visualEffectView = CropVisualEffectView()
+        visualEffectView.isUserInteractionEnabled = false
         addSubview(visualEffectView)
     }
     
@@ -725,7 +729,7 @@ class CropView: UIView {
 
 extension CropView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return backgroundContainerView
+        return imageView
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -733,17 +737,17 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        startEditing()
+//        startEditing()
         canBeReset = true
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        startEditing()
+//        startEditing()
         canBeReset = true
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        startResetTimer()
+//        startResetTimer()
         checkForCanReset()
     }
     
@@ -819,7 +823,7 @@ extension CropView {
 
 extension CropView: UIGestureRecognizerDelegate {
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        return false
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
@@ -855,8 +859,8 @@ extension CropView {
 
 extension CropView {
     fileprivate func startEditing() {
-        cancelResetTimer()
-        set(editing: true, resetCropbox: false, animated: true)
+//        cancelResetTimer()
+//        set(editing: true, resetCropbox: false, animated: true)
     }
 
     fileprivate func set(editing: Bool, resetCropbox: Bool, animated: Bool = false) {
