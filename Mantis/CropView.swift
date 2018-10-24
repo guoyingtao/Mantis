@@ -247,24 +247,10 @@ class CropView: UIView {
     fileprivate var image: UIImage!
     fileprivate var scrollView: CropScrollView!
     
-    fileprivate var backgroundImageView: UIImageView!
-    fileprivate var backgroundContainerView: UIView!
-    fileprivate var foregroundImageView: UIImageView!
-    fileprivate var foregroundContainerView: UIView!
-    
-    fileprivate var translucencyView: UIVisualEffectView?
-    fileprivate var translucencyEffect: UIBlurEffect?
-    
-    /* At times during animation, disable matching the forground image view to the background */
-    fileprivate var disableForgroundMatching = false
-    
     fileprivate var aspectRatioLockEnabled = false
     
-    fileprivate var overlayView: UIView!
     fileprivate var gridOverlayView: CropOverlayView!
-    
     fileprivate var gridPanGestureRecognizer: UIPanGestureRecognizer!
-    
     fileprivate var resetTimer: Timer?
     
     private lazy var initialCropBoxRect: CGRect = {
@@ -569,24 +555,12 @@ class CropView: UIView {
             //Set the scroll to 1.0f to reset the transform scale
             scrollView.zoomScale = 1.0
             
-            let imageRect = CGRect(origin: CGPoint.zero, size: image.size)
-            
-            backgroundImageView.transform = .identity
-            backgroundContainerView.transform = .identity
-            backgroundImageView.frame = imageRect
-            backgroundContainerView.frame = imageRect
-            
-            foregroundImageView.transform = .identity
-            foregroundImageView.frame = imageRect
+//            let imageRect = CGRect(origin: CGPoint.zero, size: image.size)
             
             layoutInitialImage()
             checkForCanReset()
             return
         }
-    }
-    
-    fileprivate func toggleTranslucencyView(visible: Bool) {
-        translucencyView?.effect = visible ? translucencyEffect : nil
     }
     
     fileprivate func updateTo(imageCropframe: CGRect) {
@@ -698,40 +672,18 @@ class CropView: UIView {
         
         
         let alpha: CGFloat = hidden ? 0 : 1
-        backgroundImageView.alpha = alpha
-        foregroundContainerView.alpha = alpha
         
         if animated == false {
             gridOverlayView.alpha = alpha
-            toggleTranslucencyView(visible: !hidden)
+//            toggleTranslucencyView(visible: !hidden)
         } else {
             UIView.animate(withDuration: 0.4) {
                 self.gridOverlayView.alpha = alpha
-                self.toggleTranslucencyView(visible: !hidden)
+//                self.toggleTranslucencyView(visible: !hidden)
             }
         }
     }
     
-    fileprivate func setBackgroundImageView(hidden: Bool, animated: Bool) {
-        if animated == false {
-            backgroundImageView.isHidden = hidden
-            return
-        }
-        
-        let beforeAlpha: CGFloat = hidden ? 1.0 : 0.0
-        let toAlpha: CGFloat = hidden ? 0.0 : 1.0
-        
-        backgroundImageView.isHidden = false
-        backgroundImageView.alpha = beforeAlpha
-        
-        UIView.animate(withDuration: 0.5, animations: {
-            self.backgroundImageView.alpha = toAlpha
-        }) { _ in
-            if (hidden) {
-                self.backgroundImageView.isHidden = true
-            }
-        }
-    }
     
     fileprivate func setGridOverlay(hidden: Bool, animated: Bool) {
         gridOverlayHidden = hidden
@@ -909,13 +861,13 @@ extension CropView {
         }
         
         if animated == false {
-            toggleTranslucencyView(visible: !editing)
+//            toggleTranslucencyView(visible: !editing)
         } else {
             let duration = editing ? 0.05 : 0.35
             let delay = editing ? 0 : 0.35
             
             UIView.animateKeyframes(withDuration: duration, delay: delay, options: [], animations: {
-                self.toggleTranslucencyView(visible: !editing)
+//                self.toggleTranslucencyView(visible: !editing)
             })
         }
     }
@@ -963,8 +915,6 @@ extension CropView {
             // multiple times inside the same animation block, resulting
             // in glitchy animations.
             //
-            // Disable matching for now, and explicitly update at the end.
-            disableForgroundMatching = true
             
             // Slight hack. This method needs to be called during `[UIViewController viewDidLayoutSubviews]`
             // in order for the crop view to resize itself during iPad split screen events.
@@ -984,9 +934,6 @@ extension CropView {
             }
             
             self.cropBoxFrame = cropBoxFrame
-            
-            disableForgroundMatching = false
-            
         }
         
         if animated == false {
@@ -1005,10 +952,10 @@ extension CropView {
         editing = false
         
         if animated == false {
-            toggleTranslucencyView(visible: !simpleRenderMode)
+//            toggleTranslucencyView(visible: !simpleRenderMode)
         } else {
             UIView.animate(withDuration: 0.25) {
-                self.toggleTranslucencyView(visible: !simpleRenderMode)
+//                self.toggleTranslucencyView(visible: !simpleRenderMode)
             }
         }
     }
@@ -1187,24 +1134,13 @@ extension CropView {
         //If we're animated, generate a snapshot view that we'll animate in place of the real view
         var snapshotView: UIView?
         if (animated) {
-            snapshotView = foregroundContainerView.snapshotView(afterScreenUpdates: false)
+//            snapshotView = foregroundContainerView.snapshotView(afterScreenUpdates: false)
             rotateAnimationInProgress = true
         }
         
-        //Rotate the background image view, inside its container view
-        backgroundImageView.transform = rotation;
-        
-        //Flip the width/height of the container view so it matches the rotated image view's size
-        let containerSize = backgroundContainerView.frame.size
-        backgroundContainerView.frame = CGRect(origin: .zero, size: containerSize)
-        backgroundImageView.frame = CGRect(origin: .zero, size: backgroundImageView.frame.size)
-        
-        //Rotate the foreground image view to match
-        foregroundContainerView.transform = .identity
-        foregroundImageView.transform = rotation
         
         //Flip the content size of the scroll view to match the rotated bounds
-        scrollView.contentSize = self.backgroundContainerView.frame.size
+        scrollView.contentSize = self.imageView.frame.size
         
         //assign the new crop box frame and re-adjust the content to fill it
         cropBoxFrame = newCropFrame
@@ -1249,9 +1185,6 @@ extension CropView {
             snapshotView.center = CGPoint(x: contentBounds.midX, y: contentBounds.midY)
             addSubview(snapshotView)
             
-            backgroundContainerView.isHidden = true
-            self.foregroundContainerView.isHidden = true;
-            self.translucencyView?.isHidden = true;
             self.gridOverlayView.isHidden = true;
             
             func animation() {
@@ -1260,18 +1193,11 @@ extension CropView {
             }
             
             func completion() {
-                backgroundContainerView.isHidden = false;
-                foregroundContainerView.isHidden = false;
-                translucencyView?.isHidden = false;
                 gridOverlayView.isHidden = false;
-                
-                backgroundContainerView.alpha = 0
                 gridOverlayView.alpha = 0
-                translucencyView?.alpha = 1.0
                 
                 UIView.animate(withDuration: 0.45, animations: {
                     snapshotView.alpha = 0
-                    self.backgroundContainerView.alpha = 1.0
                     self.gridOverlayView.alpha = 1.0
                 }) { _ in
                     self.rotateAnimationInProgress = false
