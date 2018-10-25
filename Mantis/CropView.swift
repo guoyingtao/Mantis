@@ -374,6 +374,9 @@ class CropView: UIView {
         let y = gridOverlayView.frame.maxY
         angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
+        
+        angleDashboard.layer.borderColor = UIColor.white.cgColor
+        angleDashboard.layer.borderWidth = 1
     }
     
     private func adaptAngleDashboardToCropBox() {
@@ -626,6 +629,8 @@ class CropView: UIView {
     }
     
     fileprivate func isAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
+        print("angleDashboard frame is \(angleDashboard.frame)")
+        print("point is \(point)")
         return angleDashboard.frame.contains(point)
     }
     
@@ -784,12 +789,30 @@ private var forCrop = true
 private var currentPoint: CGPoint?
 private var previousPoint: CGPoint?
 private var rotationCal: RotationCalculator?
+private var demoRotationCenterView: UIView?
 
 extension CropView {
-    private func setImageView(anchorPoint: CGPoint) {
-        let oldImageViewFrame = imageView.frame
-        imageView.layer.anchorPoint = anchorPoint
-        imageView.frame = oldImageViewFrame
+    
+    func setAnchorPoint(anchorPoint: CGPoint, forView view: UIView) {
+        var newPoint = CGPoint(x: view.bounds.size.width * anchorPoint.x,
+                               y: view.bounds.size.height * anchorPoint.y)
+        
+        
+        var oldPoint = CGPoint(x: view.bounds.size.width * view.layer.anchorPoint.x,
+                               y: view.bounds.size.height * view.layer.anchorPoint.y)
+        
+        newPoint = newPoint.applying(view.transform)
+        oldPoint = oldPoint.applying(view.transform)
+        
+        var position = view.layer.position
+        position.x -= oldPoint.x
+        position.x += newPoint.x
+        
+        position.y -= oldPoint.y
+        position.y += newPoint.y
+        
+        view.layer.position = position
+        view.layer.anchorPoint = anchorPoint
     }
     
     @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
@@ -803,7 +826,17 @@ extension CropView {
                 currentPoint = point
                 previousPoint = point
                 
-                setImageView(anchorPoint: CGPoint(x: rotationCenter.x / imageView.frame.width, y: rotationCenter.y / imageView.frame.height))
+                let rotationCenterOnImage = self.convert(rotationCenter, to: imageView)
+                
+                demoRotationCenterView?.removeFromSuperview()
+                demoRotationCenterView = UIView(frame: CGRect(x: rotationCenterOnImage.x - 2, y: rotationCenterOnImage.y - 2, width: 4, height: 4))
+                demoRotationCenterView?.backgroundColor = .red
+                imageView.addSubview(demoRotationCenterView!)
+                
+                let anchorPoint = CGPoint(x: rotationCenterOnImage.x * scrollView.zoomScale / imageView.frame.width, y: rotationCenterOnImage.y * scrollView.zoomScale / imageView.frame.height)
+
+//                setImageView(anchorPoint: anchorPoint)
+                setAnchorPoint(anchorPoint: anchorPoint, forView: imageView)
             } else {
                 panOriginPoint = point
                 cropOrignFrame = cropBoxFrame
@@ -813,7 +846,9 @@ extension CropView {
         }
         
         if recognizer.state == .ended {
-            setImageView(anchorPoint: CGPoint(x: 0.5, y: 0.5))
+            demoRotationCenterView?.removeFromSuperview()
+            let anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            setAnchorPoint(anchorPoint: anchorPoint, forView: imageView)
             if forCrop {
                 set(editing: false, resetCropbox: true, animated: true)
             } else {
@@ -831,10 +866,10 @@ extension CropView {
                 updateCropBoxFrame(withGesturePoint: point)
             } else {
                 currentPoint = point
-                let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!)
-                
-                angleDashboard.rotateDailPlate(by: rotation ?? 0)
-                imageView.transform = imageView.transform.rotated(by: rotation ?? 0)
+                if let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
+                    angleDashboard.rotateDailPlate(by: rotation)
+                    imageView.transform = imageView.transform.rotated(by: rotation)
+                }
                 
                 previousPoint = currentPoint
             }
