@@ -786,18 +786,25 @@ private var previousPoint: CGPoint?
 private var rotationCal: RotationCalculator?
 
 extension CropView {
+    private func setImageView(anchorPoint: CGPoint) {
+        let oldImageViewFrame = imageView.frame
+        imageView.layer.anchorPoint = anchorPoint
+        imageView.frame = oldImageViewFrame
+    }
+    
     @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: self)
         
         if recognizer.state == .began {
             if isAngleDashboardTouched(forPoint: point) {
                 forCrop = false
-                let midPoint = angleDashboard.convert(angleDashboard.getRotationCenter(), to: self)
-                rotationCal = RotationCalculator(midPoint: midPoint)
+                let rotationCenter = angleDashboard.convert(angleDashboard.getRotationCenter(), to: self)
+                rotationCal = RotationCalculator(midPoint: rotationCenter)
                 currentPoint = point
                 previousPoint = point
+                
+                setImageView(anchorPoint: CGPoint(x: rotationCenter.x / imageView.frame.width, y: rotationCenter.y / imageView.frame.height))
             } else {
-                startEditing()
                 panOriginPoint = point
                 cropOrignFrame = cropBoxFrame
                 tappedEdge = cropEdge(forPoint: point)
@@ -806,8 +813,9 @@ extension CropView {
         }
         
         if recognizer.state == .ended {
+            setImageView(anchorPoint: CGPoint(x: 0.5, y: 0.5))
             if forCrop {
-                startResetTimer()
+                set(editing: false, resetCropbox: true, animated: true)
             } else {
                 currentPoint = nil
                 previousPoint = nil
@@ -824,7 +832,6 @@ extension CropView {
             } else {
                 currentPoint = point
                 let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!)
-                print("rotation is \(rotation!)")
                 
                 angleDashboard.rotateDailPlate(by: rotation ?? 0)
                 imageView.transform = imageView.transform.rotated(by: rotation ?? 0)
