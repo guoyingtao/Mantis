@@ -31,14 +31,7 @@ class ViewController: UIViewController {
         cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        self.view.backgroundColor = .black
-        
-//        let dashBoard = AngleDashboard(frame: CGRect(x: 60, y: 100, width: 300, height: 100))
-//        view.addSubview(dashBoard)
-//
-//        UIView.animate(withDuration: 4) {
-//            dashBoard.rotateDailPlate(by: -CGFloat.pi / 2)
-//        }
+        self.view.backgroundColor = .black        
     }
     
     override func viewDidLayoutSubviews() {

@@ -124,6 +124,7 @@
 		5FC10B13217A9EDF00582874 /* Mantis */ = {
 			isa = PBXGroup;
 			children = (
+				5F0629F22181233E0064A5E7 /* GeometryTools.swift */,
 				5F0629F12180FE2B0064A5E7 /* MaskBackground */,
 				5F0629F02180FE100064A5E7 /* AngleRiot */,
 				5FC10B14217A9EDF00582874 /* AppDelegate.swift */,
@@ -140,7 +141,6 @@
 				5F0629AB217D41680064A5E7 /* CropBoxClamper.swift */,
 				5F0629EC2180CB2A0064A5E7 /* CoreGraphicsExtensions.swift */,
 				5F0629AF217D81A50064A5E7 /* RotationCalculator.swift */,
-				5F0629F22181233E0064A5E7 /* GeometryTools.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";

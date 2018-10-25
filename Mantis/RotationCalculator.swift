@@ -9,7 +9,7 @@
 //
 import UIKit
 
-let π = CGFloat(Double.pi)
+let π = CGFloat.pi
 
 extension CGFloat {
     var degrees:CGFloat {
@@ -39,22 +39,21 @@ class RotationCalculator {
     var outerRadius:CGFloat?
     
     // relative rotation for current gesture (in radians)
-    var rotation:CGFloat? {
-        if let currentPoint = self.currentPoint {
-            if let previousPoint = self.previousPoint {
-                var rotation = angleBetween(pointA: currentPoint, andPointB: previousPoint)
-                
-                if (rotation > π) {
-                    rotation -= π*2
-                } else if (rotation < -π) {
-                    rotation += π*2
-                }
-                
-                return rotation
-            }
+    var rotation: CGFloat? {
+        guard let currentPoint = self.currentPoint,
+            let previousPoint = self.previousPoint else {
+            return nil
         }
         
-        return nil
+        var rotation = angleBetween(pointA: currentPoint, andPointB: previousPoint)
+        
+        if (rotation > π) {
+            rotation -= π*2
+        } else if (rotation < -π) {
+            rotation += π*2
+        }
+        
+        return rotation
     }
     
     // absolute angle for current gesture (in radians)
@@ -67,7 +66,7 @@ class RotationCalculator {
     }
     
     // distance from midpoint
-    var distance:CGFloat? {
+    var distance: CGFloat? {
         if let nowPoint = self.currentPoint {
             return self.distanceBetween(pointA: self.midPoint, andPointB: nowPoint)
         }
@@ -81,18 +80,6 @@ class RotationCalculator {
     init(midPoint: CGPoint) {
         self.midPoint = midPoint
     }
-    
-    // designated initializer
-//    init(midPoint:CGPoint, innerRadius:CGFloat?, outerRadius:CGFloat?) {
-//        self.midPoint = midPoint
-//        self.innerRadius = innerRadius
-//        self.outerRadius = outerRadius
-//    }
-//
-//    // convinience initializer if innerRadius and OuterRadius are not necessary
-//    convenience init(midPoint:CGPoint) {
-//        self.init(midPoint:midPoint, innerRadius:nil, outerRadius:nil)
-//    }
     
     private func distanceBetween(pointA:CGPoint, andPointB pointB:CGPoint) -> CGFloat {
         let dx = Float(pointA.x - pointB.x)
@@ -121,57 +108,4 @@ class RotationCalculator {
         self.currentPoint = p2
         return rotation ?? 0
     }
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-//        super.touchesBegan(touches, with: event)
-//
-//        if let firstTouch = touches.first {
-//
-//            currentPoint = firstTouch.location(in: self.view)
-//
-//            var newState:UIGestureRecognizer.State = .began
-//
-//            if let innerRadius = self.innerRadius, let distance = self.distance {
-//                if distance < innerRadius {
-//                    newState = .failed
-//                }
-//            }
-//
-//            if let outerRadius = self.outerRadius, let distance = self.distance {
-//                if distance > outerRadius {
-//                    newState = .failed
-//                }
-//            }
-//
-//            state = newState
-//
-//        }
-//
-//    }
-//
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-//
-//        super.touchesMoved(touches, with: event)
-//
-//        if state == .failed {
-//            return
-//        }
-//
-//        if let firstTouch = touches.first {
-//
-//            currentPoint = firstTouch.location(in: self.view)
-//            previousPoint = firstTouch.previousLocation(in: self.view)
-//
-//            state = .changed
-//
-//        }
-//    }
-//
-//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-//        super.touchesEnded(touches, with: event)
-//        state = .ended
-//
-//        currentPoint = nil
-//        previousPoint = nil
-//    }
 }

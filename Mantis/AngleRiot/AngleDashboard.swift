@@ -18,7 +18,7 @@ class AngleDashboard: UIView {
         
         clipsToBounds = true
         
-        let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.85, width: frame.width, height: frame.width)
+        let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.9, width: frame.width, height: frame.width)
         dialPlate =  AngleDialPlate(frame: dialPlateFrame)
         addSubview(dialPlate)
         
@@ -49,7 +49,11 @@ class AngleDashboard: UIView {
         layer.addSublayer(pointer)
     }
     
+    func getRotationCenter() -> CGPoint {
+        return CGPoint(x: dialPlate.frame.midX , y: dialPlate.frame.midY)
+    }
+    
     func rotateDailPlate(by angle: CGFloat) {
         dialPlate.transform = dialPlate.transform.rotated(by: angle)
-    }    
+    }
 }

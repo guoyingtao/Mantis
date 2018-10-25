@@ -369,8 +369,8 @@ class CropView: UIView {
             angleDashboard.removeFromSuperview()
         }
         
-        let boardLength = min(bounds.width, bounds.height) * 0.8
-        let x = (bounds.width - boardLength) / 2
+        let boardLength = min(bounds.width, bounds.height)
+        let x:CGFloat = 0
         let y = gridOverlayView.frame.maxY
         angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
@@ -792,7 +792,8 @@ extension CropView {
         if recognizer.state == .began {
             if isAngleDashboardTouched(forPoint: point) {
                 forCrop = false
-                rotationCal = RotationCalculator(midPoint: point)
+                let midPoint = angleDashboard.convert(angleDashboard.getRotationCenter(), to: self)
+                rotationCal = RotationCalculator(midPoint: midPoint)
                 currentPoint = point
                 previousPoint = point
             } else {
