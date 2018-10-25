@@ -48,57 +48,9 @@ class CropView: UIView {
         didSet {
             if oldValue.equalTo(cropBoxFrame) { return }
 
-            //clamp the cropping region to the inset boundaries of the screen
-            let contentFrame = contentBounds
-            let xOrigin = ceil(contentFrame.origin.x)
-            let xDelta = cropBoxFrame.origin.x - xOrigin
-            cropBoxFrame.origin.x = floor(max(cropBoxFrame.origin.x, xOrigin))
-            
-            //If we clamp the x value, ensure we compensate for the subsequent delta generated in the width (Or else, the box will keep growing)
-            if xDelta < CGFloat.ulpOfOne {
-                cropBoxFrame.size.width += xDelta
-            }
-            
-            let yOrigin = ceil(contentFrame.origin.y)
-            let yDelta = cropBoxFrame.origin.y - yOrigin
-            cropBoxFrame.origin.y = floor(max(cropBoxFrame.origin.y, yOrigin))
-
-            if yDelta < CGFloat.ulpOfOne {
-                cropBoxFrame.size.height += yDelta
-            }
-            
-            //given the clamped X/Y values, make sure we can't extend the crop box beyond the edge of the screen in the current state
-            let maxWidth = (contentFrame.size.width + contentFrame.origin.x) - cropBoxFrame.origin.x
-            cropBoxFrame.size.width = floor(min(cropBoxFrame.size.width, maxWidth))
-
-            let maxHeight = (contentFrame.size.height + contentFrame.origin.y) - cropBoxFrame.origin.y
-            cropBoxFrame.size.height = floor(min(cropBoxFrame.size.height, maxHeight))
-            
-            //Make sure we can't make the crop box too small
-            cropBoxFrame.size.width  = max(cropBoxFrame.size.width, cropViewMinimumBoxSize)
-            cropBoxFrame.size.height = max(cropBoxFrame.size.height, cropViewMinimumBoxSize)
-            
             gridOverlayView.frame = cropBoxFrame
             dimmingView.adaptMaskTo(match: cropBoxFrame)
             visualEffectView.adaptMaskTo(match: cropBoxFrame)
-            
-            /*
-            //reset the scroll view insets to match the region of the new crop rect
-            scrollView.contentInset = UIEdgeInsets(top: cropBoxFrame.minY, left: cropBoxFrame.minX, bottom: bounds.maxY - cropBoxFrame.maxY, right: bounds.minX - cropBoxFrame.maxX)
-            
-            //if necessary, work out the new minimum size of the scroll view so it fills the crop box
-            let imageSize = imageView.bounds.size
-            let scale = max(cropBoxFrame.size.height/imageSize.height, cropBoxFrame.size.width/imageSize.width)
-            scrollView.minimumZoomScale = scale
-            
-            //make sure content isn't smaller than the crop box
-            var size = self.scrollView.contentSize
-            size.width = floor(size.width)
-            size.height = floor(size.height)
-            scrollView.contentSize = size
-
-//            //IMPORTANT: Force the scroll view to update its content after changing the zoom scale
-            scrollView.zoomScale = scrollView.zoomScale */
         }
     }
     
@@ -231,22 +183,11 @@ class CropView: UIView {
     
     fileprivate var restoreImageCropFrame = CGRect.zero
     
-    fileprivate var applyInitialCroppedImageFrame = false
-    
-    fileprivate var cropAdjustingDelay = 0.8
-    fileprivate var cropViewPadding = CGFloat(14.0)
+    fileprivate var cropViewPadding:CGFloat = 14.0
     fileprivate var maximumZoomScale = 15.0
     
     fileprivate var aspectRatio = CGSize(width: 4.0, height: 3.0)
-    
-    fileprivate var image: UIImage!
-    fileprivate var scrollView: CropScrollView!
-    
     fileprivate var aspectRatioLockEnabled = false
-    
-    fileprivate var gridOverlayView: CropOverlayView!
-    fileprivate var gridPanGestureRecognizer: UIPanGestureRecognizer!
-    fileprivate var resetTimer: Timer?
     
     private lazy var initialCropBoxRect: CGRect = {
         guard let image = image else { return .zero }
@@ -258,9 +199,15 @@ class CropView: UIView {
     } ()
     
     fileprivate var imageView: UIImageView!
+    fileprivate var imageViewContainer: UIView!
     fileprivate var dimmingView: CropDimmingView!
     fileprivate var visualEffectView: CropVisualEffectView!
     fileprivate var angleDashboard: AngleDashboard!
+    fileprivate var image: UIImage!
+    fileprivate var scrollView: CropScrollView!
+    fileprivate var gridOverlayView: CropOverlayView!
+    fileprivate var gridPanGestureRecognizer: UIPanGestureRecognizer!
+
     
     init(image: UIImage) {
         super.init(frame: CGRect.zero)
@@ -279,23 +226,26 @@ class CropView: UIView {
         gridOverlayView.removeFromSuperview()
         angleDashboard.removeFromSuperview()
         
-        cancelResetTimer()
-        setup()
+        cropBoxFrame = .zero
+        
+        setupUI()
         adaptForCropBox()
     }
     
-    private func setup() {
-        backgroundColor =  UIColor(white: 0.12, alpha: 1)
-        
+    private func setupUI() {
         setupScrollView()
-
+        
         imageView = createImageView(image: image)
-        scrollView.addSubview(imageView)
+        imageViewContainer = UIView()
+        imageViewContainer.addSubview(imageView)
+        scrollView.addSubview(imageViewContainer)
         
         setupTranslucencyView()
         setupOverlayView()
         setGridOverlayView()
-
+    }
+    
+    private func setupGestures() {
         // The pan controller to recognize gestures meant to resize the grid view
         gridPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gridPanGestureRecognized))
         gridPanGestureRecognizer.delegate = self
@@ -307,31 +257,40 @@ class CropView: UIView {
         addGestureRecognizer(doubleTap)
     }
     
+    private func setup() {
+        setupUI()
+        setupGestures()
+    }
+    
     @objc func handleDoubleTap(recognizer: UIPanGestureRecognizer) {
         reset()
     }
     
     func adaptForCropBox() {
+        print("initialCropBoxRect is \(initialCropBoxRect)")
         cropBoxFrame = initialCropBoxRect
         cropOrignFrame = cropBoxFrame
-        scrollView.frame = CGRect(origin: .zero, size: bounds.size)
+        scrollView.frame = contentBounds
+        scrollView.backgroundColor = .blue
+        imageViewContainer.frame = scrollView.bounds
         imageView.frame = initialCropBoxRect
-        
+        imageView.center = CGPoint(x: imageViewContainer.bounds.width/2, y: imageViewContainer.bounds.height/2)
         setupAngleDashboard()
     }
     
     private func setupScrollView() {
         scrollView = CropScrollView(frame: bounds)
         scrollView.touchesBegan = { [weak self] in
-            self?.startEditing()
             self?.showDimmingBackground()
         }
         scrollView.touchesEnded = { [weak self] in
-            self?.startResetTimer()
             self?.showVisualEffectBackground()
         }
+        
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 15.0
+        scrollView.zoomScale = scrollView.minimumZoomScale
+        
         scrollView.delegate = self
         addSubview(scrollView)
     }
@@ -347,8 +306,8 @@ class CropView: UIView {
     private func setupOverlayView() {
         dimmingView = CropDimmingView()
         dimmingView.isUserInteractionEnabled = false
-        addSubview(dimmingView)
         dimmingView.alpha = 0
+        addSubview(dimmingView)
     }
     
     private func setupTranslucencyView() {
@@ -374,84 +333,10 @@ class CropView: UIView {
         let y = gridOverlayView.frame.maxY
         angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
-        
-        angleDashboard.layer.borderColor = UIColor.white.cgColor
-        angleDashboard.layer.borderWidth = 1
     }
     
     private func adaptAngleDashboardToCropBox() {
         angleDashboard.frame.origin.y = gridOverlayView.frame.maxY
-    }
-    
-    // Make sure that it is execued only once
-    lazy var initialSetup: Void = {
-        layoutInitialImage()
-        
-        // -- State Restoration --
-        
-        if (restoreAngle != 0) {
-            angle = restoreAngle
-            cropBoxLastEditedAngle = angle
-            restoreAngle = 0
-        }
-        
-        if (!restoreImageCropFrame.isEmpty) {
-            imageCropFrame = restoreImageCropFrame
-            restoreImageCropFrame = .zero
-        }
-        
-        captureStateForImageRotation()
-        checkForCanReset()
-    }()
-    
-    fileprivate func layoutInitialImage() {
-        let imageSize = self.imageSize()
-        scrollView.contentSize = imageSize
-        
-        let bounds = contentBounds
-        let boundsSize = bounds.size
-        
-        //work out the minimum scale of the object
-        var scale = CGFloat(0)
-        
-        // Work out the size of the image to fit into the content bounds
-        scale = min(boundsSize.width/imageSize.width, boundsSize.height/imageSize.height)
-        let scaledImageSize = CGSize(width: floor(imageSize.width * scale), height: floor(imageSize.height * scale))
-        
-        // If an aspect ratio was pre-applied to the crop view, use that to work out the minimum scale the image needs to be to fit
-        if hasAspectRatio() {
-            let ratioScale = aspectRatio.width / aspectRatio.height
-            let fullSizeRatio = CGSize(width: boundsSize.width * ratioScale, height: boundsSize.height)
-            let fitScale = min(boundsSize.width/fullSizeRatio.width, boundsSize.height/fullSizeRatio.height)
-            let cropBoxSize = CGSize(width: fullSizeRatio.width * fitScale, height: fullSizeRatio.height * fitScale)
-            scale = max(cropBoxSize.width/imageSize.width, cropBoxSize.height/imageSize.height)
-        }
-        
-        //Whether aspect ratio, or original, the final image size we'll base the rest of the calculations off
-        let scaledSize = CGSize(width: floor(imageSize.width * scale), height: floor(imageSize.height * scale))
-        
-        //set the fully zoomed out state initially
-        scrollView.zoomScale = self.scrollView.minimumZoomScale
-        scrollView.contentSize = scaledSize
-        
-        // If we ended up with a smaller crop box than the content, line up the content so its center
-        // is in the center of the cropbox
-        if (frame.size.width < scaledSize.width - CGFloat.ulpOfOne || frame.size.height < scaledSize.height - CGFloat.ulpOfOne) {
-            var offset = CGPoint.zero
-            offset.x = -floor(bounds.midX - (scaledSize.width * 0.5))
-            offset.y = -floor(bounds.midY - (scaledSize.height * 0.5))
-            scrollView.contentOffset = offset
-        }
-        
-        //save the current state for use with 90-degree rotations
-        cropBoxLastEditedAngle = 0
-        captureStateForImageRotation()
-        
-        //save the size for checking if we're in a resettable state
-        originalCropBoxSize = scaledImageSize
-        originalContentOffset = scrollView.contentOffset
-        
-        checkForCanReset()
     }
     
     fileprivate func prepareforRotation() {
@@ -538,39 +423,15 @@ class CropView: UIView {
             newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }
         
-        let imageRefFrame = CGRect(x: imageView.frame.origin.x - 1, y: imageView.frame.origin.y - 1, width: imageView.frame.width + 2, height: imageView.frame.height + 2 )
-        if imageRefFrame.contains(newCropBoxFrame) {
-            cropBoxFrame = newCropBoxFrame
-        }
+        cropBoxFrame = newCropBoxFrame
         
-//        let cropBoxClamper = CropBoxClamper(contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
-//        cropBoxFrame = cropBoxClamper.clamp(cropBoxFrame: cropBoxFrame, withOriginalFrame: cropOrignFrame, andUpdateCropBoxFrameInfo: info)
-        checkForCanReset()
+//        var imageRefFrame = CGRect(x: imageView.frame.origin.x - 1, y: imageView.frame.origin.y - 1, width: imageView.frame.width + 2, height: imageView.frame.height + 2 )
+//        imageRefFrame = imageView.convert(imageRefFrame, to: self)
+//        if imageRefFrame.contains(newCropBoxFrame) {
+//            cropBoxFrame = newCropBoxFrame
+//        }
     }
-    
-    fileprivate func resetLayoutToDefault(animated: Bool = false) {
-        // If resetting the crop view includes resetting the aspect ratio,
-        // reset it to zero here. But set the ivar directly since there's no point
-        // in performing the relayout calculations right before a reset.
-        if hasAspectRatio() {
-            aspectRatio = CGSize.zero
-        }
-        
-        if animated == false && angle != 0 {
-            //Reset all of the rotation transforms
-            angle = 0
-            
-            //Set the scroll to 1.0f to reset the transform scale
-            scrollView.zoomScale = 1.0
-            
-//            let imageRect = CGRect(origin: CGPoint.zero, size: image.size)
-            
-            layoutInitialImage()
-            checkForCanReset()
-            return
-        }
-    }
-    
+
     fileprivate func updateTo(imageCropframe: CGRect) {
         //Convert the image crop frame's size from image space to the screen space
         let minimumSize = scrollView.minimumZoomScale
@@ -629,8 +490,6 @@ class CropView: UIView {
     }
     
     fileprivate func isAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
-        print("angleDashboard frame is \(angleDashboard.frame)")
-        print("point is \(point)")
         return angleDashboard.frame.contains(point)
     }
     
@@ -711,7 +570,7 @@ class CropView: UIView {
 
 extension CropView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
+        return imageViewContainer
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -719,19 +578,16 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        startEditing()
         canBeReset = true
         showDimmingBackground()
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        startEditing()
         canBeReset = true
         showDimmingBackground()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        startResetTimer()
         checkForCanReset()
         showVisualEffectBackground()
     }
@@ -744,7 +600,6 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        startResetTimer()
         checkForCanReset()
         showVisualEffectBackground()
     }
@@ -835,12 +690,13 @@ extension CropView {
                 
                 let anchorPoint = CGPoint(x: rotationCenterOnImage.x * scrollView.zoomScale / imageView.frame.width, y: rotationCenterOnImage.y * scrollView.zoomScale / imageView.frame.height)
 
-//                setImageView(anchorPoint: anchorPoint)
                 setAnchorPoint(anchorPoint: anchorPoint, forView: imageView)
             } else {
+                forCrop = true
                 panOriginPoint = point
                 cropOrignFrame = cropBoxFrame
                 tappedEdge = cropEdge(forPoint: point)
+                print("tappedEdge is \(tappedEdge)")
                 showDimmingBackground()
             }
         }
@@ -888,6 +744,7 @@ extension CropView: UIGestureRecognizerDelegate {
         let outerFrame = frame.insetBy(dx: -22, dy: -22)
         
         if (innerFrame.contains(tapPoint) || !outerFrame.contains(tapPoint)) {
+            print("pan false")
             return false
         }
         
@@ -904,30 +761,14 @@ extension CropView: UIGestureRecognizerDelegate {
     }
 }
 
-// Timer
 extension CropView {
     private func startResetTimer() {
-        guard resetTimer == nil else {
-            return
-        }
-        
-        resetTimer = Timer.scheduledTimer(timeInterval: cropAdjustingDelay, target: self, selector: #selector(timerTriggered), userInfo: nil, repeats: false)
-    }
-
-    @objc private func timerTriggered() {
         set(editing: false, resetCropbox: true, animated: true)
-        cancelResetTimer()
-    }
-    
-    private func cancelResetTimer() {
-        resetTimer?.invalidate()
-        resetTimer = nil
     }
 }
 
 extension CropView {
     fileprivate func startEditing() {
-        cancelResetTimer()
         set(editing: true, resetCropbox: false, animated: true)
     }
 
@@ -942,67 +783,26 @@ extension CropView {
     }
     
     func moveCroppedContentToCenter(animated: Bool = false) {
-        var cropBoxFrame = self.cropBoxFrame
-        
-        // Ensure we only proceed after the crop frame has been setup for the first time
-        if cropBoxFrame.width < CGFloat.ulpOfOne || cropBoxFrame.height < CGFloat.ulpOfOne {
-            return
-        }
-        
-        let contentRect = contentBounds
-
-        //The scale we need to scale up the crop box to fit full screen
-        let scale = min(contentRect.width / cropBoxFrame.width, contentRect.height / cropBoxFrame.height)
-        
-        let focusPoint = CGPoint(x: cropBoxFrame.midX, y: cropBoxFrame.midY)
-        let midPoint = CGPoint(x: contentRect.midX, y: contentRect.midY)
-        
-        cropBoxFrame.size.width = ceil(cropBoxFrame.width * scale)
-        cropBoxFrame.size.height = ceil(cropBoxFrame.height * scale)
-        cropBoxFrame.origin.x = contentRect.origin.x + ceil(0.5 * (contentRect.width - cropBoxFrame.width))
-        cropBoxFrame.origin.y = contentRect.origin.y + ceil(0.5 * (contentRect.height - cropBoxFrame.height))
-        
-        //Work out the point on the scroll content that the focusPoint is aiming at
-        var contentTargetPoint = CGPoint()
-        contentTargetPoint.x = ((focusPoint.x + scrollView.contentOffset.x) * scale)
-        contentTargetPoint.y = ((focusPoint.y + scrollView.contentOffset.y) * scale)
-
-        //Work out where the crop box is focusing, so we can re-align to center that point
-        var offset = CGPoint()
-        offset.x = -midPoint.x + contentTargetPoint.x
-        offset.y = -midPoint.y + contentTargetPoint.y
-
-        //clamp the content so it doesn't create any seams around the grid
-        offset.x = max(-cropBoxFrame.origin.x, offset.x)
-        offset.y = max(-cropBoxFrame.origin.y, offset.y)
         
         func translate() {
-            if (scale < CGFloat(1.0) - CGFloat.ulpOfOne || scale > CGFloat(1.0) + CGFloat.ulpOfOne) {
-                scrollView.zoomScale *= scale
-                scrollView.zoomScale = min(scrollView.maximumZoomScale, scrollView.zoomScale)
-            }
+            var rect = self.convert(self.cropBoxFrame, to: scrollView)
+            rect = CGRect(x: rect.minX/scrollView.zoomScale, y: rect.minY/scrollView.zoomScale, width: rect.width/scrollView.zoomScale, height: rect.height/scrollView.zoomScale)
+            self.scrollView.zoom(to: rect, animated: false)
             
-            // If it turns out the zoom operation would have exceeded the minizum zoom scale, don't apply
-            // the content offset
-            if (scrollView.zoomScale < scrollView.maximumZoomScale - CGFloat.ulpOfOne) {
-                offset.x = min(-cropBoxFrame.maxX + scrollView.contentSize.width, offset.x)
-                offset.y = min(-cropBoxFrame.maxY + scrollView.contentSize.height, offset.y)
-                scrollView.contentOffset = offset
-            }
-            
+            var cropBoxFrame = self.cropBoxFrame
+            let contentRect = contentBounds
+            cropBoxFrame = GeometryTools.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: cropBoxFrame)
+
             self.cropBoxFrame = cropBoxFrame
-            
             adaptAngleDashboardToCropBox()
         }
         
         if animated == false {
             translate()
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now()) {
-                UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: { [weak self] _ in
-                    self?.angleDashboard.isHidden = false
-                })
-            }
+            UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: { [weak self] _ in
+                self?.angleDashboard.isHidden = false
+            })
         }
     }
     
@@ -1116,13 +916,12 @@ extension CropView {
         }
         
         //Cancel any pending resizing timers
-        if (resetTimer != nil) {
-            cancelResetTimer()
-            set(editing: false, resetCropbox: true, animated: false)
-            
-            cropBoxLastEditedAngle = angle
-            captureStateForImageRotation()
-        }
+//        if (resetTimer != nil) {
+//            set(editing: false, resetCropbox: true, animated: false)
+//
+//            cropBoxLastEditedAngle = angle
+//            captureStateForImageRotation()
+//        }
         
         //Work out the new angle, and wrap around once we exceed 360s
         var newAngle = self.angle
