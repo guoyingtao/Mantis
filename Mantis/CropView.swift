@@ -184,7 +184,8 @@ class CropView: UIView {
     fileprivate var restoreImageCropFrame = CGRect.zero
     
     fileprivate var cropViewPadding:CGFloat = 14.0
-    fileprivate var maximumZoomScale = 15.0
+    fileprivate var maximumZoomScale:CGFloat = 15.0
+    fileprivate var minimumZoomScale:CGFloat = 15.0
     
     fileprivate var aspectRatio = CGSize(width: 4.0, height: 3.0)
     fileprivate var aspectRatioLockEnabled = false
@@ -271,6 +272,7 @@ class CropView: UIView {
         cropBoxFrame = initialCropBoxRect
         cropOrignFrame = cropBoxFrame
         scrollView.frame = contentBounds
+        scrollView.contentSize = contentBounds.size
         scrollView.backgroundColor = .blue
         imageViewContainer.frame = scrollView.bounds
         imageView.frame = initialCropBoxRect
@@ -607,7 +609,7 @@ extension CropView: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         showVisualEffectBackground()
         if decelerate == false {
-            startResetTimer()
+//            startResetTimer()
         }
     }
 }
@@ -784,13 +786,16 @@ extension CropView {
     
     func moveCroppedContentToCenter(animated: Bool = false) {
         
+        var cropBoxFrame = self.cropBoxFrame
+        let contentRect = contentBounds
+        let scale = scrollView.zoomScale
+        scrollView.contentSize = CGSize(width: contentBounds.width * scale, height: contentBounds.height * scale)
+        
         func translate() {
             var rect = self.convert(self.cropBoxFrame, to: scrollView)
-            rect = CGRect(x: rect.minX/scrollView.zoomScale, y: rect.minY/scrollView.zoomScale, width: rect.width/scrollView.zoomScale, height: rect.height/scrollView.zoomScale)
-            self.scrollView.zoom(to: rect, animated: false)
+            rect = CGRect(x: rect.minX/scale, y: rect.minY/scale, width: rect.width/scale, height: rect.height/scale)
+            scrollView.zoom(to: rect, animated: false)
             
-            var cropBoxFrame = self.cropBoxFrame
-            let contentRect = contentBounds
             cropBoxFrame = GeometryTools.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: cropBoxFrame)
 
             self.cropBoxFrame = cropBoxFrame

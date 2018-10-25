@@ -31,7 +31,9 @@ class ViewController: UIViewController {
         cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        self.view.backgroundColor = .black        
+        self.view.backgroundColor = .black
+//        self.cropView.layer.borderColor = UIColor.red.cgColor
+//        self.cropView.layer.borderWidth = 2
     }
     
     override func viewDidLayoutSubviews() {
