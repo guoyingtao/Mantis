@@ -13,6 +13,13 @@ import UIKit
 class ViewController: UIViewController {
     var cropView: CropView!
     
+    
+    @IBOutlet weak var resetButton: UIButton!
+    @IBOutlet weak var rotateButton: UIButton!
+    @IBOutlet weak var cropButton: UIButton!
+    
+    @IBOutlet weak var croppedImageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,6 +30,7 @@ class ViewController: UIViewController {
         cropView = CropView(image: image)
         cropView.frame = view.frame
         cropView.delegate = self
+        cropView.clipsToBounds = true
         view.addSubview(cropView)
 
         cropView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,12 +40,32 @@ class ViewController: UIViewController {
         cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
         self.view.backgroundColor = .black
-//        self.cropView.layer.borderColor = UIColor.red.cgColor
-//        self.cropView.layer.borderWidth = 2
     }
     
     override func viewDidLayoutSubviews() {
         cropView.adaptForCropBox()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        view.bringSubviewToFront(cropButton)
+        view.bringSubviewToFront(resetButton)
+        view.bringSubviewToFront(rotateButton)
+        view.bringSubviewToFront(croppedImageView)
+    }
+    
+    @IBAction func reset(_ sender: Any) {
+        cropView.reset()
+    }
+    
+    @IBAction func rotate(_ sender: Any) {
+    }
+    
+    @IBAction func crop(_ sender: Any) {
+        guard let image = cropView.crop() else {
+            return
+        }
+        
+        croppedImageView.image = image
     }
     
     @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {

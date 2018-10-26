@@ -113,19 +113,6 @@ class CropView: UIView {
         super.init(coder: aDecoder)
     }
     
-    func reset() {
-        scrollView.removeFromSuperview()
-        dimmingView.removeFromSuperview()
-        visualEffectView.removeFromSuperview()
-        gridOverlayView.removeFromSuperview()
-        angleDashboard.removeFromSuperview()
-        
-        cropBoxFrame = .zero
-        
-        setupUI()
-        adaptForCropBox()
-    }
-    
     private func setupUI() {
         setupScrollView()
         
@@ -145,10 +132,6 @@ class CropView: UIView {
         gridPanGestureRecognizer.delegate = self
         scrollView.panGestureRecognizer.require(toFail: gridPanGestureRecognizer)
         addGestureRecognizer(gridPanGestureRecognizer)
-        
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
-        doubleTap.numberOfTapsRequired = 2
-        addGestureRecognizer(doubleTap)
     }
     
     private func setup() {
@@ -156,12 +139,8 @@ class CropView: UIView {
         setupGestures()
     }
     
-    @objc func handleDoubleTap(recognizer: UIPanGestureRecognizer) {
-        reset()
-    }
-    
     func adaptForCropBox() {
-        print("initialCropBoxRect is \(initialCropBoxRect)")
+//        print("initialCropBoxRect is \(initialCropBoxRect)")
         cropBoxFrame = initialCropBoxRect
         cropOrignFrame = cropBoxFrame
         
@@ -583,5 +562,62 @@ extension CropView {
                 self?.angleDashboard.isHidden = false
             })
         }
+    }
+}
+
+extension CropView {
+    private func cropImage(image:UIImage, cropRect:CGRect) -> UIImage
+    {
+        UIGraphicsBeginImageContextWithOptions(cropRect.size, false, 0)
+        let context = UIGraphicsGetCurrentContext()
+        
+        context?.translateBy(x: 0.0, y: image.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+        context?.draw(image.cgImage!, in: CGRect(x:0, y:0, width:image.size.width, height:image.size.height), byTiling: false)
+        context?.clip(to: [cropRect])
+        
+        let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return croppedImage!
+    }
+}
+
+extension CropView {
+    func crop() -> UIImage? {
+        print("imageView bounds is \(imageView.bounds)")
+        let cropRect = gridOverlayView.convert(gridOverlayView.bounds, to: imageView)
+        print("cropRect is \(cropRect)")
+        
+        guard let cgImage = imageView.image?.cgImage else {
+            return nil
+        }
+        
+        let imageWidth = imageView.frame.width
+        let scale = CGFloat(cgImage.width) / imageWidth
+        
+        let realCropRect = CGRect(x: cropRect.origin.x * scale, y: cropRect.origin.y * scale, width: cropRect.width * scale, height: cropRect.height * scale)
+        print("realCropRect is \(realCropRect)")
+        
+        let image = UIImage(named: "sunflower.jpg")
+        let croppedImage = cropImage(image: image!, cropRect: realCropRect)
+        return croppedImage
+    }
+    
+    func rotate() {
+        
+    }
+    
+    func reset() {
+        scrollView.removeFromSuperview()
+        dimmingView.removeFromSuperview()
+        visualEffectView.removeFromSuperview()
+        gridOverlayView.removeFromSuperview()
+        angleDashboard.removeFromSuperview()
+        
+        cropBoxFrame = .zero
+        
+        setupUI()
+        adaptForCropBox()
     }
 }

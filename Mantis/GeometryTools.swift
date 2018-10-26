@@ -26,4 +26,19 @@ struct GeometryTools {
         rect.origin.y = outsideRect.midY - rect.height / 2
         return rect
     }
+    
+    static func checkIf(outerView: UIView, coveredInnerView innerView: UIView) -> Bool {
+        let p1 = innerView.convert(CGPoint(x: 0, y: 0), to: outerView)
+        let p2 = innerView.convert(CGPoint(x: innerView.frame.width, y: 0), to: outerView)
+        let p3 = innerView.convert(CGPoint(x: 0, y: innerView.frame.height), to: outerView)
+        let p4 = innerView.convert(CGPoint(x: innerView.frame.width, y: innerView.frame.height), to: outerView)
+        
+        print("p list is \(p1) \(p2) \(p3) \(p4)")
+        
+        if outerView.bounds.contains(p1) && outerView.bounds.contains(p2) && outerView.bounds.contains(p3) && outerView.bounds.contains(p4) {
+            return true
+        }
+        
+        return false
+    }
 }
