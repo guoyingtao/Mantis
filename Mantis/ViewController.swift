@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         guard let image = UIImage(named: "sunflower.jpg") else {
             return
         }
-        
+                
         cropView = CropView(image: image)
         cropView.frame = view.frame
         cropView.delegate = self

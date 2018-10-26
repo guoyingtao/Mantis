@@ -16,6 +16,9 @@ class AngleDashboard: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.white.cgColor
+        
         clipsToBounds = true
         
         let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.9, width: frame.width, height: frame.width)
@@ -53,7 +56,7 @@ class AngleDashboard: UIView {
         return CGPoint(x: dialPlate.frame.midX , y: dialPlate.frame.midY)
     }
     
-    func rotateDailPlate(by angle: CGFloat) {
+    func rotateDialPlate(by angle: CGFloat) {
         dialPlate.transform = dialPlate.transform.rotated(by: angle)
     }
     

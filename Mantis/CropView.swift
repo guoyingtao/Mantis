@@ -185,7 +185,7 @@ class CropView: UIView {
     
     fileprivate var cropViewPadding:CGFloat = 14.0
     fileprivate var maximumZoomScale:CGFloat = 15.0
-    fileprivate var minimumZoomScale:CGFloat = 15.0
+    fileprivate var minimumZoomScale:CGFloat = 1.0
     
     fileprivate var aspectRatio = CGSize(width: 4.0, height: 3.0)
     fileprivate var aspectRatioLockEnabled = false
@@ -271,9 +271,11 @@ class CropView: UIView {
         print("initialCropBoxRect is \(initialCropBoxRect)")
         cropBoxFrame = initialCropBoxRect
         cropOrignFrame = cropBoxFrame
-        scrollView.frame = contentBounds
-        scrollView.contentSize = contentBounds.size
+        
+        scrollView.frame = initialCropBoxRect
+        scrollView.contentSize = initialCropBoxRect.size
         scrollView.backgroundColor = .blue
+        
         imageViewContainer.frame = scrollView.bounds
         imageView.frame = initialCropBoxRect
         imageView.center = CGPoint(x: imageViewContainer.bounds.width/2, y: imageViewContainer.bounds.height/2)
@@ -289,9 +291,11 @@ class CropView: UIView {
             self?.showVisualEffectBackground()
         }
         
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 15.0
+        scrollView.minimumZoomScale = minimumZoomScale
+        scrollView.maximumZoomScale = maximumZoomScale
         scrollView.zoomScale = scrollView.minimumZoomScale
+        
+        scrollView.clipsToBounds = false
         
         scrollView.delegate = self
         addSubview(scrollView)
@@ -425,13 +429,17 @@ class CropView: UIView {
             newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }
         
+        guard newCropBoxFrame.width >= cropViewMinimumBoxSize && newCropBoxFrame.height >= cropViewMinimumBoxSize else {
+            return
+        }
+        
         cropBoxFrame = newCropBoxFrame
         
-//        var imageRefFrame = CGRect(x: imageView.frame.origin.x - 1, y: imageView.frame.origin.y - 1, width: imageView.frame.width + 2, height: imageView.frame.height + 2 )
-//        imageRefFrame = imageView.convert(imageRefFrame, to: self)
-//        if imageRefFrame.contains(newCropBoxFrame) {
-//            cropBoxFrame = newCropBoxFrame
-//        }
+        var imageRefFrame = CGRect(x: imageView.frame.origin.x - 1, y: imageView.frame.origin.y - 1, width: imageView.frame.width + 2, height: imageView.frame.height + 2 )
+        imageRefFrame = imageView.convert(imageRefFrame, to: self)
+        if imageRefFrame.contains(newCropBoxFrame) {
+            cropBoxFrame = newCropBoxFrame
+        }
     }
 
     fileprivate func updateTo(imageCropframe: CGRect) {
@@ -688,10 +696,12 @@ extension CropView {
                 demoRotationCenterView?.removeFromSuperview()
                 demoRotationCenterView = UIView(frame: CGRect(x: rotationCenterOnImage.x - 2, y: rotationCenterOnImage.y - 2, width: 4, height: 4))
                 demoRotationCenterView?.backgroundColor = .red
-                imageView.addSubview(demoRotationCenterView!)
+//                imageView.addSubview(demoRotationCenterView!)
                 
-                let anchorPoint = CGPoint(x: rotationCenterOnImage.x * scrollView.zoomScale / imageView.frame.width, y: rotationCenterOnImage.y * scrollView.zoomScale / imageView.frame.height)
+                // Do not use imageView frame because the frame will change after rotation!
+                let anchorPoint = CGPoint(x: rotationCenterOnImage.x / imageView.bounds.width, y: rotationCenterOnImage.y / imageView.bounds.height)
 
+                print("rotationCenterOnImage is \(rotationCenterOnImage)")
                 setAnchorPoint(anchorPoint: anchorPoint, forView: imageView)
             } else {
                 forCrop = true
@@ -713,6 +723,11 @@ extension CropView {
                 currentPoint = nil
                 previousPoint = nil
                 rotationCal = nil
+                
+                let angle = angleDashboard.getRotationAngle()
+                print("angle is \(angle)")
+                print("image view scalex is \(imageView.transform.scaleX)")
+                print("image view scaley is \(imageView.transform.scaleY)")
             }
             
             forCrop = true
@@ -725,13 +740,39 @@ extension CropView {
             } else {
                 currentPoint = point
                 if let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
-                    angleDashboard.rotateDailPlate(by: rotation)
-                    imageView.transform = imageView.transform.rotated(by: rotation)
+                    if checkIfCoveredCropBox() {
+                        angleDashboard.rotateDialPlate(by: rotation)
+                        imageView.transform = imageView.transform.rotated(by: rotation)
+                    } else {
+                        print("un cover")
+                        resetImageToCoverCropBox()
+                    }
+                } else {
+                    resetImageToCoverCropBox()
                 }
                 
                 previousPoint = currentPoint
             }
         }
+    }
+    
+    private func checkIfCoveredCropBox() -> Bool {
+        let p1 = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageView)
+        let p2 = gridOverlayView.convert(CGPoint(x: gridOverlayView.frame.width, y: 0), to: imageView)
+        let p3 = gridOverlayView.convert(CGPoint(x: 0, y: gridOverlayView.frame.height), to: imageView)
+        let p4 = gridOverlayView.convert(CGPoint(x: gridOverlayView.frame.width, y: gridOverlayView.frame.height), to: imageView)
+        
+        print("p list is \(p1) \(p2) \(p3) \(p4)")
+        
+        if imageView.bounds.contains(p1) && imageView.bounds.contains(p2) && imageView.bounds.contains(p3) && imageView.bounds.contains(p4) {
+            return true
+        }
+        
+        return false
+    }
+    
+    private func resetImageToCoverCropBox() {
+        
     }
 }
 
@@ -743,7 +784,7 @@ extension CropView: UIGestureRecognizerDelegate {
         
         let frame = gridOverlayView.frame
         let innerFrame = frame.insetBy(dx: 22, dy: 22)
-        let outerFrame = frame.insetBy(dx: -22, dy: -22)
+        let outerFrame = frame.insetBy(dx: -22, dy: -22 - angleDashboardHeight)
         
         if (innerFrame.contains(tapPoint) || !outerFrame.contains(tapPoint)) {
             print("pan false")
@@ -789,14 +830,15 @@ extension CropView {
         var cropBoxFrame = self.cropBoxFrame
         let contentRect = contentBounds
         let scale = scrollView.zoomScale
-        scrollView.contentSize = CGSize(width: contentBounds.width * scale, height: contentBounds.height * scale)
+        cropBoxFrame = GeometryTools.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: cropBoxFrame)
+        
+        var rect = convert(self.cropBoxFrame, to: scrollView)
+        rect = CGRect(x: rect.minX/scale, y: rect.minY/scale, width: rect.width/scale, height: rect.height/scale)
         
         func translate() {
-            var rect = self.convert(self.cropBoxFrame, to: scrollView)
-            rect = CGRect(x: rect.minX/scale, y: rect.minY/scale, width: rect.width/scale, height: rect.height/scale)
+            scrollView.frame = cropBoxFrame
+            scrollView.contentSize = cropBoxFrame.size
             scrollView.zoom(to: rect, animated: false)
-            
-            cropBoxFrame = GeometryTools.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: cropBoxFrame)
 
             self.cropBoxFrame = cropBoxFrame
             adaptAngleDashboardToCropBox()
