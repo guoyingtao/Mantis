@@ -25,6 +25,7 @@ struct CropBoxLockedAspectFrameUpdater {
         self.cropBoxFrame = cropBoxFrame
     }
     
+    @discardableResult
     mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) -> CropBoxFrameAspectInfo {
         var xDelta = xDelta
         var yDelta = yDelta

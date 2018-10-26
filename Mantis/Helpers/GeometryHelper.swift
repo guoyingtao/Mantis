@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct GeometryTools {
+struct GeometryHelper {
     static func getIncribeRect(fromOutsideRect outsideRect: CGRect, andInsideRect insideRect: CGRect) -> CGRect {
         let insideRectRatio = insideRect.width / insideRect.height
         let outsideRectRatio = outsideRect.width / outsideRect.height

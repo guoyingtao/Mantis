@@ -28,6 +28,7 @@ struct CropBoxFreeAspectFrameUpdater {
         self.cropBoxFrame = cropBoxFrame
     }
     
+    @discardableResult
     mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) -> CropBoxFrameClampInfo {
         var info = CropBoxFrameClampInfo(false, false)
         
@@ -77,7 +78,7 @@ struct CropBoxFreeAspectFrameUpdater {
         
         func updateCropBoxFrame() {
             let newSize = getNewCropFrameSize(byTappedEdge: tappedEdge)
-//            print("new size w is \(newSize.width)")
+
             switch tappedEdge {
             case .left:
                 handleLeftEdgeFrameUpdate(newSize: newSize)

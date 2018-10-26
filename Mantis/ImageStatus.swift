@@ -19,5 +19,12 @@ struct ImageStatus {
     var angle: CGFloat = 0
     var zoomScale: CGFloat = 0
     var offset: CGPoint = .zero
-    var rotationType: ImageRotationType = .none    
+    var rotationType: ImageRotationType = .none
+    
+    mutating func reset() {
+        angle = 0
+        zoomScale = 0
+        offset = .zero
+        rotationType = .none
+    }
 }
