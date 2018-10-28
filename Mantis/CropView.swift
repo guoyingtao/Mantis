@@ -55,10 +55,9 @@ class CropView: UIView {
     fileprivate var cropBoxFrame = CGRect.zero {
         didSet {
             if oldValue.equalTo(cropBoxFrame) { return }
-
+            
             gridOverlayView.frame = cropBoxFrame
-            dimmingView.adaptMaskTo(match: cropBoxFrame)
-            visualEffectView.adaptMaskTo(match: cropBoxFrame)
+            cropMaskViewManager.adaptMaskTo(match: cropBoxFrame)
         }
     }
     
@@ -86,8 +85,9 @@ class CropView: UIView {
     fileprivate var image: UIImage!
     fileprivate var imageView: UIImageView!
     fileprivate var imageViewContainer: UIView!
-    fileprivate var dimmingView: CropDimmingView!
-    fileprivate var visualEffectView: CropVisualEffectView!
+    
+    fileprivate var cropMaskViewManager: CropMaskViewManager!
+    
     fileprivate var angleDashboard: AngleDashboard!
     fileprivate var scrollView: CropScrollView!
     fileprivate var gridOverlayView: CropOverlayView!
@@ -109,14 +109,16 @@ class CropView: UIView {
         case .initial:
             setupUI()
         case .touchImage:
-            showDimmingBackground()
+            cropMaskViewManager.showDimmingBackground()
             print("touch image")
         case .touchCropboxHandle:
+            cropMaskViewManager.showDimmingBackground()
             print("touch cropbox")
         case .touchRotationBoard:
+            cropMaskViewManager.showDimmingBackground()
             print("touch rotation")
         case .betweenOperation:
-            showVisualEffectBackground()
+            cropMaskViewManager.showVisualEffectBackground()
             print("between Operation")
         }
     }
@@ -129,8 +131,7 @@ class CropView: UIView {
         imageViewContainer.addSubview(imageView)
         scrollView.addSubview(imageViewContainer)
         
-        setupTranslucencyView()
-        setupOverlayView()
+        cropMaskViewManager = CropMaskViewManager(with: self)
         setGridOverlayView()
     }
     
@@ -202,19 +203,6 @@ class CropView: UIView {
         imageView.accessibilityIgnoresInvertColors = true
         imageView.contentMode = .scaleAspectFit
         return imageView
-    }
-    
-    private func setupOverlayView() {
-        dimmingView = CropDimmingView()
-        dimmingView.isUserInteractionEnabled = false
-        dimmingView.alpha = 0
-        addSubview(dimmingView)
-    }
-    
-    private func setupTranslucencyView() {
-        visualEffectView = CropVisualEffectView()
-        visualEffectView.isUserInteractionEnabled = false
-        addSubview(visualEffectView)
     }
     
     private func setGridOverlayView() {
@@ -324,54 +312,38 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        showDimmingBackground()
+        cropMaskViewManager.showDimmingBackground()
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        showDimmingBackground()
+        cropMaskViewManager.showDimmingBackground()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        showVisualEffectBackground()
+        cropMaskViewManager.showVisualEffectBackground()
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        showVisualEffectBackground()
+        cropMaskViewManager.showVisualEffectBackground()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        showVisualEffectBackground()
-    }
-}
-
-extension CropView {
-    func showDimmingBackground() {
-        UIView.animate(withDuration: 0.1) {
-            self.dimmingView.alpha = 1
-            self.visualEffectView.alpha = 0
-        }
-    }
-    
-    func showVisualEffectBackground() {
-        UIView.animate(withDuration: 0.5) {
-            self.dimmingView.alpha = 0
-            self.visualEffectView.alpha = 1
-        }
+        cropMaskViewManager.showVisualEffectBackground()
     }
 }
 
 extension CropView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        showDimmingBackground()
+        cropMaskViewManager.showDimmingBackground()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        showVisualEffectBackground()
+        cropMaskViewManager.showVisualEffectBackground()
     }
 }
 
@@ -434,7 +406,7 @@ extension CropView {
                 cropOrignFrame = cropBoxFrame
                 tappedEdge = cropEdge(forPoint: point)
                 print("tappedEdge is \(tappedEdge)")
-                showDimmingBackground()
+                cropMaskViewManager.showDimmingBackground()
             }
         }
         
@@ -456,7 +428,7 @@ extension CropView {
             }
             
             forCrop = true
-            showVisualEffectBackground()
+            cropMaskViewManager.showVisualEffectBackground()
         }
         
         if recognizer.state == .changed {
@@ -571,8 +543,7 @@ extension CropView {
     
     func reset() {
         scrollView.removeFromSuperview()
-        dimmingView.removeFromSuperview()
-        visualEffectView.removeFromSuperview()
+        cropMaskViewManager.removeMaskViews()
         gridOverlayView.removeFromSuperview()
         angleDashboard.removeFromSuperview()
         
