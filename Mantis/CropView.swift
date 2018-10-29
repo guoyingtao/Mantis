@@ -429,7 +429,7 @@ extension CropView {
             } else {
                 currentPoint = point
                 if let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
-                    let points = GeometryHelper.checkIf(outerView: imageView, coveredInnerView: gridOverlayView)
+                    let points = GeometryHelper.getOverSteppedCornerPoints(from: imageView, andeInnerView: gridOverlayView)
                     
                     guard angleDashboard.rotateDialPlate(by: rotation) == true else {
                         return

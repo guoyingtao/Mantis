@@ -27,13 +27,11 @@ struct GeometryHelper {
         return rect
     }
     
-    static func checkIf(outerView: UIView, coveredInnerView innerView: UIView) -> [CGPoint] {
-        let yOffset:CGFloat = 0
-        let p1 = innerView.convert(CGPoint(x: 0, y: 0 + yOffset), to: outerView)
+    static func getOverSteppedCornerPoints(from outerView: UIView, andeInnerView innerView: UIView) -> [CGPoint] {
+        let p1 = innerView.convert(CGPoint(x: 0, y: 0), to: outerView)
         let p2 = innerView.convert(CGPoint(x: innerView.bounds.width, y: 0), to: outerView)
-        let p3 = innerView.convert(CGPoint(x: 0, y: innerView.bounds.height - yOffset), to: outerView)
+        let p3 = innerView.convert(CGPoint(x: 0, y: innerView.bounds.height), to:  outerView)
         let p4 = innerView.convert(CGPoint(x: innerView.bounds.width, y: innerView.frame.height), to: outerView)
-//        print("p list is \(p1) \(p2) \(p3) \(p4)")
         
         let points = [p1, p2, p3, p4]
         var outsidePoints: [CGPoint] = []

@@ -59,7 +59,8 @@ class AngleDashboard: UIView {
     }
     
     func rotateDialPlate(by angle: CGFloat) -> Bool {
-        if abs(getRotationAngle() + angle) >= angleLimit {
+        
+        if (getRotationAngle() * angle) > 0 && abs(getRotationAngle() + angle) >= angleLimit {
             return false
         } else {
             dialPlate.transform = dialPlate.transform.rotated(by: angle)
