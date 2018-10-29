@@ -27,18 +27,27 @@ struct GeometryHelper {
         return rect
     }
     
-    static func checkIf(outerView: UIView, coveredInnerView innerView: UIView) -> Bool {
-        let p1 = innerView.convert(CGPoint(x: 0, y: 0), to: outerView)
-        let p2 = innerView.convert(CGPoint(x: innerView.frame.width, y: 0), to: outerView)
-        let p3 = innerView.convert(CGPoint(x: 0, y: innerView.frame.height), to: outerView)
-        let p4 = innerView.convert(CGPoint(x: innerView.frame.width, y: innerView.frame.height), to: outerView)
-        
+    static func checkIf(outerView: UIView, coveredInnerView innerView: UIView) -> [CGPoint] {
+        let yOffset:CGFloat = 0
+        let p1 = innerView.convert(CGPoint(x: 0, y: 0 + yOffset), to: outerView)
+        let p2 = innerView.convert(CGPoint(x: innerView.bounds.width, y: 0), to: outerView)
+        let p3 = innerView.convert(CGPoint(x: 0, y: innerView.bounds.height - yOffset), to: outerView)
+        let p4 = innerView.convert(CGPoint(x: innerView.bounds.width, y: innerView.frame.height), to: outerView)
 //        print("p list is \(p1) \(p2) \(p3) \(p4)")
         
-        if outerView.bounds.contains(p1) && outerView.bounds.contains(p2) && outerView.bounds.contains(p3) && outerView.bounds.contains(p4) {
-            return true
+        let points = [p1, p2, p3, p4]
+        var outsidePoints: [CGPoint] = []
+        
+        for p in points {
+            if !outerView.bounds.contains(p) {
+                outsidePoints.append(p)
+            }
         }
         
-        return false
+        return outsidePoints
+    }
+    
+    static func getMiddlePoint(of p1: CGPoint, and p2: CGPoint) -> CGPoint {
+        return CGPoint(x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2)
     }
 }

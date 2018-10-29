@@ -10,8 +10,10 @@ import UIKit
 
 class AngleDashboard: UIView {
     
-    var dialPlate: AngleDialPlate!
-    var pointer: CAShapeLayer = CAShapeLayer()
+    var angleLimit:CGFloat = 45
+    
+    private var dialPlate: AngleDialPlate!
+    private var pointer: CAShapeLayer = CAShapeLayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,8 +58,13 @@ class AngleDashboard: UIView {
         return CGPoint(x: dialPlate.frame.midX , y: dialPlate.frame.midY)
     }
     
-    func rotateDialPlate(by angle: CGFloat) {
-        dialPlate.transform = dialPlate.transform.rotated(by: angle)
+    func rotateDialPlate(by angle: CGFloat) -> Bool {
+        if abs(getRotationAngle() + angle) >= angleLimit {
+            return false
+        } else {
+            dialPlate.transform = dialPlate.transform.rotated(by: angle)
+            return true
+        }        
     }
     
     func getRotationAngle() -> CGFloat {

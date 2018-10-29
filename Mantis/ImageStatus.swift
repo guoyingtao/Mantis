@@ -8,11 +8,19 @@
 
 import UIKit
 
-enum ImageRotationType {
-    case none
-    case clockwise90
-    case clockwise180
-    case clockwish270
+enum ImageRotationType: Int {
+    case none = 0
+    case clockwise90 = 90
+    case clockwise180 = 180
+    case clockwish270 = 270
+    
+    mutating func clockwiseRotate90() {
+        if self == .clockwish270 {
+            self = .none
+        } else {
+            self = ImageRotationType(rawValue: self.rawValue + 90) ?? .none
+        }
+    }
 }
 
 struct ImageStatus {
@@ -26,5 +34,9 @@ struct ImageStatus {
         zoomScale = 0
         offset = .zero
         rotationType = .none
+    }
+    
+    mutating func clockwiseRotate90() {
+        rotationType.clockwiseRotate90()
     }
 }
