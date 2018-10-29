@@ -110,16 +110,14 @@ class CropView: UIView {
             setupUI()
         case .touchImage:
             cropMaskViewManager.showDimmingBackground()
-            print("touch image")
         case .touchCropboxHandle:
+            angleDashboard.isHidden = true
             cropMaskViewManager.showDimmingBackground()
-            print("touch cropbox")
         case .touchRotationBoard:
             cropMaskViewManager.showDimmingBackground()
-            print("touch rotation")
         case .betweenOperation:
+            angleDashboard.isHidden = false
             cropMaskViewManager.showVisualEffectBackground()
-            print("between Operation")
         }
     }
     
@@ -185,7 +183,7 @@ class CropView: UIView {
         }
 
         scrollView.touchesCancelled = { [weak self] in
-            self?.viewStatus = .betweenOperation
+//            self?.viewStatus = .betweenOperation
         }
         
         scrollView.minimumZoomScale = minimumZoomScale
@@ -229,8 +227,6 @@ class CropView: UIView {
     }
     
     fileprivate func updateCropBoxFrame(withGesturePoint point: CGPoint) {
-        angleDashboard.isHidden = true
-
         let contentFrame = contentBounds
         
         var point = point
@@ -307,43 +303,42 @@ extension CropView: UIScrollViewDelegate {
         return imageViewContainer
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-    }
-    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        cropMaskViewManager.showDimmingBackground()
+        viewStatus = .touchImage
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        cropMaskViewManager.showDimmingBackground()
+        viewStatus = .touchImage
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        cropMaskViewManager.showVisualEffectBackground()
-    }
-    
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        viewStatus = .betweenOperation
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        cropMaskViewManager.showVisualEffectBackground()
+        viewStatus = .betweenOperation
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        cropMaskViewManager.showVisualEffectBackground()
+        viewStatus = .betweenOperation
     }
 }
 
 extension CropView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        cropMaskViewManager.showDimmingBackground()
+        
+        if let touch = touches.first {
+            let position = touch.location(in: self)
+            checkTouchEdge(forPoint: position)
+        }
+        
+        viewStatus = .touchImage
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        cropMaskViewManager.showVisualEffectBackground()
+        viewStatus = .betweenOperation
     }
 }
 
@@ -377,6 +372,15 @@ extension CropView {
         view.layer.anchorPoint = anchorPoint
     }
     
+    fileprivate func checkTouchEdge(forPoint point: CGPoint) {
+        tappedEdge = cropEdge(forPoint: point)
+        print("tappedEdge is \(tappedEdge)")
+        
+        if tappedEdge != .none {
+            viewStatus = .touchCropboxHandle
+        }
+    }
+    
     @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: self)
         
@@ -404,9 +408,8 @@ extension CropView {
                 forCrop = true
                 panOriginPoint = point
                 cropOrignFrame = cropBoxFrame
-                tappedEdge = cropEdge(forPoint: point)
-                print("tappedEdge is \(tappedEdge)")
-                cropMaskViewManager.showDimmingBackground()
+                
+                checkTouchEdge(forPoint: point)
             }
         }
         
@@ -428,7 +431,7 @@ extension CropView {
             }
             
             forCrop = true
-            cropMaskViewManager.showVisualEffectBackground()
+            viewStatus = .betweenOperation
         }
         
         if recognizer.state == .changed {
@@ -488,7 +491,6 @@ extension CropView: UIGestureRecognizerDelegate {
 
 extension CropView {
     func moveCroppedContentToCenter(animated: Bool = false) {
-        
         var cropBoxFrame = self.cropBoxFrame
         let contentRect = contentBounds
         let scale = scrollView.zoomScale
@@ -510,7 +512,7 @@ extension CropView {
             translate()
         } else {
             UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: { [weak self] _ in
-                self?.angleDashboard.isHidden = false
+                self?.viewStatus = .betweenOperation
             })
         }
     }
