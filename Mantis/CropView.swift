@@ -25,8 +25,6 @@ protocol CropViewDelegate {
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
 
-typealias UpdateCropBoxFrameInfo = (aspectHorizontal: Bool, aspectVertical: Bool, clampMinFromTop: Bool, clampMinFromLeft: Bool)
-
 class CropView: UIView {
     let cropViewMinimumBoxSize: CGFloat = 42
     var minimumAspectRatio: CGFloat = 0
@@ -111,11 +109,16 @@ class CropView: UIView {
         case .touchImage:
             cropMaskViewManager.showDimmingBackground()
         case .touchCropboxHandle:
+            gridOverlayView.gridLineNumberType = .crop
+            gridOverlayView.setGrid(hidden: false, animated: true)
             angleDashboard.isHidden = true
             cropMaskViewManager.showDimmingBackground()
         case .touchRotationBoard:
+            gridOverlayView.gridLineNumberType = .rotate
+            gridOverlayView.setGrid(hidden: false, animated: true)
             cropMaskViewManager.showDimmingBackground()
         case .betweenOperation:
+            gridOverlayView.setGrid(hidden: true, animated: true)
             angleDashboard.isHidden = false
             cropMaskViewManager.showVisualEffectBackground()
         }
@@ -180,10 +183,6 @@ class CropView: UIView {
         
         scrollView.touchesEnded = { [weak self] in
             self?.viewStatus = .betweenOperation
-        }
-
-        scrollView.touchesCancelled = { [weak self] in
-//            self?.viewStatus = .betweenOperation
         }
         
         scrollView.minimumZoomScale = minimumZoomScale
@@ -259,8 +258,14 @@ class CropView: UIView {
         }
     }
     
-    fileprivate func isAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
-        return angleDashboard.frame.contains(point)
+    fileprivate func checkIsAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
+        let contains = angleDashboard.frame.contains(point)
+        
+        if contains == true {
+            viewStatus = .touchRotationBoard
+        }
+        
+        return contains
     }
     
     fileprivate func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
@@ -328,12 +333,14 @@ extension CropView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        if let touch = touches.first {
-            let position = touch.location(in: self)
-            checkTouchEdge(forPoint: position)
-        }
-        
         viewStatus = .touchImage
+        
+        if let touch = touches.first {
+            let point = touch.location(in: self)
+            if !checkIsAngleDashboardTouched(forPoint: point) {
+                checkTouchEdge(forPoint: point)
+            }
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -350,28 +357,6 @@ private var demoRotationCenterView: UIView?
 
 extension CropView {
     
-    func setAnchorPoint(anchorPoint: CGPoint, forView view: UIView) {
-        var newPoint = CGPoint(x: view.bounds.size.width * anchorPoint.x,
-                               y: view.bounds.size.height * anchorPoint.y)
-        
-        
-        var oldPoint = CGPoint(x: view.bounds.size.width * view.layer.anchorPoint.x,
-                               y: view.bounds.size.height * view.layer.anchorPoint.y)
-        
-        newPoint = newPoint.applying(view.transform)
-        oldPoint = oldPoint.applying(view.transform)
-        
-        var position = view.layer.position
-        position.x -= oldPoint.x
-        position.x += newPoint.x
-        
-        position.y -= oldPoint.y
-        position.y += newPoint.y
-        
-        view.layer.position = position
-        view.layer.anchorPoint = anchorPoint
-    }
-    
     fileprivate func checkTouchEdge(forPoint point: CGPoint) {
         tappedEdge = cropEdge(forPoint: point)
         print("tappedEdge is \(tappedEdge)")
@@ -385,7 +370,7 @@ extension CropView {
         let point = recognizer.location(in: self)
         
         if recognizer.state == .began {
-            if isAngleDashboardTouched(forPoint: point) {
+            if checkIsAngleDashboardTouched(forPoint: point) {
                 forCrop = false
                 let rotationCenter = angleDashboard.convert(angleDashboard.getRotationCenter(), to: self)
                 rotationCal = RotationCalculator(midPoint: rotationCenter)
@@ -403,7 +388,7 @@ extension CropView {
                 let anchorPoint = CGPoint(x: rotationCenterOnImage.x / imageView.bounds.width, y: rotationCenterOnImage.y / imageView.bounds.height)
 
                 print("rotationCenterOnImage is \(rotationCenterOnImage)")
-                setAnchorPoint(anchorPoint: anchorPoint, forView: imageView)
+                imageView.setAnchorPoint(anchorPoint: anchorPoint)
             } else {
                 forCrop = true
                 panOriginPoint = point
@@ -416,7 +401,7 @@ extension CropView {
         if recognizer.state == .ended {
             demoRotationCenterView?.removeFromSuperview()
             let anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            setAnchorPoint(anchorPoint: anchorPoint, forView: imageView)
+            imageView.setAnchorPoint(anchorPoint: anchorPoint)
             if forCrop {
                 moveCroppedContentToCenter(animated: true)
             } else {

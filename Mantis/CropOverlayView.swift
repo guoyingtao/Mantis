@@ -9,48 +9,26 @@
 import UIKit
 
 class CropOverlayView: UIView {
-    let cropOverLayerCornerWidth = CGFloat(20.0)
-    var gridHidden = false
+    var gridHidden = true
+    var gridColor = UIColor(white: 0.8, alpha: 1)
     
-    private var gridLineNumberType: GridLineNumberType = .crop
+    private let cropOverLayerCornerWidth = CGFloat(20.0)
     
-    fileprivate var horizontalGridLines: [UIView] = []
-    fileprivate var verticalGridLines: [UIView] = []
-    fileprivate var borderLine: UIView = UIView()
-    fileprivate var corner: [UIView] = []
-    fileprivate let borderThickness = CGFloat(1.0)
-    
-    var displayHorizontalGridLine = true {
+    var gridLineNumberType: GridLineNumberType = .crop {
         didSet {
-            horizontalGridLines.forEach { $0.removeFromSuperview() }
-            
-            if displayHorizontalGridLine {
-                horizontalGridLines = Array(repeating: createNewLine(), count: gridLineNumberType.rawValue)
-
-            } else {
-                horizontalGridLines = []
-            }
-            
-            setNeedsDisplay()
+            setupGridLines()
+            layoutGridLines()
         }
     }
-    
-    var displayVerticalGridLines = true {
-        didSet {
-            verticalGridLines.forEach { $0.removeFromSuperview() }
-            
-            if displayVerticalGridLines {
-                verticalGridLines = Array(repeating: createNewLine(), count:  gridLineNumberType.rawValue)
-            } else {
-                verticalGridLines = []
-            }
-            
-            setNeedsDisplay()
-        }
-    }
+    private var horizontalGridLines: [UIView] = []
+    private var verticalGridLines: [UIView] = []
+    private var borderLine: UIView = UIView()
+    private var corner: [UIView] = []
+    private let borderThickness = CGFloat(1.0)
     
     override var frame: CGRect {
         didSet {
+            print("===========")
             if corner.count > 0 {
                 layoutLines()
             }            
@@ -67,7 +45,7 @@ class CropOverlayView: UIView {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func createNewLine() -> UIView {
+    private func createNewLine() -> UIView {
         let view = UIView()
         view.frame = CGRect.zero
         view.backgroundColor = .white
@@ -75,9 +53,7 @@ class CropOverlayView: UIView {
         return view
     }
     
-    fileprivate func setup() {
-        gridHidden = false
-        
+    private func setup() {
         borderLine = createNewLine()
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
@@ -86,6 +62,8 @@ class CropOverlayView: UIView {
         for _ in 0..<8 {
             corner.append(createNewLine())
         }
+        
+        setupGridLines()
     }
     
     override func didMoveToSuperview() {
@@ -96,23 +74,62 @@ class CropOverlayView: UIView {
         }
     }
     
-    fileprivate func layoutLines() {
+    private func layoutLines() {
         guard bounds.isEmpty == false else {
             return
         }
         
         layoutOuterLines()
         layoutCornerLines()
+        layoutGridLines()
+        setGridShowStatus()
     }
     
-    fileprivate func layoutOuterLines() {
+    private func setGridShowStatus() {
+        horizontalGridLines.forEach{ $0.alpha = gridHidden ? 0 : 1}
+        verticalGridLines.forEach{ $0.alpha = gridHidden ? 0 : 1}
+    }
+    
+    private func layoutGridLines() {
+        for i in 0..<gridLineNumberType.rawValue {
+            horizontalGridLines[i].frame = CGRect(x: 0, y: CGFloat(i + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1), width: frame.width, height: 1)
+            verticalGridLines[i].frame = CGRect(x: CGFloat(i + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1), y: 0, width: 1, height: frame.height)
+        }
+    }
+    
+    private func setupGridLines() {
+        setupVerticalGridLines()
+        setupHorizontalGridLines()
+    }
+    
+    private func setupHorizontalGridLines() {
+        horizontalGridLines.forEach { $0.removeFromSuperview() }
+        horizontalGridLines.removeAll()
+        for _ in 0..<gridLineNumberType.rawValue {
+            let view = createNewLine()
+            view.backgroundColor = gridColor
+            horizontalGridLines.append(view)
+        }
+    }
+    
+    private func setupVerticalGridLines() {
+        verticalGridLines.forEach { $0.removeFromSuperview() }
+        verticalGridLines.removeAll()
+        for _ in 0..<gridLineNumberType.rawValue {
+            let view = createNewLine()
+            view.backgroundColor = gridColor
+            verticalGridLines.append(view)
+        }
+    }
+    
+    private func layoutOuterLines() {
         borderLine.frame = CGRect(x: -borderThickness, y: -borderThickness, width: bounds.width + 2 * borderThickness, height: bounds.height + 2 * borderThickness)
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
         borderLine.layer.borderColor = UIColor.white.cgColor
     }
     
-    fileprivate func layoutCornerLines() {
+    private func layoutCornerLines() {
         let borderThickness = CGFloat(3.0)
         
         let topLeftHorizonalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: cropOverLayerCornerWidth, height: borderThickness)
@@ -147,7 +164,7 @@ class CropOverlayView: UIView {
     }
     
     func setGrid(hidden: Bool, animated: Bool = false) {
-        gridHidden = hidden
+        self.gridHidden = hidden
         
         func setGridLinesShowStatus () {
             horizontalGridLines.forEach { $0.alpha = hidden ? 0 : 1 }
@@ -166,7 +183,7 @@ class CropOverlayView: UIView {
 }
 
 extension CropOverlayView {
-    fileprivate enum CornerLineType: Int {
+    private enum CornerLineType: Int {
         case topLeftVertical = 0
         case topLeftHorizontal
         case topRightVertical
@@ -177,8 +194,8 @@ extension CropOverlayView {
         case bottomLeftHorizontal
     }
     
-    fileprivate enum GridLineNumberType: Int {
-        case crop = 3
-        case rotate = 9
+    enum GridLineNumberType: Int {
+        case crop = 2
+        case rotate = 8
     }
 }
