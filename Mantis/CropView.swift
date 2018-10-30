@@ -92,7 +92,6 @@ class CropView: UIView {
     fileprivate var lastTouchedPoints: [CGPoint] = []
     
     fileprivate var manualZoomed = false
-    fileprivate var manualMove   = false
     
     init(image: UIImage, imageStatus status: ImageStatus = ImageStatus()) {
         super.init(frame: CGRect.zero)
@@ -134,9 +133,6 @@ class CropView: UIView {
         
         imageContainer = ImageContainer()
         imageContainer.image = image
-        
-        imageContainer.layer.borderWidth = 2
-        imageContainer.layer.borderColor = UIColor.green.cgColor
         
         scrollView.addSubview(imageContainer)
         scrollView.imageContainer = imageContainer
@@ -408,30 +404,57 @@ extension CropView {
 
 extension CropView {
     func moveCroppedContentToCenter(animated: Bool = false) {
-        var cropBoxFrame = self.cropBoxFrame
         let contentRect = contentBounds
-        let scale = scrollView.zoomScale
-        cropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: cropBoxFrame)
+        let scaleX = contentBounds.width / cropBoxFrame.size.width
+        let scaleY = contentBounds.height / cropBoxFrame.size.height
+        let scale = min(scaleX, scaleY)
         
-        var rect = convert(self.cropBoxFrame, to: scrollView)
-        rect = CGRect(x: rect.minX/scale, y: rect.minY/scale, width: rect.width/scale, height: rect.height/scale)
+        let newCropBounds = CGRect(x: 0, y: 0, width: cropBoxFrame.width * scale, height: cropBoxFrame.height * scale)
         
-        func translate() {
-            scrollView.frame = cropBoxFrame
-            scrollView.contentSize = cropBoxFrame.size
-            scrollView.zoom(to: rect, animated: false)
+        // calculate the new bounds of scroll view
+        let width = abs(cos(imageStatus.radians)) * newCropBounds.size.width + abs(sin(imageStatus.radians)) * newCropBounds.size.height
+        let height = abs(sin(imageStatus.radians)) * newCropBounds.size.width + abs(cos(imageStatus.radians)) * newCropBounds.size.height
+        
+        // calculate the zoom area of scroll view
+        var scaleFrame = cropBoxFrame
+        if scaleFrame.width >= scrollView.contentSize.width {
+            scaleFrame.size.width = scrollView.contentSize.width - 1
+        }
+        if scaleFrame.height >= scrollView.contentSize.height {
+            scaleFrame.size.height = scrollView.contentSize.height - 1
+        }
+        
+        let contentOffset = scrollView.contentOffset
+        let contentOffsetCenter = CGPoint(x: (contentOffset.x + scrollView.bounds.width / 2),
+                                          y: (contentOffset.y + scrollView.bounds.height / 2))
+        
+        
+        var bounds: CGRect = scrollView.bounds
+        bounds.size.width = width
+        bounds.size.height = height
+        scrollView.bounds = CGRect(x: 0, y: 0, width: width, height: height)
+        
+        let newContentOffset = CGPoint(x: (contentOffsetCenter.x - scrollView.bounds.width / 2),
+                                       y: (contentOffsetCenter.y - scrollView.bounds.height / 2))
+        scrollView.contentOffset = newContentOffset
+        
+        
+        let newCropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: self.cropBoxFrame)
 
-            self.cropBoxFrame = cropBoxFrame
-            adaptAngleDashboardToCropBox()
+        UIView.animate(withDuration: 0.25, animations: {[weak self] in
+            guard let self = self else { return }
+            self.cropBoxFrame = newCropBoxFrame
+            
+            let zoomRect = self.convert(scaleFrame,
+                                                to: self.scrollView.imageContainer)
+            self.scrollView.zoom(to: zoomRect, animated: false)
+            self.adaptAngleDashboardToCropBox()
+            self.scrollView.checkContentOffset()
+        }) { [weak self] _ in
+            self?.viewStatus = .betweenOperation
         }
         
-        if animated == false {
-            translate()
-        } else {
-            UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .beginFromCurrentState, animations: {translate()}, completion: { [weak self] _ in
-                self?.viewStatus = .betweenOperation
-            })
-        }
+        manualZoomed = true
     }
 }
 
