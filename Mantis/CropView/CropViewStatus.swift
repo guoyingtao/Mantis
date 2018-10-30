@@ -10,6 +10,7 @@ import Foundation
 
 enum CropViewStatus {
     case initial
+    case rotating
     case touchImage
     case touchRotationBoard
     case touchCropboxHandle

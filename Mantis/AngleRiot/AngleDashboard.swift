@@ -22,9 +22,11 @@ class AngleDashboard: UIView {
 //        layer.borderColor = UIColor.white.cgColor
         
         clipsToBounds = true
+        let dialPlateLength = 1.2 * frame.width
         
-        let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.85, width: frame.width, height: frame.width)
+        let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -dialPlateLength * 0.88, width: dialPlateLength, height: dialPlateLength)
         dialPlate =  AngleDialPlate(frame: dialPlateFrame)
+    
         addSubview(dialPlate)
         
         setupPointer(withDialPlateMaxY: dialPlate.frame.maxY)

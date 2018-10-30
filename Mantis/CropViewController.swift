@@ -58,7 +58,7 @@ class CropViewController: UIViewController {
     }
     
     @IBAction func rotate(_ sender: Any) {
-        cropView.clockwiseRotate90()
+        cropView.anticlockwiseRotate90()
     }
     
     @IBAction func crop(_ sender: Any) {

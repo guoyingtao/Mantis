@@ -20,7 +20,6 @@
 		5F0629F32181233E0064A5E7 /* GeometryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F22181233E0064A5E7 /* GeometryHelper.swift */; };
 		5F0629F72183758A0064A5E7 /* ImageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F62183758A0064A5E7 /* ImageStatus.swift */; };
 		5F0629F921838C2A0064A5E7 /* CropViewStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */; };
-		5F0629FD218393A10064A5E7 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629FC218393A10064A5E7 /* ImageHelper.swift */; };
 		5F148994218674AF009E5EFD /* CropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F148993218674AF009E5EFD /* CropMaskViewManager.swift */; };
 		5F1489982187FF00009E5EFD /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1489972187FF00009E5EFD /* ImageContainer.swift */; };
 		5F14899B2188E283009E5EFD /* CoreGraphicsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F14899A2188E283009E5EFD /* CoreGraphicsExtensions.swift */; };
@@ -60,7 +59,6 @@
 		5F0629F22181233E0064A5E7 /* GeometryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryHelper.swift; sourceTree = "<group>"; };
 		5F0629F62183758A0064A5E7 /* ImageStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStatus.swift; sourceTree = "<group>"; };
 		5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewStatus.swift; sourceTree = "<group>"; };
-		5F0629FC218393A10064A5E7 /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
 		5F148993218674AF009E5EFD /* CropMaskViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropMaskViewManager.swift; sourceTree = "<group>"; };
 		5F1489972187FF00009E5EFD /* ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainer.swift; sourceTree = "<group>"; };
 		5F14899A2188E283009E5EFD /* CoreGraphicsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphicsExtensions.swift; sourceTree = "<group>"; };
@@ -132,7 +130,6 @@
 			children = (
 				5F0629F22181233E0064A5E7 /* GeometryHelper.swift */,
 				5F0629AF217D81A50064A5E7 /* RotationCalculator.swift */,
-				5F0629FC218393A10064A5E7 /* ImageHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -142,12 +139,13 @@
 			children = (
 				5FC10B34217AB85A00582874 /* CropOverlayView.swift */,
 				5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */,
-				5F0629A5217BB05F0064A5E7 /* CropView.swift */,
 				5F0629A7217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift */,
 				5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */,
-				5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */,
 				5F148993218674AF009E5EFD /* CropMaskViewManager.swift */,
 				5F1489972187FF00009E5EFD /* ImageContainer.swift */,
+				5F0629A5217BB05F0064A5E7 /* CropView.swift */,
+				5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */,
+				5F0629F62183758A0064A5E7 /* ImageStatus.swift */,
 			);
 			path = CropView;
 			sourceTree = "<group>";
@@ -185,7 +183,6 @@
 				5FC10B1B217A9EE100582874 /* Assets.xcassets */,
 				5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */,
 				5FC10B20217A9EE100582874 /* Info.plist */,
-				5F0629F62183758A0064A5E7 /* ImageStatus.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";
@@ -312,7 +309,6 @@
 				5F0629E7217EAC1A0064A5E7 /* CropVisualEffectView.swift in Sources */,
 				5F0629AE217D81500064A5E7 /* AngleDashboard.swift in Sources */,
 				5F14899D2188E5EC009E5EFD /* UIImageExtensions.swift in Sources */,
-				5F0629FD218393A10064A5E7 /* ImageHelper.swift in Sources */,
 				5F14899B2188E283009E5EFD /* CoreGraphicsExtensions.swift in Sources */,
 				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,
 				5F0629A8217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
