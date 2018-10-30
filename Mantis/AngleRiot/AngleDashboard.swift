@@ -18,12 +18,12 @@ class AngleDashboard: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        layer.borderWidth = 2
-        layer.borderColor = UIColor.white.cgColor
+//        layer.borderWidth = 2
+//        layer.borderColor = UIColor.white.cgColor
         
         clipsToBounds = true
         
-        let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.9, width: frame.width, height: frame.width)
+        let dialPlateFrame = CGRect(x: 0, y: -frame.width * 0.85, width: frame.width, height: frame.width)
         dialPlate =  AngleDialPlate(frame: dialPlateFrame)
         addSubview(dialPlate)
         

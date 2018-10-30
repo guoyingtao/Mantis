@@ -88,7 +88,6 @@ class CropView: UIView {
     fileprivate var angleDashboard: AngleDashboard!
     fileprivate var scrollView: CropScrollView!
     fileprivate var gridOverlayView: CropOverlayView!
-    fileprivate var gridPanGestureRecognizer: UIPanGestureRecognizer!
     
     fileprivate var forCrop = true
     fileprivate var currentPoint: CGPoint?
@@ -145,16 +144,8 @@ class CropView: UIView {
         setGridOverlayView()
     }
     
-    private func setupGestures() {
-        gridPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gridPanGestureRecognized))
-        gridPanGestureRecognizer.delegate = self
-        scrollView.panGestureRecognizer.require(toFail: gridPanGestureRecognizer)
-        addGestureRecognizer(gridPanGestureRecognizer)
-    }
-    
     private func initialSetup() {
         viewStatus = .initial
-        setupGestures()
     }
     
     func adaptForCropBox() {
@@ -222,10 +213,11 @@ class CropView: UIView {
             angleDashboard.removeFromSuperview()
         }
         
-        let boardLength = min(bounds.width, bounds.height)
+        let boardLength = gridOverlayView.frame.width * 0.8
         let x:CGFloat = 0
         let y = gridOverlayView.frame.maxY
         angleDashboard = AngleDashboard(frame: CGRect(x: x, y: y, width: boardLength, height: angleDashboardHeight))
+        angleDashboard.center.x = gridOverlayView.center.x
         addSubview(angleDashboard)
     }
     
@@ -233,7 +225,7 @@ class CropView: UIView {
         angleDashboard.frame.origin.y = gridOverlayView.frame.maxY
     }
     
-    fileprivate func updateCropBoxFrame(withGesturePoint point: CGPoint) {
+    fileprivate func updateCropBoxFrame(withTouchPoint point: CGPoint) {
         let contentFrame = contentBounds
         
         var point = point
@@ -347,17 +339,99 @@ extension CropView {
         
         viewStatus = .touchImage
         
-        if let touch = touches.first {
-            let point = touch.location(in: self)
-            if !checkIsAngleDashboardTouched(forPoint: point) {
-                checkTouchEdge(forPoint: point)
-            }
+        guard touches.count == 1, let touch = touches.first else {
+            return
         }
+        
+        let point = touch.location(in: self)
+        
+        if checkIsAngleDashboardTouched(forPoint: point) {
+            forCrop = false
+            rotationCenter = self.convert(gridOverlayView.center, to: self)
+            
+            rotationCal = RotationCalculator(midPoint: rotationCenter)
+            currentPoint = point
+            previousPoint = point
+            
+            setImageViewAnchor(byRotationCenter: rotationCenter)
+        } else {
+            forCrop = true
+            panOriginPoint = point
+            cropOrignFrame = cropBoxFrame
+            
+            checkTouchEdge(forPoint: point)
+        }
+
+//        if let touch = touches.first {
+//            if !checkIsAngleDashboardTouched(forPoint: point) {
+//                checkTouchEdge(forPoint: point)
+//            }
+//        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        
+        guard touches.count == 1, let touch = touches.first else {
+            return
+        }
+
+        
+        let point = touch.location(in: self)
+        
+        if forCrop {
+            updateCropBoxFrame(withTouchPoint: point)
+        } else {
+            currentPoint = point
+            if let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
+                let points = GeometryHelper.getOverSteppedCornerPoints(from: imageView, andeInnerView: gridOverlayView)
+                
+                guard angleDashboard.rotateDialPlate(by: rotation) == true else {
+                    return
+                }
+                
+                if points.count > 0 {
+                    lastTouchedPoints = points
+                    setImageViewAnchor(byRotationCenter: rotationCenter)
+                    resetImageToCoverCropBox(by: points, and: rotation)
+                } else {
+                    if imageView.transform.scaleX > imageZoomScaleBeforeRotation {
+                        resetImageToCoverCropBox(by: lastTouchedPoints, and: rotation, isZoomIn: false)
+                    }
+                }
+                
+                imageView.transform = imageView.transform.rotated(by: rotation)
+            }
+            
+            previousPoint = currentPoint
+        }
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
+//        viewStatus = .betweenOperation
+        
+        demoRotationCenterView?.removeFromSuperview()
+        let anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        imageView.setAnchorPoint(anchorPoint: anchorPoint)
+        if forCrop {
+            moveCroppedContentToCenter(animated: true)
+        } else {
+            currentPoint = nil
+            previousPoint = nil
+            rotationCal = nil
+            
+            let angle = angleDashboard.getRotationAngle()
+            imageStatus.angle = angle
+        }
+        
+        forCrop = true
         viewStatus = .betweenOperation
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
     }
 }
 
@@ -382,77 +456,6 @@ extension CropView {
         setImageViewAnchor(by: rotationCenterOnImage)
     }
     
-    @objc func gridPanGestureRecognized(recognizer: UIPanGestureRecognizer) {
-        let point = recognizer.location(in: self)
-        
-        if recognizer.state == .began {
-            if checkIsAngleDashboardTouched(forPoint: point) {
-                forCrop = false
-                rotationCenter = self.convert(gridOverlayView.center, to: self)
-                
-                rotationCal = RotationCalculator(midPoint: rotationCenter)
-                currentPoint = point
-                previousPoint = point
-                
-                setImageViewAnchor(byRotationCenter: rotationCenter)
-            } else {
-                forCrop = true
-                panOriginPoint = point
-                cropOrignFrame = cropBoxFrame
-                
-                checkTouchEdge(forPoint: point)
-            }
-        }
-        
-        if recognizer.state == .ended {
-            demoRotationCenterView?.removeFromSuperview()
-            let anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            imageView.setAnchorPoint(anchorPoint: anchorPoint)
-            if forCrop {
-                moveCroppedContentToCenter(animated: true)
-            } else {
-                currentPoint = nil
-                previousPoint = nil
-                rotationCal = nil
-                
-                let angle = angleDashboard.getRotationAngle()
-                imageStatus.angle = angle
-            }
-            
-            forCrop = true
-            viewStatus = .betweenOperation
-        }
-        
-        if recognizer.state == .changed {
-            if forCrop {
-                updateCropBoxFrame(withGesturePoint: point)
-            } else {
-                currentPoint = point
-                if let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
-                    let points = GeometryHelper.getOverSteppedCornerPoints(from: imageView, andeInnerView: gridOverlayView)
-                    
-                    guard angleDashboard.rotateDialPlate(by: rotation) == true else {
-                        return
-                    }
-                    
-                    if points.count > 0 {
-                        lastTouchedPoints = points
-                        setImageViewAnchor(byRotationCenter: rotationCenter)
-                        resetImageToCoverCropBox(by: points, and: rotation)
-                    } else {
-                        if imageView.transform.scaleX > imageZoomScaleBeforeRotation {
-                            resetImageToCoverCropBox(by: lastTouchedPoints, and: rotation, isZoomIn: false)
-                        }
-                    }
-
-                    imageView.transform = imageView.transform.rotated(by: rotation)
-                }
-                
-                previousPoint = currentPoint
-            }
-        }
-    }
-    
     private func resetImageToCoverCropBox(by points: [CGPoint], and rotation: CGFloat, isZoomIn: Bool = true) {
         guard points.count > 0 else { return }
         
@@ -475,34 +478,6 @@ extension CropView {
         
         scale = isZoomIn ? scale : 1.0 / scale
         imageView.transform = imageView.transform.scaledBy(x: scale, y: scale)
-    }
-}
-
-extension CropView: UIGestureRecognizerDelegate {
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard gestureRecognizer == self.gridPanGestureRecognizer else { return true }
-        
-        let tapPoint = gestureRecognizer.location(in: self)
-        
-        let frame = gridOverlayView.frame
-        let innerFrame = frame.insetBy(dx: 22, dy: 22)
-        let outerFrame = frame.insetBy(dx: -22, dy: -22 - angleDashboardHeight)
-        
-        if (innerFrame.contains(tapPoint) || !outerFrame.contains(tapPoint)) {
-            print("pan false")
-            return false
-        }
-        
-        return true
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        
-        if gridPanGestureRecognizer.state == .changed {
-            return false
-        }
-        
-        return true
     }
 }
 
