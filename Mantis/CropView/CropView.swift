@@ -525,7 +525,6 @@ extension CropView {
     func anticlockwiseRotate90() {
         viewStatus = .rotating
         
-        print("scale is \(scrollView.zoomScale)")
         imageStatus.zoomScale = scrollView.zoomScale
         
         imageStatus.clockwiseRotate90()
@@ -546,7 +545,6 @@ extension CropView {
         UIView.animate(withDuration: 0.5, animations: { [weak self] in
             guard let self = self else { return }
             self.scrollView.transform = transfrom
-            self.scrollView.setZoomScale(scale, animated: false)
         }) {[weak self] _ in
             guard let self = self else { return }
             self.viewStatus = .betweenOperation
