@@ -68,9 +68,11 @@ class AngleDashboard: UIView {
         }        
     }
     
+    func getRotationRadian() -> CGFloat {
+        return CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
+    }
+    
     func getRotationAngle() -> CGFloat {
-        let radians = CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
-        let degrees = radians * (180 / CGFloat.pi)
-        return degrees
+        return getRotationRadian() * 180 / CGFloat.pi
     }
 }

@@ -19,12 +19,12 @@
 		5F0629ED2180CB2A0064A5E7 /* CoreGraphicsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629EC2180CB2A0064A5E7 /* CoreGraphicsExtensions.swift */; };
 		5F0629EF2180F7B60064A5E7 /* AngleDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629EE2180F7B60064A5E7 /* AngleDialPlate.swift */; };
 		5F0629F32181233E0064A5E7 /* GeometryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F22181233E0064A5E7 /* GeometryHelper.swift */; };
-		5F0629F521821A830064A5E7 /* UIScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F421821A830064A5E7 /* UIScrollViewExtensions.swift */; };
 		5F0629F72183758A0064A5E7 /* ImageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F62183758A0064A5E7 /* ImageStatus.swift */; };
 		5F0629F921838C2A0064A5E7 /* CropViewStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */; };
 		5F0629FD218393A10064A5E7 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0629FC218393A10064A5E7 /* ImageHelper.swift */; };
 		5F148994218674AF009E5EFD /* CropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F148993218674AF009E5EFD /* CropMaskViewManager.swift */; };
 		5F1489962186861F009E5EFD /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1489952186861F009E5EFD /* UIViewExtensions.swift */; };
+		5F1489982187FF00009E5EFD /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1489972187FF00009E5EFD /* ImageContainer.swift */; };
 		5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B14217A9EDF00582874 /* AppDelegate.swift */; };
 		5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B16217A9EDF00582874 /* ViewController.swift */; };
 		5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B18217A9EDF00582874 /* Main.storyboard */; };
@@ -57,12 +57,12 @@
 		5F0629EC2180CB2A0064A5E7 /* CoreGraphicsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphicsExtensions.swift; sourceTree = "<group>"; };
 		5F0629EE2180F7B60064A5E7 /* AngleDialPlate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleDialPlate.swift; sourceTree = "<group>"; };
 		5F0629F22181233E0064A5E7 /* GeometryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryHelper.swift; sourceTree = "<group>"; };
-		5F0629F421821A830064A5E7 /* UIScrollViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtensions.swift; sourceTree = "<group>"; };
 		5F0629F62183758A0064A5E7 /* ImageStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStatus.swift; sourceTree = "<group>"; };
 		5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewStatus.swift; sourceTree = "<group>"; };
 		5F0629FC218393A10064A5E7 /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
 		5F148993218674AF009E5EFD /* CropMaskViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropMaskViewManager.swift; sourceTree = "<group>"; };
 		5F1489952186861F009E5EFD /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		5F1489972187FF00009E5EFD /* ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainer.swift; sourceTree = "<group>"; };
 		5FC10B11217A9EDF00582874 /* Mantis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mantis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC10B14217A9EDF00582874 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5FC10B16217A9EDF00582874 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -116,7 +116,6 @@
 		5F0629FA218393590064A5E7 /* Extentions */ = {
 			isa = PBXGroup;
 			children = (
-				5F0629F421821A830064A5E7 /* UIScrollViewExtensions.swift */,
 				5F1489952186861F009E5EFD /* UIViewExtensions.swift */,
 			);
 			path = Extentions;
@@ -172,6 +171,7 @@
 				5F0629F62183758A0064A5E7 /* ImageStatus.swift */,
 				5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */,
 				5F148993218674AF009E5EFD /* CropMaskViewManager.swift */,
+				5F1489972187FF00009E5EFD /* ImageContainer.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";
@@ -287,7 +287,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F1489962186861F009E5EFD /* UIViewExtensions.swift in Sources */,
-				5F0629F521821A830064A5E7 /* UIScrollViewExtensions.swift in Sources */,
 				5F0629F72183758A0064A5E7 /* ImageStatus.swift in Sources */,
 				5F0629F921838C2A0064A5E7 /* CropViewStatus.swift in Sources */,
 				5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */,
@@ -300,6 +299,7 @@
 				5F0629FD218393A10064A5E7 /* ImageHelper.swift in Sources */,
 				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,
 				5F0629A8217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
+				5F1489982187FF00009E5EFD /* ImageContainer.swift in Sources */,
 				5FC10B35217AB85A00582874 /* CropOverlayView.swift in Sources */,
 				5F0629F32181233E0064A5E7 /* GeometryHelper.swift in Sources */,
 				5F148994218674AF009E5EFD /* CropMaskViewManager.swift in Sources */,

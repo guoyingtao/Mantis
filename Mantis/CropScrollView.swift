@@ -9,7 +9,9 @@
 import UIKit
 
 class CropScrollView: UIScrollView {
-
+    
+    weak var imageContainer: ImageContainer?
+    
     var touchesBegan = {}
     var touchesCancelled = {}
     var touchesEnded = {}
@@ -21,6 +23,14 @@ class CropScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInsetAdjustmentBehavior = .never
+        minimumZoomScale = 1.0
+        maximumZoomScale = 15.0
+        clipsToBounds = false
+        contentSize = bounds.size
+        layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        layer.borderColor = UIColor.red.cgColor
+        layer.borderWidth = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,5 +50,50 @@ class CropScrollView: UIScrollView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesEnded()
         super.touchesBegan(touches, with: event)
+    }
+    
+    func checkContentOffset() {
+        contentOffset.x = max(contentOffset.x, 0)
+        contentOffset.y = max(contentOffset.y, 0)
+        
+        if contentSize.height - contentOffset.y <= bounds.size.height {
+            contentOffset.y = contentSize.height - bounds.size.height
+        }
+        
+        if contentSize.width - contentOffset.x <= bounds.size.width {
+            contentOffset.x = contentSize.width - bounds.size.width
+        }
+    }
+    
+    func zoomScaleToBound(animated: Bool = false) {
+        guard let imageContainer = imageContainer else {
+            return
+        }
+        
+        let scaleW = bounds.width / imageContainer.bounds.width
+        let scaleH = bounds.height / imageContainer.bounds.height
+        
+        let scale = max(scaleW, scaleH)
+        
+        setZoomScale(scale, animated: animated)
+        minimumZoomScale = scale
+    }
+    
+    func shouldScale() -> Bool {
+        return contentSize.width / bounds.width <= 1.0
+            || contentSize.height / bounds.height <= 1.0
+    }
+    
+    func updateLayout(byNewSize newSize: CGSize) {
+        let oldScrollViewcenter = center
+        let contentOffsetCenter = CGPoint(x: (contentOffset.x + bounds.width / 2),
+                                          y: (contentOffset.y + bounds.height / 2))
+        
+        bounds = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        let newContentOffset = CGPoint(x: (contentOffsetCenter.x - bounds.width / 2),
+                                       y: (contentOffsetCenter.y - bounds.height / 2))
+        
+        contentOffset = newContentOffset
+        center = oldScrollViewcenter
     }
 }

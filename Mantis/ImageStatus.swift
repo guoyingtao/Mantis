@@ -24,13 +24,20 @@ enum ImageRotationType: Int {
 }
 
 struct ImageStatus {
-    var angle: CGFloat = 0
+    var degrees: CGFloat = 0
+    
+    var radians: CGFloat {
+        get {
+          return degrees * CGFloat.pi / 180
+        }
+    }
+    
     var zoomScale: CGFloat = 0
     var offset: CGPoint = .zero
     var rotationType: ImageRotationType = .none
     
     mutating func reset() {
-        angle = 0
+        degrees = 0
         zoomScale = 0
         offset = .zero
         rotationType = .none
