@@ -18,67 +18,87 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="66" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-7f-FOl">
-                                <rect key="frame" x="51" y="620" width="250" height="30"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aLq-tA-70r">
-                                        <rect key="frame" x="0.0" y="0.0" width="39" height="30"/>
-                                        <state key="normal" title="Reset">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="reset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="v8s-dC-UoR"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t27-Nr-otT">
-                                        <rect key="frame" x="105" y="0.0" width="45" height="30"/>
-                                        <state key="normal" title="Rotate">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="rotate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PXA-1t-fVf"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qdf-2P-XB1">
-                                        <rect key="frame" x="216" y="0.0" width="34" height="30"/>
-                                        <state key="normal" title="Crop">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="crop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RIx-CD-XSl"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
-                                <rect key="frame" x="102" y="541" width="171" height="80"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="bEJ-e6-dBk"/>
-                                    <constraint firstAttribute="width" constant="171" id="vTV-Uv-3Qw"/>
-                                </constraints>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
+                                <rect key="frame" x="151" y="551" width="73" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Go to crop"/>
+                                <connections>
+                                    <segue destination="iGo-er-8gH" kind="presentation" id="XtC-NS-BEq"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
+                                <rect key="frame" x="67" y="71" width="240" height="444"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="46" id="1eE-yQ-tfX"/>
-                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="102" id="PCl-Vg-fhK"/>
-                            <constraint firstItem="yBM-7f-FOl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="600" id="d7T-yt-a2x"/>
-                            <constraint firstItem="yBM-7f-FOl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="51" id="e3V-ax-6nd"/>
-                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="521" id="lpg-Ea-vMY"/>
-                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="yWW-f1-aQn"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="cropButton" destination="Qdf-2P-XB1" id="nvS-cK-9Z6"/>
                         <outlet property="croppedImageView" destination="pUS-Eo-0ui" id="bP8-d1-p2l"/>
-                        <outlet property="resetButton" destination="aLq-tA-70r" id="Zj9-r4-zqV"/>
-                        <outlet property="rotateButton" destination="t27-Nr-otT" id="ANm-sJ-I6J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
+        </scene>
+        <!--Crop View Controller-->
+        <scene sceneID="dg9-9T-GUo">
+            <objects>
+                <viewController id="iGo-er-8gH" customClass="CropViewController" customModule="Mantis" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Yu-Id-Irm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="66" translatesAutoresizingMaskIntoConstraints="NO" id="fee-vr-64u">
+                                <rect key="frame" x="62" y="617" width="250" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-UT-8tg">
+                                        <rect key="frame" x="0.0" y="0.0" width="39" height="30"/>
+                                        <state key="normal" title="Reset">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="reset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O2u-W7-ipl"/>
+                                            <action selector="reset:" destination="iGo-er-8gH" eventType="touchUpInside" id="Q1p-Xy-seU"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Isn-H5-o9I">
+                                        <rect key="frame" x="105" y="0.0" width="45" height="30"/>
+                                        <state key="normal" title="Rotate">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="rotate:" destination="iGo-er-8gH" eventType="touchUpInside" id="Nbb-1e-x6e"/>
+                                            <action selector="rotate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yvO-EL-tZW"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agL-q0-jrX">
+                                        <rect key="frame" x="216" y="0.0" width="34" height="30"/>
+                                        <state key="normal" title="Crop">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="crop:" destination="iGo-er-8gH" eventType="touchUpInside" id="HmD-Dw-iFy"/>
+                                            <action selector="crop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sqy-8X-lla"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="5hW-Gg-OEN"/>
+                    </view>
+                    <connections>
+                        <outlet property="cropButton" destination="agL-q0-jrX" id="nT5-eW-WPy"/>
+                        <outlet property="resetButton" destination="dIy-UT-8tg" id="ALH-CD-zeg"/>
+                        <outlet property="rotateButton" destination="Isn-H5-o9I" id="ul0-nF-QBT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rl4-PT-0nH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="871" y="133"/>
         </scene>
     </scenes>
     <resources>

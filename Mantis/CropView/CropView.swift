@@ -381,10 +381,11 @@ extension CropView {
             
             let angle = angleDashboard.getRotationAngle()
             imageStatus.degrees = angle
+            
+            viewStatus = .betweenOperation
         }
         
-        forCrop = true
-        viewStatus = .betweenOperation
+        forCrop = true        
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -429,9 +430,6 @@ extension CropView {
                                           y: (contentOffset.y + scrollView.bounds.height / 2))
         
         
-        var bounds: CGRect = scrollView.bounds
-        bounds.size.width = width
-        bounds.size.height = height
         scrollView.bounds = CGRect(x: 0, y: 0, width: width, height: height)
         
         let newContentOffset = CGPoint(x: (contentOffsetCenter.x - scrollView.bounds.width / 2),
@@ -448,10 +446,10 @@ extension CropView {
             let zoomRect = self.convert(scaleFrame,
                                                 to: self.scrollView.imageContainer)
             self.scrollView.zoom(to: zoomRect, animated: false)
-            self.adaptAngleDashboardToCropBox()
             self.scrollView.checkContentOffset()
         }) { [weak self] _ in
             self?.viewStatus = .betweenOperation
+            self?.adaptAngleDashboardToCropBox()
         }
         
         manualZoomed = true
@@ -479,8 +477,41 @@ extension CropView {
 
 // public api
 extension CropView {
+    
     func crop() -> UIImage? {
-        return nil
+        let rect = imageContainer.convert(imageContainer.bounds,
+                                                         to: self)
+        let point = CGPoint(x: (rect.origin.x + rect.width / 2),
+                            y: (rect.origin.y + rect.height / 2))
+        let zeroPoint = CGPoint(x: frame.width / 2, y: gridOverlayView.center.y)
+        
+        var transform = CGAffineTransform.identity
+        // translate
+        let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
+        transform = transform.translatedBy(x: translation.x, y: translation.y)
+        
+        // rotate
+        transform = transform.rotated(by: imageStatus.radians)
+        
+        // scale
+        let t = imageContainer.transform
+        let xScale: CGFloat = sqrt(t.a * t.a + t.c * t.c)
+        let yScale: CGFloat = sqrt(t.b * t.b + t.d * t.d)
+        transform = transform.scaledBy(x: xScale, y: yScale)
+        
+        guard let fixedImage = image.cgImageWithFixedOrientation() else {
+            return nil
+        }
+            
+        guard let imageRef = fixedImage.transformedImage(transform,
+                                                       zoomScale: scrollView.zoomScale,
+                                                       sourceSize: image.size,
+                                                       cropSize: gridOverlayView.frame.size,
+                                                       imageViewSize: imageContainer.bounds.size) else {
+                                                        return nil
+        }        
+        
+        return UIImage(cgImage: imageRef)
     }
     
     func clockwiseRotate90() {
