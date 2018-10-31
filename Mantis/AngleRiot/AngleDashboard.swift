@@ -10,7 +10,7 @@ import UIKit
 
 class AngleDashboard: UIView {
     
-    var angleLimit:CGFloat = 45
+    var radiansLimit: CGFloat = 45 * CGFloat.pi / 180
     
     private var dialPlate: AngleDialPlate!
     private var pointer: CAShapeLayer = CAShapeLayer()
@@ -60,21 +60,21 @@ class AngleDashboard: UIView {
         return CGPoint(x: dialPlate.frame.midX , y: dialPlate.frame.midY)
     }
     
-    func rotateDialPlate(by angle: CGFloat) -> Bool {
+    func rotateDialPlate(by radians: CGFloat) -> Bool {
         
-        if (getRotationAngle() * angle) > 0 && abs(getRotationAngle() + angle) >= angleLimit {
+        if (getRotationRadians() * radians) > 0 && abs(getRotationRadians() + radians) >= radiansLimit {
             return false
         } else {
-            dialPlate.transform = dialPlate.transform.rotated(by: angle)
+            dialPlate.transform = dialPlate.transform.rotated(by: radians)
             return true
         }        
     }
     
-    func getRotationRadian() -> CGFloat {
+    func getRotationRadians() -> CGFloat {
         return CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
     }
     
     func getRotationAngle() -> CGFloat {
-        return getRotationRadian() * 180 / CGFloat.pi
+        return getRotationRadians() * 180 / CGFloat.pi
     }
 }
