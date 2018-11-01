@@ -66,7 +66,6 @@ class CropView: UIView {
     
     fileprivate var image: UIImage!
     fileprivate var imageContainer: ImageContainer!
-    
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     
     fileprivate var angleDashboard: AngleDashboard!
@@ -261,10 +260,6 @@ extension CropView: UIScrollViewDelegate {
         viewStatus = .touchImage
     }
     
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        
-    }
-    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         viewStatus = .betweenOperation
     }
@@ -318,7 +313,11 @@ extension CropView {
             panOriginPoint = point
             cropOrignFrame = cropBoxFrame
             
-            checkTouchEdge(forPoint: point)
+            tappedEdge = cropEdge(forPoint: point)
+            
+            if tappedEdge != .none {
+                viewStatus = .touchCropboxHandle
+            }
         }
     }
     
@@ -344,12 +343,6 @@ extension CropView {
                 imageStatus.degrees = angleDashboard.getRotationDegrees()
                 let radians = imageStatus.getTotalRadians()
                 
-//                let scale1 = CGFloat(scale(from: scrollView.transform))
-//                var transform = CGAffineTransform.identity
-//                transform = transform.scaledBy(x: scale1, y: scale1)
-//                transform = transform.rotated(by: radians)
-//                scrollView.transform = transform
-                
                 scrollView.transform = CGAffineTransform(rotationAngle: radians)
                 updatePosition(by: radians)
             }
@@ -357,10 +350,6 @@ extension CropView {
             previousPoint = currentPoint
         }
         
-    }
-    
-    func scale(from transform: CGAffineTransform) -> Double {
-        return sqrt(Double(transform.a * transform.a + transform.c * transform.c));
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -392,16 +381,7 @@ extension CropView {
     }
 }
 
-extension CropView {
-    fileprivate func checkTouchEdge(forPoint point: CGPoint) {
-        tappedEdge = cropEdge(forPoint: point)
-        
-        if tappedEdge != .none {
-            viewStatus = .touchCropboxHandle
-        }
-    }
-}
-
+// Adjust UI
 extension CropView {
     func adjustUIForNewCrop(completion: @escaping ()->Void) {
         let contentRect = contentBounds
@@ -458,9 +438,7 @@ extension CropView {
         
         manualZoomed = true
     }
-}
 
-extension CropView {
     fileprivate func updatePosition(by radians: CGFloat) {
         // position scroll view
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
@@ -489,8 +467,7 @@ extension CropView {
             newSize = CGSize(width: height, height: width)
         }
         
-        scale = newSize.width / scrollView.bounds.width
-        
+        scale = newSize.width / scrollView.bounds.width        
         scrollView.updateLayout(byNewSize: newSize)
         
         let newZoomScale = scrollView.zoomScale * scale
@@ -552,7 +529,7 @@ extension CropView {
         let radian = -CGFloat.pi / 2
         let transfrom = scrollView.transform.rotated(by: radian)
         
-        UIView.animate(withDuration: 2, animations: { [weak self] in
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
             guard let self = self else { return }
             self.cropBoxFrame = newRect
             self.scrollView.transform = transfrom

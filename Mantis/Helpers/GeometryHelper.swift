@@ -71,4 +71,8 @@ struct GeometryHelper {
         
         return .none
     }
+    
+    static func scale(from transform: CGAffineTransform) -> Double {
+        return sqrt(Double(transform.a * transform.a + transform.c * transform.c));
+    }
 }
