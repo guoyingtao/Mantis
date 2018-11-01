@@ -8,17 +8,17 @@
 
 import UIKit
 
-enum ImageRotationType: Int {
+enum ImageRotationType: CGFloat {
     case none = 0
-    case clockwise90 = 90
-    case clockwise180 = 180
-    case clockwish270 = 270
+    case anticlockwise90 = -90
+    case anticlockwise180 = -180
+    case anticlockwise270 = -270
     
-    mutating func clockwiseRotate90() {
-        if self == .clockwish270 {
+    mutating func anticlockwiseRotate90() {
+        if self == .anticlockwise270 {
             self = .none
         } else {
-            self = ImageRotationType(rawValue: self.rawValue + 90) ?? .none
+            self = ImageRotationType(rawValue: self.rawValue - 90) ?? .none
         }
     }
 }
@@ -43,7 +43,11 @@ struct ImageStatus {
         rotationType = .none
     }
     
-    mutating func clockwiseRotate90() {
-        rotationType.clockwiseRotate90()
+    mutating func anticlockwiseRotate90() {
+        rotationType.anticlockwiseRotate90()
+    }
+    
+    mutating func getTotalRadians() -> CGFloat {
+        return radians + rotationType.rawValue * CGFloat.pi / 180
     }
 }

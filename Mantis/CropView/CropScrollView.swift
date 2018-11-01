@@ -31,6 +31,7 @@ class CropScrollView: UIScrollView {
         
         layer.borderColor = UIColor.red.cgColor
         layer.borderWidth = 2
+        backgroundColor = .blue
     }
     
     required init?(coder aDecoder: NSCoder) {

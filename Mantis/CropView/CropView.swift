@@ -144,6 +144,7 @@ class CropView: UIView {
         scrollView.addSubview(imageContainer)
         scrollView.imageContainer = imageContainer
         cropMaskViewManager = CropMaskViewManager(with: self)
+        
         setGridOverlayView()
     }
     
@@ -153,7 +154,6 @@ class CropView: UIView {
         
         scrollView.frame = initialCropBoxRect
         scrollView.contentSize = initialCropBoxRect.size
-        scrollView.backgroundColor = .blue
         
         imageContainer.frame = scrollView.bounds
         imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
@@ -366,9 +366,9 @@ extension CropView {
                 }
                 
                 imageStatus.degrees = angleDashboard.getRotationDegrees()
-                let radians = imageStatus.radians
+                let radians = imageStatus.getTotalRadians()
                 scrollView.transform = CGAffineTransform(rotationAngle: radians)
-                updatePosition()
+                updatePosition(by: radians)
             }
             
             previousPoint = currentPoint
@@ -412,15 +412,28 @@ extension CropView {
 extension CropView {
     func moveCroppedContentToCenter(animated: Bool = false) {
         let contentRect = contentBounds
-        let scaleX = contentBounds.width / cropBoxFrame.size.width
-        let scaleY = contentBounds.height / cropBoxFrame.size.height
+        
+        let scaleX: CGFloat
+        let scaleY: CGFloat
+        
+        if imageStatus.rotationType == .none || imageStatus.rotationType == .anticlockwise180 {
+            scaleX = contentBounds.width / cropBoxFrame.size.width
+            scaleY = contentBounds.height / cropBoxFrame.size.height
+        } else {
+            scaleX = contentBounds.width / cropBoxFrame.size.height
+            scaleY = contentBounds.height / cropBoxFrame.size.width
+        }
+        
         let scale = min(scaleX, scaleY)
         
         let newCropBounds = CGRect(x: 0, y: 0, width: cropBoxFrame.width * scale, height: cropBoxFrame.height * scale)
         
+        let radians = imageStatus.getTotalRadians()
+        print("radians is \(radians)")
+        
         // calculate the new bounds of scroll view
-        let width = abs(cos(imageStatus.radians)) * newCropBounds.size.width + abs(sin(imageStatus.radians)) * newCropBounds.size.height
-        let height = abs(sin(imageStatus.radians)) * newCropBounds.size.width + abs(cos(imageStatus.radians)) * newCropBounds.size.height
+        let width = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
+        let height = abs(sin(radians)) * newCropBounds.size.width + abs(cos(radians)) * newCropBounds.size.height
         
         // calculate the zoom area of scroll view
         var scaleFrame = cropBoxFrame
@@ -475,11 +488,6 @@ extension CropView {
         
         scrollView.checkContentOffset()
     }
-    
-    fileprivate func updatePosition() {
-        let radians = imageStatus.radians
-        updatePosition(by: radians)
-    }
 }
 
 // public api
@@ -525,8 +533,7 @@ extension CropView {
         viewStatus = .rotating
         
         imageStatus.zoomScale = scrollView.zoomScale
-        
-        imageStatus.clockwiseRotate90()
+        imageStatus.anticlockwiseRotate90()
         
         var rect = gridOverlayView.frame
         rect.size.width = gridOverlayView.frame.height
@@ -565,7 +572,7 @@ extension CropView {
     
     fileprivate func setRotation(byRadians radians: CGFloat) {
         scrollView.transform = CGAffineTransform(rotationAngle: radians)
-        updatePosition()
+        updatePosition(by: radians)
         angleDashboard.rotateDialPlate(toRadians: radians, animated: false)
     }
     
