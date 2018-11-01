@@ -8,18 +8,6 @@
 
 import UIKit
 
-enum CropViewOverlayEdge {
-    case none
-    case topLeft
-    case top
-    case topRight
-    case right
-    case bottomRight
-    case bottom
-    case bottomLeft
-    case left
-}
-
 protocol CropViewDelegate {
     func cropViewDidBecomeResettable(_ cropView: CropView)
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
@@ -89,8 +77,6 @@ class CropView: UIView {
     fileprivate var currentPoint: CGPoint?
     fileprivate var previousPoint: CGPoint?
     fileprivate var rotationCal: RotationCalculator?
-    
-    fileprivate var lastTouchedPoints: [CGPoint] = []
     
     fileprivate var manualZoomed = false
     
@@ -255,38 +241,10 @@ class CropView: UIView {
         
         return contains
     }
-    
+        
     fileprivate func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
         let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
-        let touchSize = CGSize(width: hotAreaUnit, height: hotAreaUnit)
-        
-        //Make sure the corners take priority
-        let topLeftRect = CGRect(origin: touchRect.origin, size: touchSize)
-        if topLeftRect.contains(point) { return .topLeft }
-        
-        let topRightRect = topLeftRect.offsetBy(dx: touchRect.width - hotAreaUnit, dy: 0)
-        if topRightRect.contains(point) { return .topRight }
-        
-        let bottomLeftRect = topLeftRect.offsetBy(dx: 0, dy: touchRect.height - hotAreaUnit)
-        if bottomLeftRect.contains(point) { return .bottomLeft }
-        
-        let bottomRightRect = bottomLeftRect.offsetBy(dx: touchRect.width - hotAreaUnit, dy: 0)
-        if bottomRightRect.contains(point) { return .bottomRight }
-        
-        //Check for edges
-        let topRect = CGRect(origin: touchRect.origin, size: CGSize(width: touchRect.width, height: hotAreaUnit))
-        if topRect.contains(point) { return .top }
-        
-        let leftRect = CGRect(origin: touchRect.origin, size: CGSize(width: hotAreaUnit, height: touchRect.height))
-        if leftRect.contains(point) { return .left }
-        
-        let rightRect = CGRect(origin: CGPoint(x: touchRect.maxX - hotAreaUnit, y: touchRect.origin.y), size: CGSize(width: hotAreaUnit, height: touchRect.height))
-        if rightRect.contains(point) { return .right }
-        
-        let bottomRect = CGRect(origin: CGPoint(x: touchRect.origin.x, y: touchRect.maxY - hotAreaUnit), size: CGSize(width: touchRect.width, height: hotAreaUnit))
-        if bottomRect.contains(point) { return .bottom }
-        
-        return .none
+        return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
     }
 }
 
@@ -308,11 +266,11 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        manualZoomed = true
         viewStatus = .betweenOperation
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        manualZoomed = true
         viewStatus = .betweenOperation
     }
     
@@ -386,14 +344,13 @@ extension CropView {
                 imageStatus.degrees = angleDashboard.getRotationDegrees()
                 let radians = imageStatus.getTotalRadians()
                 
-                let scale1 = CGFloat(scale(from: scrollView.transform))
-                print("scale1 is \(scale1)")
-                var transform = CGAffineTransform.identity
-                transform = transform.scaledBy(x: scale1, y: scale1)
-                transform = transform.rotated(by: radians)
-                scrollView.transform = transform
+//                let scale1 = CGFloat(scale(from: scrollView.transform))
+//                var transform = CGAffineTransform.identity
+//                transform = transform.scaledBy(x: scale1, y: scale1)
+//                transform = transform.rotated(by: radians)
+//                scrollView.transform = transform
                 
-//                scrollView.transform = CGAffineTransform(rotationAngle: radians)
+                scrollView.transform = CGAffineTransform(rotationAngle: radians)
                 updatePosition(by: radians)
             }
             
@@ -519,7 +476,7 @@ extension CropView {
         scrollView.checkContentOffset()
     }
     
-    fileprivate func updatePosition1(by radians: CGFloat) {
+    fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
         // position scroll view
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
         let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
@@ -599,7 +556,7 @@ extension CropView {
             guard let self = self else { return }
             self.cropBoxFrame = newRect
             self.scrollView.transform = transfrom
-            self.updatePosition1(by: radian + self.imageStatus.radians)
+            self.updatePositionFor90Rotation(by: radian + self.imageStatus.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
             self.imageStatus.zoomScale = self.scrollView.zoomScale
@@ -634,6 +591,5 @@ extension CropView {
         UIView.animate(withDuration: 0.5) {
             self.setRotation(byRadians: radians)
         }
-        
     }
 }
