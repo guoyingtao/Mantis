@@ -359,15 +359,15 @@ extension CropView {
             updateCropBoxFrame(withTouchPoint: point)
         } else {
             currentPoint = point
-            if let rotation = rotationCal?.getRotation(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
+            if let radians = rotationCal?.getRotationRadians(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
                 
-                guard angleDashboard.rotateDialPlate(by: rotation) == true else {
+                guard angleDashboard.rotateDialPlate(byRadians: radians) == true else {
                     return
                 }
                 
-                imageStatus.degrees = angleDashboard.getRotationAngle()
-                let radian = imageStatus.radians
-                scrollView.transform = CGAffineTransform(rotationAngle: radian)
+                imageStatus.degrees = angleDashboard.getRotationDegrees()
+                let radians = imageStatus.radians
+                scrollView.transform = CGAffineTransform(rotationAngle: radians)
                 updatePosition()
             }
             
@@ -386,8 +386,7 @@ extension CropView {
             previousPoint = nil
             rotationCal = nil
             
-            let angle = angleDashboard.getRotationAngle()
-            imageStatus.degrees = angle
+            imageStatus.degrees = angleDashboard.getRotationDegrees()
             
             viewStatus = .betweenOperation
         }
@@ -562,5 +561,21 @@ extension CropView {
         viewStatus = .initial
         imageStatus.reset()
         adaptForCropBox()
+    }
+    
+    fileprivate func setRotation(byRadians radians: CGFloat) {
+        scrollView.transform = CGAffineTransform(rotationAngle: radians)
+        updatePosition()
+        angleDashboard.rotateDialPlate(toRadians: radians, animated: false)
+    }
+    
+    func setRotation(byDegrees degrees: CGFloat) {
+        imageStatus.degrees = degrees
+        let radians = degrees * CGFloat.pi / 180
+        
+        UIView.animate(withDuration: 0.5) {
+            self.setRotation(byRadians: radians)
+        }
+        
     }
 }

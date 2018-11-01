@@ -51,6 +51,8 @@ class CropViewController: UIViewController {
         view.bringSubviewToFront(cropButton)
         view.bringSubviewToFront(resetButton)
         view.bringSubviewToFront(rotateButton)
+        
+//        cropView.setRotation(byDegrees: 30)
     }
 
     @IBAction func reset(_ sender: Any) {

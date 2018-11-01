@@ -60,7 +60,7 @@ class AngleDashboard: UIView {
         return CGPoint(x: dialPlate.frame.midX , y: dialPlate.frame.midY)
     }
     
-    func rotateDialPlate(by radians: CGFloat) -> Bool {
+    func rotateDialPlate(byRadians radians: CGFloat) -> Bool {
         
         if (getRotationRadians() * radians) > 0 && abs(getRotationRadians() + radians) >= radiansLimit {
             return false
@@ -70,11 +70,29 @@ class AngleDashboard: UIView {
         }        
     }
     
+    func rotateDialPlate(toRadians radians: CGFloat, animated: Bool = false) {
+        guard abs(radians) < radiansLimit else {
+            return
+        }
+        
+        func rotate() {
+            dialPlate.transform = CGAffineTransform(rotationAngle: radians)
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.5) {
+                rotate()
+            }
+        } else {
+            rotate()
+        }
+    }
+    
     func getRotationRadians() -> CGFloat {
         return CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
     }
     
-    func getRotationAngle() -> CGFloat {
+    func getRotationDegrees() -> CGFloat {
         return getRotationRadians() * 180 / CGFloat.pi
     }
 }

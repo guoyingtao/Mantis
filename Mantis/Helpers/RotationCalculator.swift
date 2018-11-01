@@ -103,7 +103,7 @@ class RotationCalculator {
         return angleForPoint(point: pointA) - angleForPoint(point: pointB)
     }
     
-    func getRotation(byOldPoint p1:CGPoint, andNewPoint p2: CGPoint) -> CGFloat {
+    func getRotationRadians(byOldPoint p1:CGPoint, andNewPoint p2: CGPoint) -> CGFloat {
         self.previousPoint = p1
         self.currentPoint = p2
         return rotation ?? 0
