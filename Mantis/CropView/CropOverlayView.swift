@@ -28,7 +28,6 @@ class CropOverlayView: UIView {
     
     override var frame: CGRect {
         didSet {
-            print("===========")
             if corner.count > 0 {
                 layoutLines()
             }            

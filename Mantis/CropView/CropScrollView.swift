@@ -75,9 +75,10 @@ class CropScrollView: UIScrollView {
         let scaleH = bounds.height / imageContainer.bounds.height
         
         let scale = max(scaleW, scaleH)
+        print("zoom scale is \(scale)")
         
-        setZoomScale(scale, animated: animated)
         minimumZoomScale = scale
+        setZoomScale(scale, animated: animated)        
     }
     
     func shouldScale() -> Bool {

@@ -16,6 +16,9 @@ class ImageContainer: UIView {
         imageView.accessibilityIgnoresInvertColors = true
         imageView.contentMode = .scaleAspectFit
         
+        layer.borderColor = UIColor.green.cgColor
+        layer.borderWidth = 2
+        
         addSubview(imageView)
         
         return imageView

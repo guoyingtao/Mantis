@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct GeometryHelper {
+struct GeometryHelper {    
     static func getIncribeRect(fromOutsideRect outsideRect: CGRect, andInsideRect insideRect: CGRect) -> CGRect {
         let insideRectRatio = insideRect.width / insideRect.height
         let outsideRectRatio = outsideRect.width / outsideRect.height
@@ -25,5 +25,5 @@ struct GeometryHelper {
         rect.origin.x = outsideRect.midX - rect.width / 2
         rect.origin.y = outsideRect.midY - rect.height / 2
         return rect
-    }    
+    }
 }

@@ -25,7 +25,7 @@ class CropViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let image = UIImage(named: "sunflower.jpg") else {
+        guard let image = UIImage(named: "sunflower1.jpg") else {
             return
         }
         
@@ -37,7 +37,7 @@ class CropViewController: UIViewController {
         
         cropView.translatesAutoresizingMaskIntoConstraints = false
         cropView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
-        cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60).isActive = true
+        cropView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80).isActive = true
         cropView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         cropView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
 
