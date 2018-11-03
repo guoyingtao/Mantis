@@ -28,6 +28,8 @@
 		5F1489A12188EA02009E5EFD /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1489A02188EA02009E5EFD /* CropViewController.swift */; };
 		5FB0DB9A218DD394006CFDF9 /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB99218DD394006CFDF9 /* Mantis.swift */; };
 		5FB0DB9C218DD76A006CFDF9 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB9B218DD76A006CFDF9 /* Config.swift */; };
+		5FB0DB9E218E268D006CFDF9 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */; };
+		5FB0DBA0218E2709006CFDF9 /* FixedRatios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB9F218E2709006CFDF9 /* FixedRatios.swift */; };
 		5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B14217A9EDF00582874 /* AppDelegate.swift */; };
 		5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B16217A9EDF00582874 /* ViewController.swift */; };
 		5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B18217A9EDF00582874 /* Main.storyboard */; };
@@ -69,6 +71,8 @@
 		5F1489A02188EA02009E5EFD /* CropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
 		5FB0DB99218DD394006CFDF9 /* Mantis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5FB0DB9B218DD76A006CFDF9 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
+		5FB0DB9F218E2709006CFDF9 /* FixedRatios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedRatios.swift; sourceTree = "<group>"; };
 		5FC10B11217A9EDF00582874 /* Mantis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mantis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC10B14217A9EDF00582874 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5FC10B16217A9EDF00582874 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -189,6 +193,8 @@
 				5FC10B20217A9EE100582874 /* Info.plist */,
 				5FB0DB9B218DD76A006CFDF9 /* Config.swift */,
 				5FB0DB99218DD394006CFDF9 /* Mantis.swift */,
+				5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */,
+				5FB0DB9F218E2709006CFDF9 /* FixedRatios.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";
@@ -313,6 +319,7 @@
 				5F14899F2188E61E009E5EFD /* CGImageExtensions.swift in Sources */,
 				5F0629B0217D81A50064A5E7 /* RotationCalculator.swift in Sources */,
 				5F0629E9217EAC350064A5E7 /* CropDimmingView.swift in Sources */,
+				5FB0DB9E218E268D006CFDF9 /* RatioPresenter.swift in Sources */,
 				5F0629E7217EAC1A0064A5E7 /* CropVisualEffectView.swift in Sources */,
 				5F0629AE217D81500064A5E7 /* AngleDashboard.swift in Sources */,
 				5F14899D2188E5EC009E5EFD /* UIImageExtensions.swift in Sources */,
@@ -320,6 +327,7 @@
 				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,
 				5F0629A8217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
 				5F1489982187FF00009E5EFD /* ImageContainer.swift in Sources */,
+				5FB0DBA0218E2709006CFDF9 /* FixedRatios.swift in Sources */,
 				5FC10B35217AB85A00582874 /* CropOverlayView.swift in Sources */,
 				5F0629F32181233E0064A5E7 /* GeometryHelper.swift in Sources */,
 				5FB0DB9A218DD394006CFDF9 /* Mantis.swift in Sources */,

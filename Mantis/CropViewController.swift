@@ -27,6 +27,8 @@ public class CropViewController: UIViewController {
     var anticlockRorateBarButtonItem: UIBarButtonItem?
     var cropBarButtonItem: UIBarButtonItem?
     
+    var ratioPresenter: RatioPresenter?
+    
     var cropView: CropView?
     var image: UIImage? {
         didSet {
@@ -126,7 +128,12 @@ public class CropViewController: UIViewController {
     }
     
     @objc private func setRatio() {
-        
+        guard let image = image else { return }
+        let type: RatioType = image.isHoritontal() ? .horizontal : .vertical
+        let ratio = Double(image.ratio())
+        ratioPresenter = RatioPresenter(type: type, originalRatio: ratio)
+        ratioPresenter?.didGetRatio = { ratio in print("ratio is \(ratio)") }
+        ratioPresenter?.present(in: self)
     }
 
     @objc private func reset(_ sender: Any) {
