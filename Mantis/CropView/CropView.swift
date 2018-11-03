@@ -13,7 +13,7 @@ protocol CropViewDelegate {
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
 
-class CropView: UIView {
+public class CropView: UIView {
     let cropViewMinimumBoxSize: CGFloat = 42
     var minimumAspectRatio: CGFloat = 0
     let angleDashboardHeight: CGFloat = 50
@@ -248,34 +248,34 @@ class CropView: UIView {
 }
 
 extension CropView: UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageContainer
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         viewStatus = .touchImage
     }
     
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+    public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         viewStatus = .touchImage
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         viewStatus = .betweenOperation
     }
     
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         manualZoomed = true
         viewStatus = .betweenOperation
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         viewStatus = .betweenOperation
     }
 }
 
 extension CropView {
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
                                        dy: -hotAreaUnit).contains(point) &&
             !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
@@ -291,7 +291,7 @@ extension CropView {
         return nil        
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
         viewStatus = .touchImage
@@ -321,7 +321,7 @@ extension CropView {
         }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         
         guard touches.count == 1, let touch = touches.first else {
@@ -352,7 +352,7 @@ extension CropView {
         
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
         if forCrop {
@@ -376,7 +376,7 @@ extension CropView {
         forCrop = true        
     }
     
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
     }
 }
