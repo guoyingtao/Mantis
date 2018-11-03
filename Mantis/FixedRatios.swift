@@ -37,8 +37,7 @@ struct RatioData: ExpressibleByStringLiteral, Equatable {
         } else {
             textForVertical = textForHoritontal
         }
-        
-        
+                
         guard ratioForHoritontal != 0 else { return }
         ratioForVertical = 1.0 / ratioForHoritontal
     }
@@ -61,7 +60,7 @@ enum FixedRatiosType: RatioData, CaseIterable {
     case scale5_4 = "5:4"
     case scale7_5 = "7:5"
     case scale16_9 = "16:9"
-    
+
     func getText(by ratioType: RatioType) -> String {
         return self.rawValue.getText(by: ratioType)
     }

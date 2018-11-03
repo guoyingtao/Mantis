@@ -32,6 +32,9 @@ class RatioPresenter {
             actionSheet.addAction(action)
         }
         
-        viewController.present(actionSheet, animated: true)        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        actionSheet.addAction(cancelAction)
+        
+        viewController.present(actionSheet, animated: true)
     }
 }
