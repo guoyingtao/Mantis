@@ -8,8 +8,6 @@
 
 import UIKit
 
-// https://www.youtube.com/watch?v=AxN7HmKcKgE
-
 class ViewController: UIViewController, CropViewControllerProtocal {
     func didGetCroppedImage(image: UIImage) {
         croppedImageView.image = image
@@ -19,11 +17,13 @@ class ViewController: UIViewController, CropViewControllerProtocal {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        croppedImageView.image = UIImage(named: "sunflower1.jpg")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? CropViewController {
+        if let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? CropViewController {
             vc.delegate = self
+            vc.image = croppedImageView.image
         }
     }
 }
