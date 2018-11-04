@@ -145,13 +145,13 @@
 		5F1489992188E201009E5EFD /* CropView */ = {
 			isa = PBXGroup;
 			children = (
+				5F0629A5217BB05F0064A5E7 /* CropView.swift */,
 				5FC10B34217AB85A00582874 /* CropOverlayView.swift */,
 				5F0629A3217BAF5C0064A5E7 /* CropScrollView.swift */,
 				5F0629A7217D353F0064A5E7 /* CropBoxFreeAspectFrameUpdater.swift */,
 				5F0629A9217D3CCC0064A5E7 /* CropBoxLockedAspectFrameUpdater.swift */,
 				5F148993218674AF009E5EFD /* CropMaskViewManager.swift */,
 				5F1489972187FF00009E5EFD /* ImageContainer.swift */,
-				5F0629A5217BB05F0064A5E7 /* CropView.swift */,
 				5F0629F821838C2A0064A5E7 /* CropViewStatus.swift */,
 				5F0629F62183758A0064A5E7 /* ImageStatus.swift */,
 			);

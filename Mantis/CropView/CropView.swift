@@ -14,10 +14,11 @@ protocol CropViewDelegate {
 }
 
 public class CropView: UIView {
-    let cropViewMinimumBoxSize: CGFloat = 42
-    var minimumAspectRatio: CGFloat = 0
-    let angleDashboardHeight: CGFloat = 50
-    let hotAreaUnit = CGFloat(64)
+    fileprivate let cropViewMinimumBoxSize: CGFloat = 42
+    fileprivate let minimumAspectRatio: CGFloat = 0
+    fileprivate let angleDashboardHeight: CGFloat = 50
+    fileprivate let hotAreaUnit: CGFloat = 64
+    fileprivate let cropViewPadding:CGFloat = 14.0
     
     fileprivate var viewStatus: CropViewStatus = .initial {
         didSet {
@@ -25,7 +26,8 @@ public class CropView: UIView {
         }
     }
     
-    fileprivate var imageStatus = ImageStatus()
+    var imageStatus = ImageStatus()
+    
     fileprivate var panOriginPoint = CGPoint.zero
     
     fileprivate var contentBounds: CGRect {
@@ -51,9 +53,8 @@ public class CropView: UIView {
     
     fileprivate var cropOrignFrame = CGRect.zero
     fileprivate var tappedEdge = CropViewOverlayEdge.none
-    fileprivate var cropViewPadding:CGFloat = 14.0
-    fileprivate var aspectRatio = CGSize(width: 16.0, height: 9.0)
-    fileprivate var aspectRatioLockEnabled = false
+    
+    var aspectRatioLockEnabled = false
     
     private lazy var initialCropBoxRect: CGRect = {
         guard let image = image else { return .zero }
@@ -65,6 +66,10 @@ public class CropView: UIView {
     } ()
     
     fileprivate var image: UIImage!
+    lazy var imageRatio = {
+        return image.ratio()
+    }()
+    
     fileprivate var imageContainer: ImageContainer!
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     
@@ -145,19 +150,31 @@ public class CropView: UIView {
         imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
         setupAngleDashboard()
         
-        // To do
         if aspectRatioLockEnabled {
-            var cropBoxFrame = self.cropBoxFrame
-            let scale = aspectRatio.width / aspectRatio.height
-            let newWidth = cropBoxFrame.height / scale
-            cropBoxFrame.origin.x += (cropBoxFrame.size.width - newWidth) / 2
-            cropBoxFrame.size.width = newWidth
-            self.cropBoxFrame = cropBoxFrame
-            
-            adjustUIForNewCrop() { [weak self] in
-                self?.viewStatus = .betweenOperation
-            }
+            setFixedRatioCropBox()
         }
+    }
+    
+    func setFixedRatioCropBox() {
+        var cropBoxFrame = initialCropBoxRect
+        let center = cropBoxFrame.center
+        
+        if imageStatus.aspectRatio > imageRatio {
+            cropBoxFrame.size.height = cropBoxFrame.width / imageStatus.aspectRatio
+        } else {
+            cropBoxFrame.size.width = cropBoxFrame.size.height * imageStatus.aspectRatio
+        }
+
+        cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
+        cropBoxFrame.origin.y = center.y - cropBoxFrame.height / 2
+        
+        self.cropBoxFrame = cropBoxFrame
+        
+        adjustUIForNewCrop() { [weak self] in
+            self?.viewStatus = .betweenOperation
+        }
+        
+        adaptAngleDashboardToCropBox()
     }
     
     private func setupScrollView() {
@@ -549,6 +566,7 @@ extension CropView {
         angleDashboard.removeFromSuperview()
         
         cropBoxFrame = .zero
+        aspectRatioLockEnabled = false
         
         viewStatus = .initial
         imageStatus.reset()

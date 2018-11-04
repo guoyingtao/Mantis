@@ -82,22 +82,27 @@ public class CropViewController: UIViewController {
     
     private func createCancleButton() {
         cancelBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
+        cancelBarButtonItem?.tintColor = .white
     }
     
     private func createSetRatioButton() {
         setRatioBarButtonItem = UIBarButtonItem(title: "Set Ratio", style: .plain, target: self, action: #selector(setRatio))
+        setRatioBarButtonItem?.tintColor = .white
     }
     
     private func createResetButton() {
         resetBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(reset))
+        resetBarButtonItem?.tintColor = .white
     }
     
     private func createRotateButton() {
         anticlockRorateBarButtonItem = UIBarButtonItem(title: "Rotate", style: .plain, target: self, action: #selector(rotate))
+        anticlockRorateBarButtonItem?.tintColor = .white
     }
     
     private func createCropButton() {
         cropBarButtonItem = UIBarButtonItem(title: "Crop", style: .plain, target: self, action: #selector(crop))
+        cropBarButtonItem?.tintColor = .white
     }
     
     private func createFlexibleSpace() -> UIBarButtonItem {
@@ -112,6 +117,7 @@ public class CropViewController: UIViewController {
         createCropButton()
         
         toolbarItems = [cancelBarButtonItem!, createFlexibleSpace(), anticlockRorateBarButtonItem!, createFlexibleSpace(), resetBarButtonItem!, createFlexibleSpace(), setRatioBarButtonItem!, createFlexibleSpace(), cropBarButtonItem!]
+        navigationController?.toolbar.barTintColor = .black
     }
     
     private func createBottomOpertions() {
@@ -128,11 +134,32 @@ public class CropViewController: UIViewController {
     }
     
     @objc private func setRatio() {
+        guard let cropView = cropView else { return }
+        
+        if cropView.aspectRatioLockEnabled {
+            cropView.aspectRatioLockEnabled = false
+            setRatioBarButtonItem?.tintColor = .white
+            return
+        }
+        
         guard let image = image else { return }
+        
+        func didSet(fixedRatio ratio: Double) {
+            setRatioBarButtonItem?.tintColor = .blue
+            cropView.aspectRatioLockEnabled = true
+            cropView.imageStatus.aspectRatio = CGFloat(ratio)
+            
+            UIView.animate(withDuration: 0.5) {
+                cropView.setFixedRatioCropBox()
+            }            
+        }
+        
         let type: RatioType = image.isHoritontal() ? .horizontal : .vertical
         let ratio = Double(image.ratio())
         ratioPresenter = RatioPresenter(type: type, originalRatio: ratio)
-        ratioPresenter?.didGetRatio = { ratio in print("ratio is \(ratio)") }
+        ratioPresenter?.didGetRatio = { ratio in
+            didSet(fixedRatio: ratio)
+        }
         ratioPresenter?.present(in: self)
     }
 
