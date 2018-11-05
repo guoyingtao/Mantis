@@ -102,11 +102,17 @@ public class CropViewController: UIViewController {
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        print("viewWillTransition")
     }
     
     @objc func rotated() {
+        if UIDevice.current.userInterfaceIdiom == .phone && UIDevice.current.orientation == .portraitUpsideDown {
+            return
+        }
+        
         updateLayout()
         view.layoutIfNeeded()
+        cropView?.handleRotate()
     }
     
     private func createOptionButton(withTitle title: String, andAction action: Selector) -> UIButton {
