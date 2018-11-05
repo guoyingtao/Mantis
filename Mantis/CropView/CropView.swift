@@ -30,13 +30,27 @@ public class CropView: UIView {
     
     fileprivate var panOriginPoint = CGPoint.zero
     
-    fileprivate var contentBounds: CGRect {
+    fileprivate func getContentBounds(by rect: CGRect) -> CGRect {
         var contentRect = CGRect.zero
-        contentRect.origin.x = cropViewPadding
-        contentRect.origin.y = cropViewPadding
-        contentRect.size.width = bounds.width - 2 * cropViewPadding
-        contentRect.size.height = bounds.height - 2 * cropViewPadding - angleDashboardHeight
-    
+        
+        if UIDevice.current.orientation.isPortrait {
+            contentRect.origin.x = rect.origin.x + cropViewPadding
+            contentRect.origin.y = rect.origin.y + cropViewPadding
+            
+            contentRect.size.width = rect.width - 2 * cropViewPadding
+            contentRect.size.height = rect.height - 2 * cropViewPadding - angleDashboardHeight
+        } else if UIDevice.current.orientation.isLandscape {
+            contentRect.size.width = rect.width - 2 * cropViewPadding - angleDashboardHeight
+            contentRect.size.height = rect.height - 2 * cropViewPadding
+            
+            contentRect.origin.y = rect.origin.y + cropViewPadding
+            if UIDevice.current.orientation == .landscapeLeft {
+                contentRect.origin.x = rect.origin.x + cropViewPadding
+            } else {
+                contentRect.origin.x = rect.origin.x + cropViewPadding + angleDashboardHeight
+            }
+        }
+        
         return contentRect
     }
     
@@ -60,7 +74,7 @@ public class CropView: UIView {
         guard let image = image else { return .zero }
         guard image.size.width > 0 && image.size.height > 0 else { return .zero }
         
-        let outsideRect = contentBounds
+        let outsideRect = getContentBounds(by: self.bounds)
         let insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         return GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
     } ()
@@ -216,7 +230,7 @@ public class CropView: UIView {
     }
     
     fileprivate func updateCropBoxFrame(withTouchPoint point: CGPoint) {
-        let contentFrame = contentBounds
+        let contentFrame = getContentBounds(by: self.bounds)
         
         var point = point
         point.x = max(contentFrame.origin.x - cropViewPadding, point.x)
@@ -401,7 +415,7 @@ extension CropView {
 // Adjust UI
 extension CropView {
     func adjustUIForNewCrop(completion: @escaping ()->Void) {
-        let contentRect = contentBounds
+        let contentRect = getContentBounds(by: self.bounds)
         
         let scaleX: CGFloat
         let scaleY: CGFloat
@@ -534,6 +548,12 @@ extension CropView {
         return UIImage(cgImage: imageRef)
     }
     
+    func handleRotate() {
+        let outsideRect = getContentBounds(by: self.bounds)
+        var rect = GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: gridOverlayView.frame)
+        
+    }
+    
     func anticlockwiseRotate90() {
         viewStatus = .rotating
         
@@ -541,7 +561,7 @@ extension CropView {
         rect.size.width = gridOverlayView.frame.height
         rect.size.height = gridOverlayView.frame.width
         
-        let newRect = GeometryHelper.getIncribeRect(fromOutsideRect: contentBounds, andInsideRect: rect)
+        let newRect = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(by: self.bounds), andInsideRect: rect)
         
         let radian = -CGFloat.pi / 2
         let transfrom = scrollView.transform.rotated(by: radian)

@@ -28,7 +28,6 @@ public class CropViewController: UIViewController {
     var cropButton: UIButton?
     
     var optionButtonStackView: UIStackView?
-    var toolbar: UIToolbar?
     var optionButtons: [UIButton?] = []
     
     var ratioPresenter: RatioPresenter?
@@ -101,6 +100,10 @@ public class CropViewController: UIViewController {
         cropView?.adaptForCropBox()
     }
     
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+    
     @objc func rotated() {
         updateLayout()
         view.layoutIfNeeded()
@@ -115,7 +118,8 @@ public class CropViewController: UIViewController {
         button.titleLabel?.font = buttonFont
         button.setTitle(title, for: .normal)
         button.setTitleColor(buttonColor, for: .normal)
-        button.target(forAction: action, withSender: self)
+        button.addTarget(self, action: action, for: .touchUpInside)
+        
         return button
     }
     
@@ -125,10 +129,10 @@ public class CropViewController: UIViewController {
     
     private func createToolbarUI() {
         cancelButton = createOptionButton(withTitle: "Canel", andAction: #selector(cancel))
-        anticlockRotateButton = createOptionButton(withTitle: "Rotate", andAction: #selector(cancel))
-        resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(cancel))
-        setRatioButton = createOptionButton(withTitle: "Ratio", andAction: #selector(cancel))
-        cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(cancel))
+        anticlockRotateButton = createOptionButton(withTitle: "Rotate", andAction: #selector(rotate))
+        resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(reset))
+        setRatioButton = createOptionButton(withTitle: "Ratio", andAction: #selector(setRatio))
+        cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
         
         optionButtonStackView = UIStackView()
         optionButtonStackView?.distribution = .fillEqually
