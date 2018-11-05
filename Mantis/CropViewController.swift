@@ -100,7 +100,6 @@ public class CropViewController: UIViewController {
     
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("cropView.bounds = \(cropView!.bounds)")
         cropView?.adaptForCropBox()
     }
     

@@ -194,6 +194,8 @@ public class CropView: UIView {
         angleDashboard = AngleDashboard(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
         
+        angleDashboard.rotateDialPlate(byRadians: imageStatus.radians)
+        
         adaptAngleDashboardToCropBox()
     }
     
@@ -385,8 +387,6 @@ extension CropView {
             viewStatus = .betweenOperation
             
             print("+++ scroll view zoom scale is \(scrollView.zoomScale)")
-            print("+++ scroll view offset is \(scrollView.contentOffset)")
-            print("+++ scroll view unit offset is \(scrollView.contentOffset.x / scrollView.zoomScale)  \(scrollView.contentOffset.y / scrollView.zoomScale)")
         }
         
         forCrop = true        
@@ -586,11 +586,12 @@ extension CropView {
         return UIImage(cgImage: imageRef)
     }
     
-    func handleRotate() {        
-        print("scrollview bounds is \(scrollView.bounds)")
+    func handleRotate() {
         scrollView.contentOffset = imageStatus.offset
 
-        self.rotateScrollView()
+        rotateScrollView()
+        
+        print("&&&& zoom scale is \(scrollView.zoomScale)")
 
         if imageStatus.cropBox != .zero {
             cropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(), andInsideRect: imageStatus.cropBox)

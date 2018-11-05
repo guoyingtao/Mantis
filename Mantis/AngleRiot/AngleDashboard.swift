@@ -60,6 +60,7 @@ class AngleDashboard: UIView {
         return CGPoint(x: dialPlate.frame.midX , y: dialPlate.frame.midY)
     }
     
+    @discardableResult
     func rotateDialPlate(byRadians radians: CGFloat) -> Bool {
         
         if (getRotationRadians() * radians) > 0 && abs(getRotationRadians() + radians) >= radiansLimit {
