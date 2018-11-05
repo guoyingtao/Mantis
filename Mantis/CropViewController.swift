@@ -105,9 +105,9 @@ public class CropViewController: UIViewController {
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        
         super.viewWillTransition(to: size, with: coordinator)
     }
+    
     
     @objc func rotated() {
         let statusBarOrientation = UIApplication.shared.statusBarOrientation

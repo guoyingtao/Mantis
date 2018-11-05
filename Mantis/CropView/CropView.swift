@@ -123,6 +123,7 @@ public class CropView: UIView {
         cropBoxFrame = getInitialCropBoxRect()
         cropOrignFrame = cropBoxFrame
         
+        scrollView.transform = .identity
         scrollView.resetBy(rect: cropBoxFrame)
         
         imageContainer.frame = scrollView.bounds
@@ -586,18 +587,15 @@ extension CropView {
     }
     
     func handleRotate() {        
+        print("scrollview bounds is \(scrollView.bounds)")
         scrollView.contentOffset = imageStatus.offset
-        rotateScrollView()
-        
+
+        self.rotateScrollView()
+
         if imageStatus.cropBox != .zero {
             cropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(), andInsideRect: imageStatus.cropBox)
             adaptAngleDashboardToCropBox()
-//            updateScrollViewLayout(by: cropBoxFrame)
         }
-        
-        let newScale = scrollView.zoomScale * imageStatus.zoomScale
-        scrollView.minimumZoomScale = newScale
-        scrollView.zoomScale = newScale
     }
     
     func anticlockwiseRotate90() {
