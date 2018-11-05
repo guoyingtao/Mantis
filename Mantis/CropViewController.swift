@@ -21,7 +21,7 @@ public class CropViewController: UIViewController {
     
     var delegate: CropViewControllerProtocal?
     
-    var deviceOrientation: UIDeviceOrientation = .portrait
+    var orientation: UIInterfaceOrientation = .portrait
     
     var cancelButton: UIButton?
     var setRatioButton: UIButton?
@@ -64,7 +64,7 @@ public class CropViewController: UIViewController {
     
     init(image: UIImage) {
         self.image = image
-        deviceOrientation = UIDevice.current.orientation
+        orientation = UIApplication.shared.statusBarOrientation
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -105,23 +105,25 @@ public class CropViewController: UIViewController {
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
         super.viewWillTransition(to: size, with: coordinator)
     }
     
     @objc func rotated() {
-        let orientation = UIDevice.current.orientation
+        let statusBarOrientation = UIApplication.shared.statusBarOrientation
         
-        guard orientation != .unknown else {
+        guard statusBarOrientation != .unknown else {
             return
         }
         
-        guard orientation != deviceOrientation else {
+        guard statusBarOrientation != orientation else {
             return
         }
         
-        deviceOrientation = UIDevice.current.orientation
+        orientation = statusBarOrientation
         
-        if UIDevice.current.userInterfaceIdiom == .phone && UIDevice.current.orientation == .portraitUpsideDown {
+        if UIDevice.current.userInterfaceIdiom == .phone
+            && statusBarOrientation == .portraitUpsideDown {
             return
         }
         
@@ -275,7 +277,7 @@ extension CropViewController {
     fileprivate func updateLayout() {
         uiConstraints.forEach{ $0?.isActive = false }
         
-        if UIDevice.current.orientation.isPortrait {
+        if UIApplication.shared.statusBarOrientation.isPortrait {
             toolbarHeightConstraint?.isActive = true
             toolbarLeftConstraint?.isActive = true
             toolbarRightConstraint?.isActive = true
@@ -288,7 +290,7 @@ extension CropViewController {
             
             optionButtonStackView?.axis = .horizontal
             
-        } else if UIDevice.current.orientation.isLandscape {
+        } else if UIApplication.shared.statusBarOrientation.isLandscape {
             toolbarWidthConstraint?.isActive = true
             toolbarTopConstraint?.isActive = true
             toolbarBottomConstraint?.isActive = true
@@ -298,7 +300,7 @@ extension CropViewController {
             
             optionButtonStackView?.axis = .vertical
             
-            if UIDevice.current.orientation == .landscapeLeft {
+            if UIApplication.shared.statusBarOrientation == .landscapeLeft {
                 toolbarRightConstraint?.isActive = true
                 cropViewLandscapeLeftLeftConstraint?.isActive = true
                 cropViewLandscapeLeftRightConstraint?.isActive = true
