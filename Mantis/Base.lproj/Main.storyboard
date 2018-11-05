@@ -18,20 +18,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
-                                <rect key="frame" x="151" y="551" width="73" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
+                                <rect key="frame" x="151" y="617" width="73" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="M4W-c3-jRN"/>
+                                    <constraint firstAttribute="width" constant="73" id="fJP-8O-1J6"/>
+                                </constraints>
                                 <state key="normal" title="Go to crop"/>
                                 <connections>
                                     <segue destination="uRD-CJ-bhC" kind="presentation" id="XtC-NS-BEq"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
-                                <rect key="frame" x="67" y="71" width="240" height="444"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
+                                <rect key="frame" x="40" y="60" width="295" height="527"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Sau-lB-dow" secondAttribute="bottom" constant="20" id="PzX-wD-wqp"/>
+                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="Sxa-vn-i15"/>
+                            <constraint firstItem="Sau-lB-dow" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YW6-fB-n2C"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pUS-Eo-0ui" secondAttribute="trailing" constant="40" id="ZTq-jL-0f6"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="80" id="fPo-oy-TR4"/>
+                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="hmS-Zq-20T"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>

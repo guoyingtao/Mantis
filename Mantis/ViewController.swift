@@ -17,7 +17,7 @@ class ViewController: UIViewController, CropViewControllerProtocal {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        croppedImageView.image = UIImage(named: "sunflower1.jpg")
+        croppedImageView.image = UIImage(named: "sunflower.jpg")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
