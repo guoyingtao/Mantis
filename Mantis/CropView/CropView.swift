@@ -121,7 +121,7 @@ public class CropView: UIView {
         setGridOverlayView()
     }
     
-    func adaptForCropBox() {
+    func resetUIFrame() {
         cropBoxFrame = getInitialCropBoxRect()
         cropOrignFrame = cropBoxFrame
         
@@ -129,15 +129,16 @@ public class CropView: UIView {
         
         imageContainer.frame = scrollView.bounds
         imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
-
+        
         setupAngleDashboard()
         
         if aspectRatioLockEnabled {
             setFixedRatioCropBox()
         }
-        
-//        print("=== scroll view zoom scale is \(scrollView.zoomScale)")
-//        print("=== saved scroll view zoom scale is \(imageStatus.zoomScale)")
+    }
+    
+    func adaptForCropBox() {
+        resetUIFrame()
     }
     
     func setFixedRatioCropBox() {
@@ -642,7 +643,7 @@ extension CropView {
         
         viewStatus = .initial
         imageStatus.reset()
-        adaptForCropBox()
+        resetUIFrame()
     }
     
     fileprivate func setRotation(byRadians radians: CGFloat) {

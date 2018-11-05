@@ -99,9 +99,11 @@ class CropScrollView: UIScrollView {
     }
     
     func resetBy(rect: CGRect) {
-        frame = rect
-        contentSize = rect.size
+        // Reseting zoom need to be before resetting frame and contentsize
         minimumZoomScale = 1.0
         zoomScale = 1.0
+
+        frame = rect
+        contentSize = rect.size
     }
 }
