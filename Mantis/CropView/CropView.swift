@@ -70,14 +70,14 @@ public class CropView: UIView {
     
     var aspectRatioLockEnabled = false
     
-    private lazy var initialCropBoxRect: CGRect = {
+    private func getInitialCropBoxRect() -> CGRect {
         guard let image = image else { return .zero }
         guard image.size.width > 0 && image.size.height > 0 else { return .zero }
         
         let outsideRect = getContentBounds(by: self.bounds)
         let insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         return GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
-    } ()
+    }
     
     fileprivate var image: UIImage!
     lazy var imageRatio = {
@@ -154,11 +154,11 @@ public class CropView: UIView {
     }
     
     func adaptForCropBox() {
-        cropBoxFrame = initialCropBoxRect
+        cropBoxFrame = getInitialCropBoxRect()
         cropOrignFrame = cropBoxFrame
         
-        scrollView.frame = initialCropBoxRect
-        scrollView.contentSize = initialCropBoxRect.size
+        scrollView.frame = cropBoxFrame
+        scrollView.contentSize = cropBoxFrame.size
         
         imageContainer.frame = scrollView.bounds
         imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
@@ -170,7 +170,7 @@ public class CropView: UIView {
     }
     
     func setFixedRatioCropBox() {
-        var cropBoxFrame = initialCropBoxRect
+        var cropBoxFrame = getInitialCropBoxRect()
         let center = cropBoxFrame.center
         
         if imageStatus.aspectRatio > imageRatio {
