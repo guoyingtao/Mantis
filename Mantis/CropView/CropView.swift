@@ -26,6 +26,7 @@ public class CropView: UIView {
         }
     }
     
+    var deviceOrientation: UIDeviceOrientation = .portrait
     var imageStatus = ImageStatus()
     
     fileprivate var panOriginPoint = CGPoint.zero
@@ -69,6 +70,7 @@ public class CropView: UIView {
         super.init(frame: CGRect.zero)
         self.image = image
         self.imageStatus = status
+        deviceOrientation = UIDevice.current.orientation
         setupUI()
     }
     
@@ -134,8 +136,8 @@ public class CropView: UIView {
             setFixedRatioCropBox()
         }
         
-        print("=== scroll view zoom scale is \(scrollView.zoomScale)")
-        print("=== saved scroll view zoom scale is \(imageStatus.zoomScale)")
+//        print("=== scroll view zoom scale is \(scrollView.zoomScale)")
+//        print("=== saved scroll view zoom scale is \(imageStatus.zoomScale)")
     }
     
     func setFixedRatioCropBox() {
@@ -153,7 +155,7 @@ public class CropView: UIView {
         
         self.cropBoxFrame = cropBoxFrame
         
-        let contentRect = getContentBounds(by: self.bounds)
+        let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
             self?.viewStatus = .betweenOperation
         }
@@ -212,7 +214,7 @@ public class CropView: UIView {
     }
     
     fileprivate func updateCropBoxFrame(withTouchPoint point: CGPoint) {
-        let contentFrame = getContentBounds(by: self.bounds)
+        let contentFrame = getContentBounds()
         
         var point = point
         point.x = max(contentFrame.origin.x - cropViewPadding, point.x)
@@ -368,7 +370,7 @@ extension CropView {
         
         if forCrop {
             if !cropOrignFrame.equalTo(cropBoxFrame) {
-                let contentRect = getContentBounds(by: self.bounds)
+                let contentRect = getContentBounds()
                 adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
                     self?.viewStatus = .betweenOperation                    
                 }
@@ -405,12 +407,13 @@ extension CropView {
         guard let image = image else { return .zero }
         guard image.size.width > 0 && image.size.height > 0 else { return .zero }
         
-        let outsideRect = getContentBounds(by: self.bounds)
+        let outsideRect = getContentBounds()
         let insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         return GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
     }
     
-    fileprivate func getContentBounds(by rect: CGRect) -> CGRect {
+    fileprivate func getContentBounds() -> CGRect {
+        let rect = self.bounds
         var contentRect = CGRect.zero
         
         if UIDevice.current.orientation.isPortrait {
@@ -475,7 +478,8 @@ extension CropView {
 
         UIView.animate(withDuration: 0.25, animations: {[weak self] in
             guard let self = self else { return }
-            self.cropBoxFrame = newCropBoxFrame
+            self.cropBoxFrame = newCropBoxFrame            
+            self.imageStatus.cropBox = newCropBoxFrame
             
             let zoomRect = self.convert(scaleFrame,
                                                 to: self.scrollView.imageContainer)
@@ -585,6 +589,16 @@ extension CropView {
     }
     
     func handleRotate() {
+        guard UIDevice.current.orientation != deviceOrientation else {
+            return
+        }
+        
+        deviceOrientation = UIDevice.current.orientation
+        
+        if imageStatus.cropBox != .zero {
+            cropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(), andInsideRect: imageStatus.cropBox)
+        }
+        
         rotateScrollView()
         
         let newScale = scrollView.zoomScale * imageStatus.zoomScale
@@ -599,7 +613,7 @@ extension CropView {
         rect.size.width = gridOverlayView.frame.height
         rect.size.height = gridOverlayView.frame.width
         
-        let newRect = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(by: self.bounds), andInsideRect: rect)
+        let newRect = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
         
         let radian = -CGFloat.pi / 2
         let transfrom = scrollView.transform.rotated(by: radian)
