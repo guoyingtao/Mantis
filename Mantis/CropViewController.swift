@@ -102,7 +102,6 @@ public class CropViewController: UIViewController {
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        print("viewWillTransition")
     }
     
     @objc func rotated() {
@@ -163,8 +162,8 @@ public class CropViewController: UIViewController {
         cropView.delegate = self
         cropView.clipsToBounds = true
         
-        cropView.layer.borderColor = UIColor.red.cgColor
-        cropView.layer.borderWidth = 2
+//        cropView.layer.borderColor = UIColor.red.cgColor
+//        cropView.layer.borderWidth = 2
     }
     
     @objc private func cancel() {

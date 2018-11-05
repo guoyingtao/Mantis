@@ -101,7 +101,7 @@ struct CropBoxFreeAspectFrameUpdater {
                 handleBottomEdgeFrameUpdate(newSize: newSize)
                 handleRightEdgeFrameUpdate(newSize: newSize)
             default:
-                print("none")
+                return
             }
         }
         

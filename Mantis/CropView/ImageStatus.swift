@@ -39,7 +39,7 @@ struct ImageStatus {
     
     mutating func reset() {
         degrees = 0
-        zoomScale = 0
+        zoomScale = 1.0
         offset = .zero
         rotationType = .none
         aspectRatio = -1
