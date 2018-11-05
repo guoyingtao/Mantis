@@ -21,6 +21,8 @@ public class CropViewController: UIViewController {
     
     var delegate: CropViewControllerProtocal?
     
+    var deviceOrientation: UIDeviceOrientation = .portrait
+    
     var cancelButton: UIButton?
     var setRatioButton: UIButton?
     var resetButton: UIButton?
@@ -62,6 +64,7 @@ public class CropViewController: UIViewController {
     
     init(image: UIImage) {
         self.image = image
+        deviceOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -106,6 +109,18 @@ public class CropViewController: UIViewController {
     }
     
     @objc func rotated() {
+        let orientation = UIDevice.current.orientation
+        
+        guard orientation != .unknown else {
+            return
+        }
+        
+        guard orientation != deviceOrientation else {
+            return
+        }
+        
+        deviceOrientation = UIDevice.current.orientation
+        
         if UIDevice.current.userInterfaceIdiom == .phone && UIDevice.current.orientation == .portraitUpsideDown {
             return
         }
