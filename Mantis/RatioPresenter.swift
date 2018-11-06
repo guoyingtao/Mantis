@@ -18,7 +18,7 @@ class RatioPresenter {
         self.originalRatio = originalRatio
     }
     
-    func present(in viewController: UIViewController) {
+    func present(by viewController: UIViewController, in sourceView: UIView) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         for ratio in FixedRatiosType.allCases {
@@ -30,6 +30,12 @@ class RatioPresenter {
                 self.didGetRatio(ratioValue)
             }
             actionSheet.addAction(action)
+        }
+        
+        if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad {
+            actionSheet.popoverPresentationController?.permittedArrowDirections = .any
+            actionSheet.popoverPresentationController?.sourceView = sourceView
+//            actionSheet.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

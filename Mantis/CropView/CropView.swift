@@ -116,6 +116,9 @@ class CropView: UIView {
 
         cropMaskViewManager = CropMaskViewManager(with: self)
         setGridOverlayView()
+        
+        layer.borderColor = UIColor.red.cgColor
+        layer.borderWidth = 2
     }
     
     func resetUIFrame() {
@@ -291,15 +294,17 @@ extension CropView: UIScrollViewDelegate {
 
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let p = self.convert(point, to: self)
+        
         if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
-                                       dy: -hotAreaUnit).contains(point) &&
+                                       dy: -hotAreaUnit).contains(p) &&
             !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
-                                         dy: hotAreaUnit).contains(point)
-        || angleDashboard.frame.contains(point)) {
+                                         dy: hotAreaUnit).contains(p)
+        || angleDashboard.frame.contains(p)) {
             return self
         }
         
-        if self.frame.contains(point) {
+        if self.bounds.contains(p) {
             return self.scrollView
         }
         
@@ -381,7 +386,7 @@ extension CropView {
             previousPoint = nil
             rotationCal = nil
             imageStatus.degrees = angleDashboard.getRotationDegrees()
-            viewStatus = .betweenOperation            
+            viewStatus = .betweenOperation
         }
         
         forCrop = true        
@@ -434,7 +439,7 @@ extension CropView {
         return contentRect
     }
 
-    func saveAnchorPoints() {
+    fileprivate func saveAnchorPoints() {
         let lt = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
         imageStatus.cropLeftTopOnImage = CGPoint(x: lt.x / imageContainer.bounds.width, y: lt.y / imageContainer.bounds.height)
         let rb = gridOverlayView.convert(CGPoint(x: gridOverlayView.bounds.width, y: gridOverlayView.bounds.height), to: imageContainer)
@@ -645,6 +650,11 @@ extension CropView {
         viewStatus = .initial
         imageStatus.reset()
         resetUIFrame()
+    }
+    
+    func prepareForDeviceRotation() {
+        viewStatus = .rotating
+        saveAnchorPoints()
     }
     
     fileprivate func setRotation(byRadians radians: CGFloat) {

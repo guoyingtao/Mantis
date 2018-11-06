@@ -96,7 +96,7 @@ public class CropViewController: UIViewController {
         createCropView()
         initLayout()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
     }
     
     override public func viewDidLayoutSubviews() {
@@ -106,7 +106,7 @@ public class CropViewController: UIViewController {
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        cropView?.saveAnchorPoints()
+        cropView?.prepareForDeviceRotation()
     }    
     
     @objc func rotated() {
@@ -212,7 +212,7 @@ public class CropViewController: UIViewController {
         ratioPresenter?.didGetRatio = { ratio in
             didSet(fixedRatio: ratio)
         }
-        ratioPresenter?.present(in: self)
+        ratioPresenter?.present(by: self, in: setRatioButton!)
     }
 
     @objc private func reset(_ sender: Any) {
