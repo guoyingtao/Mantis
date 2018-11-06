@@ -93,7 +93,7 @@ public class CropViewController: UIViewController {
         if mode == .normal {
             cropToolbar?.createToolbarUI()
         } else {
-            createBottomOpertions()
+            cropToolbar?.createBottomOpertions()
         }
         
         createCropView()
@@ -137,10 +137,7 @@ public class CropViewController: UIViewController {
         view.layoutIfNeeded()
         cropView?.handleRotate()
     }
-    
-    private func createBottomOpertions() {
-    }
-    
+        
     private func createCropView() {
         guard let image = image else { return }
         

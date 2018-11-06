@@ -44,20 +44,34 @@ class CropToolbar: UIView {
         return button
     }
     
-    func createToolbarUI() {
+    private func createCancelButton() {
         cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
-        
+    }
+    
+    private func createRotationButton() {
         anticlockRotateButton = createOptionButton(withTitle: nil, andAction: #selector(rotate))
         anticlockRotateButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
-        
-        resetButton = createOptionButton(withTitle: nil, andAction: #selector(reset))
-        resetButton?.setImage(ToolBarButtonImageBuilder.resetImage(), for: .normal)
-        
+    }
+    
+    private func createResetButton(with image: UIImage? = nil) {
+        if let image = image {
+            resetButton = createOptionButton(withTitle: nil, andAction: #selector(reset))
+            resetButton?.setImage(image, for: .normal)
+        } else {
+            resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(reset))
+        }
+    }
+    
+    private func createSetRatioButton() {
         setRatioButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
         setRatioButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
-        
+    }
+    
+    private func createCropButton() {
         cropButton = createOptionButton(withTitle: "Done", andAction: #selector(crop))
-        
+    }
+    
+    private func createButtonContainer() {
         optionButtonStackView = UIStackView()
         addSubview(optionButtonStackView!)
         
@@ -68,11 +82,32 @@ class CropToolbar: UIView {
         optionButtonStackView?.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         
         optionButtonStackView?.distribution = .equalCentering
-        optionButtonStackView?.addArrangedSubview(cancelButton!)
-        optionButtonStackView?.addArrangedSubview(anticlockRotateButton!)
-        optionButtonStackView?.addArrangedSubview(resetButton!)
-        optionButtonStackView?.addArrangedSubview(setRatioButton!)
-        optionButtonStackView?.addArrangedSubview(cropButton!)
+    }
+    
+    private func addButtonsToContainer(buttons: [UIButton]) {
+        buttons.forEach{
+            optionButtonStackView?.addArrangedSubview($0)
+        }
+    }
+    
+    func createToolbarUI() {
+        createCancelButton()
+        createRotationButton()
+        createResetButton(with: ToolBarButtonImageBuilder.resetImage())
+        createSetRatioButton()
+        createCropButton()
+        
+        createButtonContainer()
+        addButtonsToContainer(buttons: [cancelButton!, anticlockRotateButton!, resetButton!, setRatioButton!, cropButton!])
+    }
+    
+    func createBottomOpertions() {
+        createRotationButton()
+        createResetButton()
+        createSetRatioButton()
+        
+        createButtonContainer()
+        addButtonsToContainer(buttons: [anticlockRotateButton!, resetButton!, setRatioButton!])
     }
     
     func checkOrientation() {
