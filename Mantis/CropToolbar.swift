@@ -50,7 +50,8 @@ class CropToolbar: UIView {
         anticlockRotateButton = createOptionButton(withTitle: nil, andAction: #selector(rotate))
         anticlockRotateButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
         
-        resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(reset))
+        resetButton = createOptionButton(withTitle: nil, andAction: #selector(reset))
+        resetButton?.setImage(ToolBarButtonImageBuilder.resetImage(), for: .normal)
         
         setRatioButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
         setRatioButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
