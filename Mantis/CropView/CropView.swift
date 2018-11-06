@@ -116,9 +116,6 @@ class CropView: UIView {
 
         cropMaskViewManager = CropMaskViewManager(with: self)
         setGridOverlayView()
-        
-        layer.borderColor = UIColor.red.cgColor
-        layer.borderWidth = 2
     }
     
     func resetUIFrame() {
@@ -588,12 +585,12 @@ extension CropView {
     }
     
     func handleRotate() {
+        resetUIFrame()
         rotateScrollView()
 
         if imageStatus.cropRightBottomOnImage != .zero {
             var lt = CGPoint(x: imageStatus.cropLeftTopOnImage.x * imageContainer.bounds.width, y: imageStatus.cropLeftTopOnImage.y * imageContainer.bounds.height)
             var rb = CGPoint(x: imageStatus.cropRightBottomOnImage.x * imageContainer.bounds.width, y: imageStatus.cropRightBottomOnImage.y * imageContainer.bounds.height)
-
             
             lt = imageContainer.convert(lt, to: self)
             rb = imageContainer.convert(rb, to: self)

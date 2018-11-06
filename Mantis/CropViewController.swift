@@ -54,6 +54,7 @@ public class CropViewController: UIViewController {
     var uiConstraints: [NSLayoutConstraint?] = []
     
     var cropView: CropView?
+    var initialLayout = false
     
     var image: UIImage? {
         didSet {
@@ -101,7 +102,10 @@ public class CropViewController: UIViewController {
     
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        cropView?.adaptForCropBox()
+        if initialLayout == false {
+            initialLayout = true
+            cropView?.adaptForCropBox()
+        }
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
