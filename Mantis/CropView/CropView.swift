@@ -16,7 +16,7 @@ protocol CropViewDelegate {
 class CropView: UIView {
     fileprivate let cropViewMinimumBoxSize: CGFloat = 42
     fileprivate let minimumAspectRatio: CGFloat = 0
-    fileprivate let angleDashboardHeight: CGFloat = 50
+    fileprivate let angleDashboardHeight: CGFloat = 60
     fileprivate let hotAreaUnit: CGFloat = 64
     fileprivate let cropViewPadding:CGFloat = 14.0
     
@@ -191,7 +191,7 @@ class CropView: UIView {
             angleDashboard.removeFromSuperview()
         }
         
-        let boardLength = gridOverlayView.frame.width * 0.8
+        let boardLength = min(bounds.width, bounds.height) * 0.6
         angleDashboard = AngleDashboard(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
         
@@ -390,10 +390,6 @@ extension CropView {
         }
         
         forCrop = true        
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
     }
 }
 

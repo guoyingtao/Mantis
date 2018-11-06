@@ -12,38 +12,40 @@ class AngleDashboard: UIView {
     
     var radiansLimit: CGFloat = 45 * CGFloat.pi / 180
     
+    let showRadiansLimit: CGFloat = 37.5 * CGFloat.pi / 180
+    let pointerHeight: CGFloat = 10
+    let spanBetweenDialPlateAndPointer: CGFloat = 6
+    
     private var dialPlate: AngleDialPlate!
     private var pointer: CAShapeLayer = CAShapeLayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-//        layer.borderWidth = 2
-//        layer.borderColor = UIColor.white.cgColor
-        
         clipsToBounds = true
-        let dialPlateLength = 1.2 * frame.width
         
-        let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -dialPlateLength * 0.88, width: dialPlateLength, height: dialPlateLength)
+        let dialPlateShowHeight = frame.height - pointerHeight - spanBetweenDialPlateAndPointer
+        let r = dialPlateShowHeight / (1 - cos(showRadiansLimit))
+        let dialPlateLength = 2 * r
+        
+        let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -(dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
         dialPlate =  AngleDialPlate(frame: dialPlateFrame)
     
         addSubview(dialPlate)
         
-        setupPointer(withDialPlateMaxY: dialPlate.frame.maxY)
+        setupPointer()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    private func setupPointer(withDialPlateMaxY dialPlateMaxY: CGFloat){
+    private func setupPointer(){
         let path = CGMutablePath()
         
-        let distanceFromDialPlateBottom: CGFloat = 0
-        let pointerEdgeLength: CGFloat = 10
-        let pointerHeight = pointerEdgeLength / sqrt(2)
+        let pointerEdgeLength: CGFloat = pointerHeight * sqrt(2)
         
-        let pointTop = CGPoint(x: bounds.width/2, y: dialPlateMaxY + distanceFromDialPlateBottom)
+        let pointTop = CGPoint(x: bounds.width/2, y: bounds.height - pointerHeight)
         let pointLeft = CGPoint(x: bounds.width/2 - pointerEdgeLength / 2, y: pointTop.y + pointerHeight)
         let pointRight = CGPoint(x: bounds.width/2 + pointerEdgeLength / 2, y: pointLeft.y)
         

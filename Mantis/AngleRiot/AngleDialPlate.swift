@@ -10,6 +10,8 @@ import UIKit
 
 fileprivate let bigDegreeScaleNumber = 36
 fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
+fileprivate let margin: CGFloat = 0
+fileprivate let spaceBetweenScaleAndNumber: CGFloat = 5
 
 class AngleDialPlate: UIView {
 
@@ -70,11 +72,14 @@ class AngleDialPlate: UIView {
         
         let numberPlateLayer = CALayer()
         numberPlateLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        
+//        numberPlateLayer.backgroundColor = UIColor.blue.cgColor
+        
         numberPlateLayer.frame = self.bounds
         self.layer.addSublayer(numberPlateLayer)
         
         let origin = numberPlateLayer.center
-        let startPos = CGPoint(x: numberPlateLayer.bounds.midX, y: numberPlateLayer.bounds.maxY - 15)
+        let startPos = CGPoint(x: numberPlateLayer.bounds.midX, y: numberPlateLayer.bounds.maxY - margin - spaceBetweenScaleAndNumber)
         let step = (2 * CGFloat.pi) / CGFloat(bigDegreeScaleNumber)
         for i in (0 ..< bigDegreeScaleNumber){
             let numberLayer = CATextLayer()
@@ -90,8 +95,7 @@ class AngleDialPlate: UIView {
             let stepChange = CGFloat(i) * step
             numberLayer.position = CGVector(from:origin, to:startPos).rotate(-stepChange).add(origin.vector).point.checked
             
-            numberLayer.transform = CATransform3DMakeRotation(-stepChange, 0, 0, 1)
-            
+            numberLayer.transform = CATransform3DMakeRotation(-stepChange, 0, 0, 1)            
             numberPlateLayer.addSublayer(numberLayer)
         }
     }
@@ -101,7 +105,7 @@ class AngleDialPlate: UIView {
         smallDotLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         
         let smallScaleMark = getSmallScaleMark()
-        smallScaleMark.position = CGPoint(x: smallDotLayer.bounds.midX, y: 10)
+        smallScaleMark.position = CGPoint(x: smallDotLayer.bounds.midX, y: margin)
         smallDotLayer.addSublayer(smallScaleMark)
         
         self.layer.addSublayer(smallDotLayer)
@@ -112,7 +116,7 @@ class AngleDialPlate: UIView {
         bigDotLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         
         let bigScaleMark = getBigScaleMark()
-        bigScaleMark.position = CGPoint(x: bigDotLayer.bounds.midX, y: 10)
+        bigScaleMark.position = CGPoint(x: bigDotLayer.bounds.midX, y: margin)
         bigDotLayer.addSublayer(bigScaleMark)
         self.layer.addSublayer(bigDotLayer)
     }
