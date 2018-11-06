@@ -32,20 +32,19 @@ struct ImageStatus {
         }
     }
     
-    var zoomScale: CGFloat = 0
-    var offset: CGPoint = .zero
     var rotationType: ImageRotationType = .none
     var aspectRatio: CGFloat = -1
     
-    var cropBox: CGRect = .zero
+    var cropLeftTopOnImage: CGPoint = .zero
+    var cropRightBottomOnImage: CGPoint = .zero
     
     mutating func reset() {
         degrees = 0
-        zoomScale = 1.0
-        offset = .zero
         rotationType = .none
         aspectRatio = -1
-        cropBox = .zero
+        
+        cropLeftTopOnImage = .zero
+        cropRightBottomOnImage = .zero        
     }
     
     mutating func anticlockwiseRotate90() {

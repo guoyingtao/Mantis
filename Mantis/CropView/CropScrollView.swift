@@ -29,9 +29,9 @@ class CropScrollView: UIScrollView {
         contentSize = bounds.size
         layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        layer.borderColor = UIColor.red.cgColor
-        layer.borderWidth = 2
-        backgroundColor = .blue
+//        layer.borderColor = UIColor.red.cgColor
+//        layer.borderWidth = 2
+//        backgroundColor = .blue
     }
     
     required init?(coder aDecoder: NSCoder) {
