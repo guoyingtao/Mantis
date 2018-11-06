@@ -358,7 +358,6 @@ extension CropView {
                 
                 imageStatus.degrees = angleDashboard.getRotationDegrees()
                 rotateScrollView()
-                saveAnchorPoints()
             }
             
             previousPoint = currentPoint
@@ -439,7 +438,7 @@ extension CropView {
         return contentRect
     }
 
-    fileprivate func saveAnchorPoints() {
+    func saveAnchorPoints() {
         let lt = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
         imageStatus.cropLeftTopOnImage = CGPoint(x: lt.x / imageContainer.bounds.width, y: lt.y / imageContainer.bounds.height)
         let rb = gridOverlayView.convert(CGPoint(x: gridOverlayView.bounds.width, y: gridOverlayView.bounds.height), to: imageContainer)
@@ -487,7 +486,6 @@ extension CropView {
         
         let newCropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: self.cropBoxFrame)
 
-        saveAnchorPoints()
         UIView.animate(withDuration: 0.25, animations: {[weak self] in
             guard let self = self else { return }
             self.cropBoxFrame = newCropBoxFrame
@@ -634,7 +632,6 @@ extension CropView {
             self.updatePositionFor90Rotation(by: radian + self.imageStatus.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
-            self.saveAnchorPoints()
             self.imageStatus.anticlockwiseRotate90()
             self.viewStatus = .betweenOperation
         }
