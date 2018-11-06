@@ -21,40 +21,36 @@ public class CropViewController: UIViewController {
     
     var delegate: CropViewControllerProtocal?
     
-    var orientation: UIInterfaceOrientation = .unknown
+    private var orientation: UIInterfaceOrientation = .unknown
     
-    var cancelButton: UIButton?
-    var setRatioButton: UIButton?
-    var resetButton: UIButton?
-    var anticlockRotateButton: UIButton?
-    var cropButton: UIButton?
+    private var cropToolbar: CropToolbar?
     
-    var optionButtonStackView: UIStackView?
-    var optionButtons: [UIButton?] = []
-    
-    var ratioPresenter: RatioPresenter?
+    private var ratioPresenter: RatioPresenter?
 
-    var cropViewTopConstraint: NSLayoutConstraint?
-    var cropViewLandscapeBottomConstraint: NSLayoutConstraint?
-    var cropViewPortraitBottomConstraint: NSLayoutConstraint?
-    var cropViewLandscapeLeftLeftConstraint: NSLayoutConstraint?
-    var cropViewLandscapeRightLeftConstraint: NSLayoutConstraint?
-    var cropViewPortraitLeftConstraint: NSLayoutConstraint?
-    var cropViewLandscapeLeftRightConstraint: NSLayoutConstraint?
-    var cropViewLandscapeRightRightConstraint: NSLayoutConstraint?
-    var cropViewPortaitRightConstraint: NSLayoutConstraint?
+    private var cropViewTopConstraint: NSLayoutConstraint?
+    private var cropViewLandscapeBottomConstraint: NSLayoutConstraint?
+    private var cropViewPortraitBottomConstraint: NSLayoutConstraint?
+    private var cropViewLandscapeLeftLeftConstraint: NSLayoutConstraint?
+    private var cropViewLandscapeRightLeftConstraint: NSLayoutConstraint?
+    private var cropViewPortraitLeftConstraint: NSLayoutConstraint?
+    private var cropViewLandscapeLeftRightConstraint: NSLayoutConstraint?
+    private var cropViewLandscapeRightRightConstraint: NSLayoutConstraint?
+    private var cropViewPortaitRightConstraint: NSLayoutConstraint?
     
-    var toolbarWidthConstraint: NSLayoutConstraint?
-    var toolbarHeightConstraint: NSLayoutConstraint?
-    var toolbarTopConstraint: NSLayoutConstraint?
-    var toolbarBottomConstraint: NSLayoutConstraint?
-    var toolbarLeftConstraint: NSLayoutConstraint?
-    var toolbarRightConstraint: NSLayoutConstraint?
+    private var toolbarWidthConstraint: NSLayoutConstraint?
+    private var toolbarHeightConstraint: NSLayoutConstraint?
+    private var toolbarTopConstraint: NSLayoutConstraint?
     
-    var uiConstraints: [NSLayoutConstraint?] = []
+    private var toolbarLeftConstraint: NSLayoutConstraint?
+    private var toolbarRightConstraint: NSLayoutConstraint?
     
-    var cropView: CropView?
-    var initialLayout = false
+    private var toolbarPortraitBottomConstraint: NSLayoutConstraint?
+    private var toolbarLandscapeBottomConstraint: NSLayoutConstraint?
+    
+    private var uiConstraints: [NSLayoutConstraint?] = []
+    
+    private var cropView: CropView?
+    private var initialLayout = false
     
     var image: UIImage? {
         didSet {
@@ -66,7 +62,6 @@ public class CropViewController: UIViewController {
     
     init(image: UIImage) {
         self.image = image
-        orientation = UIApplication.shared.statusBarOrientation
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -79,7 +74,7 @@ public class CropViewController: UIViewController {
         initCropViewAutoLayout()
         updateLayout()
         
-        uiConstraints = [cropViewTopConstraint, cropViewLandscapeBottomConstraint, cropViewPortraitBottomConstraint, cropViewLandscapeLeftLeftConstraint, cropViewLandscapeRightLeftConstraint, cropViewPortraitLeftConstraint, cropViewLandscapeLeftRightConstraint, cropViewLandscapeRightRightConstraint, cropViewPortaitRightConstraint, toolbarWidthConstraint, toolbarHeightConstraint, toolbarTopConstraint, toolbarBottomConstraint, toolbarLeftConstraint, toolbarRightConstraint]
+        uiConstraints = [cropViewTopConstraint, cropViewLandscapeBottomConstraint, cropViewPortraitBottomConstraint, cropViewLandscapeLeftLeftConstraint, cropViewLandscapeRightLeftConstraint, cropViewPortraitLeftConstraint, cropViewLandscapeLeftRightConstraint, cropViewLandscapeRightRightConstraint, cropViewPortaitRightConstraint, toolbarWidthConstraint, toolbarHeightConstraint, toolbarTopConstraint, toolbarPortraitBottomConstraint, toolbarLandscapeBottomConstraint, toolbarLeftConstraint, toolbarRightConstraint]
     }
     
     override public func viewDidLoad() {
@@ -88,8 +83,15 @@ public class CropViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         navigationController?.isToolbarHidden = true
         
+        cropToolbar = CropToolbar(frame: CGRect.zero)
+        cropToolbar?.selectedCancel = {[weak self] in self?.cancel() }
+        cropToolbar?.selectedRotate = {[weak self] in self?.rotate() }
+        cropToolbar?.selectedReset = {[weak self] in self?.reset() }
+        cropToolbar?.selectedSetRatio = {[weak self] in self?.setRatio() }
+        cropToolbar?.selectedCrop = {[weak self] in self?.crop() }
+        
         if mode == .normal {
-            createToolbarUI()
+            cropToolbar?.createToolbarUI()
         } else {
             createBottomOpertions()
         }
@@ -136,52 +138,6 @@ public class CropViewController: UIViewController {
         cropView?.handleRotate()
     }
     
-    private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        let buttonRect = CGRect(x: 0, y: 0, width: 80, height: 30)
-        let buttonColor = UIColor.white
-        let buttonFont = UIFont.systemFont(ofSize: 20)
-
-        let button = UIButton(frame: buttonRect)
-        button.titleLabel?.font = buttonFont
-        
-        if let title = title {
-            button.setTitle(title, for: .normal)
-            button.setTitleColor(buttonColor, for: .normal)
-        }
-        
-        button.addTarget(self, action: action, for: .touchUpInside)
-        
-        return button
-    }
-    
-    private func createFlexibleSpace() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-    }
-    
-    private func createToolbarUI() {
-        cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
-        
-        anticlockRotateButton = createOptionButton(withTitle: nil, andAction: #selector(rotate))
-        anticlockRotateButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
-        
-        resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(reset))
-        
-        setRatioButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
-        setRatioButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
-        
-        cropButton = createOptionButton(withTitle: "Done", andAction: #selector(crop))
-        
-        optionButtonStackView = UIStackView()
-        optionButtonStackView?.distribution = .fillEqually
-        optionButtonStackView?.addArrangedSubview(cancelButton!)
-        optionButtonStackView?.addArrangedSubview(anticlockRotateButton!)
-        optionButtonStackView?.addArrangedSubview(resetButton!)
-        optionButtonStackView?.addArrangedSubview(setRatioButton!)
-        optionButtonStackView?.addArrangedSubview(cropButton!)
-        
-        optionButtons = [cancelButton, anticlockRotateButton, resetButton, setRatioButton, cropButton]
-    }
-    
     private func createBottomOpertions() {
     }
     
@@ -195,7 +151,7 @@ public class CropViewController: UIViewController {
         cropView.clipsToBounds = true
     }
     
-    @objc private func cancel() {
+    private func cancel() {
         dismiss(animated: true, completion: nil)
     }
     
@@ -204,14 +160,14 @@ public class CropViewController: UIViewController {
         
         if cropView.aspectRatioLockEnabled {
             cropView.aspectRatioLockEnabled = false
-            setRatioButton?.setTitleColor(.white, for: .normal)
+            cropToolbar?.setRatioButton?.setTitleColor(.white, for: .normal)
             return
         }
         
         guard let image = image else { return }
         
         func didSet(fixedRatio ratio: Double) {
-            setRatioButton?.setTitleColor(.blue, for: .normal)
+            cropToolbar?.setRatioButton?.setTitleColor(.blue, for: .normal)
             cropView.aspectRatioLockEnabled = true
             cropView.imageStatus.aspectRatio = CGFloat(ratio)
             
@@ -226,18 +182,18 @@ public class CropViewController: UIViewController {
         ratioPresenter?.didGetRatio = { ratio in
             didSet(fixedRatio: ratio)
         }
-        ratioPresenter?.present(by: self, in: setRatioButton!)
+        ratioPresenter?.present(by: self, in: cropToolbar!.setRatioButton!)
     }
 
-    @objc private func reset(_ sender: Any) {
+    private func reset() {
         cropView?.reset()
     }
     
-    @objc private func rotate(_ sender: Any) {
+    private func rotate() {
         cropView?.anticlockwiseRotate90()
     }
     
-    @objc private func crop(_ sender: Any) {
+    private func crop() {
         guard let image = cropView?.crop() else {
             return
         }
@@ -251,65 +207,63 @@ public class CropViewController: UIViewController {
 // Auto layout
 extension CropViewController {
     fileprivate func initCropViewAutoLayout() {
-        guard let cropView = cropView, let stackView = optionButtonStackView else { return }
+        guard let cropView = cropView, let cropToolbar = cropToolbar else { return }
         
         view.addSubview(cropView)
         
         cropView.translatesAutoresizingMaskIntoConstraints = false
         
-        cropViewTopConstraint = cropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        cropViewTopConstraint = cropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
         cropViewLandscapeBottomConstraint = cropView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         
         cropViewLandscapeLeftLeftConstraint = cropView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
-        cropViewLandscapeLeftRightConstraint = cropView.rightAnchor.constraint(equalTo: stackView.leftAnchor)
+        cropViewLandscapeLeftRightConstraint = cropView.rightAnchor.constraint(equalTo: cropToolbar.leftAnchor)
         
-        cropViewLandscapeRightLeftConstraint = cropView.leftAnchor.constraint(equalTo: stackView.rightAnchor)
+        cropViewLandscapeRightLeftConstraint = cropView.leftAnchor.constraint(equalTo: cropToolbar.rightAnchor)
         cropViewLandscapeRightRightConstraint = cropView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
         
-        cropViewPortraitBottomConstraint = cropView.bottomAnchor.constraint(equalTo: stackView.topAnchor)
+        cropViewPortraitBottomConstraint = cropView.bottomAnchor.constraint(equalTo: cropToolbar.topAnchor)
         cropViewPortraitLeftConstraint = cropView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
         cropViewPortaitRightConstraint = cropView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
     }
     
     fileprivate func initToolarAutoLayout() {
-        guard let stackView = optionButtonStackView else { return }
+        guard let cropToolbar = cropToolbar else { return }
         
-        view.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cropToolbar)
+        cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         
-        toolbarWidthConstraint = stackView.widthAnchor.constraint(equalToConstant: 80)
-        toolbarHeightConstraint = stackView.heightAnchor.constraint(equalToConstant: 44)
-        toolbarTopConstraint = stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        toolbarBottomConstraint = stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        toolbarLeftConstraint = stackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
-        toolbarRightConstraint = stackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
+        toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: 80)
+        toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: 44)
+        toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
+        toolbarPortraitBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+        toolbarLeftConstraint = cropToolbar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
+        toolbarRightConstraint = cropToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
     }
     
     fileprivate func updateLayout() {
         uiConstraints.forEach{ $0?.isActive = false }
         
+        cropToolbar?.checkOrientation()
+        
         if UIApplication.shared.statusBarOrientation.isPortrait {
             toolbarHeightConstraint?.isActive = true
             toolbarLeftConstraint?.isActive = true
             toolbarRightConstraint?.isActive = true
-            toolbarBottomConstraint?.isActive = true
+            toolbarPortraitBottomConstraint?.isActive = true
             
             cropViewTopConstraint?.isActive = true
             cropViewPortraitBottomConstraint?.isActive = true
             cropViewPortraitLeftConstraint?.isActive = true
             cropViewPortaitRightConstraint?.isActive = true
-            
-            optionButtonStackView?.axis = .horizontal
-            
         } else if UIApplication.shared.statusBarOrientation.isLandscape {
             toolbarWidthConstraint?.isActive = true
             toolbarTopConstraint?.isActive = true
-            toolbarBottomConstraint?.isActive = true
+            toolbarLandscapeBottomConstraint?.isActive = true
             
             cropViewTopConstraint?.isActive = true
             cropViewLandscapeBottomConstraint?.isActive = true
-            
-            optionButtonStackView?.axis = .vertical
             
             if UIApplication.shared.statusBarOrientation == .landscapeLeft {
                 toolbarRightConstraint?.isActive = true
