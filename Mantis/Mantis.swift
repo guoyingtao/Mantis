@@ -14,10 +14,6 @@ public struct Mantis {
     
     static public func buildCropViewController(image: UIImage) -> CropViewController {
         return CropViewController(image: image)
-    }
-    
-    static public func buildCropView(image: UIImage) -> CropView {
-        return CropView(image: image)
-    }
+    }    
 }
 

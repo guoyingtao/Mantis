@@ -21,7 +21,7 @@ public class CropViewController: UIViewController {
     
     var delegate: CropViewControllerProtocal?
     
-    var orientation: UIInterfaceOrientation = .portrait
+    var orientation: UIInterfaceOrientation = .unknown
     
     var cancelButton: UIButton?
     var setRatioButton: UIButton?
@@ -54,6 +54,7 @@ public class CropViewController: UIViewController {
     var uiConstraints: [NSLayoutConstraint?] = []
     
     var cropView: CropView?
+    
     var image: UIImage? {
         didSet {
             cropView?.adaptForCropBox()
@@ -178,9 +179,6 @@ public class CropViewController: UIViewController {
         
         cropView.delegate = self
         cropView.clipsToBounds = true
-        
-//        cropView.layer.borderColor = UIColor.red.cgColor
-//        cropView.layer.borderWidth = 2
     }
     
     @objc private func cancel() {

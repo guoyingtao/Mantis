@@ -13,7 +13,7 @@ protocol CropViewDelegate {
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
 
-public class CropView: UIView {
+class CropView: UIView {
     fileprivate let cropViewMinimumBoxSize: CGFloat = 42
     fileprivate let minimumAspectRatio: CGFloat = 0
     fileprivate let angleDashboardHeight: CGFloat = 50
@@ -62,7 +62,6 @@ public class CropView: UIView {
     fileprivate var currentPoint: CGPoint?
     fileprivate var previousPoint: CGPoint?
     fileprivate var rotationCal: RotationCalculator?
-    
     fileprivate var manualZoomed = false
     
     init(image: UIImage, imageStatus status: ImageStatus = ImageStatus()) {
@@ -264,34 +263,34 @@ public class CropView: UIView {
 }
 
 extension CropView: UIScrollViewDelegate {
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageContainer
     }
     
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         viewStatus = .touchImage
     }
     
-    public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         viewStatus = .touchImage
     }
     
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         viewStatus = .betweenOperation
     }
     
-    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         manualZoomed = true
         viewStatus = .betweenOperation
     }
     
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         viewStatus = .betweenOperation
     }
 }
 
 extension CropView {
-    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
                                        dy: -hotAreaUnit).contains(point) &&
             !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
@@ -307,7 +306,7 @@ extension CropView {
         return nil        
     }
     
-    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
         viewStatus = .touchImage
@@ -337,7 +336,7 @@ extension CropView {
         }
     }
     
-    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         
         guard touches.count == 1, let touch = touches.first else {
@@ -365,7 +364,7 @@ extension CropView {
         
     }
     
-    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
         if forCrop {
@@ -382,16 +381,13 @@ extension CropView {
             previousPoint = nil
             rotationCal = nil
             imageStatus.degrees = angleDashboard.getRotationDegrees()
-            viewStatus = .betweenOperation
-            
-            print("+++ scroll view zoom scale is \(scrollView.zoomScale)")
-            print("+++ scroll view offset is \(scrollView.contentOffset)")
+            viewStatus = .betweenOperation            
         }
         
         forCrop = true        
     }
     
-    override public func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
     }
 }
@@ -646,7 +642,6 @@ extension CropView {
         cropBoxFrame = .zero
         aspectRatioLockEnabled = false
         
-        print("crop view bounds is \(bounds)")
         viewStatus = .initial
         imageStatus.reset()
         resetUIFrame()
