@@ -11,7 +11,7 @@ import UIKit
 fileprivate let bigDegreeScaleNumber = 36
 fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
 fileprivate let margin: CGFloat = 0
-fileprivate let spaceBetweenScaleAndNumber: CGFloat = 5
+fileprivate let spaceBetweenScaleAndNumber: CGFloat = 10
 
 class AngleDialPlate: UIView {
 
@@ -50,7 +50,7 @@ class AngleDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = UIColor.white.cgColor
+        mark.fillColor = UIColor.lightGray.cgColor
         
         return mark
     }
@@ -59,21 +59,19 @@ class AngleDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 4, height: 4)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = UIColor.white.cgColor
+        mark.fillColor = UIColor.lightGray.cgColor
         
         return mark
     }
     
     private func setupAngleNumber() {
-        let numberColor = UIColor.white
+        let numberColor = UIColor.lightGray
         let numberFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.caption2)
         
         let cgFont = CTFontCreateWithName(numberFont.fontName as CFString, numberFont.pointSize/2, nil)
         
         let numberPlateLayer = CALayer()
         numberPlateLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
-        
-//        numberPlateLayer.backgroundColor = UIColor.blue.cgColor
         
         numberPlateLayer.frame = self.bounds
         self.layer.addSublayer(numberPlateLayer)
@@ -83,8 +81,8 @@ class AngleDialPlate: UIView {
         let step = (2 * CGFloat.pi) / CGFloat(bigDegreeScaleNumber)
         for i in (0 ..< bigDegreeScaleNumber){
             let numberLayer = CATextLayer()
-            numberLayer.bounds.size = CGSize(width: i > 9 ? 20 : 8, height: 15)
-            numberLayer.fontSize = numberFont.pointSize * 0.6
+            numberLayer.bounds.size = CGSize(width: 20, height: 15)
+            numberLayer.fontSize = numberFont.pointSize
             numberLayer.alignmentMode = CATextLayerAlignmentMode.center
             numberLayer.contentsScale = UIScreen.main.scale
             numberLayer.font = cgFont

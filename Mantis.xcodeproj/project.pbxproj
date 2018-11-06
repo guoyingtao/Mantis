@@ -26,6 +26,7 @@
 		5F14899D2188E5EC009E5EFD /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F14899C2188E5EC009E5EFD /* UIImageExtensions.swift */; };
 		5F14899F2188E61E009E5EFD /* CGImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F14899E2188E61E009E5EFD /* CGImageExtensions.swift */; };
 		5F1489A12188EA02009E5EFD /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1489A02188EA02009E5EFD /* CropViewController.swift */; };
+		5F2E87CA2192179A0092287E /* ToolBarButtonImageBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E87C92192179A0092287E /* ToolBarButtonImageBuilder.swift */; };
 		5FB0DB9A218DD394006CFDF9 /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB99218DD394006CFDF9 /* Mantis.swift */; };
 		5FB0DB9C218DD76A006CFDF9 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB9B218DD76A006CFDF9 /* Config.swift */; };
 		5FB0DB9E218E268D006CFDF9 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */; };
@@ -69,6 +70,7 @@
 		5F14899C2188E5EC009E5EFD /* UIImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		5F14899E2188E61E009E5EFD /* CGImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageExtensions.swift; sourceTree = "<group>"; };
 		5F1489A02188EA02009E5EFD /* CropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
+		5F2E87C92192179A0092287E /* ToolBarButtonImageBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarButtonImageBuilder.swift; sourceTree = "<group>"; };
 		5FB0DB99218DD394006CFDF9 /* Mantis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5FB0DB9B218DD76A006CFDF9 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				5FC10B14217A9EDF00582874 /* AppDelegate.swift */,
 				5FC10B16217A9EDF00582874 /* ViewController.swift */,
 				5F1489A02188EA02009E5EFD /* CropViewController.swift */,
+				5F2E87C92192179A0092287E /* ToolBarButtonImageBuilder.swift */,
 				5FC10B18217A9EDF00582874 /* Main.storyboard */,
 				5FC10B1B217A9EE100582874 /* Assets.xcassets */,
 				5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */,
@@ -330,6 +333,7 @@
 				5FB0DBA0218E2709006CFDF9 /* FixedRatios.swift in Sources */,
 				5FC10B35217AB85A00582874 /* CropOverlayView.swift in Sources */,
 				5F0629F32181233E0064A5E7 /* GeometryHelper.swift in Sources */,
+				5F2E87CA2192179A0092287E /* ToolBarButtonImageBuilder.swift in Sources */,
 				5FB0DB9A218DD394006CFDF9 /* Mantis.swift in Sources */,
 				5F148994218674AF009E5EFD /* CropMaskViewManager.swift in Sources */,
 				5F0629EB217EADC20064A5E7 /* CropMaskProtocal.swift in Sources */,

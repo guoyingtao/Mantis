@@ -136,15 +136,19 @@ public class CropViewController: UIViewController {
         cropView?.handleRotate()
     }
     
-    private func createOptionButton(withTitle title: String, andAction action: Selector) -> UIButton {
+    private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonRect = CGRect(x: 0, y: 0, width: 80, height: 30)
         let buttonColor = UIColor.white
         let buttonFont = UIFont.systemFont(ofSize: 20)
 
         let button = UIButton(frame: buttonRect)
         button.titleLabel?.font = buttonFont
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(buttonColor, for: .normal)
+        
+        if let title = title {
+            button.setTitle(title, for: .normal)
+            button.setTitleColor(buttonColor, for: .normal)
+        }
+        
         button.addTarget(self, action: action, for: .touchUpInside)
         
         return button
@@ -155,11 +159,17 @@ public class CropViewController: UIViewController {
     }
     
     private func createToolbarUI() {
-        cancelButton = createOptionButton(withTitle: "Canel", andAction: #selector(cancel))
-        anticlockRotateButton = createOptionButton(withTitle: "Rotate", andAction: #selector(rotate))
+        cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
+        
+        anticlockRotateButton = createOptionButton(withTitle: nil, andAction: #selector(rotate))
+        anticlockRotateButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
+        
         resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(reset))
-        setRatioButton = createOptionButton(withTitle: "Ratio", andAction: #selector(setRatio))
-        cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
+        
+        setRatioButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
+        setRatioButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
+        
+        cropButton = createOptionButton(withTitle: "Done", andAction: #selector(crop))
         
         optionButtonStackView = UIStackView()
         optionButtonStackView?.distribution = .fillEqually
@@ -321,5 +331,11 @@ extension CropViewController: CropViewDelegate {
     
     func cropViewDidBecomeNonResettable(_ cropView: CropView) {
         
+    }
+}
+
+extension CropViewController {
+    public func confirmCrop() -> UIImage? {
+        return cropView?.crop()
     }
 }

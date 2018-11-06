@@ -13,7 +13,7 @@ class AngleDashboard: UIView {
     var radiansLimit: CGFloat = 45 * CGFloat.pi / 180
     
     let showRadiansLimit: CGFloat = 37.5 * CGFloat.pi / 180
-    let pointerHeight: CGFloat = 10
+    let pointerHeight: CGFloat = 8
     let spanBetweenDialPlateAndPointer: CGFloat = 6
     
     private var dialPlate: AngleDialPlate!
@@ -53,7 +53,7 @@ class AngleDashboard: UIView {
         path.addLine(to: pointLeft)
         path.addLine(to: pointRight)
         path.addLine(to: pointTop)
-        pointer.fillColor = UIColor.white.cgColor
+        pointer.fillColor = UIColor.lightGray.cgColor
         pointer.path = path
         layer.addSublayer(pointer)
     }
