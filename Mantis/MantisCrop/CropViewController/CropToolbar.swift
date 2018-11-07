@@ -32,11 +32,11 @@ class CropToolbar: UIView {
     private var wholeButtonStackView: UIStackView?
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        let buttonRect = CGRect.zero
         let buttonColor = UIColor.white
         let buttonFont = UIFont.systemFont(ofSize: 20)
         
-        let button = UIButton(frame: buttonRect)
+        let button = UIButton(type: .system)
+        button.tintColor = .white
         button.titleLabel?.font = buttonFont
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         

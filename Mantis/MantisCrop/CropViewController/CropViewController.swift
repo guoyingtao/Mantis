@@ -166,14 +166,16 @@ public class CropViewController: UIViewController {
         
         if cropView.aspectRatioLockEnabled {
             cropView.aspectRatioLockEnabled = false
-            cropToolbar?.setRatioButton?.setTitleColor(.white, for: .normal)
+//            cropToolbar?.setRatioButton?.setTitleColor(.white, for: .normal)
+            cropToolbar?.setRatioButton?.tintColor = .white
             return
         }
         
         guard let image = image else { return }
         
         func didSet(fixedRatio ratio: Double) {
-            cropToolbar?.setRatioButton?.setTitleColor(.blue, for: .normal)
+//            cropToolbar?.setRatioButton?.setTitleColor(.blue, for: .normal)
+            cropToolbar?.setRatioButton?.tintColor = nil
             cropView.aspectRatioLockEnabled = true
             cropView.imageStatus.aspectRatio = CGFloat(ratio)
             

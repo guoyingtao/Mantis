@@ -35,7 +35,7 @@ class AngleDashboard: UIView {
         let dialPlateLength = 2 * r
         let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -(dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
         
-        dialPlate =  AngleDialPlate(frame: dialPlateFrame)
+        dialPlate = AngleDialPlate(frame: dialPlateFrame)
     
         addSubview(dialPlate)
         
