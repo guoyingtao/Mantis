@@ -24,11 +24,17 @@ class AngleDashboard: UIView {
         
         clipsToBounds = true
         
-        let dialPlateShowHeight = frame.height - pointerHeight - spanBetweenDialPlateAndPointer
-        let r = dialPlateShowHeight / (1 - cos(showRadiansLimit))
-        let dialPlateLength = 2 * r
+        var dialPlateShowHeight = frame.height - pointerHeight - spanBetweenDialPlateAndPointer
+        var r = dialPlateShowHeight / (1 - cos(showRadiansLimit))
         
+        if r * 2 * sin(showRadiansLimit) > frame.width {
+            r = (frame.width / 2) / sin(showRadiansLimit)
+            dialPlateShowHeight = r - r * cos(showRadiansLimit)
+        }
+
+        let dialPlateLength = 2 * r
         let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -(dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
+        
         dialPlate =  AngleDialPlate(frame: dialPlateFrame)
     
         addSubview(dialPlate)
