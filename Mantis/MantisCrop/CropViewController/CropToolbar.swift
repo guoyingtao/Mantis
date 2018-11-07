@@ -198,3 +198,9 @@ class CropToolbar: UIView {
         selectedCrop()
     }
 }
+
+extension CropToolbar {
+    func add(button: UIButton) {
+        customButtonStackView?.insertArrangedSubview(button, at: 1)
+    }
+}

@@ -74,11 +74,10 @@ public class CropViewController: UIViewController {
         uiConstraints = [cropViewTopConstraint, cropViewLandscapeBottomConstraint, cropViewPortraitBottomConstraint, cropViewLandscapeLeftLeftConstraint, cropViewLandscapeRightLeftConstraint, cropViewPortraitLeftConstraint, cropViewLandscapeLeftRightConstraint, cropViewLandscapeRightRightConstraint, cropViewPortaitRightConstraint, toolbarWidthConstraint, toolbarHeightConstraint, toolbarTopConstraint, toolbarPortraitBottomConstraint, toolbarLandscapeBottomConstraint, toolbarLeftConstraint, toolbarRightConstraint]
     }
     
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-        
-        navigationController?.isNavigationBarHidden = true
-        navigationController?.isToolbarHidden = true
+    fileprivate func createCropToolbar() {
+        guard cropToolbar == nil else {
+            return
+        }
         
         cropToolbar = CropToolbar(frame: CGRect.zero)
         cropToolbar?.selectedCancel = {[weak self] in self?.cancel() }
@@ -92,7 +91,16 @@ public class CropViewController: UIViewController {
         } else {
             cropToolbar?.createBottomOpertions()
         }
+    }
+    
+    override public func viewDidLoad() {
+        super.viewDidLoad()
         
+        navigationController?.isNavigationBarHidden = true
+        navigationController?.isToolbarHidden = true
+        
+        createCropToolbar()
+                
         createCropView()
         initLayout()
         
@@ -301,6 +309,10 @@ extension CropViewController: CropViewDelegate {
 
 extension CropViewController {
     public func add(button: UIButton) {
+        if cropToolbar == nil {
+            createCropToolbar()
+        }
         
+        cropToolbar?.add(button: button)
     }
 }

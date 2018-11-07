@@ -30,6 +30,30 @@ class ViewController: UIViewController, CropViewControllerProtocal {
             vc.delegate = self
             vc.image = image
             vc.mode = .embedded
+            
+            let button1 = UIButton(type: .infoLight)
+            vc.add(button: button1)
+            button1.addTarget(self, action: #selector(tapButton1), for: .touchUpInside)
+            
+            let button2 = UIButton(type: .contactAdd)
+            vc.add(button: button2)
+            button2.addTarget(self, action: #selector(tapButton2), for: .touchUpInside)
+            
+            let button3 = UIButton(type: .infoDark)
+            vc.add(button: button3)
+            button3.addTarget(self, action: #selector(tapButton3), for: .touchUpInside)
         }
+    }
+    
+    @objc func tapButton1() {
+        print("tap button1")
+    }
+    
+    @objc func tapButton2() {
+        print("tap button2")
+    }
+    
+    @objc func tapButton3() {
+        print("tap button3")
     }
 }
