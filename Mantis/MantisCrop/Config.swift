@@ -8,6 +8,7 @@
 
 import Foundation
 
+// To do
 struct Config {
     
 }

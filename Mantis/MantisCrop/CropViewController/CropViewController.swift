@@ -13,8 +13,8 @@ public protocol CropViewControllerProtocal {
 }
 
 public enum CropViewControllerMode {
-    case embedded
     case normal
+    case customizable    
 }
 
 public class CropViewController: UIViewController {
@@ -49,11 +49,7 @@ public class CropViewController: UIViewController {
         
     private var initialLayout = false
     
-    var image: UIImage? {
-        didSet {
-            cropView?.adaptForCropBox()
-        }
-    }
+    var image: UIImage?
     
     var mode: CropViewControllerMode = .normal
     
@@ -156,9 +152,6 @@ public class CropViewController: UIViewController {
         
         cropView = CropView(image: image)
         guard let cropView = cropView else { return }
-        
-//        cropView.layer.borderWidth = 1
-//        cropView.layer.borderColor = UIColor.green.cgColor
         
         cropView.delegate = self
         cropView.clipsToBounds = true

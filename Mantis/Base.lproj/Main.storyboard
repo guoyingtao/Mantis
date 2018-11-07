@@ -23,16 +23,16 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="30"/>
-                                        <state key="normal" title="Present modally"/>
+                                        <state key="normal" title="Normal"/>
                                         <connections>
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
                                         <rect key="frame" x="0.0" y="30" width="120" height="30"/>
-                                        <state key="normal" title="Embeded"/>
+                                        <state key="normal" title="Customizable"/>
                                         <connections>
-                                            <action selector="embeddedPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsv-Sb-oz1"/>
+                                            <action selector="customizablePresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsv-Sb-oz1"/>
                                         </connections>
                                     </button>
                                 </subviews>

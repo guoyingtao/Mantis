@@ -11,10 +11,6 @@ import UIKit
 class ViewController: UIViewController, CropViewControllerProtocal {
     let image = UIImage(named: "sunflower.jpg")
     
-    func didGetCroppedImage(image: UIImage) {
-        croppedImageView.image = image
-    }
-    
     @IBOutlet weak var croppedImageView: UIImageView!
     
     override func viewDidLoad() {
@@ -38,16 +34,17 @@ class ViewController: UIViewController, CropViewControllerProtocal {
         guard let image = image else {
             return
         }
-        let cropViewController = Mantis.buildCropViewController(image: image)
+        let cropViewController = Mantis.cropViewController(image: image)
         cropViewController.delegate = self
         present(cropViewController, animated: true)
     }
     
-    @IBAction func embeddedPresent(_ sender: Any) {
+    @IBAction func customizablePresent(_ sender: Any) {
         guard let image = image else {
             return
         }
-        let cropViewController = Mantis.buildCropViewController(image: image, mode: .embedded)
+        
+        let cropViewController = Mantis.customizableCropViewController(image: image)
         cropViewController.delegate = self
         
         let button1 = UIButton(type: .infoLight)
@@ -63,5 +60,9 @@ class ViewController: UIViewController, CropViewControllerProtocal {
         button3.addTarget(self, action: #selector(tapButton3), for: .touchUpInside)
         
         present(cropViewController, animated: true)
+    }
+    
+    func didGetCroppedImage(image: UIImage) {
+        croppedImageView.image = image
     }
 }
