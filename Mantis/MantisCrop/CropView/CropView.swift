@@ -39,7 +39,11 @@ class CropView: UIView {
         }
     }
     
-    var delegate: CropViewDelegate?
+    var delegate: CropViewDelegate? {
+        didSet {
+            checkImageStatusChanged()
+        }
+    }
     
     fileprivate var cropOrignFrame = CGRect.zero
     fileprivate var tappedEdge = CropViewOverlayEdge.none
@@ -68,11 +72,16 @@ class CropView: UIView {
         super.init(frame: CGRect.zero)
         self.image = image
         self.imageStatus = status
-        setupUI()
+        initalRender()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    private func initalRender() {
+        setupUI()
+        checkImageStatusChanged()
     }
     
     private func render(by viewStatus: CropViewStatus) {
@@ -80,7 +89,7 @@ class CropView: UIView {
         
         switch viewStatus {
         case .initial:
-            setupUI()
+            initalRender()
         case .rotating:
             cropMaskViewManager.showVisualEffectBackground()
             gridOverlayView.isHidden = true
@@ -103,6 +112,35 @@ class CropView: UIView {
             angleDashboard.isHidden = false
             adaptAngleDashboardToCropBox()
             cropMaskViewManager.showVisualEffectBackground()
+            checkImageStatusChanged()
+        }
+    }
+    
+    private func isTheSamePoint(p1: CGPoint, p2: CGPoint) -> Bool {
+        if abs(p1.x - p2.x) > CGFloat.ulpOfOne { return false }
+        if abs(p1.y - p2.y) > CGFloat.ulpOfOne { return false }
+        
+        return true
+    }
+    
+    private func imageStatusChanged() -> Bool {
+        if imageStatus.getTotalRadians() != 0 { return true }
+        if !isTheSamePoint(p1: getImageLeftTopAnchorPoint(), p2: .zero) {
+            return true
+        }
+        
+        if !isTheSamePoint(p1: getImageRightBottomAnchorPoint(), p2: CGPoint(x: 1, y: 1)) {
+            return true
+        }
+        
+        return false
+    }
+    
+    private func checkImageStatusChanged() {
+        if imageStatusChanged() {
+            delegate?.cropViewDidBecomeResettable(self)
+        } else {
+            delegate?.cropViewDidBecomeNonResettable(self)
         }
     }
     
@@ -285,7 +323,9 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        viewStatus = .betweenOperation
+        if !decelerate {
+            viewStatus = .betweenOperation
+        }
     }
 }
 
@@ -432,12 +472,29 @@ extension CropView {
         return contentRect
     }
 
-    fileprivate func saveAnchorPoints() {
-        let lt = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
-        imageStatus.cropLeftTopOnImage = CGPoint(x: lt.x / imageContainer.bounds.width, y: lt.y / imageContainer.bounds.height)
-        let rb = gridOverlayView.convert(CGPoint(x: gridOverlayView.bounds.width, y: gridOverlayView.bounds.height), to: imageContainer)
+    fileprivate func getImageLeftTopAnchorPoint() -> CGPoint {
+        if imageContainer.bounds.size == .zero {
+            return imageStatus.cropLeftTopOnImage
+        }
         
-        imageStatus.cropRightBottomOnImage = CGPoint(x: rb.x / imageContainer.bounds.width, y: rb.y / imageContainer.bounds.height)
+        let lt = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
+        let point = CGPoint(x: lt.x / imageContainer.bounds.width, y: lt.y / imageContainer.bounds.height)
+        return point
+    }
+    
+    fileprivate func getImageRightBottomAnchorPoint() -> CGPoint {
+        if imageContainer.bounds.size == .zero {
+            return imageStatus.cropRightBottomOnImage
+        }
+
+        let rb = gridOverlayView.convert(CGPoint(x: gridOverlayView.bounds.width, y: gridOverlayView.bounds.height), to: imageContainer)
+        let point = CGPoint(x: rb.x / imageContainer.bounds.width, y: rb.y / imageContainer.bounds.height)
+        return point
+    }
+    
+    fileprivate func saveAnchorPoints() {
+        imageStatus.cropLeftTopOnImage = getImageLeftTopAnchorPoint()
+        imageStatus.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
     
     fileprivate func adjustUIForNewCrop(contentRect:CGRect, completion: @escaping ()->Void) {
@@ -517,7 +574,7 @@ extension CropView {
         
         let newSize: CGSize
         let scale: CGFloat
-        if imageStatus.rotationType == .none || imageStatus.rotationType == .anticlockwise180 {
+        if imageStatus.rotationType == .none || imageStatus.rotationType == .counterclockwise180 {
             newSize = CGSize(width: width, height: height)
         } else {
             newSize = CGSize(width: height, height: width)
@@ -607,7 +664,7 @@ extension CropView {
         }
     }
     
-    func anticlockwiseRotate90() {
+    func counterclockwiseRotate90() {
         viewStatus = .rotating
         
         var rect = gridOverlayView.frame
@@ -626,7 +683,7 @@ extension CropView {
             self.updatePositionFor90Rotation(by: radian + self.imageStatus.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
-            self.imageStatus.anticlockwiseRotate90()
+            self.imageStatus.counterclockwiseRotate90()
             self.viewStatus = .betweenOperation
         }
     }
@@ -639,9 +696,10 @@ extension CropView {
         
         cropBoxFrame = .zero
         aspectRatioLockEnabled = false
+                
+        imageStatus.reset()
         
         viewStatus = .initial
-        imageStatus.reset()
         resetUIFrame()
     }
     

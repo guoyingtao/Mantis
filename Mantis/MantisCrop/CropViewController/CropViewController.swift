@@ -151,10 +151,8 @@ public class CropViewController: UIViewController {
         guard let image = image else { return }
         
         cropView = CropView(image: image)
-        guard let cropView = cropView else { return }
-        
-        cropView.delegate = self
-        cropView.clipsToBounds = true
+        cropView?.delegate = self
+        cropView?.clipsToBounds = true
     }
     
     private func cancel() {
@@ -166,7 +164,6 @@ public class CropViewController: UIViewController {
         
         if cropView.aspectRatioLockEnabled {
             cropView.aspectRatioLockEnabled = false
-//            cropToolbar?.setRatioButton?.setTitleColor(.white, for: .normal)
             cropToolbar?.setRatioButton?.tintColor = .white
             return
         }
@@ -174,7 +171,6 @@ public class CropViewController: UIViewController {
         guard let image = image else { return }
         
         func didSet(fixedRatio ratio: Double) {
-//            cropToolbar?.setRatioButton?.setTitleColor(.blue, for: .normal)
             cropToolbar?.setRatioButton?.tintColor = nil
             cropView.aspectRatioLockEnabled = true
             cropView.imageStatus.aspectRatio = CGFloat(ratio)
@@ -198,7 +194,7 @@ public class CropViewController: UIViewController {
     }
     
     private func rotate() {
-        cropView?.anticlockwiseRotate90()
+        cropView?.counterclockwiseRotate90()
     }
     
     private func crop() {
@@ -294,11 +290,11 @@ extension CropViewController {
 
 extension CropViewController: CropViewDelegate {
     func cropViewDidBecomeResettable(_ cropView: CropView) {
-        
+        cropToolbar?.resetButton?.isHidden = false
     }
     
     func cropViewDidBecomeNonResettable(_ cropView: CropView) {
-        
+        cropToolbar?.resetButton?.isHidden = true
     }
 }
 
