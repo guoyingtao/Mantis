@@ -57,8 +57,9 @@ public class CropViewController: UIViewController {
     
     var mode: CropViewControllerMode = .normal
     
-    init(image: UIImage) {
+    init(image: UIImage, mode: CropViewControllerMode = .normal) {
         self.image = image
+        self.mode = mode
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -80,6 +81,8 @@ public class CropViewController: UIViewController {
         }
         
         cropToolbar = CropToolbar(frame: CGRect.zero)
+        cropToolbar?.backgroundColor = .black
+        
         cropToolbar?.selectedCancel = {[weak self] in self?.cancel() }
         cropToolbar?.selectedRotate = {[weak self] in self?.rotate() }
         cropToolbar?.selectedReset = {[weak self] in self?.reset() }
@@ -96,11 +99,8 @@ public class CropViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = true
-        navigationController?.isToolbarHidden = true
-        
         createCropToolbar()
-                
+        
         createCropView()
         initLayout()
         

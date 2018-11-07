@@ -12,8 +12,8 @@ public struct Mantis {
     
     static var config = Config()
     
-    static public func buildCropViewController(image: UIImage) -> CropViewController {
-        return CropViewController(image: image)
-    }    
+    static public func buildCropViewController(image: UIImage, mode: CropViewControllerMode = .normal) -> CropViewController {
+        return CropViewController(image: image, mode: mode)
+    }
 }
 

@@ -25,14 +25,14 @@
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="30"/>
                                         <state key="normal" title="Present modally"/>
                                         <connections>
-                                            <segue destination="uRD-CJ-bhC" kind="presentation" identifier="Normal" id="XtC-NS-BEq"/>
+                                            <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
                                         <rect key="frame" x="0.0" y="30" width="120" height="30"/>
                                         <state key="normal" title="Embeded"/>
                                         <connections>
-                                            <segue destination="Mtc-OT-fs7" kind="presentation" identifier="Custom" id="BDd-TX-hlf"/>
+                                            <action selector="embeddedPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsv-Sb-oz1"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -41,7 +41,7 @@
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
-                                <rect key="frame" x="40" y="60" width="295" height="527"/>
+                                <rect key="frame" x="40" y="60" width="295" height="487"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -49,7 +49,7 @@
                             <constraint firstItem="pUS-Eo-0ui" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="Sxa-vn-i15"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vyB-So-c13" secondAttribute="bottom" constant="20" id="ZRG-46-v9e"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pUS-Eo-0ui" secondAttribute="trailing" constant="40" id="ZTq-jL-0f6"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="80" id="fPo-oy-TR4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="120" id="fPo-oy-TR4"/>
                             <constraint firstItem="pUS-Eo-0ui" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="hmS-Zq-20T"/>
                             <constraint firstItem="vyB-So-c13" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="rBU-by-45z"/>
                         </constraints>
@@ -62,82 +62,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
-        </scene>
-        <!--Crop View Controller-->
-        <scene sceneID="dg9-9T-GUo">
-            <objects>
-                <viewController id="iGo-er-8gH" customClass="CropViewController" customModule="Mantis" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5Yu-Id-Irm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="5hW-Gg-OEN"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="CUT-er-KKD"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rl4-PT-0nH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1808.8" y="132.68365817091455"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="fdX-jW-ZPu">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uRD-CJ-bhC" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ht0-hh-uaV">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="iGo-er-8gH" kind="relationship" relationship="rootViewController" id="RM6-qr-nZs"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Qmw-cN-6Np" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="869.60000000000002" y="132.68365817091455"/>
-        </scene>
-        <!--Crop View Controller-->
-        <scene sceneID="YaL-9w-IhE">
-            <objects>
-                <viewController id="OPr-0g-CFF" customClass="CropViewController" customModule="Mantis" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="35c-IB-TRA">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="19b-XV-lGu"/>
-                    </view>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="wxb-SX-kNX"/>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="hod-YH-jx6"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GE9-Yt-5RD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1950" y="888"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="lRI-Qi-WXr">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" toolbarHidden="NO" id="Mtc-OT-fs7" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="mQM-FT-ArV">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="J5G-zp-Bjo">
-                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="OPr-0g-CFF" kind="relationship" relationship="rootViewController" id="Fci-cx-A9B"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UNo-oS-vys" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="897" y="952"/>
         </scene>
     </scenes>
     <resources>
