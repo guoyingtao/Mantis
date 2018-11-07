@@ -26,7 +26,7 @@ class CropView: UIView {
         }
     }
     
-    var imageStatus = ImageStatus()
+    var viewModel = CropViewModel()
     
     fileprivate var panOriginPoint = CGPoint.zero
     
@@ -68,10 +68,10 @@ class CropView: UIView {
     fileprivate var rotationCal: RotationCalculator?
     fileprivate var manualZoomed = false
     
-    init(image: UIImage, imageStatus status: ImageStatus = ImageStatus()) {
+    init(image: UIImage, viewModel: CropViewModel = CropViewModel()) {
         super.init(frame: CGRect.zero)
         self.image = image
-        self.imageStatus = status
+        self.viewModel = viewModel
         initalRender()
     }
     
@@ -124,7 +124,7 @@ class CropView: UIView {
     }
     
     private func imageStatusChanged() -> Bool {
-        if imageStatus.getTotalRadians() != 0 { return true }
+        if viewModel.getTotalRadians() != 0 { return true }
         if !isTheSamePoint(p1: getImageLeftTopAnchorPoint(), p2: .zero) {
             return true
         }
@@ -181,10 +181,10 @@ class CropView: UIView {
         var cropBoxFrame = getInitialCropBoxRect()
         let center = cropBoxFrame.center
         
-        if imageStatus.aspectRatio > imageRatio {
-            cropBoxFrame.size.height = cropBoxFrame.width / imageStatus.aspectRatio
+        if viewModel.aspectRatio > imageRatio {
+            cropBoxFrame.size.height = cropBoxFrame.width / viewModel.aspectRatio
         } else {
-            cropBoxFrame.size.width = cropBoxFrame.size.height * imageStatus.aspectRatio
+            cropBoxFrame.size.width = cropBoxFrame.size.height * viewModel.aspectRatio
         }
 
         cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
@@ -230,7 +230,7 @@ class CropView: UIView {
         angleDashboard = AngleDashboard(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
         
-        angleDashboard.rotateDialPlate(byRadians: imageStatus.radians)
+        angleDashboard.rotateDialPlate(byRadians: viewModel.radians)
         
         adaptAngleDashboardToCropBox()
     }
@@ -397,7 +397,7 @@ extension CropView {
                     return
                 }
                 
-                imageStatus.degrees = angleDashboard.getRotationDegrees()
+                viewModel.degrees = angleDashboard.getRotationDegrees()
                 rotateScrollView()
             }
             
@@ -422,7 +422,7 @@ extension CropView {
             currentPoint = nil
             previousPoint = nil
             rotationCal = nil
-            imageStatus.degrees = angleDashboard.getRotationDegrees()
+            viewModel.degrees = angleDashboard.getRotationDegrees()
             viewStatus = .betweenOperation
         }
         
@@ -433,7 +433,7 @@ extension CropView {
 // Adjust UI
 extension CropView {
     private func rotateScrollView() {
-        let radians = imageStatus.getTotalRadians()
+        let radians = viewModel.getTotalRadians()
         self.scrollView.transform = CGAffineTransform(rotationAngle: radians)
         self.updatePosition(by: radians)
     }
@@ -474,7 +474,7 @@ extension CropView {
 
     fileprivate func getImageLeftTopAnchorPoint() -> CGPoint {
         if imageContainer.bounds.size == .zero {
-            return imageStatus.cropLeftTopOnImage
+            return viewModel.cropLeftTopOnImage
         }
         
         let lt = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
@@ -484,7 +484,7 @@ extension CropView {
     
     fileprivate func getImageRightBottomAnchorPoint() -> CGPoint {
         if imageContainer.bounds.size == .zero {
-            return imageStatus.cropRightBottomOnImage
+            return viewModel.cropRightBottomOnImage
         }
 
         let rb = gridOverlayView.convert(CGPoint(x: gridOverlayView.bounds.width, y: gridOverlayView.bounds.height), to: imageContainer)
@@ -493,8 +493,8 @@ extension CropView {
     }
     
     fileprivate func saveAnchorPoints() {
-        imageStatus.cropLeftTopOnImage = getImageLeftTopAnchorPoint()
-        imageStatus.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
+        viewModel.cropLeftTopOnImage = getImageLeftTopAnchorPoint()
+        viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
     
     fileprivate func adjustUIForNewCrop(contentRect:CGRect, completion: @escaping ()->Void) {
@@ -509,7 +509,7 @@ extension CropView {
         
         let newCropBounds = CGRect(x: 0, y: 0, width: cropBoxFrame.width * scale, height: cropBoxFrame.height * scale)
         
-        let radians = imageStatus.getTotalRadians()
+        let radians = viewModel.getTotalRadians()
         
         // calculate the new bounds of scroll view
         let width = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
@@ -572,7 +572,7 @@ extension CropView {
         
         let newSize: CGSize
         let scale: CGFloat
-        if imageStatus.rotationType == .none || imageStatus.rotationType == .counterclockwise180 {
+        if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
             newSize = CGSize(width: width, height: height)
         } else {
             newSize = CGSize(width: height, height: width)
@@ -589,7 +589,7 @@ extension CropView {
     }
     
     fileprivate func updateScrollViewLayout(by cropBox: CGRect) {
-        let radians = imageStatus.getTotalRadians()
+        let radians = viewModel.getTotalRadians()
         let width = abs(cos(radians)) * cropBox.width + abs(sin(radians)) * cropBox.height
         let height = abs(sin(radians)) * cropBox.width + abs(cos(radians)) * cropBox.height
         
@@ -615,7 +615,7 @@ extension CropView {
         transform = transform.translatedBy(x: translation.x, y: translation.y)
         
         // rotate
-        transform = transform.rotated(by: imageStatus.radians)
+        transform = transform.rotated(by: viewModel.radians)
         
         // scale
         let t = imageContainer.transform
@@ -642,9 +642,9 @@ extension CropView {
         resetUIFrame()
         rotateScrollView()
 
-        if imageStatus.cropRightBottomOnImage != .zero {
-            var lt = CGPoint(x: imageStatus.cropLeftTopOnImage.x * imageContainer.bounds.width, y: imageStatus.cropLeftTopOnImage.y * imageContainer.bounds.height)
-            var rb = CGPoint(x: imageStatus.cropRightBottomOnImage.x * imageContainer.bounds.width, y: imageStatus.cropRightBottomOnImage.y * imageContainer.bounds.height)
+        if viewModel.cropRightBottomOnImage != .zero {
+            var lt = CGPoint(x: viewModel.cropLeftTopOnImage.x * imageContainer.bounds.width, y: viewModel.cropLeftTopOnImage.y * imageContainer.bounds.height)
+            var rb = CGPoint(x: viewModel.cropRightBottomOnImage.x * imageContainer.bounds.width, y: viewModel.cropRightBottomOnImage.y * imageContainer.bounds.height)
             
             lt = imageContainer.convert(lt, to: self)
             rb = imageContainer.convert(rb, to: self)
@@ -677,10 +677,10 @@ extension CropView {
             guard let self = self else { return }
             self.cropBoxFrame = newRect
             self.scrollView.transform = transfrom
-            self.updatePositionFor90Rotation(by: radian + self.imageStatus.radians)
+            self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
-            self.imageStatus.counterclockwiseRotate90()
+            self.viewModel.counterclockwiseRotate90()
             self.viewStatus = .betweenOperation
         }
     }
@@ -694,7 +694,7 @@ extension CropView {
         cropBoxFrame = .zero
         aspectRatioLockEnabled = false
                 
-        imageStatus.reset()
+        viewModel.reset()
         
         viewStatus = .initial
         resetUIFrame()
@@ -712,7 +712,7 @@ extension CropView {
     }
     
     func setRotation(byDegrees degrees: CGFloat) {
-        imageStatus.degrees = degrees
+        viewModel.degrees = degrees
         let radians = degrees * CGFloat.pi / 180
         
         UIView.animate(withDuration: 0.5) {

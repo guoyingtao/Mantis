@@ -173,7 +173,7 @@ public class CropViewController: UIViewController {
         func didSet(fixedRatio ratio: Double) {
             cropToolbar?.setRatioButton?.tintColor = nil
             cropView.aspectRatioLockEnabled = true
-            cropView.imageStatus.aspectRatio = CGFloat(ratio)
+            cropView.viewModel.aspectRatio = CGFloat(ratio)
             
             UIView.animate(withDuration: 0.5) {
                 cropView.setFixedRatioCropBox()

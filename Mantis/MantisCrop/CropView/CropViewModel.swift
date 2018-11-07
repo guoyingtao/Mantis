@@ -23,7 +23,7 @@ enum ImageRotationType: CGFloat {
     }
 }
 
-struct ImageStatus {
+struct CropViewModel {
     
     var degrees: CGFloat = 0
     
