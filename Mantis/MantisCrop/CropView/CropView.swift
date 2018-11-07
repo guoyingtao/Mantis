@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CropViewDelegate {
+protocol CropViewDelegate: class {
     func cropViewDidBecomeResettable(_ cropView: CropView)
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
@@ -39,7 +39,7 @@ class CropView: UIView {
         }
     }
     
-    var delegate: CropViewDelegate? {
+    weak var delegate: CropViewDelegate? {
         didSet {
             checkImageStatusChanged()
         }
@@ -67,6 +67,10 @@ class CropView: UIView {
     fileprivate var previousPoint: CGPoint?
     fileprivate var rotationCal: RotationCalculator?
     fileprivate var manualZoomed = false
+    
+    deinit {
+        print("CropView deinit.")
+    }
     
     init(image: UIImage, viewModel: CropViewModel = CropViewModel()) {
         super.init(frame: CGRect.zero)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol CropViewControllerProtocal {
+public protocol CropViewControllerProtocal: class {
     func didGetCroppedImage(image: UIImage)
 }
 
@@ -19,7 +19,7 @@ public enum CropViewControllerMode {
 
 public class CropViewController: UIViewController {
     
-    var delegate: CropViewControllerProtocal?
+    weak var delegate: CropViewControllerProtocal?
     
     private var orientation: UIInterfaceOrientation = .unknown
     
@@ -52,6 +52,10 @@ public class CropViewController: UIViewController {
     var image: UIImage?
     
     var mode: CropViewControllerMode = .normal
+    
+    deinit {
+        print("CropViewController deinit.")
+    }
     
     init(image: UIImage, mode: CropViewControllerMode = .normal) {
         self.image = image
