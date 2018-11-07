@@ -36,7 +36,6 @@ class AngleDashboard: UIView {
         let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -(dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
         
         dialPlate = AngleDialPlate(frame: dialPlateFrame)
-    
         addSubview(dialPlate)
         
         setupPointer()
@@ -51,7 +50,7 @@ class AngleDashboard: UIView {
         
         let pointerEdgeLength: CGFloat = pointerHeight * sqrt(2)
         
-        let pointTop = CGPoint(x: bounds.width/2, y: bounds.height - pointerHeight)
+        let pointTop = CGPoint(x: bounds.width/2, y: dialPlate.frame.maxY + pointerHeight)
         let pointLeft = CGPoint(x: bounds.width/2 - pointerEdgeLength / 2, y: pointTop.y + pointerHeight)
         let pointRight = CGPoint(x: bounds.width/2 + pointerEdgeLength / 2, y: pointLeft.y)
         
