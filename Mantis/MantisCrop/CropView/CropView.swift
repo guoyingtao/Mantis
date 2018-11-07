@@ -553,7 +553,6 @@ extension CropView {
     }
 
     fileprivate func updatePosition(by radians: CGFloat) {
-        // position scroll view
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
         let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
         
@@ -568,7 +567,6 @@ extension CropView {
     }
     
     fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
-        // position scroll view
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
         let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
         
@@ -591,7 +589,6 @@ extension CropView {
     }
     
     fileprivate func updateScrollViewLayout(by cropBox: CGRect) {
-        // position scroll view
         let radians = imageStatus.getTotalRadians()
         let width = abs(cos(radians)) * cropBox.width + abs(sin(radians)) * cropBox.height
         let height = abs(sin(radians)) * cropBox.width + abs(cos(radians)) * cropBox.height
