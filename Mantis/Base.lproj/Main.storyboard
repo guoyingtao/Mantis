@@ -44,7 +44,7 @@
                                 <rect key="frame" x="40" y="60" width="295" height="527"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="pUS-Eo-0ui" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="Sxa-vn-i15"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vyB-So-c13" secondAttribute="bottom" constant="20" id="ZRG-46-v9e"/>

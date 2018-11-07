@@ -24,8 +24,8 @@ public class CropViewController: UIViewController {
     private var orientation: UIInterfaceOrientation = .unknown
     
     private var cropToolbar: CropToolbar?
-    
     private var ratioPresenter: RatioPresenter?
+    private var cropView: CropView?
 
     private var cropViewTopConstraint: NSLayoutConstraint?
     private var cropViewLandscapeBottomConstraint: NSLayoutConstraint?
@@ -40,16 +40,13 @@ public class CropViewController: UIViewController {
     private var toolbarWidthConstraint: NSLayoutConstraint?
     private var toolbarHeightConstraint: NSLayoutConstraint?
     private var toolbarTopConstraint: NSLayoutConstraint?
-    
     private var toolbarLeftConstraint: NSLayoutConstraint?
     private var toolbarRightConstraint: NSLayoutConstraint?
-    
     private var toolbarPortraitBottomConstraint: NSLayoutConstraint?
     private var toolbarLandscapeBottomConstraint: NSLayoutConstraint?
     
     private var uiConstraints: [NSLayoutConstraint?] = []
-    
-    private var cropView: CropView?
+        
     private var initialLayout = false
     
     var image: UIImage? {
@@ -108,6 +105,14 @@ public class CropViewController: UIViewController {
             initialLayout = true
             cropView?.adaptForCropBox()
         }
+    }
+    
+    public override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    public override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+        return [.top, .bottom]
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -213,7 +218,7 @@ extension CropViewController {
         
         cropView.translatesAutoresizingMaskIntoConstraints = false
         
-        cropViewTopConstraint = cropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
+        cropViewTopConstraint = cropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         cropViewLandscapeBottomConstraint = cropView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         
         cropViewLandscapeLeftLeftConstraint = cropView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
