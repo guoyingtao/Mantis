@@ -183,24 +183,13 @@
 		5FC10B13217A9EDF00582874 /* Mantis */ = {
 			isa = PBXGroup;
 			children = (
-				5F1489992188E201009E5EFD /* CropView */,
-				5F0629F12180FE2B0064A5E7 /* MaskBackground */,
-				5F0629FB2183936B0064A5E7 /* Helpers */,
-				5F0629FA218393590064A5E7 /* Extentions */,
-				5F0629F02180FE100064A5E7 /* AngleRiot */,
+				5FCB35B621925E6E0046AB75 /* MantisCrop */,
 				5FC10B14217A9EDF00582874 /* AppDelegate.swift */,
 				5FC10B16217A9EDF00582874 /* ViewController.swift */,
-				5F1489A02188EA02009E5EFD /* CropViewController.swift */,
-				5F2E87CB219229360092287E /* CropToolbar.swift */,
-				5F2E87C92192179A0092287E /* ToolBarButtonImageBuilder.swift */,
 				5FC10B18217A9EDF00582874 /* Main.storyboard */,
 				5FC10B1B217A9EE100582874 /* Assets.xcassets */,
 				5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */,
 				5FC10B20217A9EE100582874 /* Info.plist */,
-				5FB0DB9B218DD76A006CFDF9 /* Config.swift */,
-				5FB0DB99218DD394006CFDF9 /* Mantis.swift */,
-				5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */,
-				5FB0DB9F218E2709006CFDF9 /* FixedRatios.swift */,
 			);
 			path = Mantis;
 			sourceTree = "<group>";
@@ -212,6 +201,33 @@
 				5FC10B2B217A9EE100582874 /* Info.plist */,
 			);
 			path = MantisTests;
+			sourceTree = "<group>";
+		};
+		5FCB35B621925E6E0046AB75 /* MantisCrop */ = {
+			isa = PBXGroup;
+			children = (
+				5FCB35B9219262E20046AB75 /* CropViewController */,
+				5F1489992188E201009E5EFD /* CropView */,
+				5F0629F12180FE2B0064A5E7 /* MaskBackground */,
+				5F0629FB2183936B0064A5E7 /* Helpers */,
+				5F0629FA218393590064A5E7 /* Extentions */,
+				5F0629F02180FE100064A5E7 /* AngleRiot */,
+				5FB0DB9B218DD76A006CFDF9 /* Config.swift */,
+				5FB0DB99218DD394006CFDF9 /* Mantis.swift */,
+			);
+			path = MantisCrop;
+			sourceTree = "<group>";
+		};
+		5FCB35B9219262E20046AB75 /* CropViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5F1489A02188EA02009E5EFD /* CropViewController.swift */,
+				5F2E87CB219229360092287E /* CropToolbar.swift */,
+				5F2E87C92192179A0092287E /* ToolBarButtonImageBuilder.swift */,
+				5FB0DB9D218E268D006CFDF9 /* RatioPresenter.swift */,
+				5FB0DB9F218E2709006CFDF9 /* FixedRatios.swift */,
+			);
+			path = CropViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

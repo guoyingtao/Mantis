@@ -10,6 +10,11 @@ import UIKit
 
 class CropToolbar: UIView {
     
+    let recommendHeight = 44
+    let recommendWidth = 80
+    let recommendHeightForCustom = 88
+    let recommendWidthForCustom = 124
+    
     var selectedCancel = {}
     var selectedCrop = {}
     var selectedRotate = {}
@@ -23,6 +28,8 @@ class CropToolbar: UIView {
     var cropButton: UIButton?
     
     private var optionButtonStackView: UIStackView?
+    private var customButtonStackView: UIStackView?
+    private var wholeButtonStackView: UIStackView?
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonRect = CGRect.zero
@@ -75,13 +82,40 @@ class CropToolbar: UIView {
         optionButtonStackView = UIStackView()
         addSubview(optionButtonStackView!)
         
+        optionButtonStackView?.distribution = .equalCentering
+    }
+    
+    private func setButtonContainerLayout() {
         optionButtonStackView?.translatesAutoresizingMaskIntoConstraints = false
         optionButtonStackView?.topAnchor.constraint(equalTo: topAnchor).isActive = true
         optionButtonStackView?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         optionButtonStackView?.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         optionButtonStackView?.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+    }
+    
+    private func createCustomButtonContainer() {
+        customButtonStackView = UIStackView()
+        addSubview(customButtonStackView!)
+        customButtonStackView?.distribution = .equalSpacing
+    }
+    
+    private func setLayoutForCustomButtonContainer() {
+        wholeButtonStackView?.translatesAutoresizingMaskIntoConstraints = false
+        wholeButtonStackView?.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        wholeButtonStackView?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        wholeButtonStackView?.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        wholeButtonStackView?.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+    }
+    
+    private func createWholeButtonContainer() {
+        createButtonContainer()
+        createCustomButtonContainer()
         
-        optionButtonStackView?.distribution = .equalCentering
+        wholeButtonStackView = UIStackView()
+        wholeButtonStackView?.distribution = .fillProportionally
+        addSubview(wholeButtonStackView!)
+        wholeButtonStackView?.addArrangedSubview(optionButtonStackView!)
+        wholeButtonStackView?.addArrangedSubview(customButtonStackView!)
     }
     
     private func addButtonsToContainer(buttons: [UIButton]) {
@@ -90,31 +124,57 @@ class CropToolbar: UIView {
         }
     }
     
-    func createToolbarUI() {
+    private func addButtonToCustomContainer() {
+        customButtonStackView?.addArrangedSubview(cancelButton!)
+        customButtonStackView?.addArrangedSubview(cropButton!)
+    }
+    
+    func createDefaultButtons(setResetImage: Bool = true) {
         createCancelButton()
         createRotationButton()
-        createResetButton(with: ToolBarButtonImageBuilder.resetImage())
+        
+        if setResetImage {
+            createResetButton(with: ToolBarButtonImageBuilder.resetImage())
+        } else {
+            createResetButton()
+        }
+        
         createSetRatioButton()
         createCropButton()
-        
+    }
+    
+    func createToolbarUI() {
+        createDefaultButtons()
         createButtonContainer()
+        setButtonContainerLayout()
         addButtonsToContainer(buttons: [cancelButton!, anticlockRotateButton!, resetButton!, setRatioButton!, cropButton!])
     }
     
     func createBottomOpertions() {
-        createRotationButton()
-        createResetButton()
-        createSetRatioButton()
-        
-        createButtonContainer()
+        createDefaultButtons(setResetImage: false)        
+        createWholeButtonContainer()
+        setLayoutForCustomButtonContainer()
         addButtonsToContainer(buttons: [anticlockRotateButton!, resetButton!, setRatioButton!])
+        addButtonToCustomContainer()
     }
     
     func checkOrientation() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
+            customButtonStackView?.axis = .horizontal
+            wholeButtonStackView?.axis = .vertical
         } else {
             optionButtonStackView?.axis = .vertical
+            customButtonStackView?.axis = .vertical
+            wholeButtonStackView?.axis = .horizontal
+            
+            if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+                wholeButtonStackView?.removeArrangedSubview(customButtonStackView!)
+                wholeButtonStackView?.addArrangedSubview(customButtonStackView!)
+            } else {
+                wholeButtonStackView?.removeArrangedSubview(optionButtonStackView!)
+                wholeButtonStackView?.addArrangedSubview(optionButtonStackView!)
+            }
         }
     }
     

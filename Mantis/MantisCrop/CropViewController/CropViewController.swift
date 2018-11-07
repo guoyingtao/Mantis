@@ -144,6 +144,9 @@ public class CropViewController: UIViewController {
         cropView = CropView(image: image)
         guard let cropView = cropView else { return }
         
+//        cropView.layer.borderWidth = 1
+//        cropView.layer.borderColor = UIColor.green.cgColor
+        
         cropView.delegate = self
         cropView.clipsToBounds = true
     }
@@ -230,8 +233,14 @@ extension CropViewController {
         view.addSubview(cropToolbar)
         cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         
-        toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: 80)
-        toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: 44)
+        if mode == .normal {
+            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: 80)
+            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: 44)
+        } else {
+            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: 124)
+            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: 88)
+        }
+        
         toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
         toolbarPortraitBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
@@ -286,7 +295,7 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController {
-    public func confirmCrop() -> UIImage? {
-        return cropView?.crop()
+    public func add(button: UIButton) {
+        
     }
 }

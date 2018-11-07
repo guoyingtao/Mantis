@@ -9,6 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController, CropViewControllerProtocal {
+    let image = UIImage(named: "sunflower.jpg")
+    
     func didGetCroppedImage(image: UIImage) {
         croppedImageView.image = image
     }
@@ -17,13 +19,17 @@ class ViewController: UIViewController, CropViewControllerProtocal {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        croppedImageView.image = UIImage(named: "sunflower.jpg")
+        croppedImageView.image = image
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? CropViewController {
+        if segue.identifier == "Normal", let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? CropViewController {
             vc.delegate = self
-            vc.image = croppedImageView.image
+            vc.image = image
+        } else if segue.identifier == "Custom", let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? CropViewController {
+            vc.delegate = self
+            vc.image = image
+            vc.mode = .embedded
         }
     }
 }
