@@ -165,6 +165,7 @@
 		5FC10B08217A9EDF00582874 = {
 			isa = PBXGroup;
 			children = (
+				5FCB35B621925E6E0046AB75 /* Source */,
 				5FC10B13217A9EDF00582874 /* Mantis */,
 				5FC10B28217A9EE100582874 /* MantisTests */,
 				5FC10B12217A9EDF00582874 /* Products */,
@@ -183,7 +184,6 @@
 		5FC10B13217A9EDF00582874 /* Mantis */ = {
 			isa = PBXGroup;
 			children = (
-				5FCB35B621925E6E0046AB75 /* MantisCrop */,
 				5FC10B14217A9EDF00582874 /* AppDelegate.swift */,
 				5FC10B16217A9EDF00582874 /* ViewController.swift */,
 				5FC10B18217A9EDF00582874 /* Main.storyboard */,
@@ -203,7 +203,7 @@
 			path = MantisTests;
 			sourceTree = "<group>";
 		};
-		5FCB35B621925E6E0046AB75 /* MantisCrop */ = {
+		5FCB35B621925E6E0046AB75 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				5FCB35B9219262E20046AB75 /* CropViewController */,
@@ -215,7 +215,7 @@
 				5FB0DB9B218DD76A006CFDF9 /* Config.swift */,
 				5FB0DB99218DD394006CFDF9 /* Mantis.swift */,
 			);
-			path = MantisCrop;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		5FCB35B9219262E20046AB75 /* CropViewController */ = {

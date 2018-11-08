@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.ios.deployment_target = '11.0'
   s.source       = { :git => "https://github.com/guoyingtao/Mantis.git", :tag => "#{s.version}" }
-  s.source_files  = "Mantis/MantisCrop/**/*.swift"
+  s.source_files  = "Source/**/*.swift"
 
 end
