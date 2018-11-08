@@ -243,16 +243,16 @@ extension CropViewController {
         cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         
         if mode == .normal {
-            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: 80)
-            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: 44)
+            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidth)
+            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeight)
         } else {
-            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: 124)
-            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: 88)
+            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidthForCustom)
+            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeightForCustom)
         }
         
-        toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
+        toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: cropToolbar.recommendSpanFromEdgeWhenHorizontal)
         toolbarPortraitBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
+        toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -cropToolbar.recommendSpanFromEdgeWhenHorizontal)
         toolbarLeftConstraint = cropToolbar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
         toolbarRightConstraint = cropToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
     }

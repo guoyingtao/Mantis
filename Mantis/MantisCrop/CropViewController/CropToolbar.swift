@@ -10,10 +10,15 @@ import UIKit
 
 class CropToolbar: UIView {
     
-    let recommendHeight = 44
-    let recommendWidth = 80
-    let recommendHeightForCustom = 88
-    let recommendWidthForCustom = 124
+    let recommendSpanFromEdgeWhenHorizontal: CGFloat = 40
+    let recommendHeight: CGFloat = 44
+    let recommendWidth: CGFloat = {
+        return UIDevice.current.userInterfaceIdiom == .pad ? 90 : 70
+    } ()
+    let recommendHeightForCustom: CGFloat = 88    
+    let recommendWidthForCustom: CGFloat = {
+        return UIDevice.current.userInterfaceIdiom == .pad ? 190 : 130
+    } ()
     
     var selectedCancel = {}
     var selectedCrop = {}
@@ -33,12 +38,12 @@ class CropToolbar: UIView {
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
-        let buttonFont = UIFont.systemFont(ofSize: 20)
+        let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ? 20 : 14
+        let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
         
         let button = UIButton(type: .system)
         button.tintColor = .white
         button.titleLabel?.font = buttonFont
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
         
         if let title = title {
             button.setTitle(title, for: .normal)
@@ -112,7 +117,7 @@ class CropToolbar: UIView {
         createCustomButtonContainer()
         
         wholeButtonStackView = UIStackView()
-        wholeButtonStackView?.distribution = .fillProportionally
+        wholeButtonStackView?.distribution = .fillEqually
         addSubview(wholeButtonStackView!)
         wholeButtonStackView?.addArrangedSubview(optionButtonStackView!)
         wholeButtonStackView?.addArrangedSubview(customButtonStackView!)

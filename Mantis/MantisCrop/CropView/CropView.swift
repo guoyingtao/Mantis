@@ -609,9 +609,8 @@ extension CropView {
     func crop() -> UIImage? {
         let rect = imageContainer.convert(imageContainer.bounds,
                                                          to: self)
-        let point = CGPoint(x: (rect.origin.x + rect.width / 2),
-                            y: (rect.origin.y + rect.height / 2))
-        let zeroPoint = CGPoint(x: frame.width / 2, y: gridOverlayView.center.y)
+        let point = rect.center
+        let zeroPoint = gridOverlayView.center
         
         var transform = CGAffineTransform.identity
         // translate
