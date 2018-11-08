@@ -3,5 +3,5 @@
 </p>
 
 <p align="center">
-    <img src="Screen Shot.png" height="200" alt="Screen Shot" />
+    <img src="Screen Shot.png" height="300" alt="Screen Shot" />
 </p>
