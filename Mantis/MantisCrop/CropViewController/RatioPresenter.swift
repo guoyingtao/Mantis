@@ -43,9 +43,10 @@ class RatioPresenter {
         }
         
         if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad {
+            // https://stackoverflow.com/a/27823616/288724
             actionSheet.popoverPresentationController?.permittedArrowDirections = .any
             actionSheet.popoverPresentationController?.sourceView = sourceView
-//            actionSheet.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            actionSheet.popoverPresentationController?.sourceRect = sourceView.bounds
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
