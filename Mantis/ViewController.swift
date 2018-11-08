@@ -44,6 +44,7 @@ class ViewController: UIViewController, CropViewControllerProtocal {
             return
         }
         
+        Mantis.config.addCustomRatio(ratioItem: (nameH: "2:1", ratioH: 2.0,nameV: "1:2", ratioV: 0.5))
         let cropViewController = Mantis.customizableCropViewController(image: image)
         cropViewController.delegate = self
         

@@ -8,7 +8,16 @@
 
 import Foundation
 
-// To do
-struct Config {
+public typealias RatioItemType = (nameH: String, ratioH: Double, nameV: String, ratioV: Double)
+
+class Config {
+    public var customRatios: [RatioItemType] = []
     
+    static var shared = Config()
+    
+    private init() {}
+
+    public func addCustomRatio(ratioItem: RatioItemType) {
+        customRatios.append(ratioItem)
+    }
 }

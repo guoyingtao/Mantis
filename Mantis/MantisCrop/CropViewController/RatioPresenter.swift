@@ -8,10 +8,15 @@
 
 import UIKit
 
+enum RatioType {
+    case horizontal
+    case vertical
+}
+
 class RatioPresenter {
     var didGetRatio: ((Double)->Void) = { _ in }
-    var type: RatioType = .vertical
-    var originalRatio: Double
+    private var type: RatioType = .vertical
+    private var originalRatio: Double
     
     init(type: RatioType, originalRatio: Double) {
         self.type = type
@@ -21,12 +26,17 @@ class RatioPresenter {
     func present(by viewController: UIViewController, in sourceView: UIView) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        for ratio in FixedRatiosType.allCases {
-            let title = ratio.getText(by: type)
+        let fixedRatios = FixedRatioManager(originalRatio: self.originalRatio)
+        if Config.shared.customRatios.count > 0 {
+            fixedRatios.appendToTail(ratioItems: Config.shared.customRatios)
+        }
+        
+        for ratio in fixedRatios.ratios {
+            let title = (type == .horizontal) ? ratio.nameH : ratio.nameV
             
             let action = UIAlertAction(title: title, style: .default) {[weak self] _ in
                 guard let self = self else { return }
-                let ratioValue = (ratio == .original) ? self.originalRatio : ratio.getRatio(by: self.type)
+                let ratioValue = (self.type == .horizontal) ? ratio.ratioH : ratio.ratioV
                 self.didGetRatio(ratioValue)
             }
             actionSheet.addAction(action)

@@ -8,64 +8,42 @@
 
 import Foundation
 
-enum RatioType {
-    case horizontal
-    case vertical
-}
+class FixedRatioManager {
+    private (set) var ratios: [RatioItemType] = []
 
-struct RatioData: ExpressibleByStringLiteral, Equatable {
-    typealias StringLiteralType = String
+    init(originalRatio: Double) {
+        let original = ("Original", originalRatio, "Original", originalRatio)
+        addDefault()
+        insertToHead(ratioItem: original)
+    }
     
-    var textForHoritontal: String = ""
-    var textForVertical: String = ""
-    var ratioForHoritontal: Double = 1.0
-    var ratioForVertical: Double = 1.0
-    
-    init(stringLiteral value: RatioData.StringLiteralType) {
-        textForHoritontal = value
+    private func addDefault() {
+        let square = ("Square", 1.0, "Square", 1.0)
+        let scale3_2 = ("3:2", 3.0/2.0, "2:3", 2.0/3.0)
+        let scale5_3 = ("5:3", 5.0/3.0, "3:5", 3.0/5.0)
+        let scale4_3 = ("4:3", 4.0/3.0, "3:4", 3.0/4.0)
+        let scale5_4 = ("5:4", 5.0/4.0, "4:5", 4.0/5.0)
+        let scale7_5 = ("7:5", 7.0/5.0, "5:7", 5.0/7.0)
+        let scale16_9 = ("16:9", 16.0/9.0, "9:16", 9.0/16.0)
         
-        let components = textForHoritontal.components(separatedBy: ":")
-        if components.count == 2 {
-            textForVertical = components[1] + ":" + components[0]
-            
-            guard let v0 = Double(components[0]), let v1 = Double(components[1]), v0 != 0, v1 != 0 else {
-                return
-            }
-            
-            ratioForHoritontal = v0 / v1
-            ratioForVertical = v1 / v0
-        } else {
-            textForVertical = textForHoritontal
-        }
-                
-        guard ratioForHoritontal != 0 else { return }
-        ratioForVertical = 1.0 / ratioForHoritontal
+        ratios.append(square)
+        ratios.append(scale3_2)
+        ratios.append(scale5_3)
+        ratios.append(scale4_3)
+        ratios.append(scale5_4)
+        ratios.append(scale7_5)
+        ratios.append(scale16_9)
     }
     
-    func getText(by ratioType: RatioType) -> String {
-        return ratioType == .horizontal ? textForHoritontal : textForVertical
+    func insertToHead(ratioItem: RatioItemType) {
+        ratios.insert(ratioItem, at: 0)
     }
     
-    func getRatio(by ratioType: RatioType) -> Double {
-        return ratioType == .horizontal ? ratioForHoritontal : ratioForVertical
+    func appendToTail(ratioItem: RatioItemType) {
+        ratios.append(ratioItem)
     }
-}
 
-enum FixedRatiosType: RatioData, CaseIterable {
-    case original = "Original"
-    case square = "Square"
-    case scale3_2 = "3:2"
-    case scale5_3 = "5:3"
-    case scale4_3 = "4:3"
-    case scale5_4 = "5:4"
-    case scale7_5 = "7:5"
-    case scale16_9 = "16:9"
-
-    func getText(by ratioType: RatioType) -> String {
-        return self.rawValue.getText(by: ratioType)
-    }
-    
-    func getRatio(by ratioType: RatioType) -> Double {
-        return self.rawValue.getRatio(by: ratioType)
+    func appendToTail(ratioItems: [RatioItemType]) {
+        ratios.append(contentsOf: ratioItems)
     }
 }
