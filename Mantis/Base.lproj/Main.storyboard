@@ -19,17 +19,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-So-c13">
-                                <rect key="frame" x="127.5" y="587" width="120" height="60"/>
+                                <rect key="frame" x="127.5" y="611" width="120" height="36"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="30"/>
-                                        <state key="normal" title="Normal"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Go to Crop"/>
                                         <connections>
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
-                                        <rect key="frame" x="0.0" y="30" width="120" height="30"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="0.0"/>
                                         <state key="normal" title="Customizable"/>
                                         <connections>
                                             <action selector="customizablePresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsv-Sb-oz1"/>

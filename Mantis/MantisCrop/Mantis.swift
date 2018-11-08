@@ -16,7 +16,8 @@ public struct Mantis {
         return CropViewController(image: image, mode: .normal)
     }
     
-    static public func customizableCropViewController(image: UIImage) -> CropViewController {
+    // TO DO
+    static private func customizableCropViewController(image: UIImage) -> CropViewController {
         return CropViewController(image: image, mode: .customizable)
     }
 }
