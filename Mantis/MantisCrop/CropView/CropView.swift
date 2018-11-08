@@ -619,7 +619,7 @@ extension CropView {
         transform = transform.translatedBy(x: translation.x, y: translation.y)
         
         // rotate
-        transform = transform.rotated(by: viewModel.radians)
+        transform = transform.rotated(by: viewModel.getTotalRadians())
         
         // scale
         let t = imageContainer.transform
