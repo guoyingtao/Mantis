@@ -85,8 +85,9 @@ extension UIImage {
         return newCGImg
     }
     
-    func isHoritontal() -> Bool {
+    func isHorizontal() -> Bool {
         let orientationArray: [UIImage.Orientation] = [.up,.upMirrored,.down,.downMirrored]
+        
         if orientationArray.contains(imageOrientation) {
             return size.width > size.height
         } else {

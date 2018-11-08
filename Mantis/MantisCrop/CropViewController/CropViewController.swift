@@ -184,7 +184,8 @@ public class CropViewController: UIViewController {
             }            
         }
         
-        let type: RatioType = image.isHoritontal() ? .horizontal : .vertical
+        let type: RatioType = cropView.getRatioType(byImageIsOriginalisHorizontal: image.isHorizontal())
+        
         let ratio = Double(image.ratio())
         ratioPresenter = RatioPresenter(type: type, originalRatio: ratio)
         ratioPresenter?.didGetRatio = { ratio in

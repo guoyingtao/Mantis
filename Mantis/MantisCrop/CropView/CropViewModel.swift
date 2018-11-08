@@ -53,5 +53,13 @@ struct CropViewModel {
     
     func getTotalRadians() -> CGFloat {
         return radians + rotationType.rawValue * CGFloat.pi / 180
-    }    
+    }
+    
+    func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType {
+        if rotationType == .none || rotationType == .counterclockwise180 {
+            return isHorizontal ? .horizontal : .vertical
+        } else {
+            return isHorizontal ? .vertical : .horizontal
+        }
+    }
 }

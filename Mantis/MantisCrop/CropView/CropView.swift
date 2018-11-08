@@ -723,4 +723,8 @@ extension CropView {
             self.setRotation(byRadians: radians)
         }
     }
+    
+    func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
+        return viewModel.getRatioType(byImageIsOriginalHorizontal: isHorizontal)
+    }
 }
