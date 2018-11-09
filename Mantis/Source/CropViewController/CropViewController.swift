@@ -131,13 +131,8 @@ public class CropViewController: UIViewController {
     @objc func rotated() {
         let statusBarOrientation = UIApplication.shared.statusBarOrientation
         
-        guard statusBarOrientation != .unknown else {
-            return
-        }
-        
-        guard statusBarOrientation != orientation else {
-            return
-        }
+        guard statusBarOrientation != .unknown else { return }
+        guard statusBarOrientation != orientation else { return }
         
         orientation = statusBarOrientation
         
@@ -148,9 +143,17 @@ public class CropViewController: UIViewController {
         
         updateLayout()
         view.layoutIfNeeded()
-        cropView?.handleRotate()
-    }
         
+        // When it is embedded in a container, the timing of viewDidLayoutSubviews
+        // is different with the normal mode.
+        // So delay the execution to make sure handleRotate runs after the final
+        // viewDidLayoutSubviews. **** Need to figure out better solution!
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.cropView?.handleRotate()
+        }
+        
+    }
+    
     private func createCropView() {
         guard let image = image else { return }
         
