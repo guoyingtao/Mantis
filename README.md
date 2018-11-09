@@ -43,6 +43,11 @@ public protocol CropViewControllerProtocal: class {
   
   Under this mode, you can embed CropViewController into another UIViewController. That way you can add more customized edit features other than cropping.
 
+```swift
+        let cropViewController = Mantis.cropViewController(image: image, mode: .normal)
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+```
 
 
 
