@@ -10,11 +10,11 @@
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "0.13"
+  s.version      = "0.15"
   s.summary      = "A swift photo cropping tool which mimics Photo.app"
 
   s.description  = <<-DESC
-        A swift photo cropping tool which mimics Photo.app
+        Mantis is a swift photo cropping tool which mimics Photo.app
                    DESC
 
   s.homepage     = "https://github.com/guoyingtao/Mantis"
@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.ios.deployment_target = '11.0'
   s.source       = { :git => "https://github.com/guoyingtao/Mantis.git", :tag => "#{s.version}" }
-  s.source_files  = "Source/**/*.swift"
+  s.source_files  = "Mantis/Mantis.h, Mantis/Source/**/*.swift"
 
 end
