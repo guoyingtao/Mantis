@@ -1,0 +1,625 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5F0DD2CC2195227D00F9310B /* AngleDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2AD2195227D00F9310B /* AngleDashboard.swift */; };
+		5F0DD2CD2195227D00F9310B /* AngleDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2AE2195227D00F9310B /* AngleDialPlate.swift */; };
+		5F0DD2CE2195227D00F9310B /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2AF2195227D00F9310B /* Config.swift */; };
+		5F0DD2CF2195227D00F9310B /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B02195227D00F9310B /* Mantis.swift */; };
+		5F0DD2D02195227D00F9310B /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B22195227D00F9310B /* CropToolbar.swift */; };
+		5F0DD2D12195227D00F9310B /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B32195227D00F9310B /* RatioPresenter.swift */; };
+		5F0DD2D22195227D00F9310B /* ToolBarButtonImageBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B42195227D00F9310B /* ToolBarButtonImageBuilder.swift */; };
+		5F0DD2D32195227D00F9310B /* FixedRatios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B52195227D00F9310B /* FixedRatios.swift */; };
+		5F0DD2D42195227D00F9310B /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B62195227D00F9310B /* CropViewController.swift */; };
+		5F0DD2D52195227D00F9310B /* CGImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B82195227D00F9310B /* CGImageExtensions.swift */; };
+		5F0DD2D62195227D00F9310B /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2B92195227D00F9310B /* UIImageExtensions.swift */; };
+		5F0DD2D72195227D00F9310B /* CoreGraphicsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2BA2195227D00F9310B /* CoreGraphicsExtensions.swift */; };
+		5F0DD2D82195227D00F9310B /* CropViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2BC2195227D00F9310B /* CropViewModel.swift */; };
+		5F0DD2D92195227D00F9310B /* CropScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2BD2195227D00F9310B /* CropScrollView.swift */; };
+		5F0DD2DA2195227D00F9310B /* CropViewStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2BE2195227D00F9310B /* CropViewStatus.swift */; };
+		5F0DD2DB2195227D00F9310B /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2BF2195227D00F9310B /* ImageContainer.swift */; };
+		5F0DD2DC2195227D00F9310B /* CropBoxFreeAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C02195227D00F9310B /* CropBoxFreeAspectFrameUpdater.swift */; };
+		5F0DD2DD2195227D00F9310B /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C12195227D00F9310B /* CropOverlayView.swift */; };
+		5F0DD2DE2195227D00F9310B /* CropBoxLockedAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C22195227D00F9310B /* CropBoxLockedAspectFrameUpdater.swift */; };
+		5F0DD2DF2195227D00F9310B /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C32195227D00F9310B /* CropView.swift */; };
+		5F0DD2E02195227D00F9310B /* CropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C42195227D00F9310B /* CropMaskViewManager.swift */; };
+		5F0DD2E12195227D00F9310B /* CropVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C62195227D00F9310B /* CropVisualEffectView.swift */; };
+		5F0DD2E22195227D00F9310B /* CropDimmingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C72195227D00F9310B /* CropDimmingView.swift */; };
+		5F0DD2E32195227D00F9310B /* CropMaskProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2C82195227D00F9310B /* CropMaskProtocal.swift */; };
+		5F0DD2E42195227D00F9310B /* RotationCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2CA2195227D00F9310B /* RotationCalculator.swift */; };
+		5F0DD2E52195227D00F9310B /* GeometryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD2CB2195227D00F9310B /* GeometryHelper.swift */; };
+		5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B14217A9EDF00582874 /* AppDelegate.swift */; };
+		5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B16217A9EDF00582874 /* ViewController.swift */; };
+		5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B18217A9EDF00582874 /* Main.storyboard */; };
+		5FC10B1C217A9EE100582874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B1B217A9EE100582874 /* Assets.xcassets */; };
+		5FC10B1F217A9EE100582874 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */; };
+		5FC10B2A217A9EE100582874 /* MantisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B29217A9EE100582874 /* MantisTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5FC10B26217A9EE100582874 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FC10B09217A9EDF00582874 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5FC10B10217A9EDF00582874;
+			remoteInfo = Mantis;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5F0DD2AD2195227D00F9310B /* AngleDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleDashboard.swift; sourceTree = "<group>"; };
+		5F0DD2AE2195227D00F9310B /* AngleDialPlate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleDialPlate.swift; sourceTree = "<group>"; };
+		5F0DD2AF2195227D00F9310B /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		5F0DD2B02195227D00F9310B /* Mantis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
+		5F0DD2B22195227D00F9310B /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
+		5F0DD2B32195227D00F9310B /* RatioPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
+		5F0DD2B42195227D00F9310B /* ToolBarButtonImageBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolBarButtonImageBuilder.swift; sourceTree = "<group>"; };
+		5F0DD2B52195227D00F9310B /* FixedRatios.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixedRatios.swift; sourceTree = "<group>"; };
+		5F0DD2B62195227D00F9310B /* CropViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
+		5F0DD2B82195227D00F9310B /* CGImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGImageExtensions.swift; sourceTree = "<group>"; };
+		5F0DD2B92195227D00F9310B /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
+		5F0DD2BA2195227D00F9310B /* CoreGraphicsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphicsExtensions.swift; sourceTree = "<group>"; };
+		5F0DD2BC2195227D00F9310B /* CropViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewModel.swift; sourceTree = "<group>"; };
+		5F0DD2BD2195227D00F9310B /* CropScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropScrollView.swift; sourceTree = "<group>"; };
+		5F0DD2BE2195227D00F9310B /* CropViewStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewStatus.swift; sourceTree = "<group>"; };
+		5F0DD2BF2195227D00F9310B /* ImageContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageContainer.swift; sourceTree = "<group>"; };
+		5F0DD2C02195227D00F9310B /* CropBoxFreeAspectFrameUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropBoxFreeAspectFrameUpdater.swift; sourceTree = "<group>"; };
+		5F0DD2C12195227D00F9310B /* CropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropOverlayView.swift; sourceTree = "<group>"; };
+		5F0DD2C22195227D00F9310B /* CropBoxLockedAspectFrameUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdater.swift; sourceTree = "<group>"; };
+		5F0DD2C32195227D00F9310B /* CropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
+		5F0DD2C42195227D00F9310B /* CropMaskViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropMaskViewManager.swift; sourceTree = "<group>"; };
+		5F0DD2C62195227D00F9310B /* CropVisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropVisualEffectView.swift; sourceTree = "<group>"; };
+		5F0DD2C72195227D00F9310B /* CropDimmingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropDimmingView.swift; sourceTree = "<group>"; };
+		5F0DD2C82195227D00F9310B /* CropMaskProtocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropMaskProtocal.swift; sourceTree = "<group>"; };
+		5F0DD2CA2195227D00F9310B /* RotationCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationCalculator.swift; sourceTree = "<group>"; };
+		5F0DD2CB2195227D00F9310B /* GeometryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryHelper.swift; sourceTree = "<group>"; };
+		5FC10B11217A9EDF00582874 /* MantisExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MantisExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FC10B14217A9EDF00582874 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5FC10B16217A9EDF00582874 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5FC10B19217A9EDF00582874 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5FC10B1B217A9EE100582874 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5FC10B1E217A9EE100582874 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5FC10B20217A9EE100582874 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantisExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FC10B29217A9EE100582874 /* MantisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisTests.swift; sourceTree = "<group>"; };
+		5FC10B2B217A9EE100582874 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5FC10B0E217A9EDF00582874 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FC10B22217A9EE100582874 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5F0DD2AB2195227D00F9310B /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2B02195227D00F9310B /* Mantis.swift */,
+				5F0DD2AF2195227D00F9310B /* Config.swift */,
+				5F0DD2AC2195227D00F9310B /* AngleRiot */,
+				5F0DD2B12195227D00F9310B /* CropViewController */,
+				5F0DD2B72195227D00F9310B /* Extentions */,
+				5F0DD2BB2195227D00F9310B /* CropView */,
+				5F0DD2C52195227D00F9310B /* MaskBackground */,
+				5F0DD2C92195227D00F9310B /* Helpers */,
+			);
+			name = Source;
+			path = ../Source;
+			sourceTree = "<group>";
+		};
+		5F0DD2AC2195227D00F9310B /* AngleRiot */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2AD2195227D00F9310B /* AngleDashboard.swift */,
+				5F0DD2AE2195227D00F9310B /* AngleDialPlate.swift */,
+			);
+			path = AngleRiot;
+			sourceTree = "<group>";
+		};
+		5F0DD2B12195227D00F9310B /* CropViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2B22195227D00F9310B /* CropToolbar.swift */,
+				5F0DD2B32195227D00F9310B /* RatioPresenter.swift */,
+				5F0DD2B42195227D00F9310B /* ToolBarButtonImageBuilder.swift */,
+				5F0DD2B52195227D00F9310B /* FixedRatios.swift */,
+				5F0DD2B62195227D00F9310B /* CropViewController.swift */,
+			);
+			path = CropViewController;
+			sourceTree = "<group>";
+		};
+		5F0DD2B72195227D00F9310B /* Extentions */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2B82195227D00F9310B /* CGImageExtensions.swift */,
+				5F0DD2B92195227D00F9310B /* UIImageExtensions.swift */,
+				5F0DD2BA2195227D00F9310B /* CoreGraphicsExtensions.swift */,
+			);
+			path = Extentions;
+			sourceTree = "<group>";
+		};
+		5F0DD2BB2195227D00F9310B /* CropView */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2BC2195227D00F9310B /* CropViewModel.swift */,
+				5F0DD2BD2195227D00F9310B /* CropScrollView.swift */,
+				5F0DD2BE2195227D00F9310B /* CropViewStatus.swift */,
+				5F0DD2BF2195227D00F9310B /* ImageContainer.swift */,
+				5F0DD2C02195227D00F9310B /* CropBoxFreeAspectFrameUpdater.swift */,
+				5F0DD2C12195227D00F9310B /* CropOverlayView.swift */,
+				5F0DD2C22195227D00F9310B /* CropBoxLockedAspectFrameUpdater.swift */,
+				5F0DD2C32195227D00F9310B /* CropView.swift */,
+				5F0DD2C42195227D00F9310B /* CropMaskViewManager.swift */,
+			);
+			path = CropView;
+			sourceTree = "<group>";
+		};
+		5F0DD2C52195227D00F9310B /* MaskBackground */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2C62195227D00F9310B /* CropVisualEffectView.swift */,
+				5F0DD2C72195227D00F9310B /* CropDimmingView.swift */,
+				5F0DD2C82195227D00F9310B /* CropMaskProtocal.swift */,
+			);
+			path = MaskBackground;
+			sourceTree = "<group>";
+		};
+		5F0DD2C92195227D00F9310B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				5F0DD2CA2195227D00F9310B /* RotationCalculator.swift */,
+				5F0DD2CB2195227D00F9310B /* GeometryHelper.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		5FC10B08217A9EDF00582874 = {
+			isa = PBXGroup;
+			children = (
+				5FC10B14217A9EDF00582874 /* AppDelegate.swift */,
+				5FC10B16217A9EDF00582874 /* ViewController.swift */,
+				5FC10B18217A9EDF00582874 /* Main.storyboard */,
+				5FC10B1B217A9EE100582874 /* Assets.xcassets */,
+				5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */,
+				5FC10B20217A9EE100582874 /* Info.plist */,
+				5F0DD2AB2195227D00F9310B /* Source */,
+				5FC10B28217A9EE100582874 /* MantisTests */,
+				5FC10B12217A9EDF00582874 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5FC10B12217A9EDF00582874 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5FC10B11217A9EDF00582874 /* MantisExample.app */,
+				5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5FC10B28217A9EE100582874 /* MantisTests */ = {
+			isa = PBXGroup;
+			children = (
+				5FC10B29217A9EE100582874 /* MantisTests.swift */,
+				5FC10B2B217A9EE100582874 /* Info.plist */,
+			);
+			path = MantisTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5FC10B10217A9EDF00582874 /* MantisExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5FC10B2E217A9EE100582874 /* Build configuration list for PBXNativeTarget "MantisExample" */;
+			buildPhases = (
+				5FC10B0D217A9EDF00582874 /* Sources */,
+				5FC10B0E217A9EDF00582874 /* Frameworks */,
+				5FC10B0F217A9EDF00582874 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MantisExample;
+			productName = Mantis;
+			productReference = 5FC10B11217A9EDF00582874 /* MantisExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5FC10B24217A9EE100582874 /* MantisExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5FC10B31217A9EE100582874 /* Build configuration list for PBXNativeTarget "MantisExampleTests" */;
+			buildPhases = (
+				5FC10B21217A9EE100582874 /* Sources */,
+				5FC10B22217A9EE100582874 /* Frameworks */,
+				5FC10B23217A9EE100582874 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5FC10B27217A9EE100582874 /* PBXTargetDependency */,
+			);
+			name = MantisExampleTests;
+			productName = MantisTests;
+			productReference = 5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5FC10B09217A9EDF00582874 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = Echo;
+				TargetAttributes = {
+					5FC10B10217A9EDF00582874 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					5FC10B24217A9EE100582874 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 5FC10B10217A9EDF00582874;
+					};
+				};
+			};
+			buildConfigurationList = 5FC10B0C217A9EDF00582874 /* Build configuration list for PBXProject "MantisExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5FC10B08217A9EDF00582874;
+			productRefGroup = 5FC10B12217A9EDF00582874 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5FC10B10217A9EDF00582874 /* MantisExample */,
+				5FC10B24217A9EE100582874 /* MantisExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5FC10B0F217A9EDF00582874 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC10B1F217A9EE100582874 /* LaunchScreen.storyboard in Resources */,
+				5FC10B1C217A9EE100582874 /* Assets.xcassets in Resources */,
+				5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FC10B23217A9EE100582874 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5FC10B0D217A9EDF00582874 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F0DD2D32195227D00F9310B /* FixedRatios.swift in Sources */,
+				5F0DD2DD2195227D00F9310B /* CropOverlayView.swift in Sources */,
+				5F0DD2CC2195227D00F9310B /* AngleDashboard.swift in Sources */,
+				5F0DD2CF2195227D00F9310B /* Mantis.swift in Sources */,
+				5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */,
+				5F0DD2DE2195227D00F9310B /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
+				5F0DD2D82195227D00F9310B /* CropViewModel.swift in Sources */,
+				5F0DD2E52195227D00F9310B /* GeometryHelper.swift in Sources */,
+				5F0DD2E02195227D00F9310B /* CropMaskViewManager.swift in Sources */,
+				5F0DD2D22195227D00F9310B /* ToolBarButtonImageBuilder.swift in Sources */,
+				5F0DD2E22195227D00F9310B /* CropDimmingView.swift in Sources */,
+				5F0DD2D62195227D00F9310B /* UIImageExtensions.swift in Sources */,
+				5F0DD2CE2195227D00F9310B /* Config.swift in Sources */,
+				5F0DD2CD2195227D00F9310B /* AngleDialPlate.swift in Sources */,
+				5F0DD2DA2195227D00F9310B /* CropViewStatus.swift in Sources */,
+				5F0DD2DF2195227D00F9310B /* CropView.swift in Sources */,
+				5F0DD2DC2195227D00F9310B /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
+				5F0DD2D52195227D00F9310B /* CGImageExtensions.swift in Sources */,
+				5F0DD2E42195227D00F9310B /* RotationCalculator.swift in Sources */,
+				5F0DD2D02195227D00F9310B /* CropToolbar.swift in Sources */,
+				5F0DD2D12195227D00F9310B /* RatioPresenter.swift in Sources */,
+				5F0DD2D72195227D00F9310B /* CoreGraphicsExtensions.swift in Sources */,
+				5F0DD2D92195227D00F9310B /* CropScrollView.swift in Sources */,
+				5F0DD2D42195227D00F9310B /* CropViewController.swift in Sources */,
+				5F0DD2E12195227D00F9310B /* CropVisualEffectView.swift in Sources */,
+				5F0DD2E32195227D00F9310B /* CropMaskProtocal.swift in Sources */,
+				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,
+				5F0DD2DB2195227D00F9310B /* ImageContainer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FC10B21217A9EE100582874 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC10B2A217A9EE100582874 /* MantisTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5FC10B27217A9EE100582874 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5FC10B10217A9EDF00582874 /* MantisExample */;
+			targetProxy = 5FC10B26217A9EE100582874 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5FC10B18217A9EDF00582874 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FC10B19217A9EDF00582874 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FC10B1E217A9EE100582874 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5FC10B2C217A9EE100582874 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5FC10B2D217A9EE100582874 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5FC10B2F217A9EE100582874 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3V26Q55U3S;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.echo.Mantis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5FC10B30217A9EE100582874 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3V26Q55U3S;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.echo.Mantis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5FC10B32217A9EE100582874 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3V26Q55U3S;
+				INFOPLIST_FILE = MantisTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MantisExample.app/MantisExample";
+			};
+			name = Debug;
+		};
+		5FC10B33217A9EE100582874 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3V26Q55U3S;
+				INFOPLIST_FILE = MantisTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MantisExample.app/MantisExample";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5FC10B0C217A9EDF00582874 /* Build configuration list for PBXProject "MantisExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FC10B2C217A9EE100582874 /* Debug */,
+				5FC10B2D217A9EE100582874 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5FC10B2E217A9EE100582874 /* Build configuration list for PBXNativeTarget "MantisExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FC10B2F217A9EE100582874 /* Debug */,
+				5FC10B30217A9EE100582874 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5FC10B31217A9EE100582874 /* Build configuration list for PBXNativeTarget "MantisExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FC10B32217A9EE100582874 /* Debug */,
+				5FC10B33217A9EE100582874 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5FC10B09217A9EDF00582874 /* Project object */;
+}
