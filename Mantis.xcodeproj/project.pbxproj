@@ -146,8 +146,8 @@
 				5FEBA84A21952A330018DE62 /* Config.swift */,
 				5FEBA84B21952A330018DE62 /* Mantis.swift */,
 				5FEBA84C21952A330018DE62 /* CropViewController */,
-				5FEBA85221952A330018DE62 /* Extentions */,
 				5FEBA85621952A330018DE62 /* CropView */,
+				5FEBA85221952A330018DE62 /* Extentions */,
 				5FEBA86021952A330018DE62 /* MaskBackground */,
 				5FEBA86421952A330018DE62 /* Helpers */,
 			);
@@ -167,11 +167,11 @@
 		5FEBA84C21952A330018DE62 /* CropViewController */ = {
 			isa = PBXGroup;
 			children = (
+				5FEBA85121952A330018DE62 /* CropViewController.swift */,
 				5FEBA84D21952A330018DE62 /* CropToolbar.swift */,
 				5FEBA84E21952A330018DE62 /* RatioPresenter.swift */,
 				5FEBA84F21952A330018DE62 /* ToolBarButtonImageBuilder.swift */,
 				5FEBA85021952A330018DE62 /* FixedRatios.swift */,
-				5FEBA85121952A330018DE62 /* CropViewController.swift */,
 			);
 			path = CropViewController;
 			sourceTree = "<group>";
@@ -189,6 +189,7 @@
 		5FEBA85621952A330018DE62 /* CropView */ = {
 			isa = PBXGroup;
 			children = (
+				5FEBA85E21952A330018DE62 /* CropView.swift */,
 				5FEBA85721952A330018DE62 /* CropViewModel.swift */,
 				5FEBA85821952A330018DE62 /* CropScrollView.swift */,
 				5FEBA85921952A330018DE62 /* CropViewStatus.swift */,
@@ -196,7 +197,6 @@
 				5FEBA85B21952A330018DE62 /* CropBoxFreeAspectFrameUpdater.swift */,
 				5FEBA85C21952A330018DE62 /* CropOverlayView.swift */,
 				5FEBA85D21952A330018DE62 /* CropBoxLockedAspectFrameUpdater.swift */,
-				5FEBA85E21952A330018DE62 /* CropView.swift */,
 				5FEBA85F21952A330018DE62 /* CropMaskViewManager.swift */,
 			);
 			path = CropView;

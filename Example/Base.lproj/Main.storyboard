@@ -13,27 +13,27 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Mantis" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MantisExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-So-c13">
-                                <rect key="frame" x="127.5" y="611" width="120" height="36"/>
+                                <rect key="frame" x="127.5" y="581" width="120" height="66"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Go to Crop"/>
+                                        <state key="normal" title="Normal"/>
                                         <connections>
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
                                         </connections>
                                     </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="0.0"/>
-                                        <state key="normal" title="Customizable"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
+                                        <rect key="frame" x="0.0" y="36" width="120" height="30"/>
+                                        <state key="normal" title="Embedded"/>
                                         <connections>
-                                            <action selector="customizablePresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsv-Sb-oz1"/>
+                                            <segue destination="c5I-rk-tJF" kind="presentation" id="liD-2e-mJA"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -63,6 +63,86 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
+        </scene>
+        <!--Embedded Crop View Controller-->
+        <scene sceneID="Mwe-jr-1zI">
+            <objects>
+                <viewController id="aIe-ND-Zfg" customClass="EmbeddedCropViewController" customModule="MantisExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FS5-2F-Jir">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lwW-G6-m16">
+                                <rect key="frame" x="0.0" y="20" width="375" height="603"/>
+                                <connections>
+                                    <segue destination="xJq-Ev-XcJ" kind="embed" id="WEI-AV-e4o"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="lwW-G6-m16" firstAttribute="top" secondItem="cY0-Cd-i0E" secondAttribute="top" id="F4s-gV-IK0"/>
+                            <constraint firstItem="lwW-G6-m16" firstAttribute="leading" secondItem="cY0-Cd-i0E" secondAttribute="leading" id="Rbf-LE-Lbb"/>
+                            <constraint firstItem="cY0-Cd-i0E" firstAttribute="trailing" secondItem="lwW-G6-m16" secondAttribute="trailing" id="XLc-Sl-Rfe"/>
+                            <constraint firstItem="cY0-Cd-i0E" firstAttribute="bottom" secondItem="lwW-G6-m16" secondAttribute="bottom" id="yuD-jJ-uPY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="cY0-Cd-i0E"/>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem title="Cancel" id="5p4-Ob-R9b">
+                            <connections>
+                                <action selector="cancel:" destination="aIe-ND-Zfg" id="j3e-ai-8lv"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="DsY-rM-AWO"/>
+                        <barButtonItem title="Crop" id="kZP-3N-vXv">
+                            <connections>
+                                <action selector="crop:" destination="aIe-ND-Zfg" id="L3u-QU-TTY"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="uY2-uy-qch"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xP6-ML-BEH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2056.8000000000002" y="5.8470764617691158"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="gwu-pf-bbx">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" toolbarHidden="NO" id="c5I-rk-tJF" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rbK-aW-t8y">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KpB-vr-mGb">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="aIe-ND-Zfg" kind="relationship" relationship="rootViewController" id="NRG-W3-wq0"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="q3P-pn-GxR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1117.5999999999999" y="5.8470764617691158"/>
+        </scene>
+        <!--Crop View Controller-->
+        <scene sceneID="djG-LZ-hRH">
+            <objects>
+                <viewController id="xJq-Ev-XcJ" customClass="CropViewController" customModule="MantisExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nLp-HP-0xC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TRU-F3-FYg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <resources>

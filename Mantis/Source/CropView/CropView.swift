@@ -26,7 +26,7 @@ class CropView: UIView {
         }
     }
     
-    var viewModel = CropViewModel()
+    var viewModel: CropViewModel!
     
     fileprivate var panOriginPoint = CGPoint.zero
     
@@ -179,29 +179,6 @@ class CropView: UIView {
     
     func adaptForCropBox() {
         resetUIFrame()
-    }
-    
-    func setFixedRatioCropBox() {
-        var cropBoxFrame = getInitialCropBoxRect()
-        let center = cropBoxFrame.center
-        
-        if viewModel.aspectRatio > imageRatio {
-            cropBoxFrame.size.height = cropBoxFrame.width / viewModel.aspectRatio
-        } else {
-            cropBoxFrame.size.width = cropBoxFrame.size.height * viewModel.aspectRatio
-        }
-
-        cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
-        cropBoxFrame.origin.y = center.y - cropBoxFrame.height / 2
-        
-        self.cropBoxFrame = cropBoxFrame
-        
-        let contentRect = getContentBounds()
-        adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
-            self?.viewStatus = .betweenOperation
-        }
-        
-        adaptAngleDashboardToCropBox()
     }
     
     private func setupScrollView() {
@@ -604,8 +581,7 @@ extension CropView {
 }
 
 // public api
-extension CropView {
-    
+extension CropView {    
     func crop() -> UIImage? {
         let rect = imageContainer.convert(imageContainer.bounds,
                                                          to: self)
@@ -723,6 +699,29 @@ extension CropView {
         }
     }
     
+    func setFixedRatioCropBox() {
+        var cropBoxFrame = getInitialCropBoxRect()
+        let center = cropBoxFrame.center
+        
+        if viewModel.aspectRatio > imageRatio {
+            cropBoxFrame.size.height = cropBoxFrame.width / viewModel.aspectRatio
+        } else {
+            cropBoxFrame.size.width = cropBoxFrame.size.height * viewModel.aspectRatio
+        }
+        
+        cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
+        cropBoxFrame.origin.y = center.y - cropBoxFrame.height / 2
+        
+        self.cropBoxFrame = cropBoxFrame
+        
+        let contentRect = getContentBounds()
+        adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
+            self?.viewStatus = .betweenOperation
+        }
+        
+        adaptAngleDashboardToCropBox()
+    }
+
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
         return viewModel.getRatioType(byImageIsOriginalHorizontal: isHorizontal)
     }

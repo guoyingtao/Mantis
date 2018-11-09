@@ -83,24 +83,24 @@ public class CropViewController: UIViewController {
         cropToolbar = CropToolbar(frame: CGRect.zero)
         cropToolbar?.backgroundColor = .black
         
-        cropToolbar?.selectedCancel = {[weak self] in self?.cancel() }
-        cropToolbar?.selectedRotate = {[weak self] in self?.rotate() }
-        cropToolbar?.selectedReset = {[weak self] in self?.reset() }
-        cropToolbar?.selectedSetRatio = {[weak self] in self?.setRatio() }
-        cropToolbar?.selectedCrop = {[weak self] in self?.crop() }
+        cropToolbar?.selectedCancel = {[weak self] in self?.handleCancel() }
+        cropToolbar?.selectedRotate = {[weak self] in self?.handleRotate() }
+        cropToolbar?.selectedReset = {[weak self] in self?.handleReset() }
+        cropToolbar?.selectedSetRatio = {[weak self] in self?.handleSetRatio() }
+        cropToolbar?.selectedCrop = {[weak self] in self?.handleCrop() }
         
         if mode == .normal {
             cropToolbar?.createToolbarUI()
         } else {
-            cropToolbar?.createBottomOpertions()
+            cropToolbar?.createToolbarUI(mode: .simple)
         }
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .black
         createCropToolbar()
-        
         createCropView()
         initLayout()
         
@@ -154,16 +154,16 @@ public class CropViewController: UIViewController {
     private func createCropView() {
         guard let image = image else { return }
         
-        cropView = CropView(image: image)
+        cropView = CropView(image: image, viewModel: CropViewModel())
         cropView?.delegate = self
         cropView?.clipsToBounds = true
     }
     
-    private func cancel() {
+    private func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc private func setRatio() {
+    @objc private func handleSetRatio() {
         guard let cropView = cropView else { return }
         
         if cropView.aspectRatioLockEnabled {
@@ -194,15 +194,15 @@ public class CropViewController: UIViewController {
         ratioPresenter?.present(by: self, in: cropToolbar!.setRatioButton!)
     }
 
-    private func reset() {
+    private func handleReset() {
         cropView?.reset()
     }
     
-    private func rotate() {
+    private func handleRotate() {
         cropView?.counterclockwiseRotate90()
     }
     
-    private func crop() {
+    private func handleCrop() {
         guard let image = cropView?.crop() else {
             return
         }
@@ -242,17 +242,12 @@ extension CropViewController {
         view.addSubview(cropToolbar)
         cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         
-        if mode == .normal {
-            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidth)
-            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeight)
-        } else {
-            toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidthForCustom)
-            toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeightForCustom)
-        }
-        
-        toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: cropToolbar.recommendSpanFromEdgeWhenHorizontal)
+        toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidth)
+        toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeight)
+
+        toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
         toolbarPortraitBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -cropToolbar.recommendSpanFromEdgeWhenHorizontal)
+        toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
         toolbarLeftConstraint = cropToolbar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
         toolbarRightConstraint = cropToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
     }
@@ -303,12 +298,11 @@ extension CropViewController: CropViewDelegate {
     }
 }
 
+// API
 extension CropViewController {
-    public func add(button: UIButton) {
-        if cropToolbar == nil {
-            createCropToolbar()
-        }
-        
-        cropToolbar?.add(button: button)
+    public func crop() {
+        if let image = cropView?.crop() {
+            delegate?.didGetCroppedImage(image: image)
+        }        
     }
 }
