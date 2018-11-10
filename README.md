@@ -2,6 +2,12 @@
     <img src="logo.png" height="80" max-width="90%" alt="Mantis" />
 </p>
 
+<p align="center">
+    <img src="https://img.shields.io/badge/swift-4.2-orange.svg" alt="swift 4.2 badge" />
+    <img src="https://img.shields.io/badge/platform-iOS-lightgrey.svg" alt="platform iOS badge" />
+    <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="license MIT badge" />   
+</p>
+
 # Mantis
 
    Mantis is a swift 4.2 library that mimics almost most interactions of Photos.app of iOS device. You can use CropViewController of Mantis with default buttons or you can also add your own buttons under "customized" mode. 
