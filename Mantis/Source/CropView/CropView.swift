@@ -424,7 +424,15 @@ extension CropView {
         guard image.size.width > 0 && image.size.height > 0 else { return .zero }
         
         let outsideRect = getContentBounds()
-        let insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        
+        let insideRect: CGRect
+        
+        if viewModel.isUpOrUpsideDown() {
+            insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        } else {
+            insideRect = CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width)
+        }
+        
         return GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
     }
     
@@ -703,7 +711,7 @@ extension CropView {
         var cropBoxFrame = getInitialCropBoxRect()
         let center = cropBoxFrame.center
         
-        if viewModel.aspectRatio > (cropBoxFrame.width / cropBoxFrame.height) {
+        if viewModel.aspectRatio > CGFloat(getImageRatioH()) {
             cropBoxFrame.size.height = cropBoxFrame.width / viewModel.aspectRatio
         } else {
             cropBoxFrame.size.width = cropBoxFrame.height * viewModel.aspectRatio

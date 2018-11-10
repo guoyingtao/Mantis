@@ -56,10 +56,14 @@ struct CropViewModel {
     }
     
     func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType {
-        if rotationType == .none || rotationType == .counterclockwise180 {
+        if isUpOrUpsideDown() {
             return isHorizontal ? .horizontal : .vertical
         } else {
             return isHorizontal ? .vertical : .horizontal
         }
+    }
+    
+    func isUpOrUpsideDown() -> Bool {
+        return rotationType == .none || rotationType == .counterclockwise180
     }
 }
