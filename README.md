@@ -9,7 +9,12 @@ It mimics almost the main interaction of Photos.app of iOS device.
 This project is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController)
 
 <p align="center">
-    <img src="Images/Screen Shot.png" height="300" alt="Mantis" />
+    <img src="Images/p1.png" wdith="200" alt="Mantis" />
+    <img src="Images/p2.png" height="200" alt="Mantis" />
+    <img src="Images/p3.png" height="200" alt="Mantis" />
+    <img src="Images/p4.png" height="200" alt="Mantis" />
+    <img src="Images/p5.png" height="200" alt="Mantis" />
+    <img src="Images/p6.png" height="200" alt="Mantis" />
 </p>
 
 ## Install
