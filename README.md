@@ -4,8 +4,8 @@
 
 # Mantis
 
-   Mantis is a swift 4.2 library that mimics almost most interactions of Photos.app of iOS device. You can use CropViewController with default icons or you can also add your own buttons under customized mode. 
-This project is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController)
+   Mantis is a swift 4.2 library that mimics almost most interactions of Photos.app of iOS device. You can use CropViewController of Mantis with default buttons or you can also add your own buttons under "customized" mode. 
+This project is strongly inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController).
 
 <p align="center">
     <img src="Images/p1.png" height="200" alt="Mantis" />
@@ -24,10 +24,10 @@ To do
 
 ## Usage
 
-* Create a crop ViewController
+* Create a crop ViewController of Mantis
 
 ```swift
-Mantis.cropViewController(image: image)
+let cropViewController = Mantis.cropViewController(image: <Your Image>, mode: .normal)
 ```
 
 * The caller need to conform CropViewControllerProtocal
@@ -55,10 +55,12 @@ public protocol CropViewControllerProtocal: class {
     <img src="Images/embedded.png" height="300" alt="Mantis" />
 </p>
 
+### Demo code
+
 ```swift
-        let cropViewController = Mantis.cropViewController(image: image, mode: .normal)
+        let cropViewController = Mantis.cropViewController(image: <Your Image>, mode: .normal)
         cropViewController.delegate = self
-        present(cropViewController, animated: true)
+        <Your ViewController>.present(cropViewController, animated: true)
 ```
 
 
