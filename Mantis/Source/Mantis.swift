@@ -10,11 +10,11 @@ import UIKit
 
 public struct Mantis {
     
-    public func cropViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
+    static public func cropViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
         return CropViewController(image: image, config: config, mode: .normal)
     }
     
-    public func cropCustomizableViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
+    static public func cropCustomizableViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
         return CropViewController(image: image, config: config, mode: .customizable)
     }
 }
