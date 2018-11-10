@@ -30,7 +30,7 @@ To do
 
 ## Usage
 
-* Create a crop ViewController of Mantis
+* Create a cropViewController in Mantis
 
 ```swift
 let cropViewController = Mantis().cropViewController(image: <Your Image>, mode: .normal)
