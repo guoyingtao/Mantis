@@ -36,7 +36,7 @@ To do
 let cropViewController = Mantis().cropViewController(image: <Your Image>, mode: .normal)
 ```
 
-* The caller need to conform CropViewControllerProtocal
+* The caller needs to conform CropViewControllerProtocal
 ```swift
 public protocol CropViewControllerProtocal: class {
     func didGetCroppedImage(image: UIImage)
