@@ -33,7 +33,7 @@ To do
 * Create a crop ViewController of Mantis
 
 ```swift
-let cropViewController = Mantis.cropViewController(image: <Your Image>, mode: .normal)
+let cropViewController = Mantis().cropViewController(image: <Your Image>, mode: .normal)
 ```
 
 * The caller need to conform CropViewControllerProtocal
@@ -61,10 +61,15 @@ public protocol CropViewControllerProtocal: class {
     <img src="Images/embedded.png" height="300" alt="Mantis" />
 </p>
 
+* Add your own ratio
+```swift
+Mantis().config.addCustomRatio(ratioItem: (nameH: "2:1", ratioH: 2.0, nameV: "1:2", ratioV: 0.5))
+```
+
 ### Demo code
 
 ```swift
-        let cropViewController = Mantis.cropViewController(image: <Your Image>, mode: .normal)
+        let cropViewController = Mantis().cropViewController(image: <Your Image>, mode: .normal)
         cropViewController.delegate = self
         <Your ViewController>.present(cropViewController, animated: true)
 ```
