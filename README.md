@@ -56,14 +56,12 @@ public protocol CropViewControllerProtocal: class {
 let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .normal)
 ```
 
-
+  * customizable mode
   
-  * embedded mode
-  
-  In embedded mode, you can embed CropViewController into another UIViewController. This mode includes the standard cropping feature, while enabling users to customize other edit features.
+  This mode includes the standard cropping feature, while enabling users to customize other edit features.
 
 <p align="center">
-    <img src="Images/customizable.png" height="300" alt="Mantis" />
+    <img src="Images/customizable.jpg" height="300" alt="Mantis" />
 </p>
 
 ```swift
