@@ -169,8 +169,8 @@
 			children = (
 				5FEBA85121952A330018DE62 /* CropViewController.swift */,
 				5FEBA84D21952A330018DE62 /* CropToolbar.swift */,
-				5FEBA84E21952A330018DE62 /* RatioPresenter.swift */,
 				5FEBA84F21952A330018DE62 /* ToolBarButtonImageBuilder.swift */,
+				5FEBA84E21952A330018DE62 /* RatioPresenter.swift */,
 				5FEBA85021952A330018DE62 /* FixedRatios.swift */,
 			);
 			path = CropViewController;

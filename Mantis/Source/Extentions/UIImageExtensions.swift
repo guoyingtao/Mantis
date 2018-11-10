@@ -95,7 +95,7 @@ extension UIImage {
         }
     }
     
-    func ratio() -> CGFloat {
+    func ratioH() -> CGFloat {
         let orientationArray: [UIImage.Orientation] = [.up,.upMirrored,.down,.downMirrored]
         if orientationArray.contains(imageOrientation) {
             return size.width / size.height

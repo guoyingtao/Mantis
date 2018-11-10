@@ -8,16 +8,18 @@
 
 import Foundation
 
-public typealias RatioItemType = (nameH: String, ratioH: Double, nameV: String, ratioV: Double)
-
 public class Config {
-    public var customRatios: [RatioItemType] = []
+    var customRatios: [(width: Int, height: Int)] = []
     
     public static var shared = Config()
     
     private init() {}
 
-    public func addCustomRatio(ratioItem: RatioItemType) {
-        customRatios.append(ratioItem)
+    func hasCustomRatios() -> Bool {
+        return customRatios.count > 0
+    }
+    
+    public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
+        customRatios.append((width, height))
     }
 }

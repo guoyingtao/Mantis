@@ -16,20 +16,22 @@ enum RatioType {
 class RatioPresenter {
     var didGetRatio: ((Double)->Void) = { _ in }
     private var type: RatioType = .vertical
-    private var originalRatio: Double
+    private var originalRatioH: Double
     
-    init(type: RatioType, originalRatio: Double) {
+    init(type: RatioType, originalRatioH: Double) {
         self.type = type
-        self.originalRatio = originalRatio
+        self.originalRatioH = originalRatioH
     }
     
     func present(by viewController: UIViewController, in sourceView: UIView) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let fixedRatios = FixedRatioManager(originalRatio: self.originalRatio)
-        if Config.shared.customRatios.count > 0 {
-            fixedRatios.appendToTail(ratioItems: Config.shared.customRatios)
+        let fixedRatios = FixedRatioManager(originalRatioH: self.originalRatioH)
+        if Config.shared.hasCustomRatios() {
+            fixedRatios.appendToTail(items: Config.shared.customRatios)
         }
+        
+        fixedRatios.sort(isByHorizontal: (type == .horizontal))
         
         for ratio in fixedRatios.ratios {
             let title = (type == .horizontal) ? ratio.nameH : ratio.nameV

@@ -8,11 +8,13 @@
 
 import Foundation
 
+typealias RatioItemType = (nameH: String, ratioH: Double, nameV: String, ratioV: Double)
+
 class FixedRatioManager {
     private (set) var ratios: [RatioItemType] = []
 
-    init(originalRatio: Double) {
-        let original = ("Original", originalRatio, "Original", originalRatio)
+    init(originalRatioH: Double) {
+        let original = ("Original", originalRatioH, "Original", originalRatioH)
         addDefault()
         insertToHead(ratioItem: original)
     }
@@ -35,15 +37,70 @@ class FixedRatioManager {
         ratios.append(scale16_9)
     }
     
+    private func contains(ratioItem: RatioItemType) -> Bool {
+        var contains = false
+        ratios.forEach {
+            if ($0.nameH == ratioItem.nameH || $0.nameV == ratioItem.nameV) {
+                contains = true
+            }
+        }
+        return contains
+    }
+    
     func insertToHead(ratioItem: RatioItemType) {
+        guard contains(ratioItem: ratioItem) == false else { return }
         ratios.insert(ratioItem, at: 0)
     }
     
     func appendToTail(ratioItem: RatioItemType) {
+        guard contains(ratioItem: ratioItem) == false else { return }
         ratios.append(ratioItem)
     }
 
     func appendToTail(ratioItems: [RatioItemType]) {
-        ratios.append(contentsOf: ratioItems)
+        ratioItems.forEach{
+            appendToTail(ratioItem: $0)
+        }
+    }
+    
+    func appendToTail(items: [(width: Int, height: Int)]) {
+        items.forEach {
+            let ratioItem = (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+            appendToTail(ratioItem: ratioItem)
+        }
+    }
+    
+    func sort(isByHorizontal: Bool) {
+        if isByHorizontal {
+            ratios = ratios[...1] + ratios[2...].sorted { getHeight(fromNameH: $0.nameH) < getHeight(fromNameH: $1.nameH) }
+        } else {
+            ratios = ratios[...1] + ratios[2...].sorted { getWidth(fromNameH: $0.nameH) < getWidth(fromNameH: $1.nameH) }
+        }
+    }
+    
+    private func getWidth(fromNameH nameH: String) -> Int {
+        let items = nameH.split(separator: ":")
+        guard items.count == 2 else {
+            return 0
+        }
+        
+        guard let width = Int(items[0]) else {
+            return 0
+        }
+        
+        return width
+    }
+    
+    private func getHeight(fromNameH nameH: String) -> Int {
+        let items = nameH.split(separator: ":")
+        guard items.count == 2 else {
+            return 0
+        }
+        
+        guard let width = Int(items[1]) else {
+            return 0
+        }
+        
+        return width
     }
 }

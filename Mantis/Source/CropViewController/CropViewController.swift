@@ -147,7 +147,7 @@ public class CropViewController: UIViewController {
         // When it is embedded in a container, the timing of viewDidLayoutSubviews
         // is different with the normal mode.
         // So delay the execution to make sure handleRotate runs after the final
-        // viewDidLayoutSubviews. **** Need to figure out better solution!
+        // viewDidLayoutSubviews
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.cropView?.handleRotate()
         }
@@ -189,8 +189,8 @@ public class CropViewController: UIViewController {
         
         let type: RatioType = cropView.getRatioType(byImageIsOriginalisHorizontal: image.isHorizontal())
         
-        let ratio = Double(image.ratio())
-        ratioPresenter = RatioPresenter(type: type, originalRatio: ratio)
+        let ratio = cropView.getImageRatioH()
+        ratioPresenter = RatioPresenter(type: type, originalRatioH: ratio)
         ratioPresenter?.didGetRatio = { ratio in
             didSet(fixedRatio: ratio)
         }

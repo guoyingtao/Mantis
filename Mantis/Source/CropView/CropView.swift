@@ -51,8 +51,8 @@ class CropView: UIView {
     var aspectRatioLockEnabled = false
     
     fileprivate var image: UIImage!
-    lazy var imageRatio = {
-        return image.ratio()
+    lazy var imageRatioH = {
+        return image.ratioH()
     }()
     
     fileprivate var imageContainer: ImageContainer!
@@ -703,10 +703,10 @@ extension CropView {
         var cropBoxFrame = getInitialCropBoxRect()
         let center = cropBoxFrame.center
         
-        if viewModel.aspectRatio > imageRatio {
+        if viewModel.aspectRatio > (cropBoxFrame.width / cropBoxFrame.height) {
             cropBoxFrame.size.height = cropBoxFrame.width / viewModel.aspectRatio
         } else {
-            cropBoxFrame.size.width = cropBoxFrame.size.height * viewModel.aspectRatio
+            cropBoxFrame.size.width = cropBoxFrame.height * viewModel.aspectRatio
         }
         
         cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
@@ -724,5 +724,13 @@ extension CropView {
 
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
         return viewModel.getRatioType(byImageIsOriginalHorizontal: isHorizontal)
+    }
+    
+    func getImageRatioH() -> Double {
+        if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+            return Double(image.ratioH())
+        } else {
+            return Double(1/image.ratioH())
+        }
     }
 }
