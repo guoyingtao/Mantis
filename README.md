@@ -43,11 +43,11 @@ public protocol CropViewControllerProtocal: class {
 }
 ```
 
-* CropViewController has two modes
+* CropViewController has two modes:
 
   * normal mode
 
-  Under this mode, you can use CropViewController as normal one.
+  In normal mode, you can use a set of standard CropViewController photo editing features.
 <p align="center">
     <img src="Images/Screen Shot.png" height="300" alt="Mantis" />
 </p>
@@ -55,7 +55,7 @@ public protocol CropViewControllerProtocal: class {
   
   * embedded mode
   
-  Under this mode, you can embed CropViewController into another UIViewController. That way you can add more customized edit features other than cropping.
+  In embedded mode, you can embed CropViewController into another UIViewController. This mode includes the standard cropping feature, while enabling users to customize other edit features.
 
 <p align="center">
     <img src="Images/embedded.png" height="300" alt="Mantis" />
