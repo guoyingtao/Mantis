@@ -26,8 +26,12 @@ class EmbeddedCropViewController: UIViewController {
             vc.image = image
             vc.mode = .customizable
             vc.delegate = self
+            
+            let config = MantisConfig()
+            config.addCustomRatio(byWidth: 2, andHeight: 1)
+            vc.config = config
+            
             cropViewController = vc
-            Mantis().config.addCustomRatio(byWidth: 2, andHeight: 1)
         }
     }
 }

@@ -8,18 +8,23 @@
 
 import Foundation
 
-public class Config {
+public class MantisConfig {
     var customRatios: [(width: Int, height: Int)] = []
     
-    public static var shared = Config()
+    public init() {
+    }
     
-    private init() {}
-
     func hasCustomRatios() -> Bool {
         return customRatios.count > 0
     }
     
     public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
         customRatios.append((width, height))
+    }
+    
+    func getCustomRatioItems() -> [RatioItemType] {
+        return customRatios.map {
+            (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+        }
     }
 }

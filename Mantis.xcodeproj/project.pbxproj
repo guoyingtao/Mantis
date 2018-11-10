@@ -12,7 +12,7 @@
 		5F0DD3602195244E00F9310B /* Mantis.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0DD3522195244E00F9310B /* Mantis.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FEBA86721952A330018DE62 /* AngleDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84821952A330018DE62 /* AngleDashboard.swift */; };
 		5FEBA86821952A330018DE62 /* AngleDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84921952A330018DE62 /* AngleDialPlate.swift */; };
-		5FEBA86921952A330018DE62 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84A21952A330018DE62 /* Config.swift */; };
+		5FEBA86921952A330018DE62 /* MantisConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84A21952A330018DE62 /* MantisConfig.swift */; };
 		5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84B21952A330018DE62 /* Mantis.swift */; };
 		5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84D21952A330018DE62 /* CropToolbar.swift */; };
 		5FEBA86C21952A330018DE62 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84E21952A330018DE62 /* RatioPresenter.swift */; };
@@ -57,7 +57,7 @@
 		5F0DD35F2195244E00F9310B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FEBA84821952A330018DE62 /* AngleDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleDashboard.swift; sourceTree = "<group>"; };
 		5FEBA84921952A330018DE62 /* AngleDialPlate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleDialPlate.swift; sourceTree = "<group>"; };
-		5FEBA84A21952A330018DE62 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		5FEBA84A21952A330018DE62 /* MantisConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MantisConfig.swift; sourceTree = "<group>"; };
 		5FEBA84B21952A330018DE62 /* Mantis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5FEBA84D21952A330018DE62 /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
 		5FEBA84E21952A330018DE62 /* RatioPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
@@ -142,9 +142,9 @@
 		5FEBA84621952A330018DE62 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				5FEBA84721952A330018DE62 /* AngleRiot */,
-				5FEBA84A21952A330018DE62 /* Config.swift */,
 				5FEBA84B21952A330018DE62 /* Mantis.swift */,
+				5FEBA84A21952A330018DE62 /* MantisConfig.swift */,
+				5FEBA84721952A330018DE62 /* AngleRiot */,
 				5FEBA84C21952A330018DE62 /* CropViewController */,
 				5FEBA85621952A330018DE62 /* CropView */,
 				5FEBA85221952A330018DE62 /* Extentions */,
@@ -345,7 +345,7 @@
 				5FEBA86721952A330018DE62 /* AngleDashboard.swift in Sources */,
 				5FEBA87F21952A330018DE62 /* RotationCalculator.swift in Sources */,
 				5FEBA87521952A330018DE62 /* CropViewStatus.swift in Sources */,
-				5FEBA86921952A330018DE62 /* Config.swift in Sources */,
+				5FEBA86921952A330018DE62 /* MantisConfig.swift in Sources */,
 				5FEBA87C21952A330018DE62 /* CropVisualEffectView.swift in Sources */,
 				5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */,
 				5FEBA87B21952A330018DE62 /* CropMaskViewManager.swift in Sources */,

@@ -50,15 +50,16 @@ public class CropViewController: UIViewController {
     private var initialLayout = false
     
     var image: UIImage?
-    
     var mode: CropViewControllerMode = .normal
+    var config: MantisConfig = MantisConfig()
     
     deinit {
         print("CropViewController deinit.")
     }
     
-    init(image: UIImage, mode: CropViewControllerMode = .normal) {
+    init(image: UIImage, config: MantisConfig = MantisConfig(), mode: CropViewControllerMode = .normal) {
         self.image = image
+        self.config = config
         self.mode = mode
         super.init(nibName: nil, bundle: nil)
     }
@@ -190,7 +191,8 @@ public class CropViewController: UIViewController {
         let type: RatioType = cropView.getRatioType(byImageIsOriginalisHorizontal: image.isHorizontal())
         
         let ratio = cropView.getImageRatioH()
-        ratioPresenter = RatioPresenter(type: type, originalRatioH: ratio)
+        
+        ratioPresenter = RatioPresenter(type: type, originalRatioH: ratio, customRatios: config.getCustomRatioItems())
         ratioPresenter?.didGetRatio = { ratio in
             didSet(fixedRatio: ratio)
         }
