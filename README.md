@@ -26,7 +26,23 @@ This project is strongly inspired by [IGRPhotoTweaks](https://github.com/IGRSoft
 
 ### CocoaPods
 
-To do
+```ruby
+pod 'Mantis', '~> 0.17'
+```
+
+You may also need the code below in your pod file if compile errors happen because of different swift version.
+
+```ruby
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      if ['Mantis'].include? target.name
+        target.build_configurations.each do |config|
+          config.build_settings['SWIFT_VERSION'] = '4.2'
+        end
+      end
+    end
+  end
+```
 
 ## Usage
 
