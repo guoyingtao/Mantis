@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AngleDashboard: UIView {
+class RotationDashboard: UIView {
     
     var radiansLimit: CGFloat = 45 * CGFloat.pi / 180
     
@@ -16,7 +16,7 @@ class AngleDashboard: UIView {
     let pointerHeight: CGFloat = 8
     let spanBetweenDialPlateAndPointer: CGFloat = 6
     
-    private var dialPlate: AngleDialPlate!
+    private var dialPlate: RotationAngleIndicator!
     private var pointer: CAShapeLayer = CAShapeLayer()
     
     override init(frame: CGRect) {
@@ -35,7 +35,7 @@ class AngleDashboard: UIView {
         let dialPlateLength = 2 * r
         let dialPlateFrame = CGRect(x: (frame.width - dialPlateLength) / 2, y: -(dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
         
-        dialPlate = AngleDialPlate(frame: dialPlateFrame)
+        dialPlate = RotationAngleIndicator(frame: dialPlateFrame)
         addSubview(dialPlate)
         
         setupPointer()

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F0DD400219527CD00F9310B /* AngleDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD3E1219527CD00F9310B /* AngleDashboard.swift */; };
-		5F0DD401219527CD00F9310B /* AngleDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD3E2219527CD00F9310B /* AngleDialPlate.swift */; };
 		5F0DD403219527CD00F9310B /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD3E4219527CD00F9310B /* Mantis.swift */; };
 		5F0DD404219527CD00F9310B /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD3E6219527CD00F9310B /* CropToolbar.swift */; };
 		5F0DD405219527CD00F9310B /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD3E7219527CD00F9310B /* RatioPresenter.swift */; };
@@ -40,6 +38,8 @@
 		5FC10B2A217A9EE100582874 /* MantisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B29217A9EE100582874 /* MantisTests.swift */; };
 		5FEBA88221961E4A0018DE62 /* EmbeddedCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */; };
 		5FEBA88421972D8A0018DE62 /* MantisConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88321972D890018DE62 /* MantisConfig.swift */; };
+		5FEBA8882197306A0018DE62 /* RotationDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA8862197306A0018DE62 /* RotationDashboard.swift */; };
+		5FEBA8892197306A0018DE62 /* RotationAngleIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA8872197306A0018DE62 /* RotationAngleIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,8 +53,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5F0DD3E1219527CD00F9310B /* AngleDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleDashboard.swift; sourceTree = "<group>"; };
-		5F0DD3E2219527CD00F9310B /* AngleDialPlate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AngleDialPlate.swift; sourceTree = "<group>"; };
 		5F0DD3E4219527CD00F9310B /* Mantis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5F0DD3E6219527CD00F9310B /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
 		5F0DD3E7219527CD00F9310B /* RatioPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
@@ -90,6 +88,8 @@
 		5FC10B2B217A9EE100582874 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedCropViewController.swift; sourceTree = "<group>"; };
 		5FEBA88321972D890018DE62 /* MantisConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MantisConfig.swift; sourceTree = "<group>"; };
+		5FEBA8862197306A0018DE62 /* RotationDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationDashboard.swift; sourceTree = "<group>"; };
+		5FEBA8872197306A0018DE62 /* RotationAngleIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAngleIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,24 +115,15 @@
 			children = (
 				5F0DD3E4219527CD00F9310B /* Mantis.swift */,
 				5FEBA88321972D890018DE62 /* MantisConfig.swift */,
-				5F0DD3E0219527CD00F9310B /* AngleRiot */,
 				5F0DD3E5219527CD00F9310B /* CropViewController */,
-				5F0DD3EB219527CD00F9310B /* Extentions */,
 				5F0DD3EF219527CD00F9310B /* CropView */,
+				5FEBA8852197306A0018DE62 /* RotationIndicator */,
+				5F0DD3EB219527CD00F9310B /* Extentions */,
 				5F0DD3F9219527CD00F9310B /* MaskBackground */,
 				5F0DD3FD219527CD00F9310B /* Helpers */,
 			);
 			name = Source;
 			path = ../Mantis/Source;
-			sourceTree = "<group>";
-		};
-		5F0DD3E0219527CD00F9310B /* AngleRiot */ = {
-			isa = PBXGroup;
-			children = (
-				5F0DD3E1219527CD00F9310B /* AngleDashboard.swift */,
-				5F0DD3E2219527CD00F9310B /* AngleDialPlate.swift */,
-			);
-			path = AngleRiot;
 			sourceTree = "<group>";
 		};
 		5F0DD3E5219527CD00F9310B /* CropViewController */ = {
@@ -160,6 +151,7 @@
 		5F0DD3EF219527CD00F9310B /* CropView */ = {
 			isa = PBXGroup;
 			children = (
+				5F0DD3F7219527CD00F9310B /* CropView.swift */,
 				5F0DD3F0219527CD00F9310B /* CropViewModel.swift */,
 				5F0DD3F1219527CD00F9310B /* CropScrollView.swift */,
 				5F0DD3F2219527CD00F9310B /* CropViewStatus.swift */,
@@ -167,7 +159,6 @@
 				5F0DD3F4219527CD00F9310B /* CropBoxFreeAspectFrameUpdater.swift */,
 				5F0DD3F5219527CD00F9310B /* CropOverlayView.swift */,
 				5F0DD3F6219527CD00F9310B /* CropBoxLockedAspectFrameUpdater.swift */,
-				5F0DD3F7219527CD00F9310B /* CropView.swift */,
 				5F0DD3F8219527CD00F9310B /* CropMaskViewManager.swift */,
 			);
 			path = CropView;
@@ -224,6 +215,15 @@
 				5FC10B2B217A9EE100582874 /* Info.plist */,
 			);
 			path = MantisTests;
+			sourceTree = "<group>";
+		};
+		5FEBA8852197306A0018DE62 /* RotationIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				5FEBA8862197306A0018DE62 /* RotationDashboard.swift */,
+				5FEBA8872197306A0018DE62 /* RotationAngleIndicator.swift */,
+			);
+			path = RotationIndicator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,7 +329,6 @@
 			files = (
 				5F0DD407219527CD00F9310B /* FixedRatios.swift in Sources */,
 				5F0DD411219527CD00F9310B /* CropOverlayView.swift in Sources */,
-				5F0DD400219527CD00F9310B /* AngleDashboard.swift in Sources */,
 				5F0DD403219527CD00F9310B /* Mantis.swift in Sources */,
 				5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */,
 				5F0DD412219527CD00F9310B /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
@@ -341,8 +340,8 @@
 				5F0DD406219527CD00F9310B /* ToolBarButtonImageBuilder.swift in Sources */,
 				5F0DD416219527CD00F9310B /* CropDimmingView.swift in Sources */,
 				5F0DD40A219527CD00F9310B /* UIImageExtensions.swift in Sources */,
-				5F0DD401219527CD00F9310B /* AngleDialPlate.swift in Sources */,
 				5F0DD40E219527CD00F9310B /* CropViewStatus.swift in Sources */,
+				5FEBA8882197306A0018DE62 /* RotationDashboard.swift in Sources */,
 				5F0DD413219527CD00F9310B /* CropView.swift in Sources */,
 				5F0DD410219527CD00F9310B /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
 				5F0DD409219527CD00F9310B /* CGImageExtensions.swift in Sources */,
@@ -352,6 +351,7 @@
 				5F0DD40B219527CD00F9310B /* CoreGraphicsExtensions.swift in Sources */,
 				5F0DD40D219527CD00F9310B /* CropScrollView.swift in Sources */,
 				5F0DD408219527CD00F9310B /* CropViewController.swift in Sources */,
+				5FEBA8892197306A0018DE62 /* RotationAngleIndicator.swift in Sources */,
 				5F0DD415219527CD00F9310B /* CropVisualEffectView.swift in Sources */,
 				5F0DD417219527CD00F9310B /* CropMaskProtocal.swift in Sources */,
 				5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */,

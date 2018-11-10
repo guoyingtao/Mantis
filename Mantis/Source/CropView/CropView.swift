@@ -58,7 +58,7 @@ class CropView: UIView {
     fileprivate var imageContainer: ImageContainer!
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     
-    fileprivate var angleDashboard: AngleDashboard!
+    fileprivate var angleDashboard: RotationDashboard!
     fileprivate var scrollView: CropScrollView!
     fileprivate var gridOverlayView: CropOverlayView!
     
@@ -208,7 +208,7 @@ class CropView: UIView {
         }
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
-        angleDashboard = AngleDashboard(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
+        angleDashboard = RotationDashboard(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
         addSubview(angleDashboard)
         
         angleDashboard.rotateDialPlate(byRadians: viewModel.radians)
@@ -258,9 +258,7 @@ class CropView: UIView {
             return
         }
         
-        var imageRefFrame = CGRect(x: imageContainer.frame.origin.x - 1, y: imageContainer.frame.origin.y - 1, width: imageContainer.frame.width + 2, height: imageContainer.frame.height + 2 )
-        imageRefFrame = imageContainer.convert(imageRefFrame, to: self)
-        if imageRefFrame.contains(newCropBoxFrame) {
+        if imageContainer.contains(rect: newCropBoxFrame, fromView: self) {
             cropBoxFrame = newCropBoxFrame
         }
     }

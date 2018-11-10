@@ -16,9 +16,6 @@ class ImageContainer: UIView {
         imageView.accessibilityIgnoresInvertColors = true
         imageView.contentMode = .scaleAspectFit
         
-//        layer.borderColor = UIColor.green.cgColor
-//        layer.borderWidth = 2
-        
         addSubview(imageView)
         
         return imageView
@@ -36,5 +33,15 @@ class ImageContainer: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.frame = bounds
+    }
+    
+    func contains(rect: CGRect, fromView view: UIView) -> Bool {
+        let newRect = view.convert(rect, to: self)
+        
+        let p1 = newRect.origin
+        let p2 = CGPoint(x: newRect.maxX, y: newRect.maxY)
+        
+        let refBounds = bounds.insetBy(dx: -CGFloat.ulpOfOne, dy: -CGFloat.ulpOfOne)
+        return refBounds.contains(p1) && refBounds.contains(p2)
     }
 }
