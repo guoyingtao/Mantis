@@ -9,7 +9,7 @@ It mimics almost the main interaction of Photos.app of iOS device.
 This project is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController)
 
 <p align="center">
-    <img src="Screen Shot.png" height="300" alt="Mantis" />
+    <img src="images/Screen Shot.png" height="300" alt="Mantis" />
 </p>
 
 ## Install
@@ -38,10 +38,18 @@ public protocol CropViewControllerProtocal: class {
   * normal mode
 
   Under this mode, you can use CropViewController as normal one.
+<p align="center">
+    <img src="images/Screen Shot.png" height="300" alt="Mantis" />
+</p>
+
   
   * embedded mode
   
   Under this mode, you can embed CropViewController into another UIViewController. That way you can add more customized edit features other than cropping.
+
+<p align="center">
+    <img src="images/embedded.png" height="300" alt="Mantis" />
+</p>
 
 ```swift
         let cropViewController = Mantis.cropViewController(image: image, mode: .normal)
