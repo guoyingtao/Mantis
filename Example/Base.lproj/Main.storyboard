@@ -90,12 +90,14 @@
                     </view>
                     <toolbarItems>
                         <barButtonItem title="Cancel" id="5p4-Ob-R9b">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="cancel:" destination="aIe-ND-Zfg" id="j3e-ai-8lv"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="DsY-rM-AWO"/>
                         <barButtonItem title="Crop" id="kZP-3N-vXv">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="crop:" destination="aIe-ND-Zfg" id="L3u-QU-TTY"/>
                             </connections>
@@ -122,6 +124,7 @@
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="KpB-vr-mGb">
                         <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </toolbar>
                     <connections>
                         <segue destination="aIe-ND-Zfg" kind="relationship" relationship="rootViewController" id="NRG-W3-wq0"/>
