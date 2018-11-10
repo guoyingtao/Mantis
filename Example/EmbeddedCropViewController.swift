@@ -12,11 +12,7 @@ class EmbeddedCropViewController: UIViewController {
 
     var image: UIImage?
     var cropViewController: CropViewController?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-        
+            
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true)
     }

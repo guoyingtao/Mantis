@@ -13,6 +13,19 @@ class ViewController: UIViewController, CropViewControllerProtocal {
     
     @IBOutlet weak var croppedImageView: UIImageView!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let statusBar: UIView = UIApplication.shared.value(forKey: "statusBar") as? UIView {
+            statusBar.backgroundColor = .black
+        }        
+        
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+        
     @IBAction func normalPresent(_ sender: Any) {
         guard let image = image else {
             return
