@@ -14,14 +14,14 @@ public class MantisConfig {
     public init() {
     }
     
-    func hasCustomRatios() -> Bool {
-        return customRatios.count > 0
-    }
-    
     public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
         customRatios.append((width, height))
     }
     
+    func hasCustomRatios() -> Bool {
+        return customRatios.count > 0
+    }
+        
     func getCustomRatioItems() -> [RatioItemType] {
         return customRatios.map {
             (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
