@@ -19,8 +19,35 @@ This project is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhoto
 To do
 
 ## Usage
+
+* Create a crop ViewController
+
 ```swift
 Mantis.cropViewController(image: image)
 ```
+
+* The caller need to conform CropViewControllerProtocal
+```swift
+public protocol CropViewControllerProtocal: class {
+    func didGetCroppedImage(image: UIImage)
+}
+```
+
+* CropViewController has two modes
+
+  * normal mode
+
+  Under this mode, you can use CropViewController as normal one.
+  
+  * embedded mode
+  
+  Under this mode, you can embed CropViewController into another UIViewController. That way you can add more customized edit features other than cropping.
+
+```swift
+        let cropViewController = Mantis.cropViewController(image: image, mode: .normal)
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+```
+
 
 
