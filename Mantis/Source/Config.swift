@@ -10,10 +10,10 @@ import Foundation
 
 public typealias RatioItemType = (nameH: String, ratioH: Double, nameV: String, ratioV: Double)
 
-class Config {
+public class Config {
     public var customRatios: [RatioItemType] = []
     
-    static var shared = Config()
+    public static var shared = Config()
     
     private init() {}
 

@@ -31,7 +31,7 @@ class ViewController: UIViewController, CropViewControllerProtocal {
             return
         }
         
-        let cropViewController = Mantis.cropViewController(image: image)
+        let cropViewController = Mantis().cropViewController(image: image)
         cropViewController.delegate = self
         present(cropViewController, animated: true)
     }

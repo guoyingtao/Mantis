@@ -27,6 +27,7 @@ class EmbeddedCropViewController: UIViewController {
             vc.mode = .customizable
             vc.delegate = self
             cropViewController = vc
+            Mantis().config.addCustomRatio(ratioItem: (nameH: "2:1", ratioH: 2.0, nameV: "1:2", ratioV: 0.5))
         }
     }
 }

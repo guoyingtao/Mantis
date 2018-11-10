@@ -10,10 +10,10 @@ import UIKit
 
 public struct Mantis {
     
-    static var config = Config.shared
+    public var config = Config.shared
     
-    static public func cropViewController(image: UIImage) -> CropViewController {
+    public func cropViewController(image: UIImage) -> CropViewController {
         return CropViewController(image: image, mode: .normal)
-    }    
+    }
 }
 
