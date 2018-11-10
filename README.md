@@ -4,8 +4,7 @@
 
 # Mantis
 
-   Mantis is a swift 4.2 library that allow to expand an interface to crop photos
-It mimics almost the main interaction of Photos.app of iOS device.
+   Mantis is a swift 4.2 library that mimics almost most interactions of Photos.app of iOS device. You can use CropViewController with default icons or you can also add your own buttons under customized mode. 
 This project is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController)
 
 <p align="center">
