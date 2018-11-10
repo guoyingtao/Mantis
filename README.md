@@ -30,10 +30,10 @@ To do
 
 ## Usage
 
-* Create a cropViewController in Mantis
+* Create a cropViewController in Mantis with default config and default mode
 
 ```swift
-let cropViewController = Mantis().cropViewController(image: <Your Image>, mode: .normal)
+let cropViewController = Mantis.cropViewController(image: <Your Image>)
 ```
 
 * The caller needs to conform CropViewControllerProtocal
@@ -52,6 +52,11 @@ public protocol CropViewControllerProtocal: class {
     <img src="Images/Screen Shot.png" height="300" alt="Mantis" />
 </p>
 
+```swift
+let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .normal)
+```
+
+
   
   * embedded mode
   
@@ -61,15 +66,25 @@ public protocol CropViewControllerProtocal: class {
     <img src="Images/embedded.png" height="300" alt="Mantis" />
 </p>
 
+```swift
+let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .customizable)
+```
+
 * Add your own ratio
 ```swift
-Mantis().config.addCustomRatio(ratioItem: (nameH: "2:1", ratioH: 2.0, nameV: "1:2", ratioV: 0.5))
+            let config = MantisConfig()
+            config.addCustomRatio(byWidth: 2, andHeight: 1)
+            <Your ViewController>.config = config
+            
+            // Or
+            
+            <Your ViewController> = Mantis.cropViewController(image: <Your Image>, config: config)
 ```
 
 ### Demo code
 
 ```swift
-        let cropViewController = Mantis().cropViewController(image: <Your Image>, mode: .normal)
+        let cropViewController = Mantis.cropViewController(image: <Your Image>, mode: .normal)
         cropViewController.delegate = self
         <Your ViewController>.present(cropViewController, animated: true)
 ```
