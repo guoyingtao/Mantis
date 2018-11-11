@@ -11,8 +11,7 @@
 # Mantis
 
    Mantis is a swift 4.2 library that mimics most interactions in the Photos.app on an iOS device. You can use the  CropViewController of Mantis with default buttons, or you can add your own buttons under the "customized" mode. 
-This project is strongly inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController).
-
+   
 <p align="center">
     <img src="Images/p1.png" height="200" alt="Mantis" />
     <img src="Images/p2.png" height="200" alt="Mantis" />
@@ -21,6 +20,9 @@ This project is strongly inspired by [IGRPhotoTweaks](https://github.com/IGRSoft
     <img src="Images/p5.png" height="200" alt="Mantis" />
     <img src="Images/p6.png" height="200" alt="Mantis" />
 </p>
+
+## Credits
+This project is strongly inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController).
 
 ## Install
 
