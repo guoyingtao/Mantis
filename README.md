@@ -22,7 +22,7 @@
 </p>
 
 ## Credits
-The crop and rotation feature are inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks) and [TOCropViewController](https://github.com/TimOliver/TOCropViewController).
+The crop and rotation feature are strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) and [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks).
 
 The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clock)
 
