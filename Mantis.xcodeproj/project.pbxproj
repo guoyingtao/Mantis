@@ -11,6 +11,8 @@
 		5F0DD35E2195244E00F9310B /* MantisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD35D2195244E00F9310B /* MantisTests.swift */; };
 		5F0DD3602195244E00F9310B /* Mantis.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0DD3522195244E00F9310B /* Mantis.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5F3BE13A21993373005C4BD8 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE13C21993373005C4BD8 /* MantisLocalizable.strings */; };
+		5F3BE15E2199443C005C4BD8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE15C2199443C005C4BD8 /* README.md */; };
+		5F3BE15F2199443C005C4BD8 /* Mantis.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE15D2199443C005C4BD8 /* Mantis.podspec */; };
 		5FEBA86921952A330018DE62 /* MantisConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84A21952A330018DE62 /* MantisConfig.swift */; };
 		5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84B21952A330018DE62 /* Mantis.swift */; };
 		5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84D21952A330018DE62 /* CropToolbar.swift */; };
@@ -68,6 +70,8 @@
 		5F3BE1452199344B005C4BD8 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
 		5F3BE14621993450005C4BD8 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		5F3BE14721993457005C4BD8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
+		5F3BE15C2199443C005C4BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		5F3BE15D2199443C005C4BD8 /* Mantis.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Mantis.podspec; sourceTree = SOURCE_ROOT; };
 		5FEBA84A21952A330018DE62 /* MantisConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MantisConfig.swift; sourceTree = "<group>"; };
 		5FEBA84B21952A330018DE62 /* Mantis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5FEBA84D21952A330018DE62 /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 		5F0DD3512195244E00F9310B /* Mantis */ = {
 			isa = PBXGroup;
 			children = (
+				5F3BE15D2199443C005C4BD8 /* Mantis.podspec */,
+				5F3BE15C2199443C005C4BD8 /* README.md */,
 				5F0DD3522195244E00F9310B /* Mantis.h */,
 				5F0DD3532195244E00F9310B /* Info.plist */,
 			);
@@ -346,6 +352,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F3BE15E2199443C005C4BD8 /* README.md in Resources */,
+				5F3BE15F2199443C005C4BD8 /* Mantis.podspec in Resources */,
 				5F3BE13A21993373005C4BD8 /* MantisLocalizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
