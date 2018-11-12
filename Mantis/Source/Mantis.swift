@@ -24,7 +24,11 @@
 
 import UIKit
 
-public struct Mantis {
+public class Mantis {
+    
+    static var bundle: Bundle? = {
+        return Bundle(for: Mantis.self)
+    } ()
     
     static public func cropViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
         return CropViewController(image: image, config: config, mode: .normal)

@@ -147,7 +147,7 @@
         <!--Crop View Controller-->
         <scene sceneID="djG-LZ-hRH">
             <objects>
-                <viewController id="xJq-Ev-XcJ" customClass="CropViewController" customModule="MantisExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="xJq-Ev-XcJ" customClass="CropViewController" customModule="Mantis" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nLp-HP-0xC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

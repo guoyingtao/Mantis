@@ -55,7 +55,12 @@ class CropToolbar: UIView {
     }
     
     private func createCancelButton() {
-        cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
+        var cancelText = "Cancel"
+        if let bundle = Mantis.bundle {
+            cancelText = NSLocalizedString("Cancel", tableName: "MantisLocalizable", bundle: bundle, value: "Cancel", comment: "")
+        }
+        
+        cancelButton = createOptionButton(withTitle: cancelText, andAction: #selector(cancel))
     }
     
     private func createRotationButton() {
@@ -68,7 +73,12 @@ class CropToolbar: UIView {
             resetButton = createOptionButton(withTitle: nil, andAction: #selector(reset))
             resetButton?.setImage(image, for: .normal)
         } else {
-            resetButton = createOptionButton(withTitle: "Reset", andAction: #selector(reset))
+            var resetText = "Reset"
+            if let bundle = Mantis.bundle {
+                resetText = NSLocalizedString("Reset", tableName: "MantisLocalizable", bundle: bundle, value: "Reset", comment: "")
+            }
+
+            resetButton = createOptionButton(withTitle: resetText, andAction: #selector(reset))
         }
     }
     
@@ -78,7 +88,12 @@ class CropToolbar: UIView {
     }
     
     private func createCropButton() {
-        cropButton = createOptionButton(withTitle: "Done", andAction: #selector(crop))
+        var doneText = "Done"
+        if let bundle = Mantis.bundle {
+            doneText = NSLocalizedString("Done", tableName: "MantisLocalizable", bundle: bundle, value: "Done", comment: "")
+        }
+
+        cropButton = createOptionButton(withTitle: doneText, andAction: #selector(crop))
     }
     
     private func createButtonContainer() {

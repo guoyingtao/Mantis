@@ -35,7 +35,7 @@ public enum CropViewControllerMode {
 
 public class CropViewController: UIViewController {
     
-    weak var delegate: CropViewControllerProtocal?
+    public weak var delegate: CropViewControllerProtocal?
     
     private var orientation: UIInterfaceOrientation = .unknown
     
@@ -62,12 +62,12 @@ public class CropViewController: UIViewController {
     private var toolbarLandscapeBottomConstraint: NSLayoutConstraint?
     
     private var uiConstraints: [NSLayoutConstraint?] = []
-        
+    
     private var initialLayout = false
     
-    var image: UIImage?
-    var mode: CropViewControllerMode = .normal
-    var config: MantisConfig = MantisConfig()
+    public var image: UIImage?
+    public var mode: CropViewControllerMode = .normal
+    public var config: MantisConfig = MantisConfig()
     
     deinit {
         print("CropViewController deinit.")

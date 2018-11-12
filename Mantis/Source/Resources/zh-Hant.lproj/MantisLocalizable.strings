@@ -1,0 +1,13 @@
+/* 
+  MantisLocalizable.strings
+  Mantis
+
+  Created by Echo on 11/11/18.
+  Copyright © 2018 Echo. All rights reserved.
+*/
+
+"Done" = "完成";
+"Cancel" = "取消";
+"Reset" = "重置";
+"Original" = "原始檔";
+"Square" = "正方形";

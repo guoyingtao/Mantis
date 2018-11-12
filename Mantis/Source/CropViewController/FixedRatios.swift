@@ -14,13 +14,23 @@ class FixedRatioManager {
     private (set) var ratios: [RatioItemType] = []
 
     init(originalRatioH: Double) {
-        let original = ("Original", originalRatioH, "Original", originalRatioH)
+        var originalText = "Original"
+        if let bundle = Mantis.bundle {
+            originalText = NSLocalizedString("Original", tableName: "MantisLocalizable", bundle: bundle, value: "Original", comment: "")
+        }
+        
+        let original = (originalText, originalRatioH, originalText, originalRatioH)
         addDefault()
         insertToHead(ratioItem: original)
     }
     
     private func addDefault() {
-        let square = ("Square", 1.0, "Square", 1.0)
+        var squareText = "Square"        
+        if let bundle = Mantis.bundle {
+            squareText = NSLocalizedString("Square", tableName: "MantisLocalizable", bundle: bundle, value: "Square", comment: "")
+        }
+        
+        let square = (squareText, 1.0, squareText, 1.0)
         let scale3_2 = ("3:2", 3.0/2.0, "2:3", 2.0/3.0)
         let scale5_3 = ("5:3", 5.0/3.0, "3:5", 3.0/5.0)
         let scale4_3 = ("4:3", 4.0/3.0, "3:4", 3.0/4.0)

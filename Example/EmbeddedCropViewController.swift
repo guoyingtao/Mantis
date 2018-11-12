@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Mantis
 
 class EmbeddedCropViewController: UIViewController {
 

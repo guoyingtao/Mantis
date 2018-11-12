@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Mantis
 
 class ViewController: UIViewController, CropViewControllerProtocal {
     let image = UIImage(named: "sunflower.jpg")
