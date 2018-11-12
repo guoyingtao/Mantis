@@ -157,8 +157,8 @@
 				5F0DD3F2219527CD00F9310B /* CropViewStatus.swift */,
 				5F0DD3F3219527CD00F9310B /* ImageContainer.swift */,
 				5F0DD3F4219527CD00F9310B /* CropBoxFreeAspectFrameUpdater.swift */,
-				5F0DD3F5219527CD00F9310B /* CropOverlayView.swift */,
 				5F0DD3F6219527CD00F9310B /* CropBoxLockedAspectFrameUpdater.swift */,
+				5F0DD3F5219527CD00F9310B /* CropOverlayView.swift */,
 				5F0DD3F8219527CD00F9310B /* CropMaskViewManager.swift */,
 			);
 			path = CropView;

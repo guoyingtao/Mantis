@@ -6,12 +6,7 @@
 //  Copyright © 2018 Echo. All rights reserved.
 //
 
-import Foundation
 import UIKit
-
-//ensure we can properly clamp the XY value of the box if it overruns the minimum size
-//(Otherwise the image itself will slide with the drag gesture)
-typealias CropBoxFrameClampInfo = (clampMinFromTop: Bool, clampMinFromLeft: Bool)
 
 struct CropBoxFreeAspectFrameUpdater {
     var minimumAspectRatio = CGFloat(0)
@@ -28,10 +23,7 @@ struct CropBoxFreeAspectFrameUpdater {
         self.cropBoxFrame = cropBoxFrame
     }
     
-    @discardableResult
-    mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) -> CropBoxFrameClampInfo {
-        var info = CropBoxFrameClampInfo(false, false)
-        
+    mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) {
         func newAspectRatioValid(withNewSize newSize: CGSize) -> Bool {
             return min(newSize.width, newSize.height) / max(newSize.width, newSize.height) >= minimumAspectRatio
         }
@@ -41,8 +33,6 @@ struct CropBoxFreeAspectFrameUpdater {
                 cropBoxFrame.origin.x = cropOriginFrame.origin.x + xDelta
                 cropBoxFrame.size.width = newSize.width
             }
-            
-            info.clampMinFromLeft = true
         }
         
         func handleRightEdgeFrameUpdate(newSize: CGSize) {
@@ -56,8 +46,6 @@ struct CropBoxFreeAspectFrameUpdater {
                 cropBoxFrame.origin.y = cropOriginFrame.origin.y + yDelta
                 cropBoxFrame.size.height = newSize.height
             }
-            
-            info.clampMinFromTop = true
         }
         
         func handleBottomEdgeFrameUpdate(newSize: CGSize) {
@@ -106,7 +94,5 @@ struct CropBoxFreeAspectFrameUpdater {
         }
         
         updateCropBoxFrame()
-        
-        return info
     }
 }

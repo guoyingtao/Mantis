@@ -9,9 +9,6 @@
 import Foundation
 import UIKit
 
-//Depending on which corner we drag from, set the appropriate min flag to
-typealias CropBoxFrameAspectInfo = (aspectHorizontal: Bool, aspectVertical: Bool)
-
 struct CropBoxLockedAspectFrameUpdater {
     private var contentFrame = CGRect.zero
     private var cropOriginFrame = CGRect.zero
@@ -25,23 +22,19 @@ struct CropBoxLockedAspectFrameUpdater {
         self.cropBoxFrame = cropBoxFrame
     }
     
-    @discardableResult
-    mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) -> CropBoxFrameAspectInfo {
+    mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) {
         var xDelta = xDelta
         var yDelta = yDelta
 
-        var info = CropBoxFrameAspectInfo(false, false)
         //Current aspect ratio of the crop box in case we need to clamp it
         let aspectRatio = (cropOriginFrame.size.width / cropOriginFrame.size.height);
         
         func updateHeightFromBothSides() {
-            info.aspectHorizontal = true
             cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio;
             cropBoxFrame.origin.y = cropOriginFrame.midY - (cropBoxFrame.height * 0.5);
         }
         
         func updateWidthFromBothSides() {
-            info.aspectVertical = true
             cropBoxFrame.size.width = cropBoxFrame.height * aspectRatio
             cropBoxFrame.origin.x = cropOriginFrame.midX - cropBoxFrame.width * 0.5
         }
@@ -70,11 +63,6 @@ struct CropBoxLockedAspectFrameUpdater {
             cropBoxFrame.size.height = min(cropOriginFrame.height + yDelta, contentFrame.width / aspectRatio)
         }
         
-        func setCornerEdgeAspectInfo() {
-            info.aspectHorizontal = true
-            info.aspectVertical = true
-        }
-        
         let tappedEdgeCropFrameUpdateRule: [CropViewOverlayEdge: (xDelta: CGFloat, yDelta: CGFloat)] = [.topLeft: (xDelta, yDelta), .topRight: (-xDelta, yDelta), .bottomLeft: (xDelta, -yDelta), .bottomRight: (-xDelta, -yDelta)]
         
         func setCropBoxSize() {
@@ -98,8 +86,6 @@ struct CropBoxLockedAspectFrameUpdater {
             setCropBoxSize()
             cropBoxFrame.origin.x = cropOriginFrame.origin.x + (cropOriginFrame.width - cropBoxFrame.width)
             cropBoxFrame.origin.y = cropOriginFrame.origin.y + (cropOriginFrame.height - cropBoxFrame.height)
-            
-            setCornerEdgeAspectInfo()
         }
 
         func handleTopRightEdgeFrameUpdate() {
@@ -108,21 +94,15 @@ struct CropBoxLockedAspectFrameUpdater {
             
             setCropBoxSize()
             cropBoxFrame.origin.y = cropOriginFrame.origin.y + (cropOriginFrame.height - cropBoxFrame.height)
-            
-            setCornerEdgeAspectInfo()
         }
         
         func handleBottomLeftEdgeFrameUpdate() {
             setCropBoxSize()
             cropBoxFrame.origin.x = cropOriginFrame.maxX - cropBoxFrame.width;
-            
-            setCornerEdgeAspectInfo()
         }
         
         func handleBottomRightEdgeFrameUpdate() {
             setCropBoxSize()
-            
-            setCornerEdgeAspectInfo()
         }
         
         func updateCropBoxFrame() {
@@ -149,7 +129,5 @@ struct CropBoxLockedAspectFrameUpdater {
         }
         
         updateCropBoxFrame()
-        
-        return info
     }
 }
