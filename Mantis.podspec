@@ -10,7 +10,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "0.18"
+  s.version      = "0.19"
   s.summary      = "A swift photo cropping tool which mimics Photo.app"
 
   s.description  = <<-DESC
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/guoyingtao/Mantis.git", :tag => "#{s.version}" }
   s.source_files  = "Mantis/**/*.{h,swift}"
   s.resource_bundles = {
-    "MantisBundle" = ["Mantis/*.lproj/*.strings"]
+    "MantisBundle" => ["Mantis/**/*.lproj/*.strings"]
   }
 
 end
