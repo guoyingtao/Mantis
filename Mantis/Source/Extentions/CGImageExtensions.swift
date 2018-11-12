@@ -3,8 +3,11 @@
 //  Mantis
 //
 //  Created by Echo on 10/30/18.
-//  Copyright © 2018 Echo. All rights reserved.
 //
+//  This class is from CGImage+IGRPhotoTweakExtension.swift in
+//  https://github.com/IGRSoft/IGRPhotoTweaks
+//
+// Copyright Vitalii Parovishnyk. All rights reserved.
 
 import UIKit
 

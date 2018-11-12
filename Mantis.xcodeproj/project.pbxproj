@@ -34,8 +34,8 @@
 		5FEBA87E21952A330018DE62 /* CropMaskProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA86321952A330018DE62 /* CropMaskProtocal.swift */; };
 		5FEBA87F21952A330018DE62 /* RotationCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA86521952A330018DE62 /* RotationCalculator.swift */; };
 		5FEBA88021952A330018DE62 /* GeometryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA86621952A330018DE62 /* GeometryHelper.swift */; };
-		5FEBA88B2197309E0018DE62 /* RotationDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88A2197309E0018DE62 /* RotationDashboard.swift */; };
 		5FEBA88D219730CD0018DE62 /* RotationAngleIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88C219730CD0018DE62 /* RotationAngleIndicator.swift */; };
+		5FEBA894219904590018DE62 /* RotationDail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA893219904590018DE62 /* RotationDail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,8 +79,8 @@
 		5FEBA86321952A330018DE62 /* CropMaskProtocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropMaskProtocal.swift; sourceTree = "<group>"; };
 		5FEBA86521952A330018DE62 /* RotationCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationCalculator.swift; sourceTree = "<group>"; };
 		5FEBA86621952A330018DE62 /* GeometryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryHelper.swift; sourceTree = "<group>"; };
-		5FEBA88A2197309E0018DE62 /* RotationDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationDashboard.swift; sourceTree = "<group>"; };
 		5FEBA88C219730CD0018DE62 /* RotationAngleIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAngleIndicator.swift; sourceTree = "<group>"; };
+		5FEBA893219904590018DE62 /* RotationDail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationDail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +146,7 @@
 				5FEBA84A21952A330018DE62 /* MantisConfig.swift */,
 				5FEBA84C21952A330018DE62 /* CropViewController */,
 				5FEBA85621952A330018DE62 /* CropView */,
-				5FEBA84721952A330018DE62 /* RotationIndicator */,
+				5FEBA84721952A330018DE62 /* RotationDial */,
 				5FEBA85221952A330018DE62 /* Extentions */,
 				5FEBA86021952A330018DE62 /* MaskBackground */,
 				5FEBA86421952A330018DE62 /* Helpers */,
@@ -155,13 +155,13 @@
 			path = Mantis/Source;
 			sourceTree = "<group>";
 		};
-		5FEBA84721952A330018DE62 /* RotationIndicator */ = {
+		5FEBA84721952A330018DE62 /* RotationDial */ = {
 			isa = PBXGroup;
 			children = (
+				5FEBA893219904590018DE62 /* RotationDail.swift */,
 				5FEBA88C219730CD0018DE62 /* RotationAngleIndicator.swift */,
-				5FEBA88A2197309E0018DE62 /* RotationDashboard.swift */,
 			);
-			path = RotationIndicator;
+			path = RotationDial;
 			sourceTree = "<group>";
 		};
 		5FEBA84C21952A330018DE62 /* CropViewController */ = {
@@ -336,7 +336,7 @@
 				5FEBA87A21952A330018DE62 /* CropView.swift in Sources */,
 				5FEBA87121952A330018DE62 /* UIImageExtensions.swift in Sources */,
 				5FEBA86C21952A330018DE62 /* RatioPresenter.swift in Sources */,
-				5FEBA88B2197309E0018DE62 /* RotationDashboard.swift in Sources */,
+				5FEBA894219904590018DE62 /* RotationDail.swift in Sources */,
 				5FEBA87D21952A330018DE62 /* CropDimmingView.swift in Sources */,
 				5FEBA87621952A330018DE62 /* ImageContainer.swift in Sources */,
 				5FEBA87421952A330018DE62 /* CropScrollView.swift in Sources */,
