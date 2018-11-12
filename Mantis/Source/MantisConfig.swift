@@ -27,6 +27,15 @@ import Foundation
 public class MantisConfig {
     var customRatios: [(width: Int, height: Int)] = []
     
+    static private(set) var bundle: Bundle? = {
+        let bundle = Bundle(for: Mantis.self)
+        if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
+            let bundle = Bundle(url: url)
+            return bundle
+        }
+        return nil
+    } ()
+    
     public init() {
     }
     
