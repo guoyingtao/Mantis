@@ -26,7 +26,7 @@ import UIKit
 
 public class Mantis {
     
-    static var bundle: Bundle? = {
+    static public private(set) var bundle: Bundle? = {
         return Bundle(for: Mantis.self)
     } ()
     

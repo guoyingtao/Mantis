@@ -115,6 +115,10 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="uY2-uy-qch"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <connections>
+                        <outlet property="cancelButton" destination="5p4-Ob-R9b" id="kQq-ir-MSf"/>
+                        <outlet property="doneButton" destination="kZP-3N-vXv" id="RPY-W3-vWu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xP6-ML-BEH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

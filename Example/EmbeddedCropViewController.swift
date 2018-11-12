@@ -13,7 +13,28 @@ class EmbeddedCropViewController: UIViewController {
 
     var image: UIImage?
     var cropViewController: CropViewController?
-            
+    
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var doneButton: UIBarButtonItem!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        var cancelText = "Cancel"
+        if let bundle = Mantis.bundle {
+            cancelText = NSLocalizedString("Cancel", tableName: "MantisLocalizable", bundle: bundle, value: "Cancel", comment: "")
+        }
+        
+        cancelButton.title = cancelText
+        
+        var doneText = "Done"
+        if let bundle = Mantis.bundle {
+            doneText = NSLocalizedString("Done", tableName: "MantisLocalizable", bundle: bundle, value: "Done", comment: "")
+        }
+        
+        doneButton.title = doneText
+    }
+    
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true)
     }
