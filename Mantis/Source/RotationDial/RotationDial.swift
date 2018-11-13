@@ -24,7 +24,7 @@
 
 import UIKit
 
-class RotationDail: UIView {
+class RotationDial: UIView {
     
     var radiansLimit: CGFloat = 45 * CGFloat.pi / 180
     

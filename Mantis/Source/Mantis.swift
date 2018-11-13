@@ -27,15 +27,49 @@ import UIKit
 public class Mantis {
     
     static public private(set) var bundle: Bundle? = {
-        return MantisConfig.bundle
+        return Mantis.Config.bundle
     } ()
     
-    static public func cropViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
+    static public func cropViewController(image: UIImage, config: Mantis.Config = Mantis.Config()) -> CropViewController {
         return CropViewController(image: image, config: config, mode: .normal)
     }
     
-    static public func cropCustomizableViewController(image: UIImage, config: MantisConfig = MantisConfig()) -> CropViewController {
+    static public func cropCustomizableViewController(image: UIImage, config: Mantis.Config = Mantis.Config()) -> CropViewController {
         return CropViewController(image: image, config: config, mode: .customizable)
     }
+}
+
+// Config
+extension Mantis {
+    public struct Config {
+        var customRatios: [(width: Int, height: Int)] = []
+        
+        static private(set) var bundle: Bundle? = {
+            let bundle = Bundle(for: Mantis.self)
+            if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
+                let bundle = Bundle(url: url)
+                return bundle
+            }
+            return nil
+        } ()
+        
+        public init() {
+        }
+        
+        mutating public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
+            customRatios.append((width, height))
+        }
+        
+        func hasCustomRatios() -> Bool {
+            return customRatios.count > 0
+        }
+        
+        func getCustomRatioItems() -> [RatioItemType] {
+            return customRatios.map {
+                (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+            }
+        }
+    }
+
 }
 

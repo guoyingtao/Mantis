@@ -74,7 +74,7 @@ class CropView: UIView {
     fileprivate var imageContainer: ImageContainer!
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     
-    fileprivate var angleDashboard: RotationDail!
+    fileprivate var rotationDial: RotationDial!
     fileprivate var scrollView: CropScrollView!
     fileprivate var gridOverlayView: CropOverlayView!
     
@@ -113,7 +113,7 @@ class CropView: UIView {
         case .rotating:
             cropMaskViewManager.showVisualEffectBackground()
             gridOverlayView.isHidden = true
-            angleDashboard.isHidden = true
+            rotationDial.isHidden = true
         case .touchImage:
             cropMaskViewManager.showDimmingBackground()
             gridOverlayView.gridLineNumberType = .crop
@@ -121,7 +121,7 @@ class CropView: UIView {
         case .touchCropboxHandle:
             gridOverlayView.gridLineNumberType = .crop
             gridOverlayView.setGrid(hidden: false, animated: true)
-            angleDashboard.isHidden = true
+            rotationDial.isHidden = true
             cropMaskViewManager.showDimmingBackground()
         case .touchRotationBoard:
             gridOverlayView.gridLineNumberType = .rotate
@@ -129,7 +129,7 @@ class CropView: UIView {
             cropMaskViewManager.showDimmingBackground()
         case .betweenOperation:
             gridOverlayView.setGrid(hidden: true, animated: true)
-            angleDashboard.isHidden = false
+            rotationDial.isHidden = false
             adaptAngleDashboardToCropBox()
             cropMaskViewManager.showVisualEffectBackground()
             checkImageStatusChanged()
@@ -219,32 +219,32 @@ class CropView: UIView {
     }
     
     private func setupAngleDashboard() {
-        if angleDashboard != nil {
-            angleDashboard.removeFromSuperview()
+        if rotationDial != nil {
+            rotationDial.removeFromSuperview()
         }
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
-        angleDashboard = RotationDail(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
-        addSubview(angleDashboard)
+        rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
+        addSubview(rotationDial)
         
-        angleDashboard.rotateDialPlate(byRadians: viewModel.radians)
+        rotationDial.rotateDialPlate(byRadians: viewModel.radians)
         
         adaptAngleDashboardToCropBox()
     }
     
     private func adaptAngleDashboardToCropBox() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
-            angleDashboard.transform = CGAffineTransform(rotationAngle: 0)
-            angleDashboard.frame.origin.x = gridOverlayView.frame.origin.x +  (gridOverlayView.frame.width - angleDashboard.frame.width) / 2
-            angleDashboard.frame.origin.y = gridOverlayView.frame.maxY
+            rotationDial.transform = CGAffineTransform(rotationAngle: 0)
+            rotationDial.frame.origin.x = gridOverlayView.frame.origin.x +  (gridOverlayView.frame.width - rotationDial.frame.width) / 2
+            rotationDial.frame.origin.y = gridOverlayView.frame.maxY
         } else if UIApplication.shared.statusBarOrientation == .landscapeLeft {
-            angleDashboard.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-            angleDashboard.frame.origin.x = gridOverlayView.frame.maxX
-            angleDashboard.frame.origin.y = gridOverlayView.frame.origin.y + (gridOverlayView.frame.height - angleDashboard.frame.height) / 2
+            rotationDial.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+            rotationDial.frame.origin.x = gridOverlayView.frame.maxX
+            rotationDial.frame.origin.y = gridOverlayView.frame.origin.y + (gridOverlayView.frame.height - rotationDial.frame.height) / 2
         } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
-            angleDashboard.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            angleDashboard.frame.origin.x = gridOverlayView.frame.minX - angleDashboard.frame.width
-            angleDashboard.frame.origin.y = gridOverlayView.frame.origin.y + (gridOverlayView.frame.height - angleDashboard.frame.height) / 2
+            rotationDial.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            rotationDial.frame.origin.x = gridOverlayView.frame.minX - rotationDial.frame.width
+            rotationDial.frame.origin.y = gridOverlayView.frame.origin.y + (gridOverlayView.frame.height - rotationDial.frame.height) / 2
         }
     }
     
@@ -280,7 +280,7 @@ class CropView: UIView {
     }
     
     fileprivate func checkIsAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
-        let contains = angleDashboard.frame.contains(point)
+        let contains = rotationDial.frame.contains(point)
         
         if contains == true {
             viewStatus = .touchRotationBoard
@@ -332,7 +332,7 @@ extension CropView {
                                        dy: -hotAreaUnit).contains(p) &&
             !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
                                          dy: hotAreaUnit).contains(p)
-        || angleDashboard.frame.contains(p)) {
+        || rotationDial.frame.contains(p)) {
             return self
         }
         
@@ -388,11 +388,11 @@ extension CropView {
             currentPoint = point
             if let radians = rotationCal?.getRotationRadians(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
                 
-                guard angleDashboard.rotateDialPlate(byRadians: radians) == true else {
+                guard rotationDial.rotateDialPlate(byRadians: radians) == true else {
                     return
                 }
                 
-                viewModel.degrees = angleDashboard.getRotationDegrees()
+                viewModel.degrees = rotationDial.getRotationDegrees()
                 rotateScrollView()
             }
             
@@ -417,7 +417,7 @@ extension CropView {
             currentPoint = nil
             previousPoint = nil
             rotationCal = nil
-            viewModel.degrees = angleDashboard.getRotationDegrees()
+            viewModel.degrees = rotationDial.getRotationDegrees()
             viewStatus = .betweenOperation
         }
         
@@ -690,7 +690,7 @@ extension CropView {
         scrollView.removeFromSuperview()
         cropMaskViewManager.removeMaskViews()
         gridOverlayView.removeFromSuperview()
-        angleDashboard.removeFromSuperview()
+        rotationDial.removeFromSuperview()
         
         cropBoxFrame = .zero
         aspectRatioLockEnabled = false
@@ -709,7 +709,7 @@ extension CropView {
     fileprivate func setRotation(byRadians radians: CGFloat) {
         scrollView.transform = CGAffineTransform(rotationAngle: radians)
         updatePosition(by: radians)
-        angleDashboard.rotateDialPlate(toRadians: radians, animated: false)
+        rotationDial.rotateDialPlate(toRadians: radians, animated: false)
     }
     
     func setRotation(byDegrees degrees: CGFloat) {

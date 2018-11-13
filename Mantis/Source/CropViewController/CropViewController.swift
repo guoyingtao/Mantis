@@ -67,13 +67,13 @@ public class CropViewController: UIViewController {
     
     public var image: UIImage?
     public var mode: CropViewControllerMode = .normal
-    public var config: MantisConfig = MantisConfig()
+    public var config = Mantis.Config()
     
     deinit {
         print("CropViewController deinit.")
     }
     
-    init(image: UIImage, config: MantisConfig = MantisConfig(), mode: CropViewControllerMode = .normal) {
+    init(image: UIImage, config: Mantis.Config = Mantis.Config(), mode: CropViewControllerMode = .normal) {
         self.image = image
         self.config = config
         self.mode = mode
