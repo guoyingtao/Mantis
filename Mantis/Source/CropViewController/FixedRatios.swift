@@ -14,21 +14,14 @@ class FixedRatioManager {
     private (set) var ratios: [RatioItemType] = []
 
     init(originalRatioH: Double) {
-        var originalText = "Original"
-        if let bundle = Mantis.bundle {
-            originalText = NSLocalizedString("Original", tableName: "MantisLocalizable", bundle: bundle, value: "Original", comment: "")
-        }
-        
+        let originalText = LocalizedHelper.getString("Original")
         let original = (originalText, originalRatioH, originalText, originalRatioH)
         addDefault()
         insertToHead(ratioItem: original)
     }
     
     private func addDefault() {
-        var squareText = "Square"        
-        if let bundle = Mantis.bundle {
-            squareText = NSLocalizedString("Square", tableName: "MantisLocalizable", bundle: bundle, value: "Square", comment: "")
-        }
+        let squareText = LocalizedHelper.getString("Square")
         
         let square = (squareText, 1.0, squareText, 1.0)
         let scale3_2 = ("3:2", 3.0/2.0, "2:3", 2.0/3.0)

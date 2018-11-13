@@ -13,6 +13,7 @@
 		5F3BE13A21993373005C4BD8 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE13C21993373005C4BD8 /* MantisLocalizable.strings */; };
 		5F3BE15E2199443C005C4BD8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE15C2199443C005C4BD8 /* README.md */; };
 		5F3BE15F2199443C005C4BD8 /* Mantis.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE15D2199443C005C4BD8 /* Mantis.podspec */; };
+		5F3BE1F4219B22B1005C4BD8 /* LocalizedHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BE1F3219B22B1005C4BD8 /* LocalizedHelper.swift */; };
 		5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84B21952A330018DE62 /* Mantis.swift */; };
 		5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84D21952A330018DE62 /* CropToolbar.swift */; };
 		5FEBA86C21952A330018DE62 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84E21952A330018DE62 /* RatioPresenter.swift */; };
@@ -71,6 +72,7 @@
 		5F3BE14721993457005C4BD8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		5F3BE15C2199443C005C4BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		5F3BE15D2199443C005C4BD8 /* Mantis.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Mantis.podspec; sourceTree = SOURCE_ROOT; };
+		5F3BE1F3219B22B1005C4BD8 /* LocalizedHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedHelper.swift; sourceTree = "<group>"; };
 		5FEBA84B21952A330018DE62 /* Mantis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5FEBA84D21952A330018DE62 /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
 		5FEBA84E21952A330018DE62 /* RatioPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 		5FEBA86421952A330018DE62 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				5F3BE1F3219B22B1005C4BD8 /* LocalizedHelper.swift */,
 				5FEBA86521952A330018DE62 /* RotationCalculator.swift */,
 				5FEBA86621952A330018DE62 /* GeometryHelper.swift */,
 			);
@@ -392,6 +395,7 @@
 				5FEBA88021952A330018DE62 /* GeometryHelper.swift in Sources */,
 				5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */,
 				5FEBA87E21952A330018DE62 /* CropMaskProtocal.swift in Sources */,
+				5F3BE1F4219B22B1005C4BD8 /* LocalizedHelper.swift in Sources */,
 				5FEBA86F21952A330018DE62 /* CropViewController.swift in Sources */,
 				5FEBA87821952A330018DE62 /* CropOverlayView.swift in Sources */,
 			);

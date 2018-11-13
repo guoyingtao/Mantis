@@ -50,7 +50,8 @@ class RatioPresenter {
             actionSheet.popoverPresentationController?.sourceRect = sourceView.bounds
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelText = LocalizedHelper.getString("Cancel")
+        let cancelAction = UIAlertAction(title: cancelText, style: .cancel)
         actionSheet.addAction(cancelAction)
         
         viewController.present(actionSheet, animated: true)
