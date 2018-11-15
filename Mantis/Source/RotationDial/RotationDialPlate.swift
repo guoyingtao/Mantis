@@ -1,5 +1,5 @@
 //
-//  RotationAngleIndicator.swift
+//  RotationDialPlate.swift
 //  Mantis
 //
 //  Created by Echo on 10/24/18.
@@ -29,7 +29,7 @@ fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
 fileprivate let margin: CGFloat = 0
 fileprivate let spaceBetweenScaleAndNumber: CGFloat = 10
 
-class RotationAngleIndicator: UIView {
+class RotationDialPlate: UIView {
 
     let smallDotLayer:CAReplicatorLayer = {
         var r = CAReplicatorLayer()
@@ -140,7 +140,6 @@ class RotationAngleIndicator: UIView {
         setupBigScaleMarks()
         setupAngleNumber()
     }
-
 }
 
 extension CALayer{
@@ -148,10 +147,7 @@ extension CALayer{
         get{ return self.bounds.size.checked }
         set{ return self.bounds.size = newValue }
     }
-    var occupation:(CGSize, CGPoint) {
-        get{ return (size, self.center.checked) }
-        set{ size = newValue.0; position = newValue.1 }
-    }
+
     var center:CGPoint{
         get{ return self.bounds.center.checked }
     }

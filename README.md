@@ -31,7 +31,7 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.22'
+pod 'Mantis', '~> 0.23'
 ```
 
 You may also need the code below in your pod file if compile errors happen because of different swift version.
