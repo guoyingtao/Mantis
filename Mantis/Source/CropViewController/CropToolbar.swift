@@ -13,13 +13,7 @@ public enum CropToolbarMode {
     case simple
 }
 
-class CropToolbar: UIView {
-    
-    let recommendHeight: CGFloat = 44
-    let recommendWidth: CGFloat = {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 90 : 70
-    } ()
-    
+class CropToolbar: UIView {    
     var selectedCancel = {}
     var selectedCrop = {}
     var selectedRotate = {}

@@ -44,9 +44,6 @@ public class CropViewController: UIViewController {
     private var cropToolbar: CropToolbar?
     private var stackView: UIStackView?
     
-    private var cropToolbarVerticalHeightConstraint: NSLayoutConstraint?
-    private var cropToolbarHorizontalWidthConstraint: NSLayoutConstraint?
-
     private var initialLayout = false
     
     public var image: UIImage?
@@ -233,24 +230,14 @@ extension CropViewController {
         stackView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         stackView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         stackView?.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        
-        cropToolbarVerticalHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeight)
-        cropToolbarHorizontalWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidth)
+        stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true        
     }
 
     fileprivate func updateLayout() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             stackView?.axis = .vertical
-            
-            cropToolbarVerticalHeightConstraint?.isActive = true
-            cropToolbarHorizontalWidthConstraint?.isActive = false
-            
         } else if UIApplication.shared.statusBarOrientation.isLandscape {
             stackView?.axis = .horizontal
-            
-            cropToolbarVerticalHeightConstraint?.isActive = false
-            cropToolbarHorizontalWidthConstraint?.isActive = true
         }
         
         cropToolbar?.checkOrientation()
