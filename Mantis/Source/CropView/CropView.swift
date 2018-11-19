@@ -176,15 +176,17 @@ class CropView: UIView {
         setGridOverlayView()
     }
     
-    func resetUIFrame() {
+    func resetUIFrame(resetImage: Bool = true) {
         cropBoxFrame = getInitialCropBoxRect()
         cropOrignFrame = cropBoxFrame
         
         scrollView.transform = .identity
         scrollView.resetBy(rect: cropBoxFrame)
         
-        imageContainer.frame = scrollView.bounds
-        imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
+        if resetImage {
+            imageContainer.frame = scrollView.bounds
+            imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
+        }
         
         setupAngleDashboard()
         
@@ -621,7 +623,7 @@ extension CropView {
     }
         
     func handleRotate() {
-        resetUIFrame()
+        resetUIFrame(resetImage: false)
         rotateScrollView()
         
         if viewModel.cropRightBottomOnImage != .zero {
