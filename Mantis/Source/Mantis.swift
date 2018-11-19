@@ -36,6 +36,12 @@ public func cropCustomizableViewController(image: UIImage, config: Mantis.Config
   return CropViewController(image: image, config: config, mode: .customizable)
 }
 
+public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
+
+public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
+    return image.getCroppedImage(byCropInfo: info)
+}
+
 // Config
 public struct Config {
   var customRatios: [(width: Int, height: Int)] = []

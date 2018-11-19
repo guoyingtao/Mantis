@@ -106,5 +106,27 @@ extension UIImage {
             return size.height / size.width
         }
     }
+    
+    func getCroppedImage(byCropInfo info: CropInfo) -> UIImage? {
+        guard let fixedImage = self.cgImageWithFixedOrientation() else {
+            return nil
+        }
+        
+        var transform = CGAffineTransform.identity
+        transform = transform.translatedBy(x: info.translation.x, y: info.translation.y)
+        transform = transform.rotated(by: info.rotation)
+        transform = transform.scaledBy(x: info.scale, y: info.scale)
+        
+        guard let imageRef = fixedImage.transformedImage(transform,
+                                                         zoomScale: info.scale,
+                                                         sourceSize: self.size,
+                                                         cropSize: info.cropSize,
+                                                         imageViewSize: info.imageViewSize) else {
+                                                            return nil
+        }
+        
+        return UIImage(cgImage: imageRef)
+    }
+
 }
 

@@ -171,7 +171,7 @@ class CropView: UIView {
         
         scrollView.addSubview(imageContainer)
         scrollView.imageContainer = imageContainer
-
+        
         cropMaskViewManager = CropMaskViewManager(with: self)
         setGridOverlayView()
     }
@@ -288,7 +288,7 @@ class CropView: UIView {
         
         return contains
     }
-        
+    
     fileprivate func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
         let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
         return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
@@ -329,10 +329,10 @@ extension CropView {
         let p = self.convert(point, to: self)
         
         if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
-                                       dy: -hotAreaUnit).contains(p) &&
+                                          dy: -hotAreaUnit).contains(p) &&
             !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
-                                         dy: hotAreaUnit).contains(p)
-        || rotationDial.frame.contains(p)) {
+                                           dy: hotAreaUnit).contains(p)
+            || rotationDial.frame.contains(p)) {
             return self
         }
         
@@ -474,7 +474,7 @@ extension CropView {
         
         return contentRect
     }
-
+    
     fileprivate func getImageLeftTopAnchorPoint() -> CGPoint {
         if imageContainer.bounds.size == .zero {
             return viewModel.cropLeftTopOnImage
@@ -489,7 +489,7 @@ extension CropView {
         if imageContainer.bounds.size == .zero {
             return viewModel.cropRightBottomOnImage
         }
-
+        
         let rb = gridOverlayView.convert(CGPoint(x: gridOverlayView.bounds.width, y: gridOverlayView.bounds.height), to: imageContainer)
         let point = CGPoint(x: rb.x / imageContainer.bounds.width, y: rb.y / imageContainer.bounds.height)
         return point
@@ -539,13 +539,13 @@ extension CropView {
         scrollView.contentOffset = newContentOffset
         
         let newCropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: self.cropBoxFrame)
-
+        
         UIView.animate(withDuration: 0.25, animations: {[weak self] in
             guard let self = self else { return }
             self.cropBoxFrame = newCropBoxFrame
             
             let zoomRect = self.convert(scaleFrame,
-                                                to: self.scrollView.imageContainer)
+                                        to: self.scrollView.imageContainer)
             self.scrollView.zoom(to: zoomRect, animated: false)
             self.scrollView.checkContentOffset()
         }) {_ in
@@ -554,7 +554,7 @@ extension CropView {
         
         manualZoomed = true
     }
-
+    
     fileprivate func updatePosition(by radians: CGFloat) {
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
         let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
@@ -587,7 +587,7 @@ extension CropView {
         let newZoomScale = scrollView.zoomScale * scale
         scrollView.minimumZoomScale = newZoomScale
         scrollView.zoomScale = newZoomScale
-
+        
         scrollView.checkContentOffset()
     }
     
@@ -603,46 +603,27 @@ extension CropView {
 }
 
 // public api
-extension CropView {    
+extension CropView {
     func crop() -> UIImage? {
         let rect = imageContainer.convert(imageContainer.bounds,
-                                                         to: self)
+                                          to: self)
         let point = rect.center
         let zeroPoint = gridOverlayView.center
         
-        var transform = CGAffineTransform.identity
-        // translate
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
-        transform = transform.translatedBy(x: translation.x, y: translation.y)
         
-        // rotate
-        transform = transform.rotated(by: viewModel.getTotalRadians())
-        
-        // scale
-        let t = imageContainer.transform
-        let xScale: CGFloat = sqrt(t.a * t.a + t.c * t.c)
-        let yScale: CGFloat = sqrt(t.b * t.b + t.d * t.d)
-        transform = transform.scaledBy(x: xScale, y: yScale)
-        
-        guard let fixedImage = image.cgImageWithFixedOrientation() else {
-            return nil
-        }
-            
-        guard let imageRef = fixedImage.transformedImage(transform,
-                                                       zoomScale: scrollView.zoomScale,
-                                                       sourceSize: image.size,
-                                                       cropSize: gridOverlayView.frame.size,
-                                                       imageViewSize: imageContainer.bounds.size) else {
-                                                        return nil
-        }
-        
-        return UIImage(cgImage: imageRef)
+        let info = CropInfo(translation: translation,
+                            rotation: viewModel.getTotalRadians(),
+                            scale: scrollView.zoomScale,
+                            cropSize: gridOverlayView.frame.size,
+                            imageViewSize: imageContainer.bounds.size)
+        return image.getCroppedImage(byCropInfo: info)
     }
-    
+        
     func handleRotate() {
         resetUIFrame()
         rotateScrollView()
-
+        
         if viewModel.cropRightBottomOnImage != .zero {
             var lt = CGPoint(x: viewModel.cropLeftTopOnImage.x * imageContainer.bounds.width, y: viewModel.cropLeftTopOnImage.y * imageContainer.bounds.height)
             var rb = CGPoint(x: viewModel.cropRightBottomOnImage.x * imageContainer.bounds.width, y: viewModel.cropRightBottomOnImage.y * imageContainer.bounds.height)
@@ -694,7 +675,7 @@ extension CropView {
         
         cropBoxFrame = .zero
         aspectRatioLockEnabled = false
-                
+        
         viewModel.reset()
         
         viewStatus = .initial
@@ -743,7 +724,7 @@ extension CropView {
         
         adaptAngleDashboardToCropBox()
     }
-
+    
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
         return viewModel.getRatioType(byImageIsOriginalHorizontal: isHorizontal)
     }

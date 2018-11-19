@@ -38,31 +38,15 @@ public class CropViewController: UIViewController {
     public weak var delegate: CropViewControllerProtocal?
     
     private var orientation: UIInterfaceOrientation = .unknown
-    
-    private var cropToolbar: CropToolbar?
+        
     private var ratioPresenter: RatioPresenter?
     private var cropView: CropView?
+    private var cropToolbar: CropToolbar?
+    private var stackView: UIStackView?
+    
+    private var cropToolbarVerticalHeightConstraint: NSLayoutConstraint?
+    private var cropToolbarHorizontalWidthConstraint: NSLayoutConstraint?
 
-    private var cropViewTopConstraint: NSLayoutConstraint?
-    private var cropViewLandscapeBottomConstraint: NSLayoutConstraint?
-    private var cropViewPortraitBottomConstraint: NSLayoutConstraint?
-    private var cropViewLandscapeLeftLeftConstraint: NSLayoutConstraint?
-    private var cropViewLandscapeRightLeftConstraint: NSLayoutConstraint?
-    private var cropViewPortraitLeftConstraint: NSLayoutConstraint?
-    private var cropViewLandscapeLeftRightConstraint: NSLayoutConstraint?
-    private var cropViewLandscapeRightRightConstraint: NSLayoutConstraint?
-    private var cropViewPortaitRightConstraint: NSLayoutConstraint?
-    
-    private var toolbarWidthConstraint: NSLayoutConstraint?
-    private var toolbarHeightConstraint: NSLayoutConstraint?
-    private var toolbarTopConstraint: NSLayoutConstraint?
-    private var toolbarLeftConstraint: NSLayoutConstraint?
-    private var toolbarRightConstraint: NSLayoutConstraint?
-    private var toolbarPortraitBottomConstraint: NSLayoutConstraint?
-    private var toolbarLandscapeBottomConstraint: NSLayoutConstraint?
-    
-    private var uiConstraints: [NSLayoutConstraint?] = []
-    
     private var initialLayout = false
     
     public var image: UIImage?
@@ -82,14 +66,6 @@ public class CropViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    fileprivate func initLayout() {
-        initToolarAutoLayout()
-        initCropViewAutoLayout()
-        updateLayout()
-        
-        uiConstraints = [cropViewTopConstraint, cropViewLandscapeBottomConstraint, cropViewPortraitBottomConstraint, cropViewLandscapeLeftLeftConstraint, cropViewLandscapeRightLeftConstraint, cropViewPortraitLeftConstraint, cropViewLandscapeLeftRightConstraint, cropViewLandscapeRightRightConstraint, cropViewPortaitRightConstraint, toolbarWidthConstraint, toolbarHeightConstraint, toolbarTopConstraint, toolbarPortraitBottomConstraint, toolbarLandscapeBottomConstraint, toolbarLeftConstraint, toolbarRightConstraint]
     }
     
     fileprivate func createCropToolbar() {
@@ -117,9 +93,11 @@ public class CropViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .black
+        
         createCropToolbar()
         createCropView()
         initLayout()
+        updateLayout()
         
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
     }
@@ -128,6 +106,7 @@ public class CropViewController: UIViewController {
         super.viewDidLayoutSubviews()
         if initialLayout == false {
             initialLayout = true
+            view.layoutIfNeeded()
             cropView?.adaptForCropBox()
         }
     }
@@ -236,76 +215,45 @@ public class CropViewController: UIViewController {
 
 // Auto layout
 extension CropViewController {
-    fileprivate func initCropViewAutoLayout() {
-        guard let cropView = cropView, let cropToolbar = cropToolbar else { return }
+    fileprivate func initLayout() {
+        guard let cropView = cropView, let cropToolbar = cropToolbar else {
+            return
+        }
         
-        view.addSubview(cropView)
+        stackView = UIStackView()
+        view.addSubview(stackView!)
         
+        stackView?.addArrangedSubview(cropView)
+        stackView?.addArrangedSubview(cropToolbar)
+        
+        stackView?.translatesAutoresizingMaskIntoConstraints = false
+        cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         cropView.translatesAutoresizingMaskIntoConstraints = false
         
-        cropViewTopConstraint = cropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        cropViewLandscapeBottomConstraint = cropView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        stackView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        stackView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        stackView?.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         
-        cropViewLandscapeLeftLeftConstraint = cropView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
-        cropViewLandscapeLeftRightConstraint = cropView.rightAnchor.constraint(equalTo: cropToolbar.leftAnchor)
-        
-        cropViewLandscapeRightLeftConstraint = cropView.leftAnchor.constraint(equalTo: cropToolbar.rightAnchor)
-        cropViewLandscapeRightRightConstraint = cropView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
-        
-        cropViewPortraitBottomConstraint = cropView.bottomAnchor.constraint(equalTo: cropToolbar.topAnchor)
-        cropViewPortraitLeftConstraint = cropView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
-        cropViewPortaitRightConstraint = cropView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
+        cropToolbarVerticalHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeight)
+        cropToolbarHorizontalWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidth)
     }
-    
-    fileprivate func initToolarAutoLayout() {
-        guard let cropToolbar = cropToolbar else { return }
-        
-        view.addSubview(cropToolbar)
-        cropToolbar.translatesAutoresizingMaskIntoConstraints = false
-        
-        toolbarWidthConstraint = cropToolbar.widthAnchor.constraint(equalToConstant: cropToolbar.recommendWidth)
-        toolbarHeightConstraint = cropToolbar.heightAnchor.constraint(equalToConstant: cropToolbar.recommendHeight)
 
-        toolbarTopConstraint = cropToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
-        toolbarPortraitBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        toolbarLandscapeBottomConstraint = cropToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
-        toolbarLeftConstraint = cropToolbar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
-        toolbarRightConstraint = cropToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
-    }
-    
     fileprivate func updateLayout() {
-        uiConstraints.forEach{ $0?.isActive = false }
+        if UIApplication.shared.statusBarOrientation.isPortrait {
+            stackView?.axis = .vertical
+            
+            cropToolbarVerticalHeightConstraint?.isActive = true
+            cropToolbarHorizontalWidthConstraint?.isActive = false
+            
+        } else if UIApplication.shared.statusBarOrientation.isLandscape {
+            stackView?.axis = .horizontal
+            
+            cropToolbarVerticalHeightConstraint?.isActive = false
+            cropToolbarHorizontalWidthConstraint?.isActive = true
+        }
         
         cropToolbar?.checkOrientation()
-        
-        if UIApplication.shared.statusBarOrientation.isPortrait {
-            toolbarHeightConstraint?.isActive = true
-            toolbarLeftConstraint?.isActive = true
-            toolbarRightConstraint?.isActive = true
-            toolbarPortraitBottomConstraint?.isActive = true
-            
-            cropViewTopConstraint?.isActive = true
-            cropViewPortraitBottomConstraint?.isActive = true
-            cropViewPortraitLeftConstraint?.isActive = true
-            cropViewPortaitRightConstraint?.isActive = true
-        } else if UIApplication.shared.statusBarOrientation.isLandscape {
-            toolbarWidthConstraint?.isActive = true
-            toolbarTopConstraint?.isActive = true
-            toolbarLandscapeBottomConstraint?.isActive = true
-            
-            cropViewTopConstraint?.isActive = true
-            cropViewLandscapeBottomConstraint?.isActive = true
-            
-            if UIApplication.shared.statusBarOrientation == .landscapeLeft {
-                toolbarRightConstraint?.isActive = true
-                cropViewLandscapeLeftLeftConstraint?.isActive = true
-                cropViewLandscapeLeftRightConstraint?.isActive = true
-            } else {
-                toolbarLeftConstraint?.isActive = true
-                cropViewLandscapeRightLeftConstraint?.isActive = true
-                cropViewLandscapeRightRightConstraint?.isActive = true
-            }
-        }
     }
 }
 
