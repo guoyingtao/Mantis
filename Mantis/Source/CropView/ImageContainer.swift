@@ -44,8 +44,6 @@ class ImageContainer: UIView {
         let tolerance: CGFloat = 1e-6
         let refBounds = bounds.insetBy(dx: -tolerance, dy: -tolerance)
         
-        print("newRect is \(newRect)")
-        print("refBounds is \(refBounds)")
         return refBounds.contains(p1) && refBounds.contains(p2)
     }
 }
