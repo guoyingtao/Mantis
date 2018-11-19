@@ -85,6 +85,7 @@ class CropToolbar: UIView {
         addSubview(optionButtonStackView!)
         
         optionButtonStackView?.distribution = .equalCentering
+        optionButtonStackView?.isLayoutMarginsRelativeArrangement = true
     }
     
     private func setButtonContainerLayout() {
@@ -124,8 +125,10 @@ class CropToolbar: UIView {
     func checkOrientation() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
+            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         } else {
             optionButtonStackView?.axis = .vertical
+            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         }
     }
     
