@@ -26,6 +26,10 @@ The crop and rotation feature are strongly inspired by [TOCropViewController](ht
 
 The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clock)
 
+## Requirements
+* iOS 11.0+
+* Xcode 10.0+
+
 ## Install
 
 ### CocoaPods
