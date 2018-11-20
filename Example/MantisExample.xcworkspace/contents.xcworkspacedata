@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Example/MantisExample.xcodeproj">
+      location = "group:MantisExample.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Mantis.xcodeproj">
+      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

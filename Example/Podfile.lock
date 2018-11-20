@@ -1,0 +1,16 @@
+PODS:
+  - Mantis (0.26)
+
+DEPENDENCIES:
+  - Mantis (from `../`)
+
+EXTERNAL SOURCES:
+  Mantis:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Mantis: eb9965171c3deac1d1479b39e64f3cd4e8cdaba4
+
+PODFILE CHECKSUM: 7167a9b0b27fb7d42b101db796bbae55c43eaf65
+
+COCOAPODS: 1.6.0.beta.2
