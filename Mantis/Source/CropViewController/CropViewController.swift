@@ -220,9 +220,6 @@ extension CropViewController {
         stackView = UIStackView()
         view.addSubview(stackView!)
         
-        stackView?.addArrangedSubview(cropView)
-        stackView?.addArrangedSubview(cropToolbar)
-        
         stackView?.translatesAutoresizingMaskIntoConstraints = false
         cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         cropView.translatesAutoresizingMaskIntoConstraints = false
@@ -230,17 +227,38 @@ extension CropViewController {
         stackView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         stackView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         stackView?.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true        
+        stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
     }
-
-    fileprivate func updateLayout() {
+    
+    fileprivate func setStackViewAxis() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             stackView?.axis = .vertical
         } else if UIApplication.shared.statusBarOrientation.isLandscape {
             stackView?.axis = .horizontal
         }
+    }
+    
+    fileprivate func changeStackViewOrder() {
+        guard let cropView = cropView, let cropToolbar = cropToolbar else {
+            return
+        }
         
+        stackView?.removeArrangedSubview(cropView)
+        stackView?.removeArrangedSubview(cropToolbar)
+        
+        if UIApplication.shared.statusBarOrientation.isPortrait || UIApplication.shared.statusBarOrientation == .landscapeRight {
+            stackView?.addArrangedSubview(cropView)
+            stackView?.addArrangedSubview(cropToolbar)
+        } else if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+            stackView?.addArrangedSubview(cropToolbar)
+            stackView?.addArrangedSubview(cropView)
+        }
+    }
+
+    fileprivate func updateLayout() {
+        setStackViewAxis()
         cropToolbar?.checkOrientation()
+        changeStackViewOrder()
     }
 }
 
