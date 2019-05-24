@@ -29,13 +29,13 @@ protocol CropViewDelegate: class {
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
 
+fileprivate let cropViewMinimumBoxSize: CGFloat = 42
+fileprivate let minimumAspectRatio: CGFloat = 0
+fileprivate let angleDashboardHeight: CGFloat = 60
+fileprivate let hotAreaUnit: CGFloat = 64
+fileprivate let cropViewPadding:CGFloat = 14.0
+
 class CropView: UIView {
-    fileprivate let cropViewMinimumBoxSize: CGFloat = 42
-    fileprivate let minimumAspectRatio: CGFloat = 0
-    fileprivate let angleDashboardHeight: CGFloat = 60
-    fileprivate let hotAreaUnit: CGFloat = 64
-    fileprivate let cropViewPadding:CGFloat = 14.0
-    
     var viewModel: CropViewModel!
     
     fileprivate var panOriginPoint = CGPoint.zero
@@ -72,10 +72,6 @@ class CropView: UIView {
     fileprivate var scrollView: CropScrollView!
     fileprivate var gridOverlayView: CropOverlayView!
     
-    fileprivate var forCrop = true
-    fileprivate var currentPoint: CGPoint?
-    fileprivate var previousPoint: CGPoint?
-    fileprivate var rotationCal: RotationCalculator?
     fileprivate var manualZoomed = false
     
     deinit {
@@ -112,7 +108,7 @@ class CropView: UIView {
         case .rotating:
             cropMaskViewManager.showVisualEffectBackground()
             gridOverlayView.isHidden = true
-            rotationDial.isHidden = true
+            rotationDial.isHidden = false
         case .touchImage:
             cropMaskViewManager.showDimmingBackground()
             gridOverlayView.gridLineNumberType = .crop
@@ -222,13 +218,29 @@ class CropView: UIView {
             rotationDial.removeFromSuperview()
         }
         
+        var config = DialConfig.Config()
+        config.backgroundColor = .clear
+        config.angleShowLimitType = .limit(angle: CGAngle(degrees: 40))
+        config.rotationLimitType = .limit(angle: CGAngle(degrees: 45))
+        
         let boardLength = min(bounds.width, bounds.height) * 0.6
-        rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight))
+        rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight), config: config)
+        rotationDial.isUserInteractionEnabled = true
         addSubview(rotationDial)
         
-        rotationDial.rotateDialPlate(byRadians: viewModel.radians)
+        rotationDial.setRotationCenter(by: gridOverlayView.center, of: self)
         
-        adaptAngleDashboardToCropBox()
+        rotationDial.didRotate = { [unowned self] angle in
+            self.viewModel.degrees = angle.degrees
+            self.rotateScrollView()
+        }
+        
+        rotationDial.didFinishedRotate = { [unowned self] in
+            self.viewModel.setBetweenOperationStatus()
+        }
+        
+        rotationDial.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+        adaptAngleDashboardToCropBox()        
     }
     
     private func adaptAngleDashboardToCropBox() {
@@ -327,11 +339,15 @@ extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let p = self.convert(point, to: self)
         
+        if rotationDial.frame.contains(p) {
+            return rotationDial
+        }
+        
         if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
                                           dy: -hotAreaUnit).contains(p) &&
             !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
                                            dy: hotAreaUnit).contains(p)
-            || rotationDial.frame.contains(p)) {
+            ) {
             return self
         }
         
@@ -345,30 +361,25 @@ extension CropView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        viewModel.setTouchImageStatus()
-        
         guard touches.count == 1, let touch = touches.first else {
             return
         }
         
+        if touch.view is RotationDial {
+            return
+        }
+        
+        viewModel.setTouchImageStatus()
+        
         let point = touch.location(in: self)
         
-        if checkIsAngleDashboardTouched(forPoint: point) {
-            forCrop = false
-            let rotationCenter = self.convert(gridOverlayView.center, to: self)
-            rotationCal = RotationCalculator(midPoint: rotationCenter)
-            currentPoint = point
-            previousPoint = point
-        } else {
-            forCrop = true
-            panOriginPoint = point
-            cropOrignFrame = cropBoxFrame
-            
-            tappedEdge = cropEdge(forPoint: point)
-            
-            if tappedEdge != .none {
-                viewModel.setTouchCropboxHandleStatus()
-            }
+        panOriginPoint = point
+        cropOrignFrame = cropBoxFrame
+        
+        tappedEdge = cropEdge(forPoint: point)
+        
+        if tappedEdge != .none {
+            viewModel.setTouchCropboxHandleStatus()
         }
     }
     
@@ -380,47 +391,20 @@ extension CropView {
         }
         
         let point = touch.location(in: self)
-        
-        if forCrop {
-            updateCropBoxFrame(withTouchPoint: point)
-        } else {
-            currentPoint = point
-            if let radians = rotationCal?.getRotationRadians(byOldPoint: previousPoint!, andNewPoint: currentPoint!) {
-                
-                guard rotationDial.rotateDialPlate(byRadians: radians) == true else {
-                    return
-                }
-                
-                viewModel.degrees = rotationDial.getRotationDegrees()
-                rotateScrollView()
-            }
-            
-            previousPoint = currentPoint
-        }
-        
+        updateCropBoxFrame(withTouchPoint: point)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
-        if forCrop {
-            if !cropOrignFrame.equalTo(cropBoxFrame) {
-                let contentRect = getContentBounds()
-                adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
-                    self?.viewModel.setBetweenOperationStatus()
-                }
-            } else {
-                viewModel.setBetweenOperationStatus()
+        if !cropOrignFrame.equalTo(cropBoxFrame) {
+            let contentRect = getContentBounds()
+            adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
+                self?.viewModel.setBetweenOperationStatus()
             }
         } else {
-            currentPoint = nil
-            previousPoint = nil
-            rotationCal = nil
-            viewModel.degrees = rotationDial.getRotationDegrees()
             viewModel.setBetweenOperationStatus()
         }
-        
-        forCrop = true        
     }
 }
 
@@ -695,7 +679,7 @@ extension CropView {
     fileprivate func setRotation(byRadians radians: CGFloat) {
         scrollView.transform = CGAffineTransform(rotationAngle: radians)
         updatePosition(by: radians)
-        rotationDial.rotateDialPlate(toRadians: radians, animated: false)
+        rotationDial.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
     
     func setRotation(byDegrees degrees: CGFloat) {
