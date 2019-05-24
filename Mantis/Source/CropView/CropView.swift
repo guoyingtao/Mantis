@@ -29,18 +29,18 @@ protocol CropViewDelegate: class {
     func cropViewDidBecomeNonResettable(_ cropView: CropView)
 }
 
-fileprivate let cropViewMinimumBoxSize: CGFloat = 42
-fileprivate let minimumAspectRatio: CGFloat = 0
-fileprivate let angleDashboardHeight: CGFloat = 60
-fileprivate let hotAreaUnit: CGFloat = 64
-fileprivate let cropViewPadding:CGFloat = 14.0
-
 class CropView: UIView {
+    let cropViewMinimumBoxSize: CGFloat = 42
+    let minimumAspectRatio: CGFloat = 0
+    let angleDashboardHeight: CGFloat = 60
+    let hotAreaUnit: CGFloat = 64
+    let cropViewPadding:CGFloat = 14.0
+
     var viewModel: CropViewModel!
     
-    fileprivate var panOriginPoint = CGPoint.zero
+    var panOriginPoint = CGPoint.zero
     
-    fileprivate var cropBoxFrame = CGRect.zero {
+    var cropBoxFrame = CGRect.zero {
         didSet {
             if oldValue.equalTo(cropBoxFrame) { return }
             
@@ -55,8 +55,8 @@ class CropView: UIView {
         }
     }
     
-    fileprivate var cropOrignFrame = CGRect.zero
-    fileprivate var tappedEdge = CropViewOverlayEdge.none
+    var cropOrignFrame = CGRect.zero
+    var tappedEdge = CropViewOverlayEdge.none
     
     var aspectRatioLockEnabled = false
     
@@ -68,9 +68,9 @@ class CropView: UIView {
     fileprivate var imageContainer: ImageContainer!
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     
-    fileprivate var rotationDial: RotationDial!
-    fileprivate var scrollView: CropScrollView!
-    fileprivate var gridOverlayView: CropOverlayView!
+    var rotationDial: RotationDial!
+    var scrollView: CropScrollView!
+    var gridOverlayView: CropOverlayView!
     
     fileprivate var manualZoomed = false
     
@@ -260,7 +260,7 @@ class CropView: UIView {
         }
     }
     
-    fileprivate func updateCropBoxFrame(withTouchPoint point: CGPoint) {
+    func updateCropBoxFrame(withTouchPoint point: CGPoint) {
         let contentFrame = getContentBounds()
         
         var point = point
@@ -301,7 +301,7 @@ class CropView: UIView {
         return contains
     }
     
-    fileprivate func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
+    func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
         let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
         return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
     }
@@ -336,79 +336,6 @@ extension CropView: UIScrollViewDelegate {
     }
 }
 
-extension CropView {
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let p = self.convert(point, to: self)
-        
-        if rotationDial.frame.contains(p) {
-            return rotationDial
-        }
-        
-        if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
-                                          dy: -hotAreaUnit).contains(p) &&
-            !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
-                                           dy: hotAreaUnit).contains(p)
-            ) {
-            return self
-        }
-        
-        if self.bounds.contains(p) {
-            return self.scrollView
-        }
-        
-        return nil        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        
-        guard touches.count == 1, let touch = touches.first else {
-            return
-        }
-        
-        if touch.view is RotationDial {
-            return
-        }
-        
-        viewModel.setTouchImageStatus()
-        
-        let point = touch.location(in: self)
-        
-        panOriginPoint = point
-        cropOrignFrame = cropBoxFrame
-        
-        tappedEdge = cropEdge(forPoint: point)
-        
-        if tappedEdge != .none {
-            viewModel.setTouchCropboxHandleStatus()
-        }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        
-        guard touches.count == 1, let touch = touches.first else {
-            return
-        }
-        
-        let point = touch.location(in: self)
-        updateCropBoxFrame(withTouchPoint: point)
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        
-        if !cropOrignFrame.equalTo(cropBoxFrame) {
-            let contentRect = getContentBounds()
-            adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
-                self?.viewModel.setBetweenOperationStatus()
-            }
-        } else {
-            viewModel.setBetweenOperationStatus()
-        }
-    }
-}
-
 // Adjust UI
 extension CropView {
     private func rotateScrollView() {
@@ -434,7 +361,7 @@ extension CropView {
         return GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
     }
     
-    fileprivate func getContentBounds() -> CGRect {
+    func getContentBounds() -> CGRect {
         let rect = self.bounds
         var contentRect = CGRect.zero
         
@@ -484,7 +411,7 @@ extension CropView {
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
     
-    fileprivate func adjustUIForNewCrop(contentRect:CGRect, completion: @escaping ()->Void) {
+    func adjustUIForNewCrop(contentRect:CGRect, completion: @escaping ()->Void) {
         
         let scaleX: CGFloat
         let scaleY: CGFloat
