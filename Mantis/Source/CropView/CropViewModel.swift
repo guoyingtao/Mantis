@@ -52,12 +52,15 @@ class CropViewModel: NSObject {
     var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
     
     func reset() {
+        cropBoxFrame = .zero
         degrees = 0
         rotationType = .none
         aspectRatio = -1
         
         cropLeftTopOnImage = .zero
         cropRightBottomOnImage = CGPoint(x: 1, y: 1)
+        
+        setInitialStatus()
     }
     
     func counterclockwiseRotate90() {
@@ -128,6 +131,22 @@ class CropViewModel: NSObject {
         }
 
         return newCropBoxFrame
+    }
+    
+    func setCropBoxFrame(by initialCropBox: CGRect, and imageRationH: Double) {
+        var cropBoxFrame = initialCropBox
+        let center = cropBoxFrame.center
+        
+        if (aspectRatio > CGFloat(imageRationH)) {
+            cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio
+        } else {
+            cropBoxFrame.size.width = cropBoxFrame.height * aspectRatio
+        }
+        
+        cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
+        cropBoxFrame.origin.y = center.y - cropBoxFrame.height / 2
+        
+        self.cropBoxFrame = cropBoxFrame
     }
 }
 

@@ -51,14 +51,14 @@ class CropView: UIView {
         return image.ratioH()
     }()
     
-    fileprivate var imageContainer: ImageContainer!
+    var imageContainer: ImageContainer!
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     
     var rotationDial: RotationDial!
     var scrollView: CropScrollView!
     var gridOverlayView: CropOverlayView!
     
-    fileprivate var manualZoomed = false
+    var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
     
     deinit {
@@ -270,36 +270,8 @@ class CropView: UIView {
     }    
 }
 
-extension CropView: UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageContainer
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        viewModel.setTouchImageStatus()
-    }
-    
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        viewModel.setTouchImageStatus()
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        viewModel.setBetweenOperationStatus()
-    }
-    
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        manualZoomed = true
-        viewModel.setBetweenOperationStatus()
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            viewModel.setBetweenOperationStatus()
-        }
-    }
-}
 
-// Adjust UI
+// MARK: - Adjust UI
 extension CropView {
     private func rotateScrollView() {
         let radians = viewModel.getTotalRadians()
@@ -309,7 +281,9 @@ extension CropView {
     
     private func getInitialCropBoxRect() -> CGRect {
         guard let image = image else { return .zero }
-        guard image.size.width > 0 && image.size.height > 0 else { return .zero }
+        guard image.size.width > 0 && image.size.height > 0 else {
+            return .zero
+        }
         
         let outsideRect = getContentBounds()
         
@@ -476,7 +450,7 @@ extension CropView {
 }
 
 
-// MARK: - public API
+// MARK: - internal API
 extension CropView {
     func crop() -> UIImage? {
         let rect = imageContainer.convert(imageContainer.bounds,
@@ -552,11 +526,9 @@ extension CropView {
         gridOverlayView.removeFromSuperview()
         rotationDial.removeFromSuperview()
         
-        viewModel.cropBoxFrame = .zero
         aspectRatioLockEnabled = false
         
         viewModel.reset()
-        viewModel.setInitialStatus()
         resetUIFrame()
     }
     
@@ -571,29 +543,9 @@ extension CropView {
         rotationDial.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
     
-    func setRotation(byDegrees degrees: CGFloat) {
-        viewModel.degrees = degrees
-        let radians = degrees * CGFloat.pi / 180
-        
-        UIView.animate(withDuration: 0.5) {
-            self.setRotation(byRadians: radians)
-        }
-    }
-    
     func setFixedRatioCropBox() {
-        var cropBoxFrame = getInitialCropBoxRect()
-        let center = cropBoxFrame.center
-        
-        if viewModel.aspectRatio > CGFloat(getImageRatioH()) {
-            cropBoxFrame.size.height = cropBoxFrame.width / viewModel.aspectRatio
-        } else {
-            cropBoxFrame.size.width = cropBoxFrame.height * viewModel.aspectRatio
-        }
-        
-        cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
-        cropBoxFrame.origin.y = center.y - cropBoxFrame.height / 2
-        
-        viewModel.cropBoxFrame = cropBoxFrame
+        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(),
+                                  and: getImageRatioH())
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
