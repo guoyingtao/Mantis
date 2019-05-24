@@ -50,14 +50,12 @@ class RotationDial: UIView {
      */
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.config = DialConfig.Config()
-        setup(with: self.config)
+        setup()
     }
     
     public init(frame: CGRect, config: DialConfig.Config) {
-        self.config = config
         super.init(frame: frame)
-        setup(with: self.config)
+        setup(with: config)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -193,8 +191,9 @@ extension RotationDial {
     /// Setup the dial with your own config
     ///
     /// - Parameter config: dail config. If not provided, default config will be used
-    public func setup(with config: DialConfig.Config) {
-
+    public func setup(with config: DialConfig.Config = DialConfig.Config()) {
+        self.config = config
+        
         if case .limit(let angle) = config.rotationLimitType {
             angleLimit = angle
         }
@@ -258,8 +257,8 @@ extension RotationDial {
         return CGAngle(radians: radians)
     }
     
-    public func setRotationCenter(by center: CGPoint, of view: UIView) {
-        let p = view.convert(center, to: self)
+    public func setRotationCenter(by point: CGPoint, of view: UIView) {
+        let p = view.convert(point, to: self)
         config.rotationCenterType = .custom(p)
     }
 }

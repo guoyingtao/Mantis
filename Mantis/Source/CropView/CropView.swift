@@ -222,6 +222,7 @@ class CropView: UIView {
         config.backgroundColor = .clear
         config.angleShowLimitType = .limit(angle: CGAngle(degrees: 40))
         config.rotationLimitType = .limit(angle: CGAngle(degrees: 45))
+        config.numberShowSpan = 1
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
         rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight), config: config)

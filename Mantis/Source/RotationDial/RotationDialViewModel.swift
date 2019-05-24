@@ -21,9 +21,7 @@ public class RotationDialViewModel: NSObject {
             }
             
             let radians = rotationCal.getRotationRadians(byOldPoint: oldValue, andNewPoint: newValue)
-            print("Diff is x:\(newValue.x - oldValue.x) y:\(newValue.y - oldValue.y)")
             rotationAngle = CGAngle(radians: radians)
-            print("rotationAngle is \(rotationAngle.degrees)")
         }
     }
     
