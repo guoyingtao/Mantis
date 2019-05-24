@@ -19,6 +19,7 @@
 		5FC5634922983C490094652C /* RotationCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5634522983C490094652C /* RotationCalculator.swift */; };
 		5FC5634A22983C490094652C /* RotationDial+Touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5634622983C490094652C /* RotationDial+Touches.swift */; };
 		5FC5634C22983C7B0094652C /* DialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5634B22983C7B0094652C /* DialConfig.swift */; };
+		5FC5635B229880CF0094652C /* CropView+Touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5635A229880CF0094652C /* CropView+Touches.swift */; };
 		5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84B21952A330018DE62 /* Mantis.swift */; };
 		5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84D21952A330018DE62 /* CropToolbar.swift */; };
 		5FEBA86C21952A330018DE62 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84E21952A330018DE62 /* RatioPresenter.swift */; };
@@ -82,6 +83,7 @@
 		5FC5634522983C490094652C /* RotationCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationCalculator.swift; sourceTree = "<group>"; };
 		5FC5634622983C490094652C /* RotationDial+Touches.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RotationDial+Touches.swift"; sourceTree = "<group>"; };
 		5FC5634B22983C7B0094652C /* DialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialConfig.swift; sourceTree = "<group>"; };
+		5FC5635A229880CF0094652C /* CropView+Touches.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CropView+Touches.swift"; sourceTree = "<group>"; };
 		5FEBA84B21952A330018DE62 /* Mantis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mantis.swift; sourceTree = "<group>"; };
 		5FEBA84D21952A330018DE62 /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
 		5FEBA84E21952A330018DE62 /* RatioPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				5FEBA85E21952A330018DE62 /* CropView.swift */,
+				5FC5635A229880CF0094652C /* CropView+Touches.swift */,
 				5FEBA85721952A330018DE62 /* CropViewModel.swift */,
 				5FEBA85921952A330018DE62 /* CropViewStatus.swift */,
 				5FEBA85821952A330018DE62 /* CropScrollView.swift */,
@@ -408,6 +411,7 @@
 				5FEBA87B21952A330018DE62 /* CropMaskViewManager.swift in Sources */,
 				5FEBA86E21952A330018DE62 /* FixedRatios.swift in Sources */,
 				5FEBA88021952A330018DE62 /* GeometryHelper.swift in Sources */,
+				5FC5635B229880CF0094652C /* CropView+Touches.swift in Sources */,
 				5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */,
 				5FC5634A22983C490094652C /* RotationDial+Touches.swift in Sources */,
 				5FEBA87E21952A330018DE62 /* CropMaskProtocal.swift in Sources */,
