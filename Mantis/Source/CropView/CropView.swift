@@ -36,12 +36,6 @@ class CropView: UIView {
     fileprivate let hotAreaUnit: CGFloat = 64
     fileprivate let cropViewPadding:CGFloat = 14.0
     
-    fileprivate var viewStatus: CropViewStatus = .initial {
-        didSet {
-            render(by: viewStatus)
-        }
-    }
-    
     var viewModel: CropViewModel!
     
     fileprivate var panOriginPoint = CGPoint.zero
@@ -92,6 +86,11 @@ class CropView: UIView {
         super.init(frame: CGRect.zero)
         self.image = image
         self.viewModel = viewModel
+        
+        self.viewModel.statusChanged = { [weak self] status in
+            self?.render(by: status)
+        }
+        
         initalRender()
     }
     
@@ -200,11 +199,11 @@ class CropView: UIView {
     private func setupScrollView() {
         scrollView = CropScrollView(frame: bounds)
         scrollView.touchesBegan = { [weak self] in
-            self?.viewStatus = .touchImage
+            self?.viewModel.setTouchImageStatus()
         }
         
         scrollView.touchesEnded = { [weak self] in
-            self?.viewStatus = .betweenOperation
+            self?.viewModel.setBetweenOperationStatus()
         }
         
         scrollView.delegate = self
@@ -283,7 +282,7 @@ class CropView: UIView {
         let contains = rotationDial.frame.contains(point)
         
         if contains == true {
-            viewStatus = .touchRotationBoard
+            viewModel.setTouchRotationBoardStatus()
         }
         
         return contains
@@ -301,25 +300,25 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        viewStatus = .touchImage
+        viewModel.setTouchImageStatus()
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        viewStatus = .touchImage
+        viewModel.setTouchImageStatus()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        viewStatus = .betweenOperation
+        viewModel.setBetweenOperationStatus()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         manualZoomed = true
-        viewStatus = .betweenOperation
+        viewModel.setBetweenOperationStatus()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            viewStatus = .betweenOperation
+            viewModel.setBetweenOperationStatus()
         }
     }
 }
@@ -346,7 +345,7 @@ extension CropView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        viewStatus = .touchImage
+        viewModel.setTouchImageStatus()
         
         guard touches.count == 1, let touch = touches.first else {
             return
@@ -368,7 +367,7 @@ extension CropView {
             tappedEdge = cropEdge(forPoint: point)
             
             if tappedEdge != .none {
-                viewStatus = .touchCropboxHandle
+                viewModel.setTouchCropboxHandleStatus()
             }
         }
     }
@@ -408,17 +407,17 @@ extension CropView {
             if !cropOrignFrame.equalTo(cropBoxFrame) {
                 let contentRect = getContentBounds()
                 adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
-                    self?.viewStatus = .betweenOperation                    
+                    self?.viewModel.setBetweenOperationStatus()
                 }
             } else {
-                viewStatus = .betweenOperation
+                viewModel.setBetweenOperationStatus()
             }
         } else {
             currentPoint = nil
             previousPoint = nil
             rotationCal = nil
             viewModel.degrees = rotationDial.getRotationDegrees()
-            viewStatus = .betweenOperation
+            viewModel.setBetweenOperationStatus()
         }
         
         forCrop = true        
@@ -645,13 +644,13 @@ extension CropView {
             
             adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
                 self?.adaptAngleDashboardToCropBox()
-                self?.viewStatus = .betweenOperation
+                self?.viewModel.setBetweenOperationStatus()
             }
         }
     }
     
     func counterclockwiseRotate90() {
-        viewStatus = .rotating
+        viewModel.setRotatingStatus()
         
         var rect = gridOverlayView.frame
         rect.size.width = gridOverlayView.frame.height
@@ -670,7 +669,7 @@ extension CropView {
         }) {[weak self] _ in
             guard let self = self else { return }
             self.viewModel.counterclockwiseRotate90()
-            self.viewStatus = .betweenOperation
+            self.viewModel.setBetweenOperationStatus()
         }
     }
     
@@ -684,13 +683,12 @@ extension CropView {
         aspectRatioLockEnabled = false
         
         viewModel.reset()
-        
-        viewStatus = .initial
+        viewModel.setInitialStatus()
         resetUIFrame()
     }
     
     func prepareForDeviceRotation() {
-        viewStatus = .rotating
+        viewModel.setRotatingStatus()
         saveAnchorPoints()
     }
     
@@ -726,7 +724,7 @@ extension CropView {
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
-            self?.viewStatus = .betweenOperation
+            self?.viewModel.setBetweenOperationStatus()
         }
         
         adaptAngleDashboardToCropBox()

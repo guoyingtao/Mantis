@@ -23,7 +23,14 @@ enum ImageRotationType: CGFloat {
     }
 }
 
-struct CropViewModel {
+class CropViewModel {
+    var statusChanged: (_ status: CropViewStatus)->Void = { _ in }
+    
+    var viewStatus: CropViewStatus = .initial {
+        didSet {
+            self.statusChanged(viewStatus)
+        }
+    }
     
     var degrees: CGFloat = 0
     
@@ -38,7 +45,7 @@ struct CropViewModel {
     var cropLeftTopOnImage: CGPoint = .zero
     var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
     
-    mutating func reset() {
+    func reset() {
         degrees = 0
         rotationType = .none
         aspectRatio = -1
@@ -47,7 +54,7 @@ struct CropViewModel {
         cropRightBottomOnImage = CGPoint(x: 1, y: 1)
     }
     
-    mutating func counterclockwiseRotate90() {
+    func counterclockwiseRotate90() {
         rotationType.counterclockwiseRotate90()
     }
     
@@ -65,5 +72,32 @@ struct CropViewModel {
     
     func isUpOrUpsideDown() -> Bool {
         return rotationType == .none || rotationType == .counterclockwise180
+    }
+}
+
+// MARK: - Handle view status changes
+extension CropViewModel {
+    func setInitialStatus() {
+        viewStatus = .initial
+    }
+    
+    func setRotatingStatus() {
+        viewStatus = .rotating
+    }
+    
+    func setTouchImageStatus() {
+        viewStatus = .touchImage
+    }
+
+    func setTouchRotationBoardStatus() {
+        viewStatus = .touchRotationBoard
+    }
+
+    func setTouchCropboxHandleStatus() {
+        viewStatus = .touchCropboxHandle
+    }
+    
+    func setBetweenOperationStatus() {
+        viewStatus = .betweenOperation
     }
 }

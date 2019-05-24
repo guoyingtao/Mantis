@@ -218,8 +218,8 @@
 			children = (
 				5FEBA85E21952A330018DE62 /* CropView.swift */,
 				5FEBA85721952A330018DE62 /* CropViewModel.swift */,
-				5FEBA85821952A330018DE62 /* CropScrollView.swift */,
 				5FEBA85921952A330018DE62 /* CropViewStatus.swift */,
+				5FEBA85821952A330018DE62 /* CropScrollView.swift */,
 				5FEBA85A21952A330018DE62 /* ImageContainer.swift */,
 				5FEBA85B21952A330018DE62 /* CropBoxFreeAspectFrameUpdater.swift */,
 				5FEBA85C21952A330018DE62 /* CropOverlayView.swift */,
