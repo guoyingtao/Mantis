@@ -100,7 +100,10 @@ class CropView: UIView {
         switch viewStatus {
         case .initial:
             initalRender()
-        case .rotating:
+        case .rotating(let angle):
+            viewModel.degrees = angle.degrees
+            rotateScrollView()
+        case .degree90Rotated:
             cropMaskViewManager.showVisualEffectBackground()
             gridOverlayView.isHidden = true
             rotationDial.isHidden = true
@@ -168,8 +171,6 @@ class CropView: UIView {
     
     func resetUIFrame() {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
-//        cropBoxFrame = getInitialCropBoxRect()
-//        cropOrignFrame = cropBoxFrame
         
         scrollView.transform = .identity
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
@@ -228,9 +229,7 @@ class CropView: UIView {
         rotationDial.setRotationCenter(by: gridOverlayView.center, of: self)
         
         rotationDial.didRotate = { [unowned self] angle in
-            self.viewModel.degrees = angle.degrees
-            self.cropMaskViewManager.showDimmingBackground()
-            self.rotateScrollView()
+            self.viewModel.setRotatingStatus(by: angle)
         }
         
         rotationDial.didFinishedRotate = { [unowned self] in
@@ -268,17 +267,7 @@ class CropView: UIView {
         if imageContainer.contains(rect: newCropBoxFrame, fromView: self) {
             viewModel.cropBoxFrame = newCropBoxFrame
         }
-    }
-    
-    fileprivate func checkIsAngleDashboardTouched(forPoint point: CGPoint) -> Bool {
-        let contains = rotationDial.frame.contains(point)
-        
-        if contains == true {
-            viewModel.setTouchRotationBoardStatus()
-        }
-        
-        return contains
-    }
+    }    
 }
 
 extension CropView: UIScrollViewDelegate {
@@ -535,7 +524,7 @@ extension CropView {
     }
     
     func counterclockwiseRotate90() {
-        viewModel.setRotatingStatus()
+        viewModel.setDegree90RotatedStatus()
         
         var rect = gridOverlayView.frame
         rect.size.width = gridOverlayView.frame.height
@@ -572,7 +561,7 @@ extension CropView {
     }
     
     func prepareForDeviceRotation() {
-        viewModel.setRotatingStatus()
+        viewModel.setDegree90RotatedStatus()
         saveAnchorPoints()
     }
     

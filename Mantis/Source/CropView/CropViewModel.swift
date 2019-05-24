@@ -137,8 +137,12 @@ extension CropViewModel {
         viewStatus = .initial
     }
     
-    func setRotatingStatus() {
-        viewStatus = .rotating
+    func setRotatingStatus(by angle: CGAngle) {
+        viewStatus = .rotating(angle: angle)
+    }
+    
+    func setDegree90RotatedStatus() {
+        viewStatus = .degree90Rotated
     }
     
     func setTouchImageStatus() {

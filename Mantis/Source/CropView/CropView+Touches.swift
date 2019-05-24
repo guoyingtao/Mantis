@@ -38,6 +38,7 @@ extension CropView {
         }
         
         if touch.view is RotationDial {
+            viewModel.setTouchRotationBoardStatus()
             return
         }
         
