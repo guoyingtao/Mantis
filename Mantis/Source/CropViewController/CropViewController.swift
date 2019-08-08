@@ -158,12 +158,16 @@ public class CropViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    private func resetRatioButton() {
+        cropView?.aspectRatioLockEnabled = false
+        cropToolbar?.setRatioButton?.tintColor = .white
+    }
+    
     @objc private func handleSetRatio() {
         guard let cropView = cropView else { return }
         
         if cropView.aspectRatioLockEnabled {
-            cropView.aspectRatioLockEnabled = false
-            cropToolbar?.setRatioButton?.tintColor = .white
+            resetRatioButton()
             return
         }
         
@@ -205,6 +209,7 @@ public class CropViewController: UIViewController {
     }
 
     private func handleReset() {
+        resetRatioButton()
         cropView?.reset()
     }
     
