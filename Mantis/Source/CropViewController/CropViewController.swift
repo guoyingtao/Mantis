@@ -183,7 +183,12 @@ public class CropViewController: UIViewController {
         
         let ratio = cropView.getImageRatioH()
         
-        ratioPresenter = RatioPresenter(type: type, originalRatioH: ratio, customRatios: config.getCustomRatioItems())
+        let ratioManager = FixedRatioManager(type: type,
+                                             originalRatioH: ratio,
+                                             ratioOptions: config.ratioOptions,
+                                             customRatios: config.getCustomRatioItems())
+        
+        ratioPresenter = RatioPresenter(type: type, originalRatioH: ratio, ratios: ratioManager.ratios)
         ratioPresenter?.didGetRatio = { ratio in
             didSet(fixedRatio: ratio)
         }

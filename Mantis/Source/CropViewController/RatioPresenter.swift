@@ -17,22 +17,18 @@ class RatioPresenter {
     var didGetRatio: ((Double)->Void) = { _ in }
     private var type: RatioType = .vertical
     private var originalRatioH: Double
-    private var customRatios: [RatioItemType]
+    private var ratios: [RatioItemType]
     
-    init(type: RatioType, originalRatioH: Double, customRatios: [RatioItemType] = []) {
+    init(type: RatioType, originalRatioH: Double, ratios: [RatioItemType] = []) {
         self.type = type
         self.originalRatioH = originalRatioH
-        self.customRatios = customRatios
+        self.ratios = ratios
     }
     
     func present(by viewController: UIViewController, in sourceView: UIView) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let fixedRatios = FixedRatioManager(originalRatioH: self.originalRatioH)
-        fixedRatios.appendToTail(ratioItems: customRatios)        
-        fixedRatios.sort(isByHorizontal: (type == .horizontal))
-        
-        for ratio in fixedRatios.ratios {
+        for ratio in ratios {
             let title = (type == .horizontal) ? ratio.nameH : ratio.nameV
             
             let action = UIAlertAction(title: title, style: .default) {[weak self] _ in

@@ -39,6 +39,7 @@ class EmbeddedCropViewController: UIViewController {
             vc.delegate = self
             
             var config = Mantis.Config()
+            config.ratioOptions = [.custom]
             config.addCustomRatio(byWidth: 2, andHeight: 1)
             vc.config = config
             

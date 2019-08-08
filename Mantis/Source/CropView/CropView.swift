@@ -46,11 +46,7 @@ class CropView: UIView {
     
     var aspectRatioLockEnabled = false
     
-    fileprivate var image: UIImage!
-    lazy var imageRatioH = {
-        return image.ratioH()
-    }()
-    
+    fileprivate var image: UIImage!    
     var imageContainer: ImageContainer!
     fileprivate var cropMaskViewManager: CropMaskViewManager!
     

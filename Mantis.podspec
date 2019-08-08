@@ -6,11 +6,11 @@
 #  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
-`echo "4.2" > .swift-version`
+`echo "5.0" > .swift-version`
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "0.29"
+  s.version      = "0.28"
   s.summary      = "A swift photo cropping tool which mimics Photo.app"
 
   s.description  = <<-DESC

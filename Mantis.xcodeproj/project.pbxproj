@@ -10,10 +10,13 @@
 		5F0DD3592195244E00F9310B /* Mantis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0DD34F2195244E00F9310B /* Mantis.framework */; };
 		5F0DD35E2195244E00F9310B /* MantisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0DD35D2195244E00F9310B /* MantisTests.swift */; };
 		5F0DD3602195244E00F9310B /* Mantis.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F0DD3522195244E00F9310B /* Mantis.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5F2E526A22FCA03900D9465E /* FixedRatioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E526922FCA03900D9465E /* FixedRatioManager.swift */; };
+		5F2E526C22FCA05600D9465E /* RatioOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E526B22FCA05600D9465E /* RatioOptions.swift */; };
 		5F3BE13A21993373005C4BD8 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE13C21993373005C4BD8 /* MantisLocalizable.strings */; };
 		5F3BE15E2199443C005C4BD8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE15C2199443C005C4BD8 /* README.md */; };
 		5F3BE15F2199443C005C4BD8 /* Mantis.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 5F3BE15D2199443C005C4BD8 /* Mantis.podspec */; };
 		5F3BE1F4219B22B1005C4BD8 /* LocalizedHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BE1F3219B22B1005C4BD8 /* LocalizedHelper.swift */; };
+		5FBA927222FCA4C4005E2D83 /* CropView+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBA927122FCA4C4005E2D83 /* CropView+UIScrollViewDelegate.swift */; };
 		5FC5634722983C490094652C /* RotationDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5634322983C490094652C /* RotationDialViewModel.swift */; };
 		5FC5634822983C490094652C /* CGAngle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5634422983C490094652C /* CGAngle.swift */; };
 		5FC5634922983C490094652C /* RotationCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC5634522983C490094652C /* RotationCalculator.swift */; };
@@ -24,7 +27,6 @@
 		5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84D21952A330018DE62 /* CropToolbar.swift */; };
 		5FEBA86C21952A330018DE62 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84E21952A330018DE62 /* RatioPresenter.swift */; };
 		5FEBA86D21952A330018DE62 /* ToolBarButtonImageBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA84F21952A330018DE62 /* ToolBarButtonImageBuilder.swift */; };
-		5FEBA86E21952A330018DE62 /* FixedRatios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA85021952A330018DE62 /* FixedRatios.swift */; };
 		5FEBA86F21952A330018DE62 /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA85121952A330018DE62 /* CropViewController.swift */; };
 		5FEBA87021952A330018DE62 /* CGImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA85321952A330018DE62 /* CGImageExtensions.swift */; };
 		5FEBA87121952A330018DE62 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA85421952A330018DE62 /* UIImageExtensions.swift */; };
@@ -63,6 +65,8 @@
 		5F0DD3582195244E00F9310B /* MantisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F0DD35D2195244E00F9310B /* MantisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisTests.swift; sourceTree = "<group>"; };
 		5F0DD35F2195244E00F9310B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5F2E526922FCA03900D9465E /* FixedRatioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixedRatioManager.swift; sourceTree = "<group>"; };
+		5F2E526B22FCA05600D9465E /* RatioOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioOptions.swift; sourceTree = "<group>"; };
 		5F3BE13B21993373005C4BD8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		5F3BE13D219933E9005C4BD8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
 		5F3BE13E219933F3005C4BD8 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
@@ -78,6 +82,7 @@
 		5F3BE15C2199443C005C4BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		5F3BE15D2199443C005C4BD8 /* Mantis.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Mantis.podspec; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5F3BE1F3219B22B1005C4BD8 /* LocalizedHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedHelper.swift; sourceTree = "<group>"; };
+		5FBA927122FCA4C4005E2D83 /* CropView+UIScrollViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CropView+UIScrollViewDelegate.swift"; sourceTree = "<group>"; };
 		5FC5634322983C490094652C /* RotationDialViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationDialViewModel.swift; sourceTree = "<group>"; };
 		5FC5634422983C490094652C /* CGAngle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGAngle.swift; sourceTree = "<group>"; };
 		5FC5634522983C490094652C /* RotationCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationCalculator.swift; sourceTree = "<group>"; };
@@ -88,7 +93,6 @@
 		5FEBA84D21952A330018DE62 /* CropToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
 		5FEBA84E21952A330018DE62 /* RatioPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
 		5FEBA84F21952A330018DE62 /* ToolBarButtonImageBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolBarButtonImageBuilder.swift; sourceTree = "<group>"; };
-		5FEBA85021952A330018DE62 /* FixedRatios.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixedRatios.swift; sourceTree = "<group>"; };
 		5FEBA85121952A330018DE62 /* CropViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
 		5FEBA85321952A330018DE62 /* CGImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGImageExtensions.swift; sourceTree = "<group>"; };
 		5FEBA85421952A330018DE62 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 		5FEBA84621952A330018DE62 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5F2E526B22FCA05600D9465E /* RatioOptions.swift */,
 				5FEBA84B21952A330018DE62 /* Mantis.swift */,
 				5FEBA84C21952A330018DE62 /* CropViewController */,
 				5FEBA85621952A330018DE62 /* CropView */,
@@ -209,11 +214,11 @@
 		5FEBA84C21952A330018DE62 /* CropViewController */ = {
 			isa = PBXGroup;
 			children = (
+				5F2E526922FCA03900D9465E /* FixedRatioManager.swift */,
 				5FEBA85121952A330018DE62 /* CropViewController.swift */,
 				5FEBA84D21952A330018DE62 /* CropToolbar.swift */,
 				5FEBA84F21952A330018DE62 /* ToolBarButtonImageBuilder.swift */,
 				5FEBA84E21952A330018DE62 /* RatioPresenter.swift */,
-				5FEBA85021952A330018DE62 /* FixedRatios.swift */,
 			);
 			path = CropViewController;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 		5FEBA85621952A330018DE62 /* CropView */ = {
 			isa = PBXGroup;
 			children = (
+				5FBA927122FCA4C4005E2D83 /* CropView+UIScrollViewDelegate.swift */,
 				5FEBA85E21952A330018DE62 /* CropView.swift */,
 				5FC5635A229880CF0094652C /* CropView+Touches.swift */,
 				5FEBA85721952A330018DE62 /* CropViewModel.swift */,
@@ -329,6 +335,7 @@
 					};
 					5F0DD3572195244E00F9310B = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -350,6 +357,7 @@
 				it,
 				ar,
 				"ko-KR",
+				Base,
 			);
 			mainGroup = 5F0DD3452195244E00F9310B;
 			productRefGroup = 5F0DD3502195244E00F9310B /* Products */;
@@ -393,6 +401,7 @@
 				5FEBA87721952A330018DE62 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
 				5FC5634C22983C7B0094652C /* DialConfig.swift in Sources */,
 				5FEBA87A21952A330018DE62 /* CropView.swift in Sources */,
+				5F2E526A22FCA03900D9465E /* FixedRatioManager.swift in Sources */,
 				5FEBA87121952A330018DE62 /* UIImageExtensions.swift in Sources */,
 				5FC5634922983C490094652C /* RotationCalculator.swift in Sources */,
 				5FEBA86C21952A330018DE62 /* RatioPresenter.swift in Sources */,
@@ -405,12 +414,13 @@
 				5FEBA87221952A330018DE62 /* CoreGraphicsExtensions.swift in Sources */,
 				5FC5634722983C490094652C /* RotationDialViewModel.swift in Sources */,
 				5FEBA87521952A330018DE62 /* CropViewStatus.swift in Sources */,
+				5FBA927222FCA4C4005E2D83 /* CropView+UIScrollViewDelegate.swift in Sources */,
 				5FEBA88D219730CD0018DE62 /* RotationDialPlate.swift in Sources */,
 				5FEBA87C21952A330018DE62 /* CropVisualEffectView.swift in Sources */,
 				5FEBA86B21952A330018DE62 /* CropToolbar.swift in Sources */,
 				5FEBA87B21952A330018DE62 /* CropMaskViewManager.swift in Sources */,
-				5FEBA86E21952A330018DE62 /* FixedRatios.swift in Sources */,
 				5FEBA88021952A330018DE62 /* GeometryHelper.swift in Sources */,
+				5F2E526C22FCA05600D9465E /* RatioOptions.swift in Sources */,
 				5FC5635B229880CF0094652C /* CropView+Touches.swift in Sources */,
 				5FEBA86A21952A330018DE62 /* Mantis.swift in Sources */,
 				5FC5634A22983C490094652C /* RotationDial+Touches.swift in Sources */,
@@ -522,6 +532,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -580,6 +591,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -607,7 +619,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -633,7 +645,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -652,7 +664,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -671,7 +683,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

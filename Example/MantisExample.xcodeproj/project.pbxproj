@@ -120,7 +120,6 @@
 				3FC821D838EDAC646C860226 /* Pods-MantisExampleTests.debug.xcconfig */,
 				61C386518C3C25E57F8C83A5 /* Pods-MantisExampleTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -177,9 +176,11 @@
 				TargetAttributes = {
 					5FC10B10217A9EDF00582874 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 					};
 					5FC10B24217A9EE100582874 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						TestTargetID = 5FC10B10217A9EDF00582874;
 					};
 				};
@@ -486,7 +487,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -506,7 +507,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -527,7 +528,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MantisExample.app/MantisExample";
 			};
@@ -549,7 +550,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MantisExample.app/MantisExample";
 			};

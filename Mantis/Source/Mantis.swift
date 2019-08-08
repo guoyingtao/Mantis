@@ -25,15 +25,15 @@
 import UIKit
 
 private(set) var bundle: Bundle? = {
-  return Mantis.Config.bundle
+    return Mantis.Config.bundle
 } ()
 
 public func cropViewController(image: UIImage, config: Mantis.Config = Mantis.Config()) -> CropViewController {
-  return CropViewController(image: image, config: config, mode: .normal)
+    return CropViewController(image: image, config: config, mode: .normal)
 }
 
 public func cropCustomizableViewController(image: UIImage, config: Mantis.Config = Mantis.Config()) -> CropViewController {
-  return CropViewController(image: image, config: config, mode: .customizable)
+    return CropViewController(image: image, config: config, mode: .customizable)
 }
 
 public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
@@ -44,33 +44,34 @@ public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) 
 
 // Config
 public struct Config {
-  var customRatios: [(width: Int, height: Int)] = []
-  
-  static private(set) var bundle: Bundle? = {
-    guard let bundle = Bundle(identifier: "Mantis") else { return nil }
+    public var ratioOptions: RatioOptions = .all
+    var customRatios: [(width: Int, height: Int)] = []
     
-    if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
-      let bundle = Bundle(url: url)
-      return bundle
+    static private(set) var bundle: Bundle? = {
+        guard let bundle = Bundle(identifier: "Mantis") else { return nil }
+        
+        if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
+            let bundle = Bundle(url: url)
+            return bundle
+        }
+        return nil
+    } ()
+    
+    public init() {
     }
-    return nil
-  } ()
-  
-  public init() {
-  }
-  
-  mutating public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
-    customRatios.append((width, height))
-  }
-  
-  func hasCustomRatios() -> Bool {
-    return customRatios.count > 0
-  }
-  
-  func getCustomRatioItems() -> [RatioItemType] {
-    return customRatios.map {
-      (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+    
+    mutating public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
+        customRatios.append((width, height))
     }
-  }
+    
+    func hasCustomRatios() -> Bool {
+        return customRatios.count > 0
+    }
+    
+    func getCustomRatioItems() -> [RatioItemType] {
+        return customRatios.map {
+            (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+        }
+    }
 }
 
