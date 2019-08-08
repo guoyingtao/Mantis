@@ -16,14 +16,21 @@ class FixedRatioManager {
     private var customRatios: [RatioItemType] = []
 
     init(type: RatioType, originalRatioH: Double, ratioOptions: RatioOptions = .all, customRatios: [RatioItemType] = []) {
-        if ratioOptions.contains(.defaultExtraRatios) {
-            addDefault()
-        }
-        
+
         if ratioOptions.contains(.original) {
             let originalText = LocalizedHelper.getString("Original")
             let original = (originalText, originalRatioH, originalText, originalRatioH)
-            insertToHead(ratioItem: original)
+            appendToTail(ratioItem: original)
+        }
+        
+        if ratioOptions.contains(.square) {
+            let squareText = LocalizedHelper.getString("Square")
+            let square = (squareText, 1.0, squareText, 1.0)
+            appendToTail(ratioItem: square)
+        }
+
+        if ratioOptions.contains(.extraDefaultRatios) {
+            addExtraDefaultRatios()
         }
         
         if ratioOptions.contains(.custom) {
@@ -36,24 +43,20 @@ class FixedRatioManager {
 
 // MARK: - Private methods
 extension FixedRatioManager {
-    private func addDefault() {
-        let squareText = LocalizedHelper.getString("Square")
+    private func addExtraDefaultRatios() {
+        let scale3_2 = RatioItemType("3:2", 3.0/2.0, "2:3", 2.0/3.0)
+        let scale5_3 = RatioItemType("5:3", 5.0/3.0, "3:5", 3.0/5.0)
+        let scale4_3 = RatioItemType("4:3", 4.0/3.0, "3:4", 3.0/4.0)
+        let scale5_4 = RatioItemType("5:4", 5.0/4.0, "4:5", 4.0/5.0)
+        let scale7_5 = RatioItemType("7:5", 7.0/5.0, "5:7", 5.0/7.0)
+        let scale16_9 = RatioItemType("16:9", 16.0/9.0, "9:16", 9.0/16.0)
         
-        let square = (squareText, 1.0, squareText, 1.0)
-        let scale3_2 = ("3:2", 3.0/2.0, "2:3", 2.0/3.0)
-        let scale5_3 = ("5:3", 5.0/3.0, "3:5", 3.0/5.0)
-        let scale4_3 = ("4:3", 4.0/3.0, "3:4", 3.0/4.0)
-        let scale5_4 = ("5:4", 5.0/4.0, "4:5", 4.0/5.0)
-        let scale7_5 = ("7:5", 7.0/5.0, "5:7", 5.0/7.0)
-        let scale16_9 = ("16:9", 16.0/9.0, "9:16", 9.0/16.0)
-        
-        ratios.append(square)
-        ratios.append(scale3_2)
-        ratios.append(scale5_3)
-        ratios.append(scale4_3)
-        ratios.append(scale5_4)
-        ratios.append(scale7_5)
-        ratios.append(scale16_9)
+        appendToTail(ratioItem: scale3_2)
+        appendToTail(ratioItem: scale5_3)
+        appendToTail(ratioItem: scale4_3)
+        appendToTail(ratioItem: scale5_4)
+        appendToTail(ratioItem: scale7_5)
+        appendToTail(ratioItem: scale16_9)
     }
     
     private func contains(ratioItem: RatioItemType) -> Bool {
