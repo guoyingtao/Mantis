@@ -169,7 +169,7 @@ public class CropViewController: UIViewController {
         
         guard let image = image else { return }
         
-        func didSet(fixedRatio ratio: Double) {
+        func setFixedRatio(_ ratio: Double) {
             cropToolbar?.setRatioButton?.tintColor = nil
             cropView.aspectRatioLockEnabled = true
             cropView.viewModel.aspectRatio = CGFloat(ratio)
@@ -188,9 +188,18 @@ public class CropViewController: UIViewController {
                                              ratioOptions: config.ratioOptions,
                                              customRatios: config.getCustomRatioItems())
         
+        guard ratioManager.ratios.count > 0 else { return }
+        
+        if ratioManager.ratios.count == 1 {
+            let ratioItem = ratioManager.ratios[0]
+            let ratioValue = (type == .horizontal) ? ratioItem.ratioH : ratioItem.ratioV
+            setFixedRatio(ratioValue)
+            return
+        }
+        
         ratioPresenter = RatioPresenter(type: type, originalRatioH: ratio, ratios: ratioManager.ratios)
         ratioPresenter?.didGetRatio = { ratio in
-            didSet(fixedRatio: ratio)
+            setFixedRatio(ratio)
         }
         ratioPresenter?.present(by: self, in: cropToolbar!.setRatioButton!)
     }
