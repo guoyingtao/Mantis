@@ -14,6 +14,8 @@ class EmbeddedCropViewController: UIViewController {
     var image: UIImage?
     var cropViewController: CropViewController?
     
+    var didGetCroppedImage: ((UIImage) -> Void)?
+    
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
@@ -39,7 +41,7 @@ class EmbeddedCropViewController: UIViewController {
             vc.delegate = self
             
             var config = Mantis.Config()
-            config.ratioOptions = [.custom]
+            config.ratioOptions = [.all]
             config.addCustomRatio(byWidth: 2, andHeight: 1)
             vc.config = config
             
@@ -50,6 +52,6 @@ class EmbeddedCropViewController: UIViewController {
 
 extension EmbeddedCropViewController: CropViewControllerProtocal {
     func didGetCroppedImage(image: UIImage) {
-        print("get the cropped image.")
+        self.didGetCroppedImage?(image)
     }
 }

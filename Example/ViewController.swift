@@ -38,8 +38,13 @@ class ViewController: UIViewController, CropViewControllerProtocal {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let nc = segue.destination as? UINavigationController, let vc = nc.viewControllers.first as? EmbeddedCropViewController {
+        if let nc = segue.destination as? UINavigationController,
+            let vc = nc.viewControllers.first as? EmbeddedCropViewController {
             vc.image = image
+            vc.didGetCroppedImage = {[weak self] image in
+                self?.croppedImageView.image = image
+                self?.dismiss(animated: true)
+            }
         }
     }
     
