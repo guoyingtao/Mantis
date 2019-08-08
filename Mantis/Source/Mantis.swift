@@ -60,8 +60,17 @@ public struct Config {
     public init() {
     }
     
+    @available(*, deprecated, renamed: "addCustomRatio(byHorizontalWidth:andHorizontalHeight:)")
     mutating public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
         customRatios.append((width, height))
+    }
+    
+    mutating public func addCustomRatio(byHorizontalWidth width: Int, andHorizontalHeight height: Int) {
+        customRatios.append((width, height))
+    }
+
+    mutating public func addCustomRatio(byVerticalWidth width: Int, andVerticalHeight height: Int) {
+        customRatios.append((height, width))
     }
     
     func hasCustomRatios() -> Bool {
