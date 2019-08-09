@@ -37,21 +37,6 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ```ruby
 pod 'Mantis', '~> 0.28'
 ```
-
-You may also need the code below in your pod file if compile errors happen because of different swift version.
-
-```ruby
-post_install do |installer|
-    installer.pods_project.targets.each do |target|
-      if ['Mantis'].include? target.name
-        target.build_configurations.each do |config|
-          config.build_settings['SWIFT_VERSION'] = '4.2'
-        end
-      end
-    end
-  end
-```
-
 ## Usage
 
 * Create a cropViewController in Mantis with default config and default mode
@@ -105,7 +90,6 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .
             config.ratioOptions = [.custom]
             config.addCustomRatio(byVerticalWidth: 1, andVerticalHeight: 2)            
             <Your ViewController> = Mantis.cropViewController(image: <Your Image>, config: config)
-
 ```
 
 ### Demo code
