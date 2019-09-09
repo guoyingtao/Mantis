@@ -9,7 +9,7 @@
 import UIKit
 import Mantis
 
-class ViewController: UIViewController, CropViewControllerProtocal {
+class ViewController: UIViewController, CropViewControllerProtocol {
     let image = UIImage(named: "sunflower.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
