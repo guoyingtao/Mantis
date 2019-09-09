@@ -287,16 +287,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Mantis/Mantis.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantis.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
