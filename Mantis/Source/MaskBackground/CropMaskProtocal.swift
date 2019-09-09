@@ -1,5 +1,5 @@
 //
-//  CropMaskProtocal.swift
+//  CropMaskProtocol.swift
 //  Mantis
 //
 //  Created by Echo on 10/22/18.
@@ -11,13 +11,13 @@ import UIKit
 fileprivate let minOverLayerUnit: CGFloat = 30
 fileprivate let initialFrameLength: CGFloat = 1000
 
-protocol CropMaskProtocal where Self: UIView {
+protocol CropMaskProtocol where Self: UIView {
     func initialize()
     func setMask()
     func adaptMaskTo(match cropRect: CGRect)
 }
 
-extension CropMaskProtocal {
+extension CropMaskProtocol {
     func initialize() {
         setInitialFrame()
         setMask()

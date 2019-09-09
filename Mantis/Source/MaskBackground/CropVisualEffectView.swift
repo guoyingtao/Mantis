@@ -24,7 +24,7 @@ class CropVisualEffectView: UIVisualEffectView {
     }
 }
 
-extension CropVisualEffectView: CropMaskProtocal {
+extension CropVisualEffectView: CropMaskProtocol {
     func setMask() {
         let layer = createOverLayer(opacity: 0.98)
         

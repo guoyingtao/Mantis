@@ -15,7 +15,7 @@ class CropDimmingView: UIView {
     }
 }
 
-extension CropDimmingView: CropMaskProtocal {
+extension CropDimmingView: CropMaskProtocol {
     func setMask() {
         let layer = createOverLayer(opacity: 0.5)
         self.layer.addSublayer(layer)

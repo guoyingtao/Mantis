@@ -35,7 +35,7 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.28'
+pod 'Mantis', '~> 0.29'
 ```
 ## Usage
 
@@ -45,9 +45,9 @@ pod 'Mantis', '~> 0.28'
 let cropViewController = Mantis.cropViewController(image: <Your Image>)
 ```
 
-* The caller needs to conform CropViewControllerProtocal
+* The caller needs to conform CropViewControllerProtocol
 ```swift
-public protocol CropViewControllerProtocal: class {
+public protocol CropViewControllerProtocol: class {
     func didGetCroppedImage(image: UIImage)
 }
 ```
