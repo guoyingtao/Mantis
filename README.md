@@ -62,7 +62,7 @@ public protocol CropViewControllerProtocol: class {
 </p>
 
 ```swift
-let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .normal)
+let cropViewController = Mantis.cropViewController(image: <Your Image>)
 ```
 
   * customizable mode
@@ -74,7 +74,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .
 </p>
 
 ```swift
-let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .customizable)
+let cropViewController = Mantis.cropCustomizableViewController(image: <Your Image>)
 ```
 
 * Add your own ratio
@@ -95,7 +95,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, mode = .
 ### Demo code
 
 ```swift
-        let cropViewController = Mantis.cropViewController(image: <Your Image>, mode: .normal)
+        let cropViewController = Mantis.cropViewController(image: <Your Image>)
         cropViewController.delegate = self
         <Your ViewController>.present(cropViewController, animated: true)
 ```
