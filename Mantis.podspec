@@ -28,5 +28,9 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     "Resource" => ["Mantis/**/*.lproj/*.strings"]
   }
+  
+  s.info_plist = {
+      "CFBundleIdentifier" => "com.echo.framework.Mantis"
+  }
 
 end

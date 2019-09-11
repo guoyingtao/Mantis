@@ -48,7 +48,9 @@ public struct Config {
     var customRatios: [(width: Int, height: Int)] = []
     
     static private(set) var bundle: Bundle? = {
-        guard let bundle = Bundle(identifier: "Mantis") else { return nil }
+        guard let bundle = Bundle(identifier: "com.echo.framework.Mantis") else {
+            return nil
+        }
         
         if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
             let bundle = Bundle(url: url)
