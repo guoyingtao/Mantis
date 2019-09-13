@@ -30,6 +30,11 @@ public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
 }
 
+public extension CropViewControllerDelegate {
+    func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
+    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
+}
+
 public enum CropViewControllerMode {
     case normal
     case customizable    
