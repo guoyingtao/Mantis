@@ -52,8 +52,8 @@ class CropView: UIView {
     let gridOverlayView: CropOverlayView
     var rotationDial: RotationDial?
 
-    lazy var scrollView: CropScrollView = CropScrollView(frame: bounds)
-    lazy var cropMaskViewManager: CropMaskViewManager = CropMaskViewManager(with: self)
+    lazy var scrollView = CropScrollView(frame: bounds)
+    lazy var cropMaskViewManager = CropMaskViewManager(with: self)
 
     var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
@@ -77,7 +77,7 @@ class CropView: UIView {
         
         cropFrameKVO = viewModel.observe(\.cropBoxFrame,
                                          options: [.new, .old])
-        { [unowned self]_, changed in
+        { [unowned self] _, changed in
             guard let cropFrame = changed.newValue else { return }
             self.gridOverlayView.frame = cropFrame
             self.cropMaskViewManager.adaptMaskTo(match: cropFrame)
