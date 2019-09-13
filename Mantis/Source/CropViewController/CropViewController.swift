@@ -41,22 +41,20 @@ public enum CropViewControllerMode {
 }
 
 public class CropViewController: UIViewController {
+    /// When a CropViewController is used in a storyboard,
+    /// passing an image to it is needed after the CropViewController is created.
+    public var image: UIImage!
     
     public weak var delegate: CropViewControllerDelegate?
-
-    private var orientation: UIInterfaceOrientation = .unknown
-
-    public var image: UIImage!
-    private lazy var cropView = CropView(image: image, viewModel: CropViewModel())
-    private lazy var cropToolbar = CropToolbar(frame: CGRect.zero)
-
-    private var ratioPresenter: RatioPresenter?
-    private var stackView: UIStackView?
-    
-    private var initialLayout = false
-    
     public var mode: CropViewControllerMode = .normal
     public var config = Mantis.Config()
+
+    private var orientation: UIInterfaceOrientation = .unknown
+    private lazy var cropView = CropView(image: image, viewModel: CropViewModel())
+    private lazy var cropToolbar = CropToolbar(frame: CGRect.zero)
+    private var ratioPresenter: RatioPresenter?
+    private var stackView: UIStackView?
+    private var initialLayout = false
     
     deinit {
         print("CropViewController deinit.")
