@@ -11,15 +11,13 @@ extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let p = self.convert(point, to: self)
         
-        if rotationDial.frame.contains(p) {
+        if let rotationDial = rotationDial, rotationDial.frame.contains(p) {
             return rotationDial
         }
         
-        if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit,
-                                          dy: -hotAreaUnit).contains(p) &&
-            !gridOverlayView.frame.insetBy(dx: hotAreaUnit,
-                                           dy: hotAreaUnit).contains(p)
-            ) {
+        if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit, dy: -hotAreaUnit).contains(p) &&
+            !gridOverlayView.frame.insetBy(dx: hotAreaUnit, dy: hotAreaUnit).contains(p))
+        {
             return self
         }
         
