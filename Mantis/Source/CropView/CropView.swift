@@ -36,7 +36,8 @@ let hotAreaUnit: CGFloat = 64
 let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
-    var viewModel: CropViewModel!
+    let image: UIImage
+    let viewModel: CropViewModel
     
     weak var delegate: CropViewDelegate? {
         didSet {
@@ -45,15 +46,15 @@ class CropView: UIView {
     }
     
     var aspectRatioLockEnabled = false
-    
-    fileprivate var image: UIImage!    
-    var imageContainer: ImageContainer!
-    fileprivate var cropMaskViewManager: CropMaskViewManager!
-    
-    var rotationDial: RotationDial!
-    var scrollView: CropScrollView!
-    var gridOverlayView: CropOverlayView!
-    
+
+    // Referred to in extension
+    let imageContainer: ImageContainer
+    let gridOverlayView: CropOverlayView
+    var rotationDial: RotationDial?
+
+    lazy var scrollView = CropScrollView(frame: bounds)
+    lazy var cropMaskViewManager = CropMaskViewManager(with: self)
+
     var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
     
@@ -62,17 +63,21 @@ class CropView: UIView {
     }
     
     init(image: UIImage, viewModel: CropViewModel = CropViewModel()) {
-        super.init(frame: CGRect.zero)
         self.image = image
         self.viewModel = viewModel
-        
+
+        imageContainer = ImageContainer()
+        gridOverlayView = CropOverlayView()
+
+        super.init(frame: CGRect.zero)
+
         self.viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)
         }
         
         cropFrameKVO = viewModel.observe(\.cropBoxFrame,
                                          options: [.new, .old])
-        { [unowned self]_, changed in
+        { [unowned self] _, changed in
             guard let cropFrame = changed.newValue else { return }
             self.gridOverlayView.frame = cropFrame
             self.cropMaskViewManager.adaptMaskTo(match: cropFrame)
@@ -82,7 +87,7 @@ class CropView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func initalRender() {
@@ -102,7 +107,7 @@ class CropView: UIView {
         case .degree90Rotated:
             cropMaskViewManager.showVisualEffectBackground()
             gridOverlayView.isHidden = true
-            rotationDial.isHidden = true
+            rotationDial?.isHidden = true
         case .touchImage:
             cropMaskViewManager.showDimmingBackground()
             gridOverlayView.gridLineNumberType = .crop
@@ -110,7 +115,7 @@ class CropView: UIView {
         case .touchCropboxHandle:
             gridOverlayView.gridLineNumberType = .crop
             gridOverlayView.setGrid(hidden: false, animated: true)
-            rotationDial.isHidden = true
+            rotationDial?.isHidden = true
             cropMaskViewManager.showDimmingBackground()
         case .touchRotationBoard:
             gridOverlayView.gridLineNumberType = .rotate
@@ -118,7 +123,7 @@ class CropView: UIView {
             cropMaskViewManager.showDimmingBackground()
         case .betweenOperation:
             gridOverlayView.setGrid(hidden: true, animated: true)
-            rotationDial.isHidden = false
+            rotationDial?.isHidden = false
             adaptAngleDashboardToCropBox()
             cropMaskViewManager.showVisualEffectBackground()
             checkImageStatusChanged()
@@ -155,13 +160,11 @@ class CropView: UIView {
     
     private func setupUI() {
         setupScrollView()
-        imageContainer = ImageContainer()
         imageContainer.image = image
         
         scrollView.addSubview(imageContainer)
         scrollView.imageContainer = imageContainer
         
-        cropMaskViewManager = CropMaskViewManager(with: self)
         setGridOverlayView()
     }
     
@@ -186,7 +189,6 @@ class CropView: UIView {
     }
     
     private func setupScrollView() {
-        scrollView = CropScrollView(frame: bounds)
         scrollView.touchesBegan = { [weak self] in
             self?.viewModel.setTouchImageStatus()
         }
@@ -200,7 +202,6 @@ class CropView: UIView {
     }
     
     private func setGridOverlayView() {
-        gridOverlayView = CropOverlayView()
         gridOverlayView.isUserInteractionEnabled = false
         gridOverlayView.gridHidden = true
         addSubview(gridOverlayView)
@@ -208,7 +209,7 @@ class CropView: UIView {
     
     private func setupAngleDashboard() {
         if rotationDial != nil {
-            rotationDial.removeFromSuperview()
+            rotationDial?.removeFromSuperview()
         }
         
         var config = DialConfig.Config()
@@ -218,7 +219,8 @@ class CropView: UIView {
         config.numberShowSpan = 1
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
-        rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight), config: config)
+        let rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight), config: config)
+        self.rotationDial = rotationDial
         rotationDial.isUserInteractionEnabled = true
         addSubview(rotationDial)
         
@@ -233,10 +235,12 @@ class CropView: UIView {
         }
         
         rotationDial.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
-        adaptAngleDashboardToCropBox()        
+        adaptAngleDashboardToCropBox()
     }
     
     private func adaptAngleDashboardToCropBox() {
+        guard let rotationDial = rotationDial else { return }
+
         if UIApplication.shared.statusBarOrientation.isPortrait {
             rotationDial.transform = CGAffineTransform(rotationAngle: 0)
             rotationDial.frame.origin.x = gridOverlayView.frame.origin.x +  (gridOverlayView.frame.width - rotationDial.frame.width) / 2
@@ -276,7 +280,6 @@ extension CropView {
     }
     
     private func getInitialCropBoxRect() -> CGRect {
-        guard let image = image else { return .zero }
         guard image.size.width > 0 && image.size.height > 0 else {
             return .zero
         }
@@ -520,7 +523,7 @@ extension CropView {
         scrollView.removeFromSuperview()
         cropMaskViewManager.removeMaskViews()
         gridOverlayView.removeFromSuperview()
-        rotationDial.removeFromSuperview()
+        rotationDial?.removeFromSuperview()
         
         aspectRatioLockEnabled = false
         
@@ -536,7 +539,7 @@ extension CropView {
     fileprivate func setRotation(byRadians radians: CGFloat) {
         scrollView.transform = CGAffineTransform(rotationAngle: radians)
         updatePosition(by: radians)
-        rotationDial.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
+        rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
     
     func setFixedRatioCropBox() {

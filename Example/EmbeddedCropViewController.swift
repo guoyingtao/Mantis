@@ -50,8 +50,10 @@ class EmbeddedCropViewController: UIViewController {
     }
 }
 
-extension EmbeddedCropViewController: CropViewControllerProtocol {
-    func didGetCroppedImage(image: UIImage) {
-        self.didGetCroppedImage?(image)
+extension EmbeddedCropViewController: CropViewControllerDelegate {
+    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage) {
+        self.didGetCroppedImage?(cropped)
     }
+    func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
+    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
 }

@@ -9,18 +9,18 @@
 import UIKit
 import Mantis
 
-class ViewController: UIViewController, CropViewControllerProtocol {
+class ViewController: UIViewController, CropViewControllerDelegate {
     let image = UIImage(named: "sunflower.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let statusBar: UIView = UIApplication.shared.value(forKey: "statusBar") as? UIView {
-            statusBar.backgroundColor = .black
-        }        
+//        if let statusBar: UIView = UIApplication.shared.value(forKey: "statusBar") as? UIView {
+//            statusBar.backgroundColor = .black
+//        }        
         
-        setNeedsStatusBarAppearanceUpdate()
+//        setNeedsStatusBarAppearanceUpdate()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -32,7 +32,9 @@ class ViewController: UIViewController, CropViewControllerProtocol {
             return
         }
         
+//        Mantis.Config.integratedByCocoaPods = false
         let cropViewController = Mantis.cropViewController(image: image)
+        cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         present(cropViewController, animated: true)
     }
@@ -48,7 +50,7 @@ class ViewController: UIViewController, CropViewControllerProtocol {
         }
     }
     
-    func didGetCroppedImage(image: UIImage) {
+    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage) {
         croppedImageView.image = image
     }
 }
