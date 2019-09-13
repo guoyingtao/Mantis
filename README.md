@@ -40,6 +40,7 @@ pod 'Mantis', '~> 0.30'
 ## Usage
 
 * Create a cropViewController in Mantis with default config and default mode
+**You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13 when the cropViewController is presented**
 
 ```swift
 let cropViewController = Mantis.cropViewController(image: <Your Image>)
