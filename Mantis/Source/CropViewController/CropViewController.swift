@@ -46,8 +46,9 @@ public class CropViewController: UIViewController {
 
     private var orientation: UIInterfaceOrientation = .unknown
 
-    private let cropView: CropView
-    private let cropToolbar: CropToolbar
+    public var image: UIImage!
+    private lazy var cropView = CropView(image: image, viewModel: CropViewModel())
+    private lazy var cropToolbar = CropToolbar(frame: CGRect.zero)
 
     private var ratioPresenter: RatioPresenter?
     private var stackView: UIStackView?
@@ -62,19 +63,17 @@ public class CropViewController: UIViewController {
     }
     
     init(image: UIImage, config: Mantis.Config = Mantis.Config(), mode: CropViewControllerMode = .normal) {
+        self.image = image
         self.config = config
         self.mode = mode
-
-        cropView = CropView(image: image, viewModel: CropViewModel())
-        cropToolbar = CropToolbar(frame: CGRect.zero)
-
+        
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
-    
+        
     fileprivate func createCropToolbar() {
         cropToolbar.backgroundColor = .black
         
@@ -159,7 +158,7 @@ public class CropViewController: UIViewController {
     private func handleCancel() {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            self.delegate?.cropViewControllerDidCancel(self, original: self.cropView.image)
+            self.delegate?.cropViewControllerDidCancel(self, original: self.image)
         }
     }
     

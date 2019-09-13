@@ -45,10 +45,12 @@ pod 'Mantis', '~> 0.30'
 let cropViewController = Mantis.cropViewController(image: <Your Image>)
 ```
 
-* The caller needs to conform CropViewControllerProtocol
+* The caller needs to conform CropViewControllerDelegate
 ```swift
-public protocol CropViewControllerProtocol: class {
-    func didGetCroppedImage(image: UIImage)
+public protocol CropViewControllerDelegate: class {
+    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage)
+    func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
+    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
 }
 ```
 
