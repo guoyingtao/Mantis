@@ -20,7 +20,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 //            statusBar.backgroundColor = .black
 //        }        
         
-        setNeedsStatusBarAppearanceUpdate()
+//        setNeedsStatusBarAppearanceUpdate()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -33,6 +33,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         let cropViewController = Mantis.cropViewController(image: image)
+        cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         present(cropViewController, animated: true)
     }
