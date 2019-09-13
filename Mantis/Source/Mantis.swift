@@ -44,15 +44,26 @@ public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) 
 
 // Config
 public struct Config {
+    /*
+     Cocoapods(<1.8.0) set your framework bundle identifier to "org.cocoapods.<Your framwork>"
+     When you use swift package manager to integrate your framework, your framework bundle identifier is used not "org.cocoapods.<Your framwork>".
+     This property will be removed after Cocoapods 1.8.0 official version is released
+     */
+    public static var integratedByCocoaPods = true
+    
     public var ratioOptions: RatioOptions = .all
     var customRatios: [(width: Int, height: Int)] = []
     
-    static private(set) var bundle: Bundle? = {
-//        guard let bundle = Bundle(identifier: "com.echo.framework.Mantis") else {
-//            return nil
-//        }
+    static private var bundleIdentifier: String = {
+        if integratedByCocoaPods {
+            return "org.cocoapods.Mantis"
+        }
         
-        guard let bundle = Bundle(identifier: "org.cocoapods.Mantis") else {
+        return "com.echo.framework.Mantis"
+    } ()
+    
+    static private(set) var bundle: Bundle? = {
+        guard let bundle = Bundle(identifier: bundleIdentifier) else {
             return nil
         }
         

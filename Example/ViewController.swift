@@ -32,6 +32,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
+//        Mantis.Config.integratedByCocoaPods = false
         let cropViewController = Mantis.cropViewController(image: image)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
