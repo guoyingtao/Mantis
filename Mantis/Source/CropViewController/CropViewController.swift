@@ -45,7 +45,11 @@ public enum CropViewControllerMode {
 public class CropViewController: UIViewController {
     /// When a CropViewController is used in a storyboard,
     /// passing an image to it is needed after the CropViewController is created.
-    public var image: UIImage!
+    public var image: UIImage! {
+        didSet {
+            cropView.image = image
+        }
+    }
     
     public weak var delegate: CropViewControllerDelegate?
     public var mode: CropViewControllerMode = .normal
@@ -295,5 +299,9 @@ extension CropViewController {
         }
 
         delegate?.cropViewControllerDidCrop(self, cropped: image)
+    }
+    
+    public func process(_ image: UIImage) -> UIImage? {
+        return cropView.crop(image)
     }
 }
