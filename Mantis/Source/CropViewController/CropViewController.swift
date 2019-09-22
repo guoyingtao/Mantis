@@ -25,10 +25,10 @@
 import UIKit
 
 public protocol CropViewControllerDelegate: class {
-    func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
+    func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
 }
 
 public extension CropViewControllerDelegate {

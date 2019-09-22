@@ -51,6 +51,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     }
     
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage) {
-        croppedImageView.image = image
+        croppedImageView.image = cropped
     }
 }
