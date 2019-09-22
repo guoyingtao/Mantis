@@ -36,7 +36,11 @@ let hotAreaUnit: CGFloat = 64
 let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
-    let image: UIImage
+    var image: UIImage {
+        didSet {
+            imageContainer.image = image
+        }
+    }
     let viewModel: CropViewModel
     
     weak var delegate: CropViewDelegate? {
@@ -451,7 +455,7 @@ extension CropView {
 
 // MARK: - internal API
 extension CropView {
-    func crop() -> UIImage? {
+    func crop(_ image: UIImage) -> UIImage? {
         let rect = imageContainer.convert(imageContainer.bounds,
                                           to: self)
         let point = rect.center
@@ -465,6 +469,10 @@ extension CropView {
                             cropSize: gridOverlayView.frame.size,
                             imageViewSize: imageContainer.bounds.size)
         return image.getCroppedImage(byCropInfo: info)
+    }
+    
+    func crop() -> UIImage? {
+        return crop(image)
     }
         
     func handleRotate() {
