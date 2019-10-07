@@ -104,12 +104,14 @@ class CropToolbar: UIView {
         }
     }
     
-    func createToolbarUI(mode: CropToolbarMode = .normal) {
+    func createToolbarUI(mode: CropToolbarMode = .normal, includeSetRatioButton: Bool = true) {
         createButtonContainer()
         setButtonContainerLayout()
 
         createRotationButton()
-        createSetRatioButton()
+        if includeSetRatioButton {
+            createSetRatioButton()
+        }
 
         if mode == .normal {
             createResetButton(with: ToolBarButtonImageBuilder.resetImage())

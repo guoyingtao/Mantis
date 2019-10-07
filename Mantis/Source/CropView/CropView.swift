@@ -173,14 +173,18 @@ class CropView: UIView {
     }
     
     func resetUIFrame() {
+        cropMaskViewManager.removeMaskViews()
+        cropMaskViewManager.setup(in: self)
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
-        
+                
         scrollView.transform = .identity
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
         
         imageContainer.frame = scrollView.bounds
         imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
 
+        gridOverlayView.superview?.bringSubviewToFront(gridOverlayView)
+        
         setupAngleDashboard()
         
         if aspectRatioLockEnabled {
@@ -351,7 +355,7 @@ extension CropView {
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
     
-    func adjustUIForNewCrop(contentRect:CGRect, completion: @escaping ()->Void) {
+    func adjustUIForNewCrop(contentRect:CGRect, animation: Bool = true, completion: @escaping ()->Void) {
         
         let scaleX: CGFloat
         let scaleY: CGFloat
@@ -391,17 +395,26 @@ extension CropView {
         
         let newCropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
         
-        UIView.animate(withDuration: 0.25, animations: {
+        func updateUI(by newCropBoxFrame: CGRect, and scaleFrame: CGRect) {
             self.viewModel.cropBoxFrame = newCropBoxFrame
             
             let zoomRect = self.convert(scaleFrame,
                                         to: self.scrollView.imageContainer)
             self.scrollView.zoom(to: zoomRect, animated: false)
             self.scrollView.checkContentOffset()
-        }) {_ in
-            completion()
         }
         
+        if animation {
+            UIView.animate(withDuration: 0.25, animations: {
+                updateUI(by: newCropBoxFrame, and: scaleFrame)
+            }) {_ in
+                completion()
+            }
+        } else {
+            updateUI(by: newCropBoxFrame, and: scaleFrame)
+            completion()
+        }
+                
         manualZoomed = true
     }
     
@@ -527,15 +540,18 @@ extension CropView {
         }
     }
     
-    func reset() {
+    func reset(forceFixedRatio: Bool = false) {
         scrollView.removeFromSuperview()
-        cropMaskViewManager.removeMaskViews()
         gridOverlayView.removeFromSuperview()
         rotationDial?.removeFromSuperview()
         
-        aspectRatioLockEnabled = false
+        if forceFixedRatio {
+            aspectRatioLockEnabled = true
+        } else {
+            aspectRatioLockEnabled = false
+        }
         
-        viewModel.reset()
+        viewModel.reset(forceFixedRatio: forceFixedRatio)
         resetUIFrame()
     }
     
@@ -555,7 +571,7 @@ extension CropView {
                                   and: getImageRatioH())
         
         let contentRect = getContentBounds()
-        adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
+        adjustUIForNewCrop(contentRect: contentRect, animation: false) { [weak self] in
             self?.viewModel.setBetweenOperationStatus()
         }
         

@@ -14,13 +14,17 @@ class FixedRatioManager {
     private (set) var ratios: [RatioItemType] = []
     private var ratioOptions: RatioOptions = .all
     private var customRatios: [RatioItemType] = []
+    
+    var type: RatioType = .horizontal
+    var originalRatioH = 1.0
 
     init(type: RatioType, originalRatioH: Double, ratioOptions: RatioOptions = .all, customRatios: [RatioItemType] = []) {
 
+        self.type = type
+        self.originalRatioH = originalRatioH
+        
         if ratioOptions.contains(.original) {
-            let originalText = LocalizedHelper.getString("Original")
-            let original = (originalText, originalRatioH, originalText, originalRatioH)
-            appendToTail(ratioItem: original)
+            appendToTail(ratioItem: getOriginalRatioItem())
         }
         
         if ratioOptions.contains(.square) {
@@ -38,6 +42,11 @@ class FixedRatioManager {
         }
         
         sort(isByHorizontal: (type == .horizontal))
+    }
+    
+    func getOriginalRatioItem() -> RatioItemType {
+        let originalText = LocalizedHelper.getString("Original")
+        return (originalText, originalRatioH, originalText, originalRatioH)
     }
 }
 
