@@ -88,7 +88,14 @@ public class CropViewController: UIViewController {
         cropToolbar.selectedCrop = {[weak self] in self?.handleCrop() }
         
         if mode == .normal {
-            cropToolbar.createToolbarUI()
+            if config.ratioOptions == .original || config.ratioOptions == .square {
+                // If pre-set ratioOptions to only contain a single ratio, then don't add ratio button
+                cropToolbar.createToolbarUI(includeSetRatioButton: false)
+                // Calling this will apply the current ratio
+                handleSetRatio()
+            } else {
+                cropToolbar.createToolbarUI(includeSetRatioButton: true)
+            }
         } else {
             cropToolbar.createToolbarUI(mode: .simple)
         }
