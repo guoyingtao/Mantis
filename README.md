@@ -85,12 +85,12 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
 * Add your own ratio
 ```swift
             // Add a custom ratio 1:2 for portrait orientation
-            let config = MantisConfig()
+            let config = Mantis.Config()
             config.addCustomRatio(byVerticalWidth: 1, andVerticalHeight: 2)            
             <Your ViewController> = Mantis.cropViewController(image: <Your Image>, config: config)
             
             // Set the ratioOptions of the config if you don't want to keep all default ratios
-            let config = MantisConfig() 
+            let config = Mantis.Config() 
             //config.ratioOptions = [.original, .square, .custom]
             config.ratioOptions = [.custom]
             config.addCustomRatio(byVerticalWidth: 1, andVerticalHeight: 2)            
