@@ -616,7 +616,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.31;
+				MARKETING_VERSION = 0.32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -643,7 +643,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.31;
+				MARKETING_VERSION = 0.32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
