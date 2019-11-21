@@ -14,6 +14,14 @@ import UIKit
 extension CGImage {
     
     func transformedImage(_ transform: CGAffineTransform, zoomScale: CGFloat, sourceSize: CGSize, cropSize: CGSize, imageViewSize: CGSize) -> CGImage? {
+        guard var colorSpaceRef = self.colorSpace else {
+            return self
+        }
+        // If the color space does not allow output, default to the RGB color space
+        if (!colorSpaceRef.supportsOutput) {
+            colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+        }
+        
         let expectedWidth = floor(sourceSize.width / imageViewSize.width * cropSize.width) / zoomScale
         let expectedHeight = floor(sourceSize.height / imageViewSize.height * cropSize.height) / zoomScale
         let outputSize = CGSize(width: expectedWidth, height: expectedHeight)
@@ -24,7 +32,7 @@ extension CGImage {
                                 height: Int(outputSize.height),
                                 bitsPerComponent: self.bitsPerComponent,
                                 bytesPerRow: bitmapBytesPerRow,
-                                space: self.colorSpace!,
+                                space: colorSpaceRef,
                                 bitmapInfo: self.bitmapInfo.rawValue)
         context?.setFillColor(UIColor.clear.cgColor)
         context?.fill(CGRect(x: 0,
