@@ -35,7 +35,7 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.40'
+pod 'Mantis', '~> 0.41'
 ```
 ## Usage
 
