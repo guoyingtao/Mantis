@@ -179,6 +179,10 @@ class CropOverlayView: UIView {
             setGridLinesShowStatus()
         }
     }
+    
+    func hideGrid() {
+        gridLineNumberType = .none
+    }
 }
 
 extension CropOverlayView {
@@ -194,6 +198,7 @@ extension CropOverlayView {
     }
     
     enum GridLineNumberType: Int {
+        case none = 0
         case crop = 2
         case rotate = 8
     }

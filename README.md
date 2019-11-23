@@ -35,7 +35,7 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.31'
+pod 'Mantis', '~> 0.41'
 ```
 ## Usage
 
@@ -85,17 +85,22 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
 * Add your own ratio
 ```swift
             // Add a custom ratio 1:2 for portrait orientation
-            let config = MantisConfig()
+            let config = Mantis.Config()
             config.addCustomRatio(byVerticalWidth: 1, andVerticalHeight: 2)            
             <Your ViewController> = Mantis.cropViewController(image: <Your Image>, config: config)
             
             // Set the ratioOptions of the config if you don't want to keep all default ratios
-            let config = MantisConfig() 
+            let config = Mantis.Config() 
             //config.ratioOptions = [.original, .square, .custom]
             config.ratioOptions = [.custom]
             config.addCustomRatio(byVerticalWidth: 1, andVerticalHeight: 2)            
             <Your ViewController> = Mantis.cropViewController(image: <Your Image>, config: config)
 ```
+
+* If you always want to use only one fixed ratio, set Mantis.Config.alwaysUsingOnePresetFixedRatio = true
+
+The fixed-ratio setting button does not show when alwaysUsingOnePresetFixedRatio is true
+
 
 ### Demo code
 

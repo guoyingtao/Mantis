@@ -39,6 +39,11 @@ class CropMaskViewManager {
         visualEffectView.removeFromSuperview()
     }
     
+    func bringMaskViewsToFront() {
+        dimmingView.superview?.bringSubviewToFront(dimmingView)
+        visualEffectView.superview?.bringSubviewToFront(visualEffectView)
+    }
+    
     func showDimmingBackground() {
         UIView.animate(withDuration: 0.1) {
             self.dimmingView.alpha = 1

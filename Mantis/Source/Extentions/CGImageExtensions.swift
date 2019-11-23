@@ -14,18 +14,47 @@ import UIKit
 extension CGImage {
     
     func transformedImage(_ transform: CGAffineTransform, zoomScale: CGFloat, sourceSize: CGSize, cropSize: CGSize, imageViewSize: CGSize) -> CGImage? {
+        guard var colorSpaceRef = self.colorSpace else {
+            return self
+        }
+        // If the color space does not allow output, default to the RGB color space
+        if (!colorSpaceRef.supportsOutput) {
+            colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+        }
+        
         let expectedWidth = floor(sourceSize.width / imageViewSize.width * cropSize.width) / zoomScale
         let expectedHeight = floor(sourceSize.height / imageViewSize.height * cropSize.height) / zoomScale
         let outputSize = CGSize(width: expectedWidth, height: expectedHeight)
         let bitmapBytesPerRow = 0
         
-        let context = CGContext(data: nil,
+        var context = CGContext(data: nil,
                                 width: Int(outputSize.width),
                                 height: Int(outputSize.height),
                                 bitsPerComponent: self.bitsPerComponent,
                                 bytesPerRow: bitmapBytesPerRow,
-                                space: self.colorSpace!,
+                                space: colorSpaceRef,
                                 bitmapInfo: self.bitmapInfo.rawValue)
+
+        if context == nil {
+            context = CGContext(data: nil,
+            width: Int(outputSize.width),
+            height: Int(outputSize.height),
+            bitsPerComponent: self.bitsPerComponent,
+            bytesPerRow: bitmapBytesPerRow,
+            space: colorSpaceRef,
+            bitmapInfo:CGImageAlphaInfo.premultipliedLast.rawValue)
+        }
+        
+        if context == nil {
+            context = CGContext(data: nil,
+            width: Int(outputSize.width),
+            height: Int(outputSize.height),
+            bitsPerComponent: self.bitsPerComponent,
+            bytesPerRow: bitmapBytesPerRow,
+            space: colorSpaceRef,
+            bitmapInfo:CGImageAlphaInfo.premultipliedFirst.rawValue)
+        }
+        
         context?.setFillColor(UIColor.clear.cgColor)
         context?.fill(CGRect(x: 0,
                              y: 0,

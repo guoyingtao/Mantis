@@ -51,11 +51,14 @@ class CropViewModel: NSObject {
     var cropLeftTopOnImage: CGPoint = .zero
     var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
     
-    func reset() {
+    func reset(forceFixedRatio: Bool = false) {
         cropBoxFrame = .zero
         degrees = 0
         rotationType = .none
-        aspectRatio = -1
+        
+        if forceFixedRatio == false {
+            aspectRatio = -1
+        }        
         
         cropLeftTopOnImage = .zero
         cropRightBottomOnImage = CGPoint(x: 1, y: 1)

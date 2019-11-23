@@ -54,6 +54,9 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     var customRatios: [(width: Int, height: Int)] = []
     
+    // When this one is true, fixed-ratio setting button does not show.
+    public var alwaysUsingOnePresetFixedRatio = false
+    
     static private var bundleIdentifier: String = {
         if integratedByCocoaPods {
             return "org.cocoapods.Mantis"

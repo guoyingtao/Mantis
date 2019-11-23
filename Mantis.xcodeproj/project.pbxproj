@@ -603,6 +603,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 3V26Q55U3S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -616,7 +617,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.31;
+				MARKETING_VERSION = 0.41;
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -630,6 +631,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 3V26Q55U3S;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -643,7 +645,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.31;
+				MARKETING_VERSION = 0.41;
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
