@@ -27,13 +27,34 @@ extension CGImage {
         let outputSize = CGSize(width: expectedWidth, height: expectedHeight)
         let bitmapBytesPerRow = 0
         
-        let context = CGContext(data: nil,
+        var context = CGContext(data: nil,
                                 width: Int(outputSize.width),
                                 height: Int(outputSize.height),
                                 bitsPerComponent: self.bitsPerComponent,
                                 bytesPerRow: bitmapBytesPerRow,
                                 space: colorSpaceRef,
                                 bitmapInfo: self.bitmapInfo.rawValue)
+
+        if context == nil {
+            context = CGContext(data: nil,
+            width: Int(outputSize.width),
+            height: Int(outputSize.height),
+            bitsPerComponent: self.bitsPerComponent,
+            bytesPerRow: bitmapBytesPerRow,
+            space: colorSpaceRef,
+            bitmapInfo:CGImageAlphaInfo.premultipliedLast.rawValue)
+        }
+        
+        if context == nil {
+            context = CGContext(data: nil,
+            width: Int(outputSize.width),
+            height: Int(outputSize.height),
+            bitsPerComponent: self.bitsPerComponent,
+            bytesPerRow: bitmapBytesPerRow,
+            space: colorSpaceRef,
+            bitmapInfo:CGImageAlphaInfo.premultipliedFirst.rawValue)
+        }
+        
         context?.setFillColor(UIColor.clear.cgColor)
         context?.fill(CGRect(x: 0,
                              y: 0,
