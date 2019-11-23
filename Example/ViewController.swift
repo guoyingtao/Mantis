@@ -42,12 +42,13 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
 //        Mantis.Config.integratedByCocoaPods = false
         let config = Mantis.Config()
-//        config.ratioOptions = [.square]
-//        config.alwaysUsingOnePresetFixedRatio = true
         
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
+        cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(fixDirection: true)
+        cropViewController.config.ratioOptions = [.custom]
+        cropViewController.config.addCustomRatio(byVerticalWidth: 3, andVerticalHeight: 16)
         present(cropViewController, animated: true)
     }
     

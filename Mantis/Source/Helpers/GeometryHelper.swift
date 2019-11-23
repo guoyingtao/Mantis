@@ -22,7 +22,7 @@ enum CropViewOverlayEdge {
 
 
 struct GeometryHelper {    
-    static func getIncribeRect(fromOutsideRect outsideRect: CGRect, andInsideRect insideRect: CGRect) -> CGRect {
+    static func getInscribeRect(fromOutsideRect outsideRect: CGRect, andInsideRect insideRect: CGRect) -> CGRect {
         let insideRectRatio = insideRect.width / insideRect.height
         let outsideRectRatio = outsideRect.width / outsideRect.height
         

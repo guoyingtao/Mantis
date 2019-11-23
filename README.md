@@ -97,10 +97,16 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
             <Your ViewController> = Mantis.cropViewController(image: <Your Image>, config: config)
 ```
 
-* If you always want to use only one fixed ratio, set Mantis.Config.alwaysUsingOnePresetFixedRatio = true
+* If you always want to use only one fixed ratio, set Mantis.Config.presetFixedRatioType = alwaysUsingOnePresetFixedRatio
 
-The fixed-ratio setting button does not show when alwaysUsingOnePresetFixedRatio is true
-
+When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
+ 
+- when fixDirection is true, the fixed ratio won't be adapted
+ for both horizontal and vertical directions
+- When using addCustomRatio(byVerticalWidth: 9, andVerticalHeight: 16),
+it will use 9:16 for vertical images and 16:9 for horizontal images when fixDirection is false.
+  But it will use only 9:16 for both vertical and horizontal
+images when fixDirection is true
 
 ### Demo code
 

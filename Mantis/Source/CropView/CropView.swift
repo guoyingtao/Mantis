@@ -302,7 +302,7 @@ extension CropView {
             insideRect = CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width)
         }
         
-        return GeometryHelper.getIncribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
+        return GeometryHelper.getInscribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
     }
     
     func getContentBounds() -> CGRect {
@@ -393,7 +393,7 @@ extension CropView {
                                        y: (contentOffsetCenter.y - scrollView.bounds.height / 2))
         scrollView.contentOffset = newContentOffset
         
-        let newCropBoxFrame = GeometryHelper.getIncribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
+        let newCropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
         
         func updateUI(by newCropBoxFrame: CGRect, and scaleFrame: CGRect) {
             self.viewModel.cropBoxFrame = newCropBoxFrame
@@ -436,14 +436,15 @@ extension CropView {
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
         let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
         
-        let newSize: CGSize
+        var newSize: CGSize
         let scale: CGFloat
+        
         if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
             newSize = CGSize(width: width, height: height)
         } else {
             newSize = CGSize(width: height, height: width)
         }
-        
+
         scale = newSize.width / scrollView.bounds.width        
         scrollView.updateLayout(byNewSize: newSize)
         
@@ -517,14 +518,17 @@ extension CropView {
         }
     }
     
-    func counterclockwiseRotate90() {
+    func counterclockwiseRotate90(fixedDirectionalpresetRatio: Bool = false) {
         viewModel.setDegree90RotatedStatus()
         
         var rect = gridOverlayView.frame
-        rect.size.width = gridOverlayView.frame.height
-        rect.size.height = gridOverlayView.frame.width
         
-        let newRect = GeometryHelper.getIncribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
+        if !fixedDirectionalpresetRatio {
+            rect.size.width = gridOverlayView.frame.height
+            rect.size.height = gridOverlayView.frame.width
+        }
+        
+        let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
         
         let radian = -CGFloat.pi / 2
         let transfrom = scrollView.transform.rotated(by: radian)

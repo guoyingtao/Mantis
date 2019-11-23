@@ -46,7 +46,7 @@ public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) 
 public struct Config {
     /*
      Cocoapods(<1.8.0) set your framework bundle identifier to "org.cocoapods.<Your framwork>"
-     When you use swift package manager to integrate your framework, your framework bundle identifier is used not "org.cocoapods.<Your framwork>".
+     When you use swift package manager to integrate your framework, your framework bundle identifier is not "org.cocoapods.<Your framwork>".
      This property will be removed after Cocoapods 1.8.0 official version is released
      */
     public static var integratedByCocoaPods = true
@@ -54,8 +54,8 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     var customRatios: [(width: Int, height: Int)] = []
     
-    // When this one is true, fixed-ratio setting button does not show.
-    public var alwaysUsingOnePresetFixedRatio = false
+    public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
+    var fixedRatio: Double = 0
     
     static private var bundleIdentifier: String = {
         if integratedByCocoaPods {
@@ -80,16 +80,25 @@ public struct Config {
     public init() {
     }
     
-    @available(*, deprecated, renamed: "addCustomRatio(byHorizontalWidth:andHorizontalHeight:)")
-    mutating public func addCustomRatio(byWidth width: Int, andHeight height: Int) {
-        customRatios.append((width, height))
+    mutating func checkForPresetFixedRatio(width: Int, height: Int) {
+        guard width > 0 && height > 0 else {
+            return
+        }
+        
+        if case .alwaysUsingOnePresetFixedRatio(let fixDirection) = presetFixedRatioType {
+            if fixDirection {
+                fixedRatio = Double(width) / Double(height)
+            }
+        }
     }
-    
+        
     mutating public func addCustomRatio(byHorizontalWidth width: Int, andHorizontalHeight height: Int) {
+        checkForPresetFixedRatio(width: width, height: height)
         customRatios.append((width, height))
     }
 
     mutating public func addCustomRatio(byVerticalWidth width: Int, andVerticalHeight height: Int) {
+        checkForPresetFixedRatio(width: width, height: height)
         customRatios.append((height, width))
     }
     
@@ -104,3 +113,16 @@ public struct Config {
     }
 }
 
+public enum PresetFixedRatioType {
+    /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
+     
+    - when fixDirection is true, the fixed ratio won't be adapted
+     for both horizontal and vertical directions
+    - When using addCustomRatio(byVerticalWidth: 9, andVerticalHeight: 16),
+    it will use 9:16 for vertical images and 16:9 for horizontal images when fixDirection is false.
+      But it will use only 9:16 for both vertical and horizontal
+    images when fixDirection is true
+     */
+    case alwaysUsingOnePresetFixedRatio(fixDirection: Bool)
+    case canUseMultiplePresetFixedRatio
+}
