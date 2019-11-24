@@ -440,26 +440,35 @@ extension CropView {
             
             let newSize = CGSize(width: width, height: height)
             
+            let scale: CGFloat
+            
             if gridOverlayView.frame.height > gridOverlayView.frame.width {
                 if scrollView.contentSize.height > scrollView.contentSize.width {
                     scrollView.updateLayout(byNewSize: newSize)
                 } else {
                     scrollView.updateLayout(byNewSize: CGSize(width: height, height: width))
                 }
+                
+                if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+                    scale = height / scrollView.contentSize.width
+                } else {
+                    scale = height / scrollView.contentSize.height
+                }
+
             } else {
                 if scrollView.contentSize.height < scrollView.contentSize.width {
                     scrollView.updateLayout(byNewSize: newSize)
                 } else {
                     scrollView.updateLayout(byNewSize: CGSize(width: newSize.height, height: newSize.width))
                 }
+                
+                if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+                    scale = width / scrollView.contentSize.height
+                } else {
+                    scale = width / scrollView.contentSize.width
+                }
             }
             
-            let scale: CGFloat
-            if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
-                scale = height / scrollView.contentSize.width
-            } else {
-                scale = height / scrollView.contentSize.height
-            }
             return scale
         }
         

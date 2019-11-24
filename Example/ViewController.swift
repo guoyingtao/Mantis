@@ -48,7 +48,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.delegate = self
         cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(fixDirection: true)
         cropViewController.config.ratioOptions = [.custom]
-        cropViewController.config.addCustomRatio(byVerticalWidth: 3, andVerticalHeight: 16)
+        cropViewController.config.addCustomRatio(byVerticalWidth: 16, andVerticalHeight: 9)
         present(cropViewController, animated: true)
     }
     
