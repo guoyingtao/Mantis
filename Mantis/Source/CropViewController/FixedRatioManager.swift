@@ -58,7 +58,7 @@ extension FixedRatioManager {
         let scale4_3 = RatioItemType("4:3", 4.0/3.0, "3:4", 3.0/4.0)
         let scale5_4 = RatioItemType("5:4", 5.0/4.0, "4:5", 4.0/5.0)
         let scale7_5 = RatioItemType("7:5", 7.0/5.0, "5:7", 5.0/7.0)
-        let scale16_9 = RatioItemType("16:9", 16.0/9.0, "9:16", 9.0/16.0)
+        let scale16_9 = RatioItemType("16:9", 16.0/3.0, "9:16", 3.0/16.0)
         
         appendToTail(ratioItem: scale3_2)
         appendToTail(ratioItem: scale5_3)

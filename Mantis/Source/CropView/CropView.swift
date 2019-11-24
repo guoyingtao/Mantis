@@ -432,22 +432,33 @@ extension CropView {
         scrollView.checkContentOffset()
     }
     
-    fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
-        let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
-        let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
+    fileprivate func updatePositionFor90Rotation(by radians: CGFloat, fixedDirectionalpresetRatio: Bool = false) {
+        var width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
+        var height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
         
         var newSize: CGSize
-        let scale: CGFloat
-        
-        if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
-            newSize = CGSize(width: width, height: height)
+        var scale: CGFloat
+                
+        if fixedDirectionalpresetRatio {
+            newSize = gridOverlayView.frame.size
+            scrollView.updateLayout(byNewSize: newSize)
+            
+            if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+                scale = gridOverlayView.frame.height / scrollView.contentSize.width
+            } else {
+                scale = gridOverlayView.frame.height / scrollView.contentSize.height
+            }
         } else {
-            newSize = CGSize(width: height, height: width)
-        }
+            if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+                newSize = CGSize(width: width, height: height)
+            } else {
+                newSize = CGSize(width: height, height: width)
+            }
 
-        scale = newSize.width / scrollView.bounds.width        
-        scrollView.updateLayout(byNewSize: newSize)
-        
+            scale = newSize.width / scrollView.bounds.width
+            scrollView.updateLayout(byNewSize: newSize)
+        }
+                        
         let newZoomScale = scrollView.zoomScale * scale
         scrollView.minimumZoomScale = newZoomScale
         scrollView.zoomScale = newZoomScale
@@ -536,7 +547,7 @@ extension CropView {
         UIView.animate(withDuration: 0.5, animations: {
             self.viewModel.cropBoxFrame = newRect
             self.scrollView.transform = transfrom
-            self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
+            self.updatePositionFor90Rotation(by: radian + self.viewModel.radians, fixedDirectionalpresetRatio: fixedDirectionalpresetRatio)
         }) {[weak self] _ in
             guard let self = self else { return }
             self.viewModel.counterclockwiseRotate90()
