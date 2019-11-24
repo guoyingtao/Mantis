@@ -10,7 +10,7 @@ import UIKit
 import Mantis
 
 class ViewController: UIViewController, CropViewControllerDelegate {
-    var image = UIImage(named: "sunflower.jpg")
+    var image = UIImage(named: "sunflower1.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!

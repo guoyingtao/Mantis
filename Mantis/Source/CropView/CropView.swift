@@ -433,15 +433,33 @@ extension CropView {
     }
     
     fileprivate func updatePositionFor90Rotation(by radians: CGFloat, fixedDirectionalpresetRatio: Bool = false) {
-        var width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
-        var height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
+        let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
+        let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
         
         var newSize: CGSize
         var scale: CGFloat
+        
+        scrollView.layer.borderWidth = 4
+        scrollView.layer.borderColor = UIColor.red.cgColor
                 
         if fixedDirectionalpresetRatio {
             newSize = gridOverlayView.frame.size
-            scrollView.updateLayout(byNewSize: newSize)
+            
+            print(scrollView.contentSize)
+            
+            if gridOverlayView.frame.height > gridOverlayView.frame.width {
+                if scrollView.contentSize.height > scrollView.contentSize.width {
+                    scrollView.updateLayout(byNewSize: newSize)
+                } else {
+                    scrollView.updateLayout(byNewSize: CGSize(width: newSize.height, height: newSize.width))
+                }
+            } else {
+                if scrollView.contentSize.height < scrollView.contentSize.width {
+                    scrollView.updateLayout(byNewSize: newSize)
+                } else {
+                    scrollView.updateLayout(byNewSize: CGSize(width: newSize.height, height: newSize.width))
+                }                
+            }
             
             if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
                 scale = gridOverlayView.frame.height / scrollView.contentSize.width
