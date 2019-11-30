@@ -70,8 +70,12 @@ class CropViewModel: NSObject {
         rotationType.counterclockwiseRotate90()
     }
     
-    func getTotalRadians() -> CGFloat {
+    func getTotalRadias(by radians: CGFloat) -> CGFloat {
         return radians + rotationType.rawValue * CGFloat.pi / 180
+    }
+    
+    func getTotalRadians() -> CGFloat {
+        return getTotalRadias(by: radians)
     }
     
     func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType {

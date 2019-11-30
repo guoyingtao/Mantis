@@ -236,7 +236,12 @@ class CropView: UIView {
         rotationDial.setRotationCenter(by: gridOverlayView.center, of: self)
         
         rotationDial.didRotate = { [unowned self] angle in
-            self.viewModel.setRotatingStatus(by: angle)
+            if self.forceFixedRatio {
+                let newRadians = self.viewModel.getTotalRadias(by: angle.radians)
+                self.viewModel.setRotatingStatus(by: CGAngle(radians: newRadians))
+            } else {
+                self.viewModel.setRotatingStatus(by: angle)
+            }
         }
         
         rotationDial.didFinishedRotate = { [unowned self] in
@@ -283,9 +288,10 @@ class CropView: UIView {
 // MARK: - Adjust UI
 extension CropView {
     private func rotateScrollView() {
-        let radians = viewModel.getTotalRadians()
-        self.scrollView.transform = CGAffineTransform(rotationAngle: radians)
-        self.updatePosition(by: radians)
+        let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
+        
+        self.scrollView.transform = CGAffineTransform(rotationAngle: totalRadians)
+        self.updatePosition(by: totalRadians)
     }
     
     private func getInitialCropBoxRect() -> CGRect {
