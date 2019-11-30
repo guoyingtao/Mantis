@@ -535,7 +535,8 @@ extension CropView {
         viewModel.setDegree90RotatedStatus()
         
         if forceFixedRatio {
-            let angle = CGAngle(radians: -CGFloat.pi / 2 + self.viewModel.radians)
+            viewModel.setRotatingStatus(by: CGAngle(radians: viewModel.radians))
+            let angle = CGAngle(radians: -CGFloat.pi / 2 + viewModel.radians)
             
             UIView.animate(withDuration: 0.5, animations: {
                 self.viewModel.setRotatingStatus(by: angle)

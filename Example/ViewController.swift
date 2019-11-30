@@ -18,7 +18,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.imagePicker = ImagePicker(presentationController: self, delegate: self)    
+        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

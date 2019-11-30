@@ -35,8 +35,8 @@ class RotationDial: UIView {
     
     var config = DialConfig.Config()
     
-    private var angleLimit = CGAngle(radians: CGFloat.pi)
-    private var showRadiansLimit: CGFloat = CGFloat.pi
+    private var angleLimit = CGAngle(radians: .pi)
+    private var showRadiansLimit: CGFloat = .pi
     private var dialPlate: RotationDialPlate?
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
