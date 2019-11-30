@@ -10,7 +10,7 @@ import UIKit
 import Mantis
 
 class ViewController: UIViewController, CropViewControllerDelegate {
-    var image = UIImage(named: "sunflower1.jpg")
+    var image = UIImage(named: "sunflower.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!
@@ -46,9 +46,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
-        cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(fixDirection: true)
-        cropViewController.config.ratioOptions = [.custom]
-        cropViewController.config.addCustomRatio(byVerticalWidth: 16, andVerticalHeight: 9)
+        cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
+//        cropViewController.config.ratioOptions = [.custom]
         present(cropViewController, animated: true)
     }
     

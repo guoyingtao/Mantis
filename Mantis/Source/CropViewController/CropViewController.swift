@@ -77,27 +77,7 @@ public class CropViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    fileprivate func setPresetFixedRatio() {
-        let fixedRatioManager = getFixedRatioManager()
         
-        var ratioItem: RatioItemType
-        if fixedRatioManager.ratios.count == 0 {
-            ratioItem = fixedRatioManager.getOriginalRatioItem()
-        } else {
-            ratioItem = fixedRatioManager.ratios[0]
-        }
-
-        if case .alwaysUsingOnePresetFixedRatio(let fixDirection) = config.presetFixedRatioType {
-            if fixDirection {
-                setFixedRatio(config.fixedRatio)
-            } else {
-                let ratioValue = (fixedRatioManager.type == .horizontal) ? ratioItem.ratioH : ratioItem.ratioV
-                setFixedRatio(ratioValue)
-            }
-        }
-    }
-    
     fileprivate func createCropToolbar() {
         cropToolbar.backgroundColor = .black
         
@@ -109,9 +89,9 @@ public class CropViewController: UIViewController {
         
         let showRatioButton: Bool
         
-        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
+        if case .alwaysUsingOnePresetFixedRatio(let ratio) = config.presetFixedRatioType {
             showRatioButton = false
-            setPresetFixedRatio()
+            setFixedRatio(ratio)
         } else {
             showRatioButton = true
         }
@@ -266,10 +246,8 @@ public class CropViewController: UIViewController {
     
     private func handleRotate() {
         var fixedDirectionalpresetRatio = false
-        if case .alwaysUsingOnePresetFixedRatio(let fixDirection) = config.presetFixedRatioType {
-            if fixDirection {
+        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
                 fixedDirectionalpresetRatio = true
-            }
         }
         cropView.counterclockwiseRotate90(fixedDirectionalpresetRatio: fixedDirectionalpresetRatio)
     }

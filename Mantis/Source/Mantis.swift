@@ -55,7 +55,6 @@ public struct Config {
     var customRatios: [(width: Int, height: Int)] = []
     
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
-    var fixedRatio: Double = 0
     
     static private var bundleIdentifier: String = {
         if integratedByCocoaPods {
@@ -80,25 +79,12 @@ public struct Config {
     public init() {
     }
     
-    mutating func checkForPresetFixedRatio(width: Int, height: Int) {
-        guard width > 0 && height > 0 else {
-            return
-        }
-        
-        if case .alwaysUsingOnePresetFixedRatio(let fixDirection) = presetFixedRatioType {
-            if fixDirection {
-                fixedRatio = Double(width) / Double(height)
-            }
-        }
-    }
         
     mutating public func addCustomRatio(byHorizontalWidth width: Int, andHorizontalHeight height: Int) {
-        checkForPresetFixedRatio(width: width, height: height)
         customRatios.append((width, height))
     }
 
     mutating public func addCustomRatio(byVerticalWidth width: Int, andVerticalHeight height: Int) {
-        checkForPresetFixedRatio(width: width, height: height)
         customRatios.append((height, width))
     }
     
@@ -115,14 +101,7 @@ public struct Config {
 
 public enum PresetFixedRatioType {
     /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
-     
-    - when fixDirection is true, the fixed ratio won't be adapted
-     for both horizontal and vertical directions
-    - When using addCustomRatio(byVerticalWidth: 9, andVerticalHeight: 16),
-    it will use 9:16 for vertical images and 16:9 for horizontal images when fixDirection is false.
-      But it will use only 9:16 for both vertical and horizontal
-    images when fixDirection is true
      */
-    case alwaysUsingOnePresetFixedRatio(fixDirection: Bool)
+    case alwaysUsingOnePresetFixedRatio(ratio: Double)
     case canUseMultiplePresetFixedRatio
 }
