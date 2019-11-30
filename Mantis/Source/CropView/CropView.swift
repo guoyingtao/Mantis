@@ -435,9 +435,11 @@ extension CropView {
     fileprivate func updatePositionFor90Rotation(by radians: CGFloat, fixedDirectionalpresetRatio: Bool = false) {
         
         func adjustScrollViewForFixedDirectionalPresetRatio() -> CGFloat {
-            let width = abs(cos(viewModel.radians)) * gridOverlayView.frame.width + abs(sin(viewModel.radians)) * gridOverlayView.frame.height
-            let height = abs(sin(viewModel.radians)) * gridOverlayView.frame.width + abs(cos(viewModel.radians)) * gridOverlayView.frame.height
+//            let width = abs(cos(viewModel.radians)) * gridOverlayView.frame.width + abs(sin(viewModel.radians)) * gridOverlayView.frame.height
+//            let height = abs(sin(viewModel.radians)) * gridOverlayView.frame.width + abs(cos(viewModel.radians)) * gridOverlayView.frame.height
             
+            let width = gridOverlayView.frame.width
+            let height = gridOverlayView.frame.height
             let newSize = CGSize(width: width, height: height)
             
             let scale: CGFloat

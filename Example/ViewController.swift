@@ -10,7 +10,7 @@ import UIKit
 import Mantis
 
 class ViewController: UIViewController, CropViewControllerDelegate {
-    var image = UIImage(named: "sunflower.jpg")
+    var image = UIImage(named: "sunflower1.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!
@@ -40,16 +40,27 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-//        Mantis.Config.integratedByCocoaPods = false
         let config = Mantis.Config()
         
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
-        cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
-//        cropViewController.config.ratioOptions = [.custom]
         present(cropViewController, animated: true)
     }
+    
+    @IBAction func alwayUserOnPresetRatioPresent(_ sender: Any) {
+            guard let image = image else {
+                return
+            }
+            
+            let config = Mantis.Config()
+            
+            let cropViewController = Mantis.cropViewController(image: image, config: config)
+            cropViewController.modalPresentationStyle = .fullScreen
+            cropViewController.delegate = self
+            cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
+            present(cropViewController, animated: true)
+        }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let nc = segue.destination as? UINavigationController,
