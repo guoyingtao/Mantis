@@ -528,8 +528,12 @@ extension CropView {
         if fixedDirectionalpresetRatio {
             let angle = CGAngle(radians: -CGFloat.pi / 2 + self.viewModel.radians)
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.5, animations: {
                 self.viewModel.setRotatingStatus(by: angle)
+            }) {[weak self] _ in
+                guard let self = self else { return }
+                self.viewModel.counterclockwiseRotate90()
+                self.viewModel.setBetweenOperationStatus()
             }
             
             return
