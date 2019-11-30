@@ -195,6 +195,12 @@ public class CropViewController: UIViewController {
     private func createCropView() {
         cropView.delegate = self
         cropView.clipsToBounds = true
+        
+        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
+            cropView.forceFixedRatio = true
+        } else {
+            cropView.forceFixedRatio = false
+        }
     }
     
     private func handleCancel() {
@@ -236,20 +242,11 @@ public class CropViewController: UIViewController {
     
     private func handleReset() {
         resetRatioButton()
-        
-        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
-            cropView.reset(forceFixedRatio: true)
-        } else {
-            cropView.reset(forceFixedRatio: false)
-        }
+        cropView.reset()
     }
     
     private func handleRotate() {
-        var fixedDirectionalpresetRatio = false
-        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
-                fixedDirectionalpresetRatio = true
-        }
-        cropView.counterclockwiseRotate90(fixedDirectionalpresetRatio: fixedDirectionalpresetRatio)
+        cropView.counterclockwiseRotate90()
     }
     
     private func handleCrop() {

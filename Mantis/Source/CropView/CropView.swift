@@ -61,6 +61,7 @@ class CropView: UIView {
 
     var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
+    var forceFixedRatio = false
     
     deinit {
         print("CropView deinit.")
@@ -481,8 +482,10 @@ extension CropView {
         
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
         
+        let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
+        
         let info = CropInfo(translation: translation,
-                            rotation: viewModel.getTotalRadians(),
+                            rotation: totalRadians,
                             scale: scrollView.zoomScale,
                             cropSize: gridOverlayView.frame.size,
                             imageViewSize: imageContainer.bounds.size)
@@ -522,10 +525,10 @@ extension CropView {
         }
     }
     
-    func counterclockwiseRotate90(fixedDirectionalpresetRatio: Bool = false) {
+    func counterclockwiseRotate90() {
         viewModel.setDegree90RotatedStatus()
         
-        if fixedDirectionalpresetRatio {
+        if forceFixedRatio {
             let angle = CGAngle(radians: -CGFloat.pi / 2 + self.viewModel.radians)
             
             UIView.animate(withDuration: 0.5, animations: {
@@ -539,12 +542,9 @@ extension CropView {
             return
         }
         
-        var rect = gridOverlayView.frame
-        
-        if !fixedDirectionalpresetRatio {
-            rect.size.width = gridOverlayView.frame.height
-            rect.size.height = gridOverlayView.frame.width
-        }
+        var rect = gridOverlayView.frame        
+        rect.size.width = gridOverlayView.frame.height
+        rect.size.height = gridOverlayView.frame.width
         
         let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
         
@@ -562,7 +562,7 @@ extension CropView {
         }
     }
     
-    func reset(forceFixedRatio: Bool = false) {
+    func reset() {
         scrollView.removeFromSuperview()
         gridOverlayView.removeFromSuperview()
         rotationDial?.removeFromSuperview()
