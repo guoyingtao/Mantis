@@ -10,7 +10,7 @@ import UIKit
 import Mantis
 
 class ViewController: UIViewController, CropViewControllerDelegate {
-    var image = UIImage(named: "sunflower1.jpg")
+    var image = UIImage(named: "sunflower.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!
@@ -18,13 +18,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
-        
-//        if let statusBar: UIView = UIApplication.shared.value(forKey: "statusBar") as? UIView {
-//            statusBar.backgroundColor = .black
-//        }        
-        
-//        setNeedsStatusBarAppearanceUpdate()
+        self.imagePicker = ImagePicker(presentationController: self, delegate: self)    
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
