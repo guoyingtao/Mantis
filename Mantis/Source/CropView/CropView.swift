@@ -432,48 +432,8 @@ extension CropView {
         scrollView.checkContentOffset()
     }
     
-    fileprivate func updatePositionFor90Rotation(by radians: CGFloat, fixedDirectionalpresetRatio: Bool = false) {
-        
-        func adjustScrollViewForFixedDirectionalPresetRatio() -> CGFloat {
-//            let width = abs(cos(viewModel.radians)) * gridOverlayView.frame.width + abs(sin(viewModel.radians)) * gridOverlayView.frame.height
-//            let height = abs(sin(viewModel.radians)) * gridOverlayView.frame.width + abs(cos(viewModel.radians)) * gridOverlayView.frame.height
-            
-            let width = gridOverlayView.frame.width
-            let height = gridOverlayView.frame.height
-            let newSize = CGSize(width: width, height: height)
-            
-            let scale: CGFloat
-            
-            if gridOverlayView.frame.height > gridOverlayView.frame.width {
-                if scrollView.contentSize.height > scrollView.contentSize.width {
-                    scrollView.updateLayout(byNewSize: newSize)
-                } else {
-                    scrollView.updateLayout(byNewSize: CGSize(width: height, height: width))
-                }
+    fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
                 
-                if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
-                    scale = height / scrollView.contentSize.width
-                } else {
-                    scale = height / scrollView.contentSize.height
-                }
-
-            } else {
-                if scrollView.contentSize.height < scrollView.contentSize.width {
-                    scrollView.updateLayout(byNewSize: newSize)
-                } else {
-                    scrollView.updateLayout(byNewSize: CGSize(width: newSize.height, height: newSize.width))
-                }
-                
-                if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
-                    scale = width / scrollView.contentSize.height
-                } else {
-                    scale = width / scrollView.contentSize.width
-                }
-            }
-            
-            return scale
-        }
-        
         func adjustScrollViewForNormalRatio() -> CGFloat {
             let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
             let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
@@ -490,13 +450,7 @@ extension CropView {
             return scale
         }
         
-        let scale: CGFloat
-
-        if fixedDirectionalpresetRatio {
-            scale = adjustScrollViewForFixedDirectionalPresetRatio()
-        } else {
-            scale = adjustScrollViewForNormalRatio()
-        }
+        let scale = adjustScrollViewForNormalRatio()
                         
         let newZoomScale = scrollView.zoomScale * scale
         scrollView.minimumZoomScale = newZoomScale
@@ -596,7 +550,7 @@ extension CropView {
         UIView.animate(withDuration: 0.5, animations: {
             self.viewModel.cropBoxFrame = newRect
             self.scrollView.transform = transfrom
-            self.updatePositionFor90Rotation(by: radian + self.viewModel.radians, fixedDirectionalpresetRatio: fixedDirectionalpresetRatio)
+            self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
             self.viewModel.counterclockwiseRotate90()
