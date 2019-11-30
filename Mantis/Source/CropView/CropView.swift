@@ -571,6 +571,16 @@ extension CropView {
     func counterclockwiseRotate90(fixedDirectionalpresetRatio: Bool = false) {
         viewModel.setDegree90RotatedStatus()
         
+        if fixedDirectionalpresetRatio {
+            let angle = CGAngle(radians: -CGFloat.pi / 2 + self.viewModel.radians)
+            
+            UIView.animate(withDuration: 0.5) {
+                self.viewModel.setRotatingStatus(by: angle)
+            }
+            
+            return
+        }
+        
         var rect = gridOverlayView.frame
         
         if !fixedDirectionalpresetRatio {
