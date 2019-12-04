@@ -105,7 +105,7 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
 
 When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
 
-* if you want to hide rotation dial, set Mantis.Config.showRotationDial = false
+* If you want to hide rotation dial, set Mantis.Config.showRotationDial = false
 
 
 ### Demo code
