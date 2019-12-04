@@ -42,6 +42,21 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         present(cropViewController, animated: true)
     }
     
+    @IBAction func hideRotationDialPresent(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        
+        var config = Mantis.Config()
+        config.showRotationDial = false
+        
+        let cropViewController = Mantis.cropViewController(image: image, config: config)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+    }
+
+    
     @IBAction func alwayUserOnPresetRatioPresent(_ sender: Any) {
             guard let image = image else {
                 return

@@ -193,6 +193,9 @@ public class CropViewController: UIViewController {
     }
     
     private func createCropView() {
+        if !config.showRotationDial {
+            cropView.angleDashboardHeight = 0
+        }
         cropView.delegate = self
         cropView.clipsToBounds = true
         

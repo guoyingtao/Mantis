@@ -31,11 +31,12 @@ protocol CropViewDelegate: class {
 
 let cropViewMinimumBoxSize: CGFloat = 42
 let minimumAspectRatio: CGFloat = 0
-let angleDashboardHeight: CGFloat = 60
 let hotAreaUnit: CGFloat = 64
 let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
+    var angleDashboardHeight: CGFloat = 60
+    
     var image: UIImage {
         didSet {
             imageContainer.image = image
@@ -217,6 +218,10 @@ class CropView: UIView {
     }
     
     private func setupAngleDashboard() {
+        if angleDashboardHeight == 0 {
+            return
+        }
+        
         if rotationDial != nil {
             rotationDial?.removeFromSuperview()
         }
