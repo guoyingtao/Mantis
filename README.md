@@ -35,7 +35,7 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.42'
+pod 'Mantis', '~> 0.43'
 ```
 ## Usage
 
@@ -104,6 +104,8 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
 ```
 
 When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
+
+* if you want to hide rotation dial, set Mantis.Config.showRotationDial = false
 
 
 ### Demo code
