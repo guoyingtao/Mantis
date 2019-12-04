@@ -56,6 +56,8 @@ public struct Config {
     
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
     
+    public var showRotationDial = true
+    
     static private var bundleIdentifier: String = {
         if integratedByCocoaPods {
             return "org.cocoapods.Mantis"

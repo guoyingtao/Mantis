@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-So-c13">
-                                <rect key="frame" x="37.5" y="503" width="300" height="144"/>
+                                <rect key="frame" x="37.5" y="467" width="300" height="180"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpr-TJ-i7J">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="36"/>
@@ -35,8 +35,16 @@
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgZ-jD-v0j">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
                                         <rect key="frame" x="0.0" y="72" width="300" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Embedded"/>
+                                        <connections>
+                                            <segue destination="c5I-rk-tJF" kind="presentation" modalPresentationStyle="fullScreen" id="liD-2e-mJA"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgZ-jD-v0j">
+                                        <rect key="frame" x="0.0" y="108" width="300" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="AlwaysUseOnePresetRatio"/>
                                         <connections>
@@ -44,12 +52,12 @@
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N2U-ea-YZw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
-                                        <rect key="frame" x="0.0" y="108" width="300" height="36"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkm-rK-5rk" userLabel="Hide Rotation Dial">
+                                        <rect key="frame" x="0.0" y="144" width="300" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Embedded"/>
+                                        <state key="normal" title="Hide Rotation Dial"/>
                                         <connections>
-                                            <segue destination="c5I-rk-tJF" kind="presentation" modalPresentationStyle="fullScreen" id="liD-2e-mJA"/>
+                                            <action selector="hideRotationDialPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qDm-P4-1CY"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -58,7 +66,7 @@
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
-                                <rect key="frame" x="40" y="40" width="295" height="507"/>
+                                <rect key="frame" x="40" y="0.0" width="295" height="487"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -66,8 +74,8 @@
                             <constraint firstItem="pUS-Eo-0ui" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="Sxa-vn-i15"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vyB-So-c13" secondAttribute="bottom" constant="20" id="ZRG-46-v9e"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pUS-Eo-0ui" secondAttribute="trailing" constant="40" id="ZTq-jL-0f6"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="120" id="fPo-oy-TR4"/>
-                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="hmS-Zq-20T"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="180" id="fPo-oy-TR4"/>
+                            <constraint firstItem="pUS-Eo-0ui" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="hmS-Zq-20T"/>
                             <constraint firstItem="vyB-So-c13" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="rBU-by-45z"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
