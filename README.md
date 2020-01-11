@@ -37,6 +37,13 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ```ruby
 pod 'Mantis', '~> 0.43'
 ```
+
+### Carthage
+
+```ruby
+github "guoyingtao/Mantis" "master"
+```
+
 ## Usage
 
 * Create a cropViewController in Mantis with default config and default mode
