@@ -28,6 +28,8 @@ The crop and rotation feature are strongly inspired by [TOCropViewController](ht
 
 The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clock)
 
+Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helping me to solve the problem of cropping an ellipse image with transparent background https://stackoverflow.com/a/59805317/288724
+
 ## Requirements
 * iOS 11.0+
 * Xcode 10.0+
