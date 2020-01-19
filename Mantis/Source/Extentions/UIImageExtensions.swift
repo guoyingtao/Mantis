@@ -129,6 +129,38 @@ extension UIImage {
         
         return UIImage(cgImage: imageRef)
     }
-
+    
 }
 
+extension UIImage {
+    func getImageWithTransparentBackground(pathBuilder: (CGRect) -> UIBezierPath) -> UIImage? {
+        guard let cgImage = cgImage else { return nil }
+        
+        // Because imageRendererFormat is a read only property
+        // Setting imageRendererFormat.opaque = false does not work
+        // https://stackoverflow.com/a/59805317/288724
+        let format = imageRendererFormat
+        format.opaque = false
+        
+        let rect = CGRect(origin: .zero, size: size)
+        
+        return UIGraphicsImageRenderer(size: size, format: format).image() {
+            _ in
+            pathBuilder(rect).addClip()
+            UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
+                .draw(in: rect)
+        }
+    }
+    
+    var ellipseMasked: UIImage? {
+        return getImageWithTransparentBackground() {
+            UIBezierPath(ovalIn: $0)
+        }
+    }
+    
+    func roundRect(_ radius: CGFloat) -> UIImage? {
+        return getImageWithTransparentBackground() {
+            UIBezierPath(roundedRect: $0, cornerRadius: radius)
+        }
+    }
+}
