@@ -35,6 +35,8 @@ let hotAreaUnit: CGFloat = 64
 let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
+    var cropShapeType: CropShapeType = .rect
+    
     var angleDashboardHeight: CGFloat = 60
     
     var image: UIImage {
@@ -58,7 +60,7 @@ class CropView: UIView {
     var rotationDial: RotationDial?
 
     lazy var scrollView = CropScrollView(frame: bounds)
-    lazy var cropMaskViewManager = CropMaskViewManager(with: self)
+    lazy var cropMaskViewManager = CropMaskViewManager(with: self, cropShapeType: cropShapeType)
 
     var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
@@ -500,7 +502,20 @@ extension CropView {
                             scale: scrollView.zoomScale,
                             cropSize: gridOverlayView.frame.size,
                             imageViewSize: imageContainer.bounds.size)
-        return image.getCroppedImage(byCropInfo: info)
+        
+        guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
+            return nil
+        }
+        
+        switch cropShapeType {
+        case .rect:
+            return croppedImage
+        case .ellipse:
+            return croppedImage.ellipseMasked
+        case .roundedRect(let radiusToShortSide):
+            let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
+            return croppedImage.roundRect(radius)
+        }
     }
     
     func crop() -> UIImage? {

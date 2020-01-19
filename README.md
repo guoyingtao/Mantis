@@ -19,6 +19,8 @@
     <img src="Images/p4.png" height="200" alt="Mantis" />
     <img src="Images/p5.png" height="200" alt="Mantis" />
     <img src="Images/p6.png" height="200" alt="Mantis" />
+    <img src="Images/p7.png" height="200" alt="Mantis" />
+    <img src="Images/p8.png" height="200" alt="Mantis" />
 </p>
 
 ## Credits
@@ -35,7 +37,7 @@ The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clo
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.44'
+pod 'Mantis', '~> 0.50'
 ```
 
 ### Carthage
@@ -114,6 +116,14 @@ When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not 
 
 * If you want to hide rotation dial, set Mantis.Config.showRotationDial = false
 
+* If you want to set different crop shape, set Mantis.Config.cropShapeType
+```
+public enum CropShapeType {
+    case rect
+    case ellipse
+    case roundedRect(radiusToShortSide: CGFloat)
+}
+```
 
 ### Demo code
 

@@ -11,20 +11,23 @@ import UIKit
 class CropMaskViewManager {
     fileprivate var dimmingView: CropDimmingView!
     fileprivate var visualEffectView: CropVisualEffectView!
-
-    init(with superview: UIView) {
+    
+    var cropShapeType: CropShapeType = .rect
+    
+    init(with superview: UIView, cropShapeType: CropShapeType = .rect) {
         setup(in: superview)
+        self.cropShapeType = cropShapeType
     }
     
     private func setupOverlayView(in view: UIView) {
-        dimmingView = CropDimmingView()
+        dimmingView = CropDimmingView(cropShapeType: cropShapeType)
         dimmingView.isUserInteractionEnabled = false
         dimmingView.alpha = 0
         view.addSubview(dimmingView)
     }
     
     private func setupTranslucencyView(in view: UIView) {
-        visualEffectView = CropVisualEffectView()
+        visualEffectView = CropVisualEffectView(cropShapeType: cropShapeType)
         visualEffectView.isUserInteractionEnabled = false
         view.addSubview(visualEffectView)
     }

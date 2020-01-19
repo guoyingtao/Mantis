@@ -51,6 +51,8 @@ public struct Config {
      */
     public static var integratedByCocoaPods = true
     
+    public var cropShapeType: CropShapeType = .rect
+    
     public var ratioOptions: RatioOptions = .all
     var customRatios: [(width: Int, height: Int)] = []
     
@@ -106,4 +108,10 @@ public enum PresetFixedRatioType {
      */
     case alwaysUsingOnePresetFixedRatio(ratio: Double)
     case canUseMultiplePresetFixedRatio
+}
+
+public enum CropShapeType {
+    case rect
+    case ellipse
+    case roundedRect(radiusToShortSide: CGFloat)
 }

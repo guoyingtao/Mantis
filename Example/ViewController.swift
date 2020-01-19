@@ -71,6 +71,20 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             present(cropViewController, animated: true)
         }
     
+    @IBAction func cropEllips(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        
+        var config = Mantis.Config()
+        config.cropShapeType = .ellipse
+        
+        let cropViewController = Mantis.cropViewController(image: image, config: config)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let nc = segue.destination as? UINavigationController,
             let vc = nc.viewControllers.first as? EmbeddedCropViewController {

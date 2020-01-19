@@ -12,6 +12,8 @@ fileprivate let minOverLayerUnit: CGFloat = 30
 fileprivate let initialFrameLength: CGFloat = 1000
 
 protocol CropMaskProtocol where Self: UIView {
+    var cropShapeType: CropShapeType { get set }
+    
     func initialize()
     func setMask()
     func adaptMaskTo(match cropRect: CGRect)
@@ -51,7 +53,19 @@ extension CropMaskProtocol {
         let initialRect = CGRect(x: x, y: y, width: minOverLayerUnit, height: minOverLayerUnit)
         
         let path = UIBezierPath(rect: self.bounds)
-        let innerPath = UIBezierPath(rect: initialRect)
+        
+        let innerPath: UIBezierPath
+        
+        switch cropShapeType {
+        case .rect:
+            innerPath = UIBezierPath(rect: initialRect)
+        case .ellipse:
+            innerPath = UIBezierPath(ovalIn: initialRect)
+        case .roundedRect(let radiusToShortSide):
+            let radius = min(initialRect.width, initialRect.height) * radiusToShortSide
+            innerPath = UIBezierPath(roundedRect: initialRect, cornerRadius: radius)
+        }
+        
         path.append(innerPath)
         path.usesEvenOddFillRule = true
         
