@@ -125,6 +125,12 @@ public enum CropShapeType {
 }
 ```
 
+<p align="center">
+    <img src="Images/p1.png" height="250" alt="Mantis" />
+    <img src="Images/p7.png" height="250" alt="Mantis" />
+    <img src="Images/p8.png" height="250" alt="Mantis" />
+</p>
+
 ### Demo code
 
 ```swift
