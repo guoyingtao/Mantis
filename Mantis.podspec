@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "0.50"
+  s.version      = "0.51"
   s.summary      = "A swift photo cropping tool which mimics Photo.app"
 
   s.description  = <<-DESC
