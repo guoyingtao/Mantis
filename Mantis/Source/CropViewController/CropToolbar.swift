@@ -13,7 +13,10 @@ public enum CropToolbarMode {
     case simple
 }
 
-class CropToolbar: UIView {    
+class CropToolbar: UIView {
+    var optionButtonFontSize: CGFloat = 14
+    var optionButtonFontSizeForPad: CGFloat = 20
+
     var selectedCancel = {}
     var selectedCrop = {}
     var selectedRotate = {}
@@ -30,7 +33,10 @@ class CropToolbar: UIView {
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
-        let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ? 20 : 14
+        let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
+            optionButtonFontSizeForPad :
+            optionButtonFontSize
+        
         let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
         
         let button = UIButton(type: .system)
