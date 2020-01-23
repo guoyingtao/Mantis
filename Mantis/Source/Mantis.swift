@@ -60,6 +60,9 @@ public struct Config {
     
     public var showRotationDial = true
     
+    public var optionButtonFontSize: CGFloat = 14
+    public var optionButtonFontSizeForPad: CGFloat = 20
+    
     static private var bundleIdentifier: String = {
         if integratedByCocoaPods {
             return "org.cocoapods.Mantis"

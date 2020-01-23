@@ -81,6 +81,9 @@ public class CropViewController: UIViewController {
     fileprivate func createCropToolbar() {
         cropToolbar.backgroundColor = .black
         
+        cropToolbar.optionButtonFontSize = config.optionButtonFontSize
+        cropToolbar.optionButtonFontSizeForPad = config.optionButtonFontSizeForPad
+        
         cropToolbar.selectedCancel = {[weak self] in self?.handleCancel() }
         cropToolbar.selectedRotate = {[weak self] in self?.handleRotate() }
         cropToolbar.selectedReset = {[weak self] in self?.handleReset() }
