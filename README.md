@@ -40,7 +40,7 @@ Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helpin
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.51'
+pod 'Mantis', '~> 0.52'
 ```
 
 ### Carthage
