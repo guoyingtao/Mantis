@@ -85,8 +85,7 @@ class RotationDialPlate: UIView {
     
     private func setupAngleNumber() {
         let numberFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.caption2)
-        
-        let cgFont = CTFontCreateWithName(numberFont.fontName as CFString, numberFont.pointSize/2, nil)
+        let cgFont = CTFontCreateUIFontForLanguage(.label, numberFont.pointSize/2, nil)
         
         let numberPlateLayer = CALayer()
         numberPlateLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
