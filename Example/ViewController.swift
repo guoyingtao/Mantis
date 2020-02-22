@@ -104,6 +104,10 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 extension ViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
+        guard let image = image else {
+            return
+        }
+        
         self.image = image
         self.croppedImageView.image = image
     }

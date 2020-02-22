@@ -33,12 +33,14 @@
 		3FC821D838EDAC646C860226 /* Pods-MantisExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-MantisExampleTests/Pods-MantisExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F0852B4237918510031B75D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		5F90A3CA23DCEBE800D9F27E /* MantisExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MantisExample.entitlements; sourceTree = "<group>"; };
+		5F98E7B023DD03DD007456D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5F98E7B123DD03DD007456D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5F98E7B223DD04D9007456D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		5F98E7B323DD04D9007456D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.storyboard"; sourceTree = "<group>"; };
 		5FC10B11217A9EDF00582874 /* MantisExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MantisExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC10B14217A9EDF00582874 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5FC10B16217A9EDF00582874 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		5FC10B19217A9EDF00582874 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5FC10B1B217A9EE100582874 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		5FC10B1E217A9EE100582874 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5FC10B20217A9EE100582874 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantisExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC10B29217A9EE100582874 /* MantisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisTests.swift; sourceTree = "<group>"; };
@@ -139,7 +141,7 @@
 				5FC10B0D217A9EDF00582874 /* Sources */,
 				5FC10B0E217A9EDF00582874 /* Frameworks */,
 				5FC10B0F217A9EDF00582874 /* Resources */,
-				652B296DC306BE65C74349CA /* [CP] Embed Pods Frameworks */,
+				74EAA039FD19C62EAB480BED /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,19 +198,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
-				de,
-				ar,
 				"zh-Hans",
-				ja,
-				es,
-				it,
-				"ko-KR",
-				ko,
-				"zh-Hant",
-				ru,
-				fr,
-				"pt-PT",
 			);
 			mainGroup = 5FC10B08217A9EDF00582874;
 			productRefGroup = 5FC10B12217A9EDF00582874 /* Products */;
@@ -264,7 +254,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		652B296DC306BE65C74349CA /* [CP] Embed Pods Frameworks */ = {
+		74EAA039FD19C62EAB480BED /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -339,7 +329,8 @@
 		5FC10B18217A9EDF00582874 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5FC10B19217A9EDF00582874 /* Base */,
+				5F98E7B123DD03DD007456D9 /* en */,
+				5F98E7B223DD04D9007456D9 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -347,7 +338,8 @@
 		5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5FC10B1E217A9EE100582874 /* Base */,
+				5F98E7B023DD03DD007456D9 /* en */,
+				5F98E7B323DD04D9007456D9 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

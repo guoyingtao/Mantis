@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "0.51"
+  s.version      = "0.52"
   s.summary      = "A swift photo cropping tool which mimics Photo.app"
 
   s.description  = <<-DESC
@@ -28,8 +28,12 @@ Pod::Spec.new do |s|
     "Resource" => ["Mantis/**/*.lproj/*.strings"]
   }
   
-  #  s.info_plist = {
-  #   "CFBundleIdentifier" => "com.echo.framework.Mantis"
-  #}
+  s.info_plist = {
+     "CFBundleIdentifier" => "com.echo.framework.Mantis"
+  }
+  
+  s.pod_target_xcconfig = {
+    "PRODUCT_BUNDLE_IDENTIFIER": "com.echo.framework.Mantis"
+  }
 
 end
