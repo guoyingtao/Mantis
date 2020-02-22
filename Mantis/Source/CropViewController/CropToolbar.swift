@@ -31,6 +31,9 @@ class CropToolbar: UIView {
     
     private var optionButtonStackView: UIStackView?
     
+    fileprivate var toolbarMarginLateral: CGFloat = 20
+    fileprivate var toolbarMarginVertical: CGFloat = 0
+    
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
@@ -110,6 +113,11 @@ class CropToolbar: UIView {
         }
     }
     
+    func setToolbarMargins(lateral: CGFloat, vertical: CGFloat) {
+        toolbarMarginLateral = lateral
+        toolbarMarginLateral = vertical
+    }
+    
     func createToolbarUI(mode: CropToolbarMode = .normal, includeSetRatioButton: Bool = true) {
         createButtonContainer()
         setButtonContainerLayout()
@@ -133,10 +141,10 @@ class CropToolbar: UIView {
     func checkOrientation() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
-            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: toolbarMarginVertical, left: toolbarMarginLateral, bottom: toolbarMarginVertical, right: toolbarMarginLateral)
         } else {
             optionButtonStackView?.axis = .vertical
-            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: toolbarMarginLateral, left: toolbarMarginVertical, bottom: toolbarMarginLateral, right: toolbarMarginVertical)
         }
     }
     

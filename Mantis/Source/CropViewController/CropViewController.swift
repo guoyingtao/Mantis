@@ -195,6 +195,11 @@ public class CropViewController: UIViewController {
         }
     }
     
+    public func setToolbarMargins(lateral: CGFloat, vertical: CGFloat) {
+        cropToolbar.setToolbarMargins(lateral: lateral, vertical: vertical)
+        cropToolbar.checkOrientation()
+    }
+    
     private func createCropView() {
         if !config.showRotationDial {
             cropView.angleDashboardHeight = 0
