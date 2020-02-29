@@ -36,7 +36,6 @@ let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
     var cropShapeType: CropShapeType = .rect
-    
     var angleDashboardHeight: CGFloat = 60
     
     var image: UIImage {
@@ -484,41 +483,48 @@ extension CropView {
     }
 }
 
-
 // MARK: - internal API
 extension CropView {
-    func crop(_ image: UIImage) -> UIImage? {
+    func crop(_ image: UIImage) -> (UIImage?, Transformation) {
         let rect = imageContainer.convert(imageContainer.bounds,
                                           to: self)
         let point = rect.center
         let zeroPoint = gridOverlayView.center
         
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
-        
         let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
         
-        let info = CropInfo(translation: translation,
-                            rotation: totalRadians,
-                            scale: scrollView.zoomScale,
-                            cropSize: gridOverlayView.frame.size,
-                            imageViewSize: imageContainer.bounds.size)
+        let info = CropInfo(
+            translation: translation,
+            rotation: totalRadians,
+            scale: scrollView.zoomScale,
+            cropSize: gridOverlayView.frame.size,
+            imageViewSize: imageContainer.bounds.size
+        )
+        
+        let transfromation = Transformation(
+            offset: scrollView.contentOffset,
+            rotation: totalRadians,
+            scale: scrollView.zoomScale,
+            manualZoomed: manualZoomed
+        )
         
         guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
-            return nil
+            return (nil, transfromation)
         }
         
         switch cropShapeType {
         case .rect:
-            return croppedImage
+            return (croppedImage, transfromation)
         case .ellipse:
-            return croppedImage.ellipseMasked
+            return (croppedImage.ellipseMasked, transfromation)
         case .roundedRect(let radiusToShortSide):
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
-            return croppedImage.roundRect(radius)
+            return (croppedImage.roundRect(radius), transfromation)
         }
     }
     
-    func crop() -> UIImage? {
+    func crop() -> (UIImage?, Transformation) {
         return crop(image)
     }
         
@@ -529,7 +535,6 @@ extension CropView {
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
         
         setupAngleDashboard()
-        
         rotateScrollView()
         
         if viewModel.cropRightBottomOnImage != .zero {
@@ -637,5 +642,14 @@ extension CropView {
         } else {
             return Double(1/image.ratioH())
         }
+    }
+    
+    func transform(byTransformInfo transformation: Transformation) {
+        viewModel.setRotatingStatus(by: CGAngle(radians:transformation.rotation))
+        manualZoomed = transformation.manualZoomed
+        scrollView.zoomScale = transformation.scale
+        scrollView.contentOffset = transformation.offset
+        viewModel.setBetweenOperationStatus()        
+        rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
     }
 }

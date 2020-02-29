@@ -36,25 +36,46 @@ public func cropCustomizableViewController(image: UIImage, config: Mantis.Config
     return CropViewController(image: image, config: config, mode: .customizable)
 }
 
-public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
-
 public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
     return image.getCroppedImage(byCropInfo: info)
 }
 
-// Config
-public struct Config {    
+public typealias Transformation = (
+    offset: CGPoint,
+    rotation: CGFloat,
+    scale: CGFloat,
+    manualZoomed: Bool)
+
+public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
+
+public enum PresetTransformInfoType {
+    case none
+    case presetInfo(info: Transformation)
+}
+
+public enum PresetFixedRatioType {
+    /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
+     */
+    case alwaysUsingOnePresetFixedRatio(ratio: Double)
+    case canUseMultiplePresetFixedRatio
+}
+
+public enum CropShapeType {
+    case rect
+    case ellipse
+    case roundedRect(radiusToShortSide: CGFloat)
+}
+
+public struct Config {
+    public var presetTransformInfoType: PresetTransformInfoType = .none
     public var cropShapeType: CropShapeType = .rect
-    
     public var ratioOptions: RatioOptions = .all
-    var customRatios: [(width: Int, height: Int)] = []
-    
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
-    
     public var showRotationDial = true
-    
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
+    
+    var customRatios: [(width: Int, height: Int)] = []
     
     static private var bundleIdentifier: String = {
         return "com.echo.framework.Mantis"
@@ -74,7 +95,6 @@ public struct Config {
     
     public init() {
     }
-    
         
     mutating public func addCustomRatio(byHorizontalWidth width: Int, andHorizontalHeight height: Int) {
         customRatios.append((width, height))
@@ -95,15 +115,3 @@ public struct Config {
     }
 }
 
-public enum PresetFixedRatioType {
-    /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
-     */
-    case alwaysUsingOnePresetFixedRatio(ratio: Double)
-    case canUseMultiplePresetFixedRatio
-}
-
-public enum CropShapeType {
-    case rect
-    case ellipse
-    case roundedRect(radiusToShortSide: CGFloat)
-}
