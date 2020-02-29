@@ -103,9 +103,9 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         croppedImageView.image = cropped
     }
     
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
-        croppedImageView.image = cropped
-    }
+//    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
+//        croppedImageView.image = cropped
+//    }
 }
 
 extension ViewController: ImagePickerDelegate {
