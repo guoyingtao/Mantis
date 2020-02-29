@@ -34,9 +34,12 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-        var config = Mantis.Config()
-        let transform = Mantis.Transformation(offset: CGPoint(x: 171, y: 218.33333333333334), rotation: 0.29709017276763916, scale: 1.8635663196252856, manualZoomed: true)
-        config.presetTransformInfoType = .presetInfo(info: transform)
+        let config = Mantis.Config()
+        
+        // Comment out the code below for using preset transformation
+//        let transform = Mantis.Transformation(offset: CGPoint(x: 171, y: 218.33333333333334), rotation: 0.29709017276763916, scale: 1.8635663196252856, manualZoomed: true)
+//        config.presetTransformInfoType = .presetInfo(info: transform)
+        
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
@@ -101,7 +104,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     }
     
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
-//        print(transformation)
         croppedImageView.image = cropped
     }
 }

@@ -337,15 +337,15 @@ extension CropViewController: CropViewDelegate {
 extension CropViewController {
     public func crop() {
         let cropResult = cropView.crop()
-        guard let image = cropResult.0 else {
+        guard let image = cropResult.croppedImage else {
             delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
             return
         }
         
-        delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.1)
+        delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)
     }
     
     public func process(_ image: UIImage) -> UIImage? {
-        return cropView.crop(image).0
+        return cropView.crop(image).croppedImage
     }
 }

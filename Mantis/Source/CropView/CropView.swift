@@ -485,7 +485,7 @@ extension CropView {
 
 // MARK: - internal API
 extension CropView {
-    func crop(_ image: UIImage) -> (UIImage?, Transformation) {
+    func crop(_ image: UIImage) -> (croppedImage: UIImage?, transformation: Transformation) {
         let rect = imageContainer.convert(imageContainer.bounds,
                                           to: self)
         let point = rect.center
@@ -524,7 +524,7 @@ extension CropView {
         }
     }
     
-    func crop() -> (UIImage?, Transformation) {
+    func crop() -> (croppedImage: UIImage?, transformation: Transformation) {
         return crop(image)
     }
         
