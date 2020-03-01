@@ -128,7 +128,7 @@ public enum CropShapeType {
 }
 ```
 
-* If you want to apply transformations when showing an image, set Mantis.Config.presetTransformationType
+* [If you want to apply transformations when showing an image, set Mantis.Config.presetTransformationType](apply-transformation)
 ```
 public enum PresetTransformationType {
     case none
