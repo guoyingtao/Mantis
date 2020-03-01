@@ -27,18 +27,12 @@ import UIKit
 public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidCrop(_ cropViewController: CropViewController,
                                    cropped: UIImage, transformation: Transformation)
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController,
-                                   cropped: UIImage)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
 }
 
 public extension CropViewControllerDelegate {
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController,
-                                   cropped: UIImage, transformation: Transformation) {}
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController,
-                                   cropped: UIImage) {}
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
@@ -280,7 +274,6 @@ public class CropViewController: UIViewController {
         delegate?.cropViewControllerWillDismiss(self)
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-        self.delegate?.cropViewControllerDidCrop(self, cropped: image)
             self.delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)
         }
     }
@@ -349,7 +342,6 @@ extension CropViewController {
             return
         }
 
-        delegate?.cropViewControllerDidCrop(self, cropped: image)
         delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)
     }
     

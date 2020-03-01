@@ -55,9 +55,6 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
         self.didGetCroppedImage?(cropped)
     }
     
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage) {
-        self.didGetCroppedImage?(cropped)
-    }
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
 }
