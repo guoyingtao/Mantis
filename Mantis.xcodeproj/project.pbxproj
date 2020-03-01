@@ -117,7 +117,6 @@
 		OBJ_52 /* MantisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisTests.swift; sourceTree = "<group>"; };
 		OBJ_53 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_57 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = SOURCE_ROOT; };
-		OBJ_58 /* Example */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Example; sourceTree = SOURCE_ROOT; };
 		OBJ_59 /* MantisTests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MantisTests; sourceTree = SOURCE_ROOT; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_60 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -227,7 +226,6 @@
 				OBJ_50 /* Tests */,
 				OBJ_54 /* Products */,
 				OBJ_57 /* Images */,
-				OBJ_58 /* Example */,
 				OBJ_59 /* MantisTests */,
 				OBJ_60 /* LICENSE */,
 				OBJ_61 /* README.md */,

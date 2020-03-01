@@ -213,7 +213,7 @@ public class CropViewController: UIViewController {
         
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if case .presetInfo(let transformInfo) = config.presetTransformInfoType {
+        if case .presetInfo(let transformInfo) = config.presetTransformationType {
             cropView.transform(byTransformInfo: transformInfo)
         }
     }

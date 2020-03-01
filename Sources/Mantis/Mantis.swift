@@ -48,7 +48,7 @@ public typealias Transformation = (
 
 public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
 
-public enum PresetTransformInfoType {
+public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
 }
@@ -67,7 +67,7 @@ public enum CropShapeType {
 }
 
 public struct Config {
-    public var presetTransformInfoType: PresetTransformInfoType = .none
+    public var presetTransformationType: PresetTransformationType = .none
     public var cropShapeType: CropShapeType = .rect
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio

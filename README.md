@@ -40,7 +40,7 @@ Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helpin
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 0.60'
+pod 'Mantis', '~> 1.0.0'
 ```
 
 ### Carthage
@@ -62,7 +62,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>)
 * The caller needs to conform CropViewControllerDelegate
 ```swift
 public protocol CropViewControllerDelegate: class {
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage)
+    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) // optional
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) // optional
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) // optional
@@ -125,6 +125,14 @@ public enum CropShapeType {
     case rect
     case ellipse
     case roundedRect(radiusToShortSide: CGFloat)
+}
+```
+
+* If you want to apply transformations when showing an image, set Mantis.Config.presetTransformationType
+```
+public enum PresetTransformationType {
+    case none
+    case presetInfo(info: Transformation)
 }
 ```
 
