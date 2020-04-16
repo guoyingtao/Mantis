@@ -44,7 +44,9 @@ public typealias Transformation = (
     offset: CGPoint,
     rotation: CGFloat,
     scale: CGFloat,
-    manualZoomed: Bool)
+    manualZoomed: Bool,
+    maskFrame: CGRect
+)
 
 public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
 

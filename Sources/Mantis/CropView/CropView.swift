@@ -494,6 +494,8 @@ extension CropView {
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
         let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
         
+        print(gridOverlayView.frame)
+        
         let info = CropInfo(
             translation: translation,
             rotation: totalRadians,
@@ -506,7 +508,8 @@ extension CropView {
             offset: scrollView.contentOffset,
             rotation: totalRadians,
             scale: scrollView.zoomScale,
-            manualZoomed: manualZoomed
+            manualZoomed: manualZoomed,
+            maskFrame: gridOverlayView.frame
         )
         
         guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
@@ -649,7 +652,12 @@ extension CropView {
         manualZoomed = transformation.manualZoomed
         scrollView.zoomScale = transformation.scale
         scrollView.contentOffset = transformation.offset
-        viewModel.setBetweenOperationStatus()        
+        viewModel.setBetweenOperationStatus()
+        
+        if (transformation.maskFrame != .zero) {
+            viewModel.cropBoxFrame = transformation.maskFrame
+        }
+
         rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
     }
 }
