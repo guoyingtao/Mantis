@@ -659,5 +659,6 @@ extension CropView {
         }
 
         rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+        adaptAngleDashboardToCropBox()
     }
 }
