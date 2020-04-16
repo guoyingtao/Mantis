@@ -135,6 +135,7 @@ public enum PresetTransformationType {
     case presetInfo(info: Transformation)
 }
 ```
+Please use the transformation infomation obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation).
 
 <p align="center">
     <img src="Images/p1.png" height="250" alt="Mantis" />
