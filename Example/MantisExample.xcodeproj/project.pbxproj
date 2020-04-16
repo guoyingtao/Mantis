@@ -32,9 +32,9 @@
 /* Begin PBXFileReference section */
 		3FC821D838EDAC646C860226 /* Pods-MantisExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-MantisExampleTests/Pods-MantisExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F0852B4237918510031B75D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		5F21BBB22448036100B7B0C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5F21BBB32448036100B7B0C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F90A3CA23DCEBE800D9F27E /* MantisExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MantisExample.entitlements; sourceTree = "<group>"; };
-		5F98E7B023DD03DD007456D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		5F98E7B123DD03DD007456D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5F98E7B223DD04D9007456D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		5F98E7B323DD04D9007456D9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.storyboard"; sourceTree = "<group>"; };
 		5FC10B11217A9EDF00582874 /* MantisExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MantisExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +199,7 @@
 			knownRegions = (
 				en,
 				"zh-Hans",
+				Base,
 			);
 			mainGroup = 5FC10B08217A9EDF00582874;
 			productRefGroup = 5FC10B12217A9EDF00582874 /* Products */;
@@ -329,8 +330,8 @@
 		5FC10B18217A9EDF00582874 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5F98E7B123DD03DD007456D9 /* en */,
 				5F98E7B223DD04D9007456D9 /* zh-Hans */,
+				5F21BBB22448036100B7B0C2 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -338,8 +339,8 @@
 		5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5F98E7B023DD03DD007456D9 /* en */,
 				5F98E7B323DD04D9007456D9 /* zh-Hans */,
+				5F21BBB32448036100B7B0C2 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
