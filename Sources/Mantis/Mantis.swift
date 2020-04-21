@@ -82,6 +82,7 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
     public var showRotationDial = true
+    public var showToolbar = true
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
     

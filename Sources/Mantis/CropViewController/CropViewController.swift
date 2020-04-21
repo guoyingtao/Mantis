@@ -80,6 +80,7 @@ public class CropViewController: UIViewController {
     }
         
     fileprivate func createCropToolbar() {
+        cropToolbar.isHidden = !config.showToolbar
         cropToolbar.backgroundColor = .black
         
         cropToolbar.optionButtonFontSize = config.optionButtonFontSize
@@ -218,7 +219,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    private func handleCancel() {
+    public func handleCancel() {
         delegate?.cropViewControllerWillDismiss(self)
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -231,7 +232,7 @@ public class CropViewController: UIViewController {
         cropToolbar.setRatioButton?.tintColor = .white
     }
     
-    @objc private func handleSetRatio() {
+    @objc public func handleSetRatio() {
         if cropView.aspectRatioLockEnabled {
             resetRatioButton()
             return
@@ -255,16 +256,16 @@ public class CropViewController: UIViewController {
         ratioPresenter?.present(by: self, in: cropToolbar.setRatioButton!)
     }
     
-    private func handleReset() {
+    public func handleReset() {
         resetRatioButton()
         cropView.reset()
     }
     
-    private func handleRotate() {
+    public func handleRotate() {
         cropView.counterclockwiseRotate90()
     }
     
-    private func handleCrop() {
+    public func handleCrop() {
         let cropResult = cropView.crop()
         guard let image = cropResult.croppedImage else {
             delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
