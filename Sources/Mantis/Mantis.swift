@@ -64,8 +64,16 @@ public enum PresetFixedRatioType {
 
 public enum CropShapeType {
     case rect
-    case ellipse
-    case roundedRect(radiusToShortSide: CGFloat)
+    
+    /**
+     When maskOnly is true, the cropped image is kept rect
+     */
+    case ellipse(maskOnly: Bool = false)
+
+    /**
+     When maskOnly is true, the cropped image is kept rect
+     */
+    case roundedRect(radiusToShortSide: CGFloat, maskOnly: Bool = false)
 }
 
 public struct Config {

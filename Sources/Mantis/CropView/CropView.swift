@@ -519,9 +519,16 @@ extension CropView {
         switch cropShapeType {
         case .rect:
             return (croppedImage, transfromation)
-        case .ellipse:
+        case .ellipse(let maskOnly):
+            if (maskOnly) {
+                return (croppedImage, transfromation)
+            }
             return (croppedImage.ellipseMasked, transfromation)
-        case .roundedRect(let radiusToShortSide):
+            
+        case .roundedRect(let radiusToShortSide, let maskOnly):
+            if (maskOnly) {
+                return (croppedImage, transfromation)
+            }
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
             return (croppedImage.roundRect(radius), transfromation)
         }

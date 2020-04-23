@@ -81,7 +81,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
-        config.cropShapeType = .ellipse
+        config.cropShapeType = .ellipse()
         
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.modalPresentationStyle = .fullScreen

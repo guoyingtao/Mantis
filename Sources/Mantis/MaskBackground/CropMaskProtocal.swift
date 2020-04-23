@@ -61,7 +61,7 @@ extension CropMaskProtocol {
             innerPath = UIBezierPath(rect: initialRect)
         case .ellipse:
             innerPath = UIBezierPath(ovalIn: initialRect)
-        case .roundedRect(let radiusToShortSide):
+        case .roundedRect(let radiusToShortSide, _):
             let radius = min(initialRect.width, initialRect.height) * radiusToShortSide
             innerPath = UIBezierPath(roundedRect: initialRect, cornerRadius: radius)
         }
