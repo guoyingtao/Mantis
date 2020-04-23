@@ -131,8 +131,8 @@ public class CropViewController: UIViewController {
         
         view.backgroundColor = .black
         
-        createCropToolbar()
         createCropView()
+        createCropToolbar()        
         initLayout()
         updateLayout()
         
