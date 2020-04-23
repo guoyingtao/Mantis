@@ -123,8 +123,8 @@ When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not 
 ```
 public enum CropShapeType {
     case rect
-    case ellipse
-    case roundedRect(radiusToShortSide: CGFloat)
+    case ellipse(maskOnly: Bool = false)
+    case roundedRect(radiusToShortSide: CGFloat, maskOnly: Bool = false)
 }
 ```
 
