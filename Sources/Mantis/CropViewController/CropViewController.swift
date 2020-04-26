@@ -58,7 +58,7 @@ public class CropViewController: UIViewController {
     
     private var orientation: UIInterfaceOrientation = .unknown
     private lazy var cropView = CropView(image: image, viewModel: CropViewModel())
-    private lazy var cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)
+    private var cropToolbar: CropToolbarProtocol
     private var ratioPresenter: RatioPresenter?
     private var stackView: UIStackView?
     private var initialLayout = false
@@ -67,15 +67,20 @@ public class CropViewController: UIViewController {
         print("CropViewController deinit.")
     }
     
-    init(image: UIImage, config: Mantis.Config = Mantis.Config(), mode: CropViewControllerMode = .normal) {
+    init(image: UIImage,
+         config: Mantis.Config = Mantis.Config(),
+         mode: CropViewControllerMode = .normal,
+         cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) {
         self.image = image
         self.config = config
         self.mode = mode
+        self.cropToolbar = cropToolbar
         
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.cropToolbar = CropToolbar(frame: CGRect.zero)
         super.init(coder: aDecoder)
     }
         
