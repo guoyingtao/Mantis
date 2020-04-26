@@ -13,18 +13,19 @@ public enum CropToolbarMode {
     case simple
 }
 
-class CropToolbar: UIView, CropToolbarProtocol {
-    var optionButtonFontSize: CGFloat = 14
-    var optionButtonFontSizeForPad: CGFloat = 20
+public class CropToolbar: UIView, CropToolbarProtocol {
+    public var optionButtonFontSize: CGFloat = 14
+    public var optionButtonFontSizeForPad: CGFloat = 20
 
-    var selectedCancel = {}
-    var selectedCrop = {}
-    var selectedRotate = {}
-    var selectedReset = {}
-    var selectedSetRatio = {}
+    public var selectedCancel = {}
+    public var selectedCrop = {}
+    public var selectedRotate = {}
+    public var selectedReset = {}
+    public var selectedSetRatio = {}
+    
+    public var fixedRatioSettingButton: UIButton?
     
     var cancelButton: UIButton?
-    var fixedRatioSettingButton: UIButton?
     var resetButton: UIButton?
     var anticlockRotateButton: UIButton?
     var cropButton: UIButton?
@@ -110,7 +111,9 @@ class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    func createToolbarUI(mode: CropToolbarMode = .normal, includeFixedRatioSettingButton: Bool = true) {
+    public func createToolbarUI(mode: CropToolbarMode = .normal, includeFixedRatioSettingButton: Bool = true, height: CGFloat = 0) {
+        backgroundColor = .black
+        
         createButtonContainer()
         setButtonContainerLayout()
 
@@ -130,7 +133,7 @@ class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    func adjustUIForOrientation() {
+    public func adjustUIForOrientation() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -140,11 +143,11 @@ class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    func handleCropViewDidBecomeResettable() {
+    public func handleCropViewDidBecomeResettable() {
         resetButton?.isHidden = false
     }
     
-    func handleCropViewDidBecomeNonResettable() {
+    public func handleCropViewDidBecomeNonResettable() {
         resetButton?.isHidden = true
     }
     

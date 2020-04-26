@@ -85,8 +85,6 @@ public class CropViewController: UIViewController {
     }
         
     fileprivate func createCropToolbar() {
-        cropToolbar.backgroundColor = .black
-        
         cropToolbar.optionButtonFontSize = config.optionButtonFontSize
         cropToolbar.optionButtonFontSizeForPad = config.optionButtonFontSizeForPad
         
@@ -106,9 +104,13 @@ public class CropViewController: UIViewController {
         }
         
         if mode == .normal {
-            cropToolbar.createToolbarUI(mode: .normal, includeFixedRatioSettingButton: showRatioButton)
+            cropToolbar.createToolbarUI(mode: .normal,
+                                        includeFixedRatioSettingButton: showRatioButton,
+                                        height: config.cropToolbarHeight)
         } else {
-            cropToolbar.createToolbarUI(mode: .simple, includeFixedRatioSettingButton: showRatioButton)
+            cropToolbar.createToolbarUI(mode: .simple,
+                                        includeFixedRatioSettingButton: showRatioButton,
+                                        height: config.cropToolbarHeight)
         }
     }
         

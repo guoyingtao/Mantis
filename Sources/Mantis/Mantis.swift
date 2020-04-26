@@ -28,12 +28,22 @@ private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
 } ()
 
-public func cropViewController(image: UIImage, config: Mantis.Config = Mantis.Config()) -> CropViewController {
-    return CropViewController(image: image, config: config, mode: .normal)
+public func cropViewController(image: UIImage,
+                               config: Mantis.Config = Mantis.Config(),
+                               cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
+    return CropViewController(image: image,
+                              config: config,
+                              mode: .normal,
+                              cropToolbar: cropToolbar)
 }
 
-public func cropCustomizableViewController(image: UIImage, config: Mantis.Config = Mantis.Config()) -> CropViewController {
-    return CropViewController(image: image, config: config, mode: .customizable)
+public func cropCustomizableViewController(image: UIImage,
+                                           config: Mantis.Config = Mantis.Config(),
+                                           cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
+    return CropViewController(image: image,
+                              config: config,
+                              mode: .customizable,
+                              cropToolbar: cropToolbar)
 }
 
 public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
@@ -84,6 +94,7 @@ public struct Config {
     public var showRotationDial = true
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
+    public var cropToolbarHeight: CGFloat = 0
     
     var customRatios: [(width: Int, height: Int)] = []
     

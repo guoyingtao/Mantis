@@ -19,7 +19,7 @@ public protocol CropToolbarProtocol: UIView {
     
     var fixedRatioSettingButton: UIButton? {get set}
     
-    func createToolbarUI(mode: CropToolbarMode, includeFixedRatioSettingButton: Bool)
+    func createToolbarUI(mode: CropToolbarMode, includeFixedRatioSettingButton: Bool, height: CGFloat)
     
     func adjustUIForOrientation()
     func handleCropViewDidBecomeResettable()
