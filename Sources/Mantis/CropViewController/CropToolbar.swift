@@ -13,7 +13,7 @@ public enum CropToolbarMode {
     case simple
 }
 
-class CropToolbar: UIView {
+class CropToolbar: UIView, CropToolbarProtocol {
     var optionButtonFontSize: CGFloat = 14
     var optionButtonFontSizeForPad: CGFloat = 20
 
@@ -24,7 +24,7 @@ class CropToolbar: UIView {
     var selectedSetRatio = {}
     
     var cancelButton: UIButton?
-    var setRatioButton: UIButton?
+    var fixedRatioSettingButton: UIButton?
     var resetButton: UIButton?
     var anticlockRotateButton: UIButton?
     var cropButton: UIButton?
@@ -77,8 +77,8 @@ class CropToolbar: UIView {
     }
     
     private func createSetRatioButton() {
-        setRatioButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
-        setRatioButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
+        fixedRatioSettingButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
+        fixedRatioSettingButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
     }
     
     private func createCropButton() {
@@ -110,12 +110,12 @@ class CropToolbar: UIView {
         }
     }
     
-    func createToolbarUI(mode: CropToolbarMode = .normal, includeSetRatioButton: Bool = true) {
+    func createToolbarUI(mode: CropToolbarMode = .normal, includeFixedRatioSettingButton: Bool = true) {
         createButtonContainer()
         setButtonContainerLayout()
 
         createRotationButton()
-        if includeSetRatioButton {
+        if includeFixedRatioSettingButton {
             createSetRatioButton()
         }
 
@@ -123,14 +123,14 @@ class CropToolbar: UIView {
             createResetButton(with: ToolBarButtonImageBuilder.resetImage())
             createCancelButton()
             createCropButton()
-            addButtonsToContainer(buttons: [cancelButton, anticlockRotateButton, resetButton, setRatioButton, cropButton])
+            addButtonsToContainer(buttons: [cancelButton, anticlockRotateButton, resetButton, fixedRatioSettingButton, cropButton])
         } else {
             createResetButton()
-            addButtonsToContainer(buttons: [anticlockRotateButton, resetButton, setRatioButton])
+            addButtonsToContainer(buttons: [anticlockRotateButton, resetButton, fixedRatioSettingButton])
         }
     }
     
-    func checkOrientation() {
+    func adjustUIForOrientation() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -138,6 +138,14 @@ class CropToolbar: UIView {
             optionButtonStackView?.axis = .vertical
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         }
+    }
+    
+    func handleCropViewDidBecomeResettable() {
+        resetButton?.isHidden = false
+    }
+    
+    func handleCropViewDidBecomeNonResettable() {
+        resetButton?.isHidden = true
     }
     
     @objc private func cancel() {
