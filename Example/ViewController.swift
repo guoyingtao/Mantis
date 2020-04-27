@@ -41,7 +41,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 //
 //        config.presetTransformationType = .presetInfo(info: transform)
         
-        config.cropToolbarHeight = 80
+        config.cropToolbarHeightForVertialOrientation = 44
+        config.cropToolbarWidthForHorizontalOrientation = 80
         let cropToolbar = CustomizedCropToolbar(frame: .zero)
         
         let cropViewController = Mantis.cropViewController(image: image,

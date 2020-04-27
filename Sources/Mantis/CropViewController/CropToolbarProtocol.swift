@@ -18,17 +18,33 @@ public protocol CropToolbarProtocol: UIView {
     var selectedSetRatio: ()->Void {get set}
     
     var fixedRatioSettingButton: UIButton? {get set}
+    var heightForVerticalOrientationConstraint: NSLayoutConstraint? {get set}
+    var widthForHorizonOrientationConstraint: NSLayoutConstraint? {get set}
+
+    func createToolbarUI(mode: CropToolbarMode,
+                         includeFixedRatioSettingButton: Bool)
     
-    func createToolbarUI(mode: CropToolbarMode, includeFixedRatioSettingButton: Bool, height: CGFloat)
-    
+    func initConstraint(heightForVerticalOrientation: CGFloat,
+                        widthForHorizonOrientation: CGFloat)
     func adjustUIForOrientation()
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeNonResettable()
 }
 
-extension CropToolbarProtocol {
+public extension CropToolbarProtocol {
+    func initConstraint(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
+        heightForVerticalOrientationConstraint = heightAnchor.constraint(equalToConstant: heightForVerticalOrientation)
+        widthForHorizonOrientationConstraint = widthAnchor.constraint(equalToConstant: widthForHorizonOrientation)
+    }
+    
     func adjustUIForOrientation() {
-        
+        if UIApplication.shared.statusBarOrientation.isPortrait {
+            heightForVerticalOrientationConstraint?.isActive = true
+            widthForHorizonOrientationConstraint?.isActive = false
+        } else {
+            heightForVerticalOrientationConstraint?.isActive = false
+            widthForHorizonOrientationConstraint?.isActive = true
+        }
     }
     
     func handleCropViewDidBecomeResettable() {

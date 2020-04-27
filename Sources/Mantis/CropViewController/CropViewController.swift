@@ -105,13 +105,13 @@ public class CropViewController: UIViewController {
         
         if mode == .normal {
             cropToolbar.createToolbarUI(mode: .normal,
-                                        includeFixedRatioSettingButton: showRatioButton,
-                                        height: config.cropToolbarHeight)
+                                        includeFixedRatioSettingButton: showRatioButton)
         } else {
             cropToolbar.createToolbarUI(mode: .simple,
-                                        includeFixedRatioSettingButton: showRatioButton,
-                                        height: config.cropToolbarHeight)
+                                        includeFixedRatioSettingButton: showRatioButton)
         }
+        
+        cropToolbar.initConstraint(heightForVerticalOrientation: config.cropToolbarHeightForVertialOrientation, widthForHorizonOrientation: config.cropToolbarWidthForHorizontalOrientation)
     }
         
     fileprivate func getFixedRatioManager() -> FixedRatioManager {

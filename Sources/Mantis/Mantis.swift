@@ -94,7 +94,9 @@ public struct Config {
     public var showRotationDial = true
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
-    public var cropToolbarHeight: CGFloat = 0
+    
+    public var cropToolbarHeightForVertialOrientation: CGFloat = 0
+    public var cropToolbarWidthForHorizontalOrientation: CGFloat = 0
     
     var customRatios: [(width: Int, height: Int)] = []
     

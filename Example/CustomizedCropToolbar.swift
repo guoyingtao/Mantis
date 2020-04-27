@@ -9,8 +9,7 @@
 import UIKit
 import Mantis
 
-class CustomizedCropToolbar: UIView, CropToolbarProtocol {
-    
+class CustomizedCropToolbar: UIView, CropToolbarProtocol {    
     var optionButtonFontSize: CGFloat = 16
     
     var optionButtonFontSizeForPad: CGFloat = 20
@@ -30,11 +29,11 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     var cropButton: UIButton?
     var cancelButton: UIButton?
     
+    var heightForVerticalOrientationConstraint: NSLayoutConstraint?
+    var widthForHorizonOrientationConstraint: NSLayoutConstraint?
+    
     func createToolbarUI(mode: CropToolbarMode,
-                         includeFixedRatioSettingButton: Bool,
-                         height: CGFloat) {
-        heightAnchor.constraint(equalToConstant: height).isActive = true
-        
+                         includeFixedRatioSettingButton: Bool) {
         backgroundColor = .red
         
         cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
@@ -56,19 +55,7 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         cancelButton?.heightAnchor.constraint(equalToConstant: 40).isActive = true
         cancelButton?.widthAnchor.constraint(equalToConstant: 100).isActive = true
     }
-    
-    func adjustUIForOrientation() {
-        
-    }
-    
-    func handleCropViewDidBecomeResettable() {
-        
-    }
-    
-    func handleCropViewDidBecomeNonResettable() {
-        
-    }
-    
+            
     @objc private func crop() {
         selectedCrop()
     }
