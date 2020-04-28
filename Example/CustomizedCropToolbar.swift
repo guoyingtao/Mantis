@@ -31,29 +31,42 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
+    var stackView: UIStackView?
     
     func createToolbarUI(mode: CropToolbarMode,
                          includeFixedRatioSettingButton: Bool) {
         backgroundColor = .red
         
         cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
-        addSubview(cropButton!)
 
         cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
-        addSubview(cancelButton!)
-
-        cropButton?.translatesAutoresizingMaskIntoConstraints = false
-        cropButton?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        cropButton?.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        cropButton?.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        cropButton?.widthAnchor.constraint(equalToConstant: 100).isActive = true
-
         
-        cancelButton?.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        cancelButton?.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        cancelButton?.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        cancelButton?.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        stackView = UIStackView()
+        addSubview(stackView!)
+        
+        stackView?.translatesAutoresizingMaskIntoConstraints = false
+        stackView?.alignment = .center
+        stackView?.distribution = .fillEqually
+        
+        stackView?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        stackView?.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        stackView?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        stackView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        stackView?.addArrangedSubview(cancelButton!)
+        stackView?.addArrangedSubview(cropButton!)
+    }
+    
+    func adjustUIForOrientation() {
+        if UIApplication.shared.statusBarOrientation.isPortrait {
+            heightForVerticalOrientationConstraint?.isActive = true
+            widthForHorizonOrientationConstraint?.isActive = false
+            stackView?.axis = .horizontal
+        } else {
+            heightForVerticalOrientationConstraint?.isActive = false
+            widthForHorizonOrientationConstraint?.isActive = true
+            stackView?.axis = .vertical
+        }
     }
             
     @objc private func crop() {
