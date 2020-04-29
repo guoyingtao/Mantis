@@ -17,7 +17,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     public var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     public var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     
-    public var delegate: CropToolbarDelegate?
+    public var cropToolbarDelegate: CropToolbarDelegate?
     
     var fixedRatioSettingButton: UIButton?
 
@@ -168,22 +168,22 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc private func cancel() {
-        delegate?.didSelectedCancel()
+        cropToolbarDelegate?.didSelectedCancel()
     }
     
     @objc private func setRatio() {
-        delegate?.didSelectedetRatio()
+        cropToolbarDelegate?.didSelectedetRatio()
     }
     
     @objc private func reset(_ sender: Any) {
-        delegate?.didSelectedReset()
+        cropToolbarDelegate?.didSelectedReset()
     }
     
     @objc private func rotate(_ sender: Any) {
-        delegate?.didSelectedRotate()
+        cropToolbarDelegate?.didSelectedRotate()
     }
     
     @objc private func crop(_ sender: Any) {
-        delegate?.didSelectedCrop()
+        cropToolbarDelegate?.didSelectedCrop()
     }
 }

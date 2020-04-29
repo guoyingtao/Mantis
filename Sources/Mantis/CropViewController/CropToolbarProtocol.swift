@@ -17,9 +17,8 @@ public protocol CropToolbarDelegate {
 
 public protocol CropToolbarProtocol: UIView {    
     var heightForVerticalOrientationConstraint: NSLayoutConstraint? {get set}
-    var widthForHorizonOrientationConstraint: NSLayoutConstraint? {get set}
-    
-    var delegate: CropToolbarDelegate? {get set}
+    var widthForHorizonOrientationConstraint: NSLayoutConstraint? {get set}    
+    var cropToolbarDelegate: CropToolbarDelegate? {get set}
 
     func createToolbarUI(config: CropToolbarConfig)
     

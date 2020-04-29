@@ -12,14 +12,13 @@ import Mantis
 class CustomizedCropToolbar: UIView, CropToolbarProtocol {    
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
-    var delegate: CropToolbarDelegate?
+    var cropToolbarDelegate: CropToolbarDelegate?
     
-    var fixedRatioSettingButton: UIButton?
-    var cropButton: UIButton?
-    var cancelButton: UIButton?
-    
-    var stackView: UIStackView?
-    var config: CropToolbarConfig!
+    private var fixedRatioSettingButton: UIButton?
+    private var cropButton: UIButton?
+    private var cancelButton: UIButton?
+    private var stackView: UIStackView?
+    private var config: CropToolbarConfig!
     
     func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
@@ -54,17 +53,21 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
             stackView?.axis = .vertical
         }
     }
+    
+    func getRatioListPresentSourceView() -> UIView? {
+        return fixedRatioSettingButton
+    }
             
     @objc private func crop() {
-        delegate?.didSelectedCrop()
+        cropToolbarDelegate?.didSelectedCrop()
     }
     
     @objc private func cancel() {
-        delegate?.didSelectedCancel()
+        cropToolbarDelegate?.didSelectedCancel()
     }
     
     @objc private func showRatioList() {
-        delegate?.didSelectedetRatio()
+        cropToolbarDelegate?.didSelectedetRatio()
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
@@ -88,9 +91,5 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
         
         return button
-    }
-    
-    func getRatioListPresentSourceView() -> UIView? {
-        return fixedRatioSettingButton
     }
 }
