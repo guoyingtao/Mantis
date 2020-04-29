@@ -8,23 +8,20 @@
 import UIKit
 
 public protocol CropToolbarProtocol: UIView {
-    var optionButtonFontSize: CGFloat {get set}
-    var optionButtonFontSizeForPad: CGFloat {get set}
-    
     var selectedCancel: ()->Void {get set}
     var selectedCrop: ()->Void {get set}
     var selectedRotate: ()->Void {get set}
     var selectedReset: ()->Void {get set}
     var selectedSetRatio: ()->Void {get set}
     
-    var fixedRatioSettingButton: UIButton? {get set}
     var heightForVerticalOrientationConstraint: NSLayoutConstraint? {get set}
     var widthForHorizonOrientationConstraint: NSLayoutConstraint? {get set}
 
-    func createToolbarUI(mode: CropToolbarMode,
-                         includeFixedRatioSettingButton: Bool)
+    func createToolbarUI(config: CropToolbarConfig)
     
     // MARK: - The following functions have default implementations
+    func getRatioListPresentSourceView() -> UIView?
+    
     func initConstraints(heightForVerticalOrientation: CGFloat,
                         widthForHorizonOrientation: CGFloat)
     
@@ -40,6 +37,10 @@ public protocol CropToolbarProtocol: UIView {
 }
 
 public extension CropToolbarProtocol {
+    func getRatioListPresentSourceView() -> UIView? {
+        return nil
+    }
+    
     func initConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
         heightForVerticalOrientationConstraint = heightAnchor.constraint(equalToConstant: heightForVerticalOrientation)
         widthForHorizonOrientationConstraint = widthAnchor.constraint(equalToConstant: widthForHorizonOrientation)
@@ -65,11 +66,11 @@ public extension CropToolbarProtocol {
     }
     
     func adjustUIWhenFixedRatioSetted() {
-        fixedRatioSettingButton?.tintColor = nil
+
     }
     
     func adjustUIWhenRatioResetted() {
-        fixedRatioSettingButton?.tintColor = .white
+
     }
     
     func handleCropViewDidBecomeResettable() {

@@ -14,31 +14,31 @@ public enum CropToolbarMode {
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
-    public var optionButtonFontSize: CGFloat = 14
-    public var optionButtonFontSizeForPad: CGFloat = 20
-
+    public var heightForVerticalOrientationConstraint: NSLayoutConstraint?
+    public var widthForHorizonOrientationConstraint: NSLayoutConstraint?
+    
     public var selectedCancel = {}
     public var selectedCrop = {}
     public var selectedRotate = {}
     public var selectedReset = {}
     public var selectedSetRatio = {}
     
-    public var fixedRatioSettingButton: UIButton?
-    public var heightForVerticalOrientationConstraint: NSLayoutConstraint?
-    public var widthForHorizonOrientationConstraint: NSLayoutConstraint?
+    var fixedRatioSettingButton: UIButton?
 
     var cancelButton: UIButton?
     var resetButton: UIButton?
     var anticlockRotateButton: UIButton?
     var cropButton: UIButton?
     
+    var config: CropToolbarConfig!
+    
     private var optionButtonStackView: UIStackView?
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
-            optionButtonFontSizeForPad :
-            optionButtonFontSize
+            config.optionButtonFontSizeForPad :
+            config.optionButtonFontSize
         
         let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
         
@@ -113,19 +113,20 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    public func createToolbarUI(mode: CropToolbarMode = .normal,
-                                includeFixedRatioSettingButton: Bool = true) {
+    public func createToolbarUI(config: CropToolbarConfig) {
+        self.config = config
+        
         backgroundColor = .black
         
         createButtonContainer()
         setButtonContainerLayout()
 
         createRotationButton()
-        if includeFixedRatioSettingButton {
+        if config.includeFixedRatioSettingButton  {
             createSetRatioButton()
         }
-
-        if mode == .normal {
+        
+        if config.mode == .normal {
             createResetButton(with: ToolBarButtonImageBuilder.resetImage())
             createCancelButton()
             createCropButton()
@@ -136,6 +137,10 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
+    public func getRatioListPresentSourceView() -> UIView? {
+        return fixedRatioSettingButton
+    }
+        
     public func respondToOrientationChange() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
@@ -144,6 +149,14 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             optionButtonStackView?.axis = .vertical
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         }
+    }
+    
+    public func adjustUIWhenFixedRatioSetted() {
+        fixedRatioSettingButton?.tintColor = nil
+    }
+    
+    public func adjustUIWhenRatioResetted() {
+        fixedRatioSettingButton?.tintColor = .white
     }
     
     public func handleCropViewDidBecomeResettable() {

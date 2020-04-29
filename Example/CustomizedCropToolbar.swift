@@ -10,18 +10,10 @@ import UIKit
 import Mantis
 
 class CustomizedCropToolbar: UIView, CropToolbarProtocol {    
-    var optionButtonFontSize: CGFloat = 16
-    
-    var optionButtonFontSizeForPad: CGFloat = 20
-    
     var selectedCancel: () -> Void = {}
-    
     var selectedCrop: () -> Void = {}
-    
     var selectedRotate: () -> Void = {}
-    
     var selectedReset: () -> Void = {}
-    
     var selectedSetRatio: () -> Void = {}
     
     var fixedRatioSettingButton: UIButton?
@@ -32,14 +24,16 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     var stackView: UIStackView?
+    var config: CropToolbarConfig!
     
-    func createToolbarUI(mode: CropToolbarMode,
-                         includeFixedRatioSettingButton: Bool) {
+    func createToolbarUI(config: CropToolbarConfig) {
+        self.config = config
+        
         backgroundColor = .red
         
         cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
-
         cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
+        fixedRatioSettingButton = createOptionButton(withTitle: "Ratio", andAction: #selector(showRatioList))
         
         stackView = UIStackView()
         addSubview(stackView!)
@@ -54,10 +48,11 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         stackView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
         stackView?.addArrangedSubview(cancelButton!)
+        stackView?.addArrangedSubview(fixedRatioSettingButton!)
         stackView?.addArrangedSubview(cropButton!)
     }
     
-    func adjustUIForOrientationToOrientationChange() {
+    func adjustUIWhenOrientationChange() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             stackView?.axis = .horizontal
         } else {
@@ -73,11 +68,15 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         selectedCancel()
     }
     
+    @objc private func showRatioList() {
+        selectedSetRatio()
+    }
+    
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
-            optionButtonFontSizeForPad :
-            optionButtonFontSize
+            config.optionButtonFontSizeForPad :
+            config.optionButtonFontSize
         
         let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
         
@@ -94,5 +93,9 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
         
         return button
+    }
+    
+    func getRatioListPresentSourceView() -> UIView? {
+        return fixedRatioSettingButton
     }
 }

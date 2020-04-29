@@ -87,6 +87,9 @@ public enum CropShapeType {
 }
 
 public struct CropToolbarConfig {
+    public var mode: CropToolbarMode = .normal
+    public var includeFixedRatioSettingButton = true
+    
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
     
@@ -100,11 +103,8 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
     public var showRotationDial = true
-    public var optionButtonFontSize: CGFloat = 14
-    public var optionButtonFontSizeForPad: CGFloat = 20
-    
-    public var cropToolbarHeightForVertialOrientation: CGFloat = 0
-    public var cropToolbarWidthForHorizontalOrientation: CGFloat = 0
+
+    public var cropToolbarConfig = CropToolbarConfig(optionButtonFontSize: 14, optionButtonFontSizeForPad: 20, cropToolbarHeightForVertialOrientation: 44, cropToolbarWidthForHorizontalOrientation: 44)
     
     var customRatios: [(width: Int, height: Int)] = []
     
