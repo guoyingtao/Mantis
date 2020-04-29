@@ -87,14 +87,13 @@ public enum CropShapeType {
 }
 
 public struct CropToolbarConfig {
-    public var mode: CropToolbarMode = .normal
-    public var includeFixedRatioSettingButton = true
-    
     public var optionButtonFontSize: CGFloat = 14
-    public var optionButtonFontSizeForPad: CGFloat = 20
-    
+    public var optionButtonFontSizeForPad: CGFloat = 20    
     public var cropToolbarHeightForVertialOrientation: CGFloat = 0
     public var cropToolbarWidthForHorizontalOrientation: CGFloat = 0
+    
+    var mode: CropToolbarMode = .normal
+    var includeFixedRatioSettingButton = true
 }
 
 public struct Config {
