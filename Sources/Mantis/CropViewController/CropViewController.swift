@@ -85,11 +85,7 @@ public class CropViewController: UIViewController {
     }
         
     fileprivate func createCropToolbar() {
-        cropToolbar.selectedCancel = {[weak self] in self?.handleCancel() }
-        cropToolbar.selectedRotate = {[weak self] in self?.handleRotate() }
-        cropToolbar.selectedReset = {[weak self] in self?.handleReset() }
-        cropToolbar.selectedSetRatio = {[weak self] in self?.handleSetRatio() }
-        cropToolbar.selectedCrop = {[weak self] in self?.handleCrop() }
+        cropToolbar.delegate = self
         
         if case .alwaysUsingOnePresetFixedRatio(let ratio) = config.presetFixedRatioType {
             config.cropToolbarConfig.includeFixedRatioSettingButton = false
@@ -328,6 +324,28 @@ extension CropViewController: CropViewDelegate {
     
     func cropViewDidBecomeNonResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeNonResettable()
+    }
+}
+
+extension CropViewController: CropToolbarDelegate {
+    public func didSelectedCancel() {
+        handleCancel()
+    }
+    
+    public func didSelectedCrop() {
+        handleCrop()
+    }
+    
+    public func didSelectedRotate() {
+        handleRotate()
+    }
+    
+    public func didSelectedReset() {
+        handleReset()
+    }
+    
+    public func didSelectedetRatio() {
+        handleSetRatio()
     }
 }
 

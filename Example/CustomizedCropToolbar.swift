@@ -10,19 +10,14 @@ import UIKit
 import Mantis
 
 class CustomizedCropToolbar: UIView, CropToolbarProtocol {    
-    var selectedCancel: () -> Void = {}
-    var selectedCrop: () -> Void = {}
-    var selectedRotate: () -> Void = {}
-    var selectedReset: () -> Void = {}
-    var selectedSetRatio: () -> Void = {}
+    var heightForVerticalOrientationConstraint: NSLayoutConstraint?
+    var widthForHorizonOrientationConstraint: NSLayoutConstraint?
+    var delegate: CropToolbarDelegate?
     
     var fixedRatioSettingButton: UIButton?
-    
     var cropButton: UIButton?
     var cancelButton: UIButton?
     
-    var heightForVerticalOrientationConstraint: NSLayoutConstraint?
-    var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     var stackView: UIStackView?
     var config: CropToolbarConfig!
     
@@ -61,15 +56,15 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     }
             
     @objc private func crop() {
-        selectedCrop()
+        delegate?.didSelectedCrop()
     }
     
     @objc private func cancel() {
-        selectedCancel()
+        delegate?.didSelectedCancel()
     }
     
     @objc private func showRatioList() {
-        selectedSetRatio()
+        delegate?.didSelectedetRatio()
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {

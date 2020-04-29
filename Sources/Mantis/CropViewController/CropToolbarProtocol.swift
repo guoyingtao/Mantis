@@ -7,15 +7,19 @@
 
 import UIKit
 
-public protocol CropToolbarProtocol: UIView {
-    var selectedCancel: ()->Void {get set}
-    var selectedCrop: ()->Void {get set}
-    var selectedRotate: ()->Void {get set}
-    var selectedReset: ()->Void {get set}
-    var selectedSetRatio: ()->Void {get set}
-    
+public protocol CropToolbarDelegate {
+    func didSelectedCancel();
+    func didSelectedCrop();
+    func didSelectedRotate();
+    func didSelectedReset();
+    func didSelectedetRatio();
+}
+
+public protocol CropToolbarProtocol: UIView {    
     var heightForVerticalOrientationConstraint: NSLayoutConstraint? {get set}
     var widthForHorizonOrientationConstraint: NSLayoutConstraint? {get set}
+    
+    var delegate: CropToolbarDelegate? {get set}
 
     func createToolbarUI(config: CropToolbarConfig)
     
