@@ -86,6 +86,14 @@ public enum CropShapeType {
     case roundedRect(radiusToShortSide: CGFloat, maskOnly: Bool = false)
 }
 
+public struct CropToolbarConfig {
+    public var optionButtonFontSize: CGFloat = 14
+    public var optionButtonFontSizeForPad: CGFloat = 20
+    
+    public var cropToolbarHeightForVertialOrientation: CGFloat = 0
+    public var cropToolbarWidthForHorizontalOrientation: CGFloat = 0
+}
+
 public struct Config {
     public var presetTransformationType: PresetTransformationType = .none
     public var cropShapeType: CropShapeType = .rect

@@ -24,20 +24,33 @@ public protocol CropToolbarProtocol: UIView {
     func createToolbarUI(mode: CropToolbarMode,
                          includeFixedRatioSettingButton: Bool)
     
-    func initConstraint(heightForVerticalOrientation: CGFloat,
+    // MARK: - The following functions have default implementations
+    func initConstraints(heightForVerticalOrientation: CGFloat,
                         widthForHorizonOrientation: CGFloat)
-    func adjustUIForOrientation()
+    
+    func respondToOrientationChange()
+    func adjustLayoutConstraintsWhenOrientationChange()
+    func adjustUIWhenOrientationChange()
+    
+    func adjustUIWhenFixedRatioSetted()
+    func adjustUIWhenRatioResetted()
+    
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeNonResettable()
 }
 
 public extension CropToolbarProtocol {
-    func initConstraint(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
+    func initConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
         heightForVerticalOrientationConstraint = heightAnchor.constraint(equalToConstant: heightForVerticalOrientation)
         widthForHorizonOrientationConstraint = widthAnchor.constraint(equalToConstant: widthForHorizonOrientation)
     }
     
-    func adjustUIForOrientation() {
+    func respondToOrientationChange() {
+        adjustLayoutConstraintsWhenOrientationChange()
+        adjustUIWhenOrientationChange()
+    }
+    
+    func adjustLayoutConstraintsWhenOrientationChange() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             heightForVerticalOrientationConstraint?.isActive = true
             widthForHorizonOrientationConstraint?.isActive = false
@@ -45,6 +58,18 @@ public extension CropToolbarProtocol {
             heightForVerticalOrientationConstraint?.isActive = false
             widthForHorizonOrientationConstraint?.isActive = true
         }
+    }
+    
+    func adjustUIWhenOrientationChange() {
+        
+    }
+    
+    func adjustUIWhenFixedRatioSetted() {
+        fixedRatioSettingButton?.tintColor = nil
+    }
+    
+    func adjustUIWhenRatioResetted() {
+        fixedRatioSettingButton?.tintColor = .white
     }
     
     func handleCropViewDidBecomeResettable() {

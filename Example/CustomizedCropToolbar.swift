@@ -57,14 +57,10 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         stackView?.addArrangedSubview(cropButton!)
     }
     
-    func adjustUIForOrientation() {
+    func adjustUIForOrientationToOrientationChange() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
-            heightForVerticalOrientationConstraint?.isActive = true
-            widthForHorizonOrientationConstraint?.isActive = false
             stackView?.axis = .horizontal
         } else {
-            heightForVerticalOrientationConstraint?.isActive = false
-            widthForHorizonOrientationConstraint?.isActive = true
             stackView?.axis = .vertical
         }
     }

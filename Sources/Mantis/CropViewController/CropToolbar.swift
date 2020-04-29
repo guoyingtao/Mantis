@@ -136,7 +136,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    public func adjustUIForOrientation() {
+    public func respondToOrientationChange() {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             optionButtonStackView?.axis = .horizontal
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -154,7 +154,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         resetButton?.isHidden = true
     }
     
-    public func initConstraint(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
+    public func initConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
         
     }
     
