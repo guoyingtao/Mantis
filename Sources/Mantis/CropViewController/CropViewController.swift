@@ -344,7 +344,7 @@ extension CropViewController: CropToolbarDelegate {
         handleReset()
     }
     
-    public func didSelectedetRatio() {
+    public func didSelectedSetRatio() {
         handleSetRatio()
     }
 }

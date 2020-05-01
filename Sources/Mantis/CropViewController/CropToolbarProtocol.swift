@@ -12,7 +12,7 @@ public protocol CropToolbarDelegate {
     func didSelectedCrop();
     func didSelectedRotate();
     func didSelectedReset();
-    func didSelectedetRatio();
+    func didSelectedSetRatio();
 }
 
 public protocol CropToolbarProtocol: UIView {    

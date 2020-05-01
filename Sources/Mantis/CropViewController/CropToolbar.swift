@@ -172,7 +172,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc private func setRatio() {
-        cropToolbarDelegate?.didSelectedetRatio()
+        cropToolbarDelegate?.didSelectedSetRatio()
     }
     
     @objc private func reset(_ sender: Any) {
