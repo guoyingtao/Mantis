@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-So-c13">
-                                <rect key="frame" x="37.5" y="431" width="300" height="216"/>
+                                <rect key="frame" x="37.5" y="467" width="300" height="180"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpr-TJ-i7J">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="36"/>
@@ -27,24 +27,29 @@
                                             <action selector="getImageFromAlbum:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xHT-b7-fwO"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0o0-4T-StV">
                                         <rect key="frame" x="0.0" y="36" width="300" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Normal"/>
-                                        <connections>
-                                            <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
-                                        <rect key="frame" x="0.0" y="72" width="300" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Embedded"/>
-                                        <connections>
-                                            <segue destination="c5I-rk-tJF" kind="presentation" modalPresentationStyle="fullScreen" id="liD-2e-mJA"/>
-                                        </connections>
-                                    </button>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
+                                                <rect key="frame" x="0.0" y="0.0" width="205" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="Normal"/>
+                                                <connections>
+                                                    <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Of-0q-wGQ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
+                                                <rect key="frame" x="205" y="0.0" width="95" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="Embedded"/>
+                                                <connections>
+                                                    <segue destination="c5I-rk-tJF" kind="presentation" modalPresentationStyle="fullScreen" id="liD-2e-mJA"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgZ-jD-v0j">
-                                        <rect key="frame" x="0.0" y="108" width="300" height="36"/>
+                                        <rect key="frame" x="0.0" y="72" width="300" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="AlwaysUseOnePresetRatio"/>
                                         <connections>
@@ -52,22 +57,35 @@
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N2U-ea-YZw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkm-rK-5rk" userLabel="Hide Rotation Dial">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQp-Zn-dI8">
+                                        <rect key="frame" x="0.0" y="108" width="300" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Customized CropToolbar"/>
+                                        <connections>
+                                            <action selector="customizedCropToobalButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2es-9B-Mra"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="12F-q3-2Fl">
                                         <rect key="frame" x="0.0" y="144" width="300" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Hide Rotation Dial"/>
-                                        <connections>
-                                            <action selector="hideRotationDialPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qDm-P4-1CY"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pc8-Aq-bNG">
-                                        <rect key="frame" x="0.0" y="180" width="300" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Crop Ellipse"/>
-                                        <connections>
-                                            <action selector="cropEllips:" destination="BYZ-38-t0r" eventType="touchUpInside" id="taC-HV-Jbu"/>
-                                        </connections>
-                                    </button>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pc8-Aq-bNG">
+                                                <rect key="frame" x="0.0" y="0.0" width="104" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="Crop Ellipse"/>
+                                                <connections>
+                                                    <action selector="cropEllips:" destination="BYZ-38-t0r" eventType="touchUpInside" id="taC-HV-Jbu"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkm-rK-5rk" userLabel="Hide Rotation Dial">
+                                                <rect key="frame" x="104" y="0.0" width="196" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="Hide Rotation Dial"/>
+                                                <connections>
+                                                    <action selector="hideRotationDialPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qDm-P4-1CY"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="NV8-rV-Tg1"/>

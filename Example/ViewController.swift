@@ -41,7 +41,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 //
 //        config.presetTransformationType = .presetInfo(info: transform)
         
-        let cropViewController = Mantis.cropViewController(image: image, config: config)
+        let cropViewController = Mantis.cropViewController(image: image,
+                                                           config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         present(cropViewController, animated: true)
@@ -74,6 +75,27 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
             present(cropViewController, animated: true)
         }
+    
+    
+    @IBAction func customizedCropToobalButtonTouched(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        var config = Mantis.Config()
+        
+        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 44
+        config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation = 80
+        
+        let cropToolbar = CustomizedCropToolbar(frame: .zero)
+        
+        let cropViewController = Mantis.cropViewController(image: image,
+                                                           config: config,
+                                                           cropToolbar: cropToolbar)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+
+    }
     
     @IBAction func cropEllips(_ sender: Any) {
         guard let image = image else {

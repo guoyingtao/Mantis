@@ -26,7 +26,7 @@ import UIKit
 
 protocol CropViewDelegate: class {
     func cropViewDidBecomeResettable(_ cropView: CropView)
-    func cropViewDidBecomeNonResettable(_ cropView: CropView)
+    func cropViewDidBecomeUnResettable(_ cropView: CropView)
 }
 
 let cropViewMinimumBoxSize: CGFloat = 42
@@ -161,7 +161,7 @@ class CropView: UIView {
         if imageStatusChanged() {
             delegate?.cropViewDidBecomeResettable(self)
         } else {
-            delegate?.cropViewDidBecomeNonResettable(self)
+            delegate?.cropViewDidBecomeUnResettable(self)
         }
     }
     
