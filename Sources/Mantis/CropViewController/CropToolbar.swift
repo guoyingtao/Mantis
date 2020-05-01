@@ -151,7 +151,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         fixedRatioSettingButton?.tintColor = nil
     }
     
-    public func adjustUIWhenRatioResetted() {
+    public func adjustUIWhenFixedRatioUnSetted() {
         fixedRatioSettingButton?.tintColor = .white
     }
     
@@ -159,7 +159,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         resetButton?.isHidden = false
     }
     
-    public func handleCropViewDidBecomeNonResettable() {
+    public func handleCropViewDidBecomeUnResettable() {
         resetButton?.isHidden = true
     }
     

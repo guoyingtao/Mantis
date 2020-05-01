@@ -33,10 +33,10 @@ public protocol CropToolbarProtocol: UIView {
     func adjustUIWhenOrientationChange()
     
     func adjustUIWhenFixedRatioSetted()
-    func adjustUIWhenRatioResetted()
+    func adjustUIWhenFixedRatioUnSetted()
     
     func handleCropViewDidBecomeResettable()
-    func handleCropViewDidBecomeNonResettable()
+    func handleCropViewDidBecomeUnResettable()
 }
 
 public extension CropToolbarProtocol {
@@ -72,7 +72,7 @@ public extension CropToolbarProtocol {
 
     }
     
-    func adjustUIWhenRatioResetted() {
+    func adjustUIWhenFixedRatioUnSetted() {
 
     }
     
@@ -80,7 +80,7 @@ public extension CropToolbarProtocol {
         
     }
     
-    func handleCropViewDidBecomeNonResettable() {
+    func handleCropViewDidBecomeUnResettable() {
         
     }
 }

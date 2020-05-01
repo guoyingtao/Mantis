@@ -218,7 +218,7 @@ public class CropViewController: UIViewController {
     
     private func resetRatioButton() {
         cropView.aspectRatioLockEnabled = false
-        cropToolbar.adjustUIWhenRatioResetted()
+        cropToolbar.adjustUIWhenFixedRatioUnSetted()
     }
     
     @objc private func handleSetRatio() {
@@ -322,8 +322,8 @@ extension CropViewController: CropViewDelegate {
         cropToolbar.handleCropViewDidBecomeResettable()
     }
     
-    func cropViewDidBecomeNonResettable(_ cropView: CropView) {
-        cropToolbar.handleCropViewDidBecomeNonResettable()
+    func cropViewDidBecomeUnResettable(_ cropView: CropView) {
+        cropToolbar.handleCropViewDidBecomeUnResettable()
     }
 }
 
