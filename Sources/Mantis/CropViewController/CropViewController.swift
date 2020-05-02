@@ -29,13 +29,17 @@ public protocol CropViewControllerDelegate: class {
                                    cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
+    
+    @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.1.2.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
 }
 
-public extension CropViewControllerDelegate {
-    func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
+public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
+    
+    @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.1.2.")
+    func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
 }
 
 public enum CropViewControllerMode {
@@ -212,11 +216,7 @@ public class CropViewController: UIViewController {
     }
     
     private func handleCancel() {
-        delegate?.cropViewControllerWillDismiss(self)
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.cropViewControllerDidCancel(self, original: self.image)
-        }
+        self.delegate?.cropViewControllerDidCancel(self, original: self.image)
     }
     
     private func resetRatioButton() {
@@ -267,12 +267,8 @@ public class CropViewController: UIViewController {
             delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
             return
         }
-        
-        delegate?.cropViewControllerWillDismiss(self)
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)
-        }
+
+        self.delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)        
     }
 }
 
