@@ -131,6 +131,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             createResetButton()
             addButtonsToContainer(buttons: [anticlockRotateButton, resetButton, fixedRatioSettingButton])
         }
+        
+        resetButton?.isHidden = true
     }
     
     public func getRatioListPresentSourceView() -> UIView? {
@@ -147,11 +149,11 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    public func adjustUIWhenFixedRatioSetted() {
+    public func handleFixedRatioSetted() {
         fixedRatioSettingButton?.tintColor = nil
     }
     
-    public func adjustUIWhenFixedRatioUnSetted() {
+    public func handleFixedRatioUnSetted() {
         fixedRatioSettingButton?.tintColor = .white
     }
     
@@ -168,22 +170,22 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelectedCancel()
+        cropToolbarDelegate?.didSelecteCancel()
     }
     
     @objc private func setRatio() {
-        cropToolbarDelegate?.didSelectedSetRatio()
+        cropToolbarDelegate?.didSelecteSetRatio()
     }
     
     @objc private func reset(_ sender: Any) {
-        cropToolbarDelegate?.didSelectedReset()
+        cropToolbarDelegate?.didSelecteReset()
     }
     
     @objc private func rotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectedRotate()
+        cropToolbarDelegate?.didSelecteRotate()
     }
     
     @objc private func crop(_ sender: Any) {
-        cropToolbarDelegate?.didSelectedCrop()
+        cropToolbarDelegate?.didSelecteCrop()
     }
 }

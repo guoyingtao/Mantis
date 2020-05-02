@@ -146,6 +146,9 @@ class CropView: UIView {
     
     private func imageStatusChanged() -> Bool {
         if viewModel.getTotalRadians() != 0 { return true }
+        
+        if (forceFixedRatio) { return scrollView.zoomScale != 1 }
+        
         if !isTheSamePoint(p1: getImageLeftTopAnchorPoint(), p2: .zero) {
             return true
         }
@@ -610,6 +613,7 @@ extension CropView {
         
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         resetUIFrame()
+        delegate?.cropViewDidBecomeUnResettable(self)
     }
     
     func prepareForDeviceRotation() {
