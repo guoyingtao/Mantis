@@ -170,22 +170,22 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelecteCancel()
+        cropToolbarDelegate?.didSelectCancel()
     }
     
     @objc private func setRatio() {
-        cropToolbarDelegate?.didSelecteSetRatio()
+        cropToolbarDelegate?.didSelectSetRatio()
     }
     
     @objc private func reset(_ sender: Any) {
-        cropToolbarDelegate?.didSelecteReset()
+        cropToolbarDelegate?.didSelectReset()
     }
     
     @objc private func rotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelecteRotate()
+        cropToolbarDelegate?.didSelectRotate()
     }
     
     @objc private func crop(_ sender: Any) {
-        cropToolbarDelegate?.didSelecteCrop()
+        cropToolbarDelegate?.didSelectCrop()
     }
 }

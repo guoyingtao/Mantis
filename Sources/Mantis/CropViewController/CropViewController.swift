@@ -328,23 +328,23 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
-    public func didSelecteCancel() {
+    public func didSelectCancel() {
         handleCancel()
     }
     
-    public func didSelecteCrop() {
+    public func didSelectCrop() {
         handleCrop()
     }
     
-    public func didSelecteRotate() {
+    public func didSelectRotate() {
         handleRotate()
     }
     
-    public func didSelecteReset() {
+    public func didSelectReset() {
         handleReset()
     }
     
-    public func didSelecteSetRatio() {
+    public func didSelectSetRatio() {
         handleSetRatio()
     }
 }
