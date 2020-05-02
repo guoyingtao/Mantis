@@ -177,7 +177,7 @@ public class CropViewController: UIViewController {
     }
     
     func setFixedRatio(_ ratio: Double) {
-        cropToolbar.adjustUIWhenFixedRatioSetted()
+        cropToolbar.handleFixedRatioSetted()
         cropView.aspectRatioLockEnabled = true
         cropView.viewModel.aspectRatio = CGFloat(ratio)
         
@@ -218,7 +218,7 @@ public class CropViewController: UIViewController {
     
     private func resetRatioButton() {
         cropView.aspectRatioLockEnabled = false
-        cropToolbar.adjustUIWhenFixedRatioUnSetted()
+        cropToolbar.handleFixedRatioUnSetted()
     }
     
     @objc private func handleSetRatio() {
@@ -328,23 +328,23 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
-    public func didSelectedCancel() {
+    public func didSelecteCancel() {
         handleCancel()
     }
     
-    public func didSelectedCrop() {
+    public func didSelecteCrop() {
         handleCrop()
     }
     
-    public func didSelectedRotate() {
+    public func didSelecteRotate() {
         handleRotate()
     }
     
-    public func didSelectedReset() {
+    public func didSelecteReset() {
         handleReset()
     }
     
-    public func didSelectedSetRatio() {
+    public func didSelecteSetRatio() {
         handleSetRatio()
     }
 }

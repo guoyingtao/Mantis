@@ -610,6 +610,7 @@ extension CropView {
         
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         resetUIFrame()
+        delegate?.cropViewDidBecomeUnResettable(self)
     }
     
     func prepareForDeviceRotation() {

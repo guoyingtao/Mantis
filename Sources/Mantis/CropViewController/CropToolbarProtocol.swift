@@ -8,11 +8,11 @@
 import UIKit
 
 public protocol CropToolbarDelegate {
-    func didSelectedCancel();
-    func didSelectedCrop();
-    func didSelectedRotate();
-    func didSelectedReset();
-    func didSelectedSetRatio();
+    func didSelecteCancel();
+    func didSelecteCrop();
+    func didSelecteRotate();
+    func didSelecteReset();
+    func didSelecteSetRatio();
 }
 
 public protocol CropToolbarProtocol: UIView {    
@@ -32,8 +32,8 @@ public protocol CropToolbarProtocol: UIView {
     func adjustLayoutConstraintsWhenOrientationChange()
     func adjustUIWhenOrientationChange()
     
-    func adjustUIWhenFixedRatioSetted()
-    func adjustUIWhenFixedRatioUnSetted()
+    func handleFixedRatioSetted()
+    func handleFixedRatioUnSetted()
     
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeUnResettable()
@@ -68,11 +68,11 @@ public extension CropToolbarProtocol {
         
     }
     
-    func adjustUIWhenFixedRatioSetted() {
+    func handleFixedRatioSetted() {
 
     }
     
-    func adjustUIWhenFixedRatioUnSetted() {
+    func handleFixedRatioUnSetted() {
 
     }
     
