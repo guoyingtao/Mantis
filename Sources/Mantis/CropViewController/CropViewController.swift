@@ -179,10 +179,13 @@ public class CropViewController: UIViewController {
     func setFixedRatio(_ ratio: Double) {
         cropToolbar.handleFixedRatioSetted()
         cropView.aspectRatioLockEnabled = true
-        cropView.viewModel.aspectRatio = CGFloat(ratio)
         
-        UIView.animate(withDuration: 0.5) {
-            self.cropView.setFixedRatioCropBox()
+        if (cropView.viewModel.aspectRatio != CGFloat(ratio)) {
+            cropView.viewModel.aspectRatio = CGFloat(ratio)
+            
+            UIView.animate(withDuration: 0.5) {
+                self.cropView.setFixedRatioCropBox()
+            }
         }
     }
     
