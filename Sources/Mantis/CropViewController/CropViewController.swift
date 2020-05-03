@@ -36,7 +36,6 @@ public protocol CropViewControllerDelegate: class {
 
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
-    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
     
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.1.2.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}

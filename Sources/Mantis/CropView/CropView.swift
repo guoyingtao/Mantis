@@ -74,16 +74,10 @@ class CropView: UIView {
         self.viewModel = viewModel
         
         imageContainer = ImageContainer()
-        imageContainer.layer.borderColor = UIColor.red.cgColor
-        imageContainer.layer.borderWidth = 4
-        
         gridOverlayView = CropOverlayView()
 
         super.init(frame: CGRect.zero)
         
-        self.layer.borderColor = UIColor.green.cgColor
-        self.layer.borderWidth = 8
-
         self.viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)
         }
