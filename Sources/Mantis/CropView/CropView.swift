@@ -72,12 +72,12 @@ class CropView: UIView {
     init(image: UIImage, viewModel: CropViewModel = CropViewModel()) {
         self.image = image
         self.viewModel = viewModel
-
+        
         imageContainer = ImageContainer()
         gridOverlayView = CropOverlayView()
 
         super.init(frame: CGRect.zero)
-
+        
         self.viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)
         }
@@ -289,6 +289,39 @@ class CropView: UIView {
         
         if imageContainer.contains(rect: newCropBoxFrame, fromView: self) {
             viewModel.cropBoxFrame = newCropBoxFrame
+        } else {
+            let minX = max(viewModel.cropBoxFrame.minX, newCropBoxFrame.minX)
+            let minY = max(viewModel.cropBoxFrame.minY, newCropBoxFrame.minY)
+            let maxX = min(viewModel.cropBoxFrame.maxX, newCropBoxFrame.maxX)
+            let maxY = min(viewModel.cropBoxFrame.maxY, newCropBoxFrame.maxY)
+
+            var rect: CGRect
+            
+            rect = CGRect(x: minX, y: minY, width: newCropBoxFrame.width, height: maxY - minY)
+            if imageContainer.contains(rect: rect, fromView: self) {
+                viewModel.cropBoxFrame = rect
+                return
+            }
+            
+            rect = CGRect(x: minX, y: minY, width: maxX - minX, height: newCropBoxFrame.height)
+            if imageContainer.contains(rect: rect, fromView: self) {
+                viewModel.cropBoxFrame = rect
+                return
+            }
+            
+            rect = CGRect(x: newCropBoxFrame.minX, y: minY, width: newCropBoxFrame.width, height: maxY - minY)
+            if imageContainer.contains(rect: rect, fromView: self) {
+                viewModel.cropBoxFrame = rect
+                return
+            }
+
+            rect = CGRect(x: minX, y: newCropBoxFrame.minY, width: maxX - minX, height: newCropBoxFrame.height)
+            if imageContainer.contains(rect: rect, fromView: self) {
+                viewModel.cropBoxFrame = rect
+                return
+            }
+                                                
+            viewModel.cropBoxFrame = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
         }
     }    
 }

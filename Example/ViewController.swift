@@ -121,11 +121,15 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             }
         }
     }
-    
-    
+        
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
         print(transformation);
         croppedImageView.image = cropped
+        self.dismiss(animated: true)
+    }
+    
+    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
+        self.dismiss(animated: true)
     }
 }
 

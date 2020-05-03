@@ -8,11 +8,11 @@
 import UIKit
 
 public protocol CropToolbarDelegate {
-    func didSelecteCancel();
-    func didSelecteCrop();
-    func didSelecteRotate();
-    func didSelecteReset();
-    func didSelecteSetRatio();
+    func didSelectCancel();
+    func didSelectCrop();
+    func didSelectRotate();
+    func didSelectReset();
+    func didSelectSetRatio();
 }
 
 public protocol CropToolbarProtocol: UIView {    

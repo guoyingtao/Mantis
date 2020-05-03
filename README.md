@@ -40,7 +40,7 @@ Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helpin
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 1.1.1'
+pod 'Mantis', '~> 1.2.0'
 ```
 
 ### Carthage
@@ -50,6 +50,9 @@ github "guoyingtao/Mantis"
 ```
 
 ## Usage
+
+**Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.**
+**For CropViewControllerDelegate protocol, cropViewControllerDidCancel becomes non-optional, and cropViewControllerWillDismiss is deprecated**
 
 * Create a cropViewController in Mantis with default config and default mode
 
@@ -64,8 +67,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>)
 public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) // optional
-    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) // optional
-    func cropViewControllerWillDismiss(_ cropViewController: CropViewController) // optional
+    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
 }
 ```
 

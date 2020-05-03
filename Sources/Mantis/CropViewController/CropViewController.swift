@@ -29,13 +29,16 @@ public protocol CropViewControllerDelegate: class {
                                    cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
+    
+    @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
 }
 
-public extension CropViewControllerDelegate {
-    func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
+public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
-    func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {}
+    
+    @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
+    func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
 }
 
 public enum CropViewControllerMode {
@@ -179,10 +182,13 @@ public class CropViewController: UIViewController {
     func setFixedRatio(_ ratio: Double) {
         cropToolbar.handleFixedRatioSetted()
         cropView.aspectRatioLockEnabled = true
-        cropView.viewModel.aspectRatio = CGFloat(ratio)
         
-        UIView.animate(withDuration: 0.5) {
-            self.cropView.setFixedRatioCropBox()
+        if (cropView.viewModel.aspectRatio != CGFloat(ratio)) {
+            cropView.viewModel.aspectRatio = CGFloat(ratio)
+            
+            UIView.animate(withDuration: 0.5) {
+                self.cropView.setFixedRatioCropBox()
+            }
         }
     }
     
@@ -209,11 +215,7 @@ public class CropViewController: UIViewController {
     }
     
     private func handleCancel() {
-        delegate?.cropViewControllerWillDismiss(self)
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.cropViewControllerDidCancel(self, original: self.image)
-        }
+        self.delegate?.cropViewControllerDidCancel(self, original: self.image)
     }
     
     private func resetRatioButton() {
@@ -264,12 +266,8 @@ public class CropViewController: UIViewController {
             delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
             return
         }
-        
-        delegate?.cropViewControllerWillDismiss(self)
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)
-        }
+
+        self.delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)        
     }
 }
 
@@ -328,23 +326,23 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
-    public func didSelecteCancel() {
+    public func didSelectCancel() {
         handleCancel()
     }
     
-    public func didSelecteCrop() {
+    public func didSelectCrop() {
         handleCrop()
     }
     
-    public func didSelecteRotate() {
+    public func didSelectRotate() {
         handleRotate()
     }
     
-    public func didSelecteReset() {
+    public func didSelectReset() {
         handleReset()
     }
     
-    public func didSelecteSetRatio() {
+    public func didSelectSetRatio() {
         handleSetRatio()
     }
 }
