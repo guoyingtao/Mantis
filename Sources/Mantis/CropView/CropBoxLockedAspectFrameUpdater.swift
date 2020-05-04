@@ -25,7 +25,7 @@ struct CropBoxLockedAspectFrameUpdater {
     mutating func updateCropBoxFrame(xDelta: CGFloat, yDelta: CGFloat) {
         var xDelta = xDelta
         var yDelta = yDelta
-
+        
         //Current aspect ratio of the crop box in case we need to clamp it
         let aspectRatio = (cropOriginFrame.size.width / cropOriginFrame.size.height);
         
@@ -112,7 +112,7 @@ struct CropBoxLockedAspectFrameUpdater {
             case .right:
                 handleRightEdgeFrameUpdate()
             case .top:
-                handleLeftEdgeFrameUpdate()
+                handleTopEdgeFrameUpdate()
             case .bottom:
                 handleBottomEdgeFrameUpdate()
             case .topLeft:
