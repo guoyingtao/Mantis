@@ -9,7 +9,7 @@
 import UIKit
 import Mantis
 
-class CustomizedCropToolbar: UIView, CropToolbarProtocol {    
+class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     var cropToolbarDelegate: CropToolbarDelegate?
@@ -44,6 +44,14 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         stackView?.addArrangedSubview(cancelButton!)
         stackView?.addArrangedSubview(fixedRatioSettingButton!)
         stackView?.addArrangedSubview(cropButton!)
+    }
+    
+    public func handleFixedRatioSetted() {
+        fixedRatioSettingButton?.setTitleColor(.blue, for: .normal)
+    }
+    
+    public func handleFixedRatioUnSetted() {
+        fixedRatioSettingButton?.setTitleColor(.white, for: .normal)
     }
     
     func adjustUIWhenOrientationChange() {
