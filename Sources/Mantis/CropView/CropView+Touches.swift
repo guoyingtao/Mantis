@@ -64,6 +64,7 @@ extension CropView {
         super.touchesEnded(touches, with: event)
         
         if viewModel.needCrop() {
+            gridOverlayView.handleEdgeUntouched()
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
                 self?.viewModel.setBetweenOperationStatus()
