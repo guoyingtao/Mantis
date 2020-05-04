@@ -16,8 +16,8 @@ extension CropView {
             return rotationDial
         }
         
-        if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit, dy: -hotAreaUnit).contains(p) &&
-            !gridOverlayView.frame.insetBy(dx: hotAreaUnit, dy: hotAreaUnit).contains(p))
+        if (gridOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(p) &&
+            !gridOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(p))
         {
             return self
         }

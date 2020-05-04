@@ -9,6 +9,11 @@
 import UIKit
 
 class CropOverlayView: UIView {
+    private var boarderNormalColor = UIColor.white
+    private var boarderHintColor = UIColor.white
+    private var hintLine = UIView()
+    private var tappedEdge: CropViewOverlayEdge = .none
+    
     var gridHidden = true
     var gridColor = UIColor(white: 0.8, alpha: 1)
     
@@ -25,11 +30,13 @@ class CropOverlayView: UIView {
     private var borderLine: UIView = UIView()
     private var corner: [UIView] = []
     private let borderThickness = CGFloat(1.0)
+    private let hineLineThickness = CGFloat(2.0)
     
     override var frame: CGRect {
         didSet {
             if corner.count > 0 {
                 layoutLines()
+                handleEdgeTouched(with: tappedEdge)
             }            
         }
     }
@@ -56,13 +63,14 @@ class CropOverlayView: UIView {
         borderLine = createNewLine()
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
-        borderLine.layer.borderColor = UIColor.white.cgColor
+        borderLine.layer.borderColor = boarderNormalColor.cgColor
         
         for _ in 0..<8 {
             corner.append(createNewLine())
         }
         
         setupGridLines()
+        hintLine.backgroundColor = boarderHintColor
     }
     
     override func didMoveToSuperview() {
@@ -125,7 +133,7 @@ class CropOverlayView: UIView {
         borderLine.frame = CGRect(x: -borderThickness, y: -borderThickness, width: bounds.width + 2 * borderThickness, height: bounds.height + 2 * borderThickness)
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
-        borderLine.layer.borderColor = UIColor.white.cgColor
+        borderLine.layer.borderColor = boarderNormalColor.cgColor
     }
     
     private func layoutCornerLines() {
@@ -182,6 +190,40 @@ class CropOverlayView: UIView {
     
     func hideGrid() {
         gridLineNumberType = .none
+    }
+    
+    func handleEdgeTouched(with tappedEdge: CropViewOverlayEdge) {
+        guard tappedEdge != .none  else {
+            return
+        }
+        
+        self.tappedEdge = tappedEdge
+        
+        setGrid(hidden: false, animated: true)
+        gridLineNumberType = .crop
+        
+        if (hintLine.superview == nil) {
+            addSubview(hintLine)
+        }
+        
+        switch tappedEdge {
+        case .top:
+            hintLine.frame = CGRect(x: borderLine.frame.minX, y: borderLine.frame.minY, width: borderLine.frame.width, height: hineLineThickness)
+        case .bottom:
+            hintLine.frame = CGRect(x: borderLine.frame.minX, y: borderLine.frame.maxY - hineLineThickness, width: borderLine.frame.width, height: hineLineThickness)
+        case .left:
+            hintLine.frame = CGRect(x: borderLine.frame.minX, y: borderLine.frame.minY, width: hineLineThickness, height: borderLine.frame.height)
+        case .right:
+            hintLine.frame = CGRect(x: borderLine.frame.maxX - hineLineThickness, y: borderLine.frame.minY, width: hineLineThickness, height: borderLine.frame.height)
+        default:
+            hintLine.removeFromSuperview()
+        }        
+    }
+    
+    func handleEdgeUntouched() {
+        setGrid(hidden: true, animated: true)
+        hintLine.removeFromSuperview()
+        tappedEdge = .none
     }
 }
 

@@ -31,7 +31,7 @@ protocol CropViewDelegate: class {
 
 let cropViewMinimumBoxSize: CGFloat = 42
 let minimumAspectRatio: CGFloat = 0
-let hotAreaUnit: CGFloat = 64
+let hotAreaUnit: CGFloat = 32
 let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
@@ -64,6 +64,7 @@ class CropView: UIView {
     var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
     var forceFixedRatio = false
+    var imageStatusChangedCheckForForceFixedRatio = false
     
     deinit {
         print("CropView deinit.")
@@ -119,9 +120,8 @@ class CropView: UIView {
             cropMaskViewManager.showDimmingBackground()
             gridOverlayView.gridLineNumberType = .crop
             gridOverlayView.setGrid(hidden: false, animated: true)
-        case .touchCropboxHandle:
-            gridOverlayView.gridLineNumberType = .crop
-            gridOverlayView.setGrid(hidden: false, animated: true)
+        case .touchCropboxHandle(let tappedEdge):
+            gridOverlayView.handleEdgeTouched(with: tappedEdge)
             rotationDial?.isHidden = true
             cropMaskViewManager.showDimmingBackground()
         case .touchRotationBoard:
@@ -129,7 +129,7 @@ class CropView: UIView {
             gridOverlayView.setGrid(hidden: false, animated: true)
             cropMaskViewManager.showDimmingBackground()
         case .betweenOperation:
-            gridOverlayView.setGrid(hidden: true, animated: true)
+            gridOverlayView.handleEdgeUntouched()
             rotationDial?.isHidden = false
             adaptAngleDashboardToCropBox()
             cropMaskViewManager.showVisualEffectBackground()
@@ -147,7 +147,12 @@ class CropView: UIView {
     private func imageStatusChanged() -> Bool {
         if viewModel.getTotalRadians() != 0 { return true }
         
-        if (forceFixedRatio) { return scrollView.zoomScale != 1 }
+        if (forceFixedRatio) {
+            if imageStatusChangedCheckForForceFixedRatio {
+                imageStatusChangedCheckForForceFixedRatio = false
+                return scrollView.zoomScale != 1
+            }
+        }
         
         if !isTheSamePoint(p1: getImageLeftTopAnchorPoint(), p2: .zero) {
             return true
@@ -666,7 +671,11 @@ extension CropView {
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false) { [weak self] in
-            self?.viewModel.setBetweenOperationStatus()
+            guard let self = self else { return }
+            if self.forceFixedRatio {
+                self.imageStatusChangedCheckForForceFixedRatio = true
+            }
+            self.viewModel.setBetweenOperationStatus()
         }
         
         adaptAngleDashboardToCropBox()
