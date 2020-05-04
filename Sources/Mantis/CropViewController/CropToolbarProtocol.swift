@@ -21,6 +21,8 @@ public protocol CropToolbarProtocol: UIView {
     var cropToolbarDelegate: CropToolbarDelegate? {get set}
 
     func createToolbarUI(config: CropToolbarConfig)
+    func handleFixedRatioSetted()
+    func handleFixedRatioUnSetted()
     
     // MARK: - The following functions have default implementations
     func getRatioListPresentSourceView() -> UIView?
@@ -31,10 +33,7 @@ public protocol CropToolbarProtocol: UIView {
     func respondToOrientationChange()
     func adjustLayoutConstraintsWhenOrientationChange()
     func adjustUIWhenOrientationChange()
-    
-    func handleFixedRatioSetted()
-    func handleFixedRatioUnSetted()
-    
+        
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeUnResettable()
 }
@@ -67,15 +66,7 @@ public extension CropToolbarProtocol {
     func adjustUIWhenOrientationChange() {
         
     }
-    
-    func handleFixedRatioSetted() {
-
-    }
-    
-    func handleFixedRatioUnSetted() {
-
-    }
-    
+        
     func handleCropViewDidBecomeResettable() {
         
     }

@@ -180,7 +180,7 @@ extension CropViewModel {
     }
 
     func setTouchCropboxHandleStatus() {
-        viewStatus = .touchCropboxHandle
+        viewStatus = .touchCropboxHandle(tappedEdge: tappedEdge)
     }
     
     func setBetweenOperationStatus() {

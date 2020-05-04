@@ -14,6 +14,6 @@ enum CropViewStatus {
     case degree90Rotated
     case touchImage
     case touchRotationBoard
-    case touchCropboxHandle
+    case touchCropboxHandle(tappedEdge: CropViewOverlayEdge = .none)
     case betweenOperation
 }
