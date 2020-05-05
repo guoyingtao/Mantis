@@ -508,7 +508,6 @@ extension CropView {
                         
         scrollView.zoomScale = scrollView.zoomScale * scale
         scrollView.minimumZoomScale = adjustScrollViewForNormalRatio(by: CGFloat.pi / 2)
-        print("scrollView.minimumZoomScale is \(scrollView.minimumZoomScale)")
         
         scrollView.checkContentOffset()
     }
