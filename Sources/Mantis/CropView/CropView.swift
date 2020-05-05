@@ -481,6 +481,8 @@ extension CropView {
         if !manualZoomed || scrollView.shouldScale() {
             scrollView.zoomScaleToBound()
             manualZoomed = false
+        } else {
+            scrollView.updateMinZoomScale()
         }
         
         scrollView.checkContentOffset()
@@ -679,6 +681,7 @@ extension CropView {
         }
         
         adaptAngleDashboardToCropBox()
+        scrollView.updateMinZoomScale()
     }
     
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
