@@ -488,7 +488,7 @@ extension CropView {
     
     fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
                 
-        func adjustScrollViewForNormalRatio() -> CGFloat {
+        func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat {
             let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
             let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
 
@@ -504,11 +504,11 @@ extension CropView {
             return scale
         }
         
-        let scale = adjustScrollViewForNormalRatio()
+        let scale = adjustScrollViewForNormalRatio(by: radians)
                         
-        let newZoomScale = scrollView.zoomScale * scale
-        scrollView.minimumZoomScale = newZoomScale
-        scrollView.zoomScale = newZoomScale
+        scrollView.zoomScale = scrollView.zoomScale * scale
+        scrollView.minimumZoomScale = adjustScrollViewForNormalRatio(by: CGFloat.pi / 2)
+        print("scrollView.minimumZoomScale is \(scrollView.minimumZoomScale)")
         
         scrollView.checkContentOffset()
     }

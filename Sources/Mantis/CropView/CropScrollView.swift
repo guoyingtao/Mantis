@@ -72,7 +72,7 @@ class CropScrollView: UIScrollView {
         
         let scale = max(scaleW, scaleH)
         
-        minimumZoomScale = scale
+//        minimumZoomScale = scale
         setZoomScale(scale, animated: animated)        
     }
     
