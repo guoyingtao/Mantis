@@ -507,9 +507,8 @@ extension CropView {
         let scale = adjustScrollViewForNormalRatio(by: radians)
                         
         let newZoomScale = scrollView.zoomScale * scale
-//        scrollView.minimumZoomScale = newZoomScale
+        scrollView.minimumZoomScale = newZoomScale
         scrollView.zoomScale = newZoomScale
-        scrollView.minimumZoomScale = adjustScrollViewForNormalRatio(by: CGFloat.pi / 2)
         
         scrollView.checkContentOffset()
     }
