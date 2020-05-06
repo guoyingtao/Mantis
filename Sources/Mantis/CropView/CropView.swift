@@ -644,6 +644,7 @@ extension CropView {
             self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
+            self.scrollView.updateMinZoomScale()
             self.viewModel.counterclockwiseRotate90()
             self.viewModel.setBetweenOperationStatus()
         }
