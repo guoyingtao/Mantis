@@ -409,7 +409,9 @@ extension CropView {
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
     
-    func adjustUIForNewCrop(contentRect:CGRect, animation: Bool = true, completion: @escaping ()->Void) {
+    func adjustUIForNewCrop(contentRect:CGRect,
+                            animation: Bool = true,
+                            completion: @escaping ()->Void) {
         
         let scaleX: CGFloat
         let scaleY: CGFloat
@@ -450,12 +452,13 @@ extension CropView {
         let newCropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
         
         func updateUI(by newCropBoxFrame: CGRect, and scaleFrame: CGRect) {
-            self.viewModel.cropBoxFrame = newCropBoxFrame
+            viewModel.cropBoxFrame = newCropBoxFrame
             
-            let zoomRect = self.convert(scaleFrame,
-                                        to: self.scrollView.imageContainer)
-            self.scrollView.zoom(to: zoomRect, animated: false)
-            self.scrollView.checkContentOffset()
+            let zoomRect = convert(scaleFrame,
+                                        to: scrollView.imageContainer)
+            scrollView.zoom(to: zoomRect, animated: false)
+            scrollView.checkContentOffset()
+            makeSureImageContainsCropOverlay()
         }
         
         if animation {
@@ -472,6 +475,12 @@ extension CropView {
         manualZoomed = true
     }
     
+    func makeSureImageContainsCropOverlay() {
+        if !imageContainer.contains(rect: gridOverlayView.frame, fromView: self) {
+            scrollView.zoomScaleToBound(animated: true)
+        }
+    }
+    
     fileprivate func updatePosition(by radians: CGFloat) {
         let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
         let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
@@ -481,6 +490,8 @@ extension CropView {
         if !manualZoomed || scrollView.shouldScale() {
             scrollView.zoomScaleToBound()
             manualZoomed = false
+        } else {
+            scrollView.updateMinZoomScale()
         }
         
         scrollView.checkContentOffset()
@@ -488,7 +499,7 @@ extension CropView {
     
     fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
                 
-        func adjustScrollViewForNormalRatio() -> CGFloat {
+        func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat {
             let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
             let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
 
@@ -504,7 +515,7 @@ extension CropView {
             return scale
         }
         
-        let scale = adjustScrollViewForNormalRatio()
+        let scale = adjustScrollViewForNormalRatio(by: radians)
                         
         let newZoomScale = scrollView.zoomScale * scale
         scrollView.minimumZoomScale = newZoomScale
@@ -633,6 +644,7 @@ extension CropView {
             self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
         }) {[weak self] _ in
             guard let self = self else { return }
+            self.scrollView.updateMinZoomScale()
             self.viewModel.counterclockwiseRotate90()
             self.viewModel.setBetweenOperationStatus()
         }
@@ -679,6 +691,7 @@ extension CropView {
         }
         
         adaptAngleDashboardToCropBox()
+        scrollView.updateMinZoomScale()
     }
     
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {

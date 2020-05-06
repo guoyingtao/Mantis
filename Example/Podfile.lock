@@ -1,5 +1,5 @@
 PODS:
-  - Mantis (1.2.1)
+  - Mantis (1.2.3)
 
 DEPENDENCIES:
   - Mantis (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Mantis: 69f49f9d16c66bd9dc2c73539a3a75ac832a84fe
+  Mantis: 613285b2f1eec782deb384c5af9a709e56de8388
 
 PODFILE CHECKSUM: 18a0c8f4e5ce0574b01b276d9d5b862a719dc5ce
 

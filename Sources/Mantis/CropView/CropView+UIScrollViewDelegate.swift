@@ -27,9 +27,7 @@ extension CropView: UIScrollViewDelegate {
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
 
-        if !imageContainer.contains(rect: gridOverlayView.frame, fromView: self) {
-            self.scrollView.zoomScaleToBound(animated: true)
-        }
+        makeSureImageContainsCropOverlay()
         
         manualZoomed = true
         viewModel.setBetweenOperationStatus()

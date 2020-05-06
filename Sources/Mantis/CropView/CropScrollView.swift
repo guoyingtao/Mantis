@@ -62,15 +62,23 @@ class CropScrollView: UIScrollView {
         }
     }
     
-    func zoomScaleToBound(animated: Bool = false) {
+    private func getBoundZoomScale() -> CGFloat {
         guard let imageContainer = imageContainer else {
-            return
+            return 1.0
         }
         
         let scaleW = bounds.width / imageContainer.bounds.width
         let scaleH = bounds.height / imageContainer.bounds.height
         
-        let scale = max(scaleW, scaleH)
+        return max(scaleW, scaleH)
+    }
+    
+    func updateMinZoomScale() {
+        minimumZoomScale = getBoundZoomScale()
+    }
+    
+    func zoomScaleToBound(animated: Bool = false) {
+        let scale = getBoundZoomScale()
         
         minimumZoomScale = scale
         setZoomScale(scale, animated: animated)        

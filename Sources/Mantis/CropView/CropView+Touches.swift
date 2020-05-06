@@ -68,6 +68,7 @@ extension CropView {
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
                 self?.viewModel.setBetweenOperationStatus()
+                self?.scrollView.updateMinZoomScale()
             }
         } else {
             viewModel.setBetweenOperationStatus()
