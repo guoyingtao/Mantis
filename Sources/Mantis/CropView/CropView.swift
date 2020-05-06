@@ -452,12 +452,13 @@ extension CropView {
         let newCropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
         
         func updateUI(by newCropBoxFrame: CGRect, and scaleFrame: CGRect) {
-            self.viewModel.cropBoxFrame = newCropBoxFrame
+            viewModel.cropBoxFrame = newCropBoxFrame
             
-            let zoomRect = self.convert(scaleFrame,
-                                        to: self.scrollView.imageContainer)
-            self.scrollView.zoom(to: zoomRect, animated: false)
-            self.scrollView.checkContentOffset()
+            let zoomRect = convert(scaleFrame,
+                                        to: scrollView.imageContainer)
+            scrollView.zoom(to: zoomRect, animated: false)
+            scrollView.checkContentOffset()
+            makeSureImageContainsCropOverlay()
         }
         
         if animation {
@@ -472,6 +473,12 @@ extension CropView {
         }
                 
         manualZoomed = true
+    }
+    
+    func makeSureImageContainsCropOverlay() {
+        if !imageContainer.contains(rect: gridOverlayView.frame, fromView: self) {
+            scrollView.zoomScaleToBound(animated: true)
+        }
     }
     
     fileprivate func updatePosition(by radians: CGFloat) {
