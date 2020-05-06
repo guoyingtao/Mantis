@@ -611,19 +611,21 @@ extension CropView {
         }
     }
     
-    func counterclockwiseRotate90() {
+    func counterclockwiseRotate90(completion: @escaping ()->Void = {}) {
         viewModel.setDegree90RotatedStatus()
+        let rorateDuration = 0.25
         
         if forceFixedRatio {
             viewModel.setRotatingStatus(by: CGAngle(radians: viewModel.radians))
             let angle = CGAngle(radians: -CGFloat.pi / 2 + viewModel.radians)
             
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: rorateDuration, animations: {
                 self.viewModel.setRotatingStatus(by: angle)
             }) {[weak self] _ in
                 guard let self = self else { return }
                 self.viewModel.counterclockwiseRotate90()
                 self.viewModel.setBetweenOperationStatus()
+                completion()
             }
             
             return
@@ -638,7 +640,7 @@ extension CropView {
         let radian = -CGFloat.pi / 2
         let transfrom = scrollView.transform.rotated(by: radian)
         
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: rorateDuration, animations: {
             self.viewModel.cropBoxFrame = newRect
             self.scrollView.transform = transfrom
             self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
@@ -647,6 +649,7 @@ extension CropView {
             self.scrollView.updateMinZoomScale()
             self.viewModel.counterclockwiseRotate90()
             self.viewModel.setBetweenOperationStatus()
+            completion()
         }
     }
     

@@ -65,6 +65,7 @@ public class CropViewController: UIViewController {
     private var ratioPresenter: RatioPresenter?
     private var stackView: UIStackView?
     private var initialLayout = false
+    private var disableRotation = false
     
     deinit {
         print("CropViewController deinit.")
@@ -257,7 +258,13 @@ public class CropViewController: UIViewController {
     }
     
     private func handleRotate() {
-        cropView.counterclockwiseRotate90()
+        if !disableRotation {
+            disableRotation = true
+            cropView.counterclockwiseRotate90() { [weak self] in
+                self?.disableRotation = false
+            }
+        }
+        
     }
     
     private func handleCrop() {
