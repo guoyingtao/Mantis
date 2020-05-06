@@ -409,7 +409,9 @@ extension CropView {
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
     
-    func adjustUIForNewCrop(contentRect:CGRect, animation: Bool = true, completion: @escaping ()->Void) {
+    func adjustUIForNewCrop(contentRect:CGRect,
+                            animation: Bool = true,
+                            completion: @escaping ()->Void) {
         
         let scaleX: CGFloat
         let scaleY: CGFloat
