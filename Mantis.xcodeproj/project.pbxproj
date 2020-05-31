@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
+		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		OBJ_100 /* RotationDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* RotationDialPlate.swift */; };
 		OBJ_101 /* RotationDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* RotationDialViewModel.swift */; };
 		OBJ_108 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
@@ -80,6 +81,7 @@
 
 /* Begin PBXFileReference section */
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
+		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		"Mantis::Mantis::Product" /* Mantis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Mantis::MantisTests::Product" /* MantisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MantisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -276,14 +278,15 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_9 /* Mantis.h */,
+				OBJ_36 /* Mantis.swift */,
+				OBJ_41 /* RatioOptions.swift */,
+				5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */,
 				OBJ_10 /* Info.plist */,
 				OBJ_11 /* CropView */,
 				OBJ_23 /* CropViewController */,
 				OBJ_29 /* Extentions */,
 				OBJ_33 /* Helpers */,
-				OBJ_36 /* Mantis.swift */,
 				OBJ_37 /* MaskBackground */,
-				OBJ_41 /* RatioOptions.swift */,
 				OBJ_42 /* RotationDial */,
 			);
 			name = Mantis;
@@ -409,6 +412,7 @@
 				OBJ_82 /* FixedRatioManager.swift in Sources */,
 				OBJ_83 /* RatioPresenter.swift in Sources */,
 				OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */,
+				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
 				OBJ_86 /* CoreGraphicsExtensions.swift in Sources */,
 				OBJ_87 /* UIImageExtensions.swift in Sources */,

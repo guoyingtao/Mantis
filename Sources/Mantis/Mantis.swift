@@ -92,6 +92,8 @@ public struct CropToolbarConfig {
     public var cropToolbarHeightForVertialOrientation: CGFloat = 44
     public var cropToolbarWidthForHorizontalOrientation: CGFloat = 80
     
+    public var toolbarButtonOptions: ToolbarButtonOptions = .default
+    
     var mode: CropToolbarMode = .normal
     var includeFixedRatioSettingButton = true
 }

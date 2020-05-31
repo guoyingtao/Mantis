@@ -257,10 +257,10 @@ public class CropViewController: UIViewController {
         cropView.reset()
     }
     
-    private func handleRotate() {
+    private func handleRotate(rotateAngle: CGFloat) {
         if !disableRotation {
             disableRotation = true
-            cropView.counterclockwiseRotate90() { [weak self] in
+            cropView.RotateBy90(rotateAngle: rotateAngle) { [weak self] in
                 self?.disableRotation = false
             }
         }
@@ -341,8 +341,12 @@ extension CropViewController: CropToolbarDelegate {
         handleCrop()
     }
     
-    public func didSelectRotate() {
-        handleRotate()
+    public func didSelectCounterClockwiseRotate() {
+        handleRotate(rotateAngle: -CGFloat.pi / 2)
+    }
+
+    public func didSelectClockwiseRotate() {
+        handleRotate(rotateAngle: CGFloat.pi / 2)
     }
     
     public func didSelectReset() {

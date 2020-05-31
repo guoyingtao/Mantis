@@ -112,7 +112,7 @@ class CropView: UIView {
         case .rotating(let angle):
             viewModel.degrees = angle.degrees
             rotateScrollView()
-        case .degree90Rotated:
+        case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground()
             gridOverlayView.isHidden = true
             rotationDial?.isHidden = true
@@ -611,19 +611,19 @@ extension CropView {
         }
     }
     
-    func counterclockwiseRotate90(completion: @escaping ()->Void = {}) {
-        viewModel.setDegree90RotatedStatus()
+    func RotateBy90(rotateAngle: CGFloat, completion: @escaping ()->Void = {}) {
+        viewModel.setDegree90RotatingStatus()
         let rorateDuration = 0.25
         
         if forceFixedRatio {
             viewModel.setRotatingStatus(by: CGAngle(radians: viewModel.radians))
-            let angle = CGAngle(radians: -CGFloat.pi / 2 + viewModel.radians)
+            let angle = CGAngle(radians: rotateAngle + viewModel.radians)
             
             UIView.animate(withDuration: rorateDuration, animations: {
                 self.viewModel.setRotatingStatus(by: angle)
             }) {[weak self] _ in
                 guard let self = self else { return }
-                self.viewModel.counterclockwiseRotate90()
+                self.viewModel.rotateBy90()
                 self.viewModel.setBetweenOperationStatus()
                 completion()
             }
@@ -637,7 +637,7 @@ extension CropView {
         
         let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
         
-        let radian = -CGFloat.pi / 2
+        let radian = rotateAngle
         let transfrom = scrollView.transform.rotated(by: radian)
         
         UIView.animate(withDuration: rorateDuration, animations: {
@@ -647,7 +647,7 @@ extension CropView {
         }) {[weak self] _ in
             guard let self = self else { return }
             self.scrollView.updateMinZoomScale()
-            self.viewModel.counterclockwiseRotate90()
+            self.viewModel.rotateBy90()
             self.viewModel.setBetweenOperationStatus()
             completion()
         }
@@ -670,7 +670,7 @@ extension CropView {
     }
     
     func prepareForDeviceRotation() {
-        viewModel.setDegree90RotatedStatus()
+        viewModel.setDegree90RotatingStatus()
         saveAnchorPoints()
     }
     

@@ -23,7 +23,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
     var cancelButton: UIButton?
     var resetButton: UIButton?
-    var anticlockRotateButton: UIButton?
+    var counterClockwiseRotationButton: UIButton?
+    var clockwiseRotationButton: UIButton?
     var cropButton: UIButton?
     
     var config: CropToolbarConfig!
@@ -59,9 +60,14 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         cancelButton = createOptionButton(withTitle: cancelText, andAction: #selector(cancel))
     }
     
-    private func createRotationButton() {
-        anticlockRotateButton = createOptionButton(withTitle: nil, andAction: #selector(rotate))
-        anticlockRotateButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
+    private func createCounterClockwiseRotationButton() {
+        counterClockwiseRotationButton = createOptionButton(withTitle: nil, andAction: #selector(counterClockwiseRotate))
+        counterClockwiseRotationButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
+    }
+
+    private func createClockwiseRotationButton() {
+        clockwiseRotationButton = createOptionButton(withTitle: nil, andAction: #selector(clockwiseRotate))
+        clockwiseRotationButton?.setImage(ToolBarButtonImageBuilder.rotateCWImage(), for: .normal)
     }
     
     private func createResetButton(with image: UIImage? = nil) {
@@ -101,6 +107,12 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         optionButtonStackView?.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
     }
     
+    private func addButtonsToContainer(button: UIButton?) {
+        if let button = button {
+            optionButtonStackView?.addArrangedSubview(button)
+        }
+    }
+    
     private func addButtonsToContainer(buttons: [UIButton?]) {
         buttons.forEach{
             if let button = $0 {
@@ -111,28 +123,43 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
-        
         backgroundColor = .black
         
         createButtonContainer()
         setButtonContainerLayout()
-
-        createRotationButton()
-        if config.includeFixedRatioSettingButton  {
-            createSetRatioButton()
+        
+        if config.mode == .normal {
+            createCancelButton()
+            addButtonsToContainer(button: cancelButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.counterclockwiseRotate) {
+            createCounterClockwiseRotationButton()
+            addButtonsToContainer(button: counterClockwiseRotationButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.clockwiseRotate) {
+            createClockwiseRotationButton()
+            addButtonsToContainer(button: clockwiseRotationButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.reset) {
+            createResetButton(with: ToolBarButtonImageBuilder.resetImage())
+            addButtonsToContainer(button: resetButton)
+            resetButton?.isHidden = true
+        }
+        
+        if config.toolbarButtonOptions.contains(.ratio) {
+            if config.includeFixedRatioSettingButton  {
+                createSetRatioButton()
+                addButtonsToContainer(button: fixedRatioSettingButton)
+            }
         }
         
         if config.mode == .normal {
-            createResetButton(with: ToolBarButtonImageBuilder.resetImage())
-            createCancelButton()
             createCropButton()
-            addButtonsToContainer(buttons: [cancelButton, anticlockRotateButton, resetButton, fixedRatioSettingButton, cropButton])
-        } else {
-            createResetButton()
-            addButtonsToContainer(buttons: [anticlockRotateButton, resetButton, fixedRatioSettingButton])
+            addButtonsToContainer(button: cropButton)
         }
-        
-        resetButton?.isHidden = true
     }
     
     public func getRatioListPresentSourceView() -> UIView? {
@@ -181,8 +208,12 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         cropToolbarDelegate?.didSelectReset()
     }
     
-    @objc private func rotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectRotate()
+    @objc private func counterClockwiseRotate(_ sender: Any) {
+        cropToolbarDelegate?.didSelectCounterClockwiseRotate()
+    }
+    
+    @objc private func clockwiseRotate(_ sender: Any) {
+        cropToolbarDelegate?.didSelectClockwiseRotate()
     }
     
     @objc private func crop(_ sender: Any) {

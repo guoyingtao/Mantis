@@ -66,7 +66,7 @@ class CropViewModel: NSObject {
         setInitialStatus()
     }
     
-    func counterclockwiseRotate90() {
+    func rotateBy90() {
         rotationType.counterclockwiseRotate90()
     }
     
@@ -167,8 +167,8 @@ extension CropViewModel {
         viewStatus = .rotating(angle: angle)
     }
     
-    func setDegree90RotatedStatus() {
-        viewStatus = .degree90Rotated
+    func setDegree90RotatingStatus() {
+        viewStatus = .degree90Rotating
     }
     
     func setTouchImageStatus() {

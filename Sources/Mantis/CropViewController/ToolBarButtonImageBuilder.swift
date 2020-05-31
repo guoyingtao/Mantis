@@ -77,6 +77,86 @@ struct ToolBarButtonImageBuilder {
         return rotateCWImage
     }
     
+    static func flipHorizontally() -> UIImage? {
+        var flippedImage: UIImage? = nil
+        
+        let wholeWidth = 24
+        let wholeHeight = 24
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: wholeWidth, height: wholeHeight), false, 0.0)
+        
+        let arrowWidth = 5
+        let arrowHeight = 6
+        let topbarWidth = wholeWidth - arrowWidth
+        let topbarY = arrowHeight / 2 - 1
+        
+        // topbar
+        let rectangle2Path = UIBezierPath(rect: CGRect(x: 0, y: topbarY, width: topbarWidth, height: 1))
+        UIColor.white.setFill()
+        rectangle2Path.fill()
+        
+        // left arrow
+        let leftarrowPath = UIBezierPath()
+        leftarrowPath.move(to: CGPoint(x: 0, y: topbarY))
+        leftarrowPath.addLine(to: CGPoint(x: arrowWidth, y: 0))
+        leftarrowPath.addLine(to: CGPoint(x: arrowWidth, y: arrowHeight))
+        leftarrowPath.addLine(to: CGPoint(x: 0, y: topbarY))
+        leftarrowPath.close()
+        UIColor.white.setFill()
+        leftarrowPath.fill()
+        
+        // right arrow
+        let rightarrowPath = UIBezierPath()
+        rightarrowPath.move(to: CGPoint(x: wholeWidth, y: topbarY))
+        rightarrowPath.addLine(to: CGPoint(x: wholeWidth - arrowWidth, y: 0))
+        rightarrowPath.addLine(to: CGPoint(x: wholeWidth - arrowWidth, y: arrowHeight))
+        rightarrowPath.addLine(to: CGPoint(x: wholeWidth, y: topbarY))
+        rightarrowPath.close()
+        UIColor.white.setFill()
+        rightarrowPath.fill()
+        
+        let mirrorWidth = wholeWidth / 2 - 1
+        let mirrowHeight = wholeHeight - 8
+        
+        // left mirror
+        let leftMirror = UIBezierPath()
+        leftMirror.move(to: CGPoint(x: 0, y: wholeHeight))
+        leftMirror.addLine(to: CGPoint(x: mirrorWidth, y: wholeHeight))
+        leftMirror.addLine(to: CGPoint(x: mirrorWidth, y: wholeHeight - mirrowHeight))
+        leftMirror.addLine(to: CGPoint(x: 0, y: wholeHeight))
+        leftMirror.close()
+        UIColor.white.setFill()
+        leftMirror.fill()
+        
+        // right mirror
+        let rightMirror = UIBezierPath()
+        rightMirror.move(to: CGPoint(x: wholeWidth, y: wholeHeight))
+        rightMirror.addLine(to: CGPoint(x: wholeWidth - mirrorWidth, y: wholeHeight))
+        rightMirror.addLine(to: CGPoint(x: wholeWidth - mirrorWidth, y: wholeHeight - mirrowHeight))
+        rightMirror.addLine(to: CGPoint(x: wholeWidth, y: wholeHeight))
+        rightMirror.close()
+        UIColor.white.setFill()
+        rightMirror.fill()
+        
+        flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return flippedImage
+
+    }
+    
+    static func flipVertically() -> UIImage? {
+        guard let flippedHorizontallyImage = self.flipHorizontally(), let cgImage = flippedHorizontallyImage.cgImage else { return nil }
+        
+        UIGraphicsBeginImageContextWithOptions(flippedHorizontallyImage.size, false,  flippedHorizontallyImage.scale )
+        let context = UIGraphicsGetCurrentContext()
+        context?.rotate(by: -.pi / 2)
+        context?.translateBy(x: -flippedHorizontallyImage.size.height, y: 0)
+        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: flippedHorizontallyImage.size.height, height: flippedHorizontallyImage.size.width))
+        let fippedVerticallyImage: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return fippedVerticallyImage
+    }
+    
     static func clampImage() -> UIImage? {
         var clampImage: UIImage? = nil
         
