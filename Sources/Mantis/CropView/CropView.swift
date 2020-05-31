@@ -138,8 +138,9 @@ class CropView: UIView {
     }
     
     private func isTheSamePoint(p1: CGPoint, p2: CGPoint) -> Bool {
-        if abs(p1.x - p2.x) > CGFloat.ulpOfOne { return false }
-        if abs(p1.y - p2.y) > CGFloat.ulpOfOne { return false }
+        let tolerance = CGFloat.ulpOfOne * 10
+        if abs(p1.x - p2.x) > tolerance { return false }
+        if abs(p1.y - p2.y) > tolerance { return false }
         
         return true
     }

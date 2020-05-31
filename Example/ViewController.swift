@@ -97,6 +97,21 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 
     }
     
+    @IBAction func clockwiseRotationButtonTouched(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        
+        var config = Mantis.Config()
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio];
+        
+        let cropViewController = Mantis.cropViewController(image: image,
+                                                           config: config)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+    }
+    
     @IBAction func cropEllips(_ sender: Any) {
         guard let image = image else {
             return

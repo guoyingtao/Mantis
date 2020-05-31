@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-So-c13">
-                                <rect key="frame" x="37.5" y="467" width="300" height="180"/>
+                                <rect key="frame" x="37.5" y="431" width="300" height="216"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpr-TJ-i7J">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="36"/>
@@ -65,8 +65,16 @@
                                             <action selector="customizedCropToobalButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2es-9B-Mra"/>
                                         </connections>
                                     </button>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="12F-q3-2Fl">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d2a-Mk-kD7">
                                         <rect key="frame" x="0.0" y="144" width="300" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Clockwise roation"/>
+                                        <connections>
+                                            <action selector="clockwiseRotationButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OTw-CB-LFi"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="12F-q3-2Fl">
+                                        <rect key="frame" x="0.0" y="180" width="300" height="36"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pc8-Aq-bNG">
                                                 <rect key="frame" x="0.0" y="0.0" width="104" height="36"/>
