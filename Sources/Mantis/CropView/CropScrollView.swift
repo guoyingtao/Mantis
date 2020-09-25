@@ -5,9 +5,7 @@
 //  Created by Echo on 10/20/18.
 //  Copyright © 2018 Echo. All rights reserved.
 //
-
 import UIKit
-
 class CropScrollView: UIScrollView {
     
     weak var imageContainer: ImageContainer?

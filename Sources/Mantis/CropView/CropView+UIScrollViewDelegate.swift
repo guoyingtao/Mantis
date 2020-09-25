@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-
 extension CropView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageContainer

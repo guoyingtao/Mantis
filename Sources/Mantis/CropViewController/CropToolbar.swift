@@ -49,7 +49,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
         
         button.addTarget(self, action: action, for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
+        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 20, bottom: 4, right: 20)
         
         return button
     }
@@ -120,14 +120,12 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             }
         }
     }
-    
+   
     public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
         backgroundColor = .black
-        
         createButtonContainer()
         setButtonContainerLayout()
-        
         if config.mode == .normal {
             createCancelButton()
             addButtonsToContainer(button: cancelButton)
@@ -149,22 +147,14 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             resetButton?.isHidden = true
         }
         
-        if config.toolbarButtonOptions.contains(.ratio) {
-            if config.includeFixedRatioSettingButton  {
-                createSetRatioButton()
-                addButtonsToContainer(button: fixedRatioSettingButton)
-            }
-        }
-        
         if config.mode == .normal {
             createCropButton()
             addButtonsToContainer(button: cropButton)
         }
+       
     }
     
-    public func getRatioListPresentSourceView() -> UIView? {
-        return fixedRatioSettingButton
-    }
+
         
     public func respondToOrientationChange() {
         if UIApplication.shared.statusBarOrientation.isPortrait {

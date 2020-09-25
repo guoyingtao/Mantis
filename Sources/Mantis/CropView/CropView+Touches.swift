@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let p = self.convert(point, to: self)

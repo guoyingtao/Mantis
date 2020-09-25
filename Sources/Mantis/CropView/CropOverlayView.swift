@@ -5,9 +5,7 @@
 //  Created by Echo on 10/19/18.
 //  Copyright © 2018 Echo. All rights reserved.
 //
-
 import UIKit
-
 class CropOverlayView: UIView {
     private var boarderNormalColor = UIColor.white
     private var boarderHintColor = UIColor.white

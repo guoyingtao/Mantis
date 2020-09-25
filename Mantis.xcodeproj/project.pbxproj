@@ -23,6 +23,8 @@
 /* Begin PBXBuildFile section */
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
+		FE86B30A251DE3C900CD4C05 /* RatioItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE86B308251DE3C900CD4C05 /* RatioItemView.swift */; };
+		FE86B30B251DE3C900CD4C05 /* RatioSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE86B309251DE3C900CD4C05 /* RatioSelector.swift */; };
 		OBJ_100 /* RotationDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* RotationDialPlate.swift */; };
 		OBJ_101 /* RotationDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* RotationDialViewModel.swift */; };
 		OBJ_108 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
@@ -43,7 +45,6 @@
 		OBJ_80 /* CropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* CropToolbar.swift */; };
 		OBJ_81 /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* CropViewController.swift */; };
 		OBJ_82 /* FixedRatioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* FixedRatioManager.swift */; };
-		OBJ_83 /* RatioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* RatioPresenter.swift */; };
 		OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* ToolBarButtonImageBuilder.swift */; };
 		OBJ_85 /* CGImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* CGImageExtensions.swift */; };
 		OBJ_86 /* CoreGraphicsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* CoreGraphicsExtensions.swift */; };
@@ -82,6 +83,8 @@
 /* Begin PBXFileReference section */
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
+		FE86B308251DE3C900CD4C05 /* RatioItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RatioItemView.swift; path = "../../../../../../.Trash/Mantis-master/Sources/Mantis/CropViewController/RatioItemView.swift"; sourceTree = "<group>"; };
+		FE86B309251DE3C900CD4C05 /* RatioSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RatioSelector.swift; path = "../../../../../../.Trash/Mantis-master/Sources/Mantis/CropViewController/RatioSelector.swift"; sourceTree = "<group>"; };
 		"Mantis::Mantis::Product" /* Mantis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Mantis::MantisTests::Product" /* MantisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MantisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,7 +102,6 @@
 		OBJ_24 /* CropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropToolbar.swift; sourceTree = "<group>"; };
 		OBJ_25 /* CropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
 		OBJ_26 /* FixedRatioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedRatioManager.swift; sourceTree = "<group>"; };
-		OBJ_27 /* RatioPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioPresenter.swift; sourceTree = "<group>"; };
 		OBJ_28 /* ToolBarButtonImageBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarButtonImageBuilder.swift; sourceTree = "<group>"; };
 		OBJ_30 /* CGImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageExtensions.swift; sourceTree = "<group>"; };
 		OBJ_31 /* CoreGraphicsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicsExtensions.swift; sourceTree = "<group>"; };
@@ -170,11 +172,12 @@
 		OBJ_23 /* CropViewController */ = {
 			isa = PBXGroup;
 			children = (
+				FE86B308251DE3C900CD4C05 /* RatioItemView.swift */,
+				FE86B309251DE3C900CD4C05 /* RatioSelector.swift */,
 				5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */,
 				OBJ_24 /* CropToolbar.swift */,
 				OBJ_25 /* CropViewController.swift */,
 				OBJ_26 /* FixedRatioManager.swift */,
-				OBJ_27 /* RatioPresenter.swift */,
 				OBJ_28 /* ToolBarButtonImageBuilder.swift */,
 			);
 			path = CropViewController;
@@ -410,7 +413,7 @@
 				OBJ_80 /* CropToolbar.swift in Sources */,
 				OBJ_81 /* CropViewController.swift in Sources */,
 				OBJ_82 /* FixedRatioManager.swift in Sources */,
-				OBJ_83 /* RatioPresenter.swift in Sources */,
+				FE86B30A251DE3C900CD4C05 /* RatioItemView.swift in Sources */,
 				OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */,
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
@@ -421,6 +424,7 @@
 				OBJ_90 /* Mantis.swift in Sources */,
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,
+				FE86B30B251DE3C900CD4C05 /* RatioSelector.swift in Sources */,
 				OBJ_93 /* CropVisualEffectView.swift in Sources */,
 				OBJ_94 /* RatioOptions.swift in Sources */,
 				OBJ_95 /* CGAngle.swift in Sources */,
