@@ -137,7 +137,7 @@ public class CropViewController: UIViewController {
         
         createCropView()
         createCropToolbar()
-        if !config.cropToolbarConfig.useRatioPresenter && config.cropToolbarConfig.includeFixedRatioSettingButton {
+        if config.cropToolbarConfig.ratioCandidatesShowType == .alwaysShowRatioList && config.cropToolbarConfig.includeFixedRatioSettingButton {
             createRatioSelector()
         }
         initLayout()
@@ -276,6 +276,7 @@ public class CropViewController: UIViewController {
             disableRotation = true
             cropView.RotateBy90(rotateAngle: rotateAngle) { [weak self] in
                 self?.disableRotation = false
+                self?.ratioSelector?.update(fixedRatioManager: self?.getFixedRatioManager())
             }
         }
         

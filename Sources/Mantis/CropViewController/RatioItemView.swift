@@ -29,9 +29,17 @@ class RatioItemView: UIView {
     }()
     
     var ratio: RatioItemType!
-    init(item: RatioItemType) {
+    
+    var type: RatioType! {
+        didSet {
+            titleLabel.text = type == .vertical ? ratio.nameV : ratio.nameH
+        }
+    }
+    
+    init(type: RatioType, item: RatioItemType) {
         super.init(frame: .zero)
-        ratio = item
+        self.ratio = item
+        self.type = type
         setup()
     }
     
@@ -44,7 +52,7 @@ class RatioItemView: UIView {
     }
     
     private func setup() {
-        titleLabel.text = ratio.nameV
+        titleLabel.text = type == .vertical ? ratio.nameV : ratio.nameH
         addSubview(titleLabel)
         translatesAutoresizingMaskIntoConstraints = false        
         titleLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -59,10 +67,10 @@ class RatioItemView: UIView {
         clipsToBounds = true
         
     }
+    
     @objc private func tap() {
         selected = !selected
         self.didGetRatio(ratio)
-        
     }
 }
 
