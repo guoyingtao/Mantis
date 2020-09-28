@@ -63,7 +63,9 @@ public class CropViewController: UIViewController {
     private lazy var cropView = CropView(image: image, viewModel: CropViewModel())
     private var cropToolbar: CropToolbarProtocol
     private var ratioPresenter: RatioPresenter?
+    private var ratioSelector: RatioSelector?
     private var stackView: UIStackView?
+    private var cropStackView: UIStackView!
     private var initialLayout = false
     private var disableRotation = false
     
@@ -87,7 +89,15 @@ public class CropViewController: UIViewController {
         self.cropToolbar = CropToolbar(frame: CGRect.zero)
         super.init(coder: aDecoder)
     }
-        
+    
+    fileprivate func createRatioSelector() {
+        let fixedRatioManager = getFixedRatioManager()
+        self.ratioSelector = RatioSelector(type: fixedRatioManager.type, originalRatioH: fixedRatioManager.originalRatioH, ratios: fixedRatioManager.ratios)
+        self.ratioSelector?.didGetRatio = { [weak self] ratio in
+            self?.setFixedRatio(ratio)
+        }
+    }
+    
     fileprivate func createCropToolbar() {
         cropToolbar.cropToolbarDelegate = self
         
@@ -126,7 +136,10 @@ public class CropViewController: UIViewController {
         view.backgroundColor = .black
         
         createCropView()
-        createCropToolbar()        
+        createCropToolbar()
+        if config.cropToolbarConfig.ratioCandidatesShowType == .alwaysShowRatioList && config.cropToolbarConfig.includeFixedRatioSettingButton {
+            createRatioSelector()
+        }
         initLayout()
         updateLayout()
         
@@ -255,6 +268,8 @@ public class CropViewController: UIViewController {
     private func handleReset() {
         resetRatioButton()
         cropView.reset()
+        ratioSelector?.reset()
+        ratioSelector?.update(fixedRatioManager: getFixedRatioManager())
     }
     
     private func handleRotate(rotateAngle: CGFloat) {
@@ -262,6 +277,7 @@ public class CropViewController: UIViewController {
             disableRotation = true
             cropView.RotateBy90(rotateAngle: rotateAngle) { [weak self] in
                 self?.disableRotation = false
+                self?.ratioSelector?.update(fixedRatioManager: self?.getFixedRatioManager())
             }
         }
         
@@ -281,9 +297,18 @@ public class CropViewController: UIViewController {
 // Auto layout
 extension CropViewController {
     fileprivate func initLayout() {
+        cropStackView = UIStackView()
+        cropStackView.axis = .vertical
+        cropStackView.addArrangedSubview(cropView)
+        
+        if let ratioSelector = ratioSelector {
+            cropStackView.addArrangedSubview(ratioSelector)
+        }
+        
         stackView = UIStackView()
         view.addSubview(stackView!)
         
+        cropStackView?.translatesAutoresizingMaskIntoConstraints = false
         stackView?.translatesAutoresizingMaskIntoConstraints = false
         cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         cropView.translatesAutoresizingMaskIntoConstraints = false
@@ -303,15 +328,15 @@ extension CropViewController {
     }
     
     fileprivate func changeStackViewOrder() {
-        stackView?.removeArrangedSubview(cropView)
+        stackView?.removeArrangedSubview(cropStackView)
         stackView?.removeArrangedSubview(cropToolbar)
         
         if UIApplication.shared.statusBarOrientation.isPortrait || UIApplication.shared.statusBarOrientation == .landscapeRight {
-            stackView?.addArrangedSubview(cropView)
+            stackView?.addArrangedSubview(cropStackView)
             stackView?.addArrangedSubview(cropToolbar)
         } else if UIApplication.shared.statusBarOrientation == .landscapeLeft {
             stackView?.addArrangedSubview(cropToolbar)
-            stackView?.addArrangedSubview(cropView)
+            stackView?.addArrangedSubview(cropStackView)
         }
     }
     
