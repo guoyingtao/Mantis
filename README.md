@@ -22,6 +22,7 @@
     <img src="Images/p7.png" height="250" alt="Mantis" />
     <img src="Images/p8.png" height="250" alt="Mantis" />
     <img src="Images/p9.png" height="250" alt="Mantis" />
+    <img src="Images/p10.png" height="250" alt="Mantis" />
 </p>
 
 ## Credits
@@ -120,7 +121,14 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
 When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
 
 * If you want to hide rotation dial, set Mantis.Config.showRotationDial = false
+* If you want to use ratio list instead of presenter, set Mantis.CropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
+```
 
+public enum RatioCandidatesShowType {
+    case presentRatioList
+    case alwaysShowRatioList
+}
+```
 * If you want to set different crop shape, set Mantis.Config.cropShapeType
 ```
 public enum CropShapeType {

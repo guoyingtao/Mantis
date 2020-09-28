@@ -269,6 +269,7 @@ public class CropViewController: UIViewController {
         resetRatioButton()
         cropView.reset()
         ratioSelector?.reset()
+        ratioSelector?.update(fixedRatioManager: getFixedRatioManager())
     }
     
     private func handleRotate(rotateAngle: CGFloat) {
