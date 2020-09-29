@@ -72,6 +72,12 @@ public enum PresetFixedRatioType {
     case canUseMultiplePresetFixedRatio
 }
 
+public enum CropVisualEffectType {
+    case blurDark
+    case blurLight
+    case none
+}
+
 public enum CropShapeType {
     case rect
     
@@ -106,6 +112,7 @@ public struct CropToolbarConfig {
 public struct Config {
     public var presetTransformationType: PresetTransformationType = .none
     public var cropShapeType: CropShapeType = .rect
+    public var cropVisualEffectType: CropVisualEffectType = .blurDark
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
     public var showRotationDial = true
