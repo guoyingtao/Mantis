@@ -131,8 +131,7 @@ public enum RatioCandidatesShowType {
 ```
 
 * If you build your custom toolbar you can add your own fixed ratio buttons
-```
-swift
+```swift
             // set a custom fixed ratio
             cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
 ```
