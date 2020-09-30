@@ -107,17 +107,11 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="48" translatesAutoresizingMaskIntoConstraints="NO" id="3Nv-J5-HZ1">
                                         <rect key="frame" x="0.0" y="227" width="306" height="34"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HPh-D4-Sfe">
-                                                <rect key="frame" x="0.0" y="0.0" width="129" height="34"/>
-                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                <state key="normal" title="Blurred Background"/>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9WR-aF-zl2" userLabel="Hide Rotation Dial">
-                                                <rect key="frame" x="177" y="0.0" width="129" height="34"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="306" height="34"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                <state key="normal" title="No Effect"/>
+                                                <state key="normal" title="No Visual Background Effect"/>
                                                 <connections>
                                                     <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Chc-Ek-cMW"/>
                                                 </connections>

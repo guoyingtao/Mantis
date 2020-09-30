@@ -74,7 +74,6 @@ public enum PresetFixedRatioType {
 
 public enum CropVisualEffectType {
     case blurDark
-    case blurLight
     case none
 }
 

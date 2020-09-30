@@ -125,23 +125,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.delegate = self
         present(cropViewController, animated: true)
     }
-    
-    
-    @IBAction func blurredBackground(_ sender: Any) {
-        guard let image = image else {
-            return
-        }
-        
-        var config = Mantis.Config()
-        config.cropVisualEffectType = .blurLight
-        let cropViewController = Mantis.cropViewController(image: image,
-                                                           config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
-        cropViewController.delegate = self
-        present(cropViewController, animated: true)
-    }
-    
-    
+
     @IBAction func noBackgroundEffect(_ sender: Any) {
         guard let image = image else {
             return
