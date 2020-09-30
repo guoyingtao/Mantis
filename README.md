@@ -122,13 +122,22 @@ When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not 
 
 * If you want to hide rotation dial, set Mantis.Config.showRotationDial = false
 * If you want to use ratio list instead of presenter, set Mantis.CropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
-```
 
+```
 public enum RatioCandidatesShowType {
     case presentRatioList
     case alwaysShowRatioList
 }
 ```
+
+* If you build your custom toolbar you can add your own fixed ratio buttons
+```
+swift
+            // set a custom fixed ratio
+            cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
+```
+
+
 * If you want to set different crop shape, set Mantis.Config.cropShapeType
 ```
 public enum CropShapeType {

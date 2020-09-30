@@ -34,8 +34,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-        var config = Mantis.Config()
-        
+        let config = Mantis.Config()
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen
