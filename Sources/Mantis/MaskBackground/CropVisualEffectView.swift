@@ -20,6 +20,8 @@ class CropVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         self.init(effect: translucencyEffect)
         self.cropShapeType = cropShapeType
         self.translucencyEffect = translucencyEffect
+        self.backgroundColor = effectType == .none ? .black : .clear
+        
         initialize()
     }
         
