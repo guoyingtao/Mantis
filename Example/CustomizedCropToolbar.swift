@@ -31,7 +31,7 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         
         cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
         cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
-        fixedRatioSettingButton = createOptionButton(withTitle: "List", andAction: #selector(showRatioList))
+        fixedRatioSettingButton = createOptionButton(withTitle: "Ratio", andAction: #selector(showRatioList))
         portraitRatioButton = createOptionButton(withTitle: "9:16", andAction: #selector(setPortraitRatio))
         landscapeRatioButton = createOptionButton(withTitle: "16:9", andAction: #selector(setLandscapeRatio))
 
@@ -48,16 +48,34 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         stackView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
         stackView?.addArrangedSubview(cancelButton!)
+        stackView?.addArrangedSubview(portraitRatioButton!)
+        stackView?.addArrangedSubview(landscapeRatioButton!)
         stackView?.addArrangedSubview(fixedRatioSettingButton!)
         stackView?.addArrangedSubview(cropButton!)
     }
     
-    public func handleFixedRatioSetted() {
+
+    public func handleFixedRatioSetted(ratio: Double) {
+        
+        switch ratio {
+        case 9 / 16:
+            portraitRatioButton?.setTitleColor(.blue, for: .normal)
+            landscapeRatioButton?.setTitleColor(.white, for: .normal)
+        case 16 / 9:
+            landscapeRatioButton?.setTitleColor(.blue, for: .normal)
+            portraitRatioButton?.setTitleColor(.white, for: .normal)
+        default:
+            landscapeRatioButton?.setTitleColor(.white, for: .normal)
+            portraitRatioButton?.setTitleColor(.white, for: .normal)
+        }
+        
         fixedRatioSettingButton?.setTitleColor(.blue, for: .normal)
+        fixedRatioSettingButton?.setTitle("Unlock", for: .normal)
     }
     
     public func handleFixedRatioUnSetted() {
         fixedRatioSettingButton?.setTitleColor(.white, for: .normal)
+        fixedRatioSettingButton?.setTitle("Ratio", for: .normal)
     }
     
     func adjustUIWhenOrientationChange() {
@@ -85,9 +103,11 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc private func setPortraitRatio() {
+        cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
     }
     
     @objc private func setLandscapeRatio() {
+        cropToolbarDelegate?.didSelectRatio(ratio: 16 / 9)
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {

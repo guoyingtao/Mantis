@@ -34,12 +34,30 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-        let config = Mantis.Config()
+        var config = Mantis.Config()
+        
+        let cropViewController = Mantis.cropViewController(image: image,
+                                                           config: config)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+    }
+    
+    @IBAction func presentWithPresetTransformation(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        
+        var config = Mantis.Config()
         
         // Comment out the code below for using preset transformation
-//        let transform = Mantis.Transformation(offset: CGPoint(x: 469.0, y: 942.3333333333334), rotation: 0.2806850373744965, scale: 4.157221958778101, manualZoomed: true, maskFrame: CGRect(x: 99.92007104795738, y: 14.0, width: 214.15985790408524, height: 701.0))
-//
-//        config.presetTransformationType = .presetInfo(info: transform)
+        let transform = Mantis.Transformation(offset: CGPoint(x: 0.0, y: 117.33333333333333),
+                                              rotation: -0.27415549755096436,
+                                              scale: 1.3687552811381747,
+                                              manualZoomed: true,
+                                              maskFrame: CGRect(x: 14.0, y: 217.40625, width: 347.0, height: 195.1875))
+        
+        config.presetTransformationType = .presetInfo(info: transform)
         
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
@@ -96,7 +114,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         present(cropViewController, animated: true)
 
     }
-    
     
     
     @IBAction func clockwiseRotationButtonTouched(_ sender: Any) {
