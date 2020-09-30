@@ -15,10 +15,14 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     var cropToolbarDelegate: CropToolbarDelegate?
     
     private var fixedRatioSettingButton: UIButton?
+    private var portraitRatioButton: UIButton?
+    private var landscapeRatioButton: UIButton?
     private var cropButton: UIButton?
     private var cancelButton: UIButton?
     private var stackView: UIStackView?
     private var config: CropToolbarConfig!
+    
+    var custom: ((Double) -> Void)?
     
     func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
@@ -27,8 +31,10 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         
         cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
         cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
-        fixedRatioSettingButton = createOptionButton(withTitle: "Ratio", andAction: #selector(showRatioList))
-        
+        fixedRatioSettingButton = createOptionButton(withTitle: "List", andAction: #selector(showRatioList))
+        portraitRatioButton = createOptionButton(withTitle: "9:16", andAction: #selector(setPortraitRatio))
+        landscapeRatioButton = createOptionButton(withTitle: "16:9", andAction: #selector(setLandscapeRatio))
+
         stackView = UIStackView()
         addSubview(stackView!)
         
@@ -76,6 +82,12 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     
     @objc private func showRatioList() {
         cropToolbarDelegate?.didSelectSetRatio()
+    }
+    
+    @objc private func setPortraitRatio() {
+    }
+    
+    @objc private func setLandscapeRatio() {
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {

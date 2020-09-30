@@ -193,7 +193,11 @@ public class CropViewController: UIViewController {
         }
     }
     
-    func setFixedRatio(_ ratio: Double) {
+    public func reset() {
+        cropView.reset()
+    }
+    
+    public func setFixedRatio(_ ratio: Double) {
         cropToolbar.handleFixedRatioSetted()
         cropView.aspectRatioLockEnabled = true
         
