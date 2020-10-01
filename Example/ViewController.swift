@@ -94,7 +94,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
     
     
-    @IBAction func customizedCropToobalButtonTouched(_ sender: Any) {
+    @IBAction func customizedCropToolbarButtonTouched(_ sender: Any) {
         guard let image = image else {
             return
         }
@@ -112,6 +112,28 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.delegate = self
         present(cropViewController, animated: true)
 
+    }
+    
+    
+    
+    @IBAction func customizedCropToolbarWithoutListButtonTouched(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        var config = Mantis.Config()
+        
+        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 44
+        config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation = 80
+        
+        let cropToolbar = CustomizedCropToolbarWithoutList(frame: .zero)
+        
+        let cropViewController = Mantis.cropViewController(image: image,
+                                                           config: config,
+                                                           cropToolbar: cropToolbar)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+        
     }
     
     
