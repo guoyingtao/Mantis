@@ -192,9 +192,10 @@ public class CropViewController: UIViewController {
             self?.cropView.handleRotate()
         }
     }
+
     
     func setFixedRatio(_ ratio: Double) {
-        cropToolbar.handleFixedRatioSetted()
+        cropToolbar.handleFixedRatioSetted(ratio: ratio)
         cropView.aspectRatioLockEnabled = true
         
         if (cropView.viewModel.aspectRatio != CGFloat(ratio)) {
@@ -226,6 +227,7 @@ public class CropViewController: UIViewController {
         super.viewDidAppear(animated)
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             cropView.transform(byTransformInfo: transformInfo)
+            return
         }
     }
     
@@ -381,6 +383,10 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectSetRatio() {
         handleSetRatio()
+    }
+    
+    public func didSelectRatio(ratio: Double) {
+        setFixedRatio(ratio)
     }
 }
 

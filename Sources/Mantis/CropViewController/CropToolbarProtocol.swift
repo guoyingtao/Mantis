@@ -14,6 +14,7 @@ public protocol CropToolbarDelegate {
     func didSelectClockwiseRotate();
     func didSelectReset();
     func didSelectSetRatio();
+    func didSelectRatio(ratio: Double);
 }
 
 public protocol CropToolbarProtocol: UIView {    
@@ -22,7 +23,7 @@ public protocol CropToolbarProtocol: UIView {
     var cropToolbarDelegate: CropToolbarDelegate? {get set}
 
     func createToolbarUI(config: CropToolbarConfig)
-    func handleFixedRatioSetted()
+    func handleFixedRatioSetted(ratio: Double)
     func handleFixedRatioUnSetted()
     
     // MARK: - The following functions have default implementations

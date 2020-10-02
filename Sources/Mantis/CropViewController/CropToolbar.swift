@@ -176,7 +176,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    public func handleFixedRatioSetted() {
+    public func handleFixedRatioSetted(ratio: Double) {
         fixedRatioSettingButton?.tintColor = nil
     }
     
