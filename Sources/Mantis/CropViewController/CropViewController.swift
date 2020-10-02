@@ -226,7 +226,34 @@ public class CropViewController: UIViewController {
         super.viewDidAppear(animated)
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             cropView.transform(byTransformInfo: transformInfo)
+        } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
+            let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
+            cropView.transform(byTransformInfo: transformInfo)
         }
+    }
+    
+    private func getTransformInfo(byNormalizedInfo normailizedInfo: CGRect) -> Transformation {
+        let cropFrame = cropView.viewModel.cropBoxFrame
+
+        let scale: CGFloat = min(1/normailizedInfo.width, 1/normailizedInfo.height)
+
+        var offset = CGPoint.zero
+        offset.x = cropFrame.width * scale * normailizedInfo.origin.x
+        offset.y = cropFrame.height * scale * normailizedInfo.origin.y
+        
+        var maskFrame = cropFrame
+        
+        if (normailizedInfo.width > normailizedInfo.height) {
+            maskFrame.size.height = normailizedInfo.width * cropFrame.height
+        } else if (normailizedInfo.width < normailizedInfo.height) {
+            maskFrame.size.width = normailizedInfo.width * cropFrame.width
+            maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2
+            offset.x -= (cropFrame.width - maskFrame.width) / 2
+        }
+                
+        let manualZoomed = (scale != 1.0)
+        let transformantion = Transformation(offset: offset, rotation: 0, scale: scale, manualZoomed: manualZoomed, maskFrame: maskFrame)
+        return transformantion
     }
     
     private func handleCancel() {
