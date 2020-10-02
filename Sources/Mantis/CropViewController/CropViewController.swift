@@ -230,7 +230,7 @@ public class CropViewController: UIViewController {
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
             cropView.transform(byTransformInfo: transformInfo)
-//            cropView.scrollView.bounds = CGRect(x: 0, y: 0, width: transformInfo.maskFrame.width, height: transformInfo.maskFrame.height)
+            cropView.scrollView.frame = transformInfo.maskFrame
         }
     }
     
@@ -240,19 +240,19 @@ public class CropViewController: UIViewController {
         let scale: CGFloat = min(1/normailizedInfo.width, 1/normailizedInfo.height)
 
         var offset = cropFrame.origin
-        offset.x += cropFrame.width * normailizedInfo.origin.x
-        offset.y += cropFrame.height * normailizedInfo.origin.y
+        offset.x = cropFrame.width * normailizedInfo.origin.x * scale
+        offset.y = cropFrame.height * normailizedInfo.origin.y * scale
         
         var maskFrame = cropFrame
         
         if (normailizedInfo.width > normailizedInfo.height) {
-            maskFrame.size.height = normailizedInfo.width * cropFrame.height
+            let adjustScale = 1 / normailizedInfo.width
+            maskFrame.size.height = normailizedInfo.height * cropFrame.height * adjustScale
             maskFrame.origin.y += (cropFrame.height - maskFrame.height) / 2
-            offset.y -= (cropFrame.height - maskFrame.height) / 2
         } else if (normailizedInfo.width < normailizedInfo.height) {
-            maskFrame.size.width = normailizedInfo.width * cropFrame.width
+            let adjustScale = 1 / normailizedInfo.height
+            maskFrame.size.width = normailizedInfo.width * cropFrame.width * adjustScale
             maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2
-            offset.x -= (cropFrame.width - maskFrame.width) / 2
         }
                 
         let manualZoomed = (scale != 1.0)
