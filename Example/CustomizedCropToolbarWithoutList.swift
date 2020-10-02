@@ -1,20 +1,22 @@
 //
-//  CustomizedCropToolBar.swift
+//  CustomizedCropToolbarWithoutList.swift
 //  MantisExample
 //
-//  Created by Echo on 4/26/20.
+//  Created by designerdrug on 10/01/20.
 //  Copyright © 2020 Echo. All rights reserved.
 //
 
 import UIKit
 import Mantis
 
-class CustomizedCropToolbar: UIView, CropToolbarProtocol {
+class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     var cropToolbarDelegate: CropToolbarDelegate?
     
     private var fixedRatioSettingButton: UIButton?
+    private var portraitRatioButton: UIButton?
+    private var landscapeRatioButton: UIButton?
     private var cropButton: UIButton?
     private var cancelButton: UIButton?
     private var stackView: UIStackView?
@@ -25,11 +27,13 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
         
-        backgroundColor = .red
+        backgroundColor = .darkGray
         
         cropButton = createOptionButton(withTitle: "Crop", andAction: #selector(crop))
         cancelButton = createOptionButton(withTitle: "Cancel", andAction: #selector(cancel))
-        fixedRatioSettingButton = createOptionButton(withTitle: "Ratio", andAction: #selector(showRatioList))
+        portraitRatioButton = createOptionButton(withTitle: "9:16", andAction: #selector(setPortraitRatio))
+        landscapeRatioButton = createOptionButton(withTitle: "16:9", andAction: #selector(setLandscapeRatio))
+
         stackView = UIStackView()
         addSubview(stackView!)
         
@@ -43,19 +47,29 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         stackView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
         stackView?.addArrangedSubview(cancelButton!)
-        stackView?.addArrangedSubview(fixedRatioSettingButton!)
+        stackView?.addArrangedSubview(portraitRatioButton!)
+        stackView?.addArrangedSubview(landscapeRatioButton!)
         stackView?.addArrangedSubview(cropButton!)
     }
     
 
     public func handleFixedRatioSetted(ratio: Double) {
-        fixedRatioSettingButton?.setTitleColor(.blue, for: .normal)
-        fixedRatioSettingButton?.setTitle("Unlock", for: .normal)
+        
+        switch ratio {
+        case 9 / 16:
+            portraitRatioButton?.setTitleColor(.blue, for: .normal)
+            landscapeRatioButton?.setTitleColor(.white, for: .normal)
+        case 16 / 9:
+            landscapeRatioButton?.setTitleColor(.blue, for: .normal)
+            portraitRatioButton?.setTitleColor(.white, for: .normal)
+        default:
+            landscapeRatioButton?.setTitleColor(.white, for: .normal)
+            portraitRatioButton?.setTitleColor(.white, for: .normal)
+        }
+        
     }
     
     public func handleFixedRatioUnSetted() {
-        fixedRatioSettingButton?.setTitleColor(.white, for: .normal)
-        fixedRatioSettingButton?.setTitle("Ratio", for: .normal)
     }
     
     func adjustUIWhenOrientationChange() {
@@ -66,9 +80,7 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         }
     }
     
-    func getRatioListPresentSourceView() -> UIView? {
-        return fixedRatioSettingButton
-    }
+    
             
     @objc private func crop() {
         cropToolbarDelegate?.didSelectCrop()
@@ -78,8 +90,12 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         cropToolbarDelegate?.didSelectCancel()
     }
     
-    @objc private func showRatioList() {
-        cropToolbarDelegate?.didSelectSetRatio()
+    @objc private func setPortraitRatio() {
+        cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
+    }
+    
+    @objc private func setLandscapeRatio() {
+        cropToolbarDelegate?.didSelectRatio(ratio: 16 / 9)
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {

@@ -192,9 +192,10 @@ public class CropViewController: UIViewController {
             self?.cropView.handleRotate()
         }
     }
+
     
     func setFixedRatio(_ ratio: Double) {
-        cropToolbar.handleFixedRatioSetted()
+        cropToolbar.handleFixedRatioSetted(ratio: ratio)
         cropView.aspectRatioLockEnabled = true
         
         if (cropView.viewModel.aspectRatio != CGFloat(ratio)) {
@@ -229,6 +230,7 @@ public class CropViewController: UIViewController {
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
             cropView.transform(byTransformInfo: transformInfo)
+//            cropView.scrollView.bounds = CGRect(x: 0, y: 0, width: transformInfo.maskFrame.width, height: transformInfo.maskFrame.height)
         }
     }
     
@@ -237,14 +239,16 @@ public class CropViewController: UIViewController {
 
         let scale: CGFloat = min(1/normailizedInfo.width, 1/normailizedInfo.height)
 
-        var offset = CGPoint.zero
-        offset.x = cropFrame.width * scale * normailizedInfo.origin.x
-        offset.y = cropFrame.height * scale * normailizedInfo.origin.y
+        var offset = cropFrame.origin
+        offset.x += cropFrame.width * normailizedInfo.origin.x
+        offset.y += cropFrame.height * normailizedInfo.origin.y
         
         var maskFrame = cropFrame
         
         if (normailizedInfo.width > normailizedInfo.height) {
             maskFrame.size.height = normailizedInfo.width * cropFrame.height
+            maskFrame.origin.y += (cropFrame.height - maskFrame.height) / 2
+            offset.y -= (cropFrame.height - maskFrame.height) / 2
         } else if (normailizedInfo.width < normailizedInfo.height) {
             maskFrame.size.width = normailizedInfo.width * cropFrame.width
             maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2
@@ -408,6 +412,10 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectSetRatio() {
         handleSetRatio()
+    }
+    
+    public func didSelectRatio(ratio: Double) {
+        setFixedRatio(ratio)
     }
 }
 

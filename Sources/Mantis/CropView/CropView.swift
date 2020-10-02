@@ -526,17 +526,7 @@ extension CropView {
         scrollView.zoomScale = newZoomScale
         
         scrollView.checkContentOffset()
-    }
-    
-    fileprivate func updateScrollViewLayout(by cropBox: CGRect) {
-        let radians = viewModel.getTotalRadians()
-        let width = abs(cos(radians)) * cropBox.width + abs(sin(radians)) * cropBox.height
-        let height = abs(sin(radians)) * cropBox.width + abs(cos(radians)) * cropBox.height
-        
-        let newSize = CGSize(width: width, height: height)
-        scrollView.updateLayout(byNewSize: newSize)
-        scrollView.checkContentOffset()
-    }
+    }    
 }
 
 // MARK: - internal API
@@ -560,7 +550,7 @@ extension CropView {
             imageViewSize: imageContainer.bounds.size
         )
         
-        let transfromation = Transformation(
+        let transformation = Transformation(
             offset: scrollView.contentOffset,
             rotation: totalRadians,
             scale: scrollView.zoomScale,
@@ -569,17 +559,17 @@ extension CropView {
         )
         
         guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
-            return (nil, transfromation)
+            return (nil, transformation)
         }
         
         switch cropShapeType {
         case .rect, .ellipse(maskOnly: true), .roundedRect(_, maskOnly: true):
-            return (croppedImage, transfromation)
+            return (croppedImage, transformation)
         case .ellipse(maskOnly: false):
-            return (croppedImage.ellipseMasked, transfromation)
+            return (croppedImage.ellipseMasked, transformation)
         case .roundedRect(let radiusToShortSide, maskOnly: false):
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
-            return (croppedImage.roundRect(radius), transfromation)
+            return (croppedImage.roundRect(radius), transformation)
         }
     }
     
