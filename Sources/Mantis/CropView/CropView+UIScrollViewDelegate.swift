@@ -23,9 +23,6 @@ extension CropView: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         viewModel.setBetweenOperationStatus()
-        print(scrollView.contentSize)
-        print(scrollView.contentOffset)
-        print(scrollView.zoomScale)
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
