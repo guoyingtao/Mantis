@@ -41,7 +41,7 @@ Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helpin
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 1.4.2'
+pod 'Mantis', '~> 1.4.3'
 ```
 
 ### Carthage
@@ -151,6 +151,7 @@ public enum CropShapeType {
 public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
+    case presetNormalizedInfo(normailizedInfo: CGRect)
 }
 ```
 Please use the transformation infomation obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation).
