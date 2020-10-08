@@ -49,7 +49,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         
-        // Comment out the code below for using preset transformation on iPhone 11 Pro
         let transform = Mantis.Transformation(offset: CGPoint(x: 0.0, y: 117.33333333333333),
                                               rotation: -0.27415549755096436,
                                               scale: 1.3687552811381747,
