@@ -526,17 +526,7 @@ extension CropView {
         scrollView.zoomScale = newZoomScale
         
         scrollView.checkContentOffset()
-    }
-    
-    fileprivate func updateScrollViewLayout(by cropBox: CGRect) {
-        let radians = viewModel.getTotalRadians()
-        let width = abs(cos(radians)) * cropBox.width + abs(sin(radians)) * cropBox.height
-        let height = abs(sin(radians)) * cropBox.width + abs(cos(radians)) * cropBox.height
-        
-        let newSize = CGSize(width: width, height: height)
-        scrollView.updateLayout(byNewSize: newSize)
-        scrollView.checkContentOffset()
-    }
+    }    
 }
 
 // MARK: - internal API

@@ -49,13 +49,12 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         
-        // Comment out the code below for using preset transformation
         let transform = Mantis.Transformation(offset: CGPoint(x: 0.0, y: 117.33333333333333),
                                               rotation: -0.27415549755096436,
                                               scale: 1.3687552811381747,
                                               manualZoomed: true,
                                               maskFrame: CGRect(x: 14.0, y: 217.40625, width: 347.0, height: 195.1875))
-        
+
         config.presetTransformationType = .presetInfo(info: transform)
         
         let cropViewController = Mantis.cropViewController(image: image,

@@ -63,6 +63,7 @@ public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGF
 public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
+    case presetNormalizedInfo(normailizedInfo: CGRect)
 }
 
 public enum PresetFixedRatioType {
