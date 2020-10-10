@@ -10,7 +10,7 @@ import UIKit
 import Mantis
 
 class ViewController: UIViewController, CropViewControllerDelegate {
-    var image = UIImage(named: "sunflower.jpg")
+    var image = UIImage(named: "sunflower1.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!
@@ -49,38 +49,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         
-//        let transform = Transformation(offset: CGPoint(x: 316.6666666666667, y: 473.3333333333333),
-//                                       rotation: 0.38095593452453613,
-//                                                 scale: 3.1083337936908113,
-//                                                 manualZoomed: true,
-//                                                 contentBounds: CGRect(x: 14.0, y: 14.0, width: 347.0, height: 617.0),
-//                                                 maskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-//                                                 scrollBounds: CGRect(x: 316.6666666666667, y: 473.3333333333333, width: 515.6495296292397, height: 612.202556057593))
-        
-//        let transform = Transformation(offset: CGPoint(x: 305.3333333333333, y: 461.0),
-//                                       rotation: 0.38470226526260376,
-//                                                 scale: 3.1802356380728014,
-//                                                 manualZoomed: true,
-//                                                 contentBounds: CGRect(x: 77.85062439961575, y: 14.0, width: 347.0, height: 617.0),
-//                                                 maskFrame: CGRect(x: 14.0, y: 62.25, width: 219.2987512007685, height: 617.0),
-//                                                 scrollBounds: CGRect(x: 305.3333333333333, y: 461.0, width: 434.8199732908347, height: 654.2027314270426))
 
-//        let transform = Transformation(offset: CGPoint(x: 0, y: 152.0),
-//                                       rotation: 0.7801480889320374,
-//                                                 scale: 1.7801480889320374,
-//                                                 manualZoomed: false,
-//                                                 contentBounds: CGRect(x: 14.0, y: 14.0, width: 347.0, height: 617.0),
-//                                                 maskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-//                                                 scrollBounds: CGRect(x: 0, y: 152.0, width: 612.7625867655745, height: 614.0507708977023))
-        
-//        let transform = Transformation(offset: CGPoint(x: 423.3333333333333, y: 751.0),
-//                                       rotation: 0.5617997646331786,
-//                                                 scale: 3.9177510882380475,
-//                                                 manualZoomed: true,
-//                                                 contentBounds: CGRect(x: 14.0, y: 14.0, width: 347.0, height: 617.0),
-//                                                 maskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-//                                                 scrollBounds: CGRect(x: 423.3333333333333, y: 751.0, width: 570.9409693560913, height: 625.3484062652302))
-
+        // 竖图竖直相接
 //        let transform = Transformation(offset: CGPoint(x: 231.66666666666666, y: 439.6666666666667),
 //                                       rotation: 0.5929909348487854,
 //                                                 scale: 2.841958076098717,
@@ -90,23 +60,35 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 //                                                 maskFrame: CGRect(x: 59.47694524495677, y: 14.0, width: 256.04610951008647, height: 617.0),
 //                                                 scrollBounds: CGRect(x: 231.66666666666666, y: 439.6666666666667, width: 557.1387432741491, height: 654.7511809035641))
         
-        let transform = Transformation(offset: CGPoint(x: 130.0, y: 505.6666666666667),
-                                       rotation: 0.2700628936290741,
-                                                 scale: 2.2278622522779266,
-                                                 manualZoomed: true,
-                                                 contentBounds: CGRect(x: 77.85062439961575, y: 14.0, width: 347.0, height: 617.0),
-                                                 intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-                                                 maskFrame: CGRect(x: 14.0, y: 211.28851744186045, width: 347.0, height: 222.42296511627907),
-                                                 scrollBounds: CGRect(x: 130.0, y: 505.6666666666667, width: 393.7633583065407, height: 306.9378905058312))
+        // 竖图水平相接
+//        let transform = Transformation(offset: CGPoint(x: 130.0, y: 505.6666666666667),
+//                                       rotation: 0.2700628936290741,
+//                                                 scale: 2.2278622522779266,
+//                                                 manualZoomed: true,
+//                                                 contentBounds: CGRect(x: 77.85062439961575, y: 14.0, width: 347.0, height: 617.0),
+//                                                 intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
+//                                                 maskFrame: CGRect(x: 14.0, y: 211.28851744186045, width: 347.0, height: 222.42296511627907),
+//                                                 scrollBounds: CGRect(x: 130.0, y: 505.6666666666667, width: 393.7633583065407, height: 306.9378905058312))
         
-//        let transform = Transformation(offset: CGPoint(x: 334.6666666666667, y: 442.3333333333333),
-//                                       rotation: 0.23862043023109436,
-//                                                 scale: 3.012410016154106,
+        // 横图水平相接
+//        let transform = Transformation(offset: CGPoint(x: 554.6666666666666, y: 280.6666666666667),
+//                                       rotation: 0.5006511807441711,
+//                                                 scale: 3.947303064425138,
 //                                                 manualZoomed: true,
 //                                                 contentBounds: CGRect(x: 14.0, y: 14.0, width: 347.0, height: 617.0),
 //                                                 intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-//                                                 maskFrame: CGRect(x: 14.0, y: 238.9944065506788, width: 347.0, height: 167.011186898642),
-//                                                 scrollBounds: CGRect(x: 334.6666666666667, y: 442.3333333333333, width: 376.64290759814855, height: 244.29666434105286))
+//                                                 maskFrame: CGRect(x: 14.0, y: 232.18968968968971, width: 347.0, height: 180.6206206206206),
+//                                                 scrollBounds: CGRect(x: 554.6666666666666, y: 280.6666666666667, width: 391.1100918559342, height: 325.01200985469416))
+        
+        // 横图竖直相接
+        let transform = Transformation(offset: CGPoint(x: 699.3333333333334, y: 291.0),
+                                       rotation: 0.3006804883480072,
+                                                 scale: 6.320719082330423,
+                                                 manualZoomed: true,
+                                                 contentBounds: CGRect(x: 14.0, y: 14.0, width: 347.0, height: 617.0),
+                                                 intialMaskFrame: CGRect(x: 14.0, y: 146.4634502923977, width: 347.0, height: 352.0730994152046),
+                                                 maskFrame: CGRect(x: 27.148356850401484, y: 14.0, width: 320.70328629919703, height: 617.0),
+                                                 scrollBounds: CGRect(x: 699.3333333333334, y: 291.0, width: 489.0520219374935, height: 684.3011670234625))
         
         config.presetTransformationType = .presetInfo(info: transform)
         

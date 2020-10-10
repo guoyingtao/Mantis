@@ -273,7 +273,7 @@ public class CropViewController: UIViewController {
         
         var adjustImageScale: CGFloat = 1
         
-        if (transformInfo.contentBounds.width > transformInfo.contentBounds.height) {
+        if (transformInfo.contentBounds.width > transformInfo.contentBounds.height) { // To do
             if (contentBound.height > contentBound.width) {
                 if (maskFrameHeight / maskFrameWidth > contentBound.height / contentBound.width) {
                     adjustImageScale = maskFrameHeight / cropFrame.height
@@ -281,28 +281,43 @@ public class CropViewController: UIViewController {
                     adjustImageScale = transformInfo.intialMaskFrame.width / transformInfo.maskFrame.width
                 }
             }
-        } else {
-            if (contentBound.width > contentBound.height) { // 横屏
+        } else { // Source device is vertical
+            if (contentBound.width > contentBound.height) { // Target device is horizontal
                 if (maskFrameWidth / maskFrameHeight > contentBound.width / contentBound.height) {
                     adjustImageScale = maskFrameWidth / cropFrame.width
                 } else {
                     adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
                 }
-            } else { // 竖屏
-                // 结果图垂直相接
-                if (transformInfo.maskFrame.height / transformInfo.maskFrame.width > transformInfo.contentBounds.height / transformInfo.contentBounds.width) {
-                    if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
-                        let supporsedMaskFrameHeight = contentBound.width * (transformInfo.contentBounds.height / transformInfo.contentBounds.width)
-                        adjustImageScale = maskFrameHeight / supporsedMaskFrameHeight
-                    } else {
-                        adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
+            } else { // Target device is vertical
+                // Image is vertical
+                if (cropView.imageContainer.frame.height > cropView.imageContainer.frame.width) {
+                    // source result image reaches the bounds height
+                    if (transformInfo.maskFrame.height / transformInfo.maskFrame.width > transformInfo.contentBounds.height / transformInfo.contentBounds.width) {
+                        if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
+                            let supporsedMaskFrameHeight = contentBound.width * (transformInfo.contentBounds.height / transformInfo.contentBounds.width)
+                            adjustImageScale = maskFrameHeight / supporsedMaskFrameHeight
+                        } else {
+                            adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
+                        }
+                    } else { // source result image reaches the bounds width
+                        if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
+                            let supporsedMaskFrameWidth = contentBound.height * (transformInfo.contentBounds.width / transformInfo.contentBounds.height)
+                            adjustImageScale = maskFrameWidth / supporsedMaskFrameWidth
+                        } else {
+                            adjustImageScale = maskFrameWidth / cropFrame.width
+                        }
                     }
-                } else { // 结果图水平相接
-                    if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
-                        let supporsedMaskFrameWidth = contentBound.height * (transformInfo.contentBounds.width / transformInfo.contentBounds.height)
-                        adjustImageScale = maskFrameWidth / supporsedMaskFrameWidth
+                } else { // Image is horizontal
+                    // source result image reaches the bounds height
+                    if (transformInfo.maskFrame.height / transformInfo.maskFrame.width > transformInfo.contentBounds.height / transformInfo.contentBounds.width) {
+                        if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
+                            let supporsedMaskFrameHeight = contentBound.width * (transformInfo.contentBounds.height / transformInfo.contentBounds.width)
+                            adjustImageScale = maskFrameHeight / supporsedMaskFrameHeight
+                        } else {
+                            adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
+                        }
                     } else {
-                        adjustImageScale = maskFrameWidth / cropFrame.width
+                        adjustImageScale = 1
                     }
                 }
             }
