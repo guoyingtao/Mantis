@@ -81,6 +81,8 @@ class CropView: UIView {
         gridOverlayView = CropOverlayView()
 
         super.init(frame: CGRect.zero)
+        self.layer.borderColor = UIColor.red.cgColor
+        self.layer.borderWidth = 2
         
         self.viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)
@@ -555,7 +557,10 @@ extension CropView {
             rotation: totalRadians,
             scale: scrollView.zoomScale,
             manualZoomed: manualZoomed,
-            maskFrame: gridOverlayView.frame
+            contentBounds: getContentBounds(),
+            intialMaskFrame: viewModel.cropOrignFrame,
+            maskFrame: gridOverlayView.frame,
+            scrollBounds: scrollView.bounds
         )
         
         guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
@@ -706,8 +711,14 @@ extension CropView {
     func transform(byTransformInfo transformation: Transformation) {
         viewModel.setRotatingStatus(by: CGAngle(radians:transformation.rotation))
         manualZoomed = transformation.manualZoomed
+        
+        if (transformation.scrollBounds != .zero) {
+            scrollView.bounds = transformation.scrollBounds
+        }        
+
         scrollView.zoomScale = transformation.scale
         scrollView.contentOffset = transformation.offset
+        
         viewModel.setBetweenOperationStatus()
         
         if (transformation.maskFrame != .zero) {

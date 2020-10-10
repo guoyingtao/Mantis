@@ -28,6 +28,8 @@ class CropScrollView: UIScrollView {
         clipsToBounds = false
         contentSize = bounds.size
         layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        layer.borderColor = UIColor.green.cgColor
+        layer.borderWidth = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -36,6 +38,7 @@ class CropScrollView: UIScrollView {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesBegan()
+        
         super.touchesBegan(touches, with: event)
     }
     
