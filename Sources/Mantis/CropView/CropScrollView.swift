@@ -35,7 +35,7 @@ class CropScrollView: UIScrollView {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        touchesBegan()        
+        touchesBegan()
         super.touchesBegan(touches, with: event)
     }
     
