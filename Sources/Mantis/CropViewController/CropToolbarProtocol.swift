@@ -56,7 +56,7 @@ public extension CropToolbarProtocol {
     }
     
     func adjustLayoutConstraintsWhenOrientationChange() {
-        if UIApplication.shared.statusBarOrientation.isPortrait {
+        if Orientation.isPortrait {
             heightForVerticalOrientationConstraint?.isActive = true
             widthForHorizonOrientationConstraint?.isActive = false
         } else {

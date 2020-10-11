@@ -73,7 +73,7 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     }
     
     func adjustUIWhenOrientationChange() {
-        if UIApplication.shared.statusBarOrientation.isPortrait {
+        if Orientation.isPortrait {
             stackView?.axis = .horizontal
         } else {
             stackView?.axis = .vertical
