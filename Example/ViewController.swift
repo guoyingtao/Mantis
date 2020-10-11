@@ -50,7 +50,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         var config = Mantis.Config()
         
 
-        // 竖图竖直相接
         let transform = Transformation(offset: CGPoint(x: 231.66666666666666, y: 439.6666666666667),
                                        rotation: 0.5929909348487854,
                                                  scale: 2.841958076098717,
@@ -59,50 +58,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                                  maskFrame: CGRect(x: 59.47694524495677, y: 14.0, width: 256.04610951008647, height: 617.0),
                                                  scrollBounds: CGRect(x: 231.66666666666666, y: 439.6666666666667, width: 557.1387432741491, height: 654.7511809035641))
         
-        // 竖图水平相接
-//        let transform = Transformation(offset: CGPoint(x: 130.0, y: 505.6666666666667),
-//                                       rotation: 0.2700628936290741,
-//                                                 scale: 2.2278622522779266,
-//                                                 manualZoomed: true,
-//                                                 intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-//                                                 maskFrame: CGRect(x: 14.0, y: 211.28851744186045, width: 347.0, height: 222.42296511627907),
-//                                                 scrollBounds: CGRect(x: 130.0, y: 505.6666666666667, width: 393.7633583065407, height: 306.9378905058312))
-        
-        // 横图水平相接
-//        let transform = Transformation(offset: CGPoint(x: 554.6666666666666, y: 280.6666666666667),
-//                                       rotation: 0.5006511807441711,
-//                                                 scale: 3.947303064425138,
-//                                                 manualZoomed: true,
-//                                                 intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-//                                                 maskFrame: CGRect(x: 14.0, y: 232.18968968968971, width: 347.0, height: 180.6206206206206),
-//                                                 scrollBounds: CGRect(x: 554.6666666666666, y: 280.6666666666667, width: 391.1100918559342, height: 325.01200985469416))
-        
-        // 横图竖直相接
-//        let transform = Transformation(offset: CGPoint(x: 699.3333333333334, y: 291.0),
-//                                       rotation: 0.3006804883480072,
-//                                                 scale: 6.320719082330423,
-//                                                 manualZoomed: true,
-//                                                 intialMaskFrame: CGRect(x: 14.0, y: 146.4634502923977, width: 347.0, height: 352.0730994152046),
-//                                                 maskFrame: CGRect(x: 27.148356850401484, y: 14.0, width: 320.70328629919703, height: 617.0),
-//                                                 scrollBounds: CGRect(x: 699.3333333333334, y: 291.0, width: 489.0520219374935, height: 684.3011670234625))
-        
-        // 另外一个测试
-//        let transform = Transformation(offset: CGPoint(x: 170.0, y: 58.333333333333336),
-//                                       rotation: 0.3303105235099793,
-//                                                 scale: 2.856649346741843,
-//                                                 manualZoomed: true,
-//                                                 intialMaskFrame: CGRect(x: 14.0, y: 153.20808009594663, width: 347.0, height: 338.58383980810675),
-//                                                 maskFrame: CGRect(x: 14.0, y: 135.8430990138054, width: 347.0, height: 373.313801972389),
-//                                                 scrollBounds: CGRect(x: 170.0, y: 58.333333333333336, width: 449.32115809729845, height: 465.6779461774012))
-        // 初始值是横向测试
-//        let transform = Transformation(offset: CGPoint(x: 309.3333333333333, y: 329.6666666666667),
-//                                       rotation: 0.2737011909484863,
-//                                                 scale: 4.298687412711811,
-//                                                 manualZoomed: true,
-//                                                 intialMaskFrame: CGRect(x: 190.83333333333331, y: 14.0, width: 217.33333333333334, height: 326.0),
-//                                                 maskFrame: CGRect(x: 14.0, y: 45.128304821150834, width: 571.0, height: 263.74339035769833),
-//                                                 scrollBounds: CGRect(x: 309.3333333333333, y: 329.6666666666667, width: 621.0346774172413, height: 408.2655061721273))
-
         
         config.presetTransformationType = .presetInfo(info: transform)
         

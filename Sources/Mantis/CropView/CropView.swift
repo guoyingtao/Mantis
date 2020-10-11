@@ -707,16 +707,14 @@ extension CropView {
     
     func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
         viewModel.setRotatingStatus(by: CGAngle(radians:transformation.rotation))
-        manualZoomed = transformation.manualZoomed
 
         if (transformation.scrollBounds != .zero) {
             scrollView.bounds = transformation.scrollBounds
         }
 
+        manualZoomed = transformation.manualZoomed
         scrollView.zoomScale = transformation.scale
-
         scrollView.contentOffset = transformation.offset
-        
         viewModel.setBetweenOperationStatus()
         
         if (transformation.maskFrame != .zero) {
