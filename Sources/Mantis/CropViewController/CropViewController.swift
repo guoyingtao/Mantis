@@ -225,13 +225,57 @@ public class CropViewController: UIViewController {
         
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
-            cropView.transform(byTransformInfo: transformInfo)
+            var newTransform = getTransformInfo(byTransformInfo: transformInfo)
+            
+            // The first transform is just for retrieving the final cropBoxFrame
+            cropView.transform(byTransformInfo: newTransform, rotateDial: false)
+            
+            // The second transform is for adjusting the scale of transformInfo
+            let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width) / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
+            newTransform.scale *= adjustScale
+            cropView.transform(byTransformInfo: newTransform)
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
             cropView.transform(byTransformInfo: transformInfo)
             cropView.scrollView.frame = transformInfo.maskFrame
         }
+    }
+    
+    private func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
+        let cropFrame = cropView.viewModel.cropOrignFrame
+        let contentBound = cropView.getContentBounds()
+                    
+        let adjustScale: CGFloat
+        var maskFrameWidth: CGFloat
+        var maskFrameHeight: CGFloat
+        
+        if ( transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width ) {
+            maskFrameHeight = contentBound.height
+            maskFrameWidth = transformInfo.maskFrame.width / transformInfo.maskFrame.height * maskFrameHeight
+            adjustScale = maskFrameHeight / transformInfo.maskFrame.height
+        } else {
+            maskFrameWidth = contentBound.width
+            maskFrameHeight = transformInfo.maskFrame.height / transformInfo.maskFrame.width * maskFrameWidth
+            adjustScale = maskFrameWidth / transformInfo.maskFrame.width
+        }
+        
+        var newTransform = transformInfo
+        
+        newTransform.offset = CGPoint(x:transformInfo.offset.x * adjustScale,
+                                      y:transformInfo.offset.y * adjustScale)
+                    
+        newTransform.maskFrame = CGRect(x: cropFrame.origin.x + (cropFrame.width - maskFrameWidth) / 2,
+                                        y: cropFrame.origin.y + (cropFrame.height - maskFrameHeight) / 2,
+                                        width: maskFrameWidth,
+                                        height: maskFrameHeight)
+        newTransform.scrollBounds = CGRect(x: transformInfo.scrollBounds.origin.x * adjustScale,
+                                           y: transformInfo.scrollBounds.origin.y * adjustScale,
+                                           width: transformInfo.scrollBounds.width * adjustScale,
+                                           height: transformInfo.scrollBounds.height * adjustScale)
+        
+        return newTransform
     }
     
     private func getTransformInfo(byNormalizedInfo normailizedInfo: CGRect) -> Transformation {
@@ -256,7 +300,13 @@ public class CropViewController: UIViewController {
         }
                 
         let manualZoomed = (scale != 1.0)
-        let transformantion = Transformation(offset: offset, rotation: 0, scale: scale, manualZoomed: manualZoomed, maskFrame: maskFrame)
+        let transformantion = Transformation(offset: offset,
+                                             rotation: 0,
+                                             scale: scale,
+                                             manualZoomed: manualZoomed,
+                                             intialMaskFrame: .zero,
+                                             maskFrame: maskFrame,
+                                             scrollBounds: .zero)
         return transformantion
     }
     

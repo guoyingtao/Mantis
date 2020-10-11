@@ -49,12 +49,16 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         
-        let transform = Mantis.Transformation(offset: CGPoint(x: 0.0, y: 117.33333333333333),
-                                              rotation: -0.27415549755096436,
-                                              scale: 1.3687552811381747,
-                                              manualZoomed: true,
-                                              maskFrame: CGRect(x: 14.0, y: 217.40625, width: 347.0, height: 195.1875))
 
+        let transform = Transformation(offset: CGPoint(x: 231.66666666666666, y: 439.6666666666667),
+                                       rotation: 0.5929909348487854,
+                                                 scale: 2.841958076098717,
+                                                 manualZoomed: true,
+                                                 intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
+                                                 maskFrame: CGRect(x: 59.47694524495677, y: 14.0, width: 256.04610951008647, height: 617.0),
+                                                 scrollBounds: CGRect(x: 231.66666666666666, y: 439.6666666666667, width: 557.1387432741491, height: 654.7511809035641))
+        
+        
         config.presetTransformationType = .presetInfo(info: transform)
         
         let cropViewController = Mantis.cropViewController(image: image,

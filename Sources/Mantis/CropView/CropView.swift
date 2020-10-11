@@ -555,7 +555,9 @@ extension CropView {
             rotation: totalRadians,
             scale: scrollView.zoomScale,
             manualZoomed: manualZoomed,
-            maskFrame: gridOverlayView.frame
+            intialMaskFrame: viewModel.cropOrignFrame,
+            maskFrame: gridOverlayView.frame,
+            scrollBounds: scrollView.bounds
         )
         
         guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
@@ -703,8 +705,13 @@ extension CropView {
         }
     }
     
-    func transform(byTransformInfo transformation: Transformation) {
+    func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
         viewModel.setRotatingStatus(by: CGAngle(radians:transformation.rotation))
+
+        if (transformation.scrollBounds != .zero) {
+            scrollView.bounds = transformation.scrollBounds
+        }
+
         manualZoomed = transformation.manualZoomed
         scrollView.zoomScale = transformation.scale
         scrollView.contentOffset = transformation.offset
@@ -714,7 +721,9 @@ extension CropView {
             viewModel.cropBoxFrame = transformation.maskFrame
         }
 
-        rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
-        adaptAngleDashboardToCropBox()
+        if (rotateDial) {
+            rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+            adaptAngleDashboardToCropBox()
+        }
     }
 }
