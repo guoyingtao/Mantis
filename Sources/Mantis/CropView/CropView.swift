@@ -81,8 +81,6 @@ class CropView: UIView {
         gridOverlayView = CropOverlayView()
 
         super.init(frame: CGRect.zero)
-        self.layer.borderColor = UIColor.red.cgColor
-        self.layer.borderWidth = 2
         
         self.viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)
@@ -557,7 +555,6 @@ extension CropView {
             rotation: totalRadians,
             scale: scrollView.zoomScale,
             manualZoomed: manualZoomed,
-            contentBounds: getContentBounds(),
             intialMaskFrame: viewModel.cropOrignFrame,
             maskFrame: gridOverlayView.frame,
             scrollBounds: scrollView.bounds
@@ -708,15 +705,16 @@ extension CropView {
         }
     }
     
-    func transform(byTransformInfo transformation: Transformation) {
+    func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
         viewModel.setRotatingStatus(by: CGAngle(radians:transformation.rotation))
         manualZoomed = transformation.manualZoomed
-        
+
         if (transformation.scrollBounds != .zero) {
             scrollView.bounds = transformation.scrollBounds
-        }        
+        }
 
         scrollView.zoomScale = transformation.scale
+
         scrollView.contentOffset = transformation.offset
         
         viewModel.setBetweenOperationStatus()
@@ -725,7 +723,9 @@ extension CropView {
             viewModel.cropBoxFrame = transformation.maskFrame
         }
 
-        rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
-        adaptAngleDashboardToCropBox()
+        if (rotateDial) {
+            rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+            adaptAngleDashboardToCropBox()
+        }
     }
 }

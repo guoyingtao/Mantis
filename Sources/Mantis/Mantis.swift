@@ -55,7 +55,6 @@ public typealias Transformation = (
     rotation: CGFloat,
     scale: CGFloat,
     manualZoomed: Bool,
-    contentBounds: CGRect,
     intialMaskFrame: CGRect,
     maskFrame: CGRect,
     scrollBounds: CGRect

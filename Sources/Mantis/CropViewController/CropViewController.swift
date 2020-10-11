@@ -225,11 +225,16 @@ public class CropViewController: UIViewController {
         
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let cropFrame = cropView.viewModel.cropBoxFrame
-        let contentBound = cropView.getContentBounds()
         
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
-            let newTransform = getTransformInfo(byTransformInfo: transformInfo)
+            var newTransform = getTransformInfo(byTransformInfo: transformInfo)
+            
+            // The first transform just for retrieving final cropFrame
+            cropView.transform(byTransformInfo: newTransform, rotateDial: false)
+            
+            // The second transform is for adjusting scale
+            let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width) / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
+            newTransform.scale *= adjustScale
             cropView.transform(byTransformInfo: newTransform)
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
@@ -239,15 +244,14 @@ public class CropViewController: UIViewController {
     }
     
     private func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
-        let cropFrame = cropView.viewModel.cropBoxFrame
+        let cropFrame = cropView.viewModel.cropOrignFrame
         let contentBound = cropView.getContentBounds()
                     
         let adjustScale: CGFloat
         var maskFrameWidth: CGFloat
         var maskFrameHeight: CGFloat
         
-        if ((transformInfo.maskFrame.height == transformInfo.contentBounds.height)
-                || ( transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width) ) {
+        if ( transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width ) {
             maskFrameHeight = contentBound.height
             maskFrameWidth = transformInfo.maskFrame.width / transformInfo.maskFrame.height * maskFrameHeight
             adjustScale = maskFrameHeight / transformInfo.maskFrame.height
@@ -271,59 +275,6 @@ public class CropViewController: UIViewController {
                                            width: transformInfo.scrollBounds.width * adjustScale,
                                            height: transformInfo.scrollBounds.height * adjustScale)
         
-        var adjustImageScale: CGFloat = 1
-        
-        if (transformInfo.contentBounds.width > transformInfo.contentBounds.height) { // To do
-            if (contentBound.height > contentBound.width) {
-                if (maskFrameHeight / maskFrameWidth > contentBound.height / contentBound.width) {
-                    adjustImageScale = maskFrameHeight / cropFrame.height
-                } else {
-                    adjustImageScale = transformInfo.intialMaskFrame.width / transformInfo.maskFrame.width
-                }
-            }
-        } else { // Source device is vertical
-            if (contentBound.width > contentBound.height) { // Target device is horizontal
-                if (maskFrameWidth / maskFrameHeight > contentBound.width / contentBound.height) {
-                    adjustImageScale = maskFrameWidth / cropFrame.width
-                } else {
-                    adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
-                }
-            } else { // Target device is vertical
-                // Image is vertical
-                if (cropView.imageContainer.frame.height > cropView.imageContainer.frame.width) {
-                    // source result image reaches the bounds height
-                    if (transformInfo.maskFrame.height / transformInfo.maskFrame.width > transformInfo.contentBounds.height / transformInfo.contentBounds.width) {
-                        if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
-                            let supporsedMaskFrameHeight = contentBound.width * (transformInfo.contentBounds.height / transformInfo.contentBounds.width)
-                            adjustImageScale = maskFrameHeight / supporsedMaskFrameHeight
-                        } else {
-                            adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
-                        }
-                    } else { // source result image reaches the bounds width
-                        if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
-                            let supporsedMaskFrameWidth = contentBound.height * (transformInfo.contentBounds.width / transformInfo.contentBounds.height)
-                            adjustImageScale = maskFrameWidth / supporsedMaskFrameWidth
-                        } else {
-                            adjustImageScale = maskFrameWidth / cropFrame.width
-                        }
-                    }
-                } else { // Image is horizontal
-                    // source result image reaches the bounds height
-                    if (transformInfo.maskFrame.height / transformInfo.maskFrame.width > transformInfo.contentBounds.height / transformInfo.contentBounds.width) {
-                        if (cropFrame.width / cropFrame.height > contentBound.width / contentBound.height) {
-                            let supporsedMaskFrameHeight = contentBound.width * (transformInfo.contentBounds.height / transformInfo.contentBounds.width)
-                            adjustImageScale = maskFrameHeight / supporsedMaskFrameHeight
-                        } else {
-                            adjustImageScale = transformInfo.intialMaskFrame.height / transformInfo.maskFrame.height
-                        }
-                    } else {
-                        adjustImageScale = 1
-                    }
-                }
-            }
-        }
-        
-        newTransform.scale *= adjustImageScale
         return newTransform
     }
     
@@ -353,7 +304,6 @@ public class CropViewController: UIViewController {
                                              rotation: 0,
                                              scale: scale,
                                              manualZoomed: manualZoomed,
-                                             contentBounds: maskFrame,
                                              intialMaskFrame: .zero,
                                              maskFrame: maskFrame,
                                              scrollBounds: .zero)
