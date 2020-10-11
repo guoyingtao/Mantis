@@ -39,7 +39,7 @@ class RatioPresenter {
             actionSheet.addAction(action)
         }
         
-        if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             // https://stackoverflow.com/a/27823616/288724
             actionSheet.popoverPresentationController?.permittedArrowDirections = .any
             actionSheet.popoverPresentationController?.sourceView = sourceView

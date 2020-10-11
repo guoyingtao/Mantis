@@ -141,11 +141,9 @@ public class CropViewController: UIViewController {
             createRatioSelector()
         }
         initLayout()
-        updateLayout()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+        updateLayout()        
     }
-    
+        
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if initialLayout == false {
@@ -166,18 +164,19 @@ public class CropViewController: UIViewController {
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         cropView.prepareForDeviceRotation()
+        rotated()
     }    
     
     @objc func rotated() {
-        let statusBarOrientation = UIApplication.shared.statusBarOrientation
+        let currentOrientation = Orientation.orientation
         
-        guard statusBarOrientation != .unknown else { return }
-        guard statusBarOrientation != orientation else { return }
+        guard currentOrientation != .unknown else { return }
+        guard currentOrientation != orientation else { return }
         
-        orientation = statusBarOrientation
+        orientation = currentOrientation
         
         if UIDevice.current.userInterfaceIdiom == .phone
-            && statusBarOrientation == .portraitUpsideDown {
+            && currentOrientation == .portraitUpsideDown {
             return
         }
         
@@ -402,9 +401,9 @@ extension CropViewController {
     }
     
     fileprivate func setStackViewAxis() {
-        if UIApplication.shared.statusBarOrientation.isPortrait {
+        if Orientation.isPortrait {
             stackView?.axis = .vertical
-        } else if UIApplication.shared.statusBarOrientation.isLandscape {
+        } else if Orientation.isLandscape {
             stackView?.axis = .horizontal
         }
     }
@@ -413,10 +412,10 @@ extension CropViewController {
         stackView?.removeArrangedSubview(cropStackView)
         stackView?.removeArrangedSubview(cropToolbar)
         
-        if UIApplication.shared.statusBarOrientation.isPortrait || UIApplication.shared.statusBarOrientation == .landscapeRight {
+        if Orientation.isPortrait || Orientation.isLandscapeRight {
             stackView?.addArrangedSubview(cropStackView)
             stackView?.addArrangedSubview(cropToolbar)
-        } else if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+        } else if Orientation.isLandscapeLeft {
             stackView?.addArrangedSubview(cropToolbar)
             stackView?.addArrangedSubview(cropStackView)
         }
