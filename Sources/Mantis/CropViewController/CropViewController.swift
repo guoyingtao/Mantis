@@ -141,14 +141,7 @@ public class CropViewController: UIViewController {
             createRatioSelector()
         }
         initLayout()
-        updateLayout()
-        
-//        if #available(macOS 10.13, *) {
-//            // use viewWillTransitionToSize:(CGSize)size
-//           // withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-//        } else {
-//            NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
-//        }
+        updateLayout()        
     }
         
     override public func viewDidLayoutSubviews() {
