@@ -229,10 +229,10 @@ public class CropViewController: UIViewController {
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
-            // The first transform is just for retrieving final cropFrame
+            // The first transform is just for retrieving the final cropBoxFrame
             cropView.transform(byTransformInfo: newTransform, rotateDial: false)
             
-            // The second transform is for adjusting scale
+            // The second transform is for adjusting the scale of transformInfo
             let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width) / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
             newTransform.scale *= adjustScale
             cropView.transform(byTransformInfo: newTransform)
