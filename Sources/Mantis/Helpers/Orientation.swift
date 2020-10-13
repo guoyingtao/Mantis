@@ -4,6 +4,7 @@
 //
 //  Created by Echo on 10/10/20.
 //
+import UIKit
 
 public struct Orientation {
     public static var orientation: UIInterfaceOrientation {

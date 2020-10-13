@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E409253535F300A3EB7D /* Orientation.swift */; };
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8525205CC300D95667 /* RatioSelector.swift */; };
@@ -82,6 +83,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5F17E409253535F300A3EB7D /* Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		FEDAAD8525205CC300D95667 /* RatioSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioSelector.swift; sourceTree = "<group>"; };
@@ -186,19 +188,20 @@
 			path = CropViewController;
 			sourceTree = "<group>";
 		};
-		OBJ_29 /* Extentions */ = {
+		OBJ_29 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				OBJ_30 /* CGImageExtensions.swift */,
 				OBJ_31 /* CoreGraphicsExtensions.swift */,
 				OBJ_32 /* UIImageExtensions.swift */,
 			);
-			path = Extentions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		OBJ_33 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				5F17E409253535F300A3EB7D /* Orientation.swift */,
 				OBJ_34 /* GeometryHelper.swift */,
 				OBJ_35 /* LocalizedHelper.swift */,
 			);
@@ -290,7 +293,7 @@
 				OBJ_10 /* Info.plist */,
 				OBJ_11 /* CropView */,
 				OBJ_23 /* CropViewController */,
-				OBJ_29 /* Extentions */,
+				OBJ_29 /* Extensions */,
 				OBJ_33 /* Helpers */,
 				OBJ_37 /* MaskBackground */,
 				OBJ_42 /* RotationDial */,
@@ -425,6 +428,7 @@
 				OBJ_88 /* GeometryHelper.swift in Sources */,
 				OBJ_89 /* LocalizedHelper.swift in Sources */,
 				OBJ_90 /* Mantis.swift in Sources */,
+				5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */,
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,
 				FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */,
