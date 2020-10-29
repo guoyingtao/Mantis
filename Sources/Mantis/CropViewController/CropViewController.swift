@@ -29,6 +29,7 @@ public protocol CropViewControllerDelegate: class {
                                    cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
+    func cropViewControllerDidBecomeResettable(_ cropViewController: CropViewController)
     
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
@@ -36,7 +37,8 @@ public protocol CropViewControllerDelegate: class {
 
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
-    
+    func cropViewControllerDidBecomeResettable(_ cropViewController: CropViewController) {}
+
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
 }
@@ -431,6 +433,7 @@ extension CropViewController {
 extension CropViewController: CropViewDelegate {
     func cropViewDidBecomeResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeResettable()
+        delegate?.cropViewControllerDidBecomeResettable(self)
     }
     
     func cropViewDidBecomeUnResettable(_ cropView: CropView) {
