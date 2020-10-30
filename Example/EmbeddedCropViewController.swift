@@ -53,7 +53,7 @@ class EmbeddedCropViewController: UIViewController {
     
     private func getResolution(image: UIImage?) -> String? {
         if let size = image?.size {
-            return "\(size.width) x \(size.height)px"
+            return "\(Int(size.width)) x \(Int(size.height)) pixels"
         }
         return nil
     }
