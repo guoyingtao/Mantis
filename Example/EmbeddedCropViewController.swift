@@ -18,12 +18,14 @@ class EmbeddedCropViewController: UIViewController {
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var doneButton: UIBarButtonItem!
+    @IBOutlet weak var resolutionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         cancelButton.title = "Cancel"
         doneButton.title = "Done"
+        resolutionLabel.text = "\(getResolution(image: image) ?? "unknown")"
     }
     
     @IBAction func cancel(_ sender: Any) {
@@ -48,6 +50,13 @@ class EmbeddedCropViewController: UIViewController {
             cropViewController = vc
         }
     }
+    
+    private func getResolution(image: UIImage?) -> String? {
+        if let size = image?.size {
+            return "\(size.width) x \(size.height)px"
+        }
+        return nil
+    }
 }
 
 extension EmbeddedCropViewController: CropViewControllerDelegate {
@@ -59,4 +68,13 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         self.dismiss(animated: true)
     }
+    
+    func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {
+        self.resolutionLabel.text = "..."
+    }
+    
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
+        self.resolutionLabel.text = getResolution(image: cropped)
+    }
+
 }
