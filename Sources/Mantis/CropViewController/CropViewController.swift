@@ -29,15 +29,18 @@ public protocol CropViewControllerDelegate: class {
                                    cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
-    func cropViewControllerDidBecomeResettable(_ cropViewController: CropViewController)
     
+    func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation)
+
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
 }
 
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
-    func cropViewControllerDidBecomeResettable(_ cropViewController: CropViewController) {}
+    func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {}
 
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
@@ -431,13 +434,24 @@ extension CropViewController {
 }
 
 extension CropViewController: CropViewDelegate {
+    
     func cropViewDidBecomeResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeResettable()
-        delegate?.cropViewControllerDidBecomeResettable(self)
     }
     
     func cropViewDidBecomeUnResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeUnResettable()
+    }
+    
+    func cropViewDidBeginResize(_ cropView: CropView) {
+        delegate?.cropViewControllerDidBeginResize(self)
+    }
+    
+    func cropViewDidEndResize(_ cropView: CropView) {
+        let (croppedImage, transformation) = cropView.crop()
+        if let croppedImage = croppedImage {
+            delegate?.cropViewControllerDidEndResize(self, cropped: croppedImage, transformation: transformation)
+        }
     }
 }
 

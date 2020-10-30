@@ -41,6 +41,9 @@ extension CropView {
             return
         }
         
+        // A resize event has begun by grabbing the crop UI, so notify delegate
+        delegate?.cropViewDidBeginResize(self)
+
         let point = touch.location(in: self)
         viewModel.prepareForCrop(byTouchPoint: point)
     }
@@ -67,10 +70,12 @@ extension CropView {
             gridOverlayView.handleEdgeUntouched()
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
+                self?.delegate?.cropViewDidEndResize(self!)
                 self?.viewModel.setBetweenOperationStatus()
                 self?.scrollView.updateMinZoomScale()
             }
         } else {
+            delegate?.cropViewDidEndResize(self)
             viewModel.setBetweenOperationStatus()
         }
     }
