@@ -36,14 +36,14 @@ extension CropView {
             return
         }
         
+        // A resize event has begun by grabbing the crop UI, so notify delegate
+        delegate?.cropViewDidBeginResize(self)
+        
         if touch.view is RotationDial {
             viewModel.setTouchRotationBoardStatus()
             return
         }
         
-        // A resize event has begun by grabbing the crop UI, so notify delegate
-        delegate?.cropViewDidBeginResize(self)
-
         let point = touch.location(in: self)
         viewModel.prepareForCrop(byTouchPoint: point)
     }
