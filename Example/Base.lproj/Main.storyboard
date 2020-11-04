@@ -285,26 +285,9 @@
             </objects>
             <point key="canvasLocation" x="1042" y="819"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="pAG-Yc-5gI">
-            <objects>
-                <viewController id="1ww-pC-jt2" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="rV8-rb-bEL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="y0z-sv-kI9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2014" y="-449"/>
-        </scene>
     </scenes>
     <resources>
         <image name="sunflower" width="3648" height="5472"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGray6Color">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
