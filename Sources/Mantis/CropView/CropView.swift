@@ -570,9 +570,7 @@ extension CropView {
         let zeroPoint = gridOverlayView.center
         
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
-        
-        print(gridOverlayView.frame)
-        
+                
         return CropInfo(
             translation: translation,
             rotation: getTotalRadians(),
