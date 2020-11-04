@@ -168,14 +168,26 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.delegate = self
         present(cropViewController, animated: true)
     }
-
+    
+    @IBAction func darkBackgroundEffect(_ sender: Any) {
+        presentWith(backgroundEffect: .dark)
+    }
+    
+    @IBAction func lightBackgroundEffect(_ sender: Any) {
+        presentWith(backgroundEffect: .light)
+    }
+    
     @IBAction func noBackgroundEffect(_ sender: Any) {
+        presentWith(backgroundEffect: .none)
+    }
+    
+    private func presentWith(backgroundEffect effect: CropVisualEffectType) {
         guard let image = image else {
             return
         }
         
         var config = Mantis.Config()
-        config.cropVisualEffectType = .none
+        config.cropVisualEffectType = effect
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen
