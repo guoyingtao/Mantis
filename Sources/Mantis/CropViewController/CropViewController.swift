@@ -31,7 +31,7 @@ public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
-    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation)
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)
 
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
@@ -40,7 +40,7 @@ public protocol CropViewControllerDelegate: class {
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
-    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {}
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
 
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
@@ -448,10 +448,7 @@ extension CropViewController: CropViewDelegate {
     }
     
     func cropViewDidEndResize(_ cropView: CropView) {
-        let (croppedImage, transformation) = cropView.crop()
-        if let croppedImage = croppedImage {
-            delegate?.cropViewControllerDidEndResize(self, cropped: croppedImage, transformation: transformation)
-        }
+        delegate?.cropViewControllerDidEndResize(self, original: cropView.image, cropInfo: cropView.getCropInfo())
     }
 }
 
