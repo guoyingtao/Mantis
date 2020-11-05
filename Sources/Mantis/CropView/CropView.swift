@@ -27,6 +27,8 @@ import UIKit
 protocol CropViewDelegate: class {
     func cropViewDidBecomeResettable(_ cropView: CropView)
     func cropViewDidBecomeUnResettable(_ cropView: CropView)
+    func cropViewDidBeginResize(_ cropView: CropView)
+    func cropViewDidEndResize(_ cropView: CropView)
 }
 
 let cropViewMinimumBoxSize: CGFloat = 42
@@ -532,27 +534,12 @@ extension CropView {
 // MARK: - internal API
 extension CropView {
     func crop(_ image: UIImage) -> (croppedImage: UIImage?, transformation: Transformation) {
-        let rect = imageContainer.convert(imageContainer.bounds,
-                                          to: self)
-        let point = rect.center
-        let zeroPoint = gridOverlayView.center
-        
-        let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
-        let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
-        
-        print(gridOverlayView.frame)
-        
-        let info = CropInfo(
-            translation: translation,
-            rotation: totalRadians,
-            scale: scrollView.zoomScale,
-            cropSize: gridOverlayView.frame.size,
-            imageViewSize: imageContainer.bounds.size
-        )
+
+        let info = getCropInfo()
         
         let transformation = Transformation(
             offset: scrollView.contentOffset,
-            rotation: totalRadians,
+            rotation: getTotalRadians(),
             scale: scrollView.zoomScale,
             manualZoomed: manualZoomed,
             intialMaskFrame: viewModel.cropOrignFrame,
@@ -573,6 +560,29 @@ extension CropView {
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
             return (croppedImage.roundRect(radius), transformation)
         }
+    }
+    
+    func getCropInfo() -> CropInfo {
+        
+        let rect = imageContainer.convert(imageContainer.bounds,
+                                          to: self)
+        let point = rect.center
+        let zeroPoint = gridOverlayView.center
+        
+        let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
+                
+        return CropInfo(
+            translation: translation,
+            rotation: getTotalRadians(),
+            scale: scrollView.zoomScale,
+            cropSize: gridOverlayView.frame.size,
+            imageViewSize: imageContainer.bounds.size
+        )
+        
+    }
+    
+    func getTotalRadians() -> CGFloat {
+        return forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
     }
     
     func crop() -> (croppedImage: UIImage?, transformation: Transformation) {

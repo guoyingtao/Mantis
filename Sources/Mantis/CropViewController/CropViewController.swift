@@ -30,13 +30,18 @@ public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
+    func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)
+
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
 }
 
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
-    
+    func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
+
     @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
     func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
 }
@@ -429,12 +434,21 @@ extension CropViewController {
 }
 
 extension CropViewController: CropViewDelegate {
+    
     func cropViewDidBecomeResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeResettable()
     }
     
     func cropViewDidBecomeUnResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeUnResettable()
+    }
+    
+    func cropViewDidBeginResize(_ cropView: CropView) {
+        delegate?.cropViewControllerDidBeginResize(self)
+    }
+    
+    func cropViewDidEndResize(_ cropView: CropView) {
+        delegate?.cropViewControllerDidEndResize(self, original: cropView.image, cropInfo: cropView.getCropInfo())
     }
 }
 
