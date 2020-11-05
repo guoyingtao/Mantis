@@ -127,15 +127,40 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9WR-aF-zl2" userLabel="Hide Rotation Dial">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="bu4-cG-VOh">
                                         <rect key="frame" x="0.0" y="227" width="306" height="34"/>
-                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <state key="normal" title="No Visual Background Effect"/>
-                                        <connections>
-                                            <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Chc-Ek-cMW"/>
-                                        </connections>
-                                    </button>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9WR-aF-zl2">
+                                                <rect key="frame" x="0.0" y="0.0" width="98.5" height="34"/>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <state key="normal" title="Dark Background"/>
+                                                <connections>
+                                                    <action selector="darkBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="edW-tG-CJq"/>
+                                                    <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Chc-Ek-cMW"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FmB-6O-5mY">
+                                                <rect key="frame" x="103.5" y="0.0" width="99" height="34"/>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <state key="normal" title="Light Background"/>
+                                                <connections>
+                                                    <action selector="lightBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="K1m-Uc-kdy"/>
+                                                    <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tYd-3z-IQT"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iaH-5e-UFH">
+                                                <rect key="frame" x="207.5" y="0.0" width="98.5" height="34"/>
+                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <state key="normal" title="No Background"/>
+                                                <connections>
+                                                    <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7oq-dx-dxn"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="305" id="Rnv-Qx-Cds"/>
