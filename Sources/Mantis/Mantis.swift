@@ -80,6 +80,7 @@ public enum CropVisualEffectType {
     case dark
     case light
     case none
+    case custom(color: UIColor)
 }
 
 public enum CropShapeType {
@@ -111,6 +112,8 @@ public struct CropToolbarConfig {
     
     var mode: CropToolbarMode = .normal
     var includeFixedRatioSettingButton = true
+    
+    public var themeColor: UIColor?
 }
 
 public struct Config {
@@ -120,6 +123,7 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
     public var showRotationDial = true
+    public var themeColor: UIColor?
 
     public var cropToolbarConfig = CropToolbarConfig()
     

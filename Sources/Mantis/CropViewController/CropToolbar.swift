@@ -123,7 +123,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
-        backgroundColor = .black
+        backgroundColor = config.themeColor ?? .black
         
         createButtonContainer()
         setButtonContainerLayout()
