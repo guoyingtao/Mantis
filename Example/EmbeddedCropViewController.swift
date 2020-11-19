@@ -44,7 +44,6 @@ class EmbeddedCropViewController: UIViewController {
             
             var config = Mantis.Config()
             config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1/2)
-            config.fixedRatioAnimationDuration = 0
             vc.config = config
             
             cropViewController = vc
