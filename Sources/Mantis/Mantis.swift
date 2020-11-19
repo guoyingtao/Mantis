@@ -120,6 +120,7 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
     public var showRotationDial = true
+    public var fixedRatioAnimationDuration: Double = 0.5
 
     public var cropToolbarConfig = CropToolbarConfig()
     
