@@ -205,9 +205,14 @@ public class CropViewController: UIViewController {
         if (cropView.viewModel.aspectRatio != CGFloat(ratio)) {
             cropView.viewModel.aspectRatio = CGFloat(ratio)
             
-            UIView.animate(withDuration: 0.5) {
+            if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
                 self.cropView.setFixedRatioCropBox()
+            } else {
+                UIView.animate(withDuration: 0.5) {
+                    self.cropView.setFixedRatioCropBox()
+                }
             }
+            
         }
     }
     
