@@ -21,6 +21,19 @@ enum ImageRotationType: CGFloat {
             self = ImageRotationType(rawValue: self.rawValue - 90) ?? .none
         }
     }
+    
+    mutating func clockwiseRotate90() {
+        switch (self) {
+        case .counterclockwise90:
+            self = .none
+        case .counterclockwise180:
+            self = .counterclockwise90
+        case .counterclockwise270:
+            self = .counterclockwise180
+        case .none:
+            self = .counterclockwise270
+        }
+    }
 }
 
 class CropViewModel: NSObject {
@@ -66,10 +79,22 @@ class CropViewModel: NSObject {
         setInitialStatus()
     }
     
-    func rotateBy90() {
+    func RotateBy90(rotateAngle: CGFloat) {
+        if (rotateAngle < 0) {
+            rotationType.counterclockwiseRotate90()
+        } else {
+            rotationType.clockwiseRotate90()
+        }
+    }
+    
+    func counterclockwiseRotateBy90() {
         rotationType.counterclockwiseRotate90()
     }
     
+    func clockwiseRotateBy90() {
+        rotationType.clockwiseRotate90()
+    }
+
     func getTotalRadias(by radians: CGFloat) -> CGFloat {
         return radians + rotationType.rawValue * CGFloat.pi / 180
     }
