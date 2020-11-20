@@ -636,7 +636,7 @@ extension CropView {
                 self.viewModel.setRotatingStatus(by: angle)
             }) {[weak self] _ in
                 guard let self = self else { return }
-                rotateAngle < 0 ? self.viewModel.counterclockwiseRotateBy90() : self.viewModel.clockwiseRotateBy90()
+                self.viewModel.RotateBy90(rotateAngle: rotateAngle)
                 self.viewModel.setBetweenOperationStatus()
                 completion()
             }
@@ -660,7 +660,7 @@ extension CropView {
         }) {[weak self] _ in
             guard let self = self else { return }
             self.scrollView.updateMinZoomScale()
-            rotateAngle < 0 ? self.viewModel.counterclockwiseRotateBy90() : self.viewModel.clockwiseRotateBy90()
+            self.viewModel.RotateBy90(rotateAngle: rotateAngle)
             self.viewModel.setBetweenOperationStatus()
             completion()
         }
