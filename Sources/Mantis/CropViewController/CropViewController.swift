@@ -231,10 +231,8 @@ public class CropViewController: UIViewController {
             cropView.forceFixedRatio = false
         }
     }
-        
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    
+    private func processPresetTransformation() {
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
@@ -249,6 +247,15 @@ public class CropViewController: UIViewController {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
             cropView.transform(byTransformInfo: transformInfo)
             cropView.scrollView.frame = transformInfo.maskFrame
+        }
+    }
+        
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        processPresetTransformation()
+        
+        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
+            self.cropView.setFixedRatioCropBox()
         }
     }
     
