@@ -4,7 +4,7 @@
 
 ## [1.4.8 - Fix clockwise roration bug](https://github.com/guoyingtao/Mantis/releases/tag/1.4.8) (2021-01-17)
 
-#### enhancement
+#### Enhancement
 Solve the issue: https://github.com/guoyingtao/Mantis/issues/79
 
 ---
