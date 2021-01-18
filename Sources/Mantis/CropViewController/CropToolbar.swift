@@ -153,6 +153,11 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             if config.includeFixedRatioSettingButton  {
                 createSetRatioButton()
                 addButtonsToContainer(button: fixedRatioSettingButton)
+                
+                if config.presetRatiosButtonSelected {
+                    handleFixedRatioSetted(ratio: 0)
+                    resetButton?.isHidden = false
+                }
             }
         }
         

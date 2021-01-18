@@ -72,7 +72,7 @@ public enum PresetFixedRatioType {
     /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
      */
     case alwaysUsingOnePresetFixedRatio(ratio: Double)
-    case canUseMultiplePresetFixedRatio
+    case canUseMultiplePresetFixedRatio(defaultRatio: Double = 0)
 }
 
 public enum CropVisualEffectType {
@@ -108,6 +108,7 @@ public struct CropToolbarConfig {
     public var cropToolbarWidthForHorizontalOrientation: CGFloat = 80
     public var ratioCandidatesShowType: RatioCandidatesShowType = .presentRatioList
     public var toolbarButtonOptions: ToolbarButtonOptions = .default
+    public var presetRatiosButtonSelected = false
     
     var mode: CropToolbarMode = .normal
     var includeFixedRatioSettingButton = true
@@ -118,7 +119,7 @@ public struct Config {
     public var cropShapeType: CropShapeType = .rect
     public var cropVisualEffectType: CropVisualEffectType = .blurDark
     public var ratioOptions: RatioOptions = .all
-    public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio
+    public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showRotationDial = true
 
     public var cropToolbarConfig = CropToolbarConfig()

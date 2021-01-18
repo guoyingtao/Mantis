@@ -6,7 +6,7 @@ target 'MantisExample' do
   use_frameworks!
 
   # Pods for MantisExample
-  pod 'Mantis', :path => '../'
+   pod 'Mantis', :path => '../'
 
   target 'MantisExampleTests' do
     inherit! :search_paths
