@@ -1,6 +1,13 @@
 # Change Log
 
 -----
+## [1.4.9 - Fix build with BUILD_LIBRARY_FOR_DISTRIBUTION](https://github.com/guoyingtao/Mantis/releases/tag/1.4.8) (2021-02-04)
+
+#### Fix
+Solve the issue: https://github.com/guoyingtao/Mantis/pull/82
+
+---
+
 
 ## [1.4.8 - Fix clockwise roration bug](https://github.com/guoyingtao/Mantis/releases/tag/1.4.8) (2021-01-17)
 
