@@ -28,10 +28,6 @@ Pod::Spec.new do |s|
     "Resource" => ["Sources/**/*.lproj/*.strings"]
   }
   
-  s.info_plist = {
-     "CFBundleIdentifier" => "com.echo.framework.Mantis"
-  }
-  
   s.pod_target_xcconfig = {
     "PRODUCT_BUNDLE_IDENTIFIER": "com.echo.framework.Mantis"
   }
