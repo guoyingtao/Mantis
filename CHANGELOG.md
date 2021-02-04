@@ -5,8 +5,8 @@
 
 #### Fix
 Solve the issues: 
-https://github.com/guoyingtao/Mantis/pull/82
-https://github.com/guoyingtao/Mantis/issues/81
+* https://github.com/guoyingtao/Mantis/pull/82
+* https://github.com/guoyingtao/Mantis/issues/81
 
 ---
 
