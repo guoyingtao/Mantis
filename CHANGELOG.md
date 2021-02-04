@@ -4,7 +4,9 @@
 ## [1.4.9 - Fix build with BUILD_LIBRARY_FOR_DISTRIBUTION](https://github.com/guoyingtao/Mantis/releases/tag/1.4.8) (2021-02-04)
 
 #### Fix
-Solve the issue: https://github.com/guoyingtao/Mantis/pull/82
+Solve the issues: 
+https://github.com/guoyingtao/Mantis/pull/82
+https://github.com/guoyingtao/Mantis/issues/81
 
 ---
 
