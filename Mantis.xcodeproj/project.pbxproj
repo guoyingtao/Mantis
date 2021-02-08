@@ -24,7 +24,8 @@
 		5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E409253535F300A3EB7D /* Orientation.swift */; };
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
-		8EFB6F4325D154E800C0DDB2 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */; };
+		8EFB6F6425D16AC900C0DDB2 /* Mantis-Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F5425D16A9E00C0DDB2 /* Mantis-Resource.bundle */; };
+		8EFB6F6725D16B0F00C0DDB2 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */; };
 		FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8525205CC300D95667 /* RatioSelector.swift */; };
 		FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8B25205DE900D95667 /* RatioItemView.swift */; };
 		OBJ_100 /* RotationDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* RotationDialPlate.swift */; };
@@ -81,6 +82,13 @@
 			remoteGlobalIDString = "Mantis::MantisTests";
 			remoteInfo = MantisTests;
 		};
+		8EFB6F6525D16AE300C0DDB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8EFB6F5325D16A9E00C0DDB2;
+			remoteInfo = "Mantis-Resource";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +108,8 @@
 		8EFB6F4025D154D900C0DDB2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F4125D154D900C0DDB2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F4225D154D900C0DDB2 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
+		8EFB6F5425D16A9E00C0DDB2 /* Mantis-Resource.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mantis-Resource.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EFB6F5625D16A9F00C0DDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FEDAAD8525205CC300D95667 /* RatioSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioSelector.swift; sourceTree = "<group>"; };
 		FEDAAD8B25205DE900D95667 /* RatioItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioItemView.swift; sourceTree = "<group>"; };
 		"Mantis::Mantis::Product" /* Mantis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +161,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8EFB6F5125D16A9E00C0DDB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		OBJ_102 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
@@ -175,6 +192,14 @@
 				8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		8EFB6F5525D16A9F00C0DDB2 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				8EFB6F5625D16A9F00C0DDB2 /* Info.plist */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		OBJ_11 /* CropView */ = {
@@ -260,6 +285,7 @@
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_50 /* Tests */,
+				8EFB6F5525D16A9F00C0DDB2 /* Resource */,
 				OBJ_54 /* Products */,
 				OBJ_57 /* Images */,
 				OBJ_59 /* MantisTests */,
@@ -293,6 +319,7 @@
 			children = (
 				"Mantis::MantisTests::Product" /* MantisTests.xctest */,
 				"Mantis::Mantis::Product" /* Mantis.framework */,
+				8EFB6F5425D16A9E00C0DDB2 /* Mantis-Resource.bundle */,
 			);
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -328,6 +355,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8EFB6F5325D16A9E00C0DDB2 /* Mantis-Resource */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8EFB6F5725D16A9F00C0DDB2 /* Build configuration list for PBXNativeTarget "Mantis-Resource" */;
+			buildPhases = (
+				8EFB6F5025D16A9E00C0DDB2 /* Sources */,
+				8EFB6F5125D16A9E00C0DDB2 /* Frameworks */,
+				8EFB6F5225D16A9E00C0DDB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mantis-Resource";
+			productName = Resource;
+			productReference = 8EFB6F5425D16A9E00C0DDB2 /* Mantis-Resource.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		"Mantis::Mantis" /* Mantis */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = OBJ_65 /* Build configuration list for PBXNativeTarget "Mantis" */;
@@ -339,6 +383,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8EFB6F6625D16AE300C0DDB2 /* PBXTargetDependency */,
 			);
 			name = Mantis;
 			productName = Mantis;
@@ -384,6 +429,12 @@
 			attributes = {
 				LastSwiftMigration = 9999;
 				LastUpgradeCheck = 1200;
+				TargetAttributes = {
+					8EFB6F5325D16A9E00C0DDB2 = {
+						CreatedOnToolsVersion = 12.4;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "Mantis" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -414,6 +465,7 @@
 				"Mantis::SwiftPMPackageDescription" /* MantisPackageDescription */,
 				"Mantis::MantisPackageTests::ProductTarget" /* MantisPackageTests */,
 				"Mantis::MantisTests" /* MantisTests */,
+				8EFB6F5325D16A9E00C0DDB2 /* Mantis-Resource */,
 			);
 		};
 /* End PBXProject section */
@@ -423,13 +475,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8EFB6F4325D154E800C0DDB2 /* MantisLocalizable.strings in Resources */,
+				8EFB6F6425D16AC900C0DDB2 /* Mantis-Resource.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8EFB6F5225D16A9E00C0DDB2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8EFB6F6725D16B0F00C0DDB2 /* MantisLocalizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8EFB6F5025D16A9E00C0DDB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		OBJ_107 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
@@ -495,6 +562,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		8EFB6F6625D16AE300C0DDB2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8EFB6F5325D16A9E00C0DDB2 /* Mantis-Resource */;
+			targetProxy = 8EFB6F6525D16AE300C0DDB2 /* PBXContainerItemProxy */;
+		};
 		OBJ_113 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Mantis::MantisTests" /* MantisTests */;
@@ -531,6 +603,75 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8EFB6F5825D16A9F00C0DDB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Resource/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		8EFB6F5925D16A9F00C0DDB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Resource/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		OBJ_105 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -786,6 +927,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8EFB6F5725D16A9F00C0DDB2 /* Build configuration list for PBXNativeTarget "Mantis-Resource" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8EFB6F5825D16A9F00C0DDB2 /* Debug */,
+				8EFB6F5925D16A9F00C0DDB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		OBJ_104 /* Build configuration list for PBXNativeTarget "MantisPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
