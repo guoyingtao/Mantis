@@ -1,7 +1,16 @@
 # Change Log
 
 -----
-## [1.4.9 - Fix build with BUILD_LIBRARY_FOR_DISTRIBUTION](https://github.com/guoyingtao/Mantis/releases/tag/1.4.8) (2021-02-04)
+
+## [1.4.10 - Fix getting resources from prebuilt framework](https://github.com/guoyingtao/Mantis/releases/tag/1.4.10) (2021-02-09)
+
+#### Fix
+Merge the PR #84: 
+* https://github.com/guoyingtao/Mantis/pull/84
+
+---
+
+## [1.4.9 - Fix build with BUILD_LIBRARY_FOR_DISTRIBUTION](https://github.com/guoyingtao/Mantis/releases/tag/1.4.9) (2021-02-04)
 
 #### Fix
 Solve the issues: 
