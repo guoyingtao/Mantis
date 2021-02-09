@@ -109,7 +109,6 @@
 		8EFB6F4125D154D900C0DDB2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F4225D154D900C0DDB2 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
 		8EFB6F5425D16A9E00C0DDB2 /* Resource.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Resource.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		8EFB6F5625D16A9F00C0DDB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FEDAAD8525205CC300D95667 /* RatioSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioSelector.swift; sourceTree = "<group>"; };
 		FEDAAD8B25205DE900D95667 /* RatioItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioItemView.swift; sourceTree = "<group>"; };
 		"Mantis::Mantis::Product" /* Mantis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,14 +191,6 @@
 				8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		8EFB6F5525D16A9F00C0DDB2 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				8EFB6F5625D16A9F00C0DDB2 /* Info.plist */,
-			);
-			path = Resource;
 			sourceTree = "<group>";
 		};
 		OBJ_11 /* CropView */ = {
@@ -285,7 +276,6 @@
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_50 /* Tests */,
-				8EFB6F5525D16A9F00C0DDB2 /* Resource */,
 				OBJ_54 /* Products */,
 				OBJ_57 /* Images */,
 				OBJ_59 /* MantisTests */,
