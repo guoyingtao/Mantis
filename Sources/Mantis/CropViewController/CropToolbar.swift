@@ -25,6 +25,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     var resetButton: UIButton?
     var counterClockwiseRotationButton: UIButton?
     var clockwiseRotationButton: UIButton?
+    var rotateCropperButton: UIButton?
     var cropButton: UIButton?
     
     var config: CropToolbarConfig!
@@ -68,6 +69,11 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     private func createClockwiseRotationButton() {
         clockwiseRotationButton = createOptionButton(withTitle: nil, andAction: #selector(clockwiseRotate))
         clockwiseRotationButton?.setImage(ToolBarButtonImageBuilder.rotateCWImage(), for: .normal)
+    }
+    
+    private func createrotateCropperButton() {
+        rotateCropperButton = createOptionButton(withTitle: nil, andAction: #selector(rotateCropper))
+        rotateCropperButton?.setImage(ToolBarButtonImageBuilder.rotateCropperImage(), for: .normal)
     }
     
     private func createResetButton(with image: UIImage? = nil) {
@@ -141,6 +147,11 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         if config.toolbarButtonOptions.contains(.clockwiseRotate) {
             createClockwiseRotationButton()
             addButtonsToContainer(button: clockwiseRotationButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.rotateCropper90Degree) {
+            createrotateCropperButton()
+            addButtonsToContainer(button: rotateCropperButton)
         }
         
         if config.toolbarButtonOptions.contains(.reset) {
@@ -219,6 +230,10 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     @objc private func clockwiseRotate(_ sender: Any) {
         cropToolbarDelegate?.didSelectClockwiseRotate()
+    }
+    
+    @objc private func rotateCropper(_ sender: Any) {
+        cropToolbarDelegate?.didSelectRotateCropper()
     }
     
     @objc private func crop(_ sender: Any) {

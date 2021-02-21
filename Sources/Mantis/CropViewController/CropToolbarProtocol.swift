@@ -8,14 +8,16 @@
 import UIKit
 
 public protocol CropToolbarDelegate {
-    func didSelectCancel();
-    func didSelectCrop();
-    func didSelectCounterClockwiseRotate();
-    func didSelectClockwiseRotate();
-    func didSelectReset();
-    func didSelectSetRatio();
-    func didSelectRatio(ratio: Double);
+    func didSelectCancel()
+    func didSelectCrop()
+    func didSelectCounterClockwiseRotate()
+    func didSelectClockwiseRotate()
+    func didSelectReset()
+    func didSelectSetRatio()
+    func didSelectRatio(ratio: Double)    
+    func didSelectRotateCropper()
 }
+
 
 public protocol CropToolbarProtocol: UIView {    
     var heightForVerticalOrientationConstraint: NSLayoutConstraint? {get set}
