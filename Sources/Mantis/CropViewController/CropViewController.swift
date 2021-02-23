@@ -131,8 +131,19 @@ public class CropViewController: UIViewController {
         cropToolbar.initConstraints(heightForVerticalOrientation: config.cropToolbarConfig.cropToolbarHeightForVertialOrientation, widthForHorizonOrientation: config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation)
     }
     
+    private func getRatioType() -> RatioType {
+        switch config.cropToolbarConfig.fixRatiosShowType {
+        case .adaptive:
+            return cropView.getRatioType(byImageIsOriginalisHorizontal: cropView.image.isHorizontal())
+        case .horizontal:
+            return .horizontal
+        case .vetical:
+            return .vertical
+        }
+    }
+    
     fileprivate func getFixedRatioManager() -> FixedRatioManager {
-        let type: RatioType = cropView.getRatioType(byImageIsOriginalisHorizontal: cropView.image.isHorizontal())
+        let type: RatioType = getRatioType()
         
         let ratio = cropView.getImageRatioH()
         
@@ -366,7 +377,7 @@ public class CropViewController: UIViewController {
         ratioPresenter = RatioPresenter(type: fixedRatioManager.type,
                                         originalRatioH: fixedRatioManager.originalRatioH,
                                         ratios: fixedRatioManager.ratios,
-                                        fixRatiosShowType: config.fixRatiosShowType)
+                                        fixRatiosShowType: config.cropToolbarConfig.fixRatiosShowType)
         ratioPresenter?.didGetRatio = {[weak self] ratio in
             self?.setFixedRatio(ratio)
         }
@@ -391,7 +402,7 @@ public class CropViewController: UIViewController {
         
     }
     
-    private func handleRotateCropper() {
+    private func handleAlterCropper90Degree() {
         let ratio = Double(cropView.gridOverlayView.frame.height / cropView.gridOverlayView.frame.width)
         
         cropView.viewModel.aspectRatio = CGFloat(ratio)
@@ -514,7 +525,7 @@ extension CropViewController: CropToolbarDelegate {
     }
     
     public func didSelectAlterCropper90Degree() {
-        handleRotateCropper()
+        handleAlterCropper90Degree()
     }
 }
 

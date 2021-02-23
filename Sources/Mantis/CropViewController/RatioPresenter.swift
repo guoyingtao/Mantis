@@ -27,7 +27,7 @@ class RatioPresenter {
         self.fixRatiosShowType = fixRatiosShowType
     }
     
-    func getItemTitle(by ratio: RatioItemType)-> String {
+    private func getItemTitle(by ratio: RatioItemType)-> String {
         switch fixRatiosShowType {
         case .adaptive:
             return (type == .horizontal) ? ratio.nameH : ratio.nameV
@@ -38,7 +38,7 @@ class RatioPresenter {
         }
     }
     
-    func getItemValue(by ratio: RatioItemType)-> Double {
+    private func getItemValue(by ratio: RatioItemType)-> Double {
         switch fixRatiosShowType {
         case .adaptive:
             return (type == .horizontal) ? ratio.ratioH : ratio.ratioV

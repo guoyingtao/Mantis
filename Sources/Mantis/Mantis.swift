@@ -113,6 +113,7 @@ public struct CropToolbarConfig {
     public var cropToolbarHeightForVertialOrientation: CGFloat = 44
     public var cropToolbarWidthForHorizontalOrientation: CGFloat = 80
     public var ratioCandidatesShowType: RatioCandidatesShowType = .presentRatioList
+    public var fixRatiosShowType: FixRatiosShowType = .adaptive
     public var toolbarButtonOptions: ToolbarButtonOptions = .default
     public var presetRatiosButtonSelected = false
     
@@ -127,7 +128,6 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showRotationDial = true
-    public var fixRatiosShowType: FixRatiosShowType = .adaptive
     public var cropToolbarConfig = CropToolbarConfig()
     
     var customRatios: [(width: Int, height: Int)] = []
