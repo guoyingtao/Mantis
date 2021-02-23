@@ -231,7 +231,7 @@ struct ToolBarButtonImageBuilder {
         return resetImage
     }
     
-    static func rotateCropperImage() -> UIImage? {
+    static func alterCropper90DegreeImage() -> UIImage? {
         var rotateCropperImage: UIImage? = nil
         
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 22, height: 22), false, 0.0)

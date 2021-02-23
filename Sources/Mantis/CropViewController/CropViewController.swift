@@ -510,7 +510,7 @@ extension CropViewController: CropToolbarDelegate {
         setFixedRatio(ratio)
     }
     
-    public func didSelectRotateCropper() {
+    public func didSelectAlterCropper90Degree() {
         handleRotateCropper()
     }
 }

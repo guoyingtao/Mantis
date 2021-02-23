@@ -25,7 +25,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     var resetButton: UIButton?
     var counterClockwiseRotationButton: UIButton?
     var clockwiseRotationButton: UIButton?
-    var rotateCropperButton: UIButton?
+    var alterCropper90DegreeButton: UIButton?
     var cropButton: UIButton?
     
     var config: CropToolbarConfig!
@@ -71,9 +71,9 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         clockwiseRotationButton?.setImage(ToolBarButtonImageBuilder.rotateCWImage(), for: .normal)
     }
     
-    private func createrotateCropperButton() {
-        rotateCropperButton = createOptionButton(withTitle: nil, andAction: #selector(rotateCropper))
-        rotateCropperButton?.setImage(ToolBarButtonImageBuilder.rotateCropperImage(), for: .normal)
+    private func createAlterCropper90DegreeButton() {
+        alterCropper90DegreeButton = createOptionButton(withTitle: nil, andAction: #selector(alterCropper90Degree))
+        alterCropper90DegreeButton?.setImage(ToolBarButtonImageBuilder.alterCropper90DegreeImage(), for: .normal)
     }
     
     private func createResetButton(with image: UIImage? = nil) {
@@ -149,9 +149,9 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             addButtonsToContainer(button: clockwiseRotationButton)
         }
         
-        if config.toolbarButtonOptions.contains(.rotateCropper90Degree) {
-            createrotateCropperButton()
-            addButtonsToContainer(button: rotateCropperButton)
+        if config.toolbarButtonOptions.contains(.alterCropper90Degree) {
+            createAlterCropper90DegreeButton()
+            addButtonsToContainer(button: alterCropper90DegreeButton)
         }
         
         if config.toolbarButtonOptions.contains(.reset) {
@@ -232,8 +232,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         cropToolbarDelegate?.didSelectClockwiseRotate()
     }
     
-    @objc private func rotateCropper(_ sender: Any) {
-        cropToolbarDelegate?.didSelectRotateCropper()
+    @objc private func alterCropper90Degree(_ sender: Any) {
+        cropToolbarDelegate?.didSelectAlterCropper90Degree()
     }
     
     @objc private func crop(_ sender: Any) {
