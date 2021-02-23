@@ -18,22 +18,46 @@ class RatioPresenter {
     private var type: RatioType = .vertical
     private var originalRatioH: Double
     private var ratios: [RatioItemType]
+    private var fixRatiosShowType: FixRatiosShowType = .adaptive
     
-    init(type: RatioType, originalRatioH: Double, ratios: [RatioItemType] = []) {
+    init(type: RatioType, originalRatioH: Double, ratios: [RatioItemType] = [], fixRatiosShowType: FixRatiosShowType = .adaptive) {
         self.type = type
         self.originalRatioH = originalRatioH
         self.ratios = ratios
+        self.fixRatiosShowType = fixRatiosShowType
+    }
+    
+    func getItemTitle(by ratio: RatioItemType)-> String {
+        switch fixRatiosShowType {
+        case .adaptive:
+            return (type == .horizontal) ? ratio.nameH : ratio.nameV
+        case .horizontal:
+            return ratio.nameH
+        case .vetical:
+            return ratio.nameV
+        }
+    }
+    
+    func getItemValue(by ratio: RatioItemType)-> Double {
+        switch fixRatiosShowType {
+        case .adaptive:
+            return (type == .horizontal) ? ratio.ratioH : ratio.ratioV
+        case .horizontal:
+            return ratio.ratioH
+        case .vetical:
+            return ratio.ratioV
+        }
     }
     
     func present(by viewController: UIViewController, in sourceView: UIView) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         for ratio in ratios {
-            let title = (type == .horizontal) ? ratio.nameH : ratio.nameV
+            let title = getItemTitle(by: ratio)
             
             let action = UIAlertAction(title: title, style: .default) {[weak self] _ in
                 guard let self = self else { return }
-                let ratioValue = (self.type == .horizontal) ? ratio.ratioH : ratio.ratioV
+                let ratioValue = self.getItemValue(by: ratio)
                 self.didGetRatio(ratioValue)
             }
             actionSheet.addAction(action)

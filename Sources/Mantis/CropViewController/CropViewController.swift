@@ -363,7 +363,10 @@ public class CropViewController: UIViewController {
             return
         }
         
-        ratioPresenter = RatioPresenter(type: fixedRatioManager.type, originalRatioH: fixedRatioManager.originalRatioH, ratios: fixedRatioManager.ratios)
+        ratioPresenter = RatioPresenter(type: fixedRatioManager.type,
+                                        originalRatioH: fixedRatioManager.originalRatioH,
+                                        ratios: fixedRatioManager.ratios,
+                                        fixRatiosShowType: config.fixRatiosShowType)
         ratioPresenter?.didGetRatio = {[weak self] ratio in
             self?.setFixedRatio(ratio)
         }

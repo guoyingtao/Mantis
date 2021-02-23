@@ -101,6 +101,12 @@ public enum RatioCandidatesShowType {
     case alwaysShowRatioList
 }
 
+public enum FixRatiosShowType {
+    case adaptive
+    case horizontal
+    case vetical
+}
+
 public struct CropToolbarConfig {
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
@@ -121,7 +127,7 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showRotationDial = true
-
+    public var fixRatiosShowType: FixRatiosShowType = .adaptive
     public var cropToolbarConfig = CropToolbarConfig()
     
     var customRatios: [(width: Int, height: Int)] = []
