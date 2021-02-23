@@ -388,6 +388,16 @@ public class CropViewController: UIViewController {
         
     }
     
+    private func handleRotateCropper() {
+        let ratio = Double(cropView.gridOverlayView.frame.height / cropView.gridOverlayView.frame.width)
+        
+        cropView.viewModel.aspectRatio = CGFloat(ratio)
+        
+        UIView.animate(withDuration: 0.5) {
+            self.cropView.setFixedRatioCropBox()
+        }
+    }
+    
     private func handleCrop() {
         let cropResult = cropView.crop()
         guard let image = cropResult.croppedImage else {
@@ -498,6 +508,10 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectRatio(ratio: Double) {
         setFixedRatio(ratio)
+    }
+    
+    public func didSelectAlterCropper90Degree() {
+        handleRotateCropper()
     }
 }
 

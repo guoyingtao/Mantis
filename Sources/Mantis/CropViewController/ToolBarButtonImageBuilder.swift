@@ -34,20 +34,20 @@ struct ToolBarButtonImageBuilder {
         
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 18, height: 21), false, 0.0)
         
-        //// Rectangle 2 Drawing
-        let rectangle2Path = UIBezierPath(rect: CGRect(x: 0, y: 9, width: 12, height: 12))
+        //// Draw rectangle
+        let rectanglePath = UIBezierPath(rect: CGRect(x: 0, y: 9, width: 12, height: 12))
         UIColor.white.setFill()
-        rectangle2Path.fill()
+        rectanglePath.fill()
         
-        //// Rectangle 3 Drawing
-        let rectangle3Path = UIBezierPath()
-        rectangle3Path.move(to: CGPoint(x: 5, y: 3))
-        rectangle3Path.addLine(to: CGPoint(x: 10, y: 6))
-        rectangle3Path.addLine(to: CGPoint(x: 10, y: 0))
-        rectangle3Path.addLine(to: CGPoint(x: 5, y: 3))
-        rectangle3Path.close()
+        //// Draw triangle
+        let trianglePath = UIBezierPath()
+        trianglePath.move(to: CGPoint(x: 5, y: 3))
+        trianglePath.addLine(to: CGPoint(x: 10, y: 6))
+        trianglePath.addLine(to: CGPoint(x: 10, y: 0))
+        trianglePath.addLine(to: CGPoint(x: 5, y: 3))
+        trianglePath.close()
         UIColor.white.setFill()
-        rectangle3Path.fill()
+        trianglePath.fill()
         
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
@@ -229,6 +229,29 @@ struct ToolBarButtonImageBuilder {
         UIGraphicsEndImageContext()
         
         return resetImage
+    }
+    
+    static func alterCropper90DegreeImage() -> UIImage? {
+        var rotateCropperImage: UIImage? = nil
+        
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 22, height: 22), false, 0.0)
+        
+        //// Draw rectangle
+        let rectanglePath1 = UIBezierPath(rect: CGRect(x: 1, y: 5, width: 20, height: 11))
+        UIColor.white.setStroke()
+        rectanglePath1.lineWidth = 1
+        rectanglePath1.stroke()
+
+        let rectanglePath2 = UIBezierPath(rect: CGRect(x: 6, y: 1, width: 10, height: 20))
+        UIColor.white.setStroke()
+        rectanglePath2.lineWidth = 1
+        rectanglePath2.stroke()
+        
+        rotateCropperImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        return rotateCropperImage
     }
     
 }
