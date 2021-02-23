@@ -2,6 +2,14 @@
 
 -----
 
+## [1.4.11 - Fix #85 #87](https://github.com/guoyingtao/Mantis/releases/tag/1.4.11) (2021-02-22)
+
+#### Enhencement
+* https://github.com/guoyingtao/Mantis/issues/85
+* https://github.com/guoyingtao/Mantis/issues/87
+---
+
+
 ## [1.4.10 - Fix getting resources from prebuilt framework](https://github.com/guoyingtao/Mantis/releases/tag/1.4.10) (2021-02-09)
 
 #### Fix
