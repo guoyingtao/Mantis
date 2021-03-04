@@ -2,6 +2,14 @@
 
 -----
 
+## [1.4.13 - Remove CFBundleExecutable key from resources bundle](https://github.com/guoyingtao/Mantis/releases/tag/1.4.13) (2021-03-04)
+
+#### Fix
+* https://github.com/guoyingtao/Mantis/pull/88
+
+---
+
+
 ## [1.4.12 - Set showRatiosType for RatioSelector](https://github.com/guoyingtao/Mantis/releases/tag/1.4.12) (2021-02-23)
 
 #### Enhencement
