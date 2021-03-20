@@ -67,3 +67,4 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 /Example/Podfile.lock
+.DS_Store
