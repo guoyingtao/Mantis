@@ -2,6 +2,13 @@
 
 -----
 
+## [1.5.0 - Add getBitmapInfo for creating CGContext when cropping](https://github.com/guoyingtao/Mantis/releases/tag/1.5.0) (2021-03-20)
+
+#### Enhencement
+* https://github.com/guoyingtao/Mantis/pull/90
+
+---
+
 ## [1.4.13 - Remove CFBundleExecutable key from resources bundle](https://github.com/guoyingtao/Mantis/releases/tag/1.4.13) (2021-03-04)
 
 #### Fix
