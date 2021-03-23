@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol CropToolbarDelegate {
+public protocol CropToolbarDelegate: class {
     func didSelectCancel()
     func didSelectCrop()
     func didSelectCounterClockwiseRotate()
@@ -17,7 +17,6 @@ public protocol CropToolbarDelegate {
     func didSelectRatio(ratio: Double)
     func didSelectAlterCropper90Degree()
 }
-
 
 public protocol CropToolbarProtocol: UIView {    
     var heightForVerticalOrientationConstraint: NSLayoutConstraint? {get set}

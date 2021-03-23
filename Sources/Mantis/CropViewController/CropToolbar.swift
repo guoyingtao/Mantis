@@ -17,7 +17,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     public var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     public var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     
-    public var cropToolbarDelegate: CropToolbarDelegate?
+    public weak var cropToolbarDelegate: CropToolbarDelegate?
     
     var fixedRatioSettingButton: UIButton?
 
