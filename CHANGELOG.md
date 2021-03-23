@@ -2,6 +2,13 @@
 
 -----
 
+## [1.5.1 - Fix wrong auto zoom and a memory leak issue](https://github.com/guoyingtao/Mantis/releases/tag/1.5.1) (2021-03-22)
+
+#### Fix
+* https://github.com/guoyingtao/Mantis/pull/92
+
+---
+
 ## [1.5.0 - Add getBitmapInfo for creating CGContext when cropping](https://github.com/guoyingtao/Mantis/releases/tag/1.5.0) (2021-03-20)
 
 #### Enhencement
