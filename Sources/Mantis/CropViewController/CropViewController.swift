@@ -273,10 +273,12 @@ public class CropViewController: UIViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        processPresetTransformation {
+        processPresetTransformation { [weak self] in
+            guard let self = self else { return }
+
             // Preset transformation changed preset fixed ratio crop box
             // So we need to reset it again.
-            if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
+            if case .alwaysUsingOnePresetFixedRatio = self.config.presetFixedRatioType {
                 self.cropView.setFixedRatioCropBox()
             }
         }
