@@ -44,11 +44,13 @@ struct CropBoxLockedAspectFrameUpdater {
             xDelta = max(0, xDelta)
             cropBoxFrame.origin.x = cropOriginFrame.origin.x + xDelta
             cropBoxFrame.size.width = cropOriginFrame.width - xDelta
+            cropBoxFrame.size.height = cropBoxFrame.size.width / aspectRatio
         }
         
         func handleRightEdgeFrameUpdate() {
             updateHeightFromBothSides()
             cropBoxFrame.size.width = min(cropOriginFrame.width + xDelta, contentFrame.height * aspectRatio)
+            cropBoxFrame.size.height = cropBoxFrame.size.width / aspectRatio
         }
         
         func handleTopEdgeFrameUpdate() {
@@ -56,11 +58,13 @@ struct CropBoxLockedAspectFrameUpdater {
             yDelta = max(0, yDelta)
             cropBoxFrame.origin.y = cropOriginFrame.origin.y + yDelta
             cropBoxFrame.size.height = cropOriginFrame.height - yDelta
+            cropBoxFrame.size.width = cropBoxFrame.size.height * aspectRatio
         }
         
         func handleBottomEdgeFrameUpdate() {
             updateWidthFromBothSides()
             cropBoxFrame.size.height = min(cropOriginFrame.height + yDelta, contentFrame.width / aspectRatio)
+            cropBoxFrame.size.width = cropBoxFrame.size.height * aspectRatio
         }
         
         let tappedEdgeCropFrameUpdateRule: [CropViewOverlayEdge: (xDelta: CGFloat, yDelta: CGFloat)] = [.topLeft: (xDelta, yDelta), .topRight: (-xDelta, yDelta), .bottomLeft: (xDelta, -yDelta), .bottomRight: (-xDelta, -yDelta)]
