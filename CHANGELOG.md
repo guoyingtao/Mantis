@@ -2,6 +2,13 @@
 
 -----
 
+## [1.5.2 - Fix wrong ratio for fixed ratio selection](https://github.com/guoyingtao/Mantis/releases/tag/1.5.2) (2021-03-30)
+
+#### Fix
+* https://github.com/guoyingtao/Mantis/pull/94
+
+---
+
 ## [1.5.1 - Fix wrong auto zoom and a memory leak issue](https://github.com/guoyingtao/Mantis/releases/tag/1.5.1) (2021-03-22)
 
 #### Fix
