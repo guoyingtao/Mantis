@@ -2,6 +2,13 @@
 
 -----
 
+## [1.6.0 - Add Add Dutch localization](https://github.com/guoyingtao/Mantis/releases/tag/1.6.0) (2021-04-09)
+
+#### Enhencement
+* https://github.com/guoyingtao/Mantis/pull/96
+
+---
+
 ## [1.5.2 - Fix wrong ratio for fixed ratio selection](https://github.com/guoyingtao/Mantis/releases/tag/1.5.2) (2021-03-30)
 
 #### Fix
