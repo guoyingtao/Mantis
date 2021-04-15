@@ -693,8 +693,10 @@ extension CropView {
         rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
     
-    func setFixedRatioCropBox() {
-        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(),
+    func setFixedRatioCropBox(insideRect rect: CGRect? = nil) {
+        
+        let refRect = rect ?? getInitialCropBoxRect()
+        viewModel.setFixedRatioCropBoxFrame(by: refRect,
                                   and: getImageRatioH())
         
         let contentRect = getContentBounds()
