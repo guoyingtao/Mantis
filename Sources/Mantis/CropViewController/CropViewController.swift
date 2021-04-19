@@ -113,8 +113,7 @@ public class CropViewController: UIViewController {
                 if case .none = config.presetTransformationType  {
                     setFixedRatio(ratio)
                 } else {
-                    cropToolbar.handleFixedRatioSetted(ratio: ratio)
-                    cropView.viewModel.aspectRatio = CGFloat(ratio)
+                    cropView.aspectRatioLockEnabled = true
                 }
                 
             case .canUseMultiplePresetFixedRatio(let defaultRatio):
@@ -278,17 +277,7 @@ public class CropViewController: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        processPresetTransformation { [weak self] in
-            guard let self = self else { return }
-
-            // Preset transformation changed preset fixed ratio crop box
-            // So we need to reset it again.
-            if case .alwaysUsingOnePresetFixedRatio = self.config.presetFixedRatioType {
-                cropView.aspectRatioLockEnabled = true
-                self.cropView.setFixedRatioCropBox(insideRect: cropView.viewModel.cropBoxFrame)
-            }
-        }
+        processPresetTransformation()
     }
     
     private func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
