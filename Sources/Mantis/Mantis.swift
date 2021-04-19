@@ -71,7 +71,7 @@ public enum PresetTransformationType {
 public enum PresetFixedRatioType {
     /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
      */
-    case alwaysUsingOnePresetFixedRatio(ratio: Double)
+    case alwaysUsingOnePresetFixedRatio(ratio: Double = 0)
     case canUseMultiplePresetFixedRatio(defaultRatio: Double = 0)
 }
 
