@@ -112,8 +112,6 @@ public class CropViewController: UIViewController {
                                 
                 if case .none = config.presetTransformationType  {
                     setFixedRatio(ratio)
-                } else {
-                    cropView.aspectRatioLockEnabled = true
                 }
                 
             case .canUseMultiplePresetFixedRatio(let defaultRatio):
@@ -255,7 +253,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    private func processPresetTransformation() {
+    private func processPresetTransformation(completion: ()->Void) {
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
@@ -266,16 +264,23 @@ public class CropViewController: UIViewController {
             let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width) / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
             newTransform.scale *= adjustScale
             cropView.transform(byTransformInfo: newTransform)
+            completion()
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
             cropView.transform(byTransformInfo: transformInfo)
             cropView.scrollView.frame = transformInfo.maskFrame
+            completion()
         }
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        processPresetTransformation()
+        processPresetTransformation() { [weak self] in
+            guard let self = self else { return }
+            if case .alwaysUsingOnePresetFixedRatio = self.config.presetFixedRatioType {
+                self.cropView.aspectRatioLockEnabled = true
+            }
+        }
     }
     
     private func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
