@@ -255,7 +255,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    private func processPresetTransformation(completion: ()->Void) {
+    private func processPresetTransformation() {
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
@@ -266,12 +266,10 @@ public class CropViewController: UIViewController {
             let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width) / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
             newTransform.scale *= adjustScale
             cropView.transform(byTransformInfo: newTransform)
-            completion()
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
             cropView.transform(byTransformInfo: transformInfo)
             cropView.scrollView.frame = transformInfo.maskFrame
-            completion()
         }
     }
     
