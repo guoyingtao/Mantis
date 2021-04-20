@@ -549,7 +549,7 @@ extension CropView {
             rotation: getTotalRadians(),
             scale: scrollView.zoomScale,
             manualZoomed: manualZoomed,
-            intialMaskFrame: viewModel.cropOrignFrame,
+            intialMaskFrame: getInitialCropBoxRect(),
             maskFrame: gridOverlayView.frame,
             scrollBounds: scrollView.bounds
         )
