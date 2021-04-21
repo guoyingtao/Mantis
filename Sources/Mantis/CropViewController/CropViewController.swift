@@ -216,7 +216,7 @@ public class CropViewController: UIViewController {
     }
     
     
-    func setFixedRatio(_ ratio: Double) {
+    private func setFixedRatio(_ ratio: Double, zoom: Bool = true) {
         cropToolbar.handleFixedRatioSetted(ratio: ratio)
         cropView.aspectRatioLockEnabled = true
         
@@ -224,10 +224,10 @@ public class CropViewController: UIViewController {
             cropView.viewModel.aspectRatio = CGFloat(ratio)
             
             if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
-                self.cropView.setFixedRatioCropBox()
+                self.cropView.setFixedRatioCropBox(zoom: zoom)
             } else {
                 UIView.animate(withDuration: 0.5) {
-                    self.cropView.setFixedRatioCropBox()
+                    self.cropView.setFixedRatioCropBox(zoom: zoom)
                 }
             }
             
@@ -386,7 +386,7 @@ public class CropViewController: UIViewController {
                                         ratios: fixedRatioManager.ratios,
                                         fixRatiosShowType: config.cropToolbarConfig.fixRatiosShowType)
         ratioPresenter?.didGetRatio = {[weak self] ratio in
-            self?.setFixedRatio(ratio)
+            self?.setFixedRatio(ratio, zoom: false)
         }
         ratioPresenter?.present(by: self, in: presentSourceView)
     }
