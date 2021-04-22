@@ -556,7 +556,7 @@ extension CropView {
             rotation: getTotalRadians(),
             scale: scrollView.zoomScale,
             manualZoomed: manualZoomed,
-            intialMaskFrame: viewModel.cropOrignFrame,
+            intialMaskFrame: getInitialCropBoxRect(),
             maskFrame: gridOverlayView.frame,
             scrollBounds: scrollView.bounds
         )
@@ -700,9 +700,9 @@ extension CropView {
         rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
     
+
     func setFixedRatioCropBox(zoom: Bool = true) {
-        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(),
-                                  and: getImageRatioH())
+        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(), and: getImageRatioH())
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in
