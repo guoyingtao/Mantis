@@ -424,6 +424,7 @@ extension CropView {
     
     func adjustUIForNewCrop(contentRect:CGRect,
                             animation: Bool = true,
+                            zoom: Bool = true,
                             completion: @escaping ()->Void) {
         
         let scaleX: CGFloat
@@ -467,9 +468,11 @@ extension CropView {
         func updateUI(by newCropBoxFrame: CGRect, and scaleFrame: CGRect) {
             viewModel.cropBoxFrame = newCropBoxFrame
             
-            let zoomRect = convert(scaleFrame,
-                                        to: scrollView.imageContainer)
-            scrollView.zoom(to: zoomRect, animated: false)
+            if zoom {
+                let zoomRect = convert(scaleFrame,
+                                            to: scrollView.imageContainer)
+                scrollView.zoom(to: zoomRect, animated: false)
+            }
             scrollView.checkContentOffset()
             makeSureImageContainsCropOverlay()
         }
@@ -489,7 +492,7 @@ extension CropView {
     }
     
     func makeSureImageContainsCropOverlay() {
-        if !imageContainer.contains(rect: gridOverlayView.frame, fromView: self) {
+        if !imageContainer.contains(rect: gridOverlayView.frame, fromView: self, tolerance: 0.25) {
             scrollView.zoomScaleToBound(animated: true)
         }
     }
@@ -693,14 +696,13 @@ extension CropView {
         rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
     
-    func setFixedRatioCropBox(insideRect rect: CGRect? = nil) {
-        
-        let refRect = rect ?? getInitialCropBoxRect()
-        viewModel.setFixedRatioCropBoxFrame(by: refRect,
-                                  and: getImageRatioH())
+
+    func setFixedRatioCropBox(zoom: Bool = true) {
+        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(),
+                                          and: getImageRatioH())
         
         let contentRect = getContentBounds()
-        adjustUIForNewCrop(contentRect: contentRect, animation: false) { [weak self] in
+        adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in
             guard let self = self else { return }
             if self.forceFixedRatio {
                 self.imageStatusChangedCheckForForceFixedRatio = true

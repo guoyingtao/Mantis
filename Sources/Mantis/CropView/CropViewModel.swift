@@ -165,7 +165,7 @@ class CropViewModel: NSObject {
         return newCropBoxFrame
     }
     
-    func setFixedRatioCropBoxFrame(by refCropBox: CGRect, and imageRationH: Double) {
+    func setCropBoxFrame(by refCropBox: CGRect, and imageRationH: Double) {
         var cropBoxFrame = refCropBox
         let center = cropBoxFrame.center
         
