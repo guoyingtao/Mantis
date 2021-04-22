@@ -702,8 +702,7 @@ extension CropView {
     
 
     func setFixedRatioCropBox(zoom: Bool = true) {
-        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(),
-                                          and: getImageRatioH())
+        viewModel.setCropBoxFrame(by: getInitialCropBoxRect(), and: getImageRatioH())
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in
