@@ -440,16 +440,20 @@ extension CropView {
         let radians = viewModel.getTotalRadians()
         
         // calculate the new bounds of scroll view
-        let width = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
-        let height = abs(sin(radians)) * newCropBounds.size.width + abs(cos(radians)) * newCropBounds.size.height
+        let newBoundWidth = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
+        let newBoundHeight = abs(sin(radians)) * newCropBounds.size.width + abs(cos(radians)) * newCropBounds.size.height
         
         // calculate the zoom area of scroll view
         var scaleFrame = viewModel.cropBoxFrame
-        if scaleFrame.width >= scrollView.contentSize.width {
-            scaleFrame.size.width = scrollView.contentSize.width
+        
+        let refContentWidth = abs(cos(radians)) * scrollView.contentSize.width + abs(sin(radians)) * scrollView.contentSize.height
+        let refContentHeight = abs(sin(radians)) * scrollView.contentSize.width + abs(cos(radians)) * scrollView.contentSize.height
+        
+        if scaleFrame.width >= refContentWidth {
+            scaleFrame.size.width = refContentWidth
         }
-        if scaleFrame.height >= scrollView.contentSize.height {
-            scaleFrame.size.height = scrollView.contentSize.height
+        if scaleFrame.height >= refContentHeight {
+            scaleFrame.size.height = refContentHeight
         }
         
         let contentOffset = scrollView.contentOffset
@@ -457,10 +461,10 @@ extension CropView {
                                           y: (contentOffset.y + scrollView.bounds.height / 2))
         
         
-        scrollView.bounds = CGRect(x: 0, y: 0, width: width, height: height)
+        scrollView.bounds = CGRect(x: 0, y: 0, width: newBoundWidth, height: newBoundHeight)
         
-        let newContentOffset = CGPoint(x: (contentOffsetCenter.x - scrollView.bounds.width / 2),
-                                       y: (contentOffsetCenter.y - scrollView.bounds.height / 2))
+        let newContentOffset = CGPoint(x: (contentOffsetCenter.x - newBoundWidth / 2),
+                                       y: (contentOffsetCenter.y - newBoundHeight / 2))
         scrollView.contentOffset = newContentOffset
         
         let newCropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
