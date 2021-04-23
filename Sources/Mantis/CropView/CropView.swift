@@ -437,7 +437,7 @@ extension CropView {
         
         let newCropBounds = CGRect(x: 0, y: 0, width: viewModel.cropBoxFrame.width * scale, height: viewModel.cropBoxFrame.height * scale)
         
-        let radians = viewModel.getTotalRadians()
+        let radians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
         
         // calculate the new bounds of scroll view
         let newBoundWidth = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
