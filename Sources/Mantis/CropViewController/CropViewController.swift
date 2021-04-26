@@ -277,9 +277,16 @@ public class CropViewController: UIViewController {
         super.viewDidAppear(animated)
         processPresetTransformation() { [weak self] transform in
             guard let self = self else { return }
-            if case .alwaysUsingOnePresetFixedRatio = self.config.presetFixedRatioType {
+            if case .alwaysUsingOnePresetFixedRatio(let ratio) = self.config.presetFixedRatioType {
                 self.cropView.aspectRatioLockEnabled = true
-                self.cropView.viewModel.aspectRatio = transform.maskFrame.width / transform.maskFrame.height
+                self.cropToolbar.handleFixedRatioSetted(ratio: ratio)
+                
+                if ratio == 0 {
+                    self.cropView.viewModel.aspectRatio = transform.maskFrame.width / transform.maskFrame.height
+                } else {
+                    self.cropView.viewModel.aspectRatio = CGFloat(ratio)
+                    self.cropView.setFixedRatioCropBox(zoom: false, cropBox: cropView.viewModel.cropBoxFrame)
+                }
             }
         }
     }
