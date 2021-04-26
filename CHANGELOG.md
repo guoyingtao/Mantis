@@ -2,6 +2,13 @@
 
 -----
 
+### [1.6.2](https://www.github.com/guoyingtao/Mantis/compare/v1.6.1...v1.6.2) (2021-04-26)
+
+
+### Bug Fixes
+
+* allow set different fixed ratio after preset transforamtion ([#106](https://www.github.com/guoyingtao/Mantis/issues/106)) ([06e98b8](https://www.github.com/guoyingtao/Mantis/commit/06e98b8f37924c29bdc6072d7d5c3eeeba74eecb))
+
 ### [1.6.1](https://www.github.com/guoyingtao/Mantis/compare/v1.6.0...v1.6.1) (2021-04-23)
 
 
