@@ -32,7 +32,7 @@
 ## Install
 
 <details>
-    <summary>CocoaPods</summary>
+    <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
 pod 'Mantis', '~> 1.6.2'
@@ -40,7 +40,7 @@ pod 'Mantis', '~> 1.6.2'
 </details>
 
 <details>
- <summary>Carthage</summary>
+ <summary><strong>Carthage</strong></summary>
 
 ```ruby
 github "guoyingtao/Mantis"
@@ -48,7 +48,7 @@ github "guoyingtao/Mantis"
 </details>
 
 <details>
- <summary>Swift Packages</summary>
+ <summary><strong>Swift Packages</strong></summary>
 
 * Respository: https://github.com/guoyingtao/Mantis.git
 * Rules: Version - Exact - 1.6.2
