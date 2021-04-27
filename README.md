@@ -38,17 +38,29 @@ Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helpin
 
 ## Install
 
-### CocoaPods
+<details>
+    <summary>CocoaPods</summary>
 
 ```ruby
 pod 'Mantis', '~> 1.6.2'
 ```
+</details>
 
-### Carthage
+<details>
+ <summary>Carthage</summary>
 
 ```ruby
 github "guoyingtao/Mantis"
 ```
+</details>
+
+<details>
+ <summary>Swift Packages</summary>
+
+* Respository: https://github.com/guoyingtao/Mantis.git
+* Rules: Version - Exact - 1.6.2
+
+</details>
 
 ## Usage
 
