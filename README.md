@@ -177,13 +177,11 @@ Please use the transformation infomation obtained previously from delegate metho
 ```
 
 ## Credits
-<details>
-    
 * The crop are strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 
 * The rotation feature is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks)
 * The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clock)
 * Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helping me to solve the problem of cropping an ellipse image with transparent background https://stackoverflow.com/a/59805317/288724
 * <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-</details>
+
 
 
