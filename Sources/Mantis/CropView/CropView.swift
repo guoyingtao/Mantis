@@ -566,13 +566,26 @@ extension CropView {
         }
         
         switch cropShapeType {
-        case .rect, .ellipse(maskOnly: true), .roundedRect(_, maskOnly: true):
+        case .rect,
+             .square:
             return (croppedImage, transformation)
-        case .ellipse(maskOnly: false):
+        case .ellipse:
             return (croppedImage.ellipseMasked, transformation)
-        case .roundedRect(let radiusToShortSide, maskOnly: false):
+        case .circle:
+            return (croppedImage.ellipseMasked, transformation)
+        case .roundedRect(let radiusToShortSide):
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
             return (croppedImage.roundRect(radius), transformation)
+        case .path(let points):
+            return (croppedImage.clipPath(points), transformation)
+        case .diamond:
+            let points = [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 0.5), CGPoint(x: 0.5, y: 1), CGPoint(x: 0, y: 0.5)]
+            return (croppedImage.clipPath(points), transformation)
+        case .heart:
+            return (croppedImage.heart, transformation)
+        case .polygon(let sides, let offset):
+            let points = polygonPointArray(sides: sides, x: 0.5, y: 0.5, radius: 0.5, offset: 90 + offset)
+            return (croppedImage.clipPath(points), transformation)
         }
     }
     

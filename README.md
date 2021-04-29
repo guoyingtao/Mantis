@@ -146,8 +146,8 @@ cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
 ```swift
 public enum CropShapeType {
     case rect
-    case ellipse(maskOnly: Bool = false)
-    case roundedRect(radiusToShortSide: CGFloat, maskOnly: Bool = false)
+    case ellipse
+    case roundedRect(radiusToShortSide: CGFloat)
 }
 ```
 

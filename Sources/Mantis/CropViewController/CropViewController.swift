@@ -83,7 +83,16 @@ public class CropViewController: UIViewController {
          mode: CropViewControllerMode = .normal,
          cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) {
         self.image = image
+        
         self.config = config
+        
+        switch config.cropShapeType {
+        case .circle, .square:
+            self.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
+        default:
+            ()
+        }        
+        
         self.mode = mode
         self.cropToolbar = cropToolbar
         
