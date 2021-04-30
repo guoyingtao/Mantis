@@ -78,17 +78,17 @@ extension CropMaskProtocol {
             innerPath = UIBezierPath(rect: initialRect)
         case .ellipse, .circle:
             innerPath = UIBezierPath(ovalIn: initialRect)
-        case .roundedRect(let radiusToShortSide):
+        case .roundedRect(let radiusToShortSide, _):
             let radius = min(initialRect.width, initialRect.height) * radiusToShortSide
             innerPath = UIBezierPath(roundedRect: initialRect, cornerRadius: radius)
         case .diamond:
             let points = [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 0.5), CGPoint(x: 0.5, y: 1), CGPoint(x: 0, y: 0.5)]
             innerPath = getInnerPath(by: points)
-        case .path(let points):
+        case .path(let points, _):
             innerPath = getInnerPath(by: points)
         case .heart:
             innerPath = UIBezierPath(heartIn: initialRect)
-        case .polygon(let sides, let offset):
+        case .polygon(let sides, let offset, _):
             let points = polygonPointArray(sides: sides, x: 0.5, y: 0.5, radius: 0.5, offset: 90 + offset)
             innerPath = getInnerPath(by: points)
         }

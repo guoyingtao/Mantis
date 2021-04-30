@@ -57,9 +57,6 @@ github "guoyingtao/Mantis"
 
 ## Usage
 
-**Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.**
-**For CropViewControllerDelegate protocol, cropViewControllerDidCancel becomes non-optional, and cropViewControllerWillDismiss is deprecated**
-
 * Create a cropViewController in Mantis with default config and default mode
 
 **You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13 when the cropViewController is presented**
