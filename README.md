@@ -13,7 +13,7 @@
    Mantis is an open-source swift library that provides rich cropping interactions for your iOS/Mac app.
    
 <p align="center">
-    <img src="Images/Mantis on all devices.png" height="450" alt="Mantis" />
+    <img src="Images/Mantis on all devices.png" height="400" alt="Mantis" />
 </p>
    
    Mantis also provide rich crop shapes from basic cicle to polygon to arbitrary paths.
