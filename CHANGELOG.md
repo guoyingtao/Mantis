@@ -2,6 +2,13 @@
 
 -----
 
+### [1.7.1](https://www.github.com/guoyingtao/Mantis/compare/v1.7.0...v1.7.1) (2021-05-02)
+
+
+### Bug Fixes
+
+* Add logic for macCatalyst mac idiom ([f4c8353](https://www.github.com/guoyingtao/Mantis/commit/f4c83537aac427e27b453dbe584cc0f33173007d))
+
 ## [1.7.0](https://www.github.com/guoyingtao/Mantis/compare/v1.6.2...v1.7.0) (2021-05-02)
 
 
