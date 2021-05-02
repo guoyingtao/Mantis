@@ -10,7 +10,7 @@
 
 # Mantis
 
-   Mantis is a swift 5.0 library that mimics cropping interactions in the Photos.app on an iOS device. 
+   Mantis is an open-source swift library that provides rich cropping interactions for your iOS/Mac app.
    
 <p align="center">
     <img src="Images/Mantis on all devices.png" height="250" alt="Mantis" />
@@ -46,7 +46,8 @@ github "guoyingtao/Mantis"
 
 </details>
 
-## Usage
+<details>
+<summary><strong>Usage</strong></summary>
 
 * Create a cropViewController in Mantis with default config and default mode
 
@@ -169,6 +170,8 @@ Please use the transformation infomation obtained previously from delegate metho
         <Your ViewController>.present(cropViewController, animated: true)
 ```
 
+</details>
+    
 ### Demo projects
 Mantis provide two demo projects
 - MantisExample (using Storyboard)
