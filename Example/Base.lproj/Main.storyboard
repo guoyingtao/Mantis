@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -111,9 +111,9 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="148" height="33.5"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                <state key="normal" title="Crop Ellipse"/>
+                                                <state key="normal" title="Crop Shapes"/>
                                                 <connections>
-                                                    <action selector="cropEllips:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1gF-aV-jyo"/>
+                                                    <action selector="cropShapes:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1gF-aV-jyo"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0b-7Q-V2t" userLabel="Hide Rotation Dial">
@@ -163,7 +163,6 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="305" id="Rnv-Qx-Cds"/>
                                     <constraint firstAttribute="width" constant="306" id="UJg-Uh-w9g"/>
                                 </constraints>
                             </stackView>
@@ -182,6 +181,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cropShapesButton" destination="L8S-OJ-shA" id="f3i-4a-hfL"/>
                         <outlet property="croppedImageView" destination="pUS-Eo-0ui" id="bP8-d1-p2l"/>
                     </connections>
                 </viewController>

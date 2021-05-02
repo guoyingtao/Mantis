@@ -63,17 +63,33 @@ class RatioPresenter {
             actionSheet.addAction(action)
         }
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // https://stackoverflow.com/a/27823616/288724
-            actionSheet.popoverPresentationController?.permittedArrowDirections = .any
-            actionSheet.popoverPresentationController?.sourceView = sourceView
-            actionSheet.popoverPresentationController?.sourceRect = sourceView.bounds
-        }
+        actionSheet.handlePopupInBigScreenIfNeeded(sourceView: sourceView)
         
         let cancelText = LocalizedHelper.getString("Cancel")
         let cancelAction = UIAlertAction(title: cancelText, style: .cancel)
         actionSheet.addAction(cancelAction)
         
         viewController.present(actionSheet, animated: true)
+    }
+}
+
+public extension UIAlertController {
+    func handlePopupInBigScreenIfNeeded(sourceView: UIView, permittedArrowDirections: UIPopoverArrowDirection? = nil) {
+        func handlePopupInBigScreen(sourceView: UIView, permittedArrowDirections: UIPopoverArrowDirection? = nil) {
+            // https://stackoverflow.com/a/27823616/288724
+            popoverPresentationController?.permittedArrowDirections = permittedArrowDirections ?? .any
+            popoverPresentationController?.sourceView = sourceView
+            popoverPresentationController?.sourceRect = sourceView.bounds
+        }
+        
+        if #available(macCatalyst 14.0, *) {
+            if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
+                handlePopupInBigScreen(sourceView: sourceView, permittedArrowDirections: permittedArrowDirections)
+            }
+        } else {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                handlePopupInBigScreen(sourceView: sourceView, permittedArrowDirections: permittedArrowDirections)
+            }
+        }
     }
 }

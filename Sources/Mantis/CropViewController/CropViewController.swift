@@ -31,19 +31,13 @@ public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
-    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)
-    
-    @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
-    func cropViewControllerWillDismiss(_ cropViewController: CropViewController)
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)    
 }
 
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
-    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
-    
-    @available(*, deprecated, message: "Mantis doesn't dismiss CropViewController anymore since 1.2.0. You need to dismiss it by yourself.")
-    func cropViewControllerWillDismiss(_ cropViewController: CropViewController) {}
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}   
 }
 
 public enum CropViewControllerMode {
@@ -83,7 +77,16 @@ public class CropViewController: UIViewController {
          mode: CropViewControllerMode = .normal,
          cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) {
         self.image = image
+        
         self.config = config
+        
+        switch config.cropShapeType {
+        case .circle, .square:
+            self.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
+        default:
+            ()
+        }        
+        
         self.mode = mode
         self.cropToolbar = cropToolbar
         

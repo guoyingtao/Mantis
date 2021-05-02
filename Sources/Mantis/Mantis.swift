@@ -86,14 +86,40 @@ public enum CropShapeType {
     case rect
     
     /**
+      The ratio of the crop mask will always be 1:1.
+     ### Notice
+     It equals cropShapeType = .rect
+     and presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
+     */
+    case square
+
+    /**
      When maskOnly is true, the cropped image is kept rect
      */
     case ellipse(maskOnly: Bool = false)
+    
+    /**
+      The ratio of the crop mask will always be 1:1 and when maskOnly is true, the cropped image is kept rect.
+     ### Notice
+     It equals cropShapeType = .ellipse and presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
+     */
+    case circle(maskOnly: Bool = false)
 
     /**
      When maskOnly is true, the cropped image is kept rect
      */
     case roundedRect(radiusToShortSide: CGFloat, maskOnly: Bool = false)
+        
+    case diamond(maskOnly: Bool = false)
+    
+    case heart(maskOnly: Bool = false)
+    
+    case polygon(sides: Int, offset: CGFloat = 0, maskOnly: Bool = false)
+    
+    /**
+      Each point should have normailzed values whose range is 0...1
+     */
+    case path(points: [CGPoint], maskOnly: Bool = false)
 }
 
 public enum RatioCandidatesShowType {

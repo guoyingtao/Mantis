@@ -163,4 +163,32 @@ extension UIImage {
             UIBezierPath(roundedRect: $0, cornerRadius: radius)
         }
     }
+    
+    var heart: UIImage? {
+        return getImageWithTransparentBackground() {
+            UIBezierPath(heartIn: $0)
+        }
+    }
+    
+    func clipPath(_ points: [CGPoint]) -> UIImage? {
+        guard points.count >= 3 else {
+            return nil
+        }
+        
+        return getImageWithTransparentBackground() {rect in
+            let newPoints = points.map{ CGPoint(x: rect.origin.x + rect.width * $0.x, y: rect.origin.y + rect.height * $0.y)}
+
+            
+            let path = UIBezierPath()
+            path.move(to: newPoints[0])
+            
+            for i in 1..<newPoints.count {
+                path.addLine(to: newPoints[i])
+            }
+            
+            path.close()
+            
+            return path
+        }
+    }
 }
