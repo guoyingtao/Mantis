@@ -16,7 +16,7 @@
     <img src="Images/Mantis on all devices.png" height="400" alt="Mantis" />
 </p>
    
-   Mantis also provide rich crop shapes from basic cicle to polygon to arbitrary paths.
+   Mantis also provide rich crop shapes from the basic circle/square to polygon to arbitrary paths(We even provide a heart shape ❤️ 😏).
 <p align="center">
     <img src="Images/cropshapes.png" height="450" alt="Mantis" />
 </p>
