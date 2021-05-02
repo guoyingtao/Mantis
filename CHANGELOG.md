@@ -2,6 +2,13 @@
 
 -----
 
+## [1.7.0](https://www.github.com/guoyingtao/Mantis/compare/v1.6.2...v1.7.0) (2021-05-02)
+
+
+### Features
+
+* add more custom crop shapes ([#111](https://www.github.com/guoyingtao/Mantis/issues/111)) ([380dd01](https://www.github.com/guoyingtao/Mantis/commit/380dd01dbf1a691799bd5a0bacc56151b91022b4))
+
 ### [1.6.2](https://www.github.com/guoyingtao/Mantis/compare/v1.6.1...v1.6.2) (2021-04-26)
 
 
