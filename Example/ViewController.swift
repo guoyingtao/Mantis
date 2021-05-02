@@ -14,6 +14,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!
+    @IBOutlet weak var cropShapesButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -155,7 +156,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         present(cropViewController, animated: true)
     }
     
-    @IBAction func cropEllips(_ sender: Any) {
+    @IBAction func cropShapes(_ sender: Any) {
         showCropShapeList()
     }
     
@@ -213,12 +214,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             actionSheet.addAction(action)
         }
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // https://stackoverflow.com/a/27823616/288724
-            actionSheet.popoverPresentationController?.permittedArrowDirections = .any
-            actionSheet.popoverPresentationController?.sourceView = self.view
-            actionSheet.popoverPresentationController?.sourceRect = self.view.bounds
-        }
+        actionSheet.handlePopupInBigScreenIfNeeded(sourceView: cropShapesButton)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         actionSheet.addAction(cancelAction)

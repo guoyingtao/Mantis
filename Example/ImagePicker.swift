@@ -57,12 +57,8 @@ open class ImagePicker: NSObject {
         }
         
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            alertController.popoverPresentationController?.sourceView = sourceView
-            alertController.popoverPresentationController?.sourceRect = sourceView.bounds
-            alertController.popoverPresentationController?.permittedArrowDirections = [.down, .up]
-        }
+        
+        alertController.handlePopupInBigScreenIfNeeded(sourceView: sourceView, permittedArrowDirections: [.down, .up])
 
         self.presentationController?.present(alertController, animated: true)
     }
