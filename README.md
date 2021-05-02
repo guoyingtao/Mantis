@@ -59,7 +59,7 @@ github "guoyingtao/Mantis"
 
 * Create a cropViewController in Mantis with default config and default mode
 
-**You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13 when the cropViewController is presented**
+**You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13+ when the cropViewController is presented**
 
 ```swift
 let cropViewController = Mantis.cropViewController(image: <Your Image>)
@@ -177,6 +177,11 @@ Please use the transformation infomation obtained previously from delegate metho
         cropViewController.delegate = self
         <Your ViewController>.present(cropViewController, animated: true)
 ```
+
+### Demo projects
+Mantis provide two demo projects
+- MantisExample (using Storyboard)
+- MantisSwiftUIExample (using SwiftUI)
 
 ## Credits
 * The crop are strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 
