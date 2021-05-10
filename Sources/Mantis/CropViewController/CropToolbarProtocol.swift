@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol CropToolbarDelegate: class {
+public protocol CropToolbarDelegate: AnyObject {
     func didSelectCancel()
     func didSelectCrop()
     func didSelectCounterClockwiseRotate()

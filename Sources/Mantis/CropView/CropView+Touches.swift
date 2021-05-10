@@ -61,6 +61,10 @@ extension CropView {
         
         let point = touch.location(in: self)
         updateCropBoxFrame(with: point)
+        
+        if aspectRatioLockEnabled && viewModel.aspectRatio != 0 {
+            viewModel.cropBoxFrame.size.height = viewModel.cropBoxFrame.width / viewModel.aspectRatio
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -70,9 +74,10 @@ extension CropView {
             gridOverlayView.handleEdgeUntouched()
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
-                self?.delegate?.cropViewDidEndResize(self!)
-                self?.viewModel.setBetweenOperationStatus()
-                self?.scrollView.updateMinZoomScale()
+                guard let self = self else { return }
+                self.delegate?.cropViewDidEndResize(self)
+                self.viewModel.setBetweenOperationStatus()
+                self.scrollView.updateMinZoomScale()
             }
         } else {
             delegate?.cropViewDidEndResize(self)
