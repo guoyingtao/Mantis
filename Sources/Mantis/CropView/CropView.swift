@@ -467,11 +467,13 @@ extension CropView {
                                        y: (contentOffsetCenter.y - newBoundHeight / 2))
         scrollView.contentOffset = newContentOffset
         
-        let newCropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
-        
-        func updateUI(by newCropBoxFrame: CGRect, and scaleFrame: CGRect) {
-            viewModel.cropBoxFrame = newCropBoxFrame
-            
+        func updateUItoFinalStatus() {
+            if aspectRatioLockEnabled {
+                viewModel.setCropBoxFrame(by: getInitialCropBoxRect(), and: getImageRatioH())
+            } else {
+                viewModel.cropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
+            }
+                        
             if zoom {
                 let zoomRect = convert(scaleFrame,
                                             to: scrollView.imageContainer)
@@ -483,12 +485,12 @@ extension CropView {
         
         if animation {
             UIView.animate(withDuration: 0.25, animations: {
-                updateUI(by: newCropBoxFrame, and: scaleFrame)
+                updateUItoFinalStatus()
             }) {_ in
                 completion()
             }
         } else {
-            updateUI(by: newCropBoxFrame, and: scaleFrame)
+            updateUItoFinalStatus()
             completion()
         }
                 
