@@ -63,6 +63,7 @@ class CropViewModel: NSObject {
     var aspectRatio: CGFloat = -1    
     var cropLeftTopOnImage: CGPoint = .zero
     var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
+    var freeRatioType: FreeRatioType = .freeBothDirection
     
     func reset(forceFixedRatio: Bool = false) {
         cropBoxFrame = .zero
@@ -129,7 +130,24 @@ class CropViewModel: NSObject {
     }
     
     func resetCropFrame(by frame: CGRect) {
-        cropBoxFrame = frame
+        
+        let newFrame: CGRect
+        switch freeRatioType {
+        case .freeBothDirection:
+            newFrame = frame
+        case .fixHeight(let ratio):
+            let r = min(ratio, 1)
+            let newHight = frame.size.height * CGFloat(r)
+            let newY = frame.origin.y + (frame.size.height - newHight) / 2
+            newFrame = CGRect(x: frame.origin.x, y: newY, width: frame.size.width, height: newHight)
+        case .fixWidth(let ratio):
+            let r = min(ratio, 1)
+            let newWidth = frame.size.width * CGFloat(r)
+            let newX = frame.origin.x + (frame.size.width - newWidth) / 2
+            newFrame = CGRect(x: newX, y: frame.origin.y, width: newWidth, height: frame.size.height)
+        }
+
+        cropBoxFrame = newFrame
         cropOrignFrame = frame
     }
     
@@ -158,6 +176,7 @@ class CropViewModel: NSObject {
             newCropBoxFrame = cropBoxLockedAspectFrameUpdater.cropBoxFrame
         } else {
             var cropBoxFreeAspectFrameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: tappedEdge, contentFrame: contentFrame, cropOriginFrame: cropOrignFrame, cropBoxFrame: cropBoxFrame)
+            cropBoxFreeAspectFrameUpdater.freeRatioType = freeRatioType
             cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }

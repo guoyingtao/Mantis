@@ -10,6 +10,7 @@ import UIKit
 
 struct CropBoxFreeAspectFrameUpdater {
     var minimumAspectRatio = CGFloat(0)
+    var freeRatioType: FreeRatioType = .freeBothDirection
     
     private var contentFrame = CGRect.zero
     private var cropOriginFrame = CGRect.zero
@@ -29,6 +30,10 @@ struct CropBoxFreeAspectFrameUpdater {
         }
         
         func handleLeftEdgeFrameUpdate(newSize: CGSize) {
+            if case .fixWidth = freeRatioType {
+                return
+            }
+            
             if newAspectRatioValid(withNewSize: newSize) {
                 cropBoxFrame.origin.x = cropOriginFrame.origin.x + xDelta
                 cropBoxFrame.size.width = newSize.width
@@ -36,12 +41,20 @@ struct CropBoxFreeAspectFrameUpdater {
         }
         
         func handleRightEdgeFrameUpdate(newSize: CGSize) {
+            if case .fixWidth = freeRatioType {
+                return
+            }
+
             if newAspectRatioValid(withNewSize: newSize) {
                 cropBoxFrame.size.width = newSize.width
             }
         }
         
         func handleTopEdgeFrameUpdate(newSize: CGSize) {
+            if case .fixHeight = freeRatioType {
+                return
+            }
+
             if newAspectRatioValid(withNewSize: newSize) {
                 cropBoxFrame.origin.y = cropOriginFrame.origin.y + yDelta
                 cropBoxFrame.size.height = newSize.height
@@ -49,6 +62,10 @@ struct CropBoxFreeAspectFrameUpdater {
         }
         
         func handleBottomEdgeFrameUpdate(newSize: CGSize) {
+            if case .fixHeight = freeRatioType {
+                return
+            }
+
             if newAspectRatioValid(withNewSize: newSize) {
                 cropBoxFrame.size.height = newSize.height
             }
