@@ -24,7 +24,7 @@
 
 import UIKit
 
-protocol CropViewDelegate: class {
+protocol CropViewDelegate: AnyObject {
     func cropViewDidBecomeResettable(_ cropView: CropView)
     func cropViewDidBecomeUnResettable(_ cropView: CropView)
     func cropViewDidBeginResize(_ cropView: CropView)

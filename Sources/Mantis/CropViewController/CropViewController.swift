@@ -24,7 +24,7 @@
 
 import UIKit
 
-public protocol CropViewControllerDelegate: class {
+public protocol CropViewControllerDelegate: AnyObject {
     func cropViewControllerDidCrop(_ cropViewController: CropViewController,
                                    cropped: UIImage, transformation: Transformation)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
