@@ -68,6 +68,12 @@ public enum PresetTransformationType {
     case presetNormalizedInfo(normailizedInfo: CGRect)
 }
 
+public enum FreeRatioType {
+    case freeBothDirection
+    case fixWidth(ratio: Double)
+    case fixHeight(ratio: Double)
+}
+
 public enum PresetFixedRatioType {
     /** When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
      */
@@ -152,6 +158,7 @@ public struct Config {
     public var cropShapeType: CropShapeType = .rect
     public var cropVisualEffectType: CropVisualEffectType = .blurDark
     public var ratioOptions: RatioOptions = .all
+    public var freeRatioType: FreeRatioType = .freeBothDirection
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showRotationDial = true
     public var cropToolbarConfig = CropToolbarConfig()

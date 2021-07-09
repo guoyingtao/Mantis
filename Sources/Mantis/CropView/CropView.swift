@@ -69,6 +69,13 @@ class CropView: UIView {
     var manualZoomed = false
     private var cropFrameKVO: NSKeyValueObservation?
     var forceFixedRatio = false
+    
+    var freeRatioType: FreeRatioType = .freeBothDirection {
+        willSet {
+            viewModel.freeRatioType = newValue
+        }
+    }
+    
     var imageStatusChangedCheckForForceFixedRatio = false
     
     deinit {
@@ -193,12 +200,23 @@ class CropView: UIView {
         cropMaskViewManager.removeMaskViews()
         cropMaskViewManager.setup(in: self)
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
-                
+        
         scrollView.transform = .identity
-        scrollView.resetBy(rect: viewModel.cropBoxFrame)
+        scrollView.resetBy(rect: viewModel.cropOrignFrame)
         
         imageContainer.frame = scrollView.bounds
         imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
+        
+        if case .freeBothDirection = freeRatioType {
+            
+        } else {
+            let contentRect = getContentBounds()
+            adjustUIForNewCrop(contentRect: contentRect, animation: false) {[weak self] in
+                self?.delegate?.cropViewDidEndResize(self!)
+                self?.viewModel.setBetweenOperationStatus()
+                self?.scrollView.updateMinZoomScale()
+            }
+        }
 
         gridOverlayView.superview?.bringSubviewToFront(gridOverlayView)
         
@@ -207,6 +225,7 @@ class CropView: UIView {
         if aspectRatioLockEnabled {
             setFixedRatioCropBox()
         }
+        
     }
     
     func adaptForCropBox() {
@@ -426,7 +445,6 @@ extension CropView {
                             animation: Bool = true,
                             zoom: Bool = true,
                             completion: @escaping ()->Void) {
-        
         let scaleX: CGFloat
         let scaleY: CGFloat
         
