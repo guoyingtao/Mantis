@@ -13,16 +13,17 @@ fileprivate let initialFrameLength: CGFloat = 1000
 
 protocol CropMaskProtocol where Self: UIView {
     var cropShapeType: CropShapeType { get set }
+    var innerLayer: CALayer? { get set }
     
-    func initialize()
-    func setMask()
-    func adaptMaskTo(match cropRect: CGRect)
+    func initialize(cropRatio: CGFloat)
+    func setMask(cropRatio: CGFloat)
+    func adaptMaskTo(match cropRect: CGRect, cropRatio: CGFloat)
 }
 
 extension CropMaskProtocol {
-    func initialize() {
+    func initialize(cropRatio: CGFloat = 1.0) {
         setInitialFrame()
-        setMask()
+        setMask(cropRatio: cropRatio)
     }
     
     private func setInitialFrame() {
@@ -37,20 +38,38 @@ extension CropMaskProtocol {
         self.frame = CGRect(x: x, y: y, width: width, height: height)
     }
     
-    func adaptMaskTo(match cropRect: CGRect) {
-        let scaleX = cropRect.width / minOverLayerUnit
+    func adaptMaskTo(match cropRect: CGRect, cropRatio: CGFloat) {
+        let scaleX: CGFloat
+        
+        switch cropShapeType {
+        case .roundedRect:
+            innerLayer?.removeFromSuperlayer()
+            setMask(cropRatio: cropRatio)
+            scaleX = cropRect.width / (minOverLayerUnit * cropRatio)
+        default:
+            scaleX = cropRect.width / minOverLayerUnit
+        }
+                
         let scaleY = cropRect.height / minOverLayerUnit
-        
+
         transform = CGAffineTransform(scaleX: scaleX, y: scaleY)
-        
+
         self.frame.origin.x = cropRect.midX - self.frame.width / 2
         self.frame.origin.y = cropRect.midY - self.frame.height / 2
     }
     
-    func createOverLayer(opacity: Float) -> CAShapeLayer {
-        let x = bounds.midX - minOverLayerUnit / 2
+    func createOverLayer(opacity: Float, cropRatio: CGFloat = 1.0) -> CAShapeLayer {
+        let coff: CGFloat
+        switch cropShapeType {
+        case .roundedRect:
+            coff = cropRatio
+        default:
+            coff = 1
+        }
+        
+        let x = bounds.midX - minOverLayerUnit * coff / 2
         let y = bounds.midY - minOverLayerUnit / 2
-        let initialRect = CGRect(x: x, y: y, width: minOverLayerUnit, height: minOverLayerUnit)
+        let initialRect = CGRect(x: x, y: y, width: minOverLayerUnit * coff, height: minOverLayerUnit)
         
         let path = UIBezierPath(rect: self.bounds)
         
