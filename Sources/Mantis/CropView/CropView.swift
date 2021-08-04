@@ -94,7 +94,13 @@ class CropView: UIView {
         { [unowned self] _, changed in
             guard let cropFrame = changed.newValue else { return }
             self.gridOverlayView.frame = cropFrame
-            self.cropMaskViewManager.adaptMaskTo(match: cropFrame, cropRatio: CGFloat(self.getImageRatioH()))
+            
+            var cropRatio: CGFloat = 1.0
+            if self.gridOverlayView.frame.height != 0 {
+                cropRatio = self.gridOverlayView.frame.width / self.gridOverlayView.frame.height
+            }
+            
+            self.cropMaskViewManager.adaptMaskTo(match: cropFrame, cropRatio: cropRatio)
         }
         
         initalRender()
