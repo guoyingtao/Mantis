@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F3B49FC588AD98287DE4267 /* libPods-MantisExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B8C6829EE0F5C72DC10C396B /* libPods-MantisExample.a */; };
+		1AC3B46DF36D97844A4CEA4E /* Pods_MantisExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B100014666B3974EEDE05B0C /* Pods_MantisExampleTests.framework */; };
+		37F095D77401112C083BB830 /* Pods_MantisExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A7EAB9797A43C2A34E26823 /* Pods_MantisExample.framework */; };
 		5F0852B5237918510031B75D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0852B4237918510031B75D /* ImagePicker.swift */; };
 		5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B14217A9EDF00582874 /* AppDelegate.swift */; };
 		5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B16217A9EDF00582874 /* ViewController.swift */; };
@@ -17,7 +18,6 @@
 		5FC10B2A217A9EE100582874 /* MantisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B29217A9EE100582874 /* MantisTests.swift */; };
 		5FD045EA245619D400B9D3D2 /* CustomizedCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD045E9245619D400B9D3D2 /* CustomizedCropToolbar.swift */; };
 		5FEBA88221961E4A0018DE62 /* EmbeddedCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */; };
-		AF2FE35191AA9D90825785AE /* libPods-MantisExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 652EE158B8C4F04DF075F81D /* libPods-MantisExampleTests.a */; };
 		CCBF2F602525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A7EAB9797A43C2A34E26823 /* Pods_MantisExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC821D838EDAC646C860226 /* Pods-MantisExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-MantisExampleTests/Pods-MantisExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F0852B4237918510031B75D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		5F21BBB22448036100B7B0C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -50,10 +51,9 @@
 		5FD045E9245619D400B9D3D2 /* CustomizedCropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizedCropToolbar.swift; sourceTree = "<group>"; };
 		5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedCropViewController.swift; sourceTree = "<group>"; };
 		61C386518C3C25E57F8C83A5 /* Pods-MantisExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExampleTests.release.xcconfig"; path = "Target Support Files/Pods-MantisExampleTests/Pods-MantisExampleTests.release.xcconfig"; sourceTree = "<group>"; };
-		652EE158B8C4F04DF075F81D /* libPods-MantisExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MantisExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C5370690AB91AB238B90E9 /* Pods-MantisExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.release.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.release.xcconfig"; sourceTree = "<group>"; };
 		9326C1CDF121300C5CAAE2BE /* Pods-MantisExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.debug.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.debug.xcconfig"; sourceTree = "<group>"; };
-		B8C6829EE0F5C72DC10C396B /* libPods-MantisExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MantisExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B100014666B3974EEDE05B0C /* Pods_MantisExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizedCropToolbarWithoutList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F3B49FC588AD98287DE4267 /* libPods-MantisExample.a in Frameworks */,
+				37F095D77401112C083BB830 /* Pods_MantisExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF2FE35191AA9D90825785AE /* libPods-MantisExampleTests.a in Frameworks */,
+				1AC3B46DF36D97844A4CEA4E /* Pods_MantisExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,8 +80,8 @@
 		5F3BE15921993A7C005C4BD8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B8C6829EE0F5C72DC10C396B /* libPods-MantisExample.a */,
-				652EE158B8C4F04DF075F81D /* libPods-MantisExampleTests.a */,
+				3A7EAB9797A43C2A34E26823 /* Pods_MantisExample.framework */,
+				B100014666B3974EEDE05B0C /* Pods_MantisExampleTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -147,7 +147,7 @@
 				5FC10B0D217A9EDF00582874 /* Sources */,
 				5FC10B0E217A9EDF00582874 /* Frameworks */,
 				5FC10B0F217A9EDF00582874 /* Resources */,
-				12B88BB2DAEBCE3C6ACE78D7 /* [CP] Copy Pods Resources */,
+				5B5D9B6DDD60E517CAAD07B0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -261,21 +261,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		12B88BB2DAEBCE3C6ACE78D7 /* [CP] Copy Pods Resources */ = {
+		5B5D9B6DDD60E517CAAD07B0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B990B0C0191568D739FE220D /* [CP] Check Pods Manifest.lock */ = {

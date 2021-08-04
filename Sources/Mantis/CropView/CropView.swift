@@ -63,6 +63,7 @@ class CropView: UIView {
 
     lazy var scrollView = CropScrollView(frame: bounds)
     lazy var cropMaskViewManager = CropMaskViewManager(with: self,
+                                                       cropRatio: CGFloat(getImageRatioH()),
                                                        cropShapeType: cropShapeType,
                                                        cropVisualEffectType: cropVisualEffectType)
 
@@ -93,7 +94,13 @@ class CropView: UIView {
         { [unowned self] _, changed in
             guard let cropFrame = changed.newValue else { return }
             self.gridOverlayView.frame = cropFrame
-            self.cropMaskViewManager.adaptMaskTo(match: cropFrame)
+            
+            var cropRatio: CGFloat = 1.0
+            if self.gridOverlayView.frame.height != 0 {
+                cropRatio = self.gridOverlayView.frame.width / self.gridOverlayView.frame.height
+            }
+            
+            self.cropMaskViewManager.adaptMaskTo(match: cropFrame, cropRatio: cropRatio)
         }
         
         initalRender()
@@ -191,7 +198,7 @@ class CropView: UIView {
     
     func resetUIFrame() {
         cropMaskViewManager.removeMaskViews()
-        cropMaskViewManager.setup(in: self)
+        cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageRatioH()))
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
                 
         scrollView.transform = .identity
