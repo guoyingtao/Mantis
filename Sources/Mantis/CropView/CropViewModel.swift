@@ -79,7 +79,7 @@ class CropViewModel: NSObject {
         setInitialStatus()
     }
     
-    func RotateBy90(rotateAngle: CGFloat) {
+    func rotateBy90(rotateAngle: CGFloat) {
         if (rotateAngle < 0) {
             rotationType.counterclockwiseRotate90()
         } else {

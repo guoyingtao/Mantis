@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E409253535F300A3EB7D /* Orientation.swift */; };
+		5F69CC5E26C0629400568B75 /* definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69CC5D26C0629400568B75 /* definitions.swift */; };
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		8EFB6F6725D16B0F00C0DDB2 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */; };
@@ -93,6 +94,7 @@
 
 /* Begin PBXFileReference section */
 		5F17E409253535F300A3EB7D /* Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
+		5F69CC5D26C0629400568B75 /* definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = definitions.swift; sourceTree = "<group>"; };
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		8EFB6F3625D154D900C0DDB2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				OBJ_36 /* Mantis.swift */,
 				OBJ_41 /* RatioOptions.swift */,
 				5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */,
+				5F69CC5D26C0629400568B75 /* definitions.swift */,
 				OBJ_10 /* Info.plist */,
 				OBJ_11 /* CropView */,
 				OBJ_23 /* CropViewController */,
@@ -370,6 +373,7 @@
 				OBJ_68 /* Sources */,
 				OBJ_102 /* Frameworks */,
 				8EFB6F3325D1548800C0DDB2 /* Resources */,
+				5F69CC5726BF89F900568B75 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -481,6 +485,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5F69CC5726BF89F900568B75 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8EFB6F5025D16A9E00C0DDB2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -530,6 +554,7 @@
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
 				OBJ_86 /* CoreGraphicsExtensions.swift in Sources */,
+				5F69CC5E26C0629400568B75 /* definitions.swift in Sources */,
 				OBJ_87 /* UIImageExtensions.swift in Sources */,
 				OBJ_88 /* GeometryHelper.swift in Sources */,
 				OBJ_89 /* LocalizedHelper.swift in Sources */,

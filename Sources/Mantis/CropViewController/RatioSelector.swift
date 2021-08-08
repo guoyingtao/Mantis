@@ -54,17 +54,22 @@ public class RatioSelector: UIView {
     
     func update(fixedRatioManager: FixedRatioManager?) {
         guard let fixedRatioManager = fixedRatioManager else { return }
-        self.ratios = fixedRatioManager.ratios
-        self.type = fixedRatioManager.type
-        self.originalRatioH = fixedRatioManager.originalRatioH
-        for ratioView in self.stackView.arrangedSubviews as! [RatioItemView] {
-            ratioView.type = type
+        ratios = fixedRatioManager.ratios
+        type = fixedRatioManager.type
+        originalRatioH = fixedRatioManager.originalRatioH
+        
+        if let ratioItemViews = stackView.arrangedSubviews as? [RatioItemView] {
+            for ratioView in ratioItemViews {
+                ratioView.type = type
+            }
         }
     }
     
     func reset() {
-        for ratioView in stackView.arrangedSubviews as! [RatioItemView] {
-            ratioView.selected = self.originalRatioH == ratioView.ratio.ratioH ? true : false
+        if let ratioItemViews = stackView.arrangedSubviews as? [RatioItemView] {
+            for ratioView in ratioItemViews {
+                ratioView.selected = originalRatioH == ratioView.ratio.ratioH ? true : false
+            }
         }
     }
     
@@ -77,8 +82,11 @@ public class RatioSelector: UIView {
             itemView.didGetRatio = {[weak self] ratio in
                 let ratioValue = (self?.type == .horizontal) ? ratio.ratioH : ratio.ratioV
                 self?.didGetRatio(ratioValue)
-                for ratioView in self?.stackView.arrangedSubviews as! [RatioItemView] {
-                    ratioView.selected = ratio.nameH == ratioView.ratio.nameH ? true : false
+                
+                if let ratioItemViews = self?.stackView.arrangedSubviews as? [RatioItemView] {
+                    for ratioView in ratioItemViews {
+                        ratioView.selected = ratio.nameH == ratioView.ratio.nameH ? true : false
+                    }
                 }
             }
         }

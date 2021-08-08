@@ -597,7 +597,7 @@ extension CropView {
         case .heart(maskOnly: false):
             return (croppedImage.heart, transformation)
         case .polygon(let sides, let offset, maskOnly: false):
-            let points = polygonPointArray(sides: sides, x: 0.5, y: 0.5, radius: 0.5, offset: 90 + offset)
+            let points = polygonPointArray(sides: sides, originX: 0.5, originY: 0.5, radius: 0.5, offset: 90 + offset)
             return (croppedImage.clipPath(points), transformation)
         }
     }
@@ -657,7 +657,7 @@ extension CropView {
         }
     }
     
-    func RotateBy90(rotateAngle: CGFloat, completion: @escaping ()->Void = {}) {
+    func rotateBy90(rotateAngle: CGFloat, completion: @escaping ()->Void = {}) {
         viewModel.setDegree90RotatingStatus()
         let rorateDuration = 0.25
         
@@ -669,7 +669,7 @@ extension CropView {
                 self.viewModel.setRotatingStatus(by: angle)
             }) {[weak self] _ in
                 guard let self = self else { return }
-                self.viewModel.RotateBy90(rotateAngle: rotateAngle)
+                self.viewModel.rotateBy90(rotateAngle: rotateAngle)
                 self.viewModel.setBetweenOperationStatus()
                 completion()
             }
@@ -693,7 +693,7 @@ extension CropView {
         }) {[weak self] _ in
             guard let self = self else { return }
             self.scrollView.updateMinZoomScale()
-            self.viewModel.RotateBy90(rotateAngle: rotateAngle)
+            self.viewModel.rotateBy90(rotateAngle: rotateAngle)
             self.viewModel.setBetweenOperationStatus()
             completion()
         }

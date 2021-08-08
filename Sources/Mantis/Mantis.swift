@@ -186,7 +186,7 @@ public struct Config {
     }
     
     func hasCustomRatios() -> Bool {
-        return customRatios.count > 0
+        return !customRatios.isEmpty
     }
     
     func getCustomRatioItems() -> [RatioItemType] {
