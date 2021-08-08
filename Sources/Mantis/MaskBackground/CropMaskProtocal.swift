@@ -32,10 +32,10 @@ extension CropMaskProtocol {
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         
-        let xValue = (screenWidth - width) / 2
-        let yValue = (screenHeight - height) / 2
+        let originX = (screenWidth - width) / 2
+        let originY = (screenHeight - height) / 2
         
-        self.frame = CGRect(x: xValue, y: yValue, width: width, height: height)
+        self.frame = CGRect(x: originX, y: originY, width: width, height: height)
     }
     
     func adaptMaskTo(match cropRect: CGRect, cropRatio: CGFloat) {
@@ -67,9 +67,9 @@ extension CropMaskProtocol {
             coff = 1
         }
         
-        let xValue = bounds.midX - minOverLayerUnit * coff / 2
-        let yValue = bounds.midY - minOverLayerUnit / 2
-        let initialRect = CGRect(x: xValue, y: yValue, width: minOverLayerUnit * coff, height: minOverLayerUnit)
+        let originX = bounds.midX - minOverLayerUnit * coff / 2
+        let originY = bounds.midY - minOverLayerUnit / 2
+        let initialRect = CGRect(x: originX, y: originY, width: minOverLayerUnit * coff, height: minOverLayerUnit)
         
         let path = UIBezierPath(rect: self.bounds)
         
