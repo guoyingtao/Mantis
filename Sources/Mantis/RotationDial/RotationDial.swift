@@ -140,14 +140,14 @@ extension RotationDial {
         }
         
         var dialPlateShowHeight = container.frame.height - margin - pointerHeight - spanBetweenDialPlateAndPointer
-        var r = dialPlateShowHeight / (1 - cos(showRadiansLimit))
+        var radius = dialPlateShowHeight / (1 - cos(showRadiansLimit))
         
-        if r * 2 * sin(showRadiansLimit) > container.frame.width {
-            r = (container.frame.width / 2) / sin(showRadiansLimit)
-            dialPlateShowHeight = r - r * cos(showRadiansLimit)
+        if radius * 2 * sin(showRadiansLimit) > container.frame.width {
+            radius = (container.frame.width / 2) / sin(showRadiansLimit)
+            dialPlateShowHeight = radius - radius * cos(showRadiansLimit)
         }
         
-        let dialPlateLength = 2 * r
+        let dialPlateLength = 2 * radius
         let dialPlateFrame = CGRect(x: (container.frame.width - dialPlateLength) / 2, y: margin - (dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
         
         dialPlate?.removeFromSuperview()
@@ -180,8 +180,8 @@ extension RotationDial {
         if case .custom(let center) = config.rotationCenterType {
             return center
         } else {
-            let p = CGPoint(x: dialPlate.bounds.midX , y: dialPlate.bounds.midY)
-            return dialPlate.convert(p, to: self)
+            let point = CGPoint(x: dialPlate.bounds.midX , y: dialPlate.bounds.midY)
+            return dialPlate.convert(point, to: self)
         }
     }
 }
@@ -258,7 +258,7 @@ extension RotationDial {
     }
     
     public func setRotationCenter(by point: CGPoint, of view: UIView) {
-        let p = view.convert(point, to: self)
-        config.rotationCenterType = .custom(p)
+        let newPoint = view.convert(point, to: self)
+        config.rotationCenterType = .custom(newPoint)
     }
 }

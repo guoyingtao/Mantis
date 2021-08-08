@@ -28,13 +28,13 @@ class CropOverlayView: UIView {
     private var horizontalGridLines: [UIView] = []
     private var verticalGridLines: [UIView] = []
     private var borderLine: UIView = UIView()
-    private var corner: [UIView] = []
+    private var corners: [UIView] = []
     private let borderThickness = CGFloat(1.0)
     private let hineLineThickness = CGFloat(2.0)
     
     override var frame: CGRect {
         didSet {
-            if corner.count > 0 {
+            if !corners.isEmpty {
                 layoutLines()
                 handleEdgeTouched(with: tappedEdge)
             }            
@@ -66,7 +66,7 @@ class CropOverlayView: UIView {
         borderLine.layer.borderColor = boarderNormalColor.cgColor
         
         for _ in 0..<8 {
-            corner.append(createNewLine())
+            corners.append(createNewLine())
         }
         
         setupGridLines()
@@ -76,7 +76,7 @@ class CropOverlayView: UIView {
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        if corner.count > 0 {
+        if !corners.isEmpty {
             layoutLines()
         }
     }
@@ -98,9 +98,9 @@ class CropOverlayView: UIView {
     }
     
     private func layoutGridLines() {
-        for i in 0..<gridLineNumberType.rawValue {
-            horizontalGridLines[i].frame = CGRect(x: 0, y: CGFloat(i + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1), width: frame.width, height: 1)
-            verticalGridLines[i].frame = CGRect(x: CGFloat(i + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1), y: 0, width: 1, height: frame.height)
+        for index in 0..<gridLineNumberType.rawValue {
+            horizontalGridLines[index].frame = CGRect(x: 0, y: CGFloat(index + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1), width: frame.width, height: 1)
+            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1), y: 0, width: 1, height: frame.height)
         }
     }
     
@@ -147,8 +147,8 @@ class CropOverlayView: UIView {
         let horizontalDistanceForVCorner = bounds.width + borderThickness
         let veticalDistanceForVCorner = bounds.height + 2 * borderThickness - cropOverLayerCornerWidth
         
-        for (i, line) in corner.enumerated() {
-            let lineType: CornerLineType = CropOverlayView.CornerLineType(rawValue: i) ?? .topLeftVertical
+        for (index, line) in corners.enumerated() {
+            let lineType: CornerLineType = CropOverlayView.CornerLineType(rawValue: index) ?? .topLeftVertical
             switch lineType {
             case .topLeftHorizontal:
                 line.frame = topLeftHorizonalLayerFrame

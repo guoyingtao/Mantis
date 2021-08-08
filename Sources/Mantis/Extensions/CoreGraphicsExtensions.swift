@@ -141,9 +141,9 @@ extension CGVector{
     func dot(_ vec2:CGVector) -> CGFloat { return (dx * vec2.dx + dy * vec2.dy).checked}
     func add(_ vec2:CGVector) -> CGVector { return CGVector(dx:dx + vec2.dx , dy: dy + vec2.dy).checked}
     func cross(_ vec2:CGVector) -> CGFloat { return (dx * vec2.dy - dy * vec2.dx).checked}
-    func scale(_ c:CGFloat) -> CGVector { return CGVector(dx:dx * c , dy: dy * c).checked}
+    func scale(_ scale:CGFloat) -> CGVector { return CGVector(dx:dx * scale , dy: dy * scale).checked}
     
-    init( from:CGPoint, to:CGPoint){
+    init(from: CGPoint, to: CGPoint) {
         guard !from.hasNaN && !to.hasNaN  else {
                 fatalError("Nan point!")
             }
@@ -153,7 +153,7 @@ extension CGVector{
         _ = self.checked
     }
     
-    init(angle:Angle){
+    init(angle: Angle) {
         let compAngle = angle < 0 ? (angle + 2 * CGFloat.pi) : angle
         self.init()
         dx = cos(compAngle.checked)
@@ -161,21 +161,20 @@ extension CGVector{
         _ = self.checked
     }
     
-    var theta:Angle{
+    var theta: Angle {
         return atan2(dy, dx)}
     
-    static func theta(_ vec1:CGVector, vec2:CGVector) -> Angle{
-		var i = vec1.normalized.dot(vec2.normalized)
-        if (i > 1) {
-    		i = 1;
+    static func theta(_ vec1: CGVector, vec2: CGVector) -> Angle {
+		var result = vec1.normalized.dot(vec2.normalized)
+        if result > 1 {
+            result = 1
+        } else if result < -1 {
+            result = -1
         }
-        if (i < -1){
-         	i = -1;
-        }
-        return acos(i).checked
+        return acos(result).checked
     }
     
-    static func signedTheta(_ vec1:CGVector, vec2:CGVector) -> Angle{
+    static func signedTheta(_ vec1: CGVector, vec2: CGVector) -> Angle {
         
         return (vec1.normalized.cross(vec2.normalized) > 0 ?  -1 : 1) * theta(vec1.normalized, vec2: vec2.normalized).checked
     }

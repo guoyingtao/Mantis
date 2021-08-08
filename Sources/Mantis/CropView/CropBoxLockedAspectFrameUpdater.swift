@@ -67,7 +67,10 @@ struct CropBoxLockedAspectFrameUpdater {
             cropBoxFrame.size.width = cropBoxFrame.size.height * aspectRatio
         }
         
-        let tappedEdgeCropFrameUpdateRule: [CropViewOverlayEdge: (xDelta: CGFloat, yDelta: CGFloat)] = [.topLeft: (xDelta, yDelta), .topRight: (-xDelta, yDelta), .bottomLeft: (xDelta, -yDelta), .bottomRight: (-xDelta, -yDelta)]
+        let tappedEdgeCropFrameUpdateRule: TappedEdgeCropFrameUpdateRule = [.topLeft: (xDelta, yDelta),
+                                                                              .topRight: (-xDelta, yDelta),
+                                                                              .bottomLeft: (xDelta, -yDelta),
+                                                                              .bottomRight: (-xDelta, -yDelta)]
         
         func setCropBoxSize() {
             guard let delta = tappedEdgeCropFrameUpdateRule[tappedEdge] else {

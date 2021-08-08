@@ -55,7 +55,14 @@ struct CropBoxFreeAspectFrameUpdater {
         }
         
         func getNewCropFrameSize(byTappedEdge tappedEdge: CropViewOverlayEdge) -> CGSize {
-            let tappedEdgeCropFrameUpdateRule: [CropViewOverlayEdge: (xDelta: CGFloat, yDelta: CGFloat)] = [.left: (-xDelta, 0), .right: (xDelta, 0), .top: (0, -yDelta), .bottom: (0, yDelta), .topLeft: (-xDelta, -yDelta), .topRight: (xDelta, -yDelta), .bottomLeft: (-xDelta, yDelta), .bottomRight: (xDelta, yDelta)]
+            let tappedEdgeCropFrameUpdateRule: TappedEdgeCropFrameUpdateRule = [.left: (-xDelta, 0),
+                                                                                .right: (xDelta, 0),
+                                                                                .top: (0, -yDelta),
+                                                                                .bottom: (0, yDelta),
+                                                                                .topLeft: (-xDelta, -yDelta),
+                                                                                .topRight: (xDelta, -yDelta),
+                                                                                .bottomLeft: (-xDelta, yDelta),
+                                                                                .bottomRight: (xDelta, yDelta)]
             
             guard let delta = tappedEdgeCropFrameUpdateRule[tappedEdge] else {
                 return cropOriginFrame.size

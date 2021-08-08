@@ -182,8 +182,8 @@ extension UIImage {
             let path = UIBezierPath()
             path.move(to: newPoints[0])
             
-            for i in 1..<newPoints.count {
-                path.addLine(to: newPoints[i])
+            for index in 1..<newPoints.count {
+                path.addLine(to: newPoints[index])
             }
             
             path.close()

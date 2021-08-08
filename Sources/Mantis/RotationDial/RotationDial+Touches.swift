@@ -10,8 +10,8 @@ import UIKit
 
 extension RotationDial {
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let p = convert(point, to: self)
-        if bounds.contains(p) {
+        let newPoint = convert(point, to: self)
+        if bounds.contains(newPoint) {
             return self
         }
         

@@ -53,19 +53,19 @@ class FixedRatioManager {
 // MARK: - Private methods
 extension FixedRatioManager {
     private func addExtraDefaultRatios() {
-        let scale3_2 = RatioItemType("3:2", 3.0/2.0, "2:3", 2.0/3.0)
-        let scale5_3 = RatioItemType("5:3", 5.0/3.0, "3:5", 3.0/5.0)
-        let scale4_3 = RatioItemType("4:3", 4.0/3.0, "3:4", 3.0/4.0)
-        let scale5_4 = RatioItemType("5:4", 5.0/4.0, "4:5", 4.0/5.0)
-        let scale7_5 = RatioItemType("7:5", 7.0/5.0, "5:7", 5.0/7.0)
-        let scale16_9 = RatioItemType("16:9", 16.0/9.0, "9:16", 9.0/16.0)
+        let scale3to2 = RatioItemType("3:2", 3.0/2.0, "2:3", 2.0/3.0)
+        let scale5to3 = RatioItemType("5:3", 5.0/3.0, "3:5", 3.0/5.0)
+        let scale4to3 = RatioItemType("4:3", 4.0/3.0, "3:4", 3.0/4.0)
+        let scale5to4 = RatioItemType("5:4", 5.0/4.0, "4:5", 4.0/5.0)
+        let scale7to5 = RatioItemType("7:5", 7.0/5.0, "5:7", 5.0/7.0)
+        let scale16to9 = RatioItemType("16:9", 16.0/9.0, "9:16", 9.0/16.0)
         
-        appendToTail(ratioItem: scale3_2)
-        appendToTail(ratioItem: scale5_3)
-        appendToTail(ratioItem: scale4_3)
-        appendToTail(ratioItem: scale5_4)
-        appendToTail(ratioItem: scale7_5)
-        appendToTail(ratioItem: scale16_9)
+        appendToTail(ratioItem: scale3to2)
+        appendToTail(ratioItem: scale5to3)
+        appendToTail(ratioItem: scale4to3)
+        appendToTail(ratioItem: scale5to4)
+        appendToTail(ratioItem: scale7to5)
+        appendToTail(ratioItem: scale16to9)
     }
     
     private func contains(ratioItem: RatioItemType) -> Bool {
