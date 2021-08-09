@@ -186,6 +186,20 @@ public enum PresetTransformationType {
 Please use the transformation infomation obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation).
 
 </details>
+                
+<details>
+    <summary><strong>Localization</strong></summary>
+    
+* UIKit project    
+    Add more languages support to the Localizaions section for Project Info tab 
+    
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/26723384/128650945-5a1da648-7e7d-4faf-9c95-232725b05dcc.png" height="200" alt="Mantis" />
+</p>
+    
+* SwiftUI project    
+    please check this [link](https://github.com/guoyingtao/Mantis/discussions/123#discussioncomment-1127611)
+</details>
     
 ### Demo projects
 Mantis provide two demo projects
