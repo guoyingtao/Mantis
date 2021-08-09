@@ -35,6 +35,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
+        Mantis.setBundle(Bundle(for: Self.self))
+        
         let config = Mantis.Config()
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)

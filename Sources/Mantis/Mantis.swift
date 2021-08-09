@@ -46,6 +46,10 @@ public func cropCustomizableViewController(image: UIImage,
                               cropToolbar: cropToolbar)
 }
 
+public func setBundle(_ bundle: Bundle) {
+    LocalizedHelper.setBundle(bundle)
+}
+
 public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
     return image.getCroppedImage(byCropInfo: info)
 }
@@ -167,7 +171,7 @@ public struct Config {
             return nil
         }
         
-        if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
+        if let url = bundle.url(forResource: "MantisResource", withExtension: "bundle") {
             let bundle = Bundle(url: url)
             return bundle
         }
