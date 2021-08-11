@@ -46,8 +46,8 @@ public func cropCustomizableViewController(image: UIImage,
                               cropToolbar: cropToolbar)
 }
 
-public func setBundle(_ bundle: Bundle) {
-    LocalizedHelper.setBundle(bundle)
+public func locateResourceBundle(by hostClass: AnyClass) {
+    LocalizedHelper.setBundle(Bundle(for: hostClass))
 }
 
 public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
