@@ -201,7 +201,7 @@ public class CropViewController: UIViewController {
     }    
     
     @objc func rotated() {
-        let currentOrientation = Orientation.orientation
+        let currentOrientation = Orientation.interfaceOrientation
         
         guard currentOrientation != .unknown else { return }
         guard currentOrientation != orientation else { return }
