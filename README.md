@@ -33,7 +33,7 @@
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 1.7.1'
+pod 'Mantis', '~> 1.7.2'
 ```
 </details>
 
