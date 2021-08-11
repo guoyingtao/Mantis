@@ -2,6 +2,14 @@
 
 -----
 
+### [1.7.2](https://www.github.com/guoyingtao/Mantis/compare/v1.7.1...v1.7.2) (2021-08-11)
+
+
+### Bug Fixes
+
+* fix the wrong mask rounded rectangle value ([#124](https://www.github.com/guoyingtao/Mantis/issues/124)) ([33a8865](https://www.github.com/guoyingtao/Mantis/commit/33a8865f61f2f0dc0811ebd508ef23791ad91693))
+* solve the SwiftLint errors ([#126](https://www.github.com/guoyingtao/Mantis/issues/126)) ([5e147aa](https://www.github.com/guoyingtao/Mantis/commit/5e147aa19785b57a6e5af89d098c30e39438ea51))
+
 ### [1.7.1](https://www.github.com/guoyingtao/Mantis/compare/v1.7.0...v1.7.1) (2021-05-02)
 
 
