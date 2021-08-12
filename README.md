@@ -195,18 +195,15 @@ Please use the transformation infomation obtained previously from delegate metho
     
 <p align="center">
     <img src="https://user-images.githubusercontent.com/26723384/128650945-5a1da648-7e7d-4faf-9c95-232725b05dcc.png" height="200" alt="Mantis" />
+    <br>fig 1</br>
 </p>
     
 * SwiftUI project    
     please check this [link](https://github.com/guoyingtao/Mantis/discussions/123#discussioncomment-1127611)
   
 * Custom localization tables and bundle
+    
 By default mantis will use built in localization tables to get string resources not every language is supported out of the box (see fig 1).
- 
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/26723384/128650945-5a1da648-7e7d-4faf-9c95-232725b05dcc.png" height="200" alt="Mantis" />
-    <br>fig 1</br>
-</p>
     
 However if your app support multiple languages and those languages are not 'built in', then you can define your own strings table and localize them in the application target or framework. By doing so you'll need to configure Mantis localization.
 
