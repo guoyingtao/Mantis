@@ -6,10 +6,10 @@
   Copyright © 2018 Echo. All rights reserved.
 */
 
-"Done" = "OK";
-"Cancel" = "Cancelar";
-"Reset" = "Redefinir";
-"Original" = "Original";
-"Square" = "Quadrada";
+"Mantis.Done" = "OK";
+"Mantis.Cancel" = "Cancelar";
+"Mantis.Reset" = "Redefinir";
+"Mantis.Original" = "Original";
+"Mantis.Square" = "Quadrada";
 
 

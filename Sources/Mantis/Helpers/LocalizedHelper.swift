@@ -10,8 +10,8 @@ import Foundation
 
 struct LocalizedHelper {
     static func getString(
-        localizationConfig: LocalizationConfig,
-        key: String,
+        _ key: String,
+        localizationConfig: LocalizationConfig = Mantis.localizationConfig,
         value: String? = nil
     ) -> String {
         let value = value ?? key

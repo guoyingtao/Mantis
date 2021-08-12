@@ -6,8 +6,8 @@
   Copyright © 2018 Echo. All rights reserved.
 */
 
-"Done" = "Готово";
-"Cancel" = "Отменить";
-"Reset" = "Сбросить";
-"Original" = "Оригинал";
-"Square" = "Квадрат";
+"Mantis.Done" = "Готово";
+"Mantis.Cancel" = "Отменить";
+"Mantis.Reset" = "Сбросить";
+"Mantis.Original" = "Оригинал";
+"Mantis.Square" = "Квадрат";
