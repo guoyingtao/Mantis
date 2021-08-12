@@ -6,9 +6,9 @@
   Copyright © 2018 Echo. All rights reserved.
 */
 
-"Done" = "Fatto";
-"Cancel" = "Annulla";
-"Reset" = "Ripristina";
-"Original" = "Originale";
-"Square" = "Quadrato";
+"Mantis.Done" = "Fatto";
+"Mantis.Cancel" = "Annulla";
+"Mantis.Reset" = "Ripristina";
+"Mantis.Original" = "Originale";
+"Mantis.Square" = "Quadrato";
 

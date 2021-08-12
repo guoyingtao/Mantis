@@ -19,14 +19,14 @@ class RatioPresenter {
     private var originalRatioH: Double
     private var ratios: [RatioItemType]
     private var fixRatiosShowType: FixRatiosShowType = .adaptive
-    
+
     init(type: RatioType, originalRatioH: Double, ratios: [RatioItemType] = [], fixRatiosShowType: FixRatiosShowType = .adaptive) {
         self.type = type
         self.originalRatioH = originalRatioH
         self.ratios = ratios
         self.fixRatiosShowType = fixRatiosShowType
     }
-    
+
     private func getItemTitle(by ratio: RatioItemType)-> String {
         switch fixRatiosShowType {
         case .adaptive:
@@ -37,7 +37,7 @@ class RatioPresenter {
             return ratio.nameV
         }
     }
-    
+
     private func getItemValue(by ratio: RatioItemType)-> Double {
         switch fixRatiosShowType {
         case .adaptive:
@@ -48,13 +48,13 @@ class RatioPresenter {
             return ratio.ratioV
         }
     }
-    
+
     func present(by viewController: UIViewController, in sourceView: UIView) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
+
         for ratio in ratios {
             let title = getItemTitle(by: ratio)
-            
+
             let action = UIAlertAction(title: title, style: .default) {[weak self] _ in
                 guard let self = self else { return }
                 let ratioValue = self.getItemValue(by: ratio)
@@ -62,13 +62,13 @@ class RatioPresenter {
             }
             actionSheet.addAction(action)
         }
-        
+
         actionSheet.handlePopupInBigScreenIfNeeded(sourceView: sourceView)
-        
-        let cancelText = LocalizedHelper.getString("Cancel")
+
+        let cancelText = LocalizedHelper.getString("Mantis.Cancel")
         let cancelAction = UIAlertAction(title: cancelText, style: .cancel)
         actionSheet.addAction(cancelAction)
-        
+
         viewController.present(actionSheet, animated: true)
     }
 }
@@ -81,7 +81,7 @@ public extension UIAlertController {
             popoverPresentationController?.sourceView = sourceView
             popoverPresentationController?.sourceRect = sourceView.bounds
         }
-        
+
         if #available(macCatalyst 14.0, iOS 14.0, *) {
             if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
                 handlePopupInBigScreen(sourceView: sourceView, permittedArrowDirections: permittedArrowDirections)

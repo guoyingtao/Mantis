@@ -6,9 +6,9 @@
   Copyright © 2018 Echo. All rights reserved.
 */
 
-"Done" = "완료";
-"Cancel" = "취소";
-"Reset" = "재설정";
-"Original" = "원본";
-"Square" = "정방형";
+"Mantis.Done" = "완료";
+"Mantis.Cancel" = "취소";
+"Mantis.Reset" = "재설정";
+"Mantis.Original" = "원본";
+"Mantis.Square" = "정방형";
 

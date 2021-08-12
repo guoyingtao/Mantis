@@ -14,7 +14,7 @@ class FixedRatioManager {
     private (set) var ratios: [RatioItemType] = []
     private var ratioOptions: RatioOptions = .all
     private var customRatios: [RatioItemType] = []
-    
+
     var type: RatioType = .horizontal
     var originalRatioH = 1.0
 
@@ -22,13 +22,13 @@ class FixedRatioManager {
 
         self.type = type
         self.originalRatioH = originalRatioH
-        
+
         if ratioOptions.contains(.original) {
             appendToTail(ratioItem: getOriginalRatioItem())
         }
-        
+
         if ratioOptions.contains(.square) {
-            let squareText = LocalizedHelper.getString("Square")
+            let squareText = LocalizedHelper.getString("Mantis.Square")
             let square = (squareText, 1.0, squareText, 1.0)
             appendToTail(ratioItem: square)
         }
@@ -36,16 +36,16 @@ class FixedRatioManager {
         if ratioOptions.contains(.extraDefaultRatios) {
             addExtraDefaultRatios()
         }
-        
+
         if ratioOptions.contains(.custom) {
             appendToTail(ratioItems: customRatios)
         }
-        
+
         sort(isByHorizontal: (type == .horizontal))
     }
-    
+
     func getOriginalRatioItem() -> RatioItemType {
-        let originalText = LocalizedHelper.getString("Original")
+        let originalText = LocalizedHelper.getString("Mantis.Original")
         return (originalText, originalRatioH, originalText, originalRatioH)
     }
 }
@@ -59,7 +59,7 @@ extension FixedRatioManager {
         let scale5to4 = RatioItemType("5:4", 5.0/4.0, "4:5", 4.0/5.0)
         let scale7to5 = RatioItemType("7:5", 7.0/5.0, "5:7", 5.0/7.0)
         let scale16to9 = RatioItemType("16:9", 16.0/9.0, "9:16", 9.0/16.0)
-        
+
         appendToTail(ratioItem: scale3to2)
         appendToTail(ratioItem: scale5to3)
         appendToTail(ratioItem: scale4to3)
@@ -67,7 +67,7 @@ extension FixedRatioManager {
         appendToTail(ratioItem: scale7to5)
         appendToTail(ratioItem: scale16to9)
     }
-    
+
     private func contains(ratioItem: RatioItemType) -> Bool {
         var contains = false
         ratios.forEach {
@@ -77,61 +77,61 @@ extension FixedRatioManager {
         }
         return contains
     }
-    
+
     private func getWidth(fromNameH nameH: String) -> Int {
         let items = nameH.split(separator: ":")
         guard items.count == 2 else {
             return 0
         }
-        
+
         guard let width = Int(items[0]) else {
             return 0
         }
-        
+
         return width
     }
-    
+
     private func getHeight(fromNameH nameH: String) -> Int {
         let items = nameH.split(separator: ":")
         guard items.count == 2 else {
             return 0
         }
-        
+
         guard let width = Int(items[1]) else {
             return 0
         }
-        
+
         return width
     }
-    
+
     private func insertToHead(ratioItem: RatioItemType) {
         guard contains(ratioItem: ratioItem) == false else { return }
         ratios.insert(ratioItem, at: 0)
     }
-    
+
     private func appendToTail(ratioItem: RatioItemType) {
         guard contains(ratioItem: ratioItem) == false else { return }
         ratios.append(ratioItem)
     }
-    
+
     private func appendToTail(ratioItems: [RatioItemType]) {
         ratioItems.forEach{
             appendToTail(ratioItem: $0)
         }
     }
-    
+
     private func appendToTail(items: [(width: Int, height: Int)]) {
         items.forEach {
             let ratioItem = (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
             appendToTail(ratioItem: ratioItem)
         }
     }
-    
+
     private func sort(isByHorizontal: Bool) {
         guard ratios.count > 1 else {
             return
         }
-        
+
         if isByHorizontal {
             ratios = ratios[...1] + ratios[2...].sorted { getHeight(fromNameH: $0.nameH) < getHeight(fromNameH: $1.nameH) }
         } else {
