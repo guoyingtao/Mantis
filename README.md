@@ -21,7 +21,6 @@
     <img src="Images/cropshapes.png" height="450" alt="Mantis" />
 </p>
 
-
 ## Requirements
 * iOS 11.0+
 * MacOS 10.15+
