@@ -48,7 +48,7 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Respository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 1.6.2
+* Rules: Version - Exact - 1.7.3
 
 </details>
 
