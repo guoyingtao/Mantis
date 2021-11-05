@@ -12,9 +12,14 @@ struct LocalizedHelper {
     private static var bundle: Bundle?
         
     static func setBundle(_ bundle: Bundle) {
-        guard let resourceBundleURL = bundle.url(
-            forResource: "MantisResource", withExtension: "bundle")
-            else { return }
+        let resourceBundleURL = bundle.url(
+            forResource: "MantisResources", withExtension: "bundle") ?? bundle.url(
+                forResource: "Resources", withExtension: "bundle")
+        
+        guard let resourceBundleURL = resourceBundleURL else {
+            return
+        }
+        
         LocalizedHelper.bundle = Bundle(url: resourceBundleURL)
     }
     
