@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/guoyingtao/Mantis.git", :tag => "#{s.version}" }
   s.source_files  = "Sources/**/*.{h,swift}"
   s.resource_bundles = {
-    "Resource" => ["Sources/**/*.lproj/*.strings"]
+    "MantisResource" => ["Sources/**/*.lproj/*.strings"]
   }
   
   s.pod_target_xcconfig = {

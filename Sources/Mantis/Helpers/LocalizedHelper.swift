@@ -9,6 +9,15 @@
 import Foundation
 
 struct LocalizedHelper {
+    private static var bundle: Bundle?
+        
+    static func setBundle(_ bundle: Bundle) {
+        guard let resourceBundleURL = bundle.url(
+            forResource: "MantisResource", withExtension: "bundle")
+            else { return }
+        LocalizedHelper.bundle = Bundle(url: resourceBundleURL)
+    }
+    
     static func getString(
         _ key: String,
         localizationConfig: LocalizationConfig = Mantis.localizationConfig,
@@ -16,7 +25,7 @@ struct LocalizedHelper {
     ) -> String {
         let value = value ?? key
 
-        guard let bundle = localizationConfig.bundle ?? Mantis.bundle else {
+        guard let bundle = LocalizedHelper.bundle ?? (localizationConfig.bundle ?? Mantis.bundle) else {
             return value
         }
 

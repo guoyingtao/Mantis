@@ -26,7 +26,7 @@ import UIKit
 
 private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
-} ()
+}()
 
 internal var localizationConfig = LocalizationConfig()
 
@@ -46,6 +46,10 @@ public func cropCustomizableViewController(image: UIImage,
                               config: config,
                               mode: .customizable,
                               cropToolbar: cropToolbar)
+}
+
+public func locateResourceBundle(by hostClass: AnyClass) {
+    LocalizedHelper.setBundle(Bundle(for: hostClass))
 }
 
 public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
@@ -168,19 +172,19 @@ public struct Config {
 
     static private var bundleIdentifier: String = {
         return "com.echo.framework.Mantis"
-    } ()
+    }()
 
     static private(set) var bundle: Bundle? = {
         guard let bundle = Bundle(identifier: bundleIdentifier) else {
             return nil
         }
 
-        if let url = bundle.url(forResource: "Resource", withExtension: "bundle") {
+        if let url = bundle.url(forResource: "MantisResource", withExtension: "bundle") {
             let bundle = Bundle(url: url)
             return bundle
         }
         return nil
-    } ()
+    }()
 
     public init() {
     }
@@ -203,4 +207,3 @@ public struct Config {
         }
     }
 }
-
