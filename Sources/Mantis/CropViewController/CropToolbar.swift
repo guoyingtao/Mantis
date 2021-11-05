@@ -56,7 +56,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     private func createCancelButton() {
-        let cancelText = LocalizedHelper.getString("Mantis.Cancel")
+        let cancelText = LocalizedHelper.getString("Mantis.Cancel", value: "Cancel")
 
         cancelButton = createOptionButton(withTitle: cancelText, andAction: #selector(cancel))
     }
