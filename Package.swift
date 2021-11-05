@@ -15,7 +15,7 @@ let package = Package(
     targets: [
         .target(
             name: "Mantis",
-            exclude:["Info.plist"],
+            exclude:["Resources/Info.plist"],
             resources: [.process("Resources")])
     ]
 )
