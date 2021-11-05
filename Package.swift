@@ -15,6 +15,8 @@ let package = Package(
     targets: [
         .target(
             name: "Mantis",
-            dependencies: [])
+            resources: [
+                .process("Resources")
+            ])
     ]
 )
