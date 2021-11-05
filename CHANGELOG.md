@@ -2,6 +2,13 @@
 
 -----
 
+### [1.7.4](https://www.github.com/guoyingtao/Mantis/compare/v1.7.3...v1.7.4) (2021-11-05)
+
+
+### Bug Fixes
+
+* support static lib localization ([#141](https://www.github.com/guoyingtao/Mantis/issues/141)) ([#142](https://www.github.com/guoyingtao/Mantis/issues/142)) ([fd2de0f](https://www.github.com/guoyingtao/Mantis/commit/fd2de0f69ce5c0695b40b32b4ee9e76250a7a58d))
+
 ### [1.7.3](https://www.github.com/guoyingtao/Mantis/compare/v1.7.2...v1.7.3) (2021-10-27)
 
 
