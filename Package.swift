@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Mantis",
+    defaultLocalization: "en",
     platforms: [.iOS(.v11), .macOS(.v10_15)],
     products: [
         .library(
@@ -14,6 +15,8 @@ let package = Package(
     targets: [
         .target(
             name: "Mantis",
-            dependencies: [])
+            dependencies: [],
+            path: "Mantis",
+            resources: [.process("Resources")])
     ]
 )
