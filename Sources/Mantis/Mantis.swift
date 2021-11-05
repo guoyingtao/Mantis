@@ -179,7 +179,7 @@ public struct Config {
             return nil
         }
 
-        if let url = bundle.url(forResource: "MantisResource", withExtension: "bundle") {
+        if let url = bundle.url(forResource: "MantisResources", withExtension: "bundle") {
             let bundle = Bundle(url: url)
             return bundle
         }
