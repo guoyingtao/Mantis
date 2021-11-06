@@ -16,6 +16,8 @@ let package = Package(
         .target(
             name: "Mantis",
             exclude:["Resources/Info.plist"],
-            resources: [.process("Resources")])
+            resources: [.process("Resources")],
+            swiftSettings: [.define("MANTIS_SPM")]
+        )
     ]
 )

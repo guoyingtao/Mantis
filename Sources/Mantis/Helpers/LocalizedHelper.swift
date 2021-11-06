@@ -13,13 +13,12 @@ struct LocalizedHelper {
         
     static func setBundle(_ bundle: Bundle) {
         let resourceBundleURL = bundle.url(
-            forResource: "MantisResources", withExtension: "bundle") ?? bundle.url(
-                forResource: "Resources", withExtension: "bundle")
+            forResource: "MantisResources", withExtension: "bundle")
         
         guard let resourceBundleURL = resourceBundleURL else {
             return
         }
-        
+
         LocalizedHelper.bundle = Bundle(url: resourceBundleURL)
     }
     
@@ -30,10 +29,11 @@ struct LocalizedHelper {
     ) -> String {
         let value = value ?? key
 
-        guard let bundle = LocalizedHelper.bundle ?? (localizationConfig.bundle ?? Mantis.bundle) else {
+#if MANTIS_SPM
+        guard let bundle = (localizationConfig.bundle ?? Bundle.module) else {
             return value
         }
-
+        
         return NSLocalizedString(
             key,
             tableName: localizationConfig.tableName,
@@ -41,5 +41,19 @@ struct LocalizedHelper {
             value: value,
             comment: ""
         )
+#else
+        guard let bundle = LocalizedHelper.bundle ?? (localizationConfig.bundle ?? Mantis.bundle) else {
+            return value
+        }
+        
+        return NSLocalizedString(
+            key,
+            tableName: localizationConfig.tableName,
+            bundle: bundle,
+            value: value,
+            comment: ""
+        )
+#endif
+
     }
 }
