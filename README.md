@@ -198,7 +198,14 @@ Please use the transformation infomation obtained previously from delegate metho
 </p>
     
 * SwiftUI project    
-    please check this [link](https://github.com/guoyingtao/Mantis/discussions/123#discussioncomment-1127611)
+    Please check this [link](https://github.com/guoyingtao/Mantis/discussions/123#discussioncomment-1127611)
+
+* Static frameworks
+    If you use static frameworks in CocoaPods, you need to add the code below in order to find the correct resource bundle.
+    
+```
+    Mantis.locateResourceBundle(by: Self.self)
+```
   
 * Custom localization tables and bundle
     
