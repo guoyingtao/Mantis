@@ -30,9 +30,7 @@ struct LocalizedHelper {
         let value = value ?? key
 
 #if MANTIS_SPM
-        guard let bundle = (localizationConfig.bundle ?? Bundle.module) else {
-            return value
-        }
+        let bundle = localizationConfig.bundle ?? Bundle.module
         
         return NSLocalizedString(
             key,
