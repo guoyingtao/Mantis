@@ -2,6 +2,13 @@
 
 -----
 
+### [1.7.5](https://www.github.com/guoyingtao/Mantis/compare/v1.7.4...v1.7.5) (2021-11-06)
+
+
+### Bug Fixes
+
+* solve SPM localization issue ([#145](https://www.github.com/guoyingtao/Mantis/issues/145)) ([8dedb8b](https://www.github.com/guoyingtao/Mantis/commit/8dedb8be2e58874fdf0da0dacd227dc4cec97e22))
+
 ### [1.7.4](https://www.github.com/guoyingtao/Mantis/compare/v1.7.3...v1.7.4) (2021-11-05)
 
 
