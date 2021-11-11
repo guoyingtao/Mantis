@@ -165,6 +165,7 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showRotationDial = true
+    public var rotationLimit: RotationLimitType = .limit(angle: CGAngle(degrees: 45))
     public var cropToolbarConfig = CropToolbarConfig()
     public private(set) var localizationConfig = Mantis.localizationConfig
 

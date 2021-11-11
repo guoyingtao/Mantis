@@ -54,12 +54,7 @@ enum DialConfig {
         case useDefault
         case custom(CGPoint)
     }
-    
-    enum RotationLimitType {
-        case noLimit
-        case limit(angle: CGAngle)
-    }
-    
+
     enum AnglehowLimitType {
         case noLimit
         case limit(angle: CGAngle)
@@ -76,4 +71,9 @@ enum DialConfig {
         case dark
         case light
     }
+}
+
+public enum RotationLimitType {
+    case noLimit
+    case limit(angle: CGAngle)
 }

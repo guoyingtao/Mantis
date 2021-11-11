@@ -59,7 +59,7 @@ public class CropViewController: UIViewController {
     public var config = Mantis.Config()
     
     private var orientation: UIInterfaceOrientation = .unknown
-    private lazy var cropView = CropView(image: image, viewModel: CropViewModel())
+    private lazy var cropView = CropView(image: image, viewModel: CropViewModel(), config: config)
     private var cropToolbar: CropToolbarProtocol
     private var ratioPresenter: RatioPresenter?
     private var ratioSelector: RatioSelector?
@@ -79,7 +79,7 @@ public class CropViewController: UIViewController {
         self.image = image
         
         self.config = config
-        
+
         switch config.cropShapeType {
         case .circle, .square, .heart:
             self.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
