@@ -10,7 +10,7 @@
 
 # Mantis
 
-   Mantis is an open-source swift library that provides rich cropping interactions for your iOS/Mac app.
+   Mantis is an open-source swift library that provides rich cropping interactions for your iOS/Mac app (Catalyst only).
    
 <p align="center">
     <img src="Images/Mantis on all devices.png" height="400" alt="Mantis" />
