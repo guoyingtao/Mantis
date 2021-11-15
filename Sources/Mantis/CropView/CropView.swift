@@ -38,7 +38,7 @@ let cropViewPadding:CGFloat = 14.0
 
 class CropView: UIView {
 
-    public var config = Mantis.Config()
+    public var dialConfig = Mantis.Config().dialConfig
 
     var cropShapeType: CropShapeType = .rect
     var cropVisualEffectType: CropVisualEffectType = .blurDark
@@ -79,10 +79,10 @@ class CropView: UIView {
         print("CropView deinit.")
     }
     
-    init(image: UIImage, viewModel: CropViewModel = CropViewModel(), config: Mantis.Config = Mantis.Config()) {
+    init(image: UIImage, viewModel: CropViewModel = CropViewModel(), dialConfig: DialConfig = Mantis.Config().dialConfig) {
         self.image = image
         self.viewModel = viewModel
-        self.config = config
+        self.dialConfig = dialConfig
         
         imageContainer = ImageContainer()
         gridOverlayView = CropOverlayView()
@@ -252,14 +252,8 @@ class CropView: UIView {
             rotationDial?.removeFromSuperview()
         }
 
-        var dailConfig = DialConfig.Config()
-        dailConfig.backgroundColor = .clear
-        dailConfig.angleShowLimitType = .limit(angle: CGAngle(degrees: 40))
-        dailConfig.rotationLimitType = config.rotationLimit
-        dailConfig.numberShowSpan = 1
-        
         let boardLength = min(bounds.width, bounds.height) * 0.6
-        let rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight), config: dailConfig)
+        let rotationDial = RotationDial(frame: CGRect(x: 0, y: 0, width: boardLength, height: angleDashboardHeight), dialConfig: dialConfig)
         self.rotationDial = rotationDial
         rotationDial.isUserInteractionEnabled = true
         addSubview(rotationDial)

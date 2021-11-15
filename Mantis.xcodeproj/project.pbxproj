@@ -62,7 +62,6 @@
 		OBJ_93 /* CropVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* CropVisualEffectView.swift */; };
 		OBJ_94 /* RatioOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* RatioOptions.swift */; };
 		OBJ_95 /* CGAngle.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* CGAngle.swift */; };
-		OBJ_96 /* DialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* DialConfig.swift */; };
 		OBJ_97 /* RotationCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* RotationCalculator.swift */; };
 		OBJ_98 /* RotationDial+Touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_46 /* RotationDial+Touches.swift */; };
 		OBJ_99 /* RotationDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* RotationDial.swift */; };
@@ -144,7 +143,6 @@
 		OBJ_40 /* CropVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropVisualEffectView.swift; sourceTree = "<group>"; };
 		OBJ_41 /* RatioOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioOptions.swift; sourceTree = "<group>"; };
 		OBJ_43 /* CGAngle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGAngle.swift; sourceTree = "<group>"; };
-		OBJ_44 /* DialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialConfig.swift; sourceTree = "<group>"; };
 		OBJ_45 /* RotationCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationCalculator.swift; sourceTree = "<group>"; };
 		OBJ_46 /* RotationDial+Touches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RotationDial+Touches.swift"; sourceTree = "<group>"; };
 		OBJ_47 /* RotationDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDial.swift; sourceTree = "<group>"; };
@@ -263,7 +261,6 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_43 /* CGAngle.swift */,
-				OBJ_44 /* DialConfig.swift */,
 				OBJ_45 /* RotationCalculator.swift */,
 				OBJ_46 /* RotationDial+Touches.swift */,
 				OBJ_47 /* RotationDial.swift */,
@@ -567,7 +564,6 @@
 				OBJ_93 /* CropVisualEffectView.swift in Sources */,
 				OBJ_94 /* RatioOptions.swift in Sources */,
 				OBJ_95 /* CGAngle.swift in Sources */,
-				OBJ_96 /* DialConfig.swift in Sources */,
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
 				OBJ_99 /* RotationDial.swift in Sources */,
