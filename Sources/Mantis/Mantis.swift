@@ -142,33 +142,6 @@ public enum FixRatiosShowType {
     case vetical
 }
 
-public enum DialRotationCenterType {
-    case useDefault
-    case custom(CGPoint)
-}
-
-public enum DialAngleShowLimitType {
-    case noLimit
-    case limit(angle: CGAngle)
-}
-
-public enum DialOrientation {
-    case normal
-    case right
-    case left
-    case upsideDown
-}
-
-public enum DialTheme {
-    case dark
-    case light
-}
-
-public enum DialRotationLimitType {
-    case noLimit
-    case limit(angle: CGAngle)
-}
-
 // MARK: - Localization
 public class LocalizationConfig {
     public var bundle: Bundle? = Mantis.Config.bundle
@@ -188,47 +161,6 @@ public struct CropToolbarConfig {
 
     var mode: CropToolbarMode = .normal
     var includeFixedRatioSettingButton = true
-}
-
-// MARK: - DialConfig
-public struct DialConfig {
-    public init() {}
-
-    public var margin: Double = 10
-    public var interactable = false
-    public var rotationLimitType: DialRotationLimitType = .limit(angle: CGAngle(degrees: 45))
-    public var angleShowLimitType: DialAngleShowLimitType = .limit(angle: CGAngle(degrees: 40))
-    public var rotationCenterType: DialRotationCenterType = .useDefault
-    public var numberShowSpan = 1
-    public var orientation: DialOrientation = .normal
-
-    public var backgroundColor: UIColor = .clear
-    public var bigScaleColor: UIColor = .lightGray
-    public var smallScaleColor: UIColor = .lightGray
-    public var indicatorColor: UIColor = .lightGray
-    public var numberColor: UIColor = .lightGray
-    public var centerAxisColor: UIColor = .lightGray
-
-    public var theme: DialTheme = .dark {
-        didSet {
-            switch theme {
-            case .dark:
-                backgroundColor = .clear
-                bigScaleColor = .lightGray
-                smallScaleColor = .lightGray
-                indicatorColor = .lightGray
-                numberColor = .lightGray
-                centerAxisColor = .lightGray
-            case .light:
-                backgroundColor = .clear
-                bigScaleColor = .darkGray
-                smallScaleColor = .darkGray
-                indicatorColor = .darkGray
-                numberColor = .darkGray
-                centerAxisColor = .darkGray
-            }
-        }
-    }
 }
 
 // MARK: - Config
