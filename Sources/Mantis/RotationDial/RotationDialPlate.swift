@@ -53,11 +53,11 @@ class RotationDialPlate: UIView {
         return layer
     }()
     
-    var config = DialConfig.Config()
+    var dialConfig = Mantis.Config().dialConfig
     
-    init(frame: CGRect, config: DialConfig.Config = DialConfig.Config()) {
+    init(frame: CGRect, dialConfig: DialConfig = Mantis.Config().dialConfig) {
         super.init(frame: frame)
-        self.config = config
+        self.dialConfig = dialConfig
         setup()
     }
     
@@ -69,7 +69,7 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = config.smallScaleColor.cgColor
+        mark.fillColor = dialConfig.smallScaleColor.cgColor
         
         return mark
     }
@@ -78,7 +78,7 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 4, height: 4)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = config.bigScaleColor.cgColor
+        mark.fillColor = dialConfig.bigScaleColor.cgColor
         
         return mark
     }
@@ -98,7 +98,7 @@ class RotationDialPlate: UIView {
         let step = (2 * CGFloat.pi) / CGFloat(bigDegreeScaleNumber)
         for index in (0 ..< bigDegreeScaleNumber) {
             
-            guard index % config.numberShowSpan == 0 else {
+            guard index % dialConfig.numberShowSpan == 0 else {
                 continue
             }
             
@@ -110,7 +110,7 @@ class RotationDialPlate: UIView {
             numberLayer.font = cgFont
             let angle = (index > bigDegreeScaleNumber / 2 ? index - bigDegreeScaleNumber : index) * 10
             numberLayer.string = "\(angle)"
-            numberLayer.foregroundColor = config.numberColor.cgColor
+            numberLayer.foregroundColor = dialConfig.numberColor.cgColor
             
             let stepChange = CGFloat(index) * step
             numberLayer.position = CGVector(from:origin, to:startPos).rotate(-stepChange).add(origin.vector).point.checked
@@ -146,7 +146,7 @@ class RotationDialPlate: UIView {
         let radius: CGFloat = 4
         layer.frame = CGRect(x: (self.layer.bounds.width - radius) / 2 , y: (self.layer.bounds.height - radius) / 2, width: radius, height: radius)
         layer.path = UIBezierPath(ovalIn: layer.bounds).cgPath
-        layer.fillColor = config.centerAxisColor.cgColor
+        layer.fillColor = dialConfig.centerAxisColor.cgColor
         
         self.layer.addSublayer(layer)
     }

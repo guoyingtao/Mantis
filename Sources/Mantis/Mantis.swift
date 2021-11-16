@@ -30,6 +30,7 @@ private(set) var bundle: Bundle? = {
 
 internal var localizationConfig = LocalizationConfig()
 
+// MARK: - Functions
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
@@ -56,6 +57,7 @@ public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) 
     return image.getCroppedImage(byCropInfo: info)
 }
 
+// MARK: - Type Aliases
 public typealias Transformation = (
     offset: CGPoint,
     rotation: CGFloat,
@@ -68,6 +70,7 @@ public typealias Transformation = (
 
 public typealias CropInfo = (translation: CGPoint, rotation: CGFloat, scale: CGFloat, cropSize: CGSize, imageViewSize: CGSize)
 
+// MARK: - Enums
 public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
@@ -139,6 +142,13 @@ public enum FixRatiosShowType {
     case vetical
 }
 
+// MARK: - Localization
+public class LocalizationConfig {
+    public var bundle: Bundle? = Mantis.Config.bundle
+    public var tableName = "MantisLocalizable"
+}
+
+// MARK: - CropToolbarConfig
 public struct CropToolbarConfig {
     public var optionButtonFontSize: CGFloat = 14
     public var optionButtonFontSizeForPad: CGFloat = 20
@@ -153,11 +163,7 @@ public struct CropToolbarConfig {
     var includeFixedRatioSettingButton = true
 }
 
-public class LocalizationConfig {
-    public var bundle: Bundle? = Mantis.Config.bundle
-    public var tableName = "MantisLocalizable"
-}
-
+// MARK: - Config
 public struct Config {
     public var presetTransformationType: PresetTransformationType = .none
     public var cropShapeType: CropShapeType = .rect
@@ -165,6 +171,7 @@ public struct Config {
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showRotationDial = true
+    public var dialConfig = DialConfig()
     public var cropToolbarConfig = CropToolbarConfig()
     public private(set) var localizationConfig = Mantis.localizationConfig
 

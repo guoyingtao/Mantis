@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		269AF94227437EE400F7FAF6 /* DialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269AF94127437EE400F7FAF6 /* DialConfig.swift */; };
 		5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E409253535F300A3EB7D /* Orientation.swift */; };
 		5F69CC5E26C0629400568B75 /* definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69CC5D26C0629400568B75 /* definitions.swift */; };
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
@@ -62,7 +63,6 @@
 		OBJ_93 /* CropVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* CropVisualEffectView.swift */; };
 		OBJ_94 /* RatioOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* RatioOptions.swift */; };
 		OBJ_95 /* CGAngle.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* CGAngle.swift */; };
-		OBJ_96 /* DialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* DialConfig.swift */; };
 		OBJ_97 /* RotationCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* RotationCalculator.swift */; };
 		OBJ_98 /* RotationDial+Touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_46 /* RotationDial+Touches.swift */; };
 		OBJ_99 /* RotationDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* RotationDial.swift */; };
@@ -93,6 +93,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		269AF94127437EE400F7FAF6 /* DialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialConfig.swift; sourceTree = "<group>"; };
 		5F17E409253535F300A3EB7D /* Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		5F69CC5D26C0629400568B75 /* definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = definitions.swift; sourceTree = "<group>"; };
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
@@ -144,7 +145,6 @@
 		OBJ_40 /* CropVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropVisualEffectView.swift; sourceTree = "<group>"; };
 		OBJ_41 /* RatioOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioOptions.swift; sourceTree = "<group>"; };
 		OBJ_43 /* CGAngle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGAngle.swift; sourceTree = "<group>"; };
-		OBJ_44 /* DialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialConfig.swift; sourceTree = "<group>"; };
 		OBJ_45 /* RotationCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationCalculator.swift; sourceTree = "<group>"; };
 		OBJ_46 /* RotationDial+Touches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RotationDial+Touches.swift"; sourceTree = "<group>"; };
 		OBJ_47 /* RotationDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDial.swift; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_43 /* CGAngle.swift */,
-				OBJ_44 /* DialConfig.swift */,
+				269AF94127437EE400F7FAF6 /* DialConfig.swift */,
 				OBJ_45 /* RotationCalculator.swift */,
 				OBJ_46 /* RotationDial+Touches.swift */,
 				OBJ_47 /* RotationDial.swift */,
@@ -565,9 +565,9 @@
 				FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */,
 				FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */,
 				OBJ_93 /* CropVisualEffectView.swift in Sources */,
+				269AF94227437EE400F7FAF6 /* DialConfig.swift in Sources */,
 				OBJ_94 /* RatioOptions.swift in Sources */,
 				OBJ_95 /* CGAngle.swift in Sources */,
-				OBJ_96 /* DialConfig.swift in Sources */,
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
 				OBJ_99 /* RotationDial.swift in Sources */,
