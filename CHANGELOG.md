@@ -2,6 +2,13 @@
 
 -----
 
+## [1.8.0](https://www.github.com/guoyingtao/Mantis/compare/v1.7.5...v1.8.0) (2021-11-16)
+
+
+### Features
+
+* added support to set the rotation limits ([#148](https://www.github.com/guoyingtao/Mantis/issues/148)) ([8feece0](https://www.github.com/guoyingtao/Mantis/commit/8feece05a23c66240bde446ffaea13f2e0dfe4ae))
+
 ### [1.7.5](https://www.github.com/guoyingtao/Mantis/compare/v1.7.4...v1.7.5) (2021-11-06)
 
 
