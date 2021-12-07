@@ -2,6 +2,13 @@
 
 -----
 
+### [1.8.1](https://www.github.com/guoyingtao/Mantis/compare/v1.8.0...v1.8.1) (2021-12-07)
+
+
+### Bug Fixes
+
+* exclude Info.plist in Package file ([4c5de48](https://www.github.com/guoyingtao/Mantis/commit/4c5de486e0f6d1b9cc37c4ae52b87d64f79aed8f))
+
 ## [1.8.0](https://www.github.com/guoyingtao/Mantis/compare/v1.7.5...v1.8.0) (2021-11-16)
 
 
