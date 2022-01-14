@@ -26,7 +26,9 @@ import UIKit
 
 public protocol CropViewControllerDelegate: AnyObject {
     func cropViewControllerDidCrop(_ cropViewController: CropViewController,
-                                   cropped: UIImage, transformation: Transformation)
+                                   cropped: UIImage,
+                                   transformation: Transformation,
+                                   cropInfo: CropInfo)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
@@ -439,7 +441,10 @@ public class CropViewController: UIViewController {
             return
         }
         
-        self.delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)        
+        self.delegate?.cropViewControllerDidCrop(self,
+                                                 cropped: image,
+                                                 transformation: cropResult.transformation,
+                                                 cropInfo: cropResult.cropInfo)        
     }
 }
 
@@ -558,7 +563,10 @@ extension CropViewController {
             return
         }
         
-        delegate?.cropViewControllerDidCrop(self, cropped: image, transformation: cropResult.transformation)
+        delegate?.cropViewControllerDidCrop(self,
+                                            cropped: image,
+                                            transformation: cropResult.transformation,
+                                            cropInfo: cropResult.cropInfo)
     }
     
     public func process(_ image: UIImage) -> UIImage? {

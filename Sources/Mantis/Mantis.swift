@@ -30,7 +30,7 @@ private(set) var bundle: Bundle? = {
 
 internal var localizationConfig = LocalizationConfig()
 
-// MARK: - Functions
+// MARK: - APIs
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
@@ -53,8 +53,13 @@ public func locateResourceBundle(by hostClass: AnyClass) {
     LocalizedHelper.setBundle(Bundle(for: hostClass))
 }
 
-public func getCroppedImage(byCropInfo info: CropInfo, andImage image: UIImage) -> UIImage? {
-    return image.getCroppedImage(byCropInfo: info)
+@available(*, deprecated, renamed: "crop(image:by:)")
+public func getCroppedImage(byCropInfo cropInfo: CropInfo, andImage image: UIImage) -> UIImage? {
+    return image.crop(by: cropInfo)
+}
+
+public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
+    return image.crop(by: cropInfo)
 }
 
 // MARK: - Type Aliases

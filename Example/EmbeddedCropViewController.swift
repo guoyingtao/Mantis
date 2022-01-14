@@ -59,7 +59,10 @@ class EmbeddedCropViewController: UIViewController {
 }
 
 extension EmbeddedCropViewController: CropViewControllerDelegate {
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
+    func cropViewControllerDidCrop(_ cropViewController: CropViewController,
+                                   cropped: UIImage,
+                                   transformation: Transformation,
+                                   cropInfo: CropInfo) {
         self.dismiss(animated: true)
         self.didGetCroppedImage?(cropped)
     }
@@ -73,7 +76,7 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
     }
     
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
-        let croppedImage = Mantis.getCroppedImage(byCropInfo: cropInfo, andImage: original)
+        let croppedImage = Mantis.crop(image: original, by: cropInfo)
         self.resolutionLabel.text = getResolution(image: croppedImage)
     }
 
