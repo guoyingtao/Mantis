@@ -70,7 +70,7 @@ github "guoyingtao/Mantis"
 * The caller needs to conform CropViewControllerDelegate
 ```swift
 public protocol CropViewControllerDelegate: class {
-    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation)
+    func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
     // The implementaion of the following functions are optional
@@ -182,7 +182,7 @@ public enum PresetTransformationType {
     case presetNormalizedInfo(normailizedInfo: CGRect)
 }
 ```
-Please use the transformation infomation obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation).
+Please use the transformation infomation obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, , cropInfo: CropInfo).
 
 </details>
                 
