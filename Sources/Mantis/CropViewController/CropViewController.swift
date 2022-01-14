@@ -111,16 +111,16 @@ public class CropViewController: UIViewController {
     fileprivate func createCropToolbar() {
         cropToolbar.cropToolbarDelegate = self
         
-        switch(config.presetFixedRatioType) {
-            case .alwaysUsingOnePresetFixedRatio(let ratio):
+        switch config.presetFixedRatioType {
+        case .alwaysUsingOnePresetFixedRatio(let ratio):
                 config.cropToolbarConfig.includeFixedRatioSettingButton = false
                                 
-                if case .none = config.presetTransformationType  {
+                if case .none = config.presetTransformationType {
                     setFixedRatio(ratio)
                 }
                 
-            case .canUseMultiplePresetFixedRatio(let defaultRatio):
-                if (defaultRatio > 0) {
+        case .canUseMultiplePresetFixedRatio(let defaultRatio):
+                if defaultRatio > 0 {
                     setFixedRatio(defaultRatio)
                     cropView.aspectRatioLockEnabled = true
                     config.cropToolbarConfig.presetRatiosButtonSelected = true
@@ -231,7 +231,7 @@ public class CropViewController: UIViewController {
         cropToolbar.handleFixedRatioSetted(ratio: ratio)
         cropView.aspectRatioLockEnabled = true
         
-        if (cropView.viewModel.aspectRatio != CGFloat(ratio)) {
+        if cropView.viewModel.aspectRatio != CGFloat(ratio) {
             cropView.viewModel.aspectRatio = CGFloat(ratio)
             
             if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {

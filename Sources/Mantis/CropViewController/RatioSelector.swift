@@ -115,4 +115,3 @@ public class RatioSelector: UIView {
         addRatioItems()
     }
 }
-

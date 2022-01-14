@@ -119,7 +119,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     private func addButtonsToContainer(buttons: [UIButton?]) {
-        buttons.forEach{
+        buttons.forEach {
             if let button = $0 {
                 optionButtonStackView?.addArrangedSubview(button)
             }
@@ -166,7 +166,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
 
         if config.toolbarButtonOptions.contains(.ratio) && config.ratioCandidatesShowType == .presentRatioList {
-            if config.includeFixedRatioSettingButton  {
+            if config.includeFixedRatioSettingButton {
                 createSetRatioButton()
                 addButtonsToContainer(button: fixedRatioSettingButton)
 

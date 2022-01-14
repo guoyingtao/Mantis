@@ -12,7 +12,7 @@ import Mantis
 class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
-    var cropToolbarDelegate: CropToolbarDelegate?
+    weak var cropToolbarDelegate: CropToolbarDelegate?
     
     private var fixedRatioSettingButton: UIButton?
     private var portraitRatioButton: UIButton?
@@ -52,7 +52,6 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
         stackView?.addArrangedSubview(cropButton!)
     }
     
-
     public func handleFixedRatioSetted(ratio: Double) {
         
         switch ratio {
@@ -80,8 +79,6 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
         }
     }
     
-    
-            
     @objc private func crop() {
         cropToolbarDelegate?.didSelectCrop()
     }

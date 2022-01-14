@@ -67,7 +67,7 @@ struct ToolBarButtonImageBuilder {
     static func rotateCWImage() -> UIImage? {
         guard let rotateCCWImage = self.rotateCCWImage(), let cgImage = rotateCCWImage.cgImage else { return nil }
         
-        UIGraphicsBeginImageContextWithOptions(rotateCCWImage.size, false,  rotateCCWImage.scale )
+        UIGraphicsBeginImageContextWithOptions(rotateCCWImage.size, false, rotateCCWImage.scale)
         let context = UIGraphicsGetCurrentContext()
         context?.translateBy(x: rotateCCWImage.size.width, y: rotateCCWImage.size.height)
         context?.rotate(by: .pi)
@@ -147,7 +147,7 @@ struct ToolBarButtonImageBuilder {
     static func flipVertically() -> UIImage? {
         guard let flippedHorizontallyImage = self.flipHorizontally(), let cgImage = flippedHorizontallyImage.cgImage else { return nil }
         
-        UIGraphicsBeginImageContextWithOptions(flippedHorizontallyImage.size, false,  flippedHorizontallyImage.scale )
+        UIGraphicsBeginImageContextWithOptions(flippedHorizontallyImage.size, false, flippedHorizontallyImage.scale)
         let context = UIGraphicsGetCurrentContext()
         context?.rotate(by: -.pi / 2)
         context?.translateBy(x: -flippedHorizontallyImage.size.height, y: 0)
@@ -232,7 +232,7 @@ struct ToolBarButtonImageBuilder {
     }
     
     static func alterCropper90DegreeImage() -> UIImage? {
-        var rotateCropperImage: UIImage? = nil
+        var rotateCropperImage: UIImage?
         
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 22, height: 22), false, 0.0)
         

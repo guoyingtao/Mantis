@@ -364,8 +364,7 @@ extension CropView {
             return .zero
         }
         
-        let outsideRect = getContentBounds()
-        
+        let outsideRect = getContentBounds()        
         let insideRect: CGRect
         
         if viewModel.isUpOrUpsideDown() {

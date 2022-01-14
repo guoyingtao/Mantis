@@ -37,16 +37,16 @@ class EmbeddedCropViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? CropViewController {
-            vc.image = image
-            vc.mode = .customizable
-            vc.delegate = self
+        if let cropViewController = segue.destination as? CropViewController {
+            cropViewController.image = image
+            cropViewController.mode = .customizable
+            cropViewController.delegate = self
             
             var config = Mantis.Config()
             config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1/2)
-            vc.config = config
+            cropViewController.config = config
             
-            cropViewController = vc
+            self.cropViewController = cropViewController
         }
     }
     
