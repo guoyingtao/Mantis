@@ -552,9 +552,9 @@ extension CropView {
 
 // MARK: - internal API
 extension CropView {
-    func crop(_ image: UIImage) -> (croppedImage: UIImage?, transformation: Transformation) {
+    func crop(_ image: UIImage) -> (croppedImage: UIImage?, transformation: Transformation, cropInfo: CropInfo) {
 
-        let info = getCropInfo()
+        let cropInfo = getCropInfo()
         
         let transformation = Transformation(
             offset: scrollView.contentOffset,
@@ -566,8 +566,8 @@ extension CropView {
             scrollBounds: scrollView.bounds
         )
         
-        guard let croppedImage = image.getCroppedImage(byCropInfo: info) else {
-            return (nil, transformation)
+        guard let croppedImage = image.crop(by: cropInfo) else {
+            return (nil, transformation, cropInfo)
         }
         
         switch cropShapeType {
@@ -579,24 +579,24 @@ extension CropView {
              .diamond(maskOnly: true),
              .heart(maskOnly: true),
              .polygon(_, _, maskOnly: true):
-            return (croppedImage, transformation)
+            return (croppedImage, transformation, cropInfo)
         case .ellipse:
-            return (croppedImage.ellipseMasked, transformation)
+            return (croppedImage.ellipseMasked, transformation, cropInfo)
         case .circle:
-            return (croppedImage.ellipseMasked, transformation)
+            return (croppedImage.ellipseMasked, transformation, cropInfo)
         case .roundedRect(let radiusToShortSide, maskOnly: false):
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
-            return (croppedImage.roundRect(radius), transformation)
+            return (croppedImage.roundRect(radius), transformation, cropInfo)
         case .path(let points, maskOnly: false):
-            return (croppedImage.clipPath(points), transformation)
+            return (croppedImage.clipPath(points), transformation, cropInfo)
         case .diamond(maskOnly: false):
             let points = [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 0.5), CGPoint(x: 0.5, y: 1), CGPoint(x: 0, y: 0.5)]
-            return (croppedImage.clipPath(points), transformation)
+            return (croppedImage.clipPath(points), transformation, cropInfo)
         case .heart(maskOnly: false):
-            return (croppedImage.heart, transformation)
+            return (croppedImage.heart, transformation, cropInfo)
         case .polygon(let sides, let offset, maskOnly: false):
             let points = polygonPointArray(sides: sides, originX: 0.5, originY: 0.5, radius: 0.5, offset: 90 + offset)
-            return (croppedImage.clipPath(points), transformation)
+            return (croppedImage.clipPath(points), transformation, cropInfo)
         }
     }
     
@@ -623,7 +623,7 @@ extension CropView {
         return forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
     }
     
-    func crop() -> (croppedImage: UIImage?, transformation: Transformation) {
+    func crop() -> (croppedImage: UIImage?, transformation: Transformation, cropInfo: CropInfo) {
         return crop(image)
     }
         
