@@ -75,6 +75,23 @@ class CropView: UIView {
     var forceFixedRatio = false
     var imageStatusChangedCheckForForceFixedRatio = false
     
+    lazy private var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(frame: .zero)
+        activityIndicator.color = .white
+        let indicatorSize: CGFloat = 100
+        activityIndicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+        
+        addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        activityIndicator.widthAnchor.constraint(equalToConstant: indicatorSize).isActive = true
+        activityIndicator.heightAnchor.constraint(equalToConstant: indicatorSize).isActive = true
+        
+        return activityIndicator
+    } ()
+    
     deinit {
         print("CropView deinit.")
     }
@@ -551,22 +568,10 @@ extension CropView {
 
 // MARK: - internal API
 extension CropView {
-    func crop(_ image: UIImage) -> (croppedImage: UIImage?, transformation: Transformation, cropInfo: CropInfo) {
-
-        let cropInfo = getCropInfo()
-        
-        let transformation = Transformation(
-            offset: scrollView.contentOffset,
-            rotation: getTotalRadians(),
-            scale: scrollView.zoomScale,
-            manualZoomed: manualZoomed,
-            intialMaskFrame: getInitialCropBoxRect(),
-            maskFrame: gridOverlayView.frame,
-            scrollBounds: scrollView.bounds
-        )
+    func crop(_ image: UIImage, with cropInfo: CropInfo) -> UIImage? {
         
         guard let croppedImage = image.crop(by: cropInfo) else {
-            return (nil, transformation, cropInfo)
+            return nil
         }
         
         switch cropShapeType {
@@ -578,24 +583,24 @@ extension CropView {
              .diamond(maskOnly: true),
              .heart(maskOnly: true),
              .polygon(_, _, maskOnly: true):
-            return (croppedImage, transformation, cropInfo)
+            return croppedImage
         case .ellipse:
-            return (croppedImage.ellipseMasked, transformation, cropInfo)
+            return croppedImage.ellipseMasked
         case .circle:
-            return (croppedImage.ellipseMasked, transformation, cropInfo)
+            return croppedImage.ellipseMasked
         case .roundedRect(let radiusToShortSide, maskOnly: false):
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
-            return (croppedImage.roundRect(radius), transformation, cropInfo)
+            return croppedImage.roundRect(radius)
         case .path(let points, maskOnly: false):
-            return (croppedImage.clipPath(points), transformation, cropInfo)
+            return croppedImage.clipPath(points)
         case .diamond(maskOnly: false):
             let points = [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 0.5), CGPoint(x: 0.5, y: 1), CGPoint(x: 0, y: 0.5)]
-            return (croppedImage.clipPath(points), transformation, cropInfo)
+            return croppedImage.clipPath(points)
         case .heart(maskOnly: false):
-            return (croppedImage.heart, transformation, cropInfo)
+            return croppedImage.heart
         case .polygon(let sides, let offset, maskOnly: false):
             let points = polygonPointArray(sides: sides, originX: 0.5, originY: 0.5, radius: 0.5, offset: 90 + offset)
-            return (croppedImage.clipPath(points), transformation, cropInfo)
+            return croppedImage.clipPath(points)
         }
     }
     
@@ -615,7 +620,18 @@ extension CropView {
             cropSize: gridOverlayView.frame.size,
             imageViewSize: imageContainer.bounds.size
         )
-        
+    }
+    
+    func getTransformation() -> Transformation {
+        return Transformation(
+            offset: scrollView.contentOffset,
+            rotation: getTotalRadians(),
+            scale: scrollView.zoomScale,
+            manualZoomed: manualZoomed,
+            intialMaskFrame: getInitialCropBoxRect(),
+            maskFrame: gridOverlayView.frame,
+            scrollBounds: scrollView.bounds
+        )
     }
     
     func getTotalRadians() -> CGFloat {
@@ -623,7 +639,28 @@ extension CropView {
     }
     
     func crop() -> (croppedImage: UIImage?, transformation: Transformation, cropInfo: CropInfo) {
-        return crop(image)
+        let cropInfo = getCropInfo()
+        let transformation = getTransformation()
+
+        return (crop(image, with: cropInfo), transformation, cropInfo)
+    }
+    
+    /// completion is called in the main thread
+    func asyncCrop(completion: @escaping (_ croppedImage: UIImage?, _ transformation: Transformation, _ cropInfo: CropInfo) -> Void) {
+        let cropInfo = getCropInfo()
+        let transformation = getTransformation()
+        
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+
+        DispatchQueue.global(qos: .userInteractive).async {
+            let croppedImage = self.crop(self.image, with: cropInfo)
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
+                completion(croppedImage, transformation, cropInfo)
+            }
+        }
     }
         
     func handleRotate() {

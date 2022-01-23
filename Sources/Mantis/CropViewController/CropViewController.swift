@@ -435,16 +435,21 @@ public class CropViewController: UIViewController {
     }
     
     private func handleCrop() {
-        let cropResult = cropView.crop()
-        guard let image = cropResult.croppedImage else {
-            delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
-            return
+        cropView.asyncCrop { [weak self] croppedImage, transformation, cropInfo in
+            guard let self = self else {
+                return
+            }
+            
+            guard let image = croppedImage else {
+                self.delegate?.cropViewControllerDidFailToCrop(self, original: self.cropView.image)
+                return
+            }
+            
+            self.delegate?.cropViewControllerDidCrop(self,
+                                                     cropped: image,
+                                                     transformation: transformation,
+                                                     cropInfo: cropInfo)
         }
-        
-        self.delegate?.cropViewControllerDidCrop(self,
-                                                 cropped: image,
-                                                 transformation: cropResult.transformation,
-                                                 cropInfo: cropResult.cropInfo)        
     }
 }
 
@@ -557,19 +562,24 @@ extension CropViewController: CropToolbarDelegate {
 // API
 extension CropViewController {
     public func crop() {
-        let cropResult = cropView.crop()
-        guard let image = cropResult.croppedImage else {
-            delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
-            return
+        cropView.asyncCrop { [weak self] croppedImage, transformation, cropInfo in            
+            guard let self = self else { return }
+            
+            guard let image = croppedImage else {
+                self.delegate?.cropViewControllerDidFailToCrop(self, original: self.cropView.image)
+                return
+            }
+            
+            self.delegate?.cropViewControllerDidCrop(self,
+                                                cropped: image,
+                                                transformation: transformation,
+                                                cropInfo: cropInfo)
         }
         
-        delegate?.cropViewControllerDidCrop(self,
-                                            cropped: image,
-                                            transformation: cropResult.transformation,
-                                            cropInfo: cropResult.cropInfo)
     }
     
     public func process(_ image: UIImage) -> UIImage? {
-        return cropView.crop(image).croppedImage
+        let cropInfo = cropView.getCropInfo()
+        return cropView.crop(image, with: cropInfo)
     }
 }
