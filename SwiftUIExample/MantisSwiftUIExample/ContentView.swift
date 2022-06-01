@@ -75,7 +75,7 @@ struct ImageCropper: UIViewControllerRepresentable {
             self.parent = parent
         }
         
-        func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation) {
+        func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             parent.image = cropped
             print("transformation is \(transformation)")
             parent.presentationMode.wrappedValue.dismiss()
