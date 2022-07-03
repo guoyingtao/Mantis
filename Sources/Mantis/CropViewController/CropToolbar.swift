@@ -14,6 +14,8 @@ public enum CropToolbarMode {
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
+    public var iconProvider: CropToolbarIconProvider?
+    
     public var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     public var widthForHorizonOrientationConstraint: NSLayoutConstraint?
 
@@ -57,23 +59,25 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
     private func createCancelButton() {
         let cancelText = LocalizedHelper.getString("Mantis.Cancel", value: "Cancel")
-
         cancelButton = createOptionButton(withTitle: cancelText, andAction: #selector(cancel))
     }
 
     private func createCounterClockwiseRotationButton() {
         counterClockwiseRotationButton = createOptionButton(withTitle: nil, andAction: #selector(counterClockwiseRotate))
-        counterClockwiseRotationButton?.setImage(ToolBarButtonImageBuilder.rotateCCWImage(), for: .normal)
+        let icon = iconProvider?.getCounterClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.rotateCCWImage()
+        counterClockwiseRotationButton?.setImage(icon, for: .normal)
     }
 
     private func createClockwiseRotationButton() {
         clockwiseRotationButton = createOptionButton(withTitle: nil, andAction: #selector(clockwiseRotate))
-        clockwiseRotationButton?.setImage(ToolBarButtonImageBuilder.rotateCWImage(), for: .normal)
+        let icon = iconProvider?.getClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.rotateCWImage()
+        clockwiseRotationButton?.setImage(icon, for: .normal)
     }
 
     private func createAlterCropper90DegreeButton() {
         alterCropper90DegreeButton = createOptionButton(withTitle: nil, andAction: #selector(alterCropper90Degree))
-        alterCropper90DegreeButton?.setImage(ToolBarButtonImageBuilder.alterCropper90DegreeImage(), for: .normal)
+        let icon = iconProvider?.getAlterCropper90DegreeIcon() ?? ToolBarButtonImageBuilder.alterCropper90DegreeImage()
+        alterCropper90DegreeButton?.setImage(icon, for: .normal)
     }
 
     private func createResetButton(with image: UIImage? = nil) {
@@ -88,7 +92,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
     private func createSetRatioButton() {
         fixedRatioSettingButton = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
-        fixedRatioSettingButton?.setImage(ToolBarButtonImageBuilder.clampImage(), for: .normal)
+        let icon = iconProvider?.getSetRatioIcon() ?? ToolBarButtonImageBuilder.clampImage()
+        fixedRatioSettingButton?.setImage(icon, for: .normal)
     }
 
     private func createCropButton() {
@@ -160,7 +165,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
 
         if config.toolbarButtonOptions.contains(.reset) {
-            createResetButton(with: ToolBarButtonImageBuilder.resetImage())
+            let icon = iconProvider?.getResetIcon() ?? ToolBarButtonImageBuilder.resetImage()
+            createResetButton(with: icon)
             addButtonsToContainer(button: resetButton)
             resetButton?.isHidden = true
         }

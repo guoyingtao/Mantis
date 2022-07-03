@@ -20,9 +20,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         super.viewDidLoad()
         
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
-        
-//        let cropInfo = CropInfo(translation: CGPoint(x: 94.13632915167773, y: 249.0606067401352), rotation: 0.7700574398040771, scale: 3.7635509462072614, cropSize: CGSize(width: 230.31290201917224, height: 728.0), imageViewSize: CGSize(width: 400.0, height: 600.0))
-//        croppedImageView.image = Mantis.crop(image: image!, by: cropInfo)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
