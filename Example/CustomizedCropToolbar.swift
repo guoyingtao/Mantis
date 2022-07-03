@@ -10,6 +10,8 @@ import UIKit
 import Mantis
 
 class CustomizedCropToolbar: UIView, CropToolbarProtocol {
+    var iconProvider: CropToolbarIconProvider?
+    
     var heightForVerticalOrientationConstraint: NSLayoutConstraint?
     var widthForHorizonOrientationConstraint: NSLayoutConstraint?
     weak var cropToolbarDelegate: CropToolbarDelegate?
