@@ -2,6 +2,13 @@
 
 -----
 
+## [1.10.0](https://www.github.com/guoyingtao/Mantis/compare/v1.9.0...v1.10.0) (2022-07-03)
+
+
+### Features
+
+* add CropToolbarIconProvider protocol ([#169](https://www.github.com/guoyingtao/Mantis/issues/169)) ([42b89cd](https://www.github.com/guoyingtao/Mantis/commit/42b89cd9e80702d90ac8fc054bf05939ba726cb7))
+
 ## [1.9.0](https://www.github.com/guoyingtao/Mantis/compare/v1.8.0...v1.9.0) (2022-01-14)
 
 
