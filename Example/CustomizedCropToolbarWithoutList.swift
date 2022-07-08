@@ -10,10 +10,11 @@ import UIKit
 import Mantis
 
 class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
-    var iconProvider: CropToolbarIconProvider?
+    var heightForVerticalOrientation: CGFloat?
     
-    var heightForVerticalOrientationConstraint: NSLayoutConstraint?
-    var widthForHorizonOrientationConstraint: NSLayoutConstraint?
+    var widthForHorizonOrientation: CGFloat?
+    
+    var iconProvider: CropToolbarIconProvider?    
     weak var cropToolbarDelegate: CropToolbarDelegate?
     
     private var fixedRatioSettingButton: UIButton?
@@ -73,7 +74,16 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     public func handleFixedRatioUnSetted() {
     }
     
-    func adjustUIWhenOrientationChange() {
+    public override var intrinsicContentSize: CGSize {
+        let superSize = super.intrinsicContentSize
+        if Orientation.isPortrait {
+            return CGSize(width: superSize.width, height: heightForVerticalOrientation ?? 44)
+        } else {
+            return CGSize(width: widthForHorizonOrientation ?? 44, height: superSize.height)
+        }
+    }
+
+    func adjustLayoutWhenOrientationChange() {
         if Orientation.isPortrait {
             stackView?.axis = .horizontal
         } else {

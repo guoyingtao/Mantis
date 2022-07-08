@@ -173,7 +173,6 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <constraints>
                             <constraint firstItem="vyB-So-c13" firstAttribute="top" secondItem="pUS-Eo-0ui" secondAttribute="bottom" constant="16" id="3Ig-aR-0l7"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vyB-So-c13" secondAttribute="bottom" constant="32" id="EFp-sl-UGU"/>
                             <constraint firstItem="pUS-Eo-0ui" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="PSN-fn-n11"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pUS-Eo-0ui" secondAttribute="trailing" constant="32" id="Vtc-MK-elT"/>
                             <constraint firstItem="pUS-Eo-0ui" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="rVC-N5-3Bn"/>

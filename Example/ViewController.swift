@@ -102,7 +102,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         var config = Mantis.Config()
         
-        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 44
+        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 100
         config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation = 80
         
         let cropToolbar = CustomizedCropToolbar(frame: .zero)
@@ -122,7 +122,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         var config = Mantis.Config()
         
-        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 44
+        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 160
         config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation = 80
         
         let cropToolbar = CustomizedCropToolbarWithoutList(frame: .zero)
@@ -133,7 +133,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         present(cropViewController, animated: true)
-        
     }
     
     @IBAction func clockwiseRotationButtonTouched(_ sender: Any) {

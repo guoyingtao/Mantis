@@ -34,9 +34,10 @@ public extension CropToolbarIconProvider {
     func getAlterCropper90DegreeIcon() -> UIImage? { return nil }
 }
 
-public protocol CropToolbarProtocol: UIView {    
-    var heightForVerticalOrientationConstraint: NSLayoutConstraint? { get set }
-    var widthForHorizonOrientationConstraint: NSLayoutConstraint? { get set }
+public protocol CropToolbarProtocol: UIView {
+    var heightForVerticalOrientation: CGFloat? { get set }
+    var widthForHorizonOrientation: CGFloat? { get set }
+
     var cropToolbarDelegate: CropToolbarDelegate? { get set }
     
     var iconProvider: CropToolbarIconProvider? { get set }
@@ -48,12 +49,11 @@ public protocol CropToolbarProtocol: UIView {
     // MARK: - The following functions have default implementations
     func getRatioListPresentSourceView() -> UIView?
     
-    func initConstraints(heightForVerticalOrientation: CGFloat,
-                        widthForHorizonOrientation: CGFloat)
+    func initSizeConstraints(heightForVerticalOrientation: CGFloat,
+                             widthForHorizonOrientation: CGFloat)
     
     func respondToOrientationChange()
-    func adjustLayoutConstraintsWhenOrientationChange()
-    func adjustUIWhenOrientationChange()
+    func adjustLayoutWhenOrientationChange()
         
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeUnResettable()
@@ -64,35 +64,39 @@ public extension CropToolbarProtocol {
         return nil
     }
     
-    func initConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
-        heightForVerticalOrientationConstraint = heightAnchor.constraint(equalToConstant: heightForVerticalOrientation)
-        widthForHorizonOrientationConstraint = widthAnchor.constraint(equalToConstant: widthForHorizonOrientation)
+    func initSizeConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
+        self.heightForVerticalOrientation = heightForVerticalOrientation
+        self.widthForHorizonOrientation = widthForHorizonOrientation
+        respondToOrientationChange()
     }
     
-    func respondToOrientationChange() {
-        adjustLayoutConstraintsWhenOrientationChange()
-        adjustUIWhenOrientationChange()
-    }
-    
-    func adjustLayoutConstraintsWhenOrientationChange() {
+    private func adjustIntrinsicContentSize() {
+        invalidateIntrinsicContentSize()
+        
+        let highPriority: Float = 10000
+        let lowPriority: Float = 1
+
         if Orientation.isPortrait {
-            heightForVerticalOrientationConstraint?.isActive = true
-            widthForHorizonOrientationConstraint?.isActive = false
+            setContentHuggingPriority(UILayoutPriority(highPriority), for: .vertical)
+            setContentCompressionResistancePriority(UILayoutPriority(highPriority), for: .vertical)
+            setContentHuggingPriority(UILayoutPriority(lowPriority), for: .horizontal)
+            setContentCompressionResistancePriority(UILayoutPriority(lowPriority), for: .horizontal)
         } else {
-            heightForVerticalOrientationConstraint?.isActive = false
-            widthForHorizonOrientationConstraint?.isActive = true
+            setContentHuggingPriority(UILayoutPriority(highPriority), for: .horizontal)
+            setContentCompressionResistancePriority(UILayoutPriority(highPriority), for: .horizontal)
+            setContentHuggingPriority(UILayoutPriority(lowPriority), for: .vertical)
+            setContentCompressionResistancePriority(UILayoutPriority(lowPriority), for: .vertical)
         }
     }
     
-    func adjustUIWhenOrientationChange() {
-        
-    }
-        
-    func handleCropViewDidBecomeResettable() {
-        
+    func respondToOrientationChange() {
+        adjustIntrinsicContentSize()
+        adjustLayoutWhenOrientationChange()
     }
     
-    func handleCropViewDidBecomeUnResettable() {
-        
-    }
+    func adjustLayoutWhenOrientationChange() {}
+    
+    func handleCropViewDidBecomeResettable() {}
+    
+    func handleCropViewDidBecomeUnResettable() {}
 }

@@ -14,11 +14,11 @@ public enum CropToolbarMode {
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
+    public var heightForVerticalOrientation: CGFloat?
+    public var widthForHorizonOrientation: CGFloat?
+    
     public var iconProvider: CropToolbarIconProvider?
     
-    public var heightForVerticalOrientationConstraint: NSLayoutConstraint?
-    public var widthForHorizonOrientationConstraint: NSLayoutConstraint?
-
     public weak var cropToolbarDelegate: CropToolbarDelegate?
 
     var fixedRatioSettingButton: UIButton?
@@ -33,7 +33,138 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     var config: CropToolbarConfig!
 
     private var optionButtonStackView: UIStackView?
+    
+    public func createToolbarUI(config: CropToolbarConfig) {
+        self.config = config
+        backgroundColor = .black
+                
+        if #available(macCatalyst 14.0, iOS 14.0, *) {
+            if UIDevice.current.userInterfaceIdiom == .mac {
+                backgroundColor = .white
+            }
+        }
 
+        createButtonContainer()
+        setButtonContainerLayout()
+
+        if config.mode == .normal {
+            createCancelButton()
+            addButtonsToContainer(button: cancelButton)
+        }
+
+        if config.toolbarButtonOptions.contains(.counterclockwiseRotate) {
+            createCounterClockwiseRotationButton()
+            addButtonsToContainer(button: counterClockwiseRotationButton)
+        }
+
+        if config.toolbarButtonOptions.contains(.clockwiseRotate) {
+            createClockwiseRotationButton()
+            addButtonsToContainer(button: clockwiseRotationButton)
+        }
+
+        if config.toolbarButtonOptions.contains(.alterCropper90Degree) {
+            createAlterCropper90DegreeButton()
+            addButtonsToContainer(button: alterCropper90DegreeButton)
+        }
+
+        if config.toolbarButtonOptions.contains(.reset) {
+            let icon = iconProvider?.getResetIcon() ?? ToolBarButtonImageBuilder.resetImage()
+            createResetButton(with: icon)
+            addButtonsToContainer(button: resetButton)
+            resetButton?.isHidden = true
+        }
+
+        if config.toolbarButtonOptions.contains(.ratio) && config.ratioCandidatesShowType == .presentRatioList {
+            if config.includeFixedRatioSettingButton {
+                createSetRatioButton()
+                addButtonsToContainer(button: fixedRatioSettingButton)
+
+                if config.presetRatiosButtonSelected {
+                    handleFixedRatioSetted(ratio: 0)
+                    resetButton?.isHidden = false
+                }
+            }
+        }
+
+        if config.mode == .normal {
+            createCropButton()
+            addButtonsToContainer(button: cropButton)
+        }
+    }
+    
+    public override var intrinsicContentSize: CGSize {
+        let superSize = super.intrinsicContentSize
+        if Orientation.isPortrait {
+            return CGSize(width: superSize.width, height: heightForVerticalOrientation ?? 44)
+        } else {
+            return CGSize(width: widthForHorizonOrientation ?? 44, height: superSize.height)
+        }
+    }
+
+    public func getRatioListPresentSourceView() -> UIView? {
+        return fixedRatioSettingButton
+    }
+
+    public func adjustLayoutWhenOrientationChange() {
+        if Orientation.isPortrait {
+            optionButtonStackView?.axis = .horizontal
+            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        } else {
+            optionButtonStackView?.axis = .vertical
+            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        }
+    }
+
+    public func handleFixedRatioSetted(ratio: Double) {
+        fixedRatioSettingButton?.tintColor = nil
+    }
+
+    public func handleFixedRatioUnSetted() {
+        fixedRatioSettingButton?.tintColor = .white
+    }
+
+    public func handleCropViewDidBecomeResettable() {
+        resetButton?.isHidden = false
+    }
+
+    public func handleCropViewDidBecomeUnResettable() {
+        resetButton?.isHidden = true
+    }
+}
+
+// Objc functions
+extension CropToolbar {
+    @objc private func cancel() {
+        cropToolbarDelegate?.didSelectCancel()
+    }
+
+    @objc private func setRatio() {
+        cropToolbarDelegate?.didSelectSetRatio()
+    }
+
+    @objc private func reset(_ sender: Any) {
+        cropToolbarDelegate?.didSelectReset()
+    }
+
+    @objc private func counterClockwiseRotate(_ sender: Any) {
+        cropToolbarDelegate?.didSelectCounterClockwiseRotate()
+    }
+
+    @objc private func clockwiseRotate(_ sender: Any) {
+        cropToolbarDelegate?.didSelectClockwiseRotate()
+    }
+
+    @objc private func alterCropper90Degree(_ sender: Any) {
+        cropToolbarDelegate?.didSelectAlterCropper90Degree()
+    }
+
+    @objc private func crop(_ sender: Any) {
+        cropToolbarDelegate?.didSelectCrop()
+    }
+}
+
+// private functions
+extension CropToolbar {
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
@@ -129,125 +260,5 @@ public class CropToolbar: UIView, CropToolbarProtocol {
                 optionButtonStackView?.addArrangedSubview(button)
             }
         }
-    }
-
-    public func createToolbarUI(config: CropToolbarConfig) {
-        self.config = config
-        backgroundColor = .black
-
-        if #available(macCatalyst 14.0, iOS 14.0, *) {
-            if UIDevice.current.userInterfaceIdiom == .mac {
-                backgroundColor = .white
-            }
-        }
-
-        createButtonContainer()
-        setButtonContainerLayout()
-
-        if config.mode == .normal {
-            createCancelButton()
-            addButtonsToContainer(button: cancelButton)
-        }
-
-        if config.toolbarButtonOptions.contains(.counterclockwiseRotate) {
-            createCounterClockwiseRotationButton()
-            addButtonsToContainer(button: counterClockwiseRotationButton)
-        }
-
-        if config.toolbarButtonOptions.contains(.clockwiseRotate) {
-            createClockwiseRotationButton()
-            addButtonsToContainer(button: clockwiseRotationButton)
-        }
-
-        if config.toolbarButtonOptions.contains(.alterCropper90Degree) {
-            createAlterCropper90DegreeButton()
-            addButtonsToContainer(button: alterCropper90DegreeButton)
-        }
-
-        if config.toolbarButtonOptions.contains(.reset) {
-            let icon = iconProvider?.getResetIcon() ?? ToolBarButtonImageBuilder.resetImage()
-            createResetButton(with: icon)
-            addButtonsToContainer(button: resetButton)
-            resetButton?.isHidden = true
-        }
-
-        if config.toolbarButtonOptions.contains(.ratio) && config.ratioCandidatesShowType == .presentRatioList {
-            if config.includeFixedRatioSettingButton {
-                createSetRatioButton()
-                addButtonsToContainer(button: fixedRatioSettingButton)
-
-                if config.presetRatiosButtonSelected {
-                    handleFixedRatioSetted(ratio: 0)
-                    resetButton?.isHidden = false
-                }
-            }
-        }
-
-        if config.mode == .normal {
-            createCropButton()
-            addButtonsToContainer(button: cropButton)
-        }
-    }
-
-    public func getRatioListPresentSourceView() -> UIView? {
-        return fixedRatioSettingButton
-    }
-
-    public func respondToOrientationChange() {
-        if Orientation.isPortrait {
-            optionButtonStackView?.axis = .horizontal
-            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        } else {
-            optionButtonStackView?.axis = .vertical
-            optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        }
-    }
-
-    public func handleFixedRatioSetted(ratio: Double) {
-        fixedRatioSettingButton?.tintColor = nil
-    }
-
-    public func handleFixedRatioUnSetted() {
-        fixedRatioSettingButton?.tintColor = .white
-    }
-
-    public func handleCropViewDidBecomeResettable() {
-        resetButton?.isHidden = false
-    }
-
-    public func handleCropViewDidBecomeUnResettable() {
-        resetButton?.isHidden = true
-    }
-
-    public func initConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
-
-    }
-
-    @objc private func cancel() {
-        cropToolbarDelegate?.didSelectCancel()
-    }
-
-    @objc private func setRatio() {
-        cropToolbarDelegate?.didSelectSetRatio()
-    }
-
-    @objc private func reset(_ sender: Any) {
-        cropToolbarDelegate?.didSelectReset()
-    }
-
-    @objc private func counterClockwiseRotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectCounterClockwiseRotate()
-    }
-
-    @objc private func clockwiseRotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectClockwiseRotate()
-    }
-
-    @objc private func alterCropper90Degree(_ sender: Any) {
-        cropToolbarDelegate?.didSelectAlterCropper90Degree()
-    }
-
-    @objc private func crop(_ sender: Any) {
-        cropToolbarDelegate?.didSelectCrop()
     }
 }

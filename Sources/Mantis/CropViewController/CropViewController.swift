@@ -139,8 +139,8 @@ public class CropViewController: UIViewController {
                 
         let heightForVerticalOrientation = config.cropToolbarConfig.cropToolbarHeightForVertialOrientation
         let widthForHorizonOrientation = config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation
-        cropToolbar.initConstraints(heightForVerticalOrientation: heightForVerticalOrientation,
-                                    widthForHorizonOrientation: widthForHorizonOrientation)
+        cropToolbar.initSizeConstraints(heightForVerticalOrientation: heightForVerticalOrientation,
+                                        widthForHorizonOrientation: widthForHorizonOrientation)
     }
     
     private func getRatioType() -> RatioType {

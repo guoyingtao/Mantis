@@ -430,7 +430,6 @@ extension CropView {
                             animation: Bool = true,
                             zoom: Bool = true,
                             completion: @escaping ()->Void) {
-        
         let scaleX: CGFloat
         let scaleY: CGFloat
         
