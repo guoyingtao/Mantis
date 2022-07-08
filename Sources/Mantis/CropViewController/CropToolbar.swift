@@ -14,8 +14,7 @@ public enum CropToolbarMode {
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
-    public var heightForVerticalOrientation: CGFloat?
-    public var widthForHorizonOrientation: CGFloat?
+    private(set) public var config = CropToolbarConfig()
     
     public var iconProvider: CropToolbarIconProvider?
     
@@ -29,8 +28,6 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     var clockwiseRotationButton: UIButton?
     var alterCropper90DegreeButton: UIButton?
     var cropButton: UIButton?
-
-    var config: CropToolbarConfig!
 
     private var optionButtonStackView: UIStackView?
     
@@ -95,9 +92,9 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
         if Orientation.isPortrait {
-            return CGSize(width: superSize.width, height: heightForVerticalOrientation ?? 44)
+            return CGSize(width: superSize.width, height: config.cropToolbarHeightForVertialOrientation)
         } else {
-            return CGSize(width: widthForHorizonOrientation ?? 44, height: superSize.height)
+            return CGSize(width: config.cropToolbarWidthForHorizontalOrientation, height: superSize.height)
         }
     }
 

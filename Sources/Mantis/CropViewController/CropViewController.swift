@@ -135,12 +135,7 @@ public class CropViewController: UIViewController {
             config.cropToolbarConfig.mode = .simple
         }
         
-        cropToolbar.createToolbarUI(config: config.cropToolbarConfig)
-                
-        let heightForVerticalOrientation = config.cropToolbarConfig.cropToolbarHeightForVertialOrientation
-        let widthForHorizonOrientation = config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation
-        cropToolbar.initSizeConstraints(heightForVerticalOrientation: heightForVerticalOrientation,
-                                        widthForHorizonOrientation: widthForHorizonOrientation)
+        cropToolbar.createToolbarUI(config: config.cropToolbarConfig)                
     }
     
     private func getRatioType() -> RatioType {

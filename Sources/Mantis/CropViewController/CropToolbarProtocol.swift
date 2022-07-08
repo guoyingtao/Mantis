@@ -35,9 +35,8 @@ public extension CropToolbarIconProvider {
 }
 
 public protocol CropToolbarProtocol: UIView {
-    var heightForVerticalOrientation: CGFloat? { get set }
-    var widthForHorizonOrientation: CGFloat? { get set }
-
+    var config: CropToolbarConfig { get }
+    
     var cropToolbarDelegate: CropToolbarDelegate? { get set }
     
     var iconProvider: CropToolbarIconProvider? { get set }
@@ -49,9 +48,6 @@ public protocol CropToolbarProtocol: UIView {
     // MARK: - The following functions have default implementations
     func getRatioListPresentSourceView() -> UIView?
     
-    func initSizeConstraints(heightForVerticalOrientation: CGFloat,
-                             widthForHorizonOrientation: CGFloat)
-    
     func respondToOrientationChange()
     func adjustLayoutWhenOrientationChange()
         
@@ -62,12 +58,6 @@ public protocol CropToolbarProtocol: UIView {
 public extension CropToolbarProtocol {
     func getRatioListPresentSourceView() -> UIView? {
         return nil
-    }
-    
-    func initSizeConstraints(heightForVerticalOrientation: CGFloat, widthForHorizonOrientation: CGFloat) {
-        self.heightForVerticalOrientation = heightForVerticalOrientation
-        self.widthForHorizonOrientation = widthForHorizonOrientation
-        respondToOrientationChange()
     }
     
     private func adjustIntrinsicContentSize() {

@@ -10,12 +10,10 @@ import UIKit
 import Mantis
 
 class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
-    var heightForVerticalOrientation: CGFloat?
-    
-    var widthForHorizonOrientation: CGFloat?
-    
-    var iconProvider: CropToolbarIconProvider?    
+    var iconProvider: CropToolbarIconProvider?
     weak var cropToolbarDelegate: CropToolbarDelegate?
+    
+    private (set)var config = CropToolbarConfig()
     
     private var fixedRatioSettingButton: UIButton?
     private var portraitRatioButton: UIButton?
@@ -23,8 +21,7 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     private var cropButton: UIButton?
     private var cancelButton: UIButton?
     private var stackView: UIStackView?
-    private var config: CropToolbarConfig!
-    
+        
     var custom: ((Double) -> Void)?
     
     func createToolbarUI(config: CropToolbarConfig) {
@@ -77,9 +74,9 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
         if Orientation.isPortrait {
-            return CGSize(width: superSize.width, height: heightForVerticalOrientation ?? 44)
+            return CGSize(width: superSize.width, height: config.cropToolbarHeightForVertialOrientation)
         } else {
-            return CGSize(width: widthForHorizonOrientation ?? 44, height: superSize.height)
+            return CGSize(width: config.cropToolbarWidthForHorizontalOrientation, height: superSize.height)
         }
     }
 
