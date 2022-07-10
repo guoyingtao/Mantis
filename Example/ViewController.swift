@@ -19,7 +19,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
+        imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -27,7 +27,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     }
     
     @IBAction func getImageFromAlbum(_ sender: UIButton) {
-        self.imagePicker.present(from: sender)
+        imagePicker.present(from: sender)
     }
     
     @IBAction func normalPresent(_ sender: Any) {
@@ -74,11 +74,18 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.showRotationDial = false
+        config.cropToolbarConfig.showBottomCropToolbar = false
         
-        let cropViewController = Mantis.cropViewController(image: image, config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
+        let cropToolbar = MyNavigationCropToolbar(frame: .zero)
+        let cropViewController = Mantis.cropViewController(image: image, config: config, cropToolbar: cropToolbar)
         cropViewController.delegate = self
-        present(cropViewController, animated: true)
+        cropViewController.title = "Change Profile Picture"
+        let navigationController = UINavigationController(rootViewController: cropViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+                
+        cropToolbar.cropViewController = cropViewController
+        
+        present(navigationController, animated: true)
     }
     
     @IBAction func alwayUserOnPresetRatioPresent(_ sender: Any) {
@@ -94,7 +101,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
         present(cropViewController, animated: true)
     }
-    
+        
     @IBAction func customizedCropToolbarButtonTouched(_ sender: Any) {
         guard let image = image else {
             return
@@ -112,7 +119,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         present(cropViewController, animated: true)
-        
     }
     
     @IBAction func customizedCropToolbarWithoutListButtonTouched(_ sender: Any) {
@@ -250,22 +256,21 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         print("transformation is \(transformation)")
         print("cropInfo is \(cropInfo)")
         croppedImageView.image = cropped
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
 }
 
 extension ViewController: ImagePickerDelegate {
-    
     func didSelect(image: UIImage?) {
         guard let image = image else {
             return
         }
         
         self.image = image
-        self.croppedImageView.image = image
+        croppedImageView.image = image
     }
 }
