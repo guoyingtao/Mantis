@@ -85,12 +85,12 @@ public enum CropShapeType {
 }
 
 public enum RatioCandidatesShowType {
-    case presentRatioList
+    case presentRatioListFromButton
     case alwaysShowRatioList
 }
 
-public enum FixRatiosShowType {
+public enum FixedRatiosShowType {
     case adaptive
     case horizontal
-    case vetical
+    case vertical
 }

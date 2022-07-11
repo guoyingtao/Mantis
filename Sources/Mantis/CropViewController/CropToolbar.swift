@@ -10,11 +10,11 @@ import UIKit
 
 public enum CropToolbarMode {
     case normal
-    case simple
+    case simple // Without cancel and crop buttons
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
-    private(set) public var config = CropToolbarConfig()
+    private(set) public var config: CropToolbarConfigProtocol?
     
     public var iconProvider: CropToolbarIconProvider?
     
@@ -31,9 +31,14 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
     private var optionButtonStackView: UIStackView?
     
-    public func createToolbarUI(config: CropToolbarConfig) {
+    public func createToolbarUI(config: CropToolbarConfigProtocol?) {
         self.config = config
-        backgroundColor = .black
+        
+        guard let config = config as? CropToolbarConfig else {
+            return
+        }
+        
+        backgroundColor = config.backgroundColor
                 
         if #available(macCatalyst 14.0, iOS 14.0, *) {
             if UIDevice.current.userInterfaceIdiom == .mac {
@@ -71,8 +76,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             resetButton?.isHidden = true
         }
 
-        if config.toolbarButtonOptions.contains(.ratio) && config.ratioCandidatesShowType == .presentRatioList {
-            if config.includeFixedRatioSettingButton {
+        if config.toolbarButtonOptions.contains(.ratio) && config.ratioCandidatesShowType == .presentRatioListFromButton {
+            if config.includeFixedRatiosSettingButton {
                 createSetRatioButton()
                 addButtonsToContainer(button: fixedRatioSettingButton)
 
@@ -91,10 +96,14 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
+        guard let config = config else {
+            return superSize
+        }
+
         if Orientation.isPortrait {
-            return CGSize(width: superSize.width, height: config.cropToolbarHeightForVertialOrientation)
+            return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
         } else {
-            return CGSize(width: config.cropToolbarWidthForHorizontalOrientation, height: superSize.height)
+            return CGSize(width: config.widthForHorizontalOrientation, height: superSize.height)
         }
     }
 
@@ -117,7 +126,11 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     public func handleFixedRatioUnSetted() {
-        fixedRatioSettingButton?.tintColor = .white
+        guard let config = config else {
+            return
+        }
+
+        fixedRatioSettingButton?.tintColor = config.foregroundColor
     }
 
     public func handleCropViewDidBecomeResettable() {
@@ -163,7 +176,11 @@ extension CropToolbar {
 // private functions
 extension CropToolbar {
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        let buttonColor = UIColor.white
+        guard let config = config as? CropToolbarConfig else {
+            return UIButton()
+        }
+
+        let buttonColor = config.foregroundColor
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
             config.optionButtonFontSizeForPad :
             config.optionButtonFontSize
@@ -171,7 +188,7 @@ extension CropToolbar {
         let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
 
         let button = UIButton(type: .system)
-        button.tintColor = .white
+        button.tintColor = config.foregroundColor
         button.titleLabel?.font = buttonFont
 
         if let title = title {

@@ -18,9 +18,9 @@ class RatioPresenter {
     private var type: RatioType = .vertical
     private var originalRatioH: Double
     private var ratios: [RatioItemType]
-    private var fixRatiosShowType: FixRatiosShowType = .adaptive
+    private var fixRatiosShowType: FixedRatiosShowType = .adaptive
 
-    init(type: RatioType, originalRatioH: Double, ratios: [RatioItemType] = [], fixRatiosShowType: FixRatiosShowType = .adaptive) {
+    init(type: RatioType, originalRatioH: Double, ratios: [RatioItemType] = [], fixRatiosShowType: FixedRatiosShowType = .adaptive) {
         self.type = type
         self.originalRatioH = originalRatioH
         self.ratios = ratios
@@ -33,7 +33,7 @@ class RatioPresenter {
             return (type == .horizontal) ? ratio.nameH : ratio.nameV
         case .horizontal:
             return ratio.nameH
-        case .vetical:
+        case .vertical:
             return ratio.nameV
         }
     }
@@ -44,7 +44,7 @@ class RatioPresenter {
             return (type == .horizontal) ? ratio.ratioH : ratio.ratioV
         case .horizontal:
             return ratio.ratioH
-        case .vetical:
+        case .vertical:
             return ratio.ratioV
         }
     }

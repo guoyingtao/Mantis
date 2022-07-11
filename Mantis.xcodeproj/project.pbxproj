@@ -23,7 +23,7 @@
 /* Begin PBXBuildFile section */
 		269AF94227437EE400F7FAF6 /* DialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269AF94127437EE400F7FAF6 /* DialConfig.swift */; };
 		5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E409253535F300A3EB7D /* Orientation.swift */; };
-		5F69CC5E26C0629400568B75 /* definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69CC5D26C0629400568B75 /* definitions.swift */; };
+		5F69CC5E26C0629400568B75 /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69CC5D26C0629400568B75 /* Definition.swift */; };
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		6659429D2877DAE80096A5DB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429C2877DAE80096A5DB /* Config.swift */; };
@@ -98,7 +98,7 @@
 /* Begin PBXFileReference section */
 		269AF94127437EE400F7FAF6 /* DialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialConfig.swift; sourceTree = "<group>"; };
 		5F17E409253535F300A3EB7D /* Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
-		5F69CC5D26C0629400568B75 /* definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = definitions.swift; sourceTree = "<group>"; };
+		5F69CC5D26C0629400568B75 /* Definition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definition.swift; sourceTree = "<group>"; };
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		6659429C2877DAE80096A5DB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -341,7 +341,7 @@
 				665942A02877DD1C0096A5DB /* TypeAlias.swift */,
 				OBJ_41 /* RatioOptions.swift */,
 				5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */,
-				5F69CC5D26C0629400568B75 /* definitions.swift */,
+				5F69CC5D26C0629400568B75 /* Definition.swift */,
 				OBJ_10 /* Info.plist */,
 				OBJ_11 /* CropView */,
 				OBJ_23 /* CropViewController */,
@@ -564,7 +564,7 @@
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
 				OBJ_86 /* CoreGraphicsExtensions.swift in Sources */,
-				5F69CC5E26C0629400568B75 /* definitions.swift in Sources */,
+				5F69CC5E26C0629400568B75 /* Definition.swift in Sources */,
 				OBJ_87 /* UIImageExtensions.swift in Sources */,
 				OBJ_88 /* GeometryHelper.swift in Sources */,
 				OBJ_89 /* LocalizedHelper.swift in Sources */,

@@ -13,7 +13,7 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     var iconProvider: CropToolbarIconProvider?
     weak var cropToolbarDelegate: CropToolbarDelegate?
     
-    private (set)var config = CropToolbarConfig()
+    private (set)var config: CropToolbarConfigProtocol?
     
     private var fixedRatioSettingButton: UIButton?
     private var portraitRatioButton: UIButton?
@@ -24,7 +24,7 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
         
     var custom: ((Double) -> Void)?
     
-    func createToolbarUI(config: CropToolbarConfig) {
+    func createToolbarUI(config: CropToolbarConfigProtocol?) {
         self.config = config
         
         backgroundColor = .darkGray
@@ -53,7 +53,6 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     }
     
     public func handleFixedRatioSetted(ratio: Double) {
-        
         switch ratio {
         case 9 / 16:
             portraitRatioButton?.setTitleColor(.blue, for: .normal)
@@ -73,10 +72,14 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
+        guard let config = config else {
+            return superSize
+        }
+        
         if Orientation.isPortrait {
-            return CGSize(width: superSize.width, height: config.cropToolbarHeightForVertialOrientation)
+            return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
         } else {
-            return CGSize(width: config.cropToolbarWidthForHorizontalOrientation, height: superSize.height)
+            return CGSize(width: config.widthForHorizontalOrientation, height: superSize.height)
         }
     }
 
@@ -105,6 +108,10 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
+        guard let config = config else {
+            return UIButton()
+        }
+
         let buttonColor = UIColor.white
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
             config.optionButtonFontSizeForPad :
