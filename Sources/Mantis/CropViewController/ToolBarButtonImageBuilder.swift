@@ -30,59 +30,50 @@ import UIKit
 
 struct ToolBarButtonImageBuilder {
     static func rotateCCWImage() -> UIImage? {
-        return UIImage(systemName: "rotate.left")
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            return UIImage(systemName: "rotate.left")
+        }
+        
+        return drawRotateCCWImage()
     }
     
     static func rotateCWImage() -> UIImage? {
-        return UIImage(systemName: "rotate.right")
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            return UIImage(systemName: "rotate.right")
+        }
+        
+        return drawRotateCWImage()
     }
     
     static func flipHorizontally() -> UIImage? {
-        UIImage(systemName: "flip.horizontal")
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            return UIImage(systemName: "flip.horizontal")
+        }
+        
+        return drawFlipHorizontally()
     }
     
     static func flipVertically() -> UIImage? {
-        guard let flippedHorizontallyImage = self.flipHorizontally(), let cgImage = flippedHorizontallyImage.cgImage else { return nil }
-        
-        UIGraphicsBeginImageContextWithOptions(flippedHorizontallyImage.size, false, flippedHorizontallyImage.scale)
-        let context = UIGraphicsGetCurrentContext()
-        context?.rotate(by: -.pi / 2)
-        context?.translateBy(x: -flippedHorizontallyImage.size.height, y: 0)
-        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: flippedHorizontallyImage.size.height, height: flippedHorizontallyImage.size.width))
-        let fippedVerticallyImage: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return fippedVerticallyImage
+        drawFlipVertically()
     }
     
     static func clampImage() -> UIImage? {
-        return UIImage(systemName: "aspectratio")
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            return UIImage(systemName: "aspectratio")
+        }
+        
+        return drawClampImage()
     }
     
     static func resetImage() -> UIImage? {
-        return UIImage(systemName: "arrow.2.circlepath")
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            return UIImage(systemName: "arrow.2.circlepath")
+        }
+        
+        return drawResetImage()
     }
     
     static func alterCropper90DegreeImage() -> UIImage? {
-        var rotateCropperImage: UIImage?
-        
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: 22, height: 22), false, 0.0)
-        
-        //// Draw rectangle
-        let rectanglePath1 = UIBezierPath(rect: CGRect(x: 1, y: 5, width: 20, height: 11))
-        UIColor.white.setStroke()
-        rectanglePath1.lineWidth = 1
-        rectanglePath1.stroke()
-
-        let rectanglePath2 = UIBezierPath(rect: CGRect(x: 6, y: 1, width: 10, height: 20))
-        UIColor.white.setStroke()
-        rectanglePath2.lineWidth = 1
-        rectanglePath2.stroke()
-        
-        rotateCropperImage = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-        
-        return rotateCropperImage
+        drawAlterCropper90DegreeImage()
     }
-    
 }

@@ -102,10 +102,8 @@ public class CropViewController: UIViewController {
     
     fileprivate func createRatioSelector() {
         let fixedRatioManager = getFixedRatioManager()
-        self.ratioSelector = RatioSelector(type: fixedRatioManager.type,
-                                           originalRatioH: fixedRatioManager.originalRatioH,
-                                           ratios: fixedRatioManager.ratios)
-        self.ratioSelector?.didGetRatio = { [weak self] ratio in
+        ratioSelector = RatioSelector(type: fixedRatioManager.type, originalRatioH: fixedRatioManager.originalRatioH, ratios: fixedRatioManager.ratios)
+        ratioSelector?.didGetRatio = { [weak self] ratio in
             self?.setFixedRatio(ratio)
         }
     }
@@ -233,7 +231,7 @@ public class CropViewController: UIViewController {
             cropView.viewModel.aspectRatio = CGFloat(ratio)
             
             if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
-                self.cropView.setFixedRatioCropBox(zoom: zoom)
+                cropView.setFixedRatioCropBox(zoom: zoom)
             } else {
                 UIView.animate(withDuration: 0.5) {
                     self.cropView.setFixedRatioCropBox(zoom: zoom)
@@ -251,7 +249,7 @@ public class CropViewController: UIViewController {
         cropView.clipsToBounds = true
         cropView.cropShapeType = config.cropShapeType
         cropView.cropVisualEffectType = config.cropVisualEffectType
-        
+                
         if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
             cropView.forceFixedRatio = true
         } else {
@@ -365,7 +363,7 @@ public class CropViewController: UIViewController {
     }
     
     private func handleCancel() {
-        self.delegate?.cropViewControllerDidCancel(self, original: self.image)
+        delegate?.cropViewControllerDidCancel(self, original: image)
     }
     
     private func resetRatioButton() {
@@ -439,7 +437,7 @@ public class CropViewController: UIViewController {
             return
         }
         
-        self.delegate?.cropViewControllerDidCrop(self,
+        delegate?.cropViewControllerDidCrop(self,
                                                  cropped: image,
                                                  transformation: cropResult.transformation,
                                                  cropInfo: cropResult.cropInfo)        
@@ -480,6 +478,12 @@ extension CropViewController {
     }
     
     fileprivate func changeStackViewOrder() {
+        guard config.showAttachedCropToolbar else {
+            stackView?.removeArrangedSubview(cropStackView)
+            stackView?.addArrangedSubview(cropStackView)
+            return
+        }
+        
         stackView?.removeArrangedSubview(cropStackView)
         stackView?.removeArrangedSubview(cropToolbar)
         
@@ -491,7 +495,7 @@ extension CropViewController {
             stackView?.addArrangedSubview(cropStackView)
         }
     }
-    
+            
     fileprivate func updateLayout() {
         setStackViewAxis()
         cropToolbar.respondToOrientationChange()

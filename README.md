@@ -22,7 +22,7 @@
 </p>
 
 ## Requirements
-* iOS 13.0+
+* iOS 11.0+
 * MacOS 10.15+
 * Xcode 10.0+
 
