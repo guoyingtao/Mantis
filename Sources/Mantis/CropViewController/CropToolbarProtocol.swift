@@ -24,6 +24,8 @@ public protocol CropToolbarIconProvider: AnyObject {
     func getResetIcon() -> UIImage?
     func getSetRatioIcon() -> UIImage?
     func getAlterCropper90DegreeIcon() -> UIImage?
+    func getCancelIcon() -> UIImage?
+    func getCropIcon() -> UIImage?
 }
 
 public extension CropToolbarIconProvider {
@@ -32,6 +34,8 @@ public extension CropToolbarIconProvider {
     func getResetIcon() -> UIImage? { return nil }
     func getSetRatioIcon() -> UIImage? { return nil }
     func getAlterCropper90DegreeIcon() -> UIImage? { return nil }
+    func getCancelIcon() -> UIImage? { return nil }
+    func getCropIcon() -> UIImage? { return nil }
 }
 
 public protocol CropToolbarProtocol: UIView {
