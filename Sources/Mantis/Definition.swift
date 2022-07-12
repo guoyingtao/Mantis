@@ -1,5 +1,5 @@
 //
-//  definitions.swift
+//  Definition.swift
 //  Mantis
 //
 //  Created by Echo on 8/8/21.

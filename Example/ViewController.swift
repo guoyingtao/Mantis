@@ -95,15 +95,14 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         present(cropViewController, animated: true)
     }
     
-    
     @IBAction func customizedCropToolbarButtonTouched(_ sender: Any) {
         guard let image = image else {
             return
         }
-        var config = Mantis.Config()
-        
-        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 100
-        config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation = 80
+        var config = Mantis.Config()        
+        config.cropToolbarConfig = CropToolbarConfig()
+        config.cropToolbarConfig.backgroundColor = .red
+        config.cropToolbarConfig.foregroundColor = .white
         
         let cropToolbar = CustomizedCropToolbar(frame: .zero)
         
@@ -122,8 +121,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         var config = Mantis.Config()
         
-        config.cropToolbarConfig.cropToolbarHeightForVertialOrientation = 160
-        config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation = 80
+        config.cropToolbarConfig.heightForVerticalOrientation = 160
+        config.cropToolbarConfig.widthForHorizontalOrientation = 80
         
         let cropToolbar = CustomizedCropToolbarWithoutList(frame: .zero)
         
@@ -142,7 +141,10 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .alterCropper90Degree]
-        
+        config.cropToolbarConfig.backgroundColor = .white
+        config.cropToolbarConfig.foregroundColor = .gray
+        config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
+                
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen

@@ -102,7 +102,9 @@ public class CropViewController: UIViewController {
     
     fileprivate func createRatioSelector() {
         let fixedRatioManager = getFixedRatioManager()
-        self.ratioSelector = RatioSelector(type: fixedRatioManager.type, originalRatioH: fixedRatioManager.originalRatioH, ratios: fixedRatioManager.ratios)
+        self.ratioSelector = RatioSelector(type: fixedRatioManager.type,
+                                           originalRatioH: fixedRatioManager.originalRatioH,
+                                           ratios: fixedRatioManager.ratios)
         self.ratioSelector?.didGetRatio = { [weak self] ratio in
             self?.setFixedRatio(ratio)
         }
@@ -113,7 +115,7 @@ public class CropViewController: UIViewController {
         
         switch config.presetFixedRatioType {
         case .alwaysUsingOnePresetFixedRatio(let ratio):
-                config.cropToolbarConfig.includeFixedRatioSettingButton = false
+                config.cropToolbarConfig.includeFixedRatiosSettingButton = false
                                 
                 if case .none = config.presetTransformationType {
                     setFixedRatio(ratio)
@@ -126,7 +128,7 @@ public class CropViewController: UIViewController {
                     config.cropToolbarConfig.presetRatiosButtonSelected = true
                 }
                 
-                config.cropToolbarConfig.includeFixedRatioSettingButton = true
+                config.cropToolbarConfig.includeFixedRatiosSettingButton = true
         }
                 
         if mode == .normal {
@@ -135,21 +137,16 @@ public class CropViewController: UIViewController {
             config.cropToolbarConfig.mode = .simple
         }
         
-        cropToolbar.createToolbarUI(config: config.cropToolbarConfig)
-                
-        let heightForVerticalOrientation = config.cropToolbarConfig.cropToolbarHeightForVertialOrientation
-        let widthForHorizonOrientation = config.cropToolbarConfig.cropToolbarWidthForHorizontalOrientation
-        cropToolbar.initSizeConstraints(heightForVerticalOrientation: heightForVerticalOrientation,
-                                        widthForHorizonOrientation: widthForHorizonOrientation)
+        cropToolbar.createToolbarUI(config: config.cropToolbarConfig)                
     }
     
     private func getRatioType() -> RatioType {
-        switch config.cropToolbarConfig.fixRatiosShowType {
+        switch config.cropToolbarConfig.fixedRatiosShowType {
         case .adaptive:
             return cropView.getRatioType(byImageIsOriginalisHorizontal: cropView.image.isHorizontal())
         case .horizontal:
             return .horizontal
-        case .vetical:
+        case .vertical:
             return .vertical
         }
     }
@@ -172,7 +169,8 @@ public class CropViewController: UIViewController {
         
         createCropView()
         createCropToolbar()
-        if config.cropToolbarConfig.ratioCandidatesShowType == .alwaysShowRatioList && config.cropToolbarConfig.includeFixedRatioSettingButton {
+        if config.cropToolbarConfig.ratioCandidatesShowType == .alwaysShowRatioList
+            && config.cropToolbarConfig.includeFixedRatiosSettingButton {
             createRatioSelector()
         }
         initLayout()
@@ -399,7 +397,7 @@ public class CropViewController: UIViewController {
         ratioPresenter = RatioPresenter(type: fixedRatioManager.type,
                                         originalRatioH: fixedRatioManager.originalRatioH,
                                         ratios: fixedRatioManager.ratios,
-                                        fixRatiosShowType: config.cropToolbarConfig.fixRatiosShowType)
+                                        fixRatiosShowType: config.cropToolbarConfig.fixedRatiosShowType)
         ratioPresenter?.didGetRatio = {[weak self] ratio in
             self?.setFixedRatio(ratio, zoom: false)
         }
