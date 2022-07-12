@@ -74,7 +74,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.showRotationDial = false
-        config.cropToolbarConfig.showBottomCropToolbar = false
+        config.showAttachedCropToolbar = false
         
         let cropToolbar = MyNavigationCropToolbar(frame: .zero)
         let cropViewController = Mantis.cropViewController(image: image, config: config, cropToolbar: cropToolbar)

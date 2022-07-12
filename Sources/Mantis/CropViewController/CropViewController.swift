@@ -478,7 +478,7 @@ extension CropViewController {
     }
     
     fileprivate func changeStackViewOrder() {
-        guard config.cropToolbarConfig.showBottomCropToolbar else {
+        guard config.showAttachedCropToolbar else {
             stackView?.removeArrangedSubview(cropStackView)
             stackView?.addArrangedSubview(cropStackView)
             return

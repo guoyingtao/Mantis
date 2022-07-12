@@ -115,6 +115,7 @@ public struct Config {
     public var dialConfig = DialConfig()
     public var cropToolbarConfig: CropToolbarConfigProtocol = CropToolbarConfig()
     public private(set) var localizationConfig = Mantis.localizationConfig
+    public var showAttachedCropToolbar = true
 
     var customRatios: [(width: Int, height: Int)] = []
 
