@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 public struct CropViewConfig {
     public var cropViewMinimumBoxSize: CGFloat = 42
