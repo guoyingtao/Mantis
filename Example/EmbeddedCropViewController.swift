@@ -44,6 +44,7 @@ class EmbeddedCropViewController: UIViewController {
             
             var config = Mantis.Config()
             config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1/2)
+            config.cropViewConfig.cropViewPadding = 32
             cropViewController.config = config
             
             self.cropViewController = cropViewController

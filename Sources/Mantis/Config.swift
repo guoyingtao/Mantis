@@ -111,6 +111,7 @@ public struct Config {
     public var cropVisualEffectType: CropVisualEffectType = .blurDark
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
+    public var cropViewConfig = CropViewConfig()
     public var showRotationDial = true
     public var dialConfig = DialConfig()
     public var cropToolbarConfig: CropToolbarConfigProtocol = CropToolbarConfig()

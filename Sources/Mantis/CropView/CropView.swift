@@ -31,11 +31,6 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidEndResize(_ cropView: CropView)
 }
 
-let cropViewMinimumBoxSize: CGFloat = 42
-let minimumAspectRatio: CGFloat = 0
-let hotAreaUnit: CGFloat = 32
-let cropViewPadding:CGFloat = 14.0
-
 class CropView: UIView {
 
     public var dialConfig = Mantis.Config().dialConfig
@@ -74,14 +69,26 @@ class CropView: UIView {
     private var cropFrameKVO: NSKeyValueObservation?
     var forceFixedRatio = false
     var imageStatusChangedCheckForForceFixedRatio = false
+
+    let cropViewConfig: CropViewConfig
     
     deinit {
         print("CropView deinit.")
     }
     
-    init(image: UIImage, viewModel: CropViewModel = CropViewModel(), dialConfig: DialConfig = Mantis.Config().dialConfig) {
+    init(
+        image: UIImage,
+        cropViewConfig: CropViewConfig = Mantis.Config().cropViewConfig,
+        dialConfig: DialConfig = Mantis.Config().dialConfig
+    ) {
         self.image = image
-        self.viewModel = viewModel
+
+        self.viewModel = CropViewModel(
+            cropViewPadding: cropViewConfig.cropViewPadding,
+            hotAreaUnit: cropViewConfig.hotAreaUnit
+        )
+
+        self.cropViewConfig = cropViewConfig
         self.dialConfig = dialConfig
         
         imageContainer = ImageContainer()
@@ -296,6 +303,8 @@ class CropView: UIView {
     }
     
     func updateCropBoxFrame(with point: CGPoint) {
+        let cropViewMinimumBoxSize = cropViewConfig.cropViewMinimumBoxSize
+
         let contentFrame = getContentBounds()
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(with: point, and: contentFrame, aspectRatioLockEnabled: aspectRatioLockEnabled)
         
@@ -377,6 +386,8 @@ extension CropView {
     }
     
     func getContentBounds() -> CGRect {
+        let cropViewPadding = cropViewConfig.cropViewPadding
+
         let rect = self.bounds
         var contentRect = CGRect.zero
         

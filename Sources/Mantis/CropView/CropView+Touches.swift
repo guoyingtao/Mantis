@@ -10,6 +10,8 @@ import UIKit
 
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hotAreaUnit = cropViewConfig.hotAreaUnit
+
         let newPoint = self.convert(point, to: self)
         
         if let rotationDial = rotationDial, rotationDial.frame.contains(newPoint) {

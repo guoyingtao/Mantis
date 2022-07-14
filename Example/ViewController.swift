@@ -35,7 +35,9 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-        let config = Mantis.Config()
+        var config = Mantis.Config()
+        config.cropViewConfig.cropViewPadding = 32
+        config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen
