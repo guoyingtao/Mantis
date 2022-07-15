@@ -37,6 +37,15 @@ enum ImageRotationType: CGFloat {
 }
 
 class CropViewModel: NSObject {
+    init(
+        cropViewPadding: CGFloat,
+        hotAreaUnit: CGFloat
+    ) {
+        self.cropViewPadding = cropViewPadding
+        self.hotAreaUnit = hotAreaUnit
+        super.init()
+    }
+
     var statusChanged: (_ status: CropViewStatus)->Void = { _ in }
     
     var viewStatus: CropViewStatus = .initial {
@@ -63,7 +72,10 @@ class CropViewModel: NSObject {
     var aspectRatio: CGFloat = -1    
     var cropLeftTopOnImage: CGPoint = .zero
     var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
-    
+
+    private let cropViewPadding: CGFloat
+    private let hotAreaUnit: CGFloat
+
     func reset(forceFixedRatio: Bool = false) {
         cropBoxFrame = .zero
         degrees = 0
