@@ -115,14 +115,17 @@ extension FixedRatioManager {
     }
 
     private func appendToTail(ratioItems: [RatioItemType]) {
-        ratioItems.forEach{
+        ratioItems.forEach {
             appendToTail(ratioItem: $0)
         }
     }
 
     private func appendToTail(items: [(width: Int, height: Int)]) {
         items.forEach {
-            let ratioItem = (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height), String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+            let ratioItem = (String("\($0.width):\($0.height)"),
+                             Double($0.width)/Double($0.height),
+                             String("\($0.height):\($0.width)"),
+                             Double($0.height)/Double($0.width))
             appendToTail(ratioItem: ratioItem)
         }
     }

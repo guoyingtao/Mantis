@@ -9,7 +9,7 @@ import UIKit
 
 public class RatioSelector: UIView {
     
-    var didGetRatio: ((Double)->Void) = { _ in }
+    var didGetRatio: ((Double) -> Void) = { _ in }
     private var type: RatioType = .vertical
     private var originalRatioH: Double = 0.0
     private var ratios: [RatioItemType] = []

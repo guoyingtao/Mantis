@@ -8,8 +8,8 @@
 
 import UIKit
 
-fileprivate let minOverLayerUnit: CGFloat = 30
-fileprivate let initialFrameLength: CGFloat = 1000
+private let minOverLayerUnit: CGFloat = 30
+private let initialFrameLength: CGFloat = 1000
 
 protocol CropMaskProtocol where Self: UIView {
     var cropShapeType: CropShapeType { get set }
@@ -80,11 +80,13 @@ extension CropMaskProtocol {
             guard points.count >= 3 else {
                 return innerPath
             }
-            let points0 = CGPoint(x: initialRect.width * points[0].x + initialRect.origin.x, y: initialRect.height * points[0].y + initialRect.origin.y)
+            let points0 = CGPoint(x: initialRect.width * points[0].x + initialRect.origin.x,
+                                  y: initialRect.height * points[0].y + initialRect.origin.y)
             innerPath.move(to: points0)
         
             for index in 1..<points.count {
-                let point = CGPoint(x: initialRect.width * points[index].x + initialRect.origin.x, y: initialRect.height * points[index].y + initialRect.origin.y)
+                let point = CGPoint(x: initialRect.width * points[index].x + initialRect.origin.x,
+                                    y: initialRect.height * points[index].y + initialRect.origin.y)
                 innerPath.addLine(to: point)
             }
             
@@ -128,32 +130,32 @@ extension UIBezierPath {
     convenience init(heartIn rect: CGRect) {
         self.init()
 
-        //Calculate Radius of Arcs using Pythagoras
+        // Calculate Radius of Arcs using Pythagoras
         let sideOne = rect.width * 0.4
         let sideTwo = rect.height * 0.3
         let arcRadius = sqrt(sideOne*sideOne + sideTwo*sideTwo)/2
 
-        //Left Hand Curve
+        // Left Hand Curve
         self.addArc(withCenter: CGPoint(x: rect.minX + rect.width * 0.3, y: rect.minY + rect.height * 0.35),
                     radius: arcRadius,
                     startAngle: 135.degreesToRadians,
                     endAngle: 315.degreesToRadians,
                     clockwise: true)
 
-        //Top Centre Dip
+        // Top Centre Dip
         self.addLine(to: CGPoint(x: rect.minX + rect.width/2, y: rect.minY + rect.height * 0.2))
 
-        //Right Hand Curve
+        // Right Hand Curve
         self.addArc(withCenter: CGPoint(x: rect.minX + rect.width * 0.7, y: rect.minY + rect.height * 0.35),
                     radius: arcRadius,
                     startAngle: 225.degreesToRadians,
                     endAngle: 45.degreesToRadians,
                     clockwise: true)
 
-        //Right Bottom Line
+        // Right Bottom Line
         self.addLine(to: CGPoint(x: rect.minX + rect.width * 0.5, y: rect.minY + rect.height * 0.95))
 
-        //Left Bottom Line
+        // Left Bottom Line
         self.close()
     }
 }
@@ -186,4 +188,3 @@ func polygonPointArray(sides: Int,
     }
     return points
 }
-

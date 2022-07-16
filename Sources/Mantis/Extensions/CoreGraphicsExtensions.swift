@@ -26,12 +26,12 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    var greyscale: UIColor{
+    var greyscale: UIColor {
         var (hue, saturation, brightness, alpha) = (CGFloat(0.0), CGFloat(0.0), CGFloat(0.0), CGFloat(0.0))
 
         if self.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
             return  UIColor(hue: hue, saturation: 0, brightness: brightness, alpha: alpha / 2)
-        }else {
+        } else {
             return UIColor.gray
         }
     }
@@ -42,7 +42,7 @@ extension UIColor {
         var currentBrigthness: CGFloat = 0.0
         var currentAlpha: CGFloat = 0.0
         
-        if self.getHue(&currentHue, saturation: &currentSaturation, brightness: &currentBrigthness, alpha: &currentAlpha){
+        if self.getHue(&currentHue, saturation: &currentSaturation, brightness: &currentBrigthness, alpha: &currentAlpha) {
             return UIColor(hue: currentHue + hue,
                            saturation: currentSaturation + additionalSaturation,
                            brightness: currentBrigthness + additionalBrightness,
@@ -53,12 +53,12 @@ extension UIColor {
     }
 }
 
-extension Angle{
-    var reverse:Angle{return 2 * CGFloat.pi - self}
+extension Angle {
+    var reverse: Angle { return 2 * CGFloat.pi - self }
 }
-extension FloatingPoint{
-    var isBad:Bool{ return isNaN || isInfinite }
-    var checked:Self{
+extension FloatingPoint {
+    var isBad: Bool { return isNaN || isInfinite }
+    var checked: Self {
         guard !isBad && !isInfinite else {
             fatalError("bad number!")
         }
@@ -72,10 +72,10 @@ func df() -> CGFloat {
     return    CGFloat(drand48()).checked
 }
 
-func clockDescretization(_ val: CGFloat) -> CGFloat{
-    let min:Double  = 0
-    let max:Double = 2 * Double.pi
-    let steps:Double = 144
+func clockDescretization(_ val: CGFloat) -> CGFloat {
+    let min: Double  = 0
+    let max: Double = 2 * Double.pi
+    let steps: Double = 144
     let stepSize = (max - min) / steps
     let nsf = floor(Double(val) / stepSize)
     let rest = Double(val) - stepSize * nsf
@@ -84,16 +84,16 @@ func clockDescretization(_ val: CGFloat) -> CGFloat{
 }
 
 extension CALayer {
-    func doDebug(){
-        self.borderColor = UIColor(hue: df() , saturation: df(), brightness: 1, alpha: 1).cgColor
-        self.borderWidth = 2;
+    func doDebug() {
+        self.borderColor = UIColor(hue: df(), saturation: df(), brightness: 1, alpha: 1).cgColor
+        self.borderWidth = 2
         self.sublayers?.forEach({$0.doDebug()})
     }
 }
 
-extension CGSize{
-    var hasNaN:Bool{return width.isBad || height.isBad }
-    var checked:CGSize{
+extension CGSize {
+    var hasNaN: Bool {return width.isBad || height.isBad }
+    var checked: CGSize {
         guard !hasNaN else {
             fatalError("bad number!")
         }
@@ -101,10 +101,10 @@ extension CGSize{
     }
 }
 
-extension CGRect{
-    var center:CGPoint { return CGPoint(x:midX, y: midY).checked}
-    var hasNaN:Bool{return size.hasNaN || origin.hasNaN}
-    var checked:CGRect{
+extension CGRect {
+    var center: CGPoint { return CGPoint(x: midX, y: midY).checked }
+    var hasNaN: Bool {return size.hasNaN || origin.hasNaN}
+    var checked: CGRect {
         guard !hasNaN else {
             fatalError("bad number!")
         }
@@ -112,44 +112,44 @@ extension CGRect{
     }
 }
 
-extension CGPoint{
-    var vector:CGVector { return CGVector(dx: x, dy: y).checked}
-    var checked:CGPoint{
+extension CGPoint {
+    var vector: CGVector { return CGVector(dx: x, dy: y).checked }
+    var checked: CGPoint {
         guard !hasNaN else {
             fatalError("bad number!")
         }
         return self
     }
-    var hasNaN:Bool{return x.isBad || y.isBad }
+    var hasNaN: Bool {return x.isBad || y.isBad }
 }
 
-extension CGVector{
-    var hasNaN:Bool{return dx.isBad || dy.isBad}
-    var checked:CGVector{
+extension CGVector {
+    var hasNaN: Bool { return dx.isBad || dy.isBad }
+    var checked: CGVector {
         guard !hasNaN else {
             fatalError("bad number!")
         }
         return self
     }
 
-    static var root:CGVector{ return CGVector(dx:1, dy:0).checked}
-    var magnitude:CGFloat { return sqrt(pow(dx, 2) + pow(dy,2)).checked}
-    var normalized: CGVector { return CGVector(dx:dx / magnitude,  dy: dy / magnitude).checked }
-    var point:CGPoint { return CGPoint(x: dx, y: dy).checked}
-    func rotate(_ angle:Angle) -> CGVector { return CGVector(dx: dx * cos(angle) - dy * sin(angle), dy: dx * sin(angle) + dy * cos(angle) ).checked}
+    static var root: CGVector { return CGVector(dx: 1, dy: 0).checked }
+    var magnitude: CGFloat { return sqrt(pow(dx, 2) + pow(dy, 2)).checked }
+    var normalized: CGVector { return CGVector(dx: dx / magnitude, dy: dy / magnitude).checked }
+    var point: CGPoint { return CGPoint(x: dx, y: dy).checked }
+    func rotate(_ angle: Angle) -> CGVector { return CGVector(dx: dx * cos(angle) - dy * sin(angle), dy: dx * sin(angle) + dy * cos(angle) ).checked}
     
-    func dot(_ vec2:CGVector) -> CGFloat { return (dx * vec2.dx + dy * vec2.dy).checked}
-    func add(_ vec2:CGVector) -> CGVector { return CGVector(dx:dx + vec2.dx , dy: dy + vec2.dy).checked}
-    func cross(_ vec2:CGVector) -> CGFloat { return (dx * vec2.dy - dy * vec2.dx).checked}
-    func scale(_ scale:CGFloat) -> CGVector { return CGVector(dx:dx * scale , dy: dy * scale).checked}
+    func dot(_ vec2: CGVector) -> CGFloat { return (dx * vec2.dx + dy * vec2.dy).checked}
+    func add(_ vec2: CGVector) -> CGVector { return CGVector(dx: dx + vec2.dx, dy: dy + vec2.dy).checked}
+    func cross(_ vec2: CGVector) -> CGFloat { return (dx * vec2.dy - dy * vec2.dx).checked}
+    func scale(_ scale: CGFloat) -> CGVector { return CGVector(dx: dx * scale, dy: dy * scale).checked}
     
-    init(from: CGPoint, to: CGPoint) {
-        guard !from.hasNaN && !to.hasNaN  else {
+    init(fromPoint: CGPoint, toPoint: CGPoint) {
+        guard !fromPoint.hasNaN && !toPoint.hasNaN  else {
                 fatalError("Nan point!")
             }
         self.init()
-        dx = to.x - from.x
-        dy = to.y - from.y
+        dx = toPoint.x - fromPoint.x
+        dy = toPoint.y - fromPoint.y
         _ = self.checked
     }
     

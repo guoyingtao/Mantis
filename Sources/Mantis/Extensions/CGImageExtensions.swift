@@ -18,8 +18,8 @@ extension CGImage {
             return self
         }
         // If the color space does not allow output, default to the RGB color space
-        if (!colorSpaceRef.supportsOutput) {
-            colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+        if !colorSpaceRef.supportsOutput {
+            colorSpaceRef = CGColorSpaceCreateDeviceRGB()
         }
         
         let expectedWidth = floor(sourceSize.width / imageViewSize.width * cropSize.width) / zoomScale

@@ -42,3 +42,8 @@ public typealias CropInfo = (
     imageViewSize: CGSize
 )
 
+typealias CropOutput = (
+    croppedImage: UIImage?,
+    transformation: Transformation,
+    cropInfo: CropInfo
+)

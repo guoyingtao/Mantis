@@ -148,14 +148,17 @@ extension RotationDial {
         }
         
         let dialPlateLength = 2 * radius
-        let dialPlateFrame = CGRect(x: (container.frame.width - dialPlateLength) / 2, y: margin - (dialPlateLength - dialPlateShowHeight), width: dialPlateLength, height: dialPlateLength)
+        let dialPlateFrame = CGRect(x: (container.frame.width - dialPlateLength) / 2,
+                                    y: margin - (dialPlateLength - dialPlateShowHeight),
+                                    width: dialPlateLength,
+                                    height: dialPlateLength)
         
         dialPlate?.removeFromSuperview()
         dialPlate = RotationDialPlate(frame: dialPlateFrame, dialConfig: dialConfig)
         container.addSubview(dialPlate!)
     }
     
-    private func setupPointer(in container: UIView){
+    private func setupPointer(in container: UIView) {
         guard let dialPlate = dialPlate else { return }
         
         let path = CGMutablePath()
@@ -180,7 +183,7 @@ extension RotationDial {
         if case .custom(let center) = dialConfig.rotationCenterType {
             return center
         } else {
-            let point = CGPoint(x: dialPlate.bounds.midX , y: dialPlate.bounds.midY)
+            let point = CGPoint(x: dialPlate.bounds.midX, y: dialPlate.bounds.midY)
             return dialPlate.convert(point, to: self)
         }
     }

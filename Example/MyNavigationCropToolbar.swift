@@ -56,4 +56,3 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
         cropToolbarDelegate?.didSelectClockwiseRotate()
     }
 }
-

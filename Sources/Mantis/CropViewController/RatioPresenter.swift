@@ -14,7 +14,7 @@ enum RatioType {
 }
 
 class RatioPresenter {
-    var didGetRatio: ((Double)->Void) = { _ in }
+    var didGetRatio: ((Double) -> Void) = { _ in }
     private var type: RatioType = .vertical
     private var originalRatioH: Double
     private var ratios: [RatioItemType]

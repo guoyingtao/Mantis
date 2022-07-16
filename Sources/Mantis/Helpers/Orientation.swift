@@ -7,7 +7,6 @@
 import UIKit
 
 public struct Orientation {
-    
     static var interfaceOrientation: UIInterfaceOrientation {
         if #available(iOS 13, macOS 10.13, *) {
             return (application.windows.first?.windowScene?.interfaceOrientation)!
@@ -22,11 +21,8 @@ public struct Orientation {
         : nil
     }
     
-    
     private static var application: UIApplication { .shared }
-    
     private static var device: UIDevice { .current }
-    
     
     /**
      Whether or not the device is in landscape orientation.
