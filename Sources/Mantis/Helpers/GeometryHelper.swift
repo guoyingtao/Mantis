@@ -20,7 +20,6 @@ enum CropViewOverlayEdge {
     case left
 }
 
-
 struct GeometryHelper {    
     static func getInscribeRect(fromOutsideRect outsideRect: CGRect, andInsideRect insideRect: CGRect) -> CGRect {
         let insideRectRatio = insideRect.width / insideRect.height
@@ -41,7 +40,7 @@ struct GeometryHelper {
     }
     
     static func getCropEdge(forPoint point: CGPoint, byTouchRect touchRect: CGRect, hotAreaUnit: CGFloat) -> CropViewOverlayEdge {
-        //Make sure the corners take priority
+        // Make sure the corners take priority
         let touchSize = CGSize(width: hotAreaUnit, height: hotAreaUnit)
         
         let topLeftRect = CGRect(origin: touchRect.origin, size: touchSize)
@@ -56,23 +55,29 @@ struct GeometryHelper {
         let bottomRightRect = bottomLeftRect.offsetBy(dx: touchRect.width - hotAreaUnit, dy: 0)
         if bottomRightRect.contains(point) { return .bottomRight }
         
-        //Check for edges
+        // Check for edges
         let topRect = CGRect(origin: touchRect.origin, size: CGSize(width: touchRect.width, height: hotAreaUnit))
         if topRect.contains(point) { return .top }
         
         let leftRect = CGRect(origin: touchRect.origin, size: CGSize(width: hotAreaUnit, height: touchRect.height))
         if leftRect.contains(point) { return .left }
         
-        let rightRect = CGRect(origin: CGPoint(x: touchRect.maxX - hotAreaUnit, y: touchRect.origin.y), size: CGSize(width: hotAreaUnit, height: touchRect.height))
+        let rightRect = CGRect(origin: CGPoint(x: touchRect.maxX - hotAreaUnit,
+                                               y: touchRect.origin.y),
+                               size: CGSize(width: hotAreaUnit,
+                                            height: touchRect.height))
         if rightRect.contains(point) { return .right }
         
-        let bottomRect = CGRect(origin: CGPoint(x: touchRect.origin.x, y: touchRect.maxY - hotAreaUnit), size: CGSize(width: touchRect.width, height: hotAreaUnit))
+        let bottomRect = CGRect(origin: CGPoint(x: touchRect.origin.x,
+                                                y: touchRect.maxY - hotAreaUnit),
+                                size: CGSize(width: touchRect.width,
+                                             height: hotAreaUnit))
         if bottomRect.contains(point) { return .bottom }
         
         return .none
     }
     
     static func scale(from transform: CGAffineTransform) -> Double {
-        return sqrt(Double(transform.a * transform.a + transform.c * transform.c));
+        return sqrt(Double(transform.a * transform.a + transform.c * transform.c))
     }
 }

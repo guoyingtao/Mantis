@@ -108,7 +108,9 @@ public class CropViewController: UIViewController {
     
     fileprivate func createRatioSelector() {
         let fixedRatioManager = getFixedRatioManager()
-        ratioSelector = RatioSelector(type: fixedRatioManager.type, originalRatioH: fixedRatioManager.originalRatioH, ratios: fixedRatioManager.ratios)
+        ratioSelector = RatioSelector(type: fixedRatioManager.type,
+                                      originalRatioH: fixedRatioManager.originalRatioH,
+                                      ratios: fixedRatioManager.ratios)
         ratioSelector?.didGetRatio = { [weak self] ratio in
             self?.setFixedRatio(ratio)
         }
@@ -263,7 +265,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    private func processPresetTransformation(completion: (Transformation)->Void) {
+    private func processPresetTransformation(completion: (Transformation) -> Void) {
         if case .presetInfo(let transformInfo) = config.presetTransformationType {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
@@ -271,12 +273,13 @@ public class CropViewController: UIViewController {
             cropView.transform(byTransformInfo: newTransform, rotateDial: false)
             
             // The second transform is for adjusting the scale of transformInfo
-            let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width) / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
+            let adjustScale = (cropView.viewModel.cropBoxFrame.width / cropView.viewModel.cropOrignFrame.width)
+            / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
             newTransform.scale *= adjustScale
             cropView.transform(byTransformInfo: newTransform)
             completion(transformInfo)
         } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
-            let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo);
+            let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo)
             cropView.transform(byTransformInfo: transformInfo)
             cropView.scrollView.frame = transformInfo.maskFrame
             completion(transformInfo)
@@ -285,7 +288,7 @@ public class CropViewController: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        processPresetTransformation() { [weak self] transform in
+        processPresetTransformation { [weak self] transform in
             guard let self = self else { return }
             if case .alwaysUsingOnePresetFixedRatio(let ratio) = self.config.presetFixedRatioType {
                 self.cropView.aspectRatioLockEnabled = true
@@ -309,7 +312,7 @@ public class CropViewController: UIViewController {
         var maskFrameWidth: CGFloat
         var maskFrameHeight: CGFloat
         
-        if ( transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width ) {
+        if transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width {
             maskFrameHeight = contentBound.height
             maskFrameWidth = transformInfo.maskFrame.width / transformInfo.maskFrame.height * maskFrameHeight
             adjustScale = maskFrameHeight / transformInfo.maskFrame.height
@@ -321,8 +324,8 @@ public class CropViewController: UIViewController {
         
         var newTransform = transformInfo
         
-        newTransform.offset = CGPoint(x:transformInfo.offset.x * adjustScale,
-                                      y:transformInfo.offset.y * adjustScale)
+        newTransform.offset = CGPoint(x: transformInfo.offset.x * adjustScale,
+                                      y: transformInfo.offset.y * adjustScale)
         
         newTransform.maskFrame = CGRect(x: cropFrame.origin.x + (cropFrame.width - maskFrameWidth) / 2,
                                         y: cropFrame.origin.y + (cropFrame.height - maskFrameHeight) / 2,
@@ -347,11 +350,11 @@ public class CropViewController: UIViewController {
         
         var maskFrame = cropFrame
         
-        if (normailizedInfo.width > normailizedInfo.height) {
+        if normailizedInfo.width > normailizedInfo.height {
             let adjustScale = 1 / normailizedInfo.width
             maskFrame.size.height = normailizedInfo.height * cropFrame.height * adjustScale
             maskFrame.origin.y += (cropFrame.height - maskFrame.height) / 2
-        } else if (normailizedInfo.width < normailizedInfo.height) {
+        } else if normailizedInfo.width < normailizedInfo.height {
             let adjustScale = 1 / normailizedInfo.height
             maskFrame.size.width = normailizedInfo.width * cropFrame.width * adjustScale
             maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2

@@ -91,7 +91,7 @@ extension UIImage {
     }
     
     func isHorizontal() -> Bool {
-        let orientationArray: [UIImage.Orientation] = [.up,.upMirrored,.down,.downMirrored]
+        let orientationArray: [UIImage.Orientation] = [.up, .upMirrored, .down, .downMirrored]
         
         if orientationArray.contains(imageOrientation) {
             return size.width > size.height
@@ -101,7 +101,7 @@ extension UIImage {
     }
     
     func ratioH() -> CGFloat {
-        let orientationArray: [UIImage.Orientation] = [.up,.upMirrored,.down,.downMirrored]
+        let orientationArray: [UIImage.Orientation] = [.up, .upMirrored, .down, .downMirrored]
         if orientationArray.contains(imageOrientation) {
             return size.width / size.height
         } else {
@@ -144,8 +144,7 @@ extension UIImage {
         
         let rect = CGRect(origin: .zero, size: size)
         
-        return UIGraphicsImageRenderer(size: size, format: format).image() {
-            _ in
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
             pathBuilder(rect).addClip()
             UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
                 .draw(in: rect)
@@ -153,19 +152,19 @@ extension UIImage {
     }
     
     var ellipseMasked: UIImage? {
-        return getImageWithTransparentBackground() {
+        return getImageWithTransparentBackground {
             UIBezierPath(ovalIn: $0)
         }
     }
     
     func roundRect(_ radius: CGFloat) -> UIImage? {
-        return getImageWithTransparentBackground() {
+        return getImageWithTransparentBackground {
             UIBezierPath(roundedRect: $0, cornerRadius: radius)
         }
     }
     
     var heart: UIImage? {
-        return getImageWithTransparentBackground() {
+        return getImageWithTransparentBackground {
             UIBezierPath(heartIn: $0)
         }
     }
@@ -175,9 +174,8 @@ extension UIImage {
             return nil
         }
         
-        return getImageWithTransparentBackground() {rect in
-            let newPoints = points.map{ CGPoint(x: rect.origin.x + rect.width * $0.x, y: rect.origin.y + rect.height * $0.y)}
-
+        return getImageWithTransparentBackground {rect in
+            let newPoints = points.map { CGPoint(x: rect.origin.x + rect.width * $0.x, y: rect.origin.y + rect.height * $0.y) }
             
             let path = UIBezierPath()
             path.move(to: newPoints[0])

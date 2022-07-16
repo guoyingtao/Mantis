@@ -24,31 +24,31 @@
 
 import UIKit
 
-fileprivate let bigDegreeScaleNumber = 36
-fileprivate let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
-fileprivate let margin: CGFloat = 0
-fileprivate let spaceBetweenScaleAndNumber: CGFloat = 10
+private let bigDegreeScaleNumber = 36
+private let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
+private let margin: CGFloat = 0
+private let spaceBetweenScaleAndNumber: CGFloat = 10
 
 class RotationDialPlate: UIView {
 
-    let smallDotLayer:CAReplicatorLayer = {
+    let smallDotLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
         layer.instanceCount = smallDegreeScaleNumber
         layer.instanceTransform =
             CATransform3DMakeRotation(
                 2 * CGFloat.pi / CGFloat(layer.instanceCount),
-                0,0,1)
+                0, 0, 1)
         
         return layer
     }()
     
-    let bigDotLayer:CAReplicatorLayer = {
+    let bigDotLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
         layer.instanceCount = bigDegreeScaleNumber
         layer.instanceTransform =
             CATransform3DMakeRotation(
                 2 * CGFloat.pi / CGFloat(layer.instanceCount),
-                0,0,1)
+                0, 0, 1)
         
         return layer
     }()
@@ -113,7 +113,11 @@ class RotationDialPlate: UIView {
             numberLayer.foregroundColor = dialConfig.numberColor.cgColor
             
             let stepChange = CGFloat(index) * step
-            numberLayer.position = CGVector(from:origin, to:startPos).rotate(-stepChange).add(origin.vector).point.checked
+            numberLayer.position = CGVector(fromPoint: origin, toPoint: startPos)
+                .rotate(-stepChange)
+                .add(origin.vector)
+                .point
+                .checked
             
             numberLayer.transform = CATransform3DMakeRotation(-stepChange, 0, 0, 1)            
             numberPlateLayer.addSublayer(numberLayer)
@@ -144,7 +148,10 @@ class RotationDialPlate: UIView {
     private func setCenterPart() {
         let layer = CAShapeLayer()
         let radius: CGFloat = 4
-        layer.frame = CGRect(x: (self.layer.bounds.width - radius) / 2 , y: (self.layer.bounds.height - radius) / 2, width: radius, height: radius)
+        layer.frame = CGRect(x: (self.layer.bounds.width - radius) / 2 ,
+                             y: (self.layer.bounds.height - radius) / 2,
+                             width: radius,
+                             height: radius)
         layer.path = UIBezierPath(ovalIn: layer.bounds).cgPath
         layer.fillColor = dialConfig.centerAxisColor.cgColor
         

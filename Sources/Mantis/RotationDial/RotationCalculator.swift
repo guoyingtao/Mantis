@@ -29,9 +29,9 @@ class RotationCalculator {
         
         var rotation = angleBetween(pointA: currentPoint, andPointB: previousPoint)
         
-        if (rotation > CGFloat.pi) {
+        if rotation > CGFloat.pi {
             rotation -= CGFloat.pi * 2
-        } else if (rotation < -CGFloat.pi) {
+        } else if rotation < -CGFloat.pi {
             rotation += CGFloat.pi * 2
         }
         
@@ -64,15 +64,15 @@ class RotationCalculator {
     }
     
     private func distanceBetween(pointA: CGPoint, andPointB pointB: CGPoint) -> CGFloat {
-        let dx = Float(pointA.x - pointB.x)
-        let dy = Float(pointA.y - pointB.y)
-        return CGFloat(sqrtf(dx*dx + dy*dy))
+        let diffX = Float(pointA.x - pointB.x)
+        let diffY = Float(pointA.y - pointB.y)
+        return CGFloat(sqrtf(diffX*diffX + diffY*diffY))
     }
     
     private func angleForPoint(point: CGPoint) -> CGFloat {
         var angle = CGFloat(-atan2f(Float(point.x - midPoint.x), Float(point.y - midPoint.y))) + CGFloat.pi / 2
         
-        if (angle < 0) {
+        if angle < 0 {
             angle += CGFloat.pi * 2
         }
         
@@ -83,9 +83,9 @@ class RotationCalculator {
         return angleForPoint(point: pointA) - angleForPoint(point: pointB)
     }
     
-    func getRotationRadians(byOldPoint p1: CGPoint, andNewPoint p2: CGPoint) -> CGFloat {
-        self.previousPoint = p1
-        self.currentPoint = p2
+    func getRotationRadians(byOldPoint point1: CGPoint, andNewPoint point2: CGPoint) -> CGFloat {
+        self.previousPoint = point1
+        self.currentPoint = point2
         return rotation ?? 0
     }
 }

@@ -19,7 +19,7 @@ class ImageContainer: UIView {
         addSubview(imageView)
         
         return imageView
-    } ()
+    }()
 
     var image: UIImage? {
         didSet {
@@ -38,11 +38,11 @@ class ImageContainer: UIView {
     func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 1e-6) -> Bool {
         let newRect = view.convert(rect, to: self)
         
-        let p1 = newRect.origin
-        let p2 = CGPoint(x: newRect.maxX, y: newRect.maxY)
+        let point1 = newRect.origin
+        let point2 = CGPoint(x: newRect.maxX, y: newRect.maxY)
         
         let refBounds = bounds.insetBy(dx: -tolerance, dy: -tolerance)
         
-        return refBounds.contains(p1) && refBounds.contains(p2)
+        return refBounds.contains(point1) && refBounds.contains(point2)
     }
 }

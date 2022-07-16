@@ -44,10 +44,14 @@ class CropVisualEffectView: UIVisualEffectView, CropMaskProtocol {
     
     static func getEffect(byType type: CropVisualEffectType) -> (UIVisualEffect?, UIColor) {
         switch type {
-            case .blurDark: return (UIBlurEffect(style: .dark), .clear)
-            case .dark: return (nil, UIColor.black.withAlphaComponent(0.75))
-            case .light: return (nil, UIColor.black.withAlphaComponent(0.35))
-            case .none: return (nil, .black)
+        case .blurDark:
+            return (UIBlurEffect(style: .dark), .clear)
+        case .dark:
+            return (nil, UIColor.black.withAlphaComponent(0.75))
+        case .light:
+            return (nil, UIColor.black.withAlphaComponent(0.35))
+        case .none:
+            return (nil, .black)
         }
     }
     

@@ -26,12 +26,12 @@ struct CropBoxLockedAspectFrameUpdater {
         var xDelta = xDelta
         var yDelta = yDelta
         
-        //Current aspect ratio of the crop box in case we need to clamp it
-        let aspectRatio = (cropOriginFrame.size.width / cropOriginFrame.size.height);
+        // Current aspect ratio of the crop box in case we need to clamp it
+        let aspectRatio = (cropOriginFrame.size.width / cropOriginFrame.size.height)
         
         func updateHeightFromBothSides() {
-            cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio;
-            cropBoxFrame.origin.y = cropOriginFrame.midY - (cropBoxFrame.height * 0.5);
+            cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio
+            cropBoxFrame.origin.y = cropOriginFrame.midY - (cropBoxFrame.height * 0.5)
         }
         
         func updateWidthFromBothSides() {
@@ -105,7 +105,7 @@ struct CropBoxLockedAspectFrameUpdater {
         
         func handleBottomLeftEdgeFrameUpdate() {
             setCropBoxSize()
-            cropBoxFrame.origin.x = cropOriginFrame.maxX - cropBoxFrame.width;
+            cropBoxFrame.origin.x = cropOriginFrame.maxX - cropBoxFrame.width
         }
         
         func handleBottomRightEdgeFrameUpdate() {

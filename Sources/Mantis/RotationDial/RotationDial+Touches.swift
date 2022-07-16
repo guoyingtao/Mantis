@@ -43,4 +43,3 @@ extension RotationDial {
         viewModel.touchPoint = nil
     }
 }
-

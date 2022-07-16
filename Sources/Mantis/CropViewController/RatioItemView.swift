@@ -8,7 +8,7 @@
 import UIKit
 
 class RatioItemView: UIView {
-    var didGetRatio: ((RatioItemType)->Void) = { _ in }
+    var didGetRatio: ((RatioItemType) -> Void) = { _ in }
     var selected = false {
         didSet {
             UIView.animate(withDuration: 0.2) {
@@ -74,7 +74,7 @@ class RatioItemView: UIView {
     }
 }
 
-fileprivate class PaddingLabel: UILabel {
+private class PaddingLabel: UILabel {
     var topInset: CGFloat = 4.0
     var bottomInset: CGFloat = 4.0
     var leftInset: CGFloat = 10.0

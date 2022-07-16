@@ -93,14 +93,20 @@ class CropOverlayView: UIView {
     }
     
     private func setGridShowStatus() {
-        horizontalGridLines.forEach{ $0.alpha = gridHidden ? 0 : 1}
-        verticalGridLines.forEach{ $0.alpha = gridHidden ? 0 : 1}
+        horizontalGridLines.forEach { $0.alpha = gridHidden ? 0 : 1 }
+        verticalGridLines.forEach { $0.alpha = gridHidden ? 0 : 1 }
     }
     
     private func layoutGridLines() {
         for index in 0..<gridLineNumberType.rawValue {
-            horizontalGridLines[index].frame = CGRect(x: 0, y: CGFloat(index + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1), width: frame.width, height: 1)
-            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1), y: 0, width: 1, height: frame.height)
+            horizontalGridLines[index].frame = CGRect(x: 0,
+                                                      y: CGFloat(index + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1),
+                                                      width: frame.width,
+                                                      height: 1)
+            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1),
+                                                    y: 0,
+                                                    width: 1,
+                                                    height: frame.height)
         }
     }
     
@@ -130,7 +136,10 @@ class CropOverlayView: UIView {
     }
     
     private func layoutOuterLines() {
-        borderLine.frame = CGRect(x: -borderThickness, y: -borderThickness, width: bounds.width + 2 * borderThickness, height: bounds.height + 2 * borderThickness)
+        borderLine.frame = CGRect(x: -borderThickness,
+                                  y: -borderThickness,
+                                  width: bounds.width + 2 * borderThickness,
+                                  height: bounds.height + 2 * borderThickness)
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
         borderLine.layer.borderColor = boarderNormalColor.cgColor
@@ -202,19 +211,31 @@ class CropOverlayView: UIView {
         setGrid(hidden: false, animated: true)
         gridLineNumberType = .crop
         
-        if (hintLine.superview == nil) {
+        if hintLine.superview == nil {
             addSubview(hintLine)
         }
         
         switch tappedEdge {
         case .top:
-            hintLine.frame = CGRect(x: borderLine.frame.minX, y: borderLine.frame.minY, width: borderLine.frame.width, height: hineLineThickness)
+            hintLine.frame = CGRect(x: borderLine.frame.minX,
+                                    y: borderLine.frame.minY,
+                                    width: borderLine.frame.width,
+                                    height: hineLineThickness)
         case .bottom:
-            hintLine.frame = CGRect(x: borderLine.frame.minX, y: borderLine.frame.maxY - hineLineThickness, width: borderLine.frame.width, height: hineLineThickness)
+            hintLine.frame = CGRect(x: borderLine.frame.minX,
+                                    y: borderLine.frame.maxY - hineLineThickness,
+                                    width: borderLine.frame.width,
+                                    height: hineLineThickness)
         case .left:
-            hintLine.frame = CGRect(x: borderLine.frame.minX, y: borderLine.frame.minY, width: hineLineThickness, height: borderLine.frame.height)
+            hintLine.frame = CGRect(x: borderLine.frame.minX,
+                                    y: borderLine.frame.minY,
+                                    width: hineLineThickness,
+                                    height: borderLine.frame.height)
         case .right:
-            hintLine.frame = CGRect(x: borderLine.frame.maxX - hineLineThickness, y: borderLine.frame.minY, width: hineLineThickness, height: borderLine.frame.height)
+            hintLine.frame = CGRect(x: borderLine.frame.maxX - hineLineThickness,
+                                    y: borderLine.frame.minY,
+                                    width: hineLineThickness,
+                                    height: borderLine.frame.height)
         default:
             hintLine.removeFromSuperview()
         }        
