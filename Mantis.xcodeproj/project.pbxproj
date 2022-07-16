@@ -26,6 +26,7 @@
 		5F69CC5E26C0629400568B75 /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69CC5D26C0629400568B75 /* Definition.swift */; };
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
+		664A7E9C28825B8400DF7C79 /* CropViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A7E9B28825B8400DF7C79 /* CropViewConfig.swift */; };
 		6659429D2877DAE80096A5DB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429C2877DAE80096A5DB /* Config.swift */; };
 		6659429F2877DC8A0096A5DB /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429E2877DC8A0096A5DB /* Enum.swift */; };
 		665942A12877DD1C0096A5DB /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665942A02877DD1C0096A5DB /* TypeAlias.swift */; };
@@ -102,6 +103,7 @@
 		5F69CC5D26C0629400568B75 /* Definition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definition.swift; sourceTree = "<group>"; };
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
+		664A7E9B28825B8400DF7C79 /* CropViewConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewConfig.swift; sourceTree = "<group>"; };
 		6659429C2877DAE80096A5DB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		6659429E2877DC8A0096A5DB /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		665942A02877DD1C0096A5DB /* TypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 		OBJ_11 /* CropView */ = {
 			isa = PBXGroup;
 			children = (
+				664A7E9B28825B8400DF7C79 /* CropViewConfig.swift */,
 				OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */,
 				OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */,
 				OBJ_14 /* CropMaskViewManager.swift */,
@@ -586,6 +589,7 @@
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
 				OBJ_99 /* RotationDial.swift in Sources */,
+				664A7E9C28825B8400DF7C79 /* CropViewConfig.swift in Sources */,
 				6659429D2877DAE80096A5DB /* Config.swift in Sources */,
 				OBJ_100 /* RotationDialPlate.swift in Sources */,
 				OBJ_101 /* RotationDialViewModel.swift in Sources */,
