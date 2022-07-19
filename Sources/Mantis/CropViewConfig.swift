@@ -1,7 +1,7 @@
 import UIKit
 
 public struct CropViewConfig {
-    public var cropViewMinimumBoxSize: CGFloat = 42
+    public var minimumBoxSize: CGFloat = 42
     public var padding: CGFloat = 14
     public var hotAreaUnit: CGFloat = 32
     public var cropShapeType: CropShapeType = .rect
