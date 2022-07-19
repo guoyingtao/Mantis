@@ -63,7 +63,6 @@ class CropView: UIView {
     var manualZoomed = false
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
-    
     let cropViewConfig: CropViewConfig
     
     private var cropFrameKVO: NSKeyValueObservation?
