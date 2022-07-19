@@ -42,8 +42,7 @@ class EmbeddedCropViewController: UIViewController {
             cropViewController.mode = .customizable
             cropViewController.delegate = self
             
-            var config = Mantis.Config()
-            config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1/2)
+            let config = Mantis.Config()
             cropViewController.config = config
             
             self.cropViewController = cropViewController
@@ -76,8 +75,8 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
     }
     
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
-        let croppedImage = Mantis.crop(image: original, by: cropInfo)
-        self.resolutionLabel.text = getResolution(image: croppedImage)
+        let size = cropViewController.getExpectedCropImageSize()
+        self.resolutionLabel.text = "\(Int(size.width) + 1) x \(Int(size.height) + 1) pixels"
     }
 
 }

@@ -53,9 +53,9 @@ class RotationDialPlate: UIView {
         return layer
     }()
     
-    var dialConfig = Mantis.Config().dialConfig
+    var dialConfig = Mantis.Config().cropViewConfig.dialConfig
     
-    init(frame: CGRect, dialConfig: DialConfig = Mantis.Config().dialConfig) {
+    init(frame: CGRect, dialConfig: DialConfig) {
         super.init(frame: frame)
         self.dialConfig = dialConfig
         setup()

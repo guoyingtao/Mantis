@@ -119,17 +119,26 @@ extension UIImage {
         transform = transform.rotated(by: cropInfo.rotation)
         transform = transform.scaledBy(x: cropInfo.scale, y: cropInfo.scale)
         
+        let outputSize = getExpectedCropImageSize(by: cropInfo)
         guard let imageRef = fixedImage.transformedImage(transform,
-                                                         zoomScale: cropInfo.scale,
-                                                         sourceSize: self.size,
+                                                         outputSize: outputSize,
                                                          cropSize: cropInfo.cropSize,
                                                          imageViewSize: cropInfo.imageViewSize) else {
-                                                            return nil
+            return nil
         }
         
         return UIImage(cgImage: imageRef)
     }
     
+    func getExpectedCropImageSize(by cropInfo: CropInfo) -> CGSize {
+        let zoomScale = cropInfo.scale
+        let cropSize = cropInfo.cropSize
+        let imageViewSize = cropInfo.imageViewSize
+        
+        let expectedWidth = floor(size.width / imageViewSize.width * cropSize.width) / zoomScale
+        let expectedHeight = floor(size.height / imageViewSize.height * cropSize.height) / zoomScale
+        return CGSize(width: expectedWidth, height: expectedHeight)
+    }
 }
 
 extension UIImage {

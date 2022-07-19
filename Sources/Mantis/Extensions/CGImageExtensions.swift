@@ -4,7 +4,7 @@
 //
 //  Created by Echo on 10/30/18.
 //
-//  This class is from CGImage+IGRPhotoTweakExtension.swift in
+//  This class is originally from CGImage+IGRPhotoTweakExtension.swift in
 //  https://github.com/IGRSoft/IGRPhotoTweaks
 //
 // Copyright Vitalii Parovishnyk. All rights reserved.
@@ -12,8 +12,7 @@
 import UIKit
 
 extension CGImage {
-    
-    func transformedImage(_ transform: CGAffineTransform, zoomScale: CGFloat, sourceSize: CGSize, cropSize: CGSize, imageViewSize: CGSize) -> CGImage? {
+    func transformedImage(_ transform: CGAffineTransform, outputSize: CGSize, cropSize: CGSize, imageViewSize: CGSize) -> CGImage? {
         guard var colorSpaceRef = self.colorSpace else {
             return self
         }
@@ -22,9 +21,6 @@ extension CGImage {
             colorSpaceRef = CGColorSpaceCreateDeviceRGB()
         }
         
-        let expectedWidth = floor(sourceSize.width / imageViewSize.width * cropSize.width) / zoomScale
-        let expectedHeight = floor(sourceSize.height / imageViewSize.height * cropSize.height) / zoomScale
-        let outputSize = CGSize(width: expectedWidth, height: expectedHeight)
         let bitmapBytesPerRow = 0
         
         func getBitmapInfo() -> UInt32 {

@@ -10,16 +10,13 @@ import UIKit
 
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let hotAreaUnit = cropViewConfig.hotAreaUnit
-
         let newPoint = self.convert(point, to: self)
         
         if let rotationDial = rotationDial, rotationDial.frame.contains(newPoint) {
             return rotationDial
         }
         
-        if gridOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(newPoint)
-            && !gridOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(newPoint) {
+        if isHitGridOverlayView(by: newPoint) {
             return self
         }
         
@@ -28,6 +25,13 @@ extension CropView {
         }
         
         return nil
+    }
+    
+    private func isHitGridOverlayView(by touchPoint: CGPoint) -> Bool {
+        let hotAreaUnit = cropViewConfig.hotAreaUnit
+        
+        return gridOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
+        && !gridOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(touchPoint)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -61,7 +65,7 @@ extension CropView {
         }
         
         let point = touch.location(in: self)
-        updateCropBoxFrame(with: point)
+        updateCropBoxFrame(with: point)  
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

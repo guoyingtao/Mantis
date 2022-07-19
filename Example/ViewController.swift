@@ -76,7 +76,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
-        config.showRotationDial = false
+        config.cropViewConfig.showRotationDial = false
         config.showAttachedCropToolbar = false
         
         let cropToolbar = MyNavigationCropToolbar(frame: .zero)
@@ -209,7 +209,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             let action = UIAlertAction(title: item.title, style: .default) {[weak self] _ in
                 guard let self = self else {return}
                 var config = Mantis.Config()
-                config.cropShapeType = item.type
+                config.cropViewConfig.cropShapeType = item.type
                 
                 let cropViewController = Mantis.cropViewController(image: image, config: config)
                 cropViewController.modalPresentationStyle = .fullScreen
@@ -233,7 +233,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
-        config.cropVisualEffectType = effect
+        config.cropViewConfig.cropVisualEffectType = effect
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen
