@@ -2,7 +2,7 @@ import UIKit
 
 public struct CropViewConfig {
     public var cropViewMinimumBoxSize: CGFloat = 42
-    public var cropViewPadding: CGFloat = 14
+    public var padding: CGFloat = 14
     public var hotAreaUnit: CGFloat = 32
     public var cropShapeType: CropShapeType = .rect
     public var cropVisualEffectType: CropVisualEffectType = .blurDark
