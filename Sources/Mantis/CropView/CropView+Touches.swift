@@ -28,7 +28,7 @@ extension CropView {
     }
     
     private func isHitGridOverlayView(by touchPoint: CGPoint) -> Bool {
-        let hotAreaUnit = cropViewConfig.hotAreaUnit
+        let hotAreaUnit = cropViewConfig.cropBoxHotAreaUnit
         
         return gridOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
         && !gridOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(touchPoint)

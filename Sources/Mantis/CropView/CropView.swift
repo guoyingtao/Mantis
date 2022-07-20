@@ -58,7 +58,7 @@ class CropView: UIView {
     lazy var cropMaskViewManager = CropMaskViewManager(with: self,
                                                        cropRatio: CGFloat(getImageRatioH()),
                                                        cropShapeType: cropViewConfig.cropShapeType,
-                                                       cropVisualEffectType: cropViewConfig.cropVisualEffectType)
+                                                       cropMaskVisualEffectType: cropViewConfig.cropMaskVisualEffectType)
 
     var manualZoomed = false
     var forceFixedRatio = false
@@ -78,8 +78,8 @@ class CropView: UIView {
         self.image = image
 
         self.viewModel = CropViewModel(
-            cropViewPadding: cropViewConfig.cropViewPadding,
-            hotAreaUnit: cropViewConfig.hotAreaUnit
+            cropViewPadding: cropViewConfig.padding,
+            hotAreaUnit: cropViewConfig.cropBoxHotAreaUnit
         )
 
         self.cropViewConfig = cropViewConfig
@@ -245,7 +245,7 @@ class CropView: UIView {
     }
     
     private func setupAngleDashboard() {
-        guard cropViewConfig.showRotationDial else {
+        guard let dialConfig = cropViewConfig.dialConfig else {
             return
         }
         
@@ -258,7 +258,7 @@ class CropView: UIView {
                                                       y: 0,
                                                       width: boardLength,
                                                       height: angleDashboardHeight),
-                                        dialConfig: cropViewConfig.dialConfig)
+                                        dialConfig: dialConfig)
         self.rotationDial = rotationDial
         rotationDial.isUserInteractionEnabled = true
         addSubview(rotationDial)
@@ -301,7 +301,7 @@ class CropView: UIView {
     }
     
     func updateCropBoxFrame(with point: CGPoint) {
-        let cropViewMinimumBoxSize = cropViewConfig.cropViewMinimumBoxSize
+        let cropViewMinimumBoxSize = cropViewConfig.minimumBoxSize
 
         let contentFrame = getContentBounds()
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(with: point, and: contentFrame, aspectRatioLockEnabled: aspectRatioLockEnabled)
@@ -383,7 +383,7 @@ extension CropView {
     }
     
     func getContentBounds() -> CGRect {
-        let cropViewPadding = cropViewConfig.cropViewPadding
+        let cropViewPadding = cropViewConfig.padding
 
         let rect = self.bounds
         var contentRect = CGRect.zero
@@ -527,8 +527,7 @@ extension CropView {
         scrollView.checkContentOffset()
     }
     
-    fileprivate func updatePositionFor90Rotation(by radians: CGFloat) {
-                
+    func updatePositionFor90Rotation(by radians: CGFloat) {                
         func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat {
             let width = abs(cos(radians)) * gridOverlayView.frame.width + abs(sin(radians)) * gridOverlayView.frame.height
             let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height

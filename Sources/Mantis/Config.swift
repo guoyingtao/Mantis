@@ -34,8 +34,7 @@ public class LocalizationConfig {
 public struct Config {
     public var cropViewConfig = CropViewConfig()    
     public var cropToolbarConfig: CropToolbarConfigProtocol = CropToolbarConfig()
-
-    public var presetTransformationType: PresetTransformationType = .none
+    
     public var ratioOptions: RatioOptions = .all
     public var presetFixedRatioType: PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     public var showAttachedCropToolbar = true

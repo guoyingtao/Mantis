@@ -69,7 +69,10 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = dialConfig.smallScaleColor.cgColor
+        
+        if let dialConfig = dialConfig {
+            mark.fillColor = dialConfig.smallScaleColor.cgColor
+        }
         
         return mark
     }
@@ -78,12 +81,19 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 4, height: 4)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = dialConfig.bigScaleColor.cgColor
+        
+        if let dialConfig = dialConfig {
+            mark.fillColor = dialConfig.smallScaleColor.cgColor
+        }
         
         return mark
     }
     
     private func setupAngleNumber() {
+        guard let dialConfig = dialConfig else {
+            return
+        }
+
         let numberFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.caption2)
         let cgFont = CTFontCreateUIFontForLanguage(.label, numberFont.pointSize/2, nil)
         
@@ -96,6 +106,7 @@ class RotationDialPlate: UIView {
         let origin = CGPoint(x: numberPlateLayer.frame.midX, y: numberPlateLayer.frame.midY)
         let startPos = CGPoint(x: numberPlateLayer.bounds.midX, y: numberPlateLayer.bounds.maxY - margin - spaceBetweenScaleAndNumber)
         let step = (2 * CGFloat.pi) / CGFloat(bigDegreeScaleNumber)
+        
         for index in (0 ..< bigDegreeScaleNumber) {
             
             guard index % dialConfig.numberShowSpan == 0 else {
@@ -153,8 +164,11 @@ class RotationDialPlate: UIView {
                              width: radius,
                              height: radius)
         layer.path = UIBezierPath(ovalIn: layer.bounds).cgPath
-        layer.fillColor = dialConfig.centerAxisColor.cgColor
         
+        if let dialConfig = dialConfig {
+            layer.fillColor = dialConfig.centerAxisColor.cgColor
+        }
+                
         self.layer.addSublayer(layer)
     }
     

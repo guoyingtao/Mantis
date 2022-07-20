@@ -49,7 +49,7 @@ class RotationDial: UIView {
      https://stackoverflow.com/a/42678873/288724
      */
     override init(frame: CGRect) {
-        self.dialConfig = Mantis.Config().cropViewConfig.dialConfig
+        dialConfig = DialConfig()
         super.init(frame: frame)
         
         setup()
@@ -62,7 +62,7 @@ class RotationDial: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.dialConfig = Mantis.Config().cropViewConfig.dialConfig
+        dialConfig = DialConfig()
         super.init(coder: aDecoder)
     }
 }

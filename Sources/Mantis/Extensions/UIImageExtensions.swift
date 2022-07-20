@@ -137,6 +137,7 @@ extension UIImage {
         
         let expectedWidth = floor(size.width / imageViewSize.width * cropSize.width) / zoomScale
         let expectedHeight = floor(size.height / imageViewSize.height * cropSize.height) / zoomScale
+        
         return CGSize(width: expectedWidth, height: expectedHeight)
     }
 }

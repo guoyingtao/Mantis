@@ -122,7 +122,7 @@ public class CropViewController: UIViewController {
         case .alwaysUsingOnePresetFixedRatio(let ratio):
                 config.cropToolbarConfig.includeFixedRatiosSettingButton = false
                                 
-                if case .none = config.presetTransformationType {
+            if case .none = config.cropViewConfig.presetTransformationType {
                     setFixedRatio(ratio)
                 }
                 
@@ -259,7 +259,7 @@ public class CropViewController: UIViewController {
     }
     
     private func processPresetTransformation(completion: (Transformation) -> Void) {
-        if case .presetInfo(let transformInfo) = config.presetTransformationType {
+        if case .presetInfo(let transformInfo) = config.cropViewConfig.presetTransformationType {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
             // The first transform is just for retrieving the final cropBoxFrame
@@ -271,7 +271,7 @@ public class CropViewController: UIViewController {
             newTransform.scale *= adjustScale
             cropView.transform(byTransformInfo: newTransform)
             completion(transformInfo)
-        } else if case .presetNormalizedInfo(let normailizedInfo) = config.presetTransformationType {
+        } else if case .presetNormalizedInfo(let normailizedInfo) = config.cropViewConfig.presetTransformationType {
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo)
             cropView.transform(byTransformInfo: transformInfo)
             cropView.scrollView.frame = transformInfo.maskFrame

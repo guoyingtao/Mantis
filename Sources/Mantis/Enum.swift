@@ -37,7 +37,7 @@ public enum PresetFixedRatioType {
     case canUseMultiplePresetFixedRatio(defaultRatio: Double = 0)
 }
 
-public enum CropVisualEffectType {
+public enum CropMaskVisualEffectType {
     case blurDark
     case dark
     case light
