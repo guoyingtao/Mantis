@@ -61,7 +61,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                                             width: 557.1387432741491,
                                                             height: 654.7511809035641))
                 
-        config.presetTransformationType = .presetInfo(info: transform)
+        config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
@@ -76,7 +76,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
-        config.showRotationDial = false
+        config.cropViewConfig.dialConfig = nil
         config.showAttachedCropToolbar = false
         
         let cropToolbar = MyNavigationCropToolbar(frame: .zero)
@@ -209,7 +209,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             let action = UIAlertAction(title: item.title, style: .default) {[weak self] _ in
                 guard let self = self else {return}
                 var config = Mantis.Config()
-                config.cropShapeType = item.type
+                config.cropViewConfig.cropShapeType = item.type
                 
                 let cropViewController = Mantis.cropViewController(image: image, config: config)
                 cropViewController.modalPresentationStyle = .fullScreen
@@ -227,13 +227,13 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         present(actionSheet, animated: true)
     }
     
-    private func presentWith(backgroundEffect effect: CropVisualEffectType) {
+    private func presentWith(backgroundEffect effect: CropMaskVisualEffectType) {
         guard let image = image else {
             return
         }
         
         var config = Mantis.Config()
-        config.cropVisualEffectType = effect
+        config.cropViewConfig.cropMaskVisualEffectType = effect
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen

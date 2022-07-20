@@ -24,11 +24,11 @@
 
 import UIKit
 
+var localizationConfig = LocalizationConfig()
+
 private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
 }()
-
-internal var localizationConfig = LocalizationConfig()
 
 // MARK: - APIs
 public func cropViewController(image: UIImage,

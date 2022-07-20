@@ -33,7 +33,7 @@ class RotationDial: UIView {
     var didRotate: (_ angle: CGAngle) -> Void = { _ in }
     var didFinishedRotate: () -> Void = { }
     
-    var dialConfig = Mantis.Config().dialConfig
+    var dialConfig: DialConfig
     
     private var angleLimit = CGAngle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
@@ -48,17 +48,21 @@ class RotationDial: UIView {
      This one is needed to solve storyboard render problem
      https://stackoverflow.com/a/42678873/288724
      */
-    public override init(frame: CGRect) {
+    override init(frame: CGRect) {
+        dialConfig = DialConfig()
         super.init(frame: frame)
+        
         setup()
     }
     
-    public init(frame: CGRect, dialConfig: DialConfig) {
-        super.init(frame: frame)
-        setup(with: dialConfig)
+    init(frame: CGRect, dialConfig: DialConfig) {
+        self.dialConfig = dialConfig
+        super.init(frame: frame)        
+        setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
+        dialConfig = DialConfig()
         super.init(coder: aDecoder)
     }
 }
@@ -194,9 +198,7 @@ extension RotationDial {
     /// Setup the dial with your own config
     ///
     /// - Parameter dialConfig: dail config. If not provided, default config will be used
-    public func setup(with dialConfig: DialConfig = Mantis.Config().dialConfig) {
-        self.dialConfig = dialConfig
-
+    func setup() {
         if case .limit(let angle) = dialConfig.rotationLimitType {
             angleLimit = angle
         }
@@ -227,7 +229,7 @@ extension RotationDial {
         return true
     }
     
-    public func rotateDialPlate(to angle: CGAngle, animated: Bool = false) {
+    func rotateDialPlate(to angle: CGAngle, animated: Bool = false) {
         let radians = angle.radians
         
         if case .limit = dialConfig.rotationLimitType {
@@ -249,18 +251,18 @@ extension RotationDial {
         }
     }
     
-    public func resetAngle(animated: Bool) {
+    func resetAngle(animated: Bool) {
         rotateDialPlate(to: CGAngle(radians: 0), animated: animated)
     }
     
-    public func getRotationAngle() -> CGAngle {
+    func getRotationAngle() -> CGAngle {
         guard let dialPlate = dialPlate else { return CGAngle(degrees: 0) }
         
         let radians = CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
         return CGAngle(radians: radians)
     }
     
-    public func setRotationCenter(by point: CGPoint, of view: UIView) {
+    func setRotationCenter(by point: CGPoint, of view: UIView) {
         let newPoint = view.convert(point, to: self)
         dialConfig.rotationCenterType = .custom(newPoint)
     }
