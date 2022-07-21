@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "2.0.0"
-  s.summary      = "A swift photo cropping tool which mimics Photo.app"
+  s.version      = "2.0.1"
+  s.summary      = "Mantis is an iOS Image cropping library, which mimics the Photo App written in Swift and provides rich cropping interactions for your iOS/Mac app (Catalyst only)."
 
   s.description  = <<-DESC
         Mantis is a swift photo cropping tool which mimics Photo.app
