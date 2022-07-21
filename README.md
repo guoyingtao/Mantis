@@ -31,7 +31,7 @@
   * move some properties from Config to CropViewConfig
   * make dialConfig as a property of CropViewConfig
 * Refactor CropToolbarConfigProtocol
-  * renamed some properties
+  * rename some properties
 
 ## Install
 
