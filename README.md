@@ -26,6 +26,13 @@
 * MacOS 10.15+
 * Xcode 10.0+
 
+## Breaking Changes in the coming 2.x.x (Not released yet)
+* Add CropViewConfig
+  * move some properties from Config to CropViewConfig
+  * make dialConfig as a property of CropViewConfig
+* Refactor CropToolbarConfigProtocol
+  * renamed some properties
+
 ## Install
 
 <details>
