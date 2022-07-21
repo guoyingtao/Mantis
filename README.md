@@ -26,7 +26,7 @@
 * MacOS 10.15+
 * Xcode 10.0+
 
-## Breaking Changes in 2.0.0
+## Breaking Changes in 2.x.x
 * Add CropViewConfig
   * move some properties from Config to CropViewConfig
   * make dialConfig as a property of CropViewConfig
@@ -39,7 +39,7 @@
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 2.0.0'
+pod 'Mantis', '~> 2.0.1'
 ```
 </details>
 
@@ -55,7 +55,7 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Respository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 2.0.0
+* Rules: Version - Exact - 2.0.1
 
 </details>
 
