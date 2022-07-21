@@ -245,7 +245,7 @@ class CropView: UIView {
     }
     
     private func setupAngleDashboard() {
-        guard let dialConfig = cropViewConfig.dialConfig else {
+        guard cropViewConfig.showRotationDial else {
             return
         }
         
@@ -258,7 +258,7 @@ class CropView: UIView {
                                                       y: 0,
                                                       width: boardLength,
                                                       height: angleDashboardHeight),
-                                        dialConfig: dialConfig)
+                                        dialConfig: cropViewConfig.dialConfig)
         self.rotationDial = rotationDial
         rotationDial.isUserInteractionEnabled = true
         addSubview(rotationDial)

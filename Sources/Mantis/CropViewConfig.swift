@@ -20,7 +20,9 @@ public struct CropViewConfig {
      Rotation Dial currently is tightly coupled with other parts of CropView, we see rotation dial as a part of CropView,
      so we put dialConfig inside CropViewConfig
      */
-    public var dialConfig: DialConfig? = DialConfig()
+    public var dialConfig = DialConfig()
+    
+    public var showRotationDial = true
     
     var minimumBoxSize: CGFloat = 42
     

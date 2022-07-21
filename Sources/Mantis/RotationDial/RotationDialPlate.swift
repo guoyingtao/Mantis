@@ -69,10 +69,7 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        
-        if let dialConfig = dialConfig {
-            mark.fillColor = dialConfig.smallScaleColor.cgColor
-        }
+        mark.fillColor = dialConfig.smallScaleColor.cgColor
         
         return mark
     }
@@ -82,18 +79,12 @@ class RotationDialPlate: UIView {
         mark.frame = CGRect(x: 0, y: 0, width: 4, height: 4)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
         
-        if let dialConfig = dialConfig {
-            mark.fillColor = dialConfig.smallScaleColor.cgColor
-        }
+        mark.fillColor = dialConfig.smallScaleColor.cgColor
         
         return mark
     }
     
     private func setupAngleNumber() {
-        guard let dialConfig = dialConfig else {
-            return
-        }
-
         let numberFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.caption2)
         let cgFont = CTFontCreateUIFontForLanguage(.label, numberFont.pointSize/2, nil)
         
@@ -164,11 +155,8 @@ class RotationDialPlate: UIView {
                              width: radius,
                              height: radius)
         layer.path = UIBezierPath(ovalIn: layer.bounds).cgPath
+        layer.fillColor = dialConfig.centerAxisColor.cgColor
         
-        if let dialConfig = dialConfig {
-            layer.fillColor = dialConfig.centerAxisColor.cgColor
-        }
-                
         self.layer.addSublayer(layer)
     }
     
