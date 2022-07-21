@@ -2,6 +2,13 @@
 
 -----
 
+### [2.0.1](https://www.github.com/guoyingtao/Mantis/compare/v2.0.0...v2.0.1) (2022-07-21)
+
+
+### Bug Fixes
+
+* restore showRotationDial setting ([f3facb6](https://www.github.com/guoyingtao/Mantis/commit/f3facb6c5a1e613b309f899626fa2ca277203564))
+
 ## [2.0.0](https://www.github.com/guoyingtao/Mantis/compare/v1.9.0...v2.0.0) (2022-07-21)
 
 
