@@ -2,6 +2,21 @@
 
 -----
 
+## [2.0.0](https://www.github.com/guoyingtao/Mantis/compare/v1.9.0...v2.0.0) (2022-07-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* refactor CropToolbarProtocol. Add heightForVerticalOrientation and widthForHorizonOrientation, remove heightForVerticalOrientationConstraint and widthForHorizonOrientationConstraint
+
+### Features
+
+* add CropToolbarIconProvider protocol ([#169](https://www.github.com/guoyingtao/Mantis/issues/169)) ([42b89cd](https://www.github.com/guoyingtao/Mantis/commit/42b89cd9e80702d90ac8fc054bf05939ba726cb7))
+* add showAttachedCropToolbar option to CropToolbarConfig ([#177](https://www.github.com/guoyingtao/Mantis/issues/177)) ([417f607](https://www.github.com/guoyingtao/Mantis/commit/417f60711508717aa21c281e75963ea41674b368))
+* Customize crop toolbar color ([#178](https://www.github.com/guoyingtao/Mantis/issues/178)) ([eaa8f06](https://www.github.com/guoyingtao/Mantis/commit/eaa8f06d1b55b597036584c2385a86d032d77297))
+* make CropToolBar Sizable ([#171](https://www.github.com/guoyingtao/Mantis/issues/171)) ([d01662f](https://www.github.com/guoyingtao/Mantis/commit/d01662f551edc1dea3e7a0401deec7142374f251))
+* refactor configs and add zoom scale limitation settings ([#184](https://www.github.com/guoyingtao/Mantis/issues/184)) ([a46341d](https://www.github.com/guoyingtao/Mantis/commit/a46341deef106805602d278d2c8c2484bd5f4f6a))
+
 ## [1.9.0](https://www.github.com/guoyingtao/Mantis/compare/v1.8.0...v1.9.0) (2022-01-14)
 
 
