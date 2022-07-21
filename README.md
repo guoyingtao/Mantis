@@ -26,7 +26,7 @@
 * MacOS 10.15+
 * Xcode 10.0+
 
-## Breaking Changes in the coming 2.x.x (Not released yet)
+## Breaking Changes in 2.0.0
 * Add CropViewConfig
   * move some properties from Config to CropViewConfig
   * make dialConfig as a property of CropViewConfig
@@ -39,7 +39,7 @@
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 1.9.0'
+pod 'Mantis', '~> 2.0.0'
 ```
 </details>
 
@@ -55,7 +55,7 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Respository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 1.9.0
+* Rules: Version - Exact - 2.0.0
 
 </details>
 
@@ -143,7 +143,7 @@ let cropViewController = Mantis.cropCustomizableViewController(image: <Your Imag
 
 When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
 
-* If you want to hide rotation dial, set Mantis.Config.showRotationDial = false
+* If you want to hide rotation dial, set Mantis.Config..cropViewConfig.dialConfig = nil
 * If you want to use ratio list instead of presenter, set Mantis.CropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
 
 ```swift
@@ -163,7 +163,7 @@ cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
 <details>
 <summary><strong>Crop shapes</strong></summary>
 
-* If you want to set different crop shape, set Mantis.Config.cropShapeType
+* If you want to set different crop shape, set Mantis.Config.cropViewConfig.cropShapeType
 ```swift
 public enum CropShapeType {
     case rect
@@ -181,7 +181,7 @@ public enum CropShapeType {
 <details>
 <summary><strong>Preset transformations</strong></summary>
 
-* If you want to apply transformations when showing an image, set Mantis.Config.presetTransformationType
+* If you want to apply transformations when showing an image, set Mantis.Config.cropViewConfig.presetTransformationType
 ```swift
 public enum PresetTransformationType {
     case none
