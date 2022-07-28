@@ -2,6 +2,13 @@
 
 -----
 
+### [2.0.2](https://www.github.com/guoyingtao/Mantis/compare/v2.0.1...v2.0.2) (2022-07-28)
+
+
+### Bug Fixes
+
+* solve the issue of initial minimum zoom scale is not working ([#190](https://www.github.com/guoyingtao/Mantis/issues/190)) ([560e272](https://www.github.com/guoyingtao/Mantis/commit/560e272d40d3a983403193032b3943005d2947fd))
+
 ### [2.0.1](https://www.github.com/guoyingtao/Mantis/compare/v2.0.0...v2.0.1) (2022-07-21)
 
 
