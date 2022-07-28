@@ -54,7 +54,9 @@ class CropView: UIView {
     let gridOverlayView: CropOverlayView
     var rotationDial: RotationDial?
 
-    lazy var scrollView = CropScrollView(frame: bounds)
+    lazy var scrollView = CropScrollView(frame: bounds,
+                                         minimumZoomScale: cropViewConfig.minimumZoomScale,
+                                         maximumZoomScale: cropViewConfig.maximumZoomScale)
     lazy var cropMaskViewManager = CropMaskViewManager(with: self,
                                                        cropRatio: CGFloat(getImageRatioH()),
                                                        cropShapeType: cropViewConfig.cropShapeType,
@@ -198,6 +200,10 @@ class CropView: UIView {
         scrollView.minimumZoomScale = cropViewConfig.minimumZoomScale
         scrollView.maximumZoomScale = cropViewConfig.maximumZoomScale
         
+        if cropViewConfig.minimumZoomScale > 1 {
+            scrollView.zoomScale = cropViewConfig.minimumZoomScale
+        }
+        
         setGridOverlayView()
     }
     
@@ -209,8 +215,8 @@ class CropView: UIView {
         scrollView.transform = .identity
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
         
-        imageContainer.frame = scrollView.bounds
-        imageContainer.center = CGPoint(x: scrollView.bounds.width/2, y: scrollView.bounds.height/2)
+        imageContainer.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
+        scrollView.contentOffset = CGPoint(x: (imageContainer.frame.width - scrollView.frame.width) / 2, y: (imageContainer.frame.height - scrollView.frame.height) / 2)
 
         gridOverlayView.superview?.bringSubviewToFront(gridOverlayView)
         
@@ -518,7 +524,7 @@ extension CropView {
         scrollView.updateLayout(byNewSize: CGSize(width: width, height: height))
         
         if !manualZoomed || scrollView.shouldScale() {
-            scrollView.zoomScaleToBound()
+            scrollView.zoomScaleToBound(animated: false)
             manualZoomed = false
         } else {
             scrollView.updateMinZoomScale()
@@ -557,7 +563,6 @@ extension CropView {
 // MARK: - internal API
 extension CropView {
     func crop(_ image: UIImage) -> CropOutput {
-
         let cropInfo = getCropInfo()
         
         let transformation = Transformation(
