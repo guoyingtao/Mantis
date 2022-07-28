@@ -16,15 +16,18 @@ class CropScrollView: UIScrollView {
     var touchesCancelled = {}
     var touchesEnded = {}
     
-    override init(frame: CGRect) {
+    private var initialMinimumZoomScale: CGFloat = 1.0
+    
+    init(frame: CGRect, minimumZoomScale: CGFloat = 1.0, maximumZoomScale: CGFloat = 15.0) {
         super.init(frame: frame)
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInsetAdjustmentBehavior = .never
-        minimumZoomScale = 1.0
-        maximumZoomScale = 15.0
+        self.minimumZoomScale = minimumZoomScale
+        self.maximumZoomScale = maximumZoomScale
+        initialMinimumZoomScale = minimumZoomScale
         clipsToBounds = false
         contentSize = bounds.size
         layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -70,7 +73,7 @@ class CropScrollView: UIScrollView {
         let scaleW = bounds.width / imageContainer.bounds.width
         let scaleH = bounds.height / imageContainer.bounds.height
         
-        return max(scaleW, scaleH)
+        return max(scaleW, scaleH) * initialMinimumZoomScale
     }
     
     func updateMinZoomScale() {
@@ -104,10 +107,14 @@ class CropScrollView: UIScrollView {
     
     func resetBy(rect: CGRect) {
         // Reseting zoom need to be before resetting frame and contentsize
-        minimumZoomScale = 1.0
-        zoomScale = 1.0
-
+        minimumZoomScale = max(1.0, initialMinimumZoomScale)
+        zoomScale = minimumZoomScale
+        
+        let newRect = CGRect(x: rect.origin.x,
+                             y: rect.origin.y,
+                             width: rect.width * minimumZoomScale,
+                             height: rect.height * minimumZoomScale)
         frame = rect
-        contentSize = rect.size
+        contentSize = newRect.size
     }
 }
