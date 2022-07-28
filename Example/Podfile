@@ -7,7 +7,6 @@ target 'MantisExample' do
 
   # Pods for MantisExample
    pod 'Mantis', :path => '../'
-#  pod 'Mantis', '~> 2.0.1'
 
   target 'MantisExampleTests' do
     inherit! :search_paths

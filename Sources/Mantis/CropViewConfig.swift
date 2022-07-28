@@ -12,6 +12,7 @@ public struct CropViewConfig {
     
     public var presetTransformationType: PresetTransformationType = .none
     
+    /// minimumZoomScale must be no less than 1
     public var minimumZoomScale: CGFloat = 1
     
     public var maximumZoomScale: CGFloat = 15
