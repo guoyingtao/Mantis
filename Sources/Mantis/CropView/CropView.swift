@@ -367,9 +367,26 @@ class CropView: UIView {
 extension CropView {
     private func rotateScrollView() {
         let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
+        scrollView.transform = CGAffineTransform(rotationAngle: totalRadians)
         
-        self.scrollView.transform = CGAffineTransform(rotationAngle: totalRadians)
-        self.updatePosition(by: totalRadians)
+        if viewModel.horizontallyFlip {
+            if viewModel.rotationType.isRotateByMultiple180 {
+                scrollView.transform = scrollView.transform.scaledBy(x: -1, y: 1)
+            } else {
+                scrollView.transform = scrollView.transform.scaledBy(x: 1, y: -1)
+            }
+            
+        }
+        
+        if viewModel.verticallyFlip {
+            if viewModel.rotationType.isRotateByMultiple180 {
+                scrollView.transform = scrollView.transform.scaledBy(x: 1, y: -1)
+            } else {
+                scrollView.transform = scrollView.transform.scaledBy(x: -1, y: 1)
+            }
+        }
+        
+        updatePosition(by: totalRadians)
     }
     
     private func getInitialCropBoxRect() -> CGRect {
@@ -421,7 +438,18 @@ extension CropView {
             return viewModel.cropLeftTopOnImage
         }
         
-        let leftTopPoint = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
+        let leftTopPoint: CGPoint
+        
+        if viewModel.horizontallyFlip && viewModel.verticallyFlip {
+            leftTopPoint = gridOverlayView.convert(CGPoint(x: imageContainer.bounds.width, y: imageContainer.bounds.height), to: imageContainer)
+        } else if viewModel.horizontallyFlip {
+            leftTopPoint = gridOverlayView.convert(CGPoint(x: imageContainer.bounds.width, y: 0), to: imageContainer)
+        } else if viewModel.verticallyFlip {
+            leftTopPoint = gridOverlayView.convert(CGPoint(x: 0, y: imageContainer.bounds.height), to: imageContainer)
+        } else {
+            leftTopPoint = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
+        }
+        
         let point = CGPoint(x: leftTopPoint.x / imageContainer.bounds.width, y: leftTopPoint.y / imageContainer.bounds.height)
         return point
     }
@@ -540,7 +568,7 @@ extension CropView {
             let height = abs(sin(radians)) * gridOverlayView.frame.width + abs(cos(radians)) * gridOverlayView.frame.height
 
             let newSize: CGSize
-            if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+            if viewModel.rotationType.isRotateByMultiple180 {
                 newSize = CGSize(width: width, height: height)
             } else {
                 newSize = CGSize(width: height, height: width)
@@ -651,14 +679,34 @@ extension CropView {
         let zeroPoint = gridOverlayView.center
         
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
+        
+        var scaleX = scrollView.zoomScale
+        var scaleY = scrollView.zoomScale
+        
+        if viewModel.horizontallyFlip {
+            if viewModel.rotationType.isRotateByMultiple180 {
+                scaleX = -scaleX
+            } else {
+                scaleY = -scaleY
+            }
+        }
+        
+        if viewModel.verticallyFlip {
+            if viewModel.rotationType.isRotateByMultiple180 {
+                scaleY = -scaleY
+            } else {
+                scaleX = -scaleX
+            }
+        }
                 
         return CropInfo(
             translation: translation,
             rotation: getTotalRadians(),
-            scale: scrollView.zoomScale,
+            scaleX: scaleX,
+            scaleY: scaleY,
             cropSize: gridOverlayView.frame.size,
             imageViewSize: imageContainer.bounds.size
-        )        
+        )
     }
     
     func getTotalRadians() -> CGFloat {
@@ -672,7 +720,7 @@ extension CropView {
     func handleRotate() {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
-        scrollView.transform = .identity
+        scrollView.transform = CGAffineTransform(scaleX: 1, y: 1)        
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
         
         setupAngleDashboard()
@@ -727,17 +775,24 @@ extension CropView {
         
         let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
         
-        let radian = rotateAngle
-        let transfrom = scrollView.transform.rotated(by: radian)
+        var newRotateAngle = rotateAngle
+        
+        if viewModel.horizontallyFlip {
+            newRotateAngle = -newRotateAngle
+        }
+        
+        if viewModel.verticallyFlip {
+            newRotateAngle = -newRotateAngle
+        }
         
         UIView.animate(withDuration: rorateDuration, animations: {
             self.viewModel.cropBoxFrame = newRect
-            self.scrollView.transform = transfrom
-            self.updatePositionFor90Rotation(by: radian + self.viewModel.radians)
+            self.scrollView.transform = self.scrollView.transform.rotated(by: newRotateAngle)
+            self.updatePositionFor90Rotation(by: newRotateAngle + self.viewModel.radians)
         }, completion: {[weak self] _ in
             guard let self = self else { return }
             self.scrollView.updateMinZoomScale()
-            self.viewModel.rotateBy90(rotateAngle: rotateAngle)
+            self.viewModel.rotateBy90(rotateAngle: newRotateAngle)
             self.viewModel.setBetweenOperationStatus()
             completion()
         })
@@ -793,7 +848,7 @@ extension CropView {
     }
     
     func getImageRatioH() -> Double {
-        if viewModel.rotationType == .none || viewModel.rotationType == .counterclockwise180 {
+        if viewModel.rotationType.isRotateByMultiple180 {
             return Double(image.ratioH())
         } else {
             return Double(1/image.ratioH())
@@ -824,5 +879,42 @@ extension CropView {
     
     func getExpectedCropImageSize() -> CGSize {
         image.getExpectedCropImageSize(by: getCropInfo())
+    }
+    
+    func horizontallyFlip() {
+        viewModel.horizontallyFlip.toggle()
+        flip(isHorizontal: true)
+    }
+    
+    func verticallyFlip() {
+        viewModel.verticallyFlip.toggle()
+        flip(isHorizontal: false)
+    }
+    
+    private func flip(isHorizontal: Bool = true, animated: Bool = true) {
+        var scaleX: CGFloat = 1
+        var scaleY: CGFloat = 1
+        
+        if isHorizontal {
+            if viewModel.rotationType.isRotateByMultiple180 {
+                scaleX = -scaleX
+            } else {
+                scaleY = -scaleY
+            }
+        } else {
+            if viewModel.rotationType.isRotateByMultiple180 {
+                scaleY = -scaleY
+            } else {
+                scaleX = -scaleX
+            }
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.5) {
+                self.scrollView.transform = self.scrollView.transform.scaledBy(x: scaleX, y: scaleY)
+            }
+        } else {
+            scrollView.transform = scrollView.transform.scaledBy(x: scaleX, y: scaleY)
+        }
     }
 }

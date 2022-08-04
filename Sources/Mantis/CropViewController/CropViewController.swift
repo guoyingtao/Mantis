@@ -432,6 +432,14 @@ public class CropViewController: UIViewController {
         }
     }
     
+    private func handleHorizontallyFlp() {
+        cropView.horizontallyFlip()
+    }
+    
+    private func handleVerticallyFlip() {
+        cropView.verticallyFlip()
+    }
+    
     private func handleCrop() {
         let cropResult = cropView.crop()
         guard let image = cropResult.croppedImage else {
@@ -555,6 +563,14 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectAlterCropper90Degree() {
         handleAlterCropper90Degree()
+    }
+    
+    public func didHorizontallyFlip() {
+        handleHorizontallyFlp()
+    }
+    
+    public func didVerticallyFlip() {
+        handleVerticallyFlip()
     }
 }
 

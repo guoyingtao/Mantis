@@ -40,6 +40,20 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         button.setImage(icon, for: .normal)
         return button
     }()
+    
+    private lazy var horizontallyFlipButton: UIButton = {
+        let button = createOptionButton(withTitle: nil, andAction: #selector(horizontallyFlip))
+        let icon = iconProvider?.getClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.horizontallyFlipImage()
+        button.setImage(icon, for: .normal)
+        return button
+    }()
+    
+    private lazy var verticallyFlipButton: UIButton = {
+        let button = createOptionButton(withTitle: nil, andAction: #selector(verticallyFlip(_:)))
+        let icon = iconProvider?.getClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.verticallyFlipImage()
+        button.setImage(icon, for: .normal)
+        return button
+    }()
 
     private lazy var fixedRatioSettingButton: UIButton = {
         let button = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
@@ -94,7 +108,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         if config.mode == .normal {
             addButtonsToContainer(button: cancelButton)
         }
-
+        
         if config.toolbarButtonOptions.contains(.counterclockwiseRotate) {
             addButtonsToContainer(button: counterClockwiseRotationButton)
         }
@@ -105,6 +119,14 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
         if config.toolbarButtonOptions.contains(.alterCropper90Degree) {
             addButtonsToContainer(button: alterCropper90DegreeButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.horizontallyFlip) {
+            addButtonsToContainer(button: horizontallyFlipButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.verticallyFlip) {
+            addButtonsToContainer(button: verticallyFlipButton)
         }
 
         if config.toolbarButtonOptions.contains(.reset) {
@@ -202,6 +224,14 @@ extension CropToolbar {
 
     @objc private func alterCropper90Degree(_ sender: Any) {
         cropToolbarDelegate?.didSelectAlterCropper90Degree()
+    }
+    
+    @objc private func horizontallyFlip(_ sender: Any) {
+        cropToolbarDelegate?.didHorizontallyFlip()
+    }
+
+    @objc private func verticallyFlip(_ sender: Any) {
+        cropToolbarDelegate?.didVerticallyFlip()
     }
 
     @objc private func crop(_ sender: Any) {

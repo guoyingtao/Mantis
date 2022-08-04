@@ -12,7 +12,6 @@
 import UIKit
 
 extension UIImage {
-    
     func cgImageWithFixedOrientation() -> CGImage? {
         
         guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
@@ -117,7 +116,7 @@ extension UIImage {
         var transform = CGAffineTransform.identity
         transform = transform.translatedBy(x: cropInfo.translation.x, y: cropInfo.translation.y)
         transform = transform.rotated(by: cropInfo.rotation)
-        transform = transform.scaledBy(x: cropInfo.scale, y: cropInfo.scale)
+        transform = transform.scaledBy(x: cropInfo.scaleX, y: cropInfo.scaleY)
         
         let outputSize = getExpectedCropImageSize(by: cropInfo)
         guard let imageRef = fixedImage.transformedImage(transform,
@@ -131,12 +130,13 @@ extension UIImage {
     }
     
     func getExpectedCropImageSize(by cropInfo: CropInfo) -> CGSize {
-        let zoomScale = cropInfo.scale
+        let zoomScaleX = abs(cropInfo.scaleX)
+        let zoomScaleY = abs(cropInfo.scaleY)
         let cropSize = cropInfo.cropSize
         let imageViewSize = cropInfo.imageViewSize
         
-        let expectedWidth = round(size.width / imageViewSize.width * cropSize.width / zoomScale)
-        let expectedHeight = round(size.height / imageViewSize.height * cropSize.height / zoomScale)
+        let expectedWidth = floor(size.width / imageViewSize.width * cropSize.width) / zoomScaleX
+        let expectedHeight = floor(size.height / imageViewSize.height * cropSize.height) / zoomScaleY
         
         return CGSize(width: expectedWidth, height: expectedHeight)
     }
