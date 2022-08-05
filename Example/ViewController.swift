@@ -98,12 +98,18 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-        let config = Mantis.Config()
+        var config = Mantis.Config()
+        config.showAttachedCropToolbar = true
+        config.cropViewConfig.showRotationDial = false
+        config.cropViewConfig.cropMaskVisualEffectType = .light
+        config.cropToolbarConfig.toolbarButtonOptions = []
+        config.ratioOptions = []
+        config.cropViewConfig.cropShapeType = .circle(maskOnly: true)
         
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
-        cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
+        cropViewController.config.addCustomRatio(byVerticalWidth: 1, andVerticalHeight: 1)
         present(cropViewController, animated: true)
     }
         
@@ -260,6 +266,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                    cropInfo: CropInfo) {
         print("transformation is \(transformation)")
         print("cropInfo is \(cropInfo)")
+        print("cropped image size: \(cropped.size)")
         croppedImageView.image = cropped
         dismiss(animated: true)
     }
