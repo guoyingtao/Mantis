@@ -579,7 +579,7 @@ extension CropView {
         guard let croppedImage = image.crop(by: cropInfo) else {
             return (nil, transformation, cropInfo)
         }
-                
+        
         switch cropViewConfig.cropShapeType {
         case .rect,
              .square,
