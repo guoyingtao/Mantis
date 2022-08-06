@@ -75,9 +75,6 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
     }
     
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
-        // cropViewController.getExpectedCropImageSize() uses floor() to get integer image width and height
-        // If you use this size to check if it is less than an upper limit, you may need to add 1 to width and height
-        // to make sure the size is valid
         let size = cropViewController.getExpectedCropImageSize()
         self.resolutionLabel.text = "\(Int(size.width)) x \(Int(size.height)) pixels"
     }
