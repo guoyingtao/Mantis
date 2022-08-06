@@ -216,7 +216,8 @@ class CropView: UIView {
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
         
         imageContainer.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
-        scrollView.contentOffset = CGPoint(x: (imageContainer.frame.width - scrollView.frame.width) / 2, y: (imageContainer.frame.height - scrollView.frame.height) / 2)
+        scrollView.contentOffset = CGPoint(x: (imageContainer.frame.width - scrollView.frame.width) / 2,
+                                           y: (imageContainer.frame.height - scrollView.frame.height) / 2)
 
         gridOverlayView.superview?.bringSubviewToFront(gridOverlayView)
         
@@ -588,24 +589,58 @@ extension CropView {
              .diamond(maskOnly: true),
              .heart(maskOnly: true),
              .polygon(_, _, maskOnly: true):
-            return (croppedImage, transformation, cropInfo)
+            
+            let outputImage: UIImage?
+            if cropViewConfig.cropBorderWidth > 0 {
+                outputImage = croppedImage.rectangleMasked(borderWidth: cropViewConfig.cropBorderWidth,
+                                                            borderColor: cropViewConfig.cropBorderColor)
+            } else {
+                outputImage = croppedImage
+            }
+            
+            return (outputImage, transformation, cropInfo)
         case .ellipse:
-            return (croppedImage.ellipseMasked, transformation, cropInfo)
+            return (croppedImage.ellipseMasked(borderWidth: cropViewConfig.cropBorderWidth,
+                                               borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         case .circle:
-            return (croppedImage.ellipseMasked, transformation, cropInfo)
+            return (croppedImage.ellipseMasked(borderWidth: cropViewConfig.cropBorderWidth,
+                                               borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         case .roundedRect(let radiusToShortSide, maskOnly: false):
             let radius = min(croppedImage.size.width, croppedImage.size.height) * radiusToShortSide
-            return (croppedImage.roundRect(radius), transformation, cropInfo)
+            return (croppedImage.roundRect(radius,
+                                           borderWidth: cropViewConfig.cropBorderWidth,
+                                           borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         case .path(let points, maskOnly: false):
-            return (croppedImage.clipPath(points), transformation, cropInfo)
+            return (croppedImage.clipPath(points,
+                                          borderWidth: cropViewConfig.cropBorderWidth,
+                                          borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         case .diamond(maskOnly: false):
             let points = [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 0.5), CGPoint(x: 0.5, y: 1), CGPoint(x: 0, y: 0.5)]
-            return (croppedImage.clipPath(points), transformation, cropInfo)
+            return (croppedImage.clipPath(points,
+                                          borderWidth: cropViewConfig.cropBorderWidth,
+                                          borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         case .heart(maskOnly: false):
-            return (croppedImage.heart, transformation, cropInfo)
+            return (croppedImage.heart(borderWidth: cropViewConfig.cropBorderWidth,
+                                       borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         case .polygon(let sides, let offset, maskOnly: false):
             let points = polygonPointArray(sides: sides, originX: 0.5, originY: 0.5, radius: 0.5, offset: 90 + offset)
-            return CropOutput(croppedImage.clipPath(points), transformation, cropInfo)
+            return CropOutput(croppedImage.clipPath(points,
+                                                    borderWidth: cropViewConfig.cropBorderWidth,
+                                                    borderColor: cropViewConfig.cropBorderColor),
+                              transformation,
+                              cropInfo)
         }
     }
     

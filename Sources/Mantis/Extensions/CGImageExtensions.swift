@@ -12,7 +12,10 @@
 import UIKit
 
 extension CGImage {
-    func transformedImage(_ transform: CGAffineTransform, outputSize: CGSize, cropSize: CGSize, imageViewSize: CGSize) -> CGImage? {
+    func transformedImage(_ transform: CGAffineTransform,
+                          outputSize: CGSize,
+                          cropSize: CGSize,
+                          imageViewSize: CGSize) -> CGImage? {
         guard var colorSpaceRef = self.colorSpace else {
             return self
         }
