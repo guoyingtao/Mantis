@@ -374,8 +374,7 @@ extension CropView {
                 scrollView.transform = scrollView.transform.scaledBy(x: -1, y: 1)
             } else {
                 scrollView.transform = scrollView.transform.scaledBy(x: 1, y: -1)
-            }
-            
+            }            
         }
         
         if viewModel.verticallyFlip {
@@ -438,18 +437,7 @@ extension CropView {
             return viewModel.cropLeftTopOnImage
         }
         
-        let leftTopPoint: CGPoint
-        
-        if viewModel.horizontallyFlip && viewModel.verticallyFlip {
-            leftTopPoint = gridOverlayView.convert(CGPoint(x: imageContainer.bounds.width, y: imageContainer.bounds.height), to: imageContainer)
-        } else if viewModel.horizontallyFlip {
-            leftTopPoint = gridOverlayView.convert(CGPoint(x: imageContainer.bounds.width, y: 0), to: imageContainer)
-        } else if viewModel.verticallyFlip {
-            leftTopPoint = gridOverlayView.convert(CGPoint(x: 0, y: imageContainer.bounds.height), to: imageContainer)
-        } else {
-            leftTopPoint = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
-        }
-        
+        let leftTopPoint = gridOverlayView.convert(CGPoint(x: 0, y: 0), to: imageContainer)
         let point = CGPoint(x: leftTopPoint.x / imageContainer.bounds.width, y: leftTopPoint.y / imageContainer.bounds.height)
         return point
     }
@@ -717,7 +705,7 @@ extension CropView {
         return crop(image)
     }
         
-    func handleRotate() {
+    func handleDeviceRotated() {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
         scrollView.transform = CGAffineTransform(scaleX: 1, y: 1)        

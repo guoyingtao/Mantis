@@ -202,10 +202,10 @@ public class CropViewController: UIViewController {
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         cropView.prepareForDeviceRotation()
-        rotated()
+        handleDeviceRotated()
     }    
     
-    @objc func rotated() {
+    @objc func handleDeviceRotated() {
         let currentOrientation = Orientation.interfaceOrientation
         
         guard currentOrientation != .unknown else { return }
@@ -226,7 +226,7 @@ public class CropViewController: UIViewController {
         // So delay the execution to make sure handleRotate runs after the final
         // viewDidLayoutSubviews
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.cropView.handleRotate()
+            self?.cropView.handleDeviceRotated()
         }
     }    
     

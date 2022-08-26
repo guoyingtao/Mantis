@@ -8,8 +8,7 @@
 import UIKit
 
 /**
-    Inside Mantis, CropViewController implements all delegate methods
-    For didHorizontallyFlip and didVerticallyFlip, Manis only support flip features without 
+    Inside Mantis, CropViewController implements all delegate methods 
  */
 public protocol CropToolbarDelegate: AnyObject {
     func didSelectCancel()
