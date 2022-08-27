@@ -50,7 +50,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     private lazy var verticallyFlipButton: UIButton = {
         let button = createOptionButton(withTitle: nil, andAction: #selector(verticallyFlip(_:)))
-        let icon = iconProvider?.getClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.verticallyFlipImage()
+        let icon = iconProvider?.getVerticallyFlipIcon() ?? ToolBarButtonImageBuilder.verticallyFlipImage()
         button.setImage(icon, for: .normal)
         return button
     }()
