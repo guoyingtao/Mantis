@@ -227,7 +227,7 @@ extension CropToolbar {
     }
     
     @objc private func horizontallyFlip(_ sender: Any) {
-        cropToolbarDelegate?.didHorizontallyFlip()
+        cropToolbarDelegate?.didSelectHorizontallyFlip()
     }
 
     @objc private func verticallyFlip(_ sender: Any) {
