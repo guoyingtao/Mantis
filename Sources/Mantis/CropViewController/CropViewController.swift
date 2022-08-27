@@ -533,6 +533,14 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
+    public func didSelectHorizontallyFlip() {
+        handleHorizontallyFlip()
+    }
+    
+    public func didSelectVerticallyFlip() {
+        handleVerticallyFlip()
+    }
+    
     public func didSelectCancel() {
         handleCancel()
     }
@@ -563,15 +571,7 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectAlterCropper90Degree() {
         handleAlterCropper90Degree()
-    }
-    
-    public func didHorizontallyFlip() {
-        handleHorizontallyFlip()
-    }
-    
-    public func didVerticallyFlip() {
-        handleVerticallyFlip()
-    }
+    }    
 }
 
 // API
