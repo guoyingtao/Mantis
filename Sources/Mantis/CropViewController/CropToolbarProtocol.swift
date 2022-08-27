@@ -19,7 +19,7 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectSetRatio()
     func didSelectRatio(ratio: Double)
     func didSelectAlterCropper90Degree()
-    func didHorizontallyFlip()
+    func didSelectHorizontallyFlip()
     func didVerticallyFlip()
 }
 
