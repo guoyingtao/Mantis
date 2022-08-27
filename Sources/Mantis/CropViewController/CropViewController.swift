@@ -432,7 +432,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    private func handleHorizontallyFlp() {
+    private func handleHorizontallyFlip() {
         cropView.horizontallyFlip()
     }
     
