@@ -566,7 +566,7 @@ extension CropViewController: CropToolbarDelegate {
     }
     
     public func didHorizontallyFlip() {
-        handleHorizontallyFlp()
+        handleHorizontallyFlip()
     }
     
     public func didVerticallyFlip() {
