@@ -12,7 +12,6 @@
 import UIKit
 
 extension UIImage {
-    
     func cgImageWithFixedOrientation() -> CGImage? {
         
         guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
@@ -109,7 +108,7 @@ extension UIImage {
         }
     }
     
-    func crop(by cropInfo: CropInfo) -> UIImage? {
+    func crop(by cropInfo: CropInfo, borderWidth: CGFloat = 0, borderColor: UIColor = .clear) -> UIImage? {
         guard let fixedImage = self.cgImageWithFixedOrientation() else {
             return nil
         }
@@ -117,7 +116,7 @@ extension UIImage {
         var transform = CGAffineTransform.identity
         transform = transform.translatedBy(x: cropInfo.translation.x, y: cropInfo.translation.y)
         transform = transform.rotated(by: cropInfo.rotation)
-        transform = transform.scaledBy(x: cropInfo.scale, y: cropInfo.scale)
+        transform = transform.scaledBy(x: cropInfo.scaleX, y: cropInfo.scaleY)
         
         let outputSize = getExpectedCropImageSize(by: cropInfo)
         guard let imageRef = fixedImage.transformedImage(transform,
@@ -131,19 +130,20 @@ extension UIImage {
     }
     
     func getExpectedCropImageSize(by cropInfo: CropInfo) -> CGSize {
-        let zoomScale = cropInfo.scale
+        let zoomScaleX = abs(cropInfo.scaleX)
+        let zoomScaleY = abs(cropInfo.scaleY)
         let cropSize = cropInfo.cropSize
         let imageViewSize = cropInfo.imageViewSize
         
-        let expectedWidth = floor(size.width / imageViewSize.width * cropSize.width) / zoomScale
-        let expectedHeight = floor(size.height / imageViewSize.height * cropSize.height) / zoomScale
+        let expectedWidth = floor(size.width / imageViewSize.width * cropSize.width) / zoomScaleX
+        let expectedHeight = floor(size.height / imageViewSize.height * cropSize.height) / zoomScaleY
         
         return CGSize(width: expectedWidth, height: expectedHeight)
     }
 }
 
 extension UIImage {
-    func getImageWithTransparentBackground(pathBuilder: (CGRect) -> UIBezierPath) -> UIImage? {
+    func getImageWithTransparentBackground(borderWidth: CGFloat = 0, borderColor: UIColor = .clear, pathBuilder: (CGRect) -> UIBezierPath) -> UIImage? {
         guard let cgImage = cgImage else { return nil }
         
         // Because imageRendererFormat is a read only property
@@ -155,36 +155,56 @@ extension UIImage {
         let rect = CGRect(origin: .zero, size: size)
         
         return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-            pathBuilder(rect).addClip()
+            let path: UIBezierPath
+            
+            if borderWidth > 0 {
+                let edgeInsets = UIEdgeInsets(top: borderWidth, left: borderWidth, bottom: borderWidth, right: borderWidth)
+                let innerRect = rect.inset(by: edgeInsets)
+                path = pathBuilder(innerRect)
+                borderColor.setStroke()
+                path.lineWidth = borderWidth
+                path.stroke()
+            } else {
+                path = pathBuilder(rect)
+            }
+            
+            path.addClip()
+            
             UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
                 .draw(in: rect)
         }
     }
     
-    var ellipseMasked: UIImage? {
-        return getImageWithTransparentBackground {
+    func rectangleMasked(borderWidth: CGFloat = 0, borderColor: UIColor = .clear) -> UIImage? {
+        return getImageWithTransparentBackground(borderWidth: borderWidth, borderColor: borderColor) {
+            UIBezierPath(rect: $0)
+        }
+    }
+    
+    func ellipseMasked(borderWidth: CGFloat = 0, borderColor: UIColor = .clear) -> UIImage? {
+        return getImageWithTransparentBackground(borderWidth: borderWidth, borderColor: borderColor) {
             UIBezierPath(ovalIn: $0)
         }
     }
     
-    func roundRect(_ radius: CGFloat) -> UIImage? {
-        return getImageWithTransparentBackground {
+    func roundRect(_ radius: CGFloat, borderWidth: CGFloat = 0, borderColor: UIColor = .clear) -> UIImage? {
+        return getImageWithTransparentBackground(borderWidth: borderWidth, borderColor: borderColor) {
             UIBezierPath(roundedRect: $0, cornerRadius: radius)
         }
     }
     
-    var heart: UIImage? {
-        return getImageWithTransparentBackground {
+    func heart(borderWidth: CGFloat = 0, borderColor: UIColor = .clear) -> UIImage? {
+        return getImageWithTransparentBackground(borderWidth: borderWidth, borderColor: borderColor) {
             UIBezierPath(heartIn: $0)
         }
     }
     
-    func clipPath(_ points: [CGPoint]) -> UIImage? {
+    func clipPath(_ points: [CGPoint], borderWidth: CGFloat = 0, borderColor: UIColor = .clear) -> UIImage? {
         guard points.count >= 3 else {
             return nil
         }
         
-        return getImageWithTransparentBackground {rect in
+        return getImageWithTransparentBackground(borderWidth: borderWidth, borderColor: borderColor) {rect in
             let newPoints = points.map { CGPoint(x: rect.origin.x + rect.width * $0.x, y: rect.origin.y + rect.height * $0.y) }
             
             let path = UIBezierPath()

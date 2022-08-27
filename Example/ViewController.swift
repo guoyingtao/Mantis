@@ -111,7 +111,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         guard let image = image else {
             return
         }
-        var config = Mantis.Config()        
+        var config = Mantis.Config()
         config.cropToolbarConfig = CropToolbarConfig()
         config.cropToolbarConfig.backgroundColor = .red
         config.cropToolbarConfig.foregroundColor = .white
@@ -151,7 +151,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
-        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .alterCropper90Degree]
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip, .verticallyFlip]
         config.cropToolbarConfig.backgroundColor = .white
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
@@ -212,6 +212,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                 guard let self = self else {return}
                 var config = Mantis.Config()
                 config.cropViewConfig.cropShapeType = item.type
+                config.cropViewConfig.cropBorderWidth = 40
+                config.cropViewConfig.cropBorderColor = .red
                 
                 let cropViewController = Mantis.cropViewController(image: image, config: config)
                 cropViewController.modalPresentationStyle = .fullScreen

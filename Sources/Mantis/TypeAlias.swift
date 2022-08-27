@@ -37,7 +37,8 @@ public typealias Transformation = (
 public typealias CropInfo = (
     translation: CGPoint,
     rotation: CGFloat,
-    scale: CGFloat,
+    scaleX: CGFloat,
+    scaleY: CGFloat,
     cropSize: CGSize,
     imageViewSize: CGSize
 )

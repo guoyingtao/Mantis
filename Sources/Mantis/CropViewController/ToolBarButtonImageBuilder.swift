@@ -76,4 +76,36 @@ struct ToolBarButtonImageBuilder {
     static func alterCropper90DegreeImage() -> UIImage? {
         drawAlterCropper90DegreeImage()
     }
+    
+    static func horizontallyFlipImage() -> UIImage? {
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            return UIImage(systemName: "flip.horizontal")
+        }
+        
+        return nil
+    }
+    
+    static func verticallyFlipImage() -> UIImage? {
+        if #available(macCatalyst 13.1, iOS 13.0, *) {
+            guard let horizontallyFippedImage = horizontallyFlipImage(),
+                    let cgImage = horizontallyFippedImage.cgImage else {
+                return nil
+            }
+            
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: horizontallyFippedImage.size.height,
+                                                          height: horizontallyFippedImage.size.width),
+                                                   false,
+                                                   horizontallyFippedImage.scale)
+            let context = UIGraphicsGetCurrentContext()
+            context?.rotate(by: .pi / 2)
+            context?.translateBy(x: 0, y: -horizontallyFippedImage.size.height)
+            context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: horizontallyFippedImage.size.height, height: horizontallyFippedImage.size.width))
+            let image: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }
+        
+        return nil
+    }
+
 }

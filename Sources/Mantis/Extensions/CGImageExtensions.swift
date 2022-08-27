@@ -12,7 +12,10 @@
 import UIKit
 
 extension CGImage {
-    func transformedImage(_ transform: CGAffineTransform, outputSize: CGSize, cropSize: CGSize, imageViewSize: CGSize) -> CGImage? {
+    func transformedImage(_ transform: CGAffineTransform,
+                          outputSize: CGSize,
+                          cropSize: CGSize,
+                          imageViewSize: CGSize) -> CGImage? {
         guard var colorSpaceRef = self.colorSpace else {
             return self
         }
@@ -60,9 +63,9 @@ extension CGImage {
                 
         context.setFillColor(UIColor.clear.cgColor)
         context.fill(CGRect(x: 0,
-                             y: 0,
-                             width: outputSize.width,
-                             height: outputSize.height))
+                            y: 0,
+                            width: outputSize.width,
+                            height: outputSize.height))
         
         var uiCoords = CGAffineTransform(scaleX: outputSize.width / cropSize.width,
                                          y: outputSize.height / cropSize.height)
@@ -71,7 +74,8 @@ extension CGImage {
         
         context.concatenate(uiCoords)
         context.concatenate(transform)
-        context.scaleBy(x: 1.0, y: -1.0)
+        context.scaleBy(x: 1, y: -1)
+        
         context.draw(self, in: CGRect(x: (-imageViewSize.width / 2),
                                        y: (-imageViewSize.height / 2),
                                        width: imageViewSize.width,

@@ -202,10 +202,10 @@ public class CropViewController: UIViewController {
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         cropView.prepareForDeviceRotation()
-        rotated()
+        handleDeviceRotated()
     }    
     
-    @objc func rotated() {
+    @objc func handleDeviceRotated() {
         let currentOrientation = Orientation.interfaceOrientation
         
         guard currentOrientation != .unknown else { return }
@@ -226,7 +226,7 @@ public class CropViewController: UIViewController {
         // So delay the execution to make sure handleRotate runs after the final
         // viewDidLayoutSubviews
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.cropView.handleRotate()
+            self?.cropView.handleDeviceRotated()
         }
     }    
     
@@ -432,6 +432,14 @@ public class CropViewController: UIViewController {
         }
     }
     
+    private func handleHorizontallyFlip() {
+        cropView.horizontallyFlip()
+    }
+    
+    private func handleVerticallyFlip() {
+        cropView.verticallyFlip()
+    }
+    
     private func handleCrop() {
         let cropResult = cropView.crop()
         guard let image = cropResult.croppedImage else {
@@ -525,6 +533,14 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
+    public func didSelectHorizontallyFlip() {
+        handleHorizontallyFlip()
+    }
+    
+    public func didSelectVerticallyFlip() {
+        handleVerticallyFlip()
+    }
+    
     public func didSelectCancel() {
         handleCancel()
     }
@@ -555,7 +571,7 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectAlterCropper90Degree() {
         handleAlterCropper90Degree()
-    }
+    }    
 }
 
 // API

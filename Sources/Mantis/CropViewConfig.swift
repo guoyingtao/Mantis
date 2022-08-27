@@ -8,6 +8,10 @@ public struct CropViewConfig {
     
     public var cropShapeType: CropShapeType = .rect
     
+    public var cropBorderWidth: CGFloat = 0
+    
+    public var cropBorderColor: UIColor = .clear
+    
     public var cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark
     
     public var presetTransformationType: PresetTransformationType = .none
