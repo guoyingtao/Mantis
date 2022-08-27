@@ -151,7 +151,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
-        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .alterCropper90Degree]
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip, .verticallyFlip]
         config.cropToolbarConfig.backgroundColor = .white
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList

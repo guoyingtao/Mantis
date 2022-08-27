@@ -34,6 +34,10 @@ enum ImageRotationType: CGFloat {
             self = .counterclockwise270
         }
     }
+    
+    var isRotateByMultiple180: Bool {
+        return self == .none || self == .counterclockwise180
+    }
 }
 
 class CropViewModel: NSObject {
@@ -70,11 +74,16 @@ class CropViewModel: NSObject {
     var aspectRatio: CGFloat = -1    
     var cropLeftTopOnImage: CGPoint = .zero
     var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
+    
+    var horizontallyFlip = false
+    var verticallyFlip = false
 
     private let cropViewPadding: CGFloat
     private let hotAreaUnit: CGFloat
 
     func reset(forceFixedRatio: Bool = false) {
+        horizontallyFlip = false
+        verticallyFlip = false
         cropBoxFrame = .zero
         degrees = 0
         rotationType = .none

@@ -7,6 +7,9 @@
 
 import UIKit
 
+/**
+    Inside Mantis, CropViewController implements all delegate methods 
+ */
 public protocol CropToolbarDelegate: AnyObject {
     func didSelectCancel()
     func didSelectCrop()
@@ -16,6 +19,8 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectSetRatio()
     func didSelectRatio(ratio: Double)
     func didSelectAlterCropper90Degree()
+    func didSelectHorizontallyFlip()
+    func didSelectVerticallyFlip()
 }
 
 public protocol CropToolbarIconProvider: AnyObject {
@@ -26,6 +31,8 @@ public protocol CropToolbarIconProvider: AnyObject {
     func getAlterCropper90DegreeIcon() -> UIImage?
     func getCancelIcon() -> UIImage?
     func getCropIcon() -> UIImage?
+    func getHorizontallyFlipIcon() -> UIImage?
+    func getVerticallyFlipIcon() -> UIImage?
 }
 
 public extension CropToolbarIconProvider {
@@ -36,6 +43,8 @@ public extension CropToolbarIconProvider {
     func getAlterCropper90DegreeIcon() -> UIImage? { return nil }
     func getCancelIcon() -> UIImage? { return nil }
     func getCropIcon() -> UIImage? { return nil }
+    func getHorizontallyFlipIcon() -> UIImage? { return nil }
+    func getVerticallyFlipIcon() -> UIImage? { return nil }
 }
 
 public protocol CropToolbarProtocol: UIView {
