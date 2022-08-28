@@ -2,6 +2,20 @@
 
 -----
 
+## [2.1.0](https://www.github.com/guoyingtao/Mantis/compare/v2.0.1...v2.1.0) (2022-08-27)
+
+
+### Features
+
+* add mirror mode support ([#200](https://www.github.com/guoyingtao/Mantis/issues/200)) ([ea6b1f1](https://www.github.com/guoyingtao/Mantis/commit/ea6b1f173d8ce4b63dad440671bcbe3d86638d93))
+* support adding border to cropped image ([#196](https://www.github.com/guoyingtao/Mantis/issues/196)) ([f55ae6e](https://www.github.com/guoyingtao/Mantis/commit/f55ae6eca8b16f7afdf34667093a6981c5412eed))
+
+
+### Bug Fixes
+
+* solve the issue of initial minimum zoom scale is not working ([#190](https://www.github.com/guoyingtao/Mantis/issues/190)) ([560e272](https://www.github.com/guoyingtao/Mantis/commit/560e272d40d3a983403193032b3943005d2947fd))
+* use round() instead of floor() for output image size ([#197](https://www.github.com/guoyingtao/Mantis/issues/197)) ([42bb6cc](https://www.github.com/guoyingtao/Mantis/commit/42bb6cc8bcb24fef45c1b8e2db41a71c07de032d))
+
 ### [2.0.1](https://www.github.com/guoyingtao/Mantis/compare/v2.0.0...v2.0.1) (2022-07-21)
 
 
