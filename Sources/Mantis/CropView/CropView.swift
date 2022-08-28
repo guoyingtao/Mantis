@@ -273,12 +273,7 @@ class CropView: UIView {
         rotationDial.setRotationCenter(by: gridOverlayView.center, of: self)
         
         rotationDial.didRotate = { [unowned self] angle in
-            if self.forceFixedRatio {
-                let newRadians = self.viewModel.getTotalRadias(by: angle.radians)
-                self.viewModel.setRotatingStatus(by: CGAngle(radians: newRadians))
-            } else {
-                self.viewModel.setRotatingStatus(by: angle)
-            }
+            self.viewModel.setRotatingStatus(by: angle)
         }
         
         rotationDial.didFinishedRotate = { [unowned self] in
@@ -366,7 +361,7 @@ class CropView: UIView {
 // MARK: - Adjust UI
 extension CropView {
     private func rotateScrollView() {
-        let totalRadians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
+        let totalRadians = viewModel.getTotalRadians()
         scrollView.transform = CGAffineTransform(rotationAngle: totalRadians)
         
         if viewModel.horizontallyFlip {
@@ -471,7 +466,7 @@ extension CropView {
         
         let newCropBounds = CGRect(x: 0, y: 0, width: viewModel.cropBoxFrame.width * scale, height: viewModel.cropBoxFrame.height * scale)
         
-        let radians = forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
+        let radians = viewModel.getTotalRadians()
         
         // calculate the new bounds of scroll view
         let newBoundWidth = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
@@ -698,7 +693,7 @@ extension CropView {
     }
     
     func getTotalRadians() -> CGFloat {
-        return forceFixedRatio ? viewModel.radians : viewModel.getTotalRadians()
+        return viewModel.getTotalRadians()
     }
     
     func crop() -> CropOutput {
@@ -739,24 +734,7 @@ extension CropView {
     
     func rotateBy90(rotateAngle: CGFloat, completion: @escaping () -> Void = {}) {
         viewModel.setDegree90RotatingStatus()
-        let rorateDuration = 0.25
-        
-        if forceFixedRatio {
-            viewModel.setRotatingStatus(by: CGAngle(radians: viewModel.radians))
-            let angle = CGAngle(radians: rotateAngle + viewModel.radians)
-            
-            UIView.animate(withDuration: rorateDuration, animations: {
-                self.viewModel.setRotatingStatus(by: angle)
-            }, completion: {[weak self] _ in
-                guard let self = self else { return }
-                self.viewModel.rotateBy90(rotateAngle: rotateAngle)
-                self.viewModel.setBetweenOperationStatus()
-                completion()
-            })
-            
-            return
-        }
-        
+        let rorateDuration = 0.25                
         var rect = gridOverlayView.frame        
         rect.size.width = gridOverlayView.frame.height
         rect.size.height = gridOverlayView.frame.width

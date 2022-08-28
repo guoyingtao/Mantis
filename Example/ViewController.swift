@@ -155,6 +155,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         config.cropToolbarConfig.backgroundColor = .white
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
+        config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 2.0 / 1.0)
                 
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
