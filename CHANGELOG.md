@@ -2,6 +2,13 @@
 
 -----
 
+### [2.1.1](https://www.github.com/guoyingtao/Mantis/compare/v2.1.0...v2.1.1) (2022-08-28)
+
+
+### Bug Fixes
+
+* fix the weird rotation animation issue for alwaysUsingOnePresetFixedRatio ([#202](https://www.github.com/guoyingtao/Mantis/issues/202)) ([4440568](https://www.github.com/guoyingtao/Mantis/commit/4440568098ba4e9c8bec9de9507f1b41d2a231db))
+
 ## [2.1.0](https://www.github.com/guoyingtao/Mantis/compare/v2.0.1...v2.1.0) (2022-08-27)
 
 
