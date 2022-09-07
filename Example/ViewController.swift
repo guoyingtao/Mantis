@@ -59,7 +59,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                        scrollBounds: CGRect(x: 231.66666666666666,
                                                             y: 439.6666666666667,
                                                             width: 557.1387432741491,
-                                                            height: 654.7511809035641))
+                                                            height: 654.7511809035641),
+                                       scrollViewContentSize: .zero)
                 
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         
