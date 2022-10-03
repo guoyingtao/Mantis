@@ -100,7 +100,7 @@ struct ImageCropper: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> CropViewController {
         var config = Mantis.Config()
-        config.cropShapeType = cropShapeType
+        config.cropViewConfig.cropShapeType = cropShapeType
         config.presetFixedRatioType = presetFixedRatioType
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
