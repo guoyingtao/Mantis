@@ -40,7 +40,11 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                                            config: config)
         cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
-        present(cropViewController, animated: true)
+        
+        let navigationController = UINavigationController(rootViewController: cropViewController)
+        cropViewController.title = "Demo"
+        cropViewController.view.backgroundColor = .white
+        present(navigationController, animated: true)
     }
     
     @IBAction func presentWithPresetTransformation(_ sender: Any) {

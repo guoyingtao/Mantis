@@ -84,4 +84,12 @@ extension CropView {
             viewModel.setBetweenOperationStatus()
         }
     }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPanGestureRecognizer {
+            return false
+        }
+        
+        return true
+    }
 }
