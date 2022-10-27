@@ -38,7 +38,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         let config = Mantis.Config()
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         
         let navigationController = UINavigationController(rootViewController: cropViewController)
