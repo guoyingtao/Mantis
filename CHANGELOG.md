@@ -2,6 +2,13 @@
 
 -----
 
+### [2.1.2](https://www.github.com/guoyingtao/Mantis/compare/v2.1.1...v2.1.2) (2022-10-28)
+
+
+### Bug Fixes
+
+* solve pan gesture conflict ([#220](https://www.github.com/guoyingtao/Mantis/issues/220)) ([479bb62](https://www.github.com/guoyingtao/Mantis/commit/479bb625e04a27a0f9a7c5d712f0f1c004c6dce6))
+
 ### [2.1.1](https://www.github.com/guoyingtao/Mantis/compare/v2.1.0...v2.1.1) (2022-08-28)
 
 
