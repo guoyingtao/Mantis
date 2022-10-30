@@ -216,6 +216,7 @@ class CropView: UIView {
         scrollView.resetBy(rect: viewModel.cropBoxFrame)
         
         imageContainer.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
+
         scrollView.contentOffset = CGPoint(x: (imageContainer.frame.width - scrollView.frame.width) / 2,
                                            y: (imageContainer.frame.height - scrollView.frame.height) / 2)
 
@@ -777,6 +778,8 @@ extension CropView {
         
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         resetUIFrame()
+        viewModel.setInitialStatus()
+        
         delegate?.cropViewDidBecomeUnResettable(self)
         delegate?.cropViewDidEndResize(self)
     }
@@ -850,11 +853,13 @@ extension CropView {
     func horizontallyFlip() {
         viewModel.horizontallyFlip.toggle()
         flip(isHorizontal: true)
+        checkImageStatusChanged()
     }
     
     func verticallyFlip() {
         viewModel.verticallyFlip.toggle()
         flip(isHorizontal: false)
+        checkImageStatusChanged()
     }
     
     private func flip(isHorizontal: Bool = true, animated: Bool = true) {
