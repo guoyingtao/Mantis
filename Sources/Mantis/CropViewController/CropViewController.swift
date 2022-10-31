@@ -33,13 +33,15 @@ public protocol CropViewControllerDelegate: AnyObject {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
-    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)    
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)
+    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController)
 }
 
 public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
-    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}   
+    func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
+    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {}
 }
 
 public enum CropViewControllerMode {
@@ -513,10 +515,10 @@ extension CropViewController {
     }
 }
 
-extension CropViewController: CropViewDelegate {
-    
+extension CropViewController: CropViewDelegate {    
     func cropViewDidBecomeResettable(_ cropView: CropView) {
         cropToolbar.handleCropViewDidBecomeResettable()
+        delegate?.cropViewControllerDidImageTransformed(self)
     }
     
     func cropViewDidBecomeUnResettable(_ cropView: CropView) {

@@ -35,7 +35,8 @@ class ViewController: UIViewController, CropViewControllerDelegate {
             return
         }
         
-        let config = Mantis.Config()
+        var config = Mantis.Config()
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip]
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
@@ -272,6 +273,10 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         dismiss(animated: true)
+    }
+    
+    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
+        print("image is transformed.")
     }
 }
 
