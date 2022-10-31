@@ -2,6 +2,13 @@
 
 -----
 
+## [2.2.0](https://www.github.com/guoyingtao/Mantis/compare/v2.1.2...v2.2.0) (2022-10-31)
+
+
+### Features
+
+* add cropViewControllerDidImageTransformed ([#222](https://www.github.com/guoyingtao/Mantis/issues/222)) ([8fee217](https://www.github.com/guoyingtao/Mantis/commit/8fee217d575dc39c839526fc236f31da198db40e))
+
 ### [2.1.2](https://www.github.com/guoyingtao/Mantis/compare/v2.1.1...v2.1.2) (2022-10-28)
 
 
