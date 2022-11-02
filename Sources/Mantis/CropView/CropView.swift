@@ -777,9 +777,9 @@ extension CropView {
         }
         
         viewModel.reset(forceFixedRatio: forceFixedRatio)
+
         resetUIFrame()
-        viewModel.setInitialStatus()
-        
+                
         delegate?.cropViewDidBecomeUnResettable(self)
         delegate?.cropViewDidEndResize(self)
     }

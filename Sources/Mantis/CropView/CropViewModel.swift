@@ -94,6 +94,8 @@ class CropViewModel: NSObject {
         
         cropLeftTopOnImage = .zero
         cropRightBottomOnImage = CGPoint(x: 1, y: 1)
+        
+        setInitialStatus()
     }
     
     func rotateBy90(rotateAngle: CGFloat) {
