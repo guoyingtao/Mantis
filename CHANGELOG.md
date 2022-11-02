@@ -2,6 +2,13 @@
 
 -----
 
+### [2.2.1](https://www.github.com/guoyingtao/Mantis/compare/v2.2.0...v2.2.1) (2022-11-02)
+
+
+### Bug Fixes
+
+* solve reset UI issue ([b531628](https://www.github.com/guoyingtao/Mantis/commit/b531628e1d82ae87ca9a8ab203670308a7c5f104))
+
 ## [2.2.0](https://www.github.com/guoyingtao/Mantis/compare/v2.1.2...v2.2.0) (2022-10-31)
 
 
