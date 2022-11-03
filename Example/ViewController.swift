@@ -81,7 +81,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
-        config.cropViewConfig.showRotationDial = true
+        config.cropViewConfig.showRotationDial = false
         config.cropViewConfig.minimumZoomScale = 2.0
         config.cropViewConfig.maximumZoomScale = 10.0
         
@@ -90,7 +90,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.delegate = self
         cropViewController.title = "Change Profile Picture"
         let navigationController = UINavigationController(rootViewController: cropViewController)
-        navigationController.modalPresentationStyle = .fullScreen
                 
         cropToolbar.cropViewController = cropViewController
         
@@ -105,7 +104,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         let config = Mantis.Config()
         
         let cropViewController = Mantis.cropViewController(image: image, config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
         cropViewController.delegate = self
         cropViewController.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 16.0 / 9.0)
         present(cropViewController, animated: true)

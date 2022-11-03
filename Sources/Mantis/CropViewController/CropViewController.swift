@@ -171,7 +171,11 @@ public class CropViewController: UIViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
+
+#if targetEnvironment(macCatalyst)
+        modalPresentationStyle = .fullScreen
+        navigationController?.modalPresentationStyle = .fullScreen
+#endif
         view.backgroundColor = .black
         
         createCropView()
