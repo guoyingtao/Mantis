@@ -26,6 +26,9 @@ class EmbeddedCropViewController: UIViewController {
         cancelButton.title = "Cancel"
         doneButton.title = "Done"
         resolutionLabel.text = "\(getResolution(image: image) ?? "unknown")"
+        
+        view.backgroundColor = .black
+        navigationController?.toolbar.backgroundColor = .black
     }
     
     @IBAction func cancel(_ sender: Any) {
@@ -39,10 +42,10 @@ class EmbeddedCropViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cropViewController = segue.destination as? CropViewController {
             cropViewController.image = image
-            cropViewController.mode = .customizable
             cropViewController.delegate = self
             
-            let config = Mantis.Config()
+            var config = Mantis.Config()
+            config.cropToolbarConfig.mode = .embedded
             cropViewController.config = config
             
             self.cropViewController = cropViewController

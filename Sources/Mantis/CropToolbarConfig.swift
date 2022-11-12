@@ -49,7 +49,7 @@ public protocol CropToolbarConfigProtocol {
     
     /**
      - For .normal, the CropToolBar has cancel and crop buttons
-     - For .simple, the CropToolBar does not have cancel and crop buttons
+     - For .embedded, the CropToolBar does not have cancel and crop buttons
      When embeding CropViewController to another UIViewController, that UIViewController should be
      in charge of cancel and crop buttons
      */
