@@ -36,16 +36,6 @@ public func cropViewController(image: UIImage,
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
     return CropViewController(image: image,
                               config: config,
-                              mode: .normal,
-                              cropToolbar: cropToolbar)
-}
-
-public func cropCustomizableViewController(image: UIImage,
-                                           config: Mantis.Config = Mantis.Config(),
-                                           cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
-    return CropViewController(image: image,
-                              config: config,
-                              mode: .customizable,
                               cropToolbar: cropToolbar)
 }
 

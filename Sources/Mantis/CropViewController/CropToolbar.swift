@@ -10,7 +10,7 @@ import UIKit
 
 public enum CropToolbarMode {
     case normal
-    case simple // Without cancel and crop buttons
+    case embedded // Without cancel and crop buttons
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {

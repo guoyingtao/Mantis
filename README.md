@@ -89,13 +89,13 @@ public protocol CropViewControllerDelegate: class {
 </details>
     
 <details>
-<summary><strong>UI mode</strong></summary>
+<summary><strong>CropToolbar mode</strong></summary>
 
-* CropViewController has two modes:
+* CropToolbar has two modes:
 
   * normal mode
 
-  In normal mode, you can use a set of standard CropViewController photo editing features.
+  In normal mode, you can use a set of standard CropViewController photo editing features with "Cancel" and "Done" buttons.
 <p align="center">
     <img src="Images/Screen Shot.png" height="300" alt="Mantis" />
 </p>
@@ -104,16 +104,18 @@ public protocol CropViewControllerDelegate: class {
 let cropViewController = Mantis.cropViewController(image: <Your Image>)
 ```
 
-  * customizable mode
+  * embedded mode
   
-  This mode includes the standard cropping feature, while enabling users to customize other edit features.
+  This mode does not include "Cancel" and "Done" buttons, so you can embed CropViewController into another view controller
 
 <p align="center">
     <img src="Images/customizable.jpg" height="300" alt="Mantis" />
 </p>
 
 ```swift
-let cropViewController = Mantis.cropCustomizableViewController(image: <Your Image>)
+var config = Mantis.Config()
+config.cropToolbarConfig.mode = .embedded
+let cropViewController = Mantis.cropViewController(image: <Your Image>, config: config)
 ```
 
 </details>

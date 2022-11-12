@@ -44,11 +44,6 @@ public extension CropViewControllerDelegate where Self: UIViewController {
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {}
 }
 
-public enum CropViewControllerMode {
-    case normal
-    case customizable    
-}
-
 public class CropViewController: UIViewController {
     /// When a CropViewController is used in a storyboard,
     /// passing an image to it is needed after the CropViewController is created.
@@ -59,7 +54,6 @@ public class CropViewController: UIViewController {
     }
     
     public weak var delegate: CropViewControllerDelegate?
-    public var mode: CropViewControllerMode = .normal
     public var config = Mantis.Config()
     
     private var orientation: UIInterfaceOrientation = .unknown
@@ -83,7 +77,6 @@ public class CropViewController: UIViewController {
     
     init(image: UIImage,
          config: Mantis.Config = Mantis.Config(),
-         mode: CropViewControllerMode = .normal,
          cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) {
         self.image = image
         
@@ -96,7 +89,6 @@ public class CropViewController: UIViewController {
             ()
         }        
         
-        self.mode = mode
         self.cropToolbar = cropToolbar
         
         super.init(nibName: nil, bundle: nil)
@@ -136,12 +128,6 @@ public class CropViewController: UIViewController {
                 }
                 
                 config.cropToolbarConfig.includeFixedRatiosSettingButton = true
-        }
-                
-        if mode == .normal {
-            config.cropToolbarConfig.mode = .normal
-        } else {
-            config.cropToolbarConfig.mode = .simple
         }
         
         cropToolbar.createToolbarUI(config: config.cropToolbarConfig)                
