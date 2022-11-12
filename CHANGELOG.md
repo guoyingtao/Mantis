@@ -2,6 +2,13 @@
 
 -----
 
+### [2.2.2](https://www.github.com/guoyingtao/Mantis/compare/v2.2.1...v2.2.2) (2022-11-12)
+
+
+### Bug Fixes
+
+* present full screen for mac catalyst ([#226](https://www.github.com/guoyingtao/Mantis/issues/226)) ([3921dbc](https://www.github.com/guoyingtao/Mantis/commit/3921dbc9ffc9da9de7a6e9b6f07a5b32b76bef81))
+
 ### [2.2.1](https://www.github.com/guoyingtao/Mantis/compare/v2.2.0...v2.2.1) (2022-11-02)
 
 
