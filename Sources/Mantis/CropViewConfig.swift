@@ -29,9 +29,9 @@ public struct CropViewConfig {
     
     public var showRotationDial = true
     
-    var minimumBoxSize: CGFloat = 42
+    public var padding: CGFloat = 14
     
-    var padding: CGFloat = 14
+    var minimumCropBoxSize: CGFloat = 42
 
     public init() {}
 }

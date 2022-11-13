@@ -304,7 +304,7 @@ class CropView: UIView {
     }
     
     func updateCropBoxFrame(with point: CGPoint) {
-        let cropViewMinimumBoxSize = cropViewConfig.minimumBoxSize
+        let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
 
         let contentFrame = getContentBounds()
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(with: point, and: contentFrame, aspectRatioLockEnabled: aspectRatioLockEnabled)
