@@ -11,16 +11,16 @@ import UIKit
     Inside Mantis, CropViewController implements all delegate methods 
  */
 public protocol CropToolbarDelegate: AnyObject {
-    func didSelectCancel()
-    func didSelectCrop()
-    func didSelectCounterClockwiseRotate()
-    func didSelectClockwiseRotate()
-    func didSelectReset()
-    func didSelectSetRatio()
-    func didSelectRatio(ratio: Double)
-    func didSelectAlterCropper90Degree()
-    func didSelectHorizontallyFlip()
-    func didSelectVerticallyFlip()
+    func didSelectCancel(_ cropToolbar: CropToolbarProtocol)
+    func didSelectCrop(_ cropToolbar: CropToolbarProtocol)
+    func didSelectCounterClockwiseRotate(_ cropToolbar: CropToolbarProtocol)
+    func didSelectClockwiseRotate(_ cropToolbar: CropToolbarProtocol)
+    func didSelectReset(_ cropToolbar: CropToolbarProtocol)
+    func didSelectSetRatio(_ cropToolbar: CropToolbarProtocol)
+    func didSelectRatio(_ cropToolbar: CropToolbarProtocol, ratio: Double)
+    func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol)
+    func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol)
+    func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol)
 }
 
 public protocol CropToolbarIconProvider: AnyObject {

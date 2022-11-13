@@ -88,15 +88,15 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     }
             
     @objc private func crop() {
-        cropToolbarDelegate?.didSelectCrop()
+        cropToolbarDelegate?.didSelectCrop(self)
     }
     
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelectCancel()
+        cropToolbarDelegate?.didSelectCancel(self)
     }
     
     @objc private func showRatioList() {
-        cropToolbarDelegate?.didSelectSetRatio()
+        cropToolbarDelegate?.didSelectSetRatio(self)
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {

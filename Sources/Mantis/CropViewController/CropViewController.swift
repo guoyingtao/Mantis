@@ -525,43 +525,43 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
-    public func didSelectHorizontallyFlip() {
+    public func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol) {
         handleHorizontallyFlip()
     }
     
-    public func didSelectVerticallyFlip() {
+    public func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol) {
         handleVerticallyFlip()
     }
     
-    public func didSelectCancel() {
+    public func didSelectCancel(_ cropToolbar: CropToolbarProtocol) {
         handleCancel()
     }
     
-    public func didSelectCrop() {
+    public func didSelectCrop(_ cropToolbar: CropToolbarProtocol) {
         handleCrop()
     }
     
-    public func didSelectCounterClockwiseRotate() {
+    public func didSelectCounterClockwiseRotate(_ cropToolbar: CropToolbarProtocol) {
         handleRotate(rotateAngle: -CGFloat.pi / 2)
     }
     
-    public func didSelectClockwiseRotate() {
+    public func didSelectClockwiseRotate(_ cropToolbar: CropToolbarProtocol) {
         handleRotate(rotateAngle: CGFloat.pi / 2)
     }
     
-    public func didSelectReset() {
+    public func didSelectReset(_ cropToolbar: CropToolbarProtocol) {
         handleReset()
     }
     
-    public func didSelectSetRatio() {
+    public func didSelectSetRatio(_ cropToolbar: CropToolbarProtocol) {
         handleSetRatio()
     }
     
-    public func didSelectRatio(ratio: Double) {
+    public func didSelectRatio(_ cropToolbar: CropToolbarProtocol, ratio: Double) {
         setFixedRatio(ratio)
     }
     
-    public func didSelectAlterCropper90Degree() {
+    public func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol) {
         handleAlterCropper90Degree()
     }    
 }
