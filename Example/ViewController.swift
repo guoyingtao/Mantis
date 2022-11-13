@@ -36,6 +36,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         }
         
         var config = Mantis.Config()
+        config.cropMode = .async
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip]
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)

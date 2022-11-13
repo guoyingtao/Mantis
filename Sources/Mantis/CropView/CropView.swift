@@ -69,6 +69,23 @@ class CropView: UIView {
     
     private var cropFrameKVO: NSKeyValueObservation?
     
+    lazy private var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(frame: .zero)
+        activityIndicator.color = .white
+        let indicatorSize: CGFloat = 100
+        activityIndicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+        
+        addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        activityIndicator.widthAnchor.constraint(equalToConstant: indicatorSize).isActive = true
+        activityIndicator.heightAnchor.constraint(equalToConstant: indicatorSize).isActive = true
+        
+        return activityIndicator
+    } ()
+    
     deinit {
         print("CropView deinit.")
     }
@@ -699,6 +716,19 @@ extension CropView {
     
     func crop() -> CropOutput {
         return crop(image)
+    }
+    
+    /// completion is called in the main thread
+    func asynCrop(completion: @escaping (_ cropOutput: CropOutput) -> Void ) {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            let cropOutput = self.crop()
+            DispatchQueue.main.async {
+                completion(cropOutput)
+            }
+        }
     }
         
     func handleDeviceRotated() {
