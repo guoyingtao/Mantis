@@ -39,7 +39,7 @@
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 2.2.1'
+pod 'Mantis', '~> 2.3.0'
 ```
 </details>
 
@@ -55,7 +55,7 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Respository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 2.2.1
+* Rules: Version - Exact - 2.3.0
 
 </details>
 
