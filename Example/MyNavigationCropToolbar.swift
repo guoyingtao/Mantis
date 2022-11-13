@@ -45,14 +45,14 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc func crop() {
-        cropToolbarDelegate?.didSelectCrop()
+        cropToolbarDelegate?.didSelectCrop(self)
     }
     
     @objc func cancel() {
-        cropToolbarDelegate?.didSelectCancel()
+        cropToolbarDelegate?.didSelectCancel(self)
     }
     
     @objc func rotate() {
-        cropToolbarDelegate?.didSelectClockwiseRotate()
+        cropToolbarDelegate?.didSelectClockwiseRotate(self)
     }
 }

@@ -203,39 +203,39 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 // Objc functions
 extension CropToolbar {
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelectCancel()
+        cropToolbarDelegate?.didSelectCancel(self)
     }
 
     @objc private func setRatio() {
-        cropToolbarDelegate?.didSelectSetRatio()
+        cropToolbarDelegate?.didSelectSetRatio(self)
     }
 
     @objc private func reset(_ sender: Any) {
-        cropToolbarDelegate?.didSelectReset()
+        cropToolbarDelegate?.didSelectReset(self)
     }
 
     @objc private func counterClockwiseRotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectCounterClockwiseRotate()
+        cropToolbarDelegate?.didSelectCounterClockwiseRotate(self)
     }
 
     @objc private func clockwiseRotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectClockwiseRotate()
+        cropToolbarDelegate?.didSelectClockwiseRotate(self)
     }
 
     @objc private func alterCropper90Degree(_ sender: Any) {
-        cropToolbarDelegate?.didSelectAlterCropper90Degree()
+        cropToolbarDelegate?.didSelectAlterCropper90Degree(self)
     }
     
     @objc private func horizontallyFlip(_ sender: Any) {
-        cropToolbarDelegate?.didSelectHorizontallyFlip()
+        cropToolbarDelegate?.didSelectHorizontallyFlip(self)
     }
 
     @objc private func verticallyFlip(_ sender: Any) {
-        cropToolbarDelegate?.didSelectVerticallyFlip()
+        cropToolbarDelegate?.didSelectVerticallyFlip(self)
     }
 
     @objc private func crop(_ sender: Any) {
-        cropToolbarDelegate?.didSelectCrop()
+        cropToolbarDelegate?.didSelectCrop(self)
     }
 }
 
