@@ -565,7 +565,7 @@ extension CropViewController {
             let cropOutput = cropView.crop()
             handleCropOutput(cropOutput)
         case .async:
-            cropView.asynCrop(completion: handleCropOutput)
+            cropView.asyncCrop(completion: handleCropOutput)
         }
         
         func handleCropOutput(_ cropOutput: CropOutput) {

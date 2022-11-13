@@ -719,13 +719,14 @@ extension CropView {
     }
     
     /// completion is called in the main thread
-    func asynCrop(completion: @escaping (_ cropOutput: CropOutput) -> Void ) {
+    func asyncCrop(completion: @escaping (_ cropOutput: CropOutput) -> Void ) {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
         DispatchQueue.global(qos: .userInteractive).async {
             let cropOutput = self.crop()
             DispatchQueue.main.async {
+                self.activityIndicator.isHidden = true
                 completion(cropOutput)
             }
         }
