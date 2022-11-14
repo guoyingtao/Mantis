@@ -433,16 +433,7 @@ public class CropViewController: UIViewController {
     }
     
     private func handleCrop() {
-        let cropResult = cropView.crop()
-        guard let image = cropResult.croppedImage else {
-            delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
-            return
-        }
-        
-        delegate?.cropViewControllerDidCrop(self,
-                                                 cropped: image,
-                                                 transformation: cropResult.transformation,
-                                                 cropInfo: cropResult.cropInfo)        
+        crop()
     }
 }
 
@@ -569,16 +560,25 @@ extension CropViewController: CropToolbarDelegate {
 // API
 extension CropViewController {
     public func crop() {
-        let cropResult = cropView.crop()
-        guard let image = cropResult.croppedImage else {
-            delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
-            return
+        switch config.cropMode {
+        case .sync:
+            let cropOutput = cropView.crop()
+            handleCropOutput(cropOutput)
+        case .async:
+            cropView.asyncCrop(completion: handleCropOutput)
         }
         
-        delegate?.cropViewControllerDidCrop(self,
-                                            cropped: image,
-                                            transformation: cropResult.transformation,
-                                            cropInfo: cropResult.cropInfo)
+        func handleCropOutput(_ cropOutput: CropOutput) {
+            guard let image = cropOutput.croppedImage else {
+                delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
+                return
+            }
+            
+            delegate?.cropViewControllerDidCrop(self,
+                                                cropped: image,
+                                                transformation: cropOutput.transformation,
+                                                cropInfo: cropOutput.cropInfo)
+        }
     }
     
     public func process(_ image: UIImage) -> UIImage? {

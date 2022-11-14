@@ -32,6 +32,14 @@ public class LocalizationConfig {
     
 // MARK: - Config
 public struct Config {
+    
+    public enum CropMode {
+        case sync
+        case async // We may need this mode when cropping big images
+    }
+    
+    public var cropMode: CropMode = .sync
+    
     public var cropViewConfig = CropViewConfig()    
     public var cropToolbarConfig: CropToolbarConfigProtocol = CropToolbarConfig()
     
