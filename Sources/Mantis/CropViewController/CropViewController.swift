@@ -60,7 +60,8 @@ public class CropViewController: UIViewController {
 
     private lazy var cropView = CropView(
         image: image,
-        cropViewConfig: config.cropViewConfig
+        cropViewConfig: config.cropViewConfig,
+        cropBottomPadding: cropBottomPadding
     )
 
     private var cropToolbar: CropToolbarProtocol
@@ -70,6 +71,7 @@ public class CropViewController: UIViewController {
     private var cropStackView: UIStackView!
     private var initialLayout = false
     private var disableRotation = false
+    private var cropBottomPadding: CGFloat = 0
     
     deinit {
         print("CropViewController deinit.")
@@ -77,7 +79,8 @@ public class CropViewController: UIViewController {
     
     init(image: UIImage,
          config: Mantis.Config = Mantis.Config(),
-         cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) {
+         cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero),
+         cropBottomPadding: CGFloat = 0) {
         self.image = image
         
         self.config = config
@@ -90,6 +93,7 @@ public class CropViewController: UIViewController {
         }        
         
         self.cropToolbar = cropToolbar
+        self.cropBottomPadding = cropBottomPadding
         
         super.init(nibName: nil, bundle: nil)
     }

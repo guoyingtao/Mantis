@@ -86,13 +86,16 @@ class CropView: UIView {
         return activityIndicator
     } ()
     
+    private var cropBottomPadding: CGFloat = 0
+    
     deinit {
         print("CropView deinit.")
     }
     
     init(
         image: UIImage,
-        cropViewConfig: CropViewConfig = Mantis.Config().cropViewConfig
+        cropViewConfig: CropViewConfig = Mantis.Config().cropViewConfig,
+        cropBottomPadding: CGFloat = 0
     ) {
         self.image = image
 
@@ -102,6 +105,7 @@ class CropView: UIView {
         )
 
         self.cropViewConfig = cropViewConfig
+        self.cropBottomPadding = cropBottomPadding
         
         imageContainer = ImageContainer()
         gridOverlayView = CropOverlayView()
@@ -125,14 +129,14 @@ class CropView: UIView {
             self.cropMaskViewManager.adaptMaskTo(match: cropFrame, cropRatio: cropRatio)
         }
                 
-        initalRender()
+        initialRender()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initalRender() {
+    private func initialRender() {
         setupUI()
         checkImageStatusChanged()
     }
@@ -142,7 +146,7 @@ class CropView: UIView {
         
         switch viewStatus {
         case .initial:
-            initalRender()
+            initialRender()
         case .rotating(let angle):
             viewModel.degrees = angle.degrees
             rotateScrollView()
@@ -222,6 +226,7 @@ class CropView: UIView {
         }
         
         setGridOverlayView()
+        setUpCropBottomPadding()
     }
     
     func resetUIFrame() {
@@ -267,6 +272,14 @@ class CropView: UIView {
         gridOverlayView.isUserInteractionEnabled = false
         gridOverlayView.gridHidden = true
         addSubview(gridOverlayView)
+    }
+    
+    private func setUpCropBottomPadding() {
+        let spacer = UIView()
+        gridOverlayView.addSubview(spacer)
+        NSLayoutConstraint.activate([
+            spacer.heightAnchor.constraint(equalToConstant: cropBottomPadding),
+            spacer.bottomAnchor.constraint(equalTo: self.bottomAnchor)])
     }
     
     private func setupAngleDashboard() {
