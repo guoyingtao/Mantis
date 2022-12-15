@@ -41,12 +41,17 @@ class EmbeddedCropViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cropViewController = segue.destination as? CropViewController {
-            cropViewController.image = image
             cropViewController.delegate = self
-            
+                        
             var config = Mantis.Config()
             config.cropToolbarConfig.mode = .embedded
             cropViewController.config = config
+            
+            if let image = image {
+                Mantis.setupCropView(for: cropViewController, with: image, and: config.cropViewConfig)
+            }
+            
+            Mantis.setupCropToolbar(for: cropViewController)
             
             self.cropViewController = cropViewController
         }

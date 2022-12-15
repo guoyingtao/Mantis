@@ -45,25 +45,14 @@ public extension CropViewControllerDelegate where Self: UIViewController {
 }
 
 public class CropViewController: UIViewController {
-    /// When a CropViewController is used in a storyboard,
-    /// passing an image to it is needed after the CropViewController is created.
-    public var image: UIImage! {
-        didSet {
-            cropView.image = image
-        }
-    }
-    
     public weak var delegate: CropViewControllerDelegate?
     public var config = Mantis.Config()
     
     private var orientation: UIInterfaceOrientation = .unknown
 
-    private lazy var cropView = CropView(
-        image: image,
-        cropViewConfig: config.cropViewConfig
-    )
-
-    private var cropToolbar: CropToolbarProtocol
+    var cropView: CropViewProtocol!
+    var cropToolbar: CropToolbarProtocol!
+    
     private var ratioPresenter: RatioPresenter?
     private var ratioSelector: RatioSelector?
     private var stackView: UIStackView?
@@ -75,11 +64,7 @@ public class CropViewController: UIViewController {
         print("CropViewController deinit.")
     }
     
-    init(image: UIImage,
-         config: Mantis.Config = Mantis.Config(),
-         cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) {
-        self.image = image
-        
+    init(config: Mantis.Config = Mantis.Config()) {
         self.config = config
 
         switch config.cropViewConfig.cropShapeType {
@@ -89,13 +74,10 @@ public class CropViewController: UIViewController {
             ()
         }        
         
-        self.cropToolbar = cropToolbar
-        
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.cropToolbar = CropToolbar(frame: CGRect.zero)
         super.init(coder: aDecoder)
     }
     
@@ -247,7 +229,7 @@ public class CropViewController: UIViewController {
     }
     
     private func handleCancel() {
-        delegate?.cropViewControllerDidCancel(self, original: image)
+        delegate?.cropViewControllerDidCancel(self, original: cropView.image)
     }
     
     private func resetRatioButton() {

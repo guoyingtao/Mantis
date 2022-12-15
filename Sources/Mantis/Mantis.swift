@@ -33,10 +33,26 @@ private(set) var bundle: Bundle? = {
 // MARK: - APIs
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
-                               cropToolbar: CropToolbarProtocol = CropToolbar(frame: CGRect.zero)) -> CropViewController {
-    return CropViewController(image: image,
-                              config: config,
-                              cropToolbar: cropToolbar)
+                               cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)) -> CropViewController {
+    let cropViewController = CropViewController(config: config)
+    setupCropView(for: cropViewController, with: image, and: config.cropViewConfig)
+    setupCropToolbar(for: cropViewController, with: cropToolbar)
+    return cropViewController
+}
+
+public func setupCropView(for cropViewController: CropViewController, with image: UIImage, and cropViewConfig: CropViewConfig) {
+    let cropView = CropView(image: image, cropViewConfig: cropViewConfig)
+    cropViewController.cropView = cropView
+}
+
+public func setupCropToolbar(for cropViewController: CropViewController, with cropToolbar: CropToolbarProtocol? = nil) {
+    guard let cropToolbar = cropToolbar else {
+        let cropToolbar = CropToolbar(frame: .zero)
+        cropViewController.cropToolbar = cropToolbar
+        return
+    }
+    
+    cropViewController.cropToolbar = cropToolbar
 }
 
 public func locateResourceBundle(by hostClass: AnyClass) {

@@ -208,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				66100E06294B7059001C8593 /* CropViewProtocol.swift */,
+				5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -241,7 +242,6 @@
 		OBJ_23 /* CropViewController */ = {
 			isa = PBXGroup;
 			children = (
-				5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */,
 				OBJ_24 /* CropToolbar.swift */,
 				OBJ_25 /* CropViewController.swift */,
 				OBJ_26 /* FixedRatioManager.swift */,
