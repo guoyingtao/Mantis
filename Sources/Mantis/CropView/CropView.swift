@@ -125,11 +125,38 @@ class CropView: UIView {
             self.cropMaskViewManager.adaptMaskTo(match: cropFrame, cropRatio: cropRatio)
         }
                 
-        initalRender()
+        initalRender()        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initialSetup(delegate: CropViewDelegate, alwaysUsingOnePresetFixedRatio: Bool = false) {
+        self.delegate = delegate
+        setViewDefaultProperties()
+        forceFixedRatio = alwaysUsingOnePresetFixedRatio
+    }
+    
+    func setViewDefaultProperties() {
+        clipsToBounds = true
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func setFixedRatio(_ ratio: Double, zoom: Bool = true, alwaysUsingOnePresetFixedRatio: Bool = false) {
+        aspectRatioLockEnabled = true
+        
+        if viewModel.aspectRatio != CGFloat(ratio) {
+            viewModel.aspectRatio = CGFloat(ratio)
+            
+            if alwaysUsingOnePresetFixedRatio {
+                setFixedRatioCropBox(zoom: zoom)
+            } else {
+                UIView.animate(withDuration: 0.5) {
+                    self.setFixedRatioCropBox(zoom: zoom)
+                }
+            }
+        }
     }
     
     private func initalRender() {
@@ -825,6 +852,16 @@ extension CropView {
         })
     }
     
+    func handleAlterCropper90Degree() {
+        let ratio = Double(gridOverlayView.frame.height / gridOverlayView.frame.width)
+        
+        viewModel.aspectRatio = CGFloat(ratio)
+        
+        UIView.animate(withDuration: 0.5) {
+            self.setFixedRatioCropBox()
+        }
+    }
+    
     func reset() {
         scrollView.removeFromSuperview()
         gridOverlayView.removeFromSuperview()
@@ -906,6 +943,108 @@ extension CropView {
         }
     }
     
+    func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
+        let cropFrame = viewModel.cropOrignFrame
+        let contentBound = getContentBounds()
+        
+        let adjustScale: CGFloat
+        var maskFrameWidth: CGFloat
+        var maskFrameHeight: CGFloat
+        
+        if transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width {
+            maskFrameHeight = contentBound.height
+            maskFrameWidth = transformInfo.maskFrame.width / transformInfo.maskFrame.height * maskFrameHeight
+            adjustScale = maskFrameHeight / transformInfo.maskFrame.height
+        } else {
+            maskFrameWidth = contentBound.width
+            maskFrameHeight = transformInfo.maskFrame.height / transformInfo.maskFrame.width * maskFrameWidth
+            adjustScale = maskFrameWidth / transformInfo.maskFrame.width
+        }
+        
+        var newTransform = transformInfo
+        
+        newTransform.offset = CGPoint(x: transformInfo.offset.x * adjustScale,
+                                      y: transformInfo.offset.y * adjustScale)
+        
+        newTransform.maskFrame = CGRect(x: cropFrame.origin.x + (cropFrame.width - maskFrameWidth) / 2,
+                                        y: cropFrame.origin.y + (cropFrame.height - maskFrameHeight) / 2,
+                                        width: maskFrameWidth,
+                                        height: maskFrameHeight)
+        newTransform.scrollBounds = CGRect(x: transformInfo.scrollBounds.origin.x * adjustScale,
+                                           y: transformInfo.scrollBounds.origin.y * adjustScale,
+                                           width: transformInfo.scrollBounds.width * adjustScale,
+                                           height: transformInfo.scrollBounds.height * adjustScale)
+        
+        return newTransform
+    }
+    
+    func getTransformInfo(byNormalizedInfo normailizedInfo: CGRect) -> Transformation {
+        let cropFrame = viewModel.cropBoxFrame
+        
+        let scale: CGFloat = min(1/normailizedInfo.width, 1/normailizedInfo.height)
+        
+        var offset = cropFrame.origin
+        offset.x = cropFrame.width * normailizedInfo.origin.x * scale
+        offset.y = cropFrame.height * normailizedInfo.origin.y * scale
+        
+        var maskFrame = cropFrame
+        
+        if normailizedInfo.width > normailizedInfo.height {
+            let adjustScale = 1 / normailizedInfo.width
+            maskFrame.size.height = normailizedInfo.height * cropFrame.height * adjustScale
+            maskFrame.origin.y += (cropFrame.height - maskFrame.height) / 2
+        } else if normailizedInfo.width < normailizedInfo.height {
+            let adjustScale = 1 / normailizedInfo.height
+            maskFrame.size.width = normailizedInfo.width * cropFrame.width * adjustScale
+            maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2
+        }
+        
+        let manualZoomed = (scale != 1.0)
+        let transformantion = Transformation(offset: offset,
+                                             rotation: 0,
+                                             scale: scale,
+                                             manualZoomed: manualZoomed,
+                                             intialMaskFrame: .zero,
+                                             maskFrame: maskFrame,
+                                             scrollBounds: .zero)
+        return transformantion
+    }
+
+    func processPresetTransformation(completion: (Transformation) -> Void) {
+        switch cropViewConfig.presetTransformationType {
+        case .presetInfo(let transformInfo):
+            var newTransform = getTransformInfo(byTransformInfo: transformInfo)
+            
+            // The first transform is just for retrieving the final cropBoxFrame
+            transform(byTransformInfo: newTransform, rotateDial: false)
+            
+            // The second transform is for adjusting the scale of transformInfo
+            let adjustScale = (viewModel.cropBoxFrame.width / viewModel.cropOrignFrame.width)
+            / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
+            newTransform.scale *= adjustScale
+            transform(byTransformInfo: newTransform)
+            completion(transformInfo)
+        case .presetNormalizedInfo(let normailizedInfo):
+            let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo)
+            transform(byTransformInfo: transformInfo)
+            scrollView.frame = transformInfo.maskFrame
+            completion(transformInfo)
+        case .none:
+            break
+        }
+    }
+    
+    func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation) {
+        aspectRatioLockEnabled = true
+        
+        if ratio == 0 {
+            viewModel.aspectRatio = transformation.maskFrame.width / transformation.maskFrame.height
+        } else {
+            viewModel.aspectRatio = CGFloat(ratio)
+            setFixedRatioCropBox(zoom: false, cropBox: viewModel.cropBoxFrame)
+        }
+    }
+
     func getExpectedCropImageSize() -> CGSize {
         image.getExpectedCropImageSize(by: getCropInfo())
     }
