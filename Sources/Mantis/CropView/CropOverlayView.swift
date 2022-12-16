@@ -37,7 +37,7 @@ class CropOverlayView: UIView {
             if !corners.isEmpty {
                 layoutLines()
                 handleEdgeTouched(with: tappedEdge)
-            }            
+            }
         }
     }
     
@@ -98,12 +98,13 @@ class CropOverlayView: UIView {
     }
     
     private func layoutGridLines() {
-        for index in 0..<gridLineNumberType.rawValue {
+        let helpLineNumber = gridLineNumberType.getHelpLineNumber()
+        for index in 0..<helpLineNumber {
             horizontalGridLines[index].frame = CGRect(x: 0,
-                                                      y: CGFloat(index + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1),
+                                                      y: CGFloat(index + 1) * frame.height / CGFloat(helpLineNumber + 1),
                                                       width: frame.width,
                                                       height: 1)
-            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1),
+            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(helpLineNumber + 1),
                                                     y: 0,
                                                     width: 1,
                                                     height: frame.height)
@@ -118,7 +119,7 @@ class CropOverlayView: UIView {
     private func setupHorizontalGridLines() {
         horizontalGridLines.forEach { $0.removeFromSuperview() }
         horizontalGridLines.removeAll()
-        for _ in 0..<gridLineNumberType.rawValue {
+        for _ in 0..<gridLineNumberType.getHelpLineNumber() {
             let view = createNewLine()
             view.backgroundColor = gridColor
             horizontalGridLines.append(view)
@@ -128,7 +129,7 @@ class CropOverlayView: UIView {
     private func setupVerticalGridLines() {
         verticalGridLines.forEach { $0.removeFromSuperview() }
         verticalGridLines.removeAll()
-        for _ in 0..<gridLineNumberType.rawValue {
+        for _ in 0..<gridLineNumberType.getHelpLineNumber() {
             let view = createNewLine()
             view.backgroundColor = gridColor
             verticalGridLines.append(view)
@@ -150,7 +151,7 @@ class CropOverlayView: UIView {
         
         let topLeftHorizonalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: cropOverLayerCornerWidth, height: borderThickness)
         let topLeftVerticalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: borderThickness, height: cropOverLayerCornerWidth)
-                
+        
         let horizontalDistanceForHCorner = bounds.width + 2 * borderThickness - cropOverLayerCornerWidth
         let verticalDistanceForHCorner = bounds.height + borderThickness
         let horizontalDistanceForVCorner = bounds.width + borderThickness
@@ -238,7 +239,7 @@ class CropOverlayView: UIView {
                                     height: borderLine.frame.height)
         default:
             hintLine.removeFromSuperview()
-        }        
+        }
     }
     
     func handleEdgeUntouched() {
@@ -260,9 +261,20 @@ extension CropOverlayView {
         case bottomLeftHorizontal
     }
     
-    enum GridLineNumberType: Int {
-        case none = 0
-        case crop = 2
-        case rotate = 8
+    enum GridLineNumberType {
+        case none
+        case crop
+        case rotate
+        
+        func getHelpLineNumber() -> Int {
+            switch self {
+            case .none:
+                return 0
+            case .crop:
+                return 2
+            case .rotate:
+                return 8
+            }
+        }
     }
 }

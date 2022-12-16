@@ -27,6 +27,12 @@
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E06294B7059001C8593 /* CropViewProtocol.swift */; };
+		66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */; };
+		66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */; };
+		66100E0D294BAE94001C8593 /* CropOverlayViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */; };
+		66100E0F294BAEA5001C8593 /* RotationDialProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */; };
+		66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */; };
+		66100E13294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */; };
 		663FCF3928866DDA003D3B9E /* CropViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663FCF3728866DDA003D3B9E /* CropViewConfig.swift */; };
 		663FCF3A28866DDA003D3B9E /* CropToolbarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663FCF3828866DDA003D3B9E /* CropToolbarConfig.swift */; };
 		664A7E9F2884606800DF7C79 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A7E9E2884606800DF7C79 /* Global.swift */; };
@@ -107,6 +113,12 @@
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		66100E06294B7059001C8593 /* CropViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewProtocol.swift; sourceTree = "<group>"; };
+		66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerProtocol.swift; sourceTree = "<group>"; };
+		66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelProtocol.swift; sourceTree = "<group>"; };
+		66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropOverlayViewProtocol.swift; sourceTree = "<group>"; };
+		66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialProtocol.swift; sourceTree = "<group>"; };
+		66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropScrollViewProtocol.swift; sourceTree = "<group>"; };
+		66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropMaskViewManagerProtocol.swift; sourceTree = "<group>"; };
 		663FCF3728866DDA003D3B9E /* CropViewConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewConfig.swift; sourceTree = "<group>"; };
 		663FCF3828866DDA003D3B9E /* CropToolbarConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarConfig.swift; sourceTree = "<group>"; };
 		664A7E9E2884606800DF7C79 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
@@ -209,6 +221,12 @@
 			children = (
 				66100E06294B7059001C8593 /* CropViewProtocol.swift */,
 				5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */,
+				66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */,
+				66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */,
+				66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */,
+				66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */,
+				66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */,
+				66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -570,6 +588,7 @@
 				OBJ_69 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
 				OBJ_70 /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
 				OBJ_71 /* CropMaskViewManager.swift in Sources */,
+				66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */,
 				OBJ_72 /* CropOverlayView.swift in Sources */,
 				OBJ_73 /* CropScrollView.swift in Sources */,
 				66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */,
@@ -579,14 +598,18 @@
 				OBJ_76 /* CropView.swift in Sources */,
 				OBJ_77 /* CropViewModel.swift in Sources */,
 				6659429F2877DC8A0096A5DB /* Enum.swift in Sources */,
+				66100E13294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift in Sources */,
 				OBJ_78 /* CropViewStatus.swift in Sources */,
 				OBJ_79 /* ImageContainer.swift in Sources */,
 				66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */,
+				66100E0F294BAEA5001C8593 /* RotationDialProtocol.swift in Sources */,
+				66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */,
 				5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */,
 				OBJ_80 /* CropToolbar.swift in Sources */,
 				OBJ_81 /* CropViewController.swift in Sources */,
 				OBJ_82 /* FixedRatioManager.swift in Sources */,
 				OBJ_83 /* RatioPresenter.swift in Sources */,
+				66100E0D294BAE94001C8593 /* CropOverlayViewProtocol.swift in Sources */,
 				OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */,
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
@@ -609,6 +632,7 @@
 				OBJ_95 /* CGAngle.swift in Sources */,
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
+				66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */,
 				OBJ_99 /* RotationDial.swift in Sources */,
 				6659429D2877DAE80096A5DB /* Config.swift in Sources */,
 				OBJ_100 /* RotationDialPlate.swift in Sources */,

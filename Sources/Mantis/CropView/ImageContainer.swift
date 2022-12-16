@@ -15,19 +15,16 @@ class ImageContainer: UIView {
         imageView.layer.minificationFilter = .trilinear
         imageView.accessibilityIgnoresInvertColors = true
         imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
         
         addSubview(imageView)
         
         return imageView
     }()
 
-    var image: UIImage? {
-        didSet {
-            imageView.frame = bounds
-            imageView.image = image
-            
-            imageView.isUserInteractionEnabled = true
-        }
+    func setup(with image: UIImage) {
+        imageView.frame = bounds
+        imageView.image = image
     }
     
     override func layoutSubviews() {

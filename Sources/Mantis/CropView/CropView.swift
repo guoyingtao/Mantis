@@ -36,7 +36,7 @@ class CropView: UIView {
     
     var image: UIImage {
         didSet {
-            imageContainer.image = image
+            imageContainer.setup(with: image)
         }
     }
     let viewModel: CropViewModel
@@ -92,7 +92,7 @@ class CropView: UIView {
     
     init(
         image: UIImage,
-        cropViewConfig: CropViewConfig = Mantis.Config().cropViewConfig
+        cropViewConfig: CropViewConfig
     ) {
         self.image = image
 
@@ -210,7 +210,7 @@ class CropView: UIView {
     
     private func setupUI() {
         setupScrollView()
-        imageContainer.image = image
+        imageContainer.setup(with: image)
         
         scrollView.addSubview(imageContainer)
         scrollView.imageContainer = imageContainer
