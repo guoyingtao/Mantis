@@ -35,7 +35,7 @@ class ImageContainer: UIView {
         imageView.frame = bounds
     }
     
-    func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 1e-6) -> Bool {
+    func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 0.5) -> Bool {
         let newRect = view.convert(rect, to: self)
         
         let point1 = newRect.origin

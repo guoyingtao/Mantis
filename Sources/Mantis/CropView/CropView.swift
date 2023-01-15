@@ -84,7 +84,7 @@ class CropView: UIView {
         activityIndicator.heightAnchor.constraint(equalToConstant: indicatorSize).isActive = true
         
         return activityIndicator
-    } ()
+    }()
     
     deinit {
         print("CropView deinit.")
@@ -321,12 +321,23 @@ class CropView: UIView {
     }
     
     func updateCropBoxFrame(with point: CGPoint) {
-        let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
-
-        let contentFrame = getContentBounds()
-        let newCropBoxFrame = viewModel.getNewCropBoxFrame(with: point, and: contentFrame, aspectRatioLockEnabled: aspectRatioLockEnabled)
-        
         let contentBounds = getContentBounds()
+        
+        guard contentBounds.contains(point) else {
+            return
+        }
+        
+        let imageFrame = CGRect(x: scrollView.frame.origin.x - scrollView.contentOffset.x,
+                                y: scrollView.frame.origin.y - scrollView.contentOffset.y,
+                                width: imageContainer.frame.width,
+                                height: imageContainer.frame.height)
+        
+        guard imageFrame.contains(point) else {
+            return
+        }
+        
+        let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
+        let newCropBoxFrame = viewModel.getNewCropBoxFrame(with: point, and: contentBounds, aspectRatioLockEnabled: aspectRatioLockEnabled)
         
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
                 && newCropBoxFrame.minX >= contentBounds.minX
@@ -373,7 +384,7 @@ class CropView: UIView {
             
             viewModel.cropBoxFrame = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
         }
-    }    
+    }
 }
 
 // MARK: - Adjust UI
