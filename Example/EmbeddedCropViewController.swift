@@ -45,13 +45,7 @@ class EmbeddedCropViewController: UIViewController {
                         
             var config = Mantis.Config()
             config.cropToolbarConfig.mode = .embedded
-            cropViewController.config = config
-            
-            if let image = image {
-                Mantis.setupCropView(for: cropViewController, with: image, and: config.cropViewConfig)
-            }
-            
-            Mantis.setupCropToolbar(for: cropViewController)
+            Mantis.setupCropViewController(cropViewController, with: image, and: config)
             
             self.cropViewController = cropViewController
         }

@@ -10,5 +10,3 @@ import UIKit
 protocol RotationDialProtocol: UIView {
     
 }
-
-
