@@ -40,25 +40,32 @@ enum ImageRotationType: CGFloat {
     }
 }
 
-class CropViewModel: NSObject {
+class CropViewModel: CropViewModelProtocol {
     init(
         cropViewPadding: CGFloat,
         hotAreaUnit: CGFloat
     ) {
         self.cropViewPadding = cropViewPadding
         self.hotAreaUnit = hotAreaUnit
-        super.init()
     }
 
     var statusChanged: (_ status: CropViewStatus) -> Void = { _ in }
     
     var viewStatus: CropViewStatus = .initial {
         didSet {
-            self.statusChanged(viewStatus)
+            statusChanged(viewStatus)
         }
     }
     
-    @objc dynamic var cropBoxFrame = CGRect.zero
+    var cropBoxFrameChanged: (_ frame: CGRect) -> Void = { _ in }
+    
+    var cropBoxFrame = CGRect.zero {
+        didSet {
+            if oldValue != cropBoxFrame {
+                cropBoxFrameChanged(cropBoxFrame)
+            }
+        }
+    }
     var cropOrignFrame = CGRect.zero
     
     var panOriginPoint = CGPoint.zero
@@ -72,8 +79,8 @@ class CropViewModel: NSObject {
     
     var rotationType: ImageRotationType = .none
     var aspectRatio: CGFloat = -1    
-    var cropLeftTopOnImage: CGPoint = .zero
-    var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
+    var cropLeftTopOnImage = CGPoint.zero
+    var cropRightBottomOnImage = CGPoint(x: 1, y: 1)
     
     var horizontallyFlip = false
     var verticallyFlip = false
@@ -204,36 +211,5 @@ class CropViewModel: NSObject {
         cropBoxFrame.origin.y = center.y - cropBoxFrame.height / 2
         
         self.cropBoxFrame = cropBoxFrame
-    }
-}
-
-// MARK: - Handle view status changes
-extension CropViewModel {
-    func setInitialStatus() {
-        viewStatus = .initial
-    }
-    
-    func setRotatingStatus(by angle: CGAngle) {
-        viewStatus = .rotating(angle: angle)
-    }
-    
-    func setDegree90RotatingStatus() {
-        viewStatus = .degree90Rotating
-    }
-    
-    func setTouchImageStatus() {
-        viewStatus = .touchImage
-    }
-
-    func setTouchRotationBoardStatus() {
-        viewStatus = .touchRotationBoard
-    }
-
-    func setTouchCropboxHandleStatus() {
-        viewStatus = .touchCropboxHandle(tappedEdge: tappedEdge)
-    }
-    
-    func setBetweenOperationStatus() {
-        viewStatus = .betweenOperation
     }
 }
