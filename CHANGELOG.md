@@ -2,6 +2,18 @@
 
 -----
 
+## [2.4.0](https://www.github.com/guoyingtao/Mantis/compare/v2.3.0...v2.4.0) (2023-01-16)
+
+
+### Features
+
+* support async crop ([#232](https://www.github.com/guoyingtao/Mantis/issues/232)) ([69e5640](https://www.github.com/guoyingtao/Mantis/commit/69e5640f64bee3c0cfd06526ab4fdecb70450fe9))
+
+
+### Bug Fixes
+
+* fix the issue that sometimes it is hard to move crop box ([#243](https://www.github.com/guoyingtao/Mantis/issues/243)) ([af51496](https://www.github.com/guoyingtao/Mantis/commit/af51496d8a33894e0f3a8576f75c72b11f75d55f))
+
 ## [2.3.0](https://www.github.com/guoyingtao/Mantis/compare/v2.2.1...v2.3.0) (2022-11-13)
 
 
