@@ -221,11 +221,11 @@
 			children = (
 				66100E06294B7059001C8593 /* CropViewProtocol.swift */,
 				5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */,
-				66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */,
 				66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */,
 				66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */,
 				66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */,
 				66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */,
+				66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */,
 				66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */,
 			);
 			path = Protocols;

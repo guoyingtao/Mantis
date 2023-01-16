@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CropOverlayView: UIView {
+class CropOverlayView: UIView, CropOverlayViewProtocol {
     private var boarderNormalColor = UIColor.white
     private var boarderHintColor = UIColor.white
     private var hintLine = UIView()
@@ -259,22 +259,5 @@ extension CropOverlayView {
         case bottomRightHorizontal
         case bottomLeftVertical
         case bottomLeftHorizontal
-    }
-    
-    enum GridLineNumberType {
-        case none
-        case crop
-        case rotate
-        
-        func getHelpLineNumber() -> Int {
-            switch self {
-            case .none:
-                return 0
-            case .crop:
-                return 2
-            case .rotate:
-                return 8
-            }
-        }
-    }
+    }    
 }

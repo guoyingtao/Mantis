@@ -30,8 +30,8 @@ extension CropView {
     private func isHitGridOverlayView(by touchPoint: CGPoint) -> Bool {
         let hotAreaUnit = cropViewConfig.cropBoxHotAreaUnit
         
-        return gridOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
-        && !gridOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(touchPoint)
+        return cropOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
+        && !cropOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(touchPoint)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -72,7 +72,7 @@ extension CropView {
         super.touchesEnded(touches, with: event)
         
         if viewModel.needCrop() {
-            gridOverlayView.handleEdgeUntouched()
+            cropOverlayView.handleEdgeUntouched()
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
                 self?.delegate?.cropViewDidEndResize(self!)

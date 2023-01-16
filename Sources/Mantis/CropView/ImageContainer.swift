@@ -21,17 +21,19 @@ class ImageContainer: UIView {
         
         return imageView
     }()
-
-    func setup(with image: UIImage) {
-        imageView.frame = bounds
-        imageView.image = image
-    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.frame = bounds
     }
-    
+}
+
+extension ImageContainer: ImageContainerProtocol {
+    func setup(with image: UIImage) {
+        imageView.frame = bounds
+        imageView.image = image
+    }
+
     func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 0.5) -> Bool {
         let newRect = view.convert(rect, to: self)
         

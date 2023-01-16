@@ -45,8 +45,15 @@ public func setupCropView(for cropViewController: CropViewController, with image
         cropViewPadding: cropViewConfig.padding,
         hotAreaUnit: cropViewConfig.cropBoxHotAreaUnit
     )
+    
+    let cropOverlayView = CropOverlayView()
+    let imageContainer = ImageContainer()
 
-    let cropView = CropView(image: image, cropViewConfig: cropViewConfig, viewModel: viewModel)
+    let cropView = CropView(image: image,
+                            cropViewConfig: cropViewConfig,
+                            viewModel: viewModel,
+                            cropOverlayView: cropOverlayView,
+                            imageContainer: imageContainer)
     cropViewController.cropView = cropView
 }
 

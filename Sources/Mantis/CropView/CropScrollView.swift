@@ -10,7 +10,7 @@ import UIKit
 
 class CropScrollView: UIScrollView {
     
-    weak var imageContainer: ImageContainer?
+    weak var imageContainer: ImageContainerProtocol?
     
     var touchesBegan = {}
     var touchesCancelled = {}
