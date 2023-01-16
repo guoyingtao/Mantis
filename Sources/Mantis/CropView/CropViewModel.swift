@@ -6,7 +6,7 @@
 //  Copyright © 2018 Echo. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum ImageRotationType: CGFloat {
     case none = 0
