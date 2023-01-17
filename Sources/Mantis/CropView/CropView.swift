@@ -126,7 +126,8 @@ class CropView: UIView {
     }
     
     private func initalRender() {
-        setupUI()
+        setupScrollView()
+        setGridOverlayView()
         checkImageStatusChanged()
     }
     
@@ -201,23 +202,11 @@ class CropView: UIView {
         }
     }
     
-    private func setupUI() {
-        setupScrollView()
-        
-        if cropViewConfig.minimumZoomScale > 1 {
-            scrollView.zoomScale = cropViewConfig.minimumZoomScale
-        }
-        
-        setGridOverlayView()
-    }
-    
-    func resetUIFrame() {
+    func resetComponents() {
         cropMaskViewManager.removeMaskViews()
         cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageRatioH()))
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
-        
         scrollView.resetImageContent(by: viewModel.cropBoxFrame)
-        
         cropOverlayView.superview?.bringSubviewToFront(cropOverlayView)
         
         setupAngleDashboard()
@@ -238,6 +227,10 @@ class CropView: UIView {
         
         scrollView.delegate = self
         addSubview(scrollView)
+        
+        if cropViewConfig.minimumZoomScale > 1 {
+            scrollView.zoomScale = cropViewConfig.minimumZoomScale
+        }
     }
     
     private func setGridOverlayView() {
@@ -749,11 +742,7 @@ extension CropView: CropViewProtocol {
             return Double(1/image.ratioH())
         }
     }
-    
-    func adaptForCropBox() {
-        resetUIFrame()
-    }
-    
+        
     func prepareForDeviceRotation() {
         viewModel.setDegree90RotatingStatus()
         saveAnchorPoints()
@@ -998,7 +987,7 @@ extension CropView: CropViewProtocol {
         
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         
-        resetUIFrame()
+        resetComponents()
         
         delegate?.cropViewDidBecomeUnResettable(self)
         delegate?.cropViewDidEndResize(self)

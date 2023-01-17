@@ -161,7 +161,7 @@ public class CropViewController: UIViewController {
         if initialLayout == false {
             initialLayout = true
             view.layoutIfNeeded()
-            cropView.adaptForCropBox()
+            cropView.resetComponents()
         }
     }
     
