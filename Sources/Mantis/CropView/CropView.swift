@@ -54,9 +54,7 @@ class CropView: UIView {
     let cropOverlayView: CropOverlayViewProtocol
     var rotationDial: RotationDial?
     
-    lazy var scrollView = CropScrollView(frame: bounds,
-                                         minimumZoomScale: cropViewConfig.minimumZoomScale,
-                                         maximumZoomScale: cropViewConfig.maximumZoomScale)
+    let scrollView: CropScrollViewProtocol
     lazy var cropMaskViewManager = CropMaskViewManager(with: self,
                                                        cropRatio: CGFloat(getImageRatioH()),
                                                        cropShapeType: cropViewConfig.cropShapeType,
@@ -93,15 +91,17 @@ class CropView: UIView {
         cropViewConfig: CropViewConfig,
         viewModel: CropViewModelProtocol,
         cropOverlayView: CropOverlayViewProtocol,
-        imageContainer: ImageContainerProtocol
+        imageContainer: ImageContainerProtocol,
+        cropScrollView: CropScrollViewProtocol
     ) {
         self.image = image
         self.cropViewConfig = cropViewConfig
         self.viewModel = viewModel
         self.cropOverlayView = cropOverlayView
         self.imageContainer = imageContainer
+        self.scrollView = cropScrollView
         
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         
         viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)
@@ -226,13 +226,7 @@ class CropView: UIView {
         cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageRatioH()))
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
-        scrollView.transform = .identity
-        scrollView.resetBy(rect: viewModel.cropBoxFrame)
-        
-        imageContainer.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
-        
-        scrollView.contentOffset = CGPoint(x: (imageContainer.frame.width - scrollView.frame.width) / 2,
-                                           y: (imageContainer.frame.height - scrollView.frame.height) / 2)
+        scrollView.resetImageContent(by: viewModel.cropBoxFrame)
         
         cropOverlayView.superview?.bringSubviewToFront(cropOverlayView)
         
@@ -779,7 +773,7 @@ extension CropView: CropViewProtocol {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
         scrollView.transform = CGAffineTransform(scaleX: 1, y: 1)
-        scrollView.resetBy(rect: viewModel.cropBoxFrame)
+        scrollView.reset(by: viewModel.cropBoxFrame)
         
         setupAngleDashboard()
         rotateScrollView()

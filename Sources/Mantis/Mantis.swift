@@ -48,12 +48,14 @@ public func setupCropView(for cropViewController: CropViewController, with image
     
     let cropOverlayView = CropOverlayView()
     let imageContainer = ImageContainer()
+    let cropScrollView = CropScrollView(frame: .zero, minimumZoomScale: 1.0, maximumZoomScale: 15.0)
 
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
                             viewModel: viewModel,
                             cropOverlayView: cropOverlayView,
-                            imageContainer: imageContainer)
+                            imageContainer: imageContainer,
+                            cropScrollView: cropScrollView)
     cropViewController.cropView = cropView
 }
 
