@@ -47,15 +47,21 @@ public func setupCropView(for cropViewController: CropViewController, with image
     )
     
     let cropOverlayView = CropOverlayView()
-    let imageContainer = ImageContainer()
-    let cropScrollView = CropScrollView(frame: .zero, minimumZoomScale: 1.0, maximumZoomScale: 15.0)
-
+    let imageContainer = ImageContainer(with: image)
+    let cropScrollView = CropScrollView(frame: .zero,
+                                        minimumZoomScale: cropViewConfig.minimumZoomScale,
+                                        maximumZoomScale: cropViewConfig.maximumZoomScale,
+                                        imageContainer: imageContainer)
+    let cropMaskViewManager = CropMaskViewManager(cropShapeType: cropViewConfig.cropShapeType,
+                                                  cropMaskVisualEffectType: cropViewConfig.cropMaskVisualEffectType)
+    
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
                             viewModel: viewModel,
                             cropOverlayView: cropOverlayView,
                             imageContainer: imageContainer,
-                            cropScrollView: cropScrollView)
+                            cropScrollView: cropScrollView,
+                            cropMaskViewManager: cropMaskViewManager)
     cropViewController.cropView = cropView
 }
 

@@ -9,13 +9,17 @@
 import UIKit
 
 final class CropScrollView: UIScrollView {
-    weak var imageContainer: ImageContainerProtocol?
+    var imageContainer: ImageContainerProtocol?
     
     var touchesBegan = {}
     var touchesCancelled = {}
     var touchesEnded = {}
     
     private var initialMinimumZoomScale: CGFloat = 1.0
+    
+    deinit {
+        print("CropScrollView deinit")
+    }
         
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesBegan()
@@ -45,7 +49,10 @@ final class CropScrollView: UIScrollView {
 }
 
 extension CropScrollView: CropScrollViewProtocol {
-    convenience init(frame: CGRect, minimumZoomScale: CGFloat, maximumZoomScale: CGFloat) {
+    convenience init(frame: CGRect,
+                     minimumZoomScale: CGFloat,
+                     maximumZoomScale: CGFloat,
+                     imageContainer: ImageContainerProtocol) {
         self.init(frame: frame)
         
         alwaysBounceHorizontal = true
@@ -53,12 +60,15 @@ extension CropScrollView: CropScrollViewProtocol {
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInsetAdjustmentBehavior = .never
-        self.minimumZoomScale = minimumZoomScale
-        self.maximumZoomScale = maximumZoomScale
-        initialMinimumZoomScale = minimumZoomScale
         clipsToBounds = false
         contentSize = bounds.size
         layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+
+        self.minimumZoomScale = minimumZoomScale
+        self.maximumZoomScale = maximumZoomScale
+        initialMinimumZoomScale = minimumZoomScale
+        self.imageContainer = imageContainer
+        addSubview(self.imageContainer!)
     }
 
     func checkContentOffset() {

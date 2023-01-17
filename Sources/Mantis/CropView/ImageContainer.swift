@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageContainer: UIView {
+final class ImageContainer: UIView {
 
     lazy private var imageView: UIImageView = {
         let imageView = UIImageView(frame: bounds)
@@ -29,8 +29,8 @@ class ImageContainer: UIView {
 }
 
 extension ImageContainer: ImageContainerProtocol {
-    func setup(with image: UIImage) {
-        imageView.frame = bounds
+    convenience init(with image: UIImage) {
+        self.init()
         imageView.image = image
     }
 

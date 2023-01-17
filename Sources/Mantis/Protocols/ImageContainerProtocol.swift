@@ -8,6 +8,6 @@
 import UIKit
 
 protocol ImageContainerProtocol: UIView {
-    func setup(with image: UIImage)
+    init(with image: UIImage)
     func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat) -> Bool
 }

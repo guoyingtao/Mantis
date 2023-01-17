@@ -10,7 +10,7 @@ import UIKit
 
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let newPoint = self.convert(point, to: self)
+        let newPoint = convert(point, to: self)
         
         if let rotationDial = rotationDial, rotationDial.frame.contains(newPoint) {
             return rotationDial
@@ -20,8 +20,8 @@ extension CropView {
             return self
         }
         
-        if self.bounds.contains(newPoint) {
-            return self.scrollView
+        if bounds.contains(newPoint) {
+            return scrollView
         }
         
         return nil

@@ -13,7 +13,7 @@ protocol CropScrollViewProtocol: UIScrollView {
     var touchesCancelled: () -> Void { get set }
     var touchesEnded: () -> Void { get set }
     
-    init(frame: CGRect, minimumZoomScale: CGFloat, maximumZoomScale: CGFloat)
+    init(frame: CGRect, minimumZoomScale: CGFloat, maximumZoomScale: CGFloat, imageContainer: ImageContainerProtocol)
     func checkContentOffset()
     func updateMinZoomScale()
     func zoomScaleToBound(animated: Bool)

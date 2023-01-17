@@ -34,11 +34,8 @@ protocol CropViewDelegate: AnyObject {
 class CropView: UIView {
     private let angleDashboardHeight: CGFloat = 60
     
-    var image: UIImage {
-        didSet {
-            imageContainer.setup(with: image)
-        }
-    }
+    var image: UIImage
+    
     let viewModel: CropViewModelProtocol
     
     weak var delegate: CropViewDelegate? {
@@ -52,13 +49,10 @@ class CropView: UIView {
     // Referred to in extension
     let imageContainer: ImageContainerProtocol
     let cropOverlayView: CropOverlayViewProtocol
-    var rotationDial: RotationDial?
-    
     let scrollView: CropScrollViewProtocol
-    lazy var cropMaskViewManager = CropMaskViewManager(with: self,
-                                                       cropRatio: CGFloat(getImageRatioH()),
-                                                       cropShapeType: cropViewConfig.cropShapeType,
-                                                       cropMaskVisualEffectType: cropViewConfig.cropMaskVisualEffectType)
+    let cropMaskViewManager: CropMaskViewManagerProtocol
+    
+    var rotationDial: RotationDial?
     
     var manualZoomed = false
     var forceFixedRatio = false
@@ -92,7 +86,8 @@ class CropView: UIView {
         viewModel: CropViewModelProtocol,
         cropOverlayView: CropOverlayViewProtocol,
         imageContainer: ImageContainerProtocol,
-        cropScrollView: CropScrollViewProtocol
+        cropScrollView: CropScrollViewProtocol,
+        cropMaskViewManager: CropMaskViewManagerProtocol
     ) {
         self.image = image
         self.cropViewConfig = cropViewConfig
@@ -100,6 +95,7 @@ class CropView: UIView {
         self.cropOverlayView = cropOverlayView
         self.imageContainer = imageContainer
         self.scrollView = cropScrollView
+        self.cropMaskViewManager = cropMaskViewManager
         
         super.init(frame: .zero)
         
@@ -110,7 +106,7 @@ class CropView: UIView {
         viewModel.cropBoxFrameChanged = { [weak self] cropBoxFrame in
             self?.handleCropBoxFrameChange(cropBoxFrame)
         }
-                
+        
         initalRender()
     }
     
@@ -207,12 +203,6 @@ class CropView: UIView {
     
     private func setupUI() {
         setupScrollView()
-        imageContainer.setup(with: image)
-        
-        scrollView.addSubview(imageContainer)
-        scrollView.imageContainer = imageContainer
-        scrollView.minimumZoomScale = cropViewConfig.minimumZoomScale
-        scrollView.maximumZoomScale = cropViewConfig.maximumZoomScale
         
         if cropViewConfig.minimumZoomScale > 1 {
             scrollView.zoomScale = cropViewConfig.minimumZoomScale
