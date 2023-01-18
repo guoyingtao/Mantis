@@ -14,7 +14,7 @@ class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
     var cropShapeType: CropShapeType = .rect
     var imageRatio: CGFloat = 1.0
     
-    fileprivate var translucencyEffect: UIVisualEffect?
+    private var translucencyEffect: UIVisualEffect?
     
     convenience init(cropShapeType: CropShapeType = .rect,
                      effectType: CropMaskVisualEffectType = .blurDark,

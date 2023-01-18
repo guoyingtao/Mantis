@@ -81,7 +81,7 @@ public class CropViewController: UIViewController {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func createRatioSelector() {
+    private func createRatioSelector() {
         let fixedRatioManager = getFixedRatioManager()
         ratioSelector = RatioSelector(type: fixedRatioManager.type,
                                       originalRatioH: fixedRatioManager.originalRatioH,
@@ -91,7 +91,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    fileprivate func createCropToolbar() {
+    private func createCropToolbar() {
         cropToolbar.cropToolbarDelegate = self
         
         switch config.presetFixedRatioType {
@@ -126,7 +126,7 @@ public class CropViewController: UIViewController {
         }
     }
     
-    fileprivate func getFixedRatioManager() -> FixedRatioManager {
+    private func getFixedRatioManager() -> FixedRatioManager {
         let type: RatioType = getRatioType()
         
         let ratio = cropView.getImageRatioH()
@@ -304,7 +304,7 @@ public class CropViewController: UIViewController {
 
 // Auto layout
 extension CropViewController {
-    fileprivate func initLayout() {
+    private func initLayout() {
         cropStackView = UIStackView()
         cropStackView.axis = .vertical
         cropStackView.addArrangedSubview(cropView)
@@ -326,7 +326,7 @@ extension CropViewController {
         stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
     }
     
-    fileprivate func setStackViewAxis() {
+    private func setStackViewAxis() {
         if Orientation.isPortrait {
             stackView?.axis = .vertical
         } else if Orientation.isLandscape {
@@ -334,7 +334,7 @@ extension CropViewController {
         }
     }
     
-    fileprivate func changeStackViewOrder() {
+    private func changeStackViewOrder() {
         guard config.showAttachedCropToolbar else {
             stackView?.removeArrangedSubview(cropStackView)
             stackView?.addArrangedSubview(cropStackView)
@@ -353,7 +353,7 @@ extension CropViewController {
         }
     }
             
-    fileprivate func updateLayout() {
+    private func updateLayout() {
         setStackViewAxis()
         cropToolbar.respondToOrientationChange()
         changeStackViewOrder()

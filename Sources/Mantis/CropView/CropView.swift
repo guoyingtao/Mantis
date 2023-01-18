@@ -424,7 +424,7 @@ extension CropView {
         return contentRect
     }
     
-    fileprivate func getImageLeftTopAnchorPoint() -> CGPoint {
+    private func getImageLeftTopAnchorPoint() -> CGPoint {
         if imageContainer.bounds.size == .zero {
             return viewModel.cropLeftTopOnImage
         }
@@ -434,7 +434,7 @@ extension CropView {
         return point
     }
     
-    fileprivate func getImageRightBottomAnchorPoint() -> CGPoint {
+    private func getImageRightBottomAnchorPoint() -> CGPoint {
         if imageContainer.bounds.size == .zero {
             return viewModel.cropRightBottomOnImage
         }
@@ -444,7 +444,7 @@ extension CropView {
         return point
     }
     
-    fileprivate func saveAnchorPoints() {
+    private func saveAnchorPoints() {
         viewModel.cropLeftTopOnImage = getImageLeftTopAnchorPoint()
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
     }
@@ -453,11 +453,8 @@ extension CropView {
                             animation: Bool = true,
                             zoom: Bool = true,
                             completion: @escaping () -> Void) {
-        let scaleX: CGFloat
-        let scaleY: CGFloat
-        
-        scaleX = contentRect.width / viewModel.cropBoxFrame.size.width
-        scaleY = contentRect.height / viewModel.cropBoxFrame.size.height
+        let scaleX = contentRect.width / viewModel.cropBoxFrame.size.width
+        let scaleY = contentRect.height / viewModel.cropBoxFrame.size.height
         
         let scale = min(scaleX, scaleY)
         
@@ -478,6 +475,7 @@ extension CropView {
         if scaleFrame.width >= refContentWidth {
             scaleFrame.size.width = refContentWidth
         }
+        
         if scaleFrame.height >= refContentHeight {
             scaleFrame.size.height = refContentHeight
         }
@@ -526,7 +524,7 @@ extension CropView {
         }
     }
     
-    fileprivate func updatePosition(by radians: CGFloat) {
+    private func updatePosition(by radians: CGFloat) {
         let width = abs(cos(radians)) * cropOverlayView.frame.width + abs(sin(radians)) * cropOverlayView.frame.height
         let height = abs(sin(radians)) * cropOverlayView.frame.width + abs(cos(radians)) * cropOverlayView.frame.height
         
@@ -671,7 +669,7 @@ extension CropView {
         return viewModel.getTotalRadians()
     }
     
-    fileprivate func setRotation(byRadians radians: CGFloat) {
+    private func setRotation(byRadians radians: CGFloat) {
         scrollView.transform = CGAffineTransform(rotationAngle: radians)
         updatePosition(by: radians)
         rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
