@@ -8,7 +8,6 @@
 import Foundation
 
 protocol RotationDialViewModelProtocol {
-    var rotationAngle: CGAngle { get set }
     var didSetRotationAngle: (CGAngle) -> Void { get set }
     var touchPoint: CGPoint? { get set }
     func setup(with midPoint: CGPoint)

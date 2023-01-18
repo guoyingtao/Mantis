@@ -9,12 +9,6 @@
 import UIKit
 
 class RotationDialViewModel: RotationDialViewModelProtocol {
-    var rotationAngle = CGAngle(degrees: 0) {
-        didSet {
-            didSetRotationAngle(rotationAngle)
-        }
-    }
-    
     var didSetRotationAngle: (CGAngle) -> Void = { _ in }
     
     var touchPoint: CGPoint? {
@@ -29,7 +23,13 @@ class RotationDialViewModel: RotationDialViewModelProtocol {
             rotationAngle = CGAngle(radians: radians)
         }
     }
-    
+
+    private var rotationAngle = CGAngle(degrees: 0) {
+        didSet {
+            didSetRotationAngle(rotationAngle)
+        }
+    }
+
     private var rotationCalculator: RotationCalculator?
     
     func setup(with midPoint: CGPoint) {
