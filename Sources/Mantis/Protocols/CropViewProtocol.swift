@@ -21,7 +21,7 @@ protocol CropViewProtocol: UIView {
     func prepareForDeviceRotation()
     func handleDeviceRotated()
     func setFixedRatio(_ ratio: Double, zoom: Bool, alwaysUsingOnePresetFixedRatio: Bool)
-    func rotateBy90(rotateAngle: CGFloat, completion: @escaping () -> Void)
+    func rotateBy90(withRotateType rotateType: RotateBy90DegreeType, completion: @escaping () -> Void)
     func handleAlterCropper90Degree()
     func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation)
     

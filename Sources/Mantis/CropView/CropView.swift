@@ -796,36 +796,42 @@ extension CropView: CropViewProtocol {
         }
     }
     
-    func rotateBy90(rotateAngle: CGFloat, completion: @escaping () -> Void = {}) {
+    func rotateBy90(withRotateType rotateType: RotateBy90DegreeType, completion: @escaping () -> Void = {}) {
         viewModel.setDegree90RotatingStatus()
-        let rorateDuration = 0.25
-        var rect = cropOverlayView.frame
-        rect.size.width = cropOverlayView.frame.height
-        rect.size.height = cropOverlayView.frame.width
         
-        let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
-        
-        var newRotateAngle = rotateAngle
+        var newRotateType = rotateType
         
         if viewModel.horizontallyFlip {
-            newRotateAngle = -newRotateAngle
+            newRotateType.toggle()
         }
         
         if viewModel.verticallyFlip {
-            newRotateAngle = -newRotateAngle
+            newRotateType.toggle()
         }
         
-        UIView.animate(withDuration: rorateDuration, animations: {
-            self.viewModel.cropBoxFrame = newRect
-            self.scrollView.transform = self.scrollView.transform.rotated(by: newRotateAngle)
-            self.updatePositionFor90Rotation(by: newRotateAngle + self.viewModel.radians)
-        }, completion: {[weak self] _ in
-            guard let self = self else { return }
-            self.scrollView.updateMinZoomScale()
-            let type: RotateBy90DegreeType = newRotateAngle > 0 ? .clockwise : .counterClockwise
-            self.viewModel.rotateBy90(with: type)
-            self.viewModel.setBetweenOperationStatus()
+        func handleRotateAnimation() {
+            var rect = cropOverlayView.frame
+            rect.size.width = cropOverlayView.frame.height
+            rect.size.height = cropOverlayView.frame.width
+
+            let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
+            viewModel.cropBoxFrame = newRect
+            let rotateAngle = newRotateType == .clockwise ? CGFloat.pi / 2 : -CGFloat.pi / 2
+            scrollView.transform = scrollView.transform.rotated(by: rotateAngle)
+            updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
+        }
+        
+        func handleRoteteCompletion() {
+            scrollView.updateMinZoomScale()
+            viewModel.rotateBy90(withRotateType: newRotateType)
+            viewModel.setBetweenOperationStatus()
             completion()
+        }
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            handleRotateAnimation()
+        }, completion: { _ in
+            handleRoteteCompletion()
         })
     }
     
