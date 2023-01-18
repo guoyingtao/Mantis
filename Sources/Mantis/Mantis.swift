@@ -40,7 +40,9 @@ public func cropViewController(image: UIImage,
     return cropViewController
 }
 
-public func setupCropView(for cropViewController: CropViewController, with image: UIImage, and cropViewConfig: CropViewConfig) {
+public func setupCropView(for cropViewController: CropViewController,
+                          with image: UIImage,
+                          and cropViewConfig: CropViewConfig) {
     let viewModel = CropViewModel(
         cropViewPadding: cropViewConfig.padding,
         hotAreaUnit: cropViewConfig.cropBoxHotAreaUnit
@@ -73,11 +75,14 @@ public func setupCropView(for cropViewController: CropViewController, with image
     cropViewController.cropView = cropView
 }
 
-public func setupCropToolbar(for cropViewController: CropViewController, with cropToolbar: CropToolbarProtocol? = nil) {
+public func setupCropToolbar(for cropViewController: CropViewController,
+                             with cropToolbar: CropToolbarProtocol? = nil) {
     cropViewController.cropToolbar = cropToolbar ?? CropToolbar(frame: .zero)
 }
 
-public func setupCropViewController(_ cropViewController: CropViewController, with image: UIImage?, and config: Mantis.Config) {
+public func setupCropViewController(_ cropViewController: CropViewController,
+                                    with image: UIImage?,
+                                    and config: Mantis.Config) {
     cropViewController.config = config
     
     if let image = image {
