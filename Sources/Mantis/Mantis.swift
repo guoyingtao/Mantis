@@ -47,7 +47,7 @@ public func setupCropView(for cropViewController: CropViewController, with image
     )
     
     let cropOverlayView = CropOverlayView()
-    let imageContainer = ImageContainer(with: image)
+    let imageContainer = ImageContainer(image: image)
     let cropScrollView = CropScrollView(frame: .zero,
                                         minimumZoomScale: cropViewConfig.minimumZoomScale,
                                         maximumZoomScale: cropViewConfig.maximumZoomScale,
@@ -64,7 +64,10 @@ public func setupCropView(for cropViewController: CropViewController, with image
                             cropMaskViewManager: cropMaskViewManager)
     
     if cropViewConfig.showRotationDial {
-        cropView.rotationDial = RotationDial(frame: .zero, dialConfig: cropViewConfig.dialConfig)
+        let viewModel = RotationDialViewModel()
+        cropView.rotationDial = RotationDial(frame: .zero,
+                                             dialConfig: cropViewConfig.dialConfig,
+                                             viewModel: viewModel)
     }
     
     cropViewController.cropView = cropView

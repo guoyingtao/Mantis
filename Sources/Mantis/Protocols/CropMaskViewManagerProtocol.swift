@@ -11,9 +11,6 @@ protocol CropMaskViewManagerProtocol {
     var cropShapeType: CropShapeType { get set }
     var cropMaskVisualEffectType: CropMaskVisualEffectType { get set }
 
-    init(cropShapeType: CropShapeType,
-         cropMaskVisualEffectType: CropMaskVisualEffectType)
-    
     func setup(in view: UIView, cropRatio: CGFloat)
     func removeMaskViews()
     func bringMaskViewsToFront()

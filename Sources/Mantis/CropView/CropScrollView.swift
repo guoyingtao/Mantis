@@ -20,7 +20,33 @@ final class CropScrollView: UIScrollView {
     deinit {
         print("CropScrollView deinit")
     }
+    
+    init(frame: CGRect,
+         minimumZoomScale: CGFloat,
+         maximumZoomScale: CGFloat,
+         imageContainer: ImageContainerProtocol) {
+        super.init(frame: frame)
         
+        alwaysBounceHorizontal = true
+        alwaysBounceVertical = true
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
+        contentInsetAdjustmentBehavior = .never
+        clipsToBounds = false
+        contentSize = bounds.size
+        layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+
+        self.minimumZoomScale = minimumZoomScale
+        self.maximumZoomScale = maximumZoomScale
+        initialMinimumZoomScale = minimumZoomScale
+        self.imageContainer = imageContainer
+        addSubview(self.imageContainer!)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesBegan()
         super.touchesBegan(touches, with: event)
@@ -49,28 +75,6 @@ final class CropScrollView: UIScrollView {
 }
 
 extension CropScrollView: CropScrollViewProtocol {
-    convenience init(frame: CGRect,
-                     minimumZoomScale: CGFloat,
-                     maximumZoomScale: CGFloat,
-                     imageContainer: ImageContainerProtocol) {
-        self.init(frame: frame)
-        
-        alwaysBounceHorizontal = true
-        alwaysBounceVertical = true
-        showsHorizontalScrollIndicator = false
-        showsVerticalScrollIndicator = false
-        contentInsetAdjustmentBehavior = .never
-        clipsToBounds = false
-        contentSize = bounds.size
-        layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-
-        self.minimumZoomScale = minimumZoomScale
-        self.maximumZoomScale = maximumZoomScale
-        initialMinimumZoomScale = minimumZoomScale
-        self.imageContainer = imageContainer
-        addSubview(self.imageContainer!)
-    }
-
     func checkContentOffset() {
         contentOffset.x = max(contentOffset.x, 0)
         contentOffset.y = max(contentOffset.y, 0)

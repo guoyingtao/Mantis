@@ -9,7 +9,6 @@
 import UIKit
 
 final class ImageContainer: UIView {
-
     lazy private var imageView: UIImageView = {
         let imageView = UIImageView(frame: bounds)
         imageView.layer.minificationFilter = .trilinear
@@ -22,6 +21,15 @@ final class ImageContainer: UIView {
         return imageView
     }()
     
+    init(image: UIImage) {
+        super.init(frame: .zero)
+        imageView.image = image
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.frame = bounds
@@ -29,11 +37,6 @@ final class ImageContainer: UIView {
 }
 
 extension ImageContainer: ImageContainerProtocol {
-    convenience init(with image: UIImage) {
-        self.init()
-        imageView.image = image
-    }
-
     func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 0.5) -> Bool {
         let newRect = view.convert(rect, to: self)
         

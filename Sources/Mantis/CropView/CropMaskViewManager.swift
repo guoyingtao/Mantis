@@ -15,6 +15,13 @@ final class CropMaskViewManager {
     var cropShapeType: CropShapeType = .rect
     var cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark
     
+    init(cropShapeType: CropShapeType = .rect,
+         cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark) {
+        
+        self.cropShapeType = cropShapeType
+        self.cropMaskVisualEffectType = cropMaskVisualEffectType
+    }
+
     private func setupOverlayView(in view: UIView, cropRatio: CGFloat = 1.0) {
         dimmingView = CropDimmingView(cropShapeType: cropShapeType, cropRatio: cropRatio)
         dimmingView?.isUserInteractionEnabled = false
@@ -32,15 +39,6 @@ final class CropMaskViewManager {
 }
 
 extension CropMaskViewManager: CropMaskViewManagerProtocol {
-    convenience init(cropShapeType: CropShapeType = .rect,
-                     cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark) {
-        
-        self.init()
-        
-        self.cropShapeType = cropShapeType
-        self.cropMaskVisualEffectType = cropMaskVisualEffectType
-    }
-    
     func setup(in view: UIView, cropRatio: CGFloat = 1.0) {
         setupOverlayView(in: view, cropRatio: cropRatio)
         setupTranslucencyView(in: view, cropRatio: cropRatio)
