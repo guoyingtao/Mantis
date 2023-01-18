@@ -822,7 +822,8 @@ extension CropView: CropViewProtocol {
         }, completion: {[weak self] _ in
             guard let self = self else { return }
             self.scrollView.updateMinZoomScale()
-            self.viewModel.rotateBy90(rotateAngle: newRotateAngle)
+            let type: RotateBy90DegreeType = newRotateAngle > 0 ? .clockwise : .counterClockwise
+            self.viewModel.rotateBy90(with: type)
             self.viewModel.setBetweenOperationStatus()
             completion()
         })

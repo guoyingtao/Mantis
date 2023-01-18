@@ -94,3 +94,16 @@ public enum FixedRatiosShowType {
     case horizontal
     case vertical
 }
+
+enum RotateBy90DegreeType {
+    case clockwise
+    case counterClockwise
+    
+    mutating func toggle() {
+        if self == .clockwise {
+            self = .counterClockwise
+        } else {
+            self = .clockwise
+        }
+    }
+}

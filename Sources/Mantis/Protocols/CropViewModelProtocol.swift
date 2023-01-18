@@ -29,7 +29,7 @@ protocol CropViewModelProtocol: AnyObject {
     var verticallyFlip: Bool { get set }
     
     func reset(forceFixedRatio: Bool)
-    func rotateBy90(rotateAngle: CGFloat)
+    func rotateBy90(with type: RotateBy90DegreeType)
     func counterclockwiseRotateBy90()
     func clockwiseRotateBy90()
     func getTotalRadias(by radians: CGFloat) -> CGFloat

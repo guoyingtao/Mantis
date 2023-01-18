@@ -104,12 +104,12 @@ class CropViewModel: CropViewModelProtocol {
         
         setInitialStatus()
     }
-    
-    func rotateBy90(rotateAngle: CGFloat) {
-        if rotateAngle < 0 {
-            rotationType.counterclockwiseRotate90()
-        } else {
+        
+    func rotateBy90(with type: RotateBy90DegreeType) {
+        if type == .clockwise {
             rotationType.clockwiseRotate90()
+        } else {
+            rotationType.counterclockwiseRotate90()
         }
     }
     
