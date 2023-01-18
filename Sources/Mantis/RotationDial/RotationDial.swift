@@ -176,9 +176,6 @@ extension RotationDial {
 }
 
 extension RotationDial: RotationDialProtocol {
-    /// Setup the dial with your own config
-    ///
-    /// - Parameter dialConfig: dail config. If not provided, default config will be used
     func setup(with frame: CGRect) {
         self.frame = frame
         
