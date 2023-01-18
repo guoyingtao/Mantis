@@ -25,15 +25,15 @@
 import UIKit
 
 @IBDesignable
-class RotationDial: UIView {
-    @IBInspectable public var pointerHeight: CGFloat = 8
-    @IBInspectable public var spanBetweenDialPlateAndPointer: CGFloat = 6
-    @IBInspectable public var pointerWidth: CGFloat = 8 * sqrt(2)
+final class RotationDial: UIView {
+    @IBInspectable var pointerHeight: CGFloat = 8
+    @IBInspectable var spanBetweenDialPlateAndPointer: CGFloat = 6
+    @IBInspectable var pointerWidth: CGFloat = 8 * sqrt(2)
     
     var didRotate: (_ angle: CGAngle) -> Void = { _ in }
     var didFinishedRotate: () -> Void = { }
     
-    var dialConfig: DialConfig
+    private var dialConfig: DialConfig
     
     private var angleLimit = CGAngle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
@@ -52,22 +52,16 @@ class RotationDial: UIView {
         dialConfig = DialConfig()
         super.init(frame: frame)
         
-        setup()
+        setup(with: frame)
     }
-    
-    init(frame: CGRect, dialConfig: DialConfig) {
-        self.dialConfig = dialConfig
-        super.init(frame: frame)        
-        setup()
-    }
-    
+        
     required init?(coder aDecoder: NSCoder) {
         dialConfig = DialConfig()
         super.init(coder: aDecoder)
     }
 }
 
-// MARK: - private funtions
+// MARK: - private functions
 extension RotationDial {
     private func setupUI() {
         clipsToBounds = true
@@ -193,12 +187,19 @@ extension RotationDial {
     }
 }
 
-// MARK: - public API
-extension RotationDial {
+extension RotationDial: RotationDialProtocol {
+    convenience init(frame: CGRect, dialConfig: DialConfig) {
+        self.init(frame: frame)
+        self.dialConfig = dialConfig
+        setup(with: frame)
+    }
+
     /// Setup the dial with your own config
     ///
     /// - Parameter dialConfig: dail config. If not provided, default config will be used
-    func setup() {
+    func setup(with frame: CGRect) {
+        self.frame = frame
+        
         if case .limit(let angle) = dialConfig.rotationLimitType {
             angleLimit = angle
         }

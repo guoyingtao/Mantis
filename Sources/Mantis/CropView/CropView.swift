@@ -52,7 +52,7 @@ class CropView: UIView {
     let scrollView: CropScrollViewProtocol
     let cropMaskViewManager: CropMaskViewManagerProtocol
     
-    var rotationDial: RotationDial?
+    var rotationDial: RotationDialProtocol?
     
     var manualZoomed = false
     var forceFixedRatio = false
@@ -240,21 +240,19 @@ class CropView: UIView {
     }
     
     private func setupAngleDashboard() {
-        guard cropViewConfig.showRotationDial else {
+        guard cropViewConfig.showRotationDial, let rotationDial = rotationDial else {
             return
         }
         
-        if rotationDial != nil {
-            rotationDial?.removeFromSuperview()
-        }
+        rotationDial.removeFromSuperview()
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
-        let rotationDial = RotationDial(frame: CGRect(x: 0,
-                                                      y: 0,
-                                                      width: boardLength,
-                                                      height: angleDashboardHeight),
-                                        dialConfig: cropViewConfig.dialConfig)
-        self.rotationDial = rotationDial
+        let dialFrame = CGRect(x: 0,
+                               y: 0,
+                               width: boardLength,
+                               height: angleDashboardHeight)
+        rotationDial.setup(with: dialFrame)
+
         rotationDial.isUserInteractionEnabled = true
         addSubview(rotationDial)
         
@@ -594,7 +592,7 @@ extension CropView {
             manualZoomed: manualZoomed,
             intialMaskFrame: getInitialCropBoxRect(),
             maskFrame: cropOverlayView.frame,
-            scrollBounds: scrollView.bounds
+            scrollViewBounds: scrollView.bounds
         )
     }
     
@@ -859,8 +857,8 @@ extension CropView: CropViewProtocol {
     func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
         viewModel.setRotatingStatus(by: CGAngle(radians: transformation.rotation))
         
-        if transformation.scrollBounds != .zero {
-            scrollView.bounds = transformation.scrollBounds
+        if transformation.scrollViewBounds != .zero {
+            scrollView.bounds = transformation.scrollViewBounds
         }
         
         manualZoomed = transformation.manualZoomed
@@ -905,10 +903,10 @@ extension CropView: CropViewProtocol {
                                         y: cropFrame.origin.y + (cropFrame.height - maskFrameHeight) / 2,
                                         width: maskFrameWidth,
                                         height: maskFrameHeight)
-        newTransform.scrollBounds = CGRect(x: transformInfo.scrollBounds.origin.x * adjustScale,
-                                           y: transformInfo.scrollBounds.origin.y * adjustScale,
-                                           width: transformInfo.scrollBounds.width * adjustScale,
-                                           height: transformInfo.scrollBounds.height * adjustScale)
+        newTransform.scrollViewBounds = CGRect(x: transformInfo.scrollViewBounds.origin.x * adjustScale,
+                                               y: transformInfo.scrollViewBounds.origin.y * adjustScale,
+                                               width: transformInfo.scrollViewBounds.width * adjustScale,
+                                               height: transformInfo.scrollViewBounds.height * adjustScale)
         
         return newTransform
     }
@@ -941,7 +939,7 @@ extension CropView: CropViewProtocol {
                                              manualZoomed: manualZoomed,
                                              intialMaskFrame: .zero,
                                              maskFrame: maskFrame,
-                                             scrollBounds: .zero)
+                                             scrollViewBounds: .zero)
         return transformantion
     }
     

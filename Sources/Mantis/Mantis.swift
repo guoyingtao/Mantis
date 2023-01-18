@@ -62,6 +62,11 @@ public func setupCropView(for cropViewController: CropViewController, with image
                             imageContainer: imageContainer,
                             cropScrollView: cropScrollView,
                             cropMaskViewManager: cropMaskViewManager)
+    
+    if cropViewConfig.showRotationDial {
+        cropView.rotationDial = RotationDial(frame: .zero, dialConfig: cropViewConfig.dialConfig)
+    }
+    
     cropViewController.cropView = cropView
 }
 
