@@ -26,10 +26,6 @@ import UIKit
 
 var localizationConfig = LocalizationConfig()
 
-private(set) var bundle: Bundle? = {
-    return Mantis.Config.bundle
-}()
-
 // MARK: - APIs
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
@@ -43,37 +39,17 @@ public func cropViewController(image: UIImage,
 public func setupCropView(for cropViewController: CropViewController,
                           with image: UIImage,
                           and cropViewConfig: CropViewConfig) {
-    let viewModel = CropViewModel(
-        cropViewPadding: cropViewConfig.padding,
-        hotAreaUnit: cropViewConfig.cropBoxHotAreaUnit
-    )
-    
-    let cropOverlayView = CropOverlayView()
-    let imageContainer = ImageContainer(image: image)
-    let cropScrollView = CropScrollView(frame: .zero,
-                                        minimumZoomScale: cropViewConfig.minimumZoomScale,
-                                        maximumZoomScale: cropViewConfig.maximumZoomScale,
-                                        imageContainer: imageContainer)
-    
-    let dimmingView = CropDimmingView(cropShapeType: cropViewConfig.cropShapeType)
-    let visualEffectView = CropMaskVisualEffectView(cropShapeType: cropViewConfig.cropShapeType,
-                                                    effectType: cropViewConfig.cropMaskVisualEffectType)
-    let cropMaskViewManager = CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
+    let imageContainer = ImageContainer(image: image)        
     
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
-                            viewModel: viewModel,
-                            cropOverlayView: cropOverlayView,
+                            viewModel: buildCropViewModel(with: cropViewConfig),
+                            cropOverlayView: CropOverlayView(),
                             imageContainer: imageContainer,
-                            cropScrollView: cropScrollView,
-                            cropMaskViewManager: cropMaskViewManager)
+                            cropScrollView: buildCropScrollView(with: cropViewConfig, and: imageContainer),
+                            cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
     
-    if cropViewConfig.showRotationDial {
-        let viewModel = RotationDialViewModel()
-        cropView.rotationDial = RotationDial(frame: .zero,
-                                             dialConfig: cropViewConfig.dialConfig,
-                                             viewModel: viewModel)
-    }
+    setupRotationDialIfNeeded(with: cropViewConfig, and: cropView)
     
     cropViewController.cropView = cropView
 }
@@ -101,4 +77,39 @@ public func locateResourceBundle(by hostClass: AnyClass) {
 
 public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
     return image.crop(by: cropInfo)
+}
+
+// MARK: - private section
+private(set) var bundle: Bundle? = {
+    return Mantis.Config.bundle
+}()
+
+private func buildCropViewModel(with cropViewConfig: CropViewConfig) -> CropViewModelProtocol {
+    CropViewModel(
+        cropViewPadding: cropViewConfig.padding,
+        hotAreaUnit: cropViewConfig.cropBoxHotAreaUnit
+    )
+}
+
+private func buildCropScrollView(with cropViewConfig: CropViewConfig, and imageContainer: ImageContainerProtocol) -> CropScrollViewProtocol {
+    CropScrollView(frame: .zero,
+                   minimumZoomScale: cropViewConfig.minimumZoomScale,
+                   maximumZoomScale: cropViewConfig.maximumZoomScale,
+                   imageContainer: imageContainer)
+}
+
+private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> CropMaskViewManagerProtocol {
+    let dimmingView = CropDimmingView(cropShapeType: cropViewConfig.cropShapeType)
+    let visualEffectView = CropMaskVisualEffectView(cropShapeType: cropViewConfig.cropShapeType,
+                                                    effectType: cropViewConfig.cropMaskVisualEffectType)
+    return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
+}
+
+private func setupRotationDialIfNeeded(with cropViewConfig: CropViewConfig, and cropView: CropView) {
+    if cropViewConfig.showRotationDial {
+        let viewModel = RotationDialViewModel()
+        cropView.rotationDial = RotationDial(frame: .zero,
+                                             dialConfig: cropViewConfig.dialConfig,
+                                             viewModel: viewModel)
+    }
 }
