@@ -64,8 +64,8 @@ extension CropView {
             return
         }
         
-        let point = touch.location(in: self)
-        updateCropBoxFrame(with: point)
+        let touchPoint = touch.location(in: self)
+        updateCropBoxFrame(withTouchPoint: touchPoint)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

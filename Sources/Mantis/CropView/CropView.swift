@@ -291,10 +291,10 @@ class CropView: UIView {
         }
     }
     
-    func updateCropBoxFrame(with point: CGPoint) {
+    func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
         let contentBounds = getContentBounds()
         
-        guard contentBounds.contains(point) else {
+        guard contentBounds.contains(touchPoint) else {
             return
         }
         
@@ -303,12 +303,14 @@ class CropView: UIView {
                                 width: imageContainer.frame.width,
                                 height: imageContainer.frame.height)
         
-        guard imageFrame.contains(point) else {
+        guard imageFrame.contains(touchPoint) else {
             return
         }
         
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
-        let newCropBoxFrame = viewModel.getNewCropBoxFrame(with: point, and: contentBounds, aspectRatioLockEnabled: aspectRatioLockEnabled)
+        let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,
+                                                           andContentFrame: contentBounds,
+                                                           aspectRatioLockEnabled: aspectRatioLockEnabled)
         
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
                 && newCropBoxFrame.minX >= contentBounds.minX
@@ -683,7 +685,7 @@ extension CropView {
     func setFixedRatioCropBox(zoom: Bool = true, cropBox: CGRect? = nil) {
         let refCropBox = cropBox ?? getInitialCropBoxRect()
         let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: getImageHorizontalToVerticalRatio())
-        viewModel.setCropBoxFrame(by: refCropBox, and: imageHorizontalToVerticalRatio)
+        viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in

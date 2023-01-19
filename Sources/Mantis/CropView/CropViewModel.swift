@@ -150,14 +150,16 @@ class CropViewModel: CropViewModelProtocol {
         return !cropBoxOriginFrame.equalTo(cropBoxFrame)
     }
         
-    func getNewCropBoxFrame(with point: CGPoint, and contentFrame: CGRect, aspectRatioLockEnabled: Bool) -> CGRect {
-        var point = point
-        point.x = max(contentFrame.origin.x - cropViewPadding, point.x)
-        point.y = max(contentFrame.origin.y - cropViewPadding, point.y)
+    func getNewCropBoxFrame(withTouchPoint touchPoint: CGPoint,
+                            andContentFrame contentFrame: CGRect,
+                            aspectRatioLockEnabled: Bool) -> CGRect {
+        var touchPoint = touchPoint
+        touchPoint.x = max(contentFrame.origin.x - cropViewPadding, touchPoint.x)
+        touchPoint.y = max(contentFrame.origin.y - cropViewPadding, touchPoint.y)
         
-        // The delta between where we first tapped, and where our finger is now
-        let xDelta = ceil(point.x - panOriginPoint.x)
-        let yDelta = ceil(point.y - panOriginPoint.y)
+        // The delta descripes the difference between where we tapped in the beginning, and the current finger location
+        let xDelta = ceil(touchPoint.x - panOriginPoint.x)
+        let yDelta = ceil(touchPoint.y - panOriginPoint.y)
         
         let newCropBoxFrame: CGRect
         if aspectRatioLockEnabled {
@@ -179,7 +181,7 @@ class CropViewModel: CropViewModelProtocol {
         return newCropBoxFrame
     }
     
-    func setCropBoxFrame(by refCropBox: CGRect, and imageHorizontalToVerticalRatio: ImageHorizontalToVerticalRatio) {
+    func setCropBoxFrame(by refCropBox: CGRect, for imageHorizontalToVerticalRatio: ImageHorizontalToVerticalRatio) {
         var cropBoxFrame = refCropBox
         let center = cropBoxFrame.center
         

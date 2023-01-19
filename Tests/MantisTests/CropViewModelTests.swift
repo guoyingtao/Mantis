@@ -157,17 +157,45 @@ final class CropViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.needCrop())
     }
     
+    func testGetNewCropBoxFrame() {
+        let contentFrame = CGRect(x: 20, y: 200, width: 100, height: 200)
+        
+        viewModel.panOriginPoint = CGPoint(x: 20, y: 200)
+        viewModel.tappedEdge = .bottomLeft
+        viewModel.cropBoxFrame = contentFrame
+        viewModel.cropBoxOriginFrame = contentFrame
+        
+        // Test streching out the crop box from bottom left
+        var touchPoint = CGPoint(x: 10, y: 210)
+        var newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: false)
+        XCTAssertTrue(newCropBoxFrame.width > contentFrame.width)
+        XCTAssertTrue(newCropBoxFrame.height > contentFrame.height)
+        XCTAssertNotEqual(newCropBoxFrame.width / newCropBoxFrame.height, contentFrame.width / contentFrame.height)
+
+        newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: true)
+        XCTAssertTrue(newCropBoxFrame.width > contentFrame.width)
+        XCTAssertTrue(newCropBoxFrame.height > contentFrame.height)
+        XCTAssertEqual(newCropBoxFrame.width / newCropBoxFrame.height, contentFrame.width / contentFrame.height, accuracy: 0.1)
+        
+        // Test squizzing in the crop box from bottom left
+        touchPoint = CGPoint(x: 20, y: 190)
+        newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: true)
+        XCTAssertTrue(newCropBoxFrame.width < contentFrame.width)
+        XCTAssertTrue(newCropBoxFrame.height < contentFrame.height)
+        XCTAssertEqual(newCropBoxFrame.width / newCropBoxFrame.height, contentFrame.width / contentFrame.height, accuracy: 0.1)
+    }
+    
     func testSetCropBoxFrame() {
         let refCropBox = CGRect(x: 20, y: 20, width: 100, height: 200)
         viewModel.aspectRatio = 0.9
         let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: 1.2)
-        viewModel.setCropBoxFrame(by: refCropBox, and: imageHorizontalToVerticalRatio)
+        viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         XCTAssertEqual(viewModel.cropBoxFrame.center, refCropBox.center)
         XCTAssertEqual(viewModel.cropBoxFrame.height, refCropBox.height)
         XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
         
         viewModel.aspectRatio = 1.4
-        viewModel.setCropBoxFrame(by: refCropBox, and: imageHorizontalToVerticalRatio)
+        viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         XCTAssertEqual(viewModel.cropBoxFrame.center, refCropBox.center)
         XCTAssertEqual(viewModel.cropBoxFrame.width, refCropBox.width)
         XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
