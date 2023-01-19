@@ -36,7 +36,7 @@ public func cropViewController(image: UIImage,
 
 public func setupCropViewController(_ cropViewController: CropViewController,
                                     with image: UIImage,
-                                    and config: Mantis.Config) {
+                                    and config: Mantis.Config = Mantis.Config()) {
     cropViewController.config = config
     setupCropView(for: cropViewController, with: image, and: config.cropViewConfig)
     setupCropToolbar(for: cropViewController)
