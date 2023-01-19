@@ -16,7 +16,7 @@ protocol CropViewProtocol: UIView {
     func initialSetup(delegate: CropViewDelegate, alwaysUsingOnePresetFixedRatio: Bool)
     func setViewDefaultProperties()
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType
-    func getImageRatioH() -> Double
+    func getImageHorizontalToVerticalRatio() -> Double
     func resetComponents()
     func prepareForDeviceRotation()
     func handleDeviceRotated()

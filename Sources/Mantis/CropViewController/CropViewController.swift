@@ -129,7 +129,7 @@ public class CropViewController: UIViewController {
     private func getFixedRatioManager() -> FixedRatioManager {
         let type: RatioType = getRatioType()
         
-        let ratio = cropView.getImageRatioH()
+        let ratio = cropView.getImageHorizontalToVerticalRatio()
         
         return FixedRatioManager(type: type,
                                  originalRatioH: ratio,

@@ -156,4 +156,20 @@ final class CropViewModelTests: XCTestCase {
         viewModel.cropBoxFrame = frame1
         XCTAssertTrue(viewModel.needCrop())
     }
+    
+    func testSetCropBoxFrame() {
+        let refCropBox = CGRect(x: 20, y: 20, width: 100, height: 200)
+        viewModel.aspectRatio = 0.9
+        let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: 1.2)
+        viewModel.setCropBoxFrame(by: refCropBox, and: imageHorizontalToVerticalRatio)
+        XCTAssertEqual(viewModel.cropBoxFrame.center, refCropBox.center)
+        XCTAssertEqual(viewModel.cropBoxFrame.height, refCropBox.height)
+        XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
+        
+        viewModel.aspectRatio = 1.4
+        viewModel.setCropBoxFrame(by: refCropBox, and: imageHorizontalToVerticalRatio)
+        XCTAssertEqual(viewModel.cropBoxFrame.center, refCropBox.center)
+        XCTAssertEqual(viewModel.cropBoxFrame.width, refCropBox.width)
+        XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
+    }
 }

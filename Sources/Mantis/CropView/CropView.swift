@@ -204,7 +204,7 @@ class CropView: UIView {
     
     func resetComponents() {
         cropMaskViewManager.removeMaskViews()
-        cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageRatioH()))
+        cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageHorizontalToVerticalRatio()))
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
         cropAuxiliaryIndicatorView.bringSelfToFront()
@@ -682,7 +682,8 @@ extension CropView {
     
     func setFixedRatioCropBox(zoom: Bool = true, cropBox: CGRect? = nil) {
         let refCropBox = cropBox ?? getInitialCropBoxRect()
-        viewModel.setCropBoxFrame(by: refCropBox, and: getImageRatioH())
+        let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: getImageHorizontalToVerticalRatio())
+        viewModel.setCropBoxFrame(by: refCropBox, and: imageHorizontalToVerticalRatio)
         
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in
@@ -736,11 +737,11 @@ extension CropView: CropViewProtocol {
         return viewModel.getRatioType(byImageIsOriginalHorizontal: isHorizontal)
     }
     
-    func getImageRatioH() -> Double {
+    func getImageHorizontalToVerticalRatio() -> Double {
         if viewModel.rotationType.isRotateByMultiple180 {
-            return Double(image.ratioH())
+            return Double(image.horizontalToVerticalRatio())
         } else {
-            return Double(1/image.ratioH())
+            return Double(1/image.horizontalToVerticalRatio())
         }
     }
         

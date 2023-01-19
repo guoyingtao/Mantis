@@ -179,11 +179,11 @@ class CropViewModel: CropViewModelProtocol {
         return newCropBoxFrame
     }
     
-    func setCropBoxFrame(by refCropBox: CGRect, and imageRationH: Double) {
+    func setCropBoxFrame(by refCropBox: CGRect, and imageHorizontalToVerticalRatio: ImageHorizontalToVerticalRatio) {
         var cropBoxFrame = refCropBox
         let center = cropBoxFrame.center
         
-        if aspectRatio > CGFloat(imageRationH) {
+        if aspectRatio > CGFloat(imageHorizontalToVerticalRatio.ratio) {
             cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio
         } else {
             cropBoxFrame.size.width = cropBoxFrame.height * aspectRatio

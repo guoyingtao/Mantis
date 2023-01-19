@@ -7,13 +7,17 @@
 
 import Foundation
 
+struct ImageHorizontalToVerticalRatio {
+    var ratio: Double
+}
+
 protocol CropViewModelProtocol: AnyObject {
     var cropBoxFrameChanged: (_ frame: CGRect) -> Void { get set }
     var cropBoxFrame: CGRect { get set }
     var cropBoxOriginFrame: CGRect { get set }
     func resetCropFrame(by frame: CGRect)
     func getNewCropBoxFrame(with point: CGPoint, and contentFrame: CGRect, aspectRatioLockEnabled: Bool) -> CGRect
-    func setCropBoxFrame(by refCropBox: CGRect, and imageRationH: Double)
+    func setCropBoxFrame(by refCropBox: CGRect, and imageHorizontalToVerticalRatio: ImageHorizontalToVerticalRatio)
 
     var statusChanged: (_ status: CropViewStatus) -> Void { get set }
     var viewStatus: CropViewStatus { get set }
