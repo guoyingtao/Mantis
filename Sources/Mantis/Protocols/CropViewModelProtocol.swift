@@ -10,7 +10,7 @@ import Foundation
 protocol CropViewModelProtocol: AnyObject {
     var cropBoxFrameChanged: (_ frame: CGRect) -> Void { get set }
     var cropBoxFrame: CGRect { get set }
-    var cropOrignFrame: CGRect { get set }
+    var cropBoxOriginFrame: CGRect { get set }
     func resetCropFrame(by frame: CGRect)
     func getNewCropBoxFrame(with point: CGPoint, and contentFrame: CGRect, aspectRatioLockEnabled: Bool) -> CGRect
     func setCropBoxFrame(by refCropBox: CGRect, and imageRationH: Double)
@@ -30,9 +30,6 @@ protocol CropViewModelProtocol: AnyObject {
     
     func reset(forceFixedRatio: Bool)
     func rotateBy90(withRotateType type: RotateBy90DegreeType)
-    func counterclockwiseRotateBy90()
-    func clockwiseRotateBy90()
-    func getTotalRadias(by radians: CGFloat) -> CGFloat
     func getTotalRadians() -> CGFloat
     func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType
     func isUpOrUpsideDown() -> Bool

@@ -880,7 +880,7 @@ extension CropView: CropViewProtocol {
     }
     
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
-        let cropFrame = viewModel.cropOrignFrame
+        let cropFrame = viewModel.cropBoxOriginFrame
         let contentBound = getContentBounds()
         
         let adjustScale: CGFloat
@@ -955,7 +955,7 @@ extension CropView: CropViewProtocol {
             transform(byTransformInfo: newTransform, rotateDial: false)
             
             // The second transform is for adjusting the scale of transformInfo
-            let adjustScale = (viewModel.cropBoxFrame.width / viewModel.cropOrignFrame.width)
+            let adjustScale = (viewModel.cropBoxFrame.width / viewModel.cropBoxOriginFrame.width)
             / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
             newTransform.scale *= adjustScale
             transform(byTransformInfo: newTransform)
