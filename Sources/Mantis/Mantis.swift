@@ -66,7 +66,7 @@ private func setupCropView(for cropViewController: CropViewController,
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
                             viewModel: buildCropViewModel(with: cropViewConfig),
-                            cropOverlayView: CropOverlayView(),
+                            cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorView(),
                             imageContainer: imageContainer,
                             cropScrollView: buildCropScrollView(with: cropViewConfig, and: imageContainer),
                             cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))

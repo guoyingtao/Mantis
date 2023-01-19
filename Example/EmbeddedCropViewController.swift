@@ -2,8 +2,8 @@
 //  EmbeddedCropViewController.swift
 //  MantisExample
 //
-//  Created by Echo on 11/9/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 11/9/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 
 import UIKit
@@ -47,7 +47,7 @@ class EmbeddedCropViewController: UIViewController {
         cropViewController.delegate = self
                     
         var config = Mantis.Config()
-        config.cropToolbarConfig.mode = .embedded        
+        config.cropToolbarConfig.mode = .embedded
         Mantis.setupCropViewController(cropViewController, with: image, and: config)
         
         self.cropViewController = cropViewController

@@ -1,5 +1,5 @@
 //
-//  CropOverlayView.swift
+//  CropAuxiliaryIndicatorView.swift
 //  Mantis
 //
 //  Created by Echo on 10/19/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CropOverlayView: UIView, CropOverlayViewProtocol {
+class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var boarderNormalColor = UIColor.white
     private var boarderHintColor = UIColor.white
     private var hintLine = UIView()
@@ -158,7 +158,7 @@ class CropOverlayView: UIView, CropOverlayViewProtocol {
         let veticalDistanceForVCorner = bounds.height + 2 * borderThickness - cropOverLayerCornerWidth
         
         for (index, line) in corners.enumerated() {
-            let lineType: CornerLineType = CropOverlayView.CornerLineType(rawValue: index) ?? .topLeftVertical
+            let lineType: CornerLineType = CropAuxiliaryIndicatorView.CornerLineType(rawValue: index) ?? .topLeftVertical
             switch lineType {
             case .topLeftHorizontal:
                 line.frame = topLeftHorizonalLayerFrame
@@ -249,7 +249,7 @@ class CropOverlayView: UIView, CropOverlayViewProtocol {
     }
 }
 
-extension CropOverlayView {
+extension CropAuxiliaryIndicatorView {
     private enum CornerLineType: Int {
         case topLeftVertical = 0
         case topLeftHorizontal

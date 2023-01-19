@@ -1,5 +1,5 @@
 //
-//  CropOverlayViewProtocol.swift
+//  CropAuxiliaryIndicatorViewProtocol.swift
 //  Mantis
 //
 //  Created by yingtguo on 12/15/22.
@@ -24,7 +24,7 @@ enum GridLineNumberType {
     }
 }
 
-protocol CropOverlayViewProtocol: UIView {
+protocol CropAuxiliaryIndicatorViewProtocol: UIView {
     var gridLineNumberType: GridLineNumberType { get set }
     var gridHidden: Bool { get set }
     var gridColor: UIColor { get set }

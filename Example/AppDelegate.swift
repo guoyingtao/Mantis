@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Mantis
 //
-//  Created by Echo on 10/19/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 10/19/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 
 import UIKit
