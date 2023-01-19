@@ -36,7 +36,6 @@ protocol CropViewModelProtocol: AnyObject {
     func prepareForCrop(byTouchPoint point: CGPoint)
     
     func needCrop() -> Bool
-    func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge
     
     // MARK: - Handle view status changes
     func setInitialStatus()

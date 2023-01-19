@@ -19,6 +19,29 @@ final class CropViewModelTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    func testReset() {
+        viewModel.aspectRatio = 1
+        viewModel.reset(forceFixedRatio: true)
+        assertResetStatus()
+        XCTAssertEqual(viewModel.aspectRatio, 1)
+        
+        viewModel.aspectRatio = 1
+        viewModel.reset(forceFixedRatio: false)
+        assertResetStatus()
+        XCTAssertEqual(viewModel.aspectRatio, -1)
+    }
+    
+    private func assertResetStatus() {
+        XCTAssertFalse(viewModel.horizontallyFlip)
+        XCTAssertFalse(viewModel.verticallyFlip)
+        XCTAssertEqual(viewModel.cropBoxFrame, .zero)
+        XCTAssertEqual(viewModel.degrees, 0)
+        XCTAssertEqual(viewModel.rotationType, .none)
+        XCTAssertEqual(viewModel.cropLeftTopOnImage, .zero)
+        XCTAssertEqual(viewModel.cropRightBottomOnImage, CGPoint(x: 1, y: 1))
+        XCTAssertEqual(viewModel.viewStatus, .initial)
+    }
 
     func testClockwiseRotateBy90() {
         viewModel.rotationType = .none
@@ -54,6 +77,49 @@ final class CropViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isUpOrUpsideDown())
         viewModel.rotationType = .counterclockwise270
         XCTAssertFalse(viewModel.isUpOrUpsideDown())
+    }
+    
+    func testPrepareForCrop() {
+        viewModel.cropBoxFrame = CGRect(x: 40, y: 40, width: 200, height: 200)
+        XCTAssertNotEqual(viewModel.cropBoxFrame, viewModel.cropBoxOriginFrame)
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 1, y: 1))
+        XCTAssertEqual(viewModel.panOriginPoint, CGPoint(x: 1, y: 1))
+        XCTAssertEqual(viewModel.cropBoxFrame, viewModel.cropBoxOriginFrame)
+        XCTAssertEqual(viewModel.tappedEdge, .none)
+        XCTAssertEqual(viewModel.viewStatus, .touchImage)
+
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 40, y: 40))
+        XCTAssertEqual(viewModel.tappedEdge, .topLeft)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .topLeft))
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 40, y: 240))
+        XCTAssertEqual(viewModel.tappedEdge, .bottomLeft)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .bottomLeft))
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 240, y: 40))
+        XCTAssertEqual(viewModel.tappedEdge, .topRight)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .topRight))
+
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 240, y: 240))
+        XCTAssertEqual(viewModel.tappedEdge, .bottomRight)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .bottomRight))
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 80, y: 40))
+        XCTAssertEqual(viewModel.tappedEdge, .top)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .top))
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 80, y: 240))
+        XCTAssertEqual(viewModel.tappedEdge, .bottom)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .bottom))
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 40, y: 80))
+        XCTAssertEqual(viewModel.tappedEdge, .left)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .left))
+        
+        viewModel.prepareForCrop(byTouchPoint: CGPoint(x: 240, y: 80))
+        XCTAssertEqual(viewModel.tappedEdge, .right)
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .right))
     }
     
     func testResetCropFrame() {

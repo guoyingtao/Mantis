@@ -149,12 +149,7 @@ class CropViewModel: CropViewModelProtocol {
     func needCrop() -> Bool {
         return !cropBoxOriginFrame.equalTo(cropBoxFrame)
     }
-    
-    func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
-        let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
-        return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
-    }
-    
+        
     func getNewCropBoxFrame(with point: CGPoint, and contentFrame: CGRect, aspectRatioLockEnabled: Bool) -> CGRect {
         var point = point
         point.x = max(contentFrame.origin.x - cropViewPadding, point.x)
@@ -213,5 +208,10 @@ extension CropViewModel {
     
     private func getTotalRadians(by radians: CGFloat) -> CGFloat {
         return radians + rotationType.rawValue * CGFloat.pi / 180
+    }
+    
+    private func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
+        let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
+        return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
     }
 }

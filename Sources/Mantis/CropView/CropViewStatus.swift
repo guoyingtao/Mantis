@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CropViewStatus {
+enum CropViewStatus: Equatable {
     case initial
     case rotating(angle: CGAngle)
     case degree90Rotating
