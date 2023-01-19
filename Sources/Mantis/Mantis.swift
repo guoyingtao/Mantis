@@ -24,8 +24,6 @@
 
 import UIKit
 
-var localizationConfig = LocalizationConfig()
-
 // MARK: - APIs
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
@@ -34,29 +32,6 @@ public func cropViewController(image: UIImage,
     setupCropView(for: cropViewController, with: image, and: config.cropViewConfig)
     setupCropToolbar(for: cropViewController, with: cropToolbar)
     return cropViewController
-}
-
-public func setupCropView(for cropViewController: CropViewController,
-                          with image: UIImage,
-                          and cropViewConfig: CropViewConfig) {
-    let imageContainer = ImageContainer(image: image)        
-    
-    let cropView = CropView(image: image,
-                            cropViewConfig: cropViewConfig,
-                            viewModel: buildCropViewModel(with: cropViewConfig),
-                            cropOverlayView: CropOverlayView(),
-                            imageContainer: imageContainer,
-                            cropScrollView: buildCropScrollView(with: cropViewConfig, and: imageContainer),
-                            cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
-    
-    setupRotationDialIfNeeded(with: cropViewConfig, and: cropView)
-    
-    cropViewController.cropView = cropView
-}
-
-public func setupCropToolbar(for cropViewController: CropViewController,
-                             with cropToolbar: CropToolbarProtocol? = nil) {
-    cropViewController.cropToolbar = cropToolbar ?? CropToolbar(frame: .zero)
 }
 
 public func setupCropViewController(_ cropViewController: CropViewController,
@@ -79,10 +54,36 @@ public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
     return image.crop(by: cropInfo)
 }
 
+// MARK: - internal section
+var localizationConfig = LocalizationConfig()
+
 // MARK: - private section
 private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
 }()
+
+private func setupCropView(for cropViewController: CropViewController,
+                           with image: UIImage,
+                           and cropViewConfig: CropViewConfig) {
+    let imageContainer = ImageContainer(image: image)
+    
+    let cropView = CropView(image: image,
+                            cropViewConfig: cropViewConfig,
+                            viewModel: buildCropViewModel(with: cropViewConfig),
+                            cropOverlayView: CropOverlayView(),
+                            imageContainer: imageContainer,
+                            cropScrollView: buildCropScrollView(with: cropViewConfig, and: imageContainer),
+                            cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
+    
+    setupRotationDialIfNeeded(with: cropViewConfig, and: cropView)
+    
+    cropViewController.cropView = cropView
+}
+
+private func setupCropToolbar(for cropViewController: CropViewController,
+                              with cropToolbar: CropToolbarProtocol? = nil) {
+    cropViewController.cropToolbar = cropToolbar ?? CropToolbar(frame: .zero)
+}
 
 private func buildCropViewModel(with cropViewConfig: CropViewConfig) -> CropViewModelProtocol {
     CropViewModel(
