@@ -1,5 +1,5 @@
 //
-//  CropScrollViewProtocol.swift
+//  CropWorkbenchViewProtocol.swift
 //  Mantis
 //
 //  Created by yingtguo on 12/15/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CropScrollViewProtocol: UIScrollView {
+protocol CropWorkbenchViewProtocol: UIScrollView {
     var imageContainer: ImageContainerProtocol? { get set }
     var touchesBegan: () -> Void { get set }
     var touchesCancelled: () -> Void { get set }

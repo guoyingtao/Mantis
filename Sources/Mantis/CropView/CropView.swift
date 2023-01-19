@@ -49,7 +49,7 @@ class CropView: UIView {
     // Referred to in extension
     let imageContainer: ImageContainerProtocol
     let cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorViewProtocol
-    let scrollView: CropScrollViewProtocol
+    let cropWorkbenchView: CropWorkbenchViewProtocol
     let cropMaskViewManager: CropMaskViewManagerProtocol
     
     var rotationDial: RotationDialProtocol?
@@ -86,7 +86,7 @@ class CropView: UIView {
         viewModel: CropViewModelProtocol,
         cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorViewProtocol,
         imageContainer: ImageContainerProtocol,
-        cropScrollView: CropScrollViewProtocol,
+        cropWorkbenchView: CropWorkbenchViewProtocol,
         cropMaskViewManager: CropMaskViewManagerProtocol
     ) {
         self.image = image
@@ -94,7 +94,7 @@ class CropView: UIView {
         self.viewModel = viewModel
         self.cropAuxiliaryIndicatorView = cropAuxiliaryIndicatorView
         self.imageContainer = imageContainer
-        self.scrollView = cropScrollView
+        self.cropWorkbenchView = cropWorkbenchView
         self.cropMaskViewManager = cropMaskViewManager
         
         super.init(frame: .zero)
@@ -126,8 +126,8 @@ class CropView: UIView {
     }
     
     private func initalRender() {
-        setupScrollView()
-        setGridOverlayView()
+        setupCropWorkbenchView()
+        setupCropAuxiliaryIndicatorView()
         checkImageStatusChanged()
     }
     
@@ -139,7 +139,7 @@ class CropView: UIView {
             initalRender()
         case .rotating(let angle):
             viewModel.degrees = angle.degrees
-            rotateScrollView()
+            rotateCropWorkbenchView()
         case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             cropAuxiliaryIndicatorView.isHidden = true
@@ -179,7 +179,7 @@ class CropView: UIView {
         if forceFixedRatio {
             if checkForForceFixedRatioFlag {
                 checkForForceFixedRatioFlag = false
-                return scrollView.zoomScale != 1
+                return cropWorkbenchView.zoomScale != 1
             }
         }
         
@@ -206,7 +206,7 @@ class CropView: UIView {
         cropMaskViewManager.removeMaskViews()
         cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageRatioH()))
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
-        scrollView.resetImageContent(by: viewModel.cropBoxFrame)
+        cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
         cropAuxiliaryIndicatorView.bringSelfToFront()
         
         setupAngleDashboard()
@@ -216,24 +216,24 @@ class CropView: UIView {
         }
     }
     
-    private func setupScrollView() {
-        scrollView.touchesBegan = { [weak self] in
+    private func setupCropWorkbenchView() {
+        cropWorkbenchView.touchesBegan = { [weak self] in
             self?.viewModel.setTouchImageStatus()
         }
         
-        scrollView.touchesEnded = { [weak self] in
+        cropWorkbenchView.touchesEnded = { [weak self] in
             self?.viewModel.setBetweenOperationStatus()
         }
         
-        scrollView.delegate = self
-        addSubview(scrollView)
+        cropWorkbenchView.delegate = self
+        addSubview(cropWorkbenchView)
         
         if cropViewConfig.minimumZoomScale > 1 {
-            scrollView.zoomScale = cropViewConfig.minimumZoomScale
+            cropWorkbenchView.zoomScale = cropViewConfig.minimumZoomScale
         }
     }
     
-    private func setGridOverlayView() {
+    private func setupCropAuxiliaryIndicatorView() {
         cropAuxiliaryIndicatorView.isUserInteractionEnabled = false
         cropAuxiliaryIndicatorView.gridHidden = true
         addSubview(cropAuxiliaryIndicatorView)
@@ -275,16 +275,19 @@ class CropView: UIView {
         
         if Orientation.isPortrait {
             rotationDial.transform = CGAffineTransform(rotationAngle: 0)
-            rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x + (cropAuxiliaryIndicatorView.frame.width - rotationDial.frame.width) / 2
+            rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
+            (cropAuxiliaryIndicatorView.frame.width - rotationDial.frame.width) / 2
             rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
         } else if Orientation.isLandscapeLeft {
             rotationDial.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
             rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
-            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y + (cropAuxiliaryIndicatorView.frame.height - rotationDial.frame.height) / 2
+            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
+            (cropAuxiliaryIndicatorView.frame.height - rotationDial.frame.height) / 2
         } else if Orientation.isLandscapeRight {
             rotationDial.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
             rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationDial.frame.width
-            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y + (cropAuxiliaryIndicatorView.frame.height - rotationDial.frame.height) / 2
+            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
+            (cropAuxiliaryIndicatorView.frame.height - rotationDial.frame.height) / 2
         }
     }
     
@@ -295,8 +298,8 @@ class CropView: UIView {
             return
         }
         
-        let imageFrame = CGRect(x: scrollView.frame.origin.x - scrollView.contentOffset.x,
-                                y: scrollView.frame.origin.y - scrollView.contentOffset.y,
+        let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
+                                y: cropWorkbenchView.frame.origin.y - cropWorkbenchView.contentOffset.y,
                                 width: imageContainer.frame.width,
                                 height: imageContainer.frame.height)
         
@@ -357,23 +360,23 @@ class CropView: UIView {
 
 // MARK: - Adjust UI
 extension CropView {
-    private func rotateScrollView() {
+    private func rotateCropWorkbenchView() {
         let totalRadians = viewModel.getTotalRadians()
-        scrollView.transform = CGAffineTransform(rotationAngle: totalRadians)
+        cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
         
         if viewModel.horizontallyFlip {
             if viewModel.rotationType.isRotateByMultiple180 {
-                scrollView.transform = scrollView.transform.scaledBy(x: -1, y: 1)
+                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: -1, y: 1)
             } else {
-                scrollView.transform = scrollView.transform.scaledBy(x: 1, y: -1)
+                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: 1, y: -1)
             }
         }
         
         if viewModel.verticallyFlip {
             if viewModel.rotationType.isRotateByMultiple180 {
-                scrollView.transform = scrollView.transform.scaledBy(x: 1, y: -1)
+                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: 1, y: -1)
             } else {
-                scrollView.transform = scrollView.transform.scaledBy(x: -1, y: 1)
+                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: -1, y: 1)
             }
         }
         
@@ -439,7 +442,9 @@ extension CropView {
             return viewModel.cropRightBottomOnImage
         }
         
-        let rightBottomPoint = cropAuxiliaryIndicatorView.convert(CGPoint(x: cropAuxiliaryIndicatorView.bounds.width, y: cropAuxiliaryIndicatorView.bounds.height), to: imageContainer)
+        let rightBottomPoint = cropAuxiliaryIndicatorView.convert(CGPoint(x: cropAuxiliaryIndicatorView.bounds.width,
+                                                                          y: cropAuxiliaryIndicatorView.bounds.height),
+                                                                  to: imageContainer)
         let point = CGPoint(x: rightBottomPoint.x / imageContainer.bounds.width, y: rightBottomPoint.y / imageContainer.bounds.height)
         return point
     }
@@ -469,8 +474,8 @@ extension CropView {
         // calculate the zoom area of scroll view
         var scaleFrame = viewModel.cropBoxFrame
         
-        let refContentWidth = abs(cos(radians)) * scrollView.contentSize.width + abs(sin(radians)) * scrollView.contentSize.height
-        let refContentHeight = abs(sin(radians)) * scrollView.contentSize.width + abs(cos(radians)) * scrollView.contentSize.height
+        let refContentWidth = abs(cos(radians)) * cropWorkbenchView.contentSize.width + abs(sin(radians)) * cropWorkbenchView.contentSize.height
+        let refContentHeight = abs(sin(radians)) * cropWorkbenchView.contentSize.width + abs(cos(radians)) * cropWorkbenchView.contentSize.height
         
         if scaleFrame.width >= refContentWidth {
             scaleFrame.size.width = refContentWidth
@@ -480,15 +485,15 @@ extension CropView {
             scaleFrame.size.height = refContentHeight
         }
         
-        let contentOffset = scrollView.contentOffset
-        let contentOffsetCenter = CGPoint(x: (contentOffset.x + scrollView.bounds.width / 2),
-                                          y: (contentOffset.y + scrollView.bounds.height / 2))
+        let contentOffset = cropWorkbenchView.contentOffset
+        let contentOffsetCenter = CGPoint(x: (contentOffset.x + cropWorkbenchView.bounds.width / 2),
+                                          y: (contentOffset.y + cropWorkbenchView.bounds.height / 2))
         
-        scrollView.bounds = CGRect(x: 0, y: 0, width: newBoundWidth, height: newBoundHeight)
+        cropWorkbenchView.bounds = CGRect(x: 0, y: 0, width: newBoundWidth, height: newBoundHeight)
         
         let newContentOffset = CGPoint(x: (contentOffsetCenter.x - newBoundWidth / 2),
                                        y: (contentOffsetCenter.y - newBoundHeight / 2))
-        scrollView.contentOffset = newContentOffset
+        cropWorkbenchView.contentOffset = newContentOffset
         
         let newCropBoxFrame = GeometryHelper.getInscribeRect(fromOutsideRect: contentRect, andInsideRect: viewModel.cropBoxFrame)
         
@@ -497,10 +502,10 @@ extension CropView {
             
             if zoom {
                 let zoomRect = convert(scaleFrame,
-                                       to: scrollView.imageContainer)
-                scrollView.zoom(to: zoomRect, animated: false)
+                                       to: cropWorkbenchView.imageContainer)
+                cropWorkbenchView.zoom(to: zoomRect, animated: false)
             }
-            scrollView.checkContentOffset()
+            cropWorkbenchView.checkContentOffset()
             makeSureImageContainsCropOverlay()
         }
         
@@ -520,7 +525,7 @@ extension CropView {
     
     func makeSureImageContainsCropOverlay() {
         if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
-            scrollView.zoomScaleToBound(animated: true)
+            cropWorkbenchView.zoomScaleToBound(animated: true)
         }
     }
     
@@ -528,16 +533,16 @@ extension CropView {
         let width = abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.height
         let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
         
-        scrollView.updateLayout(byNewSize: CGSize(width: width, height: height))
+        cropWorkbenchView.updateLayout(byNewSize: CGSize(width: width, height: height))
         
-        if !manualZoomed || scrollView.shouldScale() {
-            scrollView.zoomScaleToBound(animated: false)
+        if !manualZoomed || cropWorkbenchView.shouldScale() {
+            cropWorkbenchView.zoomScaleToBound(animated: false)
             manualZoomed = false
         } else {
-            scrollView.updateMinZoomScale()
+            cropWorkbenchView.updateMinZoomScale()
         }
         
-        scrollView.checkContentOffset()
+        cropWorkbenchView.checkContentOffset()
     }
     
     func updatePositionFor90Rotation(by radians: CGFloat) {
@@ -552,18 +557,18 @@ extension CropView {
                 newSize = CGSize(width: height, height: width)
             }
             
-            let scale = newSize.width / scrollView.bounds.width
-            scrollView.updateLayout(byNewSize: newSize)
+            let scale = newSize.width / cropWorkbenchView.bounds.width
+            cropWorkbenchView.updateLayout(byNewSize: newSize)
             return scale
         }
         
         let scale = adjustScrollViewForNormalRatio(by: radians)
         
-        let newZoomScale = scrollView.zoomScale * scale
-        scrollView.minimumZoomScale = newZoomScale
-        scrollView.zoomScale = newZoomScale
+        let newZoomScale = cropWorkbenchView.zoomScale * scale
+        cropWorkbenchView.minimumZoomScale = newZoomScale
+        cropWorkbenchView.zoomScale = newZoomScale
         
-        scrollView.checkContentOffset()
+        cropWorkbenchView.checkContentOffset()
     }
 }
 
@@ -584,13 +589,13 @@ extension CropView {
     
     func makeTransformation() -> Transformation {
         Transformation(
-            offset: scrollView.contentOffset,
+            offset: cropWorkbenchView.contentOffset,
             rotation: getTotalRadians(),
-            scale: scrollView.zoomScale,
+            scale: cropWorkbenchView.zoomScale,
             manualZoomed: manualZoomed,
             intialMaskFrame: getInitialCropBoxRect(),
             maskFrame: cropAuxiliaryIndicatorView.frame,
-            scrollViewBounds: scrollView.bounds
+            cropWorkbenchViewBounds: cropWorkbenchView.bounds
         )
     }
     
@@ -670,7 +675,7 @@ extension CropView {
     }
     
     private func setRotation(byRadians radians: CGFloat) {
-        scrollView.transform = CGAffineTransform(rotationAngle: radians)
+        cropWorkbenchView.transform = CGAffineTransform(rotationAngle: radians)
         updatePosition(by: radians)
         rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
     }
@@ -689,7 +694,7 @@ extension CropView {
         }
         
         adaptAngleDashboardToCropBox()
-        scrollView.updateMinZoomScale()
+        cropWorkbenchView.updateMinZoomScale()
     }
     
     private func flip(isHorizontal: Bool = true, animated: Bool = true) {
@@ -712,10 +717,10 @@ extension CropView {
         
         if animated {
             UIView.animate(withDuration: 0.5) {
-                self.scrollView.transform = self.scrollView.transform.scaledBy(x: scaleX, y: scaleY)
+                self.cropWorkbenchView.transform = self.cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
             }
         } else {
-            scrollView.transform = scrollView.transform.scaledBy(x: scaleX, y: scaleY)
+            cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
         }
     }
 }
@@ -747,11 +752,11 @@ extension CropView: CropViewProtocol {
     func handleDeviceRotated() {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
-        scrollView.transform = CGAffineTransform(scaleX: 1, y: 1)
-        scrollView.reset(by: viewModel.cropBoxFrame)
+        cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)
+        cropWorkbenchView.reset(by: viewModel.cropBoxFrame)
         
         setupAngleDashboard()
-        rotateScrollView()
+        rotateCropWorkbenchView()
         
         if viewModel.cropRightBottomOnImage != .zero {
             var leftTopPoint = CGPoint(x: viewModel.cropLeftTopOnImage.x * imageContainer.bounds.width,
@@ -813,12 +818,12 @@ extension CropView: CropViewProtocol {
             let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
             viewModel.cropBoxFrame = newRect
             let rotateAngle = newRotateType == .clockwise ? CGFloat.pi / 2 : -CGFloat.pi / 2
-            scrollView.transform = scrollView.transform.rotated(by: rotateAngle)
+            cropWorkbenchView.transform = cropWorkbenchView.transform.rotated(by: rotateAngle)
             updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
         }
         
         func handleRoteteCompletion() {
-            scrollView.updateMinZoomScale()
+            cropWorkbenchView.updateMinZoomScale()
             viewModel.rotateBy90(withRotateType: newRotateType)
             viewModel.setBetweenOperationStatus()
             completion()
@@ -855,13 +860,13 @@ extension CropView: CropViewProtocol {
     func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
         viewModel.setRotatingStatus(by: CGAngle(radians: transformation.rotation))
         
-        if transformation.scrollViewBounds != .zero {
-            scrollView.bounds = transformation.scrollViewBounds
+        if transformation.cropWorkbenchViewBounds != .zero {
+            cropWorkbenchView.bounds = transformation.cropWorkbenchViewBounds
         }
         
         manualZoomed = transformation.manualZoomed
-        scrollView.zoomScale = transformation.scale
-        scrollView.contentOffset = transformation.offset
+        cropWorkbenchView.zoomScale = transformation.scale
+        cropWorkbenchView.contentOffset = transformation.offset
         viewModel.setBetweenOperationStatus()
         
         if transformation.maskFrame != .zero {
@@ -901,10 +906,10 @@ extension CropView: CropViewProtocol {
                                         y: cropFrame.origin.y + (cropFrame.height - maskFrameHeight) / 2,
                                         width: maskFrameWidth,
                                         height: maskFrameHeight)
-        newTransform.scrollViewBounds = CGRect(x: transformInfo.scrollViewBounds.origin.x * adjustScale,
-                                               y: transformInfo.scrollViewBounds.origin.y * adjustScale,
-                                               width: transformInfo.scrollViewBounds.width * adjustScale,
-                                               height: transformInfo.scrollViewBounds.height * adjustScale)
+        newTransform.cropWorkbenchViewBounds = CGRect(x: transformInfo.cropWorkbenchViewBounds.origin.x * adjustScale,
+                                               y: transformInfo.cropWorkbenchViewBounds.origin.y * adjustScale,
+                                               width: transformInfo.cropWorkbenchViewBounds.width * adjustScale,
+                                               height: transformInfo.cropWorkbenchViewBounds.height * adjustScale)
         
         return newTransform
     }
@@ -937,7 +942,7 @@ extension CropView: CropViewProtocol {
                                              manualZoomed: manualZoomed,
                                              intialMaskFrame: .zero,
                                              maskFrame: maskFrame,
-                                             scrollViewBounds: .zero)
+                                             cropWorkbenchViewBounds: .zero)
         return transformantion
     }
     
@@ -958,7 +963,7 @@ extension CropView: CropViewProtocol {
         case .presetNormalizedInfo(let normailizedInfo):
             let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo)
             transform(byTransformInfo: transformInfo)
-            scrollView.frame = transformInfo.maskFrame
+            cropWorkbenchView.frame = transformInfo.maskFrame
             completion(transformInfo)
         case .none:
             break
@@ -978,7 +983,7 @@ extension CropView: CropViewProtocol {
     }
     
     func reset() {
-        scrollView.removeFromSuperview()
+        cropWorkbenchView.removeFromSuperview()
         cropAuxiliaryIndicatorView.removeFromSuperview()
         rotationDial?.removeFromSuperview()
         
@@ -1025,8 +1030,8 @@ extension CropView: CropViewProtocol {
         
         let translation =  CGPoint(x: (point.x - zeroPoint.x), y: (point.y - zeroPoint.y))
         
-        var scaleX = scrollView.zoomScale
-        var scaleY = scrollView.zoomScale
+        var scaleX = cropWorkbenchView.zoomScale
+        var scaleY = cropWorkbenchView.zoomScale
         
         if viewModel.horizontallyFlip {
             if viewModel.rotationType.isRotateByMultiple180 {

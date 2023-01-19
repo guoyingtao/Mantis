@@ -31,7 +31,7 @@ public typealias Transformation = (
     manualZoomed: Bool,
     intialMaskFrame: CGRect,
     maskFrame: CGRect,
-    scrollViewBounds: CGRect
+    cropWorkbenchViewBounds: CGRect
 )
 
 public typealias CropInfo = (

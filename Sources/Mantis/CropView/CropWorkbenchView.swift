@@ -1,14 +1,14 @@
 //
-//  CropScrollView.swift
+//  CropWorkbenchView.swift
 //  Mantis
 //
-//  Created by Echo on 10/20/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 10/20/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 
 import UIKit
 
-final class CropScrollView: UIScrollView {
+final class CropWorkbenchView: UIScrollView {
     var imageContainer: ImageContainerProtocol?
     
     var touchesBegan = {}
@@ -18,7 +18,7 @@ final class CropScrollView: UIScrollView {
     private var initialMinimumZoomScale: CGFloat = 1.0
     
     deinit {
-        print("CropScrollView deinit")
+        print("CropWorkbenchView deinit")
     }
     
     init(frame: CGRect,
@@ -74,7 +74,7 @@ final class CropScrollView: UIScrollView {
     }
 }
 
-extension CropScrollView: CropScrollViewProtocol {
+extension CropWorkbenchView: CropWorkbenchViewProtocol {
     func checkContentOffset() {
         contentOffset.x = max(contentOffset.x, 0)
         contentOffset.y = max(contentOffset.y, 0)

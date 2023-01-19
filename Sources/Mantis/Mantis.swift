@@ -68,7 +68,7 @@ private func setupCropView(for cropViewController: CropViewController,
                             viewModel: buildCropViewModel(with: cropViewConfig),
                             cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorView(),
                             imageContainer: imageContainer,
-                            cropScrollView: buildCropScrollView(with: cropViewConfig, and: imageContainer),
+                            cropWorkbenchView: buildCropWorkbenchView(with: cropViewConfig, and: imageContainer),
                             cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
     
     setupRotationDialIfNeeded(with: cropViewConfig, and: cropView)
@@ -88,8 +88,8 @@ private func buildCropViewModel(with cropViewConfig: CropViewConfig) -> CropView
     )
 }
 
-private func buildCropScrollView(with cropViewConfig: CropViewConfig, and imageContainer: ImageContainerProtocol) -> CropScrollViewProtocol {
-    CropScrollView(frame: .zero,
+private func buildCropWorkbenchView(with cropViewConfig: CropViewConfig, and imageContainer: ImageContainerProtocol) -> CropWorkbenchViewProtocol {
+    CropWorkbenchView(frame: .zero,
                    minimumZoomScale: cropViewConfig.minimumZoomScale,
                    maximumZoomScale: cropViewConfig.maximumZoomScale,
                    imageContainer: imageContainer)

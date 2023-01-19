@@ -56,8 +56,8 @@
 		OBJ_69 /* CropBoxFreeAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */; };
 		OBJ_70 /* CropBoxLockedAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */; };
 		OBJ_71 /* CropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* CropMaskViewManager.swift */; };
-		OBJ_72 /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* CropOverlayView.swift */; };
-		OBJ_73 /* CropScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* CropScrollView.swift */; };
+		OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* CropAuxiliaryIndicatorView.swift */; };
+		OBJ_73 /* CropWorkbenchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* CropWorkbenchView.swift */; };
 		OBJ_74 /* CropView+Touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* CropView+Touches.swift */; };
 		OBJ_75 /* CropView+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* CropView+UIScrollViewDelegate.swift */; };
 		OBJ_76 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* CropView.swift */; };
@@ -155,8 +155,8 @@
 		OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFreeAspectFrameUpdater.swift; sourceTree = "<group>"; };
 		OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdater.swift; sourceTree = "<group>"; };
 		OBJ_14 /* CropMaskViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropMaskViewManager.swift; sourceTree = "<group>"; };
-		OBJ_15 /* CropOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropOverlayView.swift; sourceTree = "<group>"; };
-		OBJ_16 /* CropScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropScrollView.swift; sourceTree = "<group>"; };
+		OBJ_15 /* CropAuxiliaryIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorView.swift; sourceTree = "<group>"; };
+		OBJ_16 /* CropWorkbenchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchView.swift; sourceTree = "<group>"; };
 		OBJ_17 /* CropView+Touches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Touches.swift"; sourceTree = "<group>"; };
 		OBJ_18 /* CropView+UIScrollViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+UIScrollViewDelegate.swift"; sourceTree = "<group>"; };
 		OBJ_19 /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
@@ -252,8 +252,8 @@
 				OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */,
 				OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */,
 				OBJ_14 /* CropMaskViewManager.swift */,
-				OBJ_15 /* CropOverlayView.swift */,
-				OBJ_16 /* CropScrollView.swift */,
+				OBJ_15 /* CropAuxiliaryIndicatorView.swift */,
+				OBJ_16 /* CropWorkbenchView.swift */,
 				OBJ_17 /* CropView+Touches.swift */,
 				OBJ_18 /* CropView+UIScrollViewDelegate.swift */,
 				OBJ_19 /* CropView.swift */,
@@ -600,8 +600,8 @@
 				OBJ_70 /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
 				OBJ_71 /* CropMaskViewManager.swift in Sources */,
 				66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */,
-				OBJ_72 /* CropOverlayView.swift in Sources */,
-				OBJ_73 /* CropScrollView.swift in Sources */,
+				OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */,
+				OBJ_73 /* CropWorkbenchView.swift in Sources */,
 				66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */,
 				OBJ_74 /* CropView+Touches.swift in Sources */,
 				OBJ_75 /* CropView+UIScrollViewDelegate.swift in Sources */,

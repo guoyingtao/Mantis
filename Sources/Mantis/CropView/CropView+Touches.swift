@@ -21,7 +21,7 @@ extension CropView {
         }
         
         if bounds.contains(newPoint) {
-            return scrollView
+            return cropWorkbenchView
         }
         
         return nil
@@ -75,9 +75,10 @@ extension CropView {
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
-                self?.delegate?.cropViewDidEndResize(self!)
-                self?.viewModel.setBetweenOperationStatus()
-                self?.scrollView.updateMinZoomScale()
+                guard let self = self else { return }
+                self.delegate?.cropViewDidEndResize(self)
+                self.viewModel.setBetweenOperationStatus()
+                self.cropWorkbenchView.updateMinZoomScale()
             }
         } else {
             delegate?.cropViewDidEndResize(self)
