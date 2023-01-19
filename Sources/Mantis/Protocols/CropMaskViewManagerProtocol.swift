@@ -8,13 +8,10 @@
 import UIKit
 
 protocol CropMaskViewManagerProtocol {
-    var cropShapeType: CropShapeType { get set }
-    var cropMaskVisualEffectType: CropMaskVisualEffectType { get set }
-
     func setup(in view: UIView, cropRatio: CGFloat)
     func removeMaskViews()
     func bringMaskViewsToFront()
-    func showDimmingBackground()
-    func showVisualEffectBackground()
+    func showDimmingBackground(animated: Bool)
+    func showVisualEffectBackground(animated: Bool)
     func adaptMaskTo(match cropRect: CGRect, cropRatio: CGFloat)
 }

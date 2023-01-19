@@ -141,26 +141,26 @@ class CropView: UIView {
             viewModel.degrees = angle.degrees
             rotateScrollView()
         case .degree90Rotating:
-            cropMaskViewManager.showVisualEffectBackground()
+            cropMaskViewManager.showVisualEffectBackground(animated: true)
             cropOverlayView.isHidden = true
             rotationDial?.isHidden = true
         case .touchImage:
-            cropMaskViewManager.showDimmingBackground()
+            cropMaskViewManager.showDimmingBackground(animated: true)
             cropOverlayView.gridLineNumberType = .crop
             cropOverlayView.setGrid(hidden: false, animated: true)
         case .touchCropboxHandle(let tappedEdge):
             cropOverlayView.handleEdgeTouched(with: tappedEdge)
             rotationDial?.isHidden = true
-            cropMaskViewManager.showDimmingBackground()
+            cropMaskViewManager.showDimmingBackground(animated: true)
         case .touchRotationBoard:
             cropOverlayView.gridLineNumberType = .rotate
             cropOverlayView.setGrid(hidden: false, animated: true)
-            cropMaskViewManager.showDimmingBackground()
+            cropMaskViewManager.showDimmingBackground(animated: true)
         case .betweenOperation:
             cropOverlayView.handleEdgeUntouched()
             rotationDial?.isHidden = false
             adaptAngleDashboardToCropBox()
-            cropMaskViewManager.showVisualEffectBackground()
+            cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
         }
     }
@@ -207,7 +207,7 @@ class CropView: UIView {
         cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageRatioH()))
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         scrollView.resetImageContent(by: viewModel.cropBoxFrame)
-        cropOverlayView.superview?.bringSubviewToFront(cropOverlayView)
+        cropOverlayView.bringSelfToFront()
         
         setupAngleDashboard()
         

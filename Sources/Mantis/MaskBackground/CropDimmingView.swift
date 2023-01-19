@@ -14,10 +14,9 @@ class CropDimmingView: UIView, CropMaskProtocol {
     var cropShapeType: CropShapeType = .rect
     var imageRatio: CGFloat = 1.0
     
-    convenience init(cropShapeType: CropShapeType = .rect, cropRatio: CGFloat = 1.0) {
+    convenience init(cropShapeType: CropShapeType = .rect) {
         self.init(frame: CGRect.zero)
         self.cropShapeType = cropShapeType
-        initialize(cropRatio: cropRatio)
     }
     
     func setMask(cropRatio: CGFloat) {

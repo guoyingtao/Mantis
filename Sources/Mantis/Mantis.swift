@@ -54,8 +54,11 @@ public func setupCropView(for cropViewController: CropViewController,
                                         minimumZoomScale: cropViewConfig.minimumZoomScale,
                                         maximumZoomScale: cropViewConfig.maximumZoomScale,
                                         imageContainer: imageContainer)
-    let cropMaskViewManager = CropMaskViewManager(cropShapeType: cropViewConfig.cropShapeType,
-                                                  cropMaskVisualEffectType: cropViewConfig.cropMaskVisualEffectType)
+    
+    let dimmingView = CropDimmingView(cropShapeType: cropViewConfig.cropShapeType)
+    let visualEffectView = CropMaskVisualEffectView(cropShapeType: cropViewConfig.cropShapeType,
+                                                    effectType: cropViewConfig.cropMaskVisualEffectType)
+    let cropMaskViewManager = CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
     
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
