@@ -2,8 +2,8 @@
 //  Mantis.swift
 //  Mantis
 //
-//  Created by Echo on 11/3/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 11/3/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to
