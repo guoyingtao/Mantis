@@ -8,33 +8,35 @@
 
 import UIKit
 
-class ImageContainer: UIView {
-
+final class ImageContainer: UIView {
     lazy private var imageView: UIImageView = {
         let imageView = UIImageView(frame: bounds)
         imageView.layer.minificationFilter = .trilinear
         imageView.accessibilityIgnoresInvertColors = true
         imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
         
         addSubview(imageView)
         
         return imageView
     }()
-
-    var image: UIImage? {
-        didSet {
-            imageView.frame = bounds
-            imageView.image = image
-            
-            imageView.isUserInteractionEnabled = true
-        }
+    
+    init(image: UIImage) {
+        super.init(frame: .zero)
+        imageView.image = image
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.frame = bounds
     }
-    
+}
+
+extension ImageContainer: ImageContainerProtocol {
     func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 0.5) -> Bool {
         let newRect = view.convert(rect, to: self)
         

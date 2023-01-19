@@ -10,7 +10,7 @@ import UIKit
 
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let newPoint = self.convert(point, to: self)
+        let newPoint = convert(point, to: self)
         
         if let rotationDial = rotationDial, rotationDial.frame.contains(newPoint) {
             return rotationDial
@@ -20,8 +20,8 @@ extension CropView {
             return self
         }
         
-        if self.bounds.contains(newPoint) {
-            return self.scrollView
+        if bounds.contains(newPoint) {
+            return cropWorkbenchView
         }
         
         return nil
@@ -30,8 +30,8 @@ extension CropView {
     private func isHitGridOverlayView(by touchPoint: CGPoint) -> Bool {
         let hotAreaUnit = cropViewConfig.cropBoxHotAreaUnit
         
-        return gridOverlayView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
-        && !gridOverlayView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(touchPoint)
+        return cropAuxiliaryIndicatorView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
+        && !cropAuxiliaryIndicatorView.frame.insetBy(dx: hotAreaUnit/2, dy: hotAreaUnit/2).contains(touchPoint)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -64,20 +64,21 @@ extension CropView {
             return
         }
         
-        let point = touch.location(in: self)
-        updateCropBoxFrame(with: point)
+        let touchPoint = touch.location(in: self)
+        updateCropBoxFrame(withTouchPoint: touchPoint)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
         if viewModel.needCrop() {
-            gridOverlayView.handleEdgeUntouched()
+            cropAuxiliaryIndicatorView.handleEdgeUntouched()
             let contentRect = getContentBounds()
             adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
-                self?.delegate?.cropViewDidEndResize(self!)
-                self?.viewModel.setBetweenOperationStatus()
-                self?.scrollView.updateMinZoomScale()
+                guard let self = self else { return }
+                self.delegate?.cropViewDidEndResize(self)
+                self.viewModel.setBetweenOperationStatus()
+                self.cropWorkbenchView.updateMinZoomScale()
             }
         } else {
             delegate?.cropViewDidEndResize(self)

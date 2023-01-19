@@ -1,6 +1,5 @@
 //
-//  AngleDashboard.swift
-//  Puffer
+//  RotationDial.swift
 //
 //  Created by Echo on 10/21/18.
 //  Copyright © 2018 Echo. All rights reserved.
@@ -25,49 +24,37 @@
 import UIKit
 
 @IBDesignable
-class RotationDial: UIView {
-    @IBInspectable public var pointerHeight: CGFloat = 8
-    @IBInspectable public var spanBetweenDialPlateAndPointer: CGFloat = 6
-    @IBInspectable public var pointerWidth: CGFloat = 8 * sqrt(2)
+final class RotationDial: UIView {
+    var pointerHeight: CGFloat = 8
+    var spanBetweenDialPlateAndPointer: CGFloat = 6
+    var pointerWidth: CGFloat = 8 * sqrt(2)
     
     var didRotate: (_ angle: CGAngle) -> Void = { _ in }
     var didFinishedRotate: () -> Void = { }
     
-    var dialConfig: DialConfig
+    var viewModel: RotationDialViewModelProtocol
+    
+    private var dialConfig: DialConfig
     
     private var angleLimit = CGAngle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
     private var dialPlate: RotationDialPlate?
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
-    private var rotationKVO: NSKeyValueObservation?
-
-    var viewModel = RotationDialViewModel()
     
-    /**
-     This one is needed to solve storyboard render problem
-     https://stackoverflow.com/a/42678873/288724
-     */
-    override init(frame: CGRect) {
-        dialConfig = DialConfig()
-        super.init(frame: frame)
-        
-        setup()
-    }
-    
-    init(frame: CGRect, dialConfig: DialConfig) {
+    init(frame: CGRect, dialConfig: DialConfig, viewModel: RotationDialViewModelProtocol) {
         self.dialConfig = dialConfig
-        super.init(frame: frame)        
-        setup()
+        self.viewModel = viewModel
+        super.init(frame: frame)
+        setup(with: frame)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        dialConfig = DialConfig()
-        super.init(coder: aDecoder)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
-// MARK: - private funtions
+// MARK: - private functions
 extension RotationDial {
     private func setupUI() {
         clipsToBounds = true
@@ -82,15 +69,10 @@ extension RotationDial {
     }
     
     private func setupViewModel() {
-        rotationKVO = viewModel.observe(\.rotationAngle,
-                                        options: [.old, .new]
-        ) { [weak self] _, changed in
-            guard let angle = changed.newValue else { return }
+        viewModel.didSetRotationAngle = { [weak self] angle in
             self?.handleRotation(by: angle)
         }
-        
-        let rotationCenter = getRotationCenter()
-        viewModel.makeRotationCalculator(by: rotationCenter)
+        viewModel.setup(with: getRotationCenter())
     }
     
     private func handleRotation(by angle: CGAngle) {
@@ -193,12 +175,10 @@ extension RotationDial {
     }
 }
 
-// MARK: - public API
-extension RotationDial {
-    /// Setup the dial with your own config
-    ///
-    /// - Parameter dialConfig: dail config. If not provided, default config will be used
-    func setup() {
+extension RotationDial: RotationDialProtocol {
+    func setup(with frame: CGRect) {
+        self.frame = frame
+        
         if case .limit(let angle) = dialConfig.rotationLimitType {
             angleLimit = angle
         }

@@ -8,15 +8,14 @@
 
 import UIKit
 
-public class RotationDialViewModel: NSObject {
-    fileprivate var rotationCal: RotationCalculator?    
-    @objc dynamic var rotationAngle = CGAngle(degrees: 0)
+class RotationDialViewModel: RotationDialViewModelProtocol {
+    var didSetRotationAngle: (CGAngle) -> Void = { _ in }
     
     var touchPoint: CGPoint? {
         didSet {
             guard let oldValue = oldValue,
                 let newValue = self.touchPoint,
-                let rotationCal = rotationCal else {
+                let rotationCal = rotationCalculator else {
                 return
             }
             
@@ -24,12 +23,16 @@ public class RotationDialViewModel: NSObject {
             rotationAngle = CGAngle(radians: radians)
         }
     }
-    
-    public override init() {
-        
+
+    private var rotationAngle = CGAngle(degrees: 0) {
+        didSet {
+            didSetRotationAngle(rotationAngle)
+        }
     }
+
+    private var rotationCalculator: RotationCalculator?
     
-    func makeRotationCalculator(by midPoint: CGPoint) {
-        rotationCal = RotationCalculator(midPoint: midPoint)
+    func setup(with midPoint: CGPoint) {
+        rotationCalculator = RotationCalculator(midPoint: midPoint)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  CropOverlayView.swift
+//  CropAuxiliaryIndicatorView.swift
 //  Mantis
 //
 //  Created by Echo on 10/19/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CropOverlayView: UIView {
+class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var boarderNormalColor = UIColor.white
     private var boarderHintColor = UIColor.white
     private var hintLine = UIView()
@@ -37,7 +37,7 @@ class CropOverlayView: UIView {
             if !corners.isEmpty {
                 layoutLines()
                 handleEdgeTouched(with: tappedEdge)
-            }            
+            }
         }
     }
     
@@ -98,12 +98,13 @@ class CropOverlayView: UIView {
     }
     
     private func layoutGridLines() {
-        for index in 0..<gridLineNumberType.rawValue {
+        let helpLineNumber = gridLineNumberType.getHelpLineNumber()
+        for index in 0..<helpLineNumber {
             horizontalGridLines[index].frame = CGRect(x: 0,
-                                                      y: CGFloat(index + 1) * frame.height / CGFloat(gridLineNumberType.rawValue + 1),
+                                                      y: CGFloat(index + 1) * frame.height / CGFloat(helpLineNumber + 1),
                                                       width: frame.width,
                                                       height: 1)
-            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(gridLineNumberType.rawValue + 1),
+            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(helpLineNumber + 1),
                                                     y: 0,
                                                     width: 1,
                                                     height: frame.height)
@@ -118,7 +119,7 @@ class CropOverlayView: UIView {
     private func setupHorizontalGridLines() {
         horizontalGridLines.forEach { $0.removeFromSuperview() }
         horizontalGridLines.removeAll()
-        for _ in 0..<gridLineNumberType.rawValue {
+        for _ in 0..<gridLineNumberType.getHelpLineNumber() {
             let view = createNewLine()
             view.backgroundColor = gridColor
             horizontalGridLines.append(view)
@@ -128,7 +129,7 @@ class CropOverlayView: UIView {
     private func setupVerticalGridLines() {
         verticalGridLines.forEach { $0.removeFromSuperview() }
         verticalGridLines.removeAll()
-        for _ in 0..<gridLineNumberType.rawValue {
+        for _ in 0..<gridLineNumberType.getHelpLineNumber() {
             let view = createNewLine()
             view.backgroundColor = gridColor
             verticalGridLines.append(view)
@@ -150,14 +151,14 @@ class CropOverlayView: UIView {
         
         let topLeftHorizonalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: cropOverLayerCornerWidth, height: borderThickness)
         let topLeftVerticalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: borderThickness, height: cropOverLayerCornerWidth)
-                
+        
         let horizontalDistanceForHCorner = bounds.width + 2 * borderThickness - cropOverLayerCornerWidth
         let verticalDistanceForHCorner = bounds.height + borderThickness
         let horizontalDistanceForVCorner = bounds.width + borderThickness
         let veticalDistanceForVCorner = bounds.height + 2 * borderThickness - cropOverLayerCornerWidth
         
         for (index, line) in corners.enumerated() {
-            let lineType: CornerLineType = CropOverlayView.CornerLineType(rawValue: index) ?? .topLeftVertical
+            let lineType: CornerLineType = CropAuxiliaryIndicatorView.CornerLineType(rawValue: index) ?? .topLeftVertical
             switch lineType {
             case .topLeftHorizontal:
                 line.frame = topLeftHorizonalLayerFrame
@@ -238,7 +239,7 @@ class CropOverlayView: UIView {
                                     height: borderLine.frame.height)
         default:
             hintLine.removeFromSuperview()
-        }        
+        }
     }
     
     func handleEdgeUntouched() {
@@ -248,7 +249,7 @@ class CropOverlayView: UIView {
     }
 }
 
-extension CropOverlayView {
+extension CropAuxiliaryIndicatorView {
     private enum CornerLineType: Int {
         case topLeftVertical = 0
         case topLeftHorizontal
@@ -258,11 +259,5 @@ extension CropOverlayView {
         case bottomRightHorizontal
         case bottomLeftVertical
         case bottomLeftHorizontal
-    }
-    
-    enum GridLineNumberType: Int {
-        case none = 0
-        case crop = 2
-        case rotate = 8
-    }
+    }    
 }

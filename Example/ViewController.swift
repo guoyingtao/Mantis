@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  Mantis
 //
-//  Created by Echo on 10/19/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 10/19/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 
 import UIKit
@@ -61,10 +61,10 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                        manualZoomed: true,
                                        intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
                                        maskFrame: CGRect(x: 59.47694524495677, y: 14.0, width: 256.04610951008647, height: 617.0),
-                                       scrollBounds: CGRect(x: 231.66666666666666,
-                                                            y: 439.6666666666667,
-                                                            width: 557.1387432741491,
-                                                            height: 654.7511809035641))
+                                       cropWorkbenchViewBounds: CGRect(x: 231.66666666666666,
+                                                                y: 439.6666666666667,
+                                                                width: 557.1387432741491,
+                                                                height: 654.7511809035641))
                 
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Echo. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum ImageRotationType: CGFloat {
     case none = 0
@@ -40,27 +40,33 @@ enum ImageRotationType: CGFloat {
     }
 }
 
-class CropViewModel: NSObject {
+class CropViewModel: CropViewModelProtocol {
     init(
         cropViewPadding: CGFloat,
         hotAreaUnit: CGFloat
     ) {
         self.cropViewPadding = cropViewPadding
         self.hotAreaUnit = hotAreaUnit
-        super.init()
     }
 
     var statusChanged: (_ status: CropViewStatus) -> Void = { _ in }
     
     var viewStatus: CropViewStatus = .initial {
         didSet {
-            self.statusChanged(viewStatus)
+            statusChanged(viewStatus)
         }
     }
     
-    @objc dynamic var cropBoxFrame = CGRect.zero
-    var cropOrignFrame = CGRect.zero
+    var cropBoxFrameChanged: (_ frame: CGRect) -> Void = { _ in }
     
+    var cropBoxFrame = CGRect.zero {
+        didSet {
+            if oldValue != cropBoxFrame {
+                cropBoxFrameChanged(cropBoxFrame)
+            }
+        }
+    }
+    var cropBoxOriginFrame = CGRect.zero
     var panOriginPoint = CGPoint.zero
     var tappedEdge = CropViewOverlayEdge.none
     
@@ -72,8 +78,8 @@ class CropViewModel: NSObject {
     
     var rotationType: ImageRotationType = .none
     var aspectRatio: CGFloat = -1    
-    var cropLeftTopOnImage: CGPoint = .zero
-    var cropRightBottomOnImage: CGPoint = CGPoint(x: 1, y: 1)
+    var cropLeftTopOnImage = CGPoint.zero
+    var cropRightBottomOnImage = CGPoint(x: 1, y: 1)
     
     var horizontallyFlip = false
     var verticallyFlip = false
@@ -97,29 +103,17 @@ class CropViewModel: NSObject {
         
         setInitialStatus()
     }
-    
-    func rotateBy90(rotateAngle: CGFloat) {
-        if rotateAngle < 0 {
-            rotationType.counterclockwiseRotate90()
-        } else {
+        
+    func rotateBy90(withRotateType type: RotateBy90DegreeType) {
+        if type == .clockwise {
             rotationType.clockwiseRotate90()
+        } else {
+            rotationType.counterclockwiseRotate90()
         }
     }
-    
-    func counterclockwiseRotateBy90() {
-        rotationType.counterclockwiseRotate90()
-    }
-    
-    func clockwiseRotateBy90() {
-        rotationType.clockwiseRotate90()
-    }
-
-    func getTotalRadias(by radians: CGFloat) -> CGFloat {
-        return radians + rotationType.rawValue * CGFloat.pi / 180
-    }
-    
+        
     func getTotalRadians() -> CGFloat {
-        return getTotalRadias(by: radians)
+        return getTotalRadians(by: radians)
     }
     
     func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType {
@@ -136,7 +130,7 @@ class CropViewModel: NSObject {
 
     func prepareForCrop(byTouchPoint point: CGPoint) {
         panOriginPoint = point
-        cropOrignFrame = cropBoxFrame
+        cropBoxOriginFrame = cropBoxFrame
         
         tappedEdge = cropEdge(forPoint: point)
         
@@ -149,39 +143,36 @@ class CropViewModel: NSObject {
     
     func resetCropFrame(by frame: CGRect) {
         cropBoxFrame = frame
-        cropOrignFrame = frame
+        cropBoxOriginFrame = frame
     }
     
     func needCrop() -> Bool {
-        return !cropOrignFrame.equalTo(cropBoxFrame)
+        return !cropBoxOriginFrame.equalTo(cropBoxFrame)
     }
-    
-    func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
-        let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
-        return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
-    }
-    
-    func getNewCropBoxFrame(with point: CGPoint, and contentFrame: CGRect, aspectRatioLockEnabled: Bool) -> CGRect {
-        var point = point
-        point.x = max(contentFrame.origin.x - cropViewPadding, point.x)
-        point.y = max(contentFrame.origin.y - cropViewPadding, point.y)
         
-        // The delta between where we first tapped, and where our finger is now
-        let xDelta = ceil(point.x - panOriginPoint.x)
-        let yDelta = ceil(point.y - panOriginPoint.y)
+    func getNewCropBoxFrame(withTouchPoint touchPoint: CGPoint,
+                            andContentFrame contentFrame: CGRect,
+                            aspectRatioLockEnabled: Bool) -> CGRect {
+        var touchPoint = touchPoint
+        touchPoint.x = max(contentFrame.origin.x - cropViewPadding, touchPoint.x)
+        touchPoint.y = max(contentFrame.origin.y - cropViewPadding, touchPoint.y)
+        
+        // The delta descripes the difference between where we tapped in the beginning, and the current finger location
+        let xDelta = ceil(touchPoint.x - panOriginPoint.x)
+        let yDelta = ceil(touchPoint.y - panOriginPoint.y)
         
         let newCropBoxFrame: CGRect
         if aspectRatioLockEnabled {
             var cropBoxLockedAspectFrameUpdater = CropBoxLockedAspectFrameUpdater(tappedEdge: tappedEdge,
                                                                                   contentFrame: contentFrame,
-                                                                                  cropOriginFrame: cropOrignFrame,
+                                                                                  cropOriginFrame: cropBoxOriginFrame,
                                                                                   cropBoxFrame: cropBoxFrame)
             cropBoxLockedAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             newCropBoxFrame = cropBoxLockedAspectFrameUpdater.cropBoxFrame
         } else {
             var cropBoxFreeAspectFrameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: tappedEdge,
                                                                               contentFrame: contentFrame,
-                                                                              cropOriginFrame: cropOrignFrame,
+                                                                              cropOriginFrame: cropBoxOriginFrame,
                                                                               cropBoxFrame: cropBoxFrame)
             cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
@@ -190,11 +181,11 @@ class CropViewModel: NSObject {
         return newCropBoxFrame
     }
     
-    func setCropBoxFrame(by refCropBox: CGRect, and imageRationH: Double) {
+    func setCropBoxFrame(by refCropBox: CGRect, for imageHorizontalToVerticalRatio: ImageHorizontalToVerticalRatio) {
         var cropBoxFrame = refCropBox
         let center = cropBoxFrame.center
         
-        if aspectRatio > CGFloat(imageRationH) {
+        if aspectRatio > CGFloat(imageHorizontalToVerticalRatio.ratio) {
             cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio
         } else {
             cropBoxFrame.size.width = cropBoxFrame.height * aspectRatio
@@ -207,33 +198,22 @@ class CropViewModel: NSObject {
     }
 }
 
-// MARK: - Handle view status changes
+// MARK: - private
 extension CropViewModel {
-    func setInitialStatus() {
-        viewStatus = .initial
+    private func counterclockwiseRotateBy90() {
+        rotationType.counterclockwiseRotate90()
     }
     
-    func setRotatingStatus(by angle: CGAngle) {
-        viewStatus = .rotating(angle: angle)
+    private func clockwiseRotateBy90() {
+        rotationType.clockwiseRotate90()
     }
     
-    func setDegree90RotatingStatus() {
-        viewStatus = .degree90Rotating
+    private func getTotalRadians(by radians: CGFloat) -> CGFloat {
+        return radians + rotationType.rawValue * CGFloat.pi / 180
     }
     
-    func setTouchImageStatus() {
-        viewStatus = .touchImage
-    }
-
-    func setTouchRotationBoardStatus() {
-        viewStatus = .touchRotationBoard
-    }
-
-    func setTouchCropboxHandleStatus() {
-        viewStatus = .touchCropboxHandle(tappedEdge: tappedEdge)
-    }
-    
-    func setBetweenOperationStatus() {
-        viewStatus = .betweenOperation
+    private func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
+        let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
+        return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
     }
 }

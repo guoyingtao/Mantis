@@ -1,16 +1,15 @@
 //
-//  CropScrollView.swift
+//  CropWorkbenchView.swift
 //  Mantis
 //
-//  Created by Echo on 10/20/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 10/20/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 
 import UIKit
 
-class CropScrollView: UIScrollView {
-    
-    weak var imageContainer: ImageContainer?
+final class CropWorkbenchView: UIScrollView {
+    var imageContainer: ImageContainerProtocol?
     
     var touchesBegan = {}
     var touchesCancelled = {}
@@ -18,23 +17,34 @@ class CropScrollView: UIScrollView {
     
     private var initialMinimumZoomScale: CGFloat = 1.0
     
-    init(frame: CGRect, minimumZoomScale: CGFloat = 1.0, maximumZoomScale: CGFloat = 15.0) {
+    deinit {
+        print("CropWorkbenchView deinit")
+    }
+    
+    init(frame: CGRect,
+         minimumZoomScale: CGFloat,
+         maximumZoomScale: CGFloat,
+         imageContainer: ImageContainerProtocol) {
         super.init(frame: frame)
+        
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInsetAdjustmentBehavior = .never
-        self.minimumZoomScale = minimumZoomScale
-        self.maximumZoomScale = maximumZoomScale
-        initialMinimumZoomScale = minimumZoomScale
         clipsToBounds = false
         contentSize = bounds.size
         layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+
+        self.minimumZoomScale = minimumZoomScale
+        self.maximumZoomScale = maximumZoomScale
+        initialMinimumZoomScale = minimumZoomScale
+        self.imageContainer = imageContainer
+        addSubview(self.imageContainer!)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -51,7 +61,20 @@ class CropScrollView: UIScrollView {
         touchesEnded()
         super.touchesBegan(touches, with: event)
     }
-    
+        
+    private func getBoundZoomScale() -> CGFloat {
+        guard let imageContainer = imageContainer else {
+            return 1.0
+        }
+        
+        let scaleW = bounds.width / imageContainer.bounds.width
+        let scaleH = bounds.height / imageContainer.bounds.height
+        
+        return max(scaleW, scaleH) * initialMinimumZoomScale
+    }
+}
+
+extension CropWorkbenchView: CropWorkbenchViewProtocol {
     func checkContentOffset() {
         contentOffset.x = max(contentOffset.x, 0)
         contentOffset.y = max(contentOffset.y, 0)
@@ -65,17 +88,6 @@ class CropScrollView: UIScrollView {
         }
     }
     
-    private func getBoundZoomScale() -> CGFloat {
-        guard let imageContainer = imageContainer else {
-            return 1.0
-        }
-        
-        let scaleW = bounds.width / imageContainer.bounds.width
-        let scaleH = bounds.height / imageContainer.bounds.height
-        
-        return max(scaleW, scaleH) * initialMinimumZoomScale
-    }
-    
     func updateMinZoomScale() {
         minimumZoomScale = getBoundZoomScale()
     }
@@ -84,7 +96,7 @@ class CropScrollView: UIScrollView {
         let scale = getBoundZoomScale()
         
         minimumZoomScale = scale
-        setZoomScale(scale, animated: animated)        
+        setZoomScale(scale, animated: animated)
     }
     
     func shouldScale() -> Bool {
@@ -105,7 +117,7 @@ class CropScrollView: UIScrollView {
         center = oldScrollViewcenter
     }
     
-    func resetBy(rect: CGRect) {
+    func reset(by rect: CGRect) {
         // Reseting zoom need to be before resetting frame and contentsize
         minimumZoomScale = max(1.0, initialMinimumZoomScale)
         zoomScale = minimumZoomScale
@@ -116,5 +128,22 @@ class CropScrollView: UIScrollView {
                              height: rect.height * minimumZoomScale)
         frame = rect
         contentSize = newRect.size
+    }
+    
+    func resetImageContent(by cropBoxFrame: CGRect) {
+        transform = .identity
+        reset(by: cropBoxFrame)
+        
+        guard let imageContainer = imageContainer else {
+            return
+        }
+        
+        imageContainer.frame = CGRect(x: 0,
+                                      y: 0,
+                                      width: contentSize.width,
+                                      height: contentSize.height)
+        
+        contentOffset = CGPoint(x: (imageContainer.frame.width - frame.width) / 2,
+                                y: (imageContainer.frame.height - frame.height) / 2)
     }
 }

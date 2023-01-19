@@ -2,8 +2,8 @@
 //  EmbeddedCropViewController.swift
 //  MantisExample
 //
-//  Created by Echo on 11/9/18.
-//  Copyright © 2018 Echo. All rights reserved.
+//  Created by Yingtao Guo on 11/9/18.
+//  Copyright © 2018 Echo Studio. All rights reserved.
 //
 
 import UIKit
@@ -40,16 +40,17 @@ class EmbeddedCropViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let cropViewController = segue.destination as? CropViewController {
-            cropViewController.image = image
-            cropViewController.delegate = self
-            
-            var config = Mantis.Config()
-            config.cropToolbarConfig.mode = .embedded
-            cropViewController.config = config
-            
-            self.cropViewController = cropViewController
+        guard let cropViewController = segue.destination as? CropViewController, let image else {
+            return
         }
+        
+        cropViewController.delegate = self
+                    
+        var config = Mantis.Config()
+        config.cropToolbarConfig.mode = .embedded
+        Mantis.setupCropViewController(cropViewController, with: image, and: config)
+        
+        self.cropViewController = cropViewController
     }
     
     private func getResolution(image: UIImage?) -> String? {
