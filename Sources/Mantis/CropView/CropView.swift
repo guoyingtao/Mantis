@@ -1052,13 +1052,19 @@ extension CropView: CropViewProtocol {
             }
         }
         
+        let totalRadians = getTotalRadians()
+        let cropRegion = imageContainer.getCropRegion(withCropBoxFrame: viewModel.cropBoxFrame,
+                                                      cropView: self,
+                                                      rotation: totalRadians)
+        
         return CropInfo(
             translation: translation,
-            rotation: getTotalRadians(),
+            rotation: totalRadians,
             scaleX: scaleX,
             scaleY: scaleY,
             cropSize: cropAuxiliaryIndicatorView.frame.size,
-            imageViewSize: imageContainer.bounds.size
+            imageViewSize: imageContainer.bounds.size,
+            cropRegion: cropRegion
         )
     }
     

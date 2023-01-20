@@ -43,6 +43,7 @@
 		66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F439892978539700728B52 /* RotationDialViewModelTests.swift */; };
 		66F4398E2978F6E400728B52 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4398D2978F6E400728B52 /* UIViewExtensions.swift */; };
 		66F439902979472C00728B52 /* CropViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4398F2979472C00728B52 /* CropViewModelTests.swift */; };
+		66F43992297A123400728B52 /* CropViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F43991297A123400728B52 /* CropViewControllerDelegate.swift */; };
 		66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F909BE287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift */; };
 		8EFB6F6725D16B0F00C0DDB2 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */; };
 		8EFB6FB125D187A000C0DDB2 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F5425D16A9E00C0DDB2 /* Resource.bundle */; };
@@ -133,6 +134,7 @@
 		66F439892978539700728B52 /* RotationDialViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialViewModelTests.swift; sourceTree = "<group>"; };
 		66F4398D2978F6E400728B52 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		66F4398F2979472C00728B52 /* CropViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelTests.swift; sourceTree = "<group>"; };
+		66F43991297A123400728B52 /* CropViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewControllerDelegate.swift; sourceTree = "<group>"; };
 		66F909BE287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToolBarButtonImageBuilder+DrawImage.swift"; sourceTree = "<group>"; };
 		8EFB6F3625D154D900C0DDB2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F3725D154D900C0DDB2 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */,
 				66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */,
 				66F439872978376F00728B52 /* RotationDialViewModelProtocol.swift */,
+				66F43991297A123400728B52 /* CropViewControllerDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -649,6 +652,7 @@
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
 				66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */,
+				66F43992297A123400728B52 /* CropViewControllerDelegate.swift in Sources */,
 				OBJ_99 /* RotationDial.swift in Sources */,
 				6659429D2877DAE80096A5DB /* Config.swift in Sources */,
 				OBJ_100 /* RotationDialPlate.swift in Sources */,
