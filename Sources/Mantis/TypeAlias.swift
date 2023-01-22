@@ -38,8 +38,7 @@ public typealias CropRegion = (
     topLeft: CGPoint,
     topRight: CGPoint,
     bottomLeft: CGPoint,
-    bottomRight: CGPoint,
-    rotation: CGFloat
+    bottomRight: CGPoint
 )
 
 public typealias CropInfo = (

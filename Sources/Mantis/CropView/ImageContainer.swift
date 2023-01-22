@@ -48,7 +48,7 @@ extension ImageContainer: ImageContainerProtocol {
         return refBounds.contains(point1) && refBounds.contains(point2)
     }
     
-    func getCropRegion(withCropBoxFrame cropBoxFrame: CGRect, cropView: UIView, rotation: CGFloat) -> CropRegion {
+    func getCropRegion(withCropBoxFrame cropBoxFrame: CGRect, cropView: UIView) -> CropRegion {
         var topLeft = cropView.convert(CGPoint(x: cropBoxFrame.minX, y: cropBoxFrame.minY), to: self)
         var topRight = cropView.convert(CGPoint(x: cropBoxFrame.maxX, y: cropBoxFrame.minY), to: self)
         var bottomLeft = cropView.convert(CGPoint(x: cropBoxFrame.minX, y: cropBoxFrame.maxY), to: self)
@@ -62,7 +62,6 @@ extension ImageContainer: ImageContainerProtocol {
         return CropRegion(topLeft: topLeft,
                           topRight: topRight,
                           bottomLeft: bottomLeft,
-                          bottomRight: bottomRight,
-                          rotation: rotation)
+                          bottomRight: bottomRight)
     }
 }
