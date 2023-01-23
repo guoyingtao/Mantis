@@ -355,7 +355,9 @@ extension CropViewController: CropViewDelegate {
     }
     
     func cropViewDidEndResize(_ cropView: CropView) {
-        delegate?.cropViewControllerDidEndResize(self, original: cropView.image, cropInfo: cropView.getCropInfo())
+        delegate?.cropViewControllerDidEndResize(self,
+                                                 original: cropView.image,
+                                                 cropInfo: cropView.getCropInfo())
     }
 }
 

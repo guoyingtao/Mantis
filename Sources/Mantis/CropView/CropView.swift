@@ -1068,6 +1068,6 @@ extension CropView: CropViewProtocol {
     }
     
     func getExpectedCropImageSize() -> CGSize {
-        image.getExpectedCropImageSize(by: getCropInfo())
+        image.getOutputCropImageSize(by: getCropInfo())
     }
 }
