@@ -103,7 +103,7 @@ extension UIImage {
         guard let transformedCGImage = fixedOrientationImage.transformedImage(transform,
                                                                               outputSize: outputSize,
                                                                               cropSize: cropInfo.cropSize,
-                                                                              imageViewSize:        cropInfo.imageViewSize) else {
+                                                                              imageViewSize: cropInfo.imageViewSize) else {
             return nil
         }
         

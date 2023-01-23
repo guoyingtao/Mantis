@@ -39,6 +39,7 @@
 		6659429D2877DAE80096A5DB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429C2877DAE80096A5DB /* Config.swift */; };
 		6659429F2877DC8A0096A5DB /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429E2877DC8A0096A5DB /* Enum.swift */; };
 		665942A12877DD1C0096A5DB /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665942A02877DD1C0096A5DB /* TypeAlias.swift */; };
+		66EDABDC297E6D3200EAD5DC /* CGAffineTransformExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EDABDB297E6D3200EAD5DC /* CGAffineTransformExtensions.swift */; };
 		66F439882978376F00728B52 /* RotationDialViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F439872978376F00728B52 /* RotationDialViewModelProtocol.swift */; };
 		66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F439892978539700728B52 /* RotationDialViewModelTests.swift */; };
 		66F4398E2978F6E400728B52 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4398D2978F6E400728B52 /* UIViewExtensions.swift */; };
@@ -130,6 +131,7 @@
 		6659429C2877DAE80096A5DB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		6659429E2877DC8A0096A5DB /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		665942A02877DD1C0096A5DB /* TypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
+		66EDABDB297E6D3200EAD5DC /* CGAffineTransformExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGAffineTransformExtensions.swift; sourceTree = "<group>"; };
 		66F439872978376F00728B52 /* RotationDialViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialViewModelProtocol.swift; sourceTree = "<group>"; };
 		66F439892978539700728B52 /* RotationDialViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialViewModelTests.swift; sourceTree = "<group>"; };
 		66F4398D2978F6E400728B52 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				OBJ_31 /* CoreGraphicsExtensions.swift */,
 				OBJ_32 /* UIImageExtensions.swift */,
 				66F4398D2978F6E400728B52 /* UIViewExtensions.swift */,
+				66EDABDB297E6D3200EAD5DC /* CGAffineTransformExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -636,6 +639,7 @@
 				5F69CC5E26C0629400568B75 /* Definition.swift in Sources */,
 				OBJ_87 /* UIImageExtensions.swift in Sources */,
 				OBJ_88 /* GeometryHelper.swift in Sources */,
+				66EDABDC297E6D3200EAD5DC /* CGAffineTransformExtensions.swift in Sources */,
 				663FCF3928866DDA003D3B9E /* CropViewConfig.swift in Sources */,
 				OBJ_89 /* LocalizedHelper.swift in Sources */,
 				OBJ_90 /* Mantis.swift in Sources */,
