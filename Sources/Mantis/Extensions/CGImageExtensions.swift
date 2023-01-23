@@ -19,6 +19,7 @@ extension CGImage {
         guard var colorSpaceRef = self.colorSpace else {
             return self
         }
+        
         // If the color space does not allow output, default to the RGB color space
         if !colorSpaceRef.supportsOutput {
             colorSpaceRef = CGColorSpaceCreateDeviceRGB()
@@ -52,12 +53,12 @@ extension CGImage {
         }
         
         guard let context = CGContext(data: nil,
-                                width: Int(outputSize.width),
-                                height: Int(outputSize.height),
-                                bitsPerComponent: bitsPerComponent,
-                                bytesPerRow: bitmapBytesPerRow,
-                                space: colorSpaceRef,
-                                bitmapInfo: getBitmapInfo()) else {
+                                      width: Int(outputSize.width),
+                                      height: Int(outputSize.height),
+                                      bitsPerComponent: bitsPerComponent,
+                                      bytesPerRow: bitmapBytesPerRow,
+                                      space: colorSpaceRef,
+                                      bitmapInfo: getBitmapInfo()) else {
             return self
         }
                 
@@ -77,12 +78,10 @@ extension CGImage {
         context.scaleBy(x: 1, y: -1)
         
         context.draw(self, in: CGRect(x: (-imageViewSize.width / 2),
-                                       y: (-imageViewSize.height / 2),
-                                       width: imageViewSize.width,
-                                       height: imageViewSize.height))
+                                      y: (-imageViewSize.height / 2),
+                                      width: imageViewSize.width,
+                                      height: imageViewSize.height))
         
-        let result = context.makeImage()
-        
-        return result
+        return context.makeImage()
     }
 }
