@@ -55,12 +55,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         return button
     }()
 
-    private lazy var fixedRatioSettingButton: UIButton = {
-        let button = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
-        let icon = iconProvider?.getSetRatioIcon() ?? ToolBarButtonImageBuilder.clampImage()
-        button.setImage(icon, for: .normal)
-        return button
-    }()
+    private var fixedRatioSettingButton: UIButton?
     
     private lazy var cancelButton: UIButton = {
         if let icon = iconProvider?.getCancelIcon() {
@@ -138,7 +133,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
         if config.toolbarButtonOptions.contains(.ratio) && config.ratioCandidatesShowType == .presentRatioListFromButton {
             if config.includeFixedRatiosSettingButton {
-                addButtonsToContainer(button: fixedRatioSettingButton)
+                fixedRatioSettingButton = createSetRatioButton()
+                addButtonsToContainer(button: fixedRatioSettingButton!)
 
                 if config.presetRatiosButtonSelected {
                     handleFixedRatioSetted(ratio: 0)
@@ -180,7 +176,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     public func handleFixedRatioSetted(ratio: Double) {
-        fixedRatioSettingButton.tintColor = nil
+        fixedRatioSettingButton?.tintColor = nil
     }
 
     public func handleFixedRatioUnSetted() {
@@ -188,7 +184,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             return
         }
 
-        fixedRatioSettingButton.tintColor = config.foregroundColor
+        fixedRatioSettingButton?.tintColor = config.foregroundColor
     }
 
     public func handleCropViewDidBecomeResettable() {
@@ -277,6 +273,13 @@ extension CropToolbar {
             let resetText = LocalizedHelper.getString("Mantis.Reset", value: "Reset")
             return createOptionButton(withTitle: resetText, andAction: #selector(reset))
         }
+    }
+    
+    private func createSetRatioButton() -> UIButton {
+        let button = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
+        let icon = iconProvider?.getSetRatioIcon() ?? ToolBarButtonImageBuilder.clampImage()
+        button.setImage(icon, for: .normal)
+        return button
     }
 
     private func createButtonContainer() {
