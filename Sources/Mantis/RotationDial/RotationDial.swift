@@ -46,7 +46,6 @@ final class RotationDial: UIView {
         self.dialConfig = dialConfig
         self.viewModel = viewModel
         super.init(frame: frame)
-        setup(with: frame)
     }
     
     required init?(coder: NSCoder) {
@@ -245,5 +244,9 @@ extension RotationDial: RotationDialProtocol {
     func setRotationCenter(by point: CGPoint, of view: UIView) {
         let newPoint = view.convert(point, to: self)
         dialConfig.rotationCenterType = .custom(newPoint)
+    }
+    
+    func reset() {
+        dialConfig.rotationCenterType = .useDefault
     }
 }

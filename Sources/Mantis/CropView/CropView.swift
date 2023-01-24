@@ -52,7 +52,14 @@ class CropView: UIView {
     let cropWorkbenchView: CropWorkbenchViewProtocol
     let cropMaskViewManager: CropMaskViewManagerProtocol
     
-    var rotationDial: RotationDialProtocol?
+    var rotationDial: RotationDialProtocol? {
+        didSet {
+            guard let rotationDial = rotationDial else {
+                return
+            }
+            addSubview(rotationDial)
+        }
+    }
     
     var manualZoomed = false
     var forceFixedRatio = false
@@ -107,7 +114,7 @@ class CropView: UIView {
             self?.handleCropBoxFrameChange(cropBoxFrame)
         }
         
-        initalRender()
+        viewModel.setInitialStatus()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -125,7 +132,7 @@ class CropView: UIView {
         cropMaskViewManager.adaptMaskTo(match: cropBoxFrame, cropRatio: cropRatio)
     }
     
-    private func initalRender() {
+    private func initialRender() {
         setupCropWorkbenchView()
         setupCropAuxiliaryIndicatorView()
         checkImageStatusChanged()
@@ -136,7 +143,7 @@ class CropView: UIView {
         
         switch viewStatus {
         case .initial:
-            initalRender()
+            initialRender()
         case .rotating(let angle):
             viewModel.degrees = angle.degrees
             rotateCropWorkbenchView()
@@ -195,13 +202,13 @@ class CropView: UIView {
     }
     
     func resetComponents() {
-        cropMaskViewManager.removeMaskViews()
         cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageHorizontalToVerticalRatio()))
+        
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
         cropAuxiliaryIndicatorView.bringSelfToFront()
         
-        setupAngleDashboard()
+        setupRotationDial()
         
         if aspectRatioLockEnabled {
             setFixedRatioCropBox()
@@ -231,12 +238,12 @@ class CropView: UIView {
         addSubview(cropAuxiliaryIndicatorView)
     }
     
-    private func setupAngleDashboard() {
+    private func setupRotationDial() {
         guard cropViewConfig.showRotationDial, let rotationDial = rotationDial else {
             return
         }
         
-        rotationDial.removeFromSuperview()
+        rotationDial.reset()
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
         let dialFrame = CGRect(x: 0,
@@ -244,9 +251,7 @@ class CropView: UIView {
                                width: boardLength,
                                height: angleDashboardHeight)
         rotationDial.setup(with: dialFrame)
-
         rotationDial.isUserInteractionEnabled = true
-        addSubview(rotationDial)
         
         rotationDial.setRotationCenter(by: cropAuxiliaryIndicatorView.center, of: self)
         
@@ -259,6 +264,8 @@ class CropView: UIView {
         }
         
         rotationDial.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+        rotationDial.bringSelfToFront()
+                
         adaptAngleDashboardToCropBox()
     }
     
@@ -750,7 +757,6 @@ extension CropView: CropViewProtocol {
         cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)
         cropWorkbenchView.reset(by: viewModel.cropBoxFrame)
         
-        setupAngleDashboard()
         rotateCropWorkbenchView()
         
         if viewModel.cropRightBottomOnImage != .zero {
@@ -770,7 +776,6 @@ extension CropView: CropViewProtocol {
             let contentRect = getContentBounds()
             
             adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
-                self?.adaptAngleDashboardToCropBox()
                 self?.viewModel.setBetweenOperationStatus()
             }
         }
@@ -978,16 +983,7 @@ extension CropView: CropViewProtocol {
     }
     
     func reset() {
-        cropWorkbenchView.removeFromSuperview()
-        cropAuxiliaryIndicatorView.removeFromSuperview()
-        rotationDial?.removeFromSuperview()
-        
-        if forceFixedRatio {
-            aspectRatioLockEnabled = true
-        } else {
-            aspectRatioLockEnabled = false
-        }
-        
+        aspectRatioLockEnabled = forceFixedRatio
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         
         resetComponents()

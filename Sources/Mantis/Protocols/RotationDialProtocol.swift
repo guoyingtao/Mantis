@@ -20,4 +20,5 @@ protocol RotationDialProtocol: UIView {
     func resetAngle(animated: Bool)
     func getRotationAngle() -> CGAngle
     func setRotationCenter(by point: CGPoint, of view: UIView)
+    func reset()
 }

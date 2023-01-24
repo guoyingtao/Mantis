@@ -46,10 +46,6 @@ extension CropMaskViewManager: CropMaskViewManagerProtocol {
         maskViews.forEach { $0.removeFromSuperview() }
     }
     
-    func bringMaskViewsToFront() {
-        maskViews.forEach { $0.bringSelfToFront() }
-    }
-        
     func showDimmingBackground(animated: Bool) {
         if animated {
             UIView.animate(withDuration: 0.1) {

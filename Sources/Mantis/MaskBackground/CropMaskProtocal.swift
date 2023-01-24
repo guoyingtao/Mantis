@@ -11,7 +11,7 @@ import UIKit
 private let minOverLayerUnit: CGFloat = 30
 private let initialFrameLength: CGFloat = 1000
 
-protocol CropMaskProtocol where Self: UIView {
+protocol CropMaskProtocol: UIView {
     var cropShapeType: CropShapeType { get set }
     var innerLayer: CALayer? { get set }
     
@@ -39,7 +39,7 @@ extension CropMaskProtocol {
     }
     
     func adaptMaskTo(match cropRect: CGRect, cropRatio: CGFloat) {
-        let scaleX: CGFloat
+        var scaleX: CGFloat
         
         switch cropShapeType {
         case .roundedRect:
@@ -50,7 +50,10 @@ extension CropMaskProtocol {
             scaleX = cropRect.width / minOverLayerUnit
         }
                 
-        let scaleY = cropRect.height / minOverLayerUnit
+        var scaleY = cropRect.height / minOverLayerUnit
+        
+        scaleX = max(scaleX, 0.0001)
+        scaleY = max(scaleY, 0.0001)
 
         transform = CGAffineTransform(scaleX: scaleX, y: scaleY)
 
