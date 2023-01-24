@@ -164,15 +164,7 @@ class CropView: UIView {
             checkImageStatusChanged()
         }
     }
-    
-    private func isTheSamePoint(point1: CGPoint, point2: CGPoint) -> Bool {
-        let tolerance = CGFloat.ulpOfOne * 10
-        if abs(point1.x - point2.x) > tolerance { return false }
-        if abs(point1.y - point2.y) > tolerance { return false }
         
-        return true
-    }
-    
     private func imageStatusChanged() -> Bool {
         if viewModel.getTotalRadians() != 0 { return true }
         
@@ -664,11 +656,11 @@ extension CropView {
                     cropInfo)
         case .polygon(let sides, let offset, maskOnly: false):
             let points = polygonPointArray(sides: sides, originX: 0.5, originY: 0.5, radius: 0.5, offset: 90 + offset)
-            return CropOutput(croppedImage.clipPath(points,
-                                                    borderWidth: cropViewConfig.cropBorderWidth,
-                                                    borderColor: cropViewConfig.cropBorderColor),
-                              transformation,
-                              cropInfo)
+            return (croppedImage.clipPath(points,
+                                          borderWidth: cropViewConfig.cropBorderWidth,
+                                          borderColor: cropViewConfig.cropBorderColor),
+                    transformation,
+                    cropInfo)
         }
     }
     
