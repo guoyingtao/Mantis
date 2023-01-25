@@ -209,23 +209,23 @@ public class CropViewController: UIViewController {
         cropToolbar.handleFixedRatioUnSetted()
     }
     
-    private func isNeedResetRatioButton() -> Bool {
-        var needResetRatioButton = false
+    private func isNeedToResetRatioButton() -> Bool {
+        var needToResetRatioButton = false
         
         switch config.presetFixedRatioType {
         case .canUseMultiplePresetFixedRatio(let defaultRatio):
             if defaultRatio == 0 {
-                needResetRatioButton = true
+                needToResetRatioButton = true
             }
         default:
             break
         }
 
-        return needResetRatioButton
+        return needToResetRatioButton
     }
     
     @objc private func handleSetRatio() {
-        if cropView.aspectRatioLockEnabled && isNeedResetRatioButton() {
+        if cropView.aspectRatioLockEnabled && isNeedToResetRatioButton() {
             resetRatioButton()
             return
         }
@@ -256,7 +256,7 @@ public class CropViewController: UIViewController {
     }
     
     private func handleReset() {
-        if isNeedResetRatioButton() {
+        if isNeedToResetRatioButton() {
             resetRatioButton()
         }
         
