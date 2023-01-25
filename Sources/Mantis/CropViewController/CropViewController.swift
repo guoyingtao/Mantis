@@ -126,7 +126,7 @@ public class CropViewController: UIViewController {
 #endif
         view.backgroundColor = .black
         
-        cropView.initialSetup(delegate: self, alwaysUsingOnePresetFixedRatio: isAlwaysUsingOnePresetFixedRatio())
+        cropView.initialSetup(delegate: self, presetFixedRatioType: config.presetFixedRatioType)
         createCropToolbar()
         if config.cropToolbarConfig.ratioCandidatesShowType == .alwaysShowRatioList
             && config.cropToolbarConfig.includeFixedRatiosSettingButton {
@@ -186,17 +186,9 @@ public class CropViewController: UIViewController {
     
     private func setFixedRatio(_ ratio: Double, zoom: Bool = true) {
         cropToolbar.handleFixedRatioSetted(ratio: ratio)
-        cropView.setFixedRatio(ratio, zoom: zoom, alwaysUsingOnePresetFixedRatio: isAlwaysUsingOnePresetFixedRatio())
+        cropView.setFixedRatio(ratio, zoom: zoom, presetFixedRatioType: config.presetFixedRatioType)
     }
     
-    private func isAlwaysUsingOnePresetFixedRatio() -> Bool {
-        if case .alwaysUsingOnePresetFixedRatio = config.presetFixedRatioType {
-            return true
-        }
-        
-        return false
-    }
-        
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         cropView.processPresetTransformation { [weak self] transformation in
@@ -217,8 +209,23 @@ public class CropViewController: UIViewController {
         cropToolbar.handleFixedRatioUnSetted()
     }
     
+    private func isNeedResetRatioButton() -> Bool {
+        var needResetRatioButton = false
+        
+        switch config.presetFixedRatioType {
+        case .canUseMultiplePresetFixedRatio(let defaultRatio):
+            if defaultRatio == 0 {
+                needResetRatioButton = true
+            }
+        default:
+            break
+        }
+
+        return needResetRatioButton
+    }
+    
     @objc private func handleSetRatio() {
-        if cropView.aspectRatioLockEnabled {
+        if cropView.aspectRatioLockEnabled && isNeedResetRatioButton() {
             resetRatioButton()
             return
         }
@@ -249,7 +256,10 @@ public class CropViewController: UIViewController {
     }
     
     private func handleReset() {
-        resetRatioButton()
+        if isNeedResetRatioButton() {
+            resetRatioButton()
+        }
+        
         cropView.reset()
         ratioSelector?.reset()
         ratioSelector?.update(fixedRatioManager: getFixedRatioManager())

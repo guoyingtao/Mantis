@@ -13,14 +13,14 @@ protocol CropViewProtocol: UIView {
     var aspectRatioLockEnabled: Bool { get set }
     var delegate: CropViewDelegate? { get set }
     
-    func initialSetup(delegate: CropViewDelegate, alwaysUsingOnePresetFixedRatio: Bool)
+    func initialSetup(delegate: CropViewDelegate, presetFixedRatioType: PresetFixedRatioType)
     func setViewDefaultProperties()
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType
     func getImageHorizontalToVerticalRatio() -> Double
     func resetComponents()
     func prepareForDeviceRotation()
     func handleDeviceRotated()
-    func setFixedRatio(_ ratio: Double, zoom: Bool, alwaysUsingOnePresetFixedRatio: Bool)
+    func setFixedRatio(_ ratio: Double, zoom: Bool, presetFixedRatioType: PresetFixedRatioType)
     func rotateBy90(withRotateType rotateType: RotateBy90DegreeType, completion: @escaping () -> Void)
     func handleAlterCropper90Degree()
     func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation)
