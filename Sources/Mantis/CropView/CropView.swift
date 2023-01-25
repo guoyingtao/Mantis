@@ -728,10 +728,19 @@ extension CropView {
 }
 
 extension CropView: CropViewProtocol {
-    func initialSetup(delegate: CropViewDelegate, alwaysUsingOnePresetFixedRatio: Bool = false) {
+    private func setForceFixedRatio(by presetFixedRatioType: PresetFixedRatioType) {
+        switch presetFixedRatioType {
+        case .alwaysUsingOnePresetFixedRatio(_):
+            forceFixedRatio = true
+        case .canUseMultiplePresetFixedRatio(let defaultRatio):
+            forceFixedRatio = defaultRatio > 0
+        }
+    }
+    
+    func initialSetup(delegate: CropViewDelegate, presetFixedRatioType: PresetFixedRatioType) {
         self.delegate = delegate
         setViewDefaultProperties()
-        forceFixedRatio = alwaysUsingOnePresetFixedRatio
+        setForceFixedRatio(by: presetFixedRatioType)
     }
     
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
@@ -781,13 +790,15 @@ extension CropView: CropViewProtocol {
         }
     }
     
-    func setFixedRatio(_ ratio: Double, zoom: Bool = true, alwaysUsingOnePresetFixedRatio: Bool = false) {
+    func setFixedRatio(_ ratio: Double, zoom: Bool = true, presetFixedRatioType: PresetFixedRatioType) {
         aspectRatioLockEnabled = true
         
         if viewModel.aspectRatio != CGFloat(ratio) {
             viewModel.aspectRatio = CGFloat(ratio)
             
-            if alwaysUsingOnePresetFixedRatio {
+            setForceFixedRatio(by: presetFixedRatioType)
+            
+            if forceFixedRatio {
                 setFixedRatioCropBox(zoom: zoom)
             } else {
                 UIView.animate(withDuration: 0.5) {
