@@ -189,6 +189,10 @@ public class CropViewController: UIViewController {
         cropView.setFixedRatio(ratio, zoom: zoom, presetFixedRatioType: config.presetFixedRatioType)
     }
     
+    private func setFreeRatio() {
+        resetRatioButton()
+    }
+    
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         cropView.processPresetTransformation { [weak self] transformation in
@@ -406,6 +410,10 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectRatio(_ cropToolbar: CropToolbarProtocol, ratio: Double) {
         setFixedRatio(ratio)
+    }
+    
+    public func didSelectFreeRatio(_ cropToolbar: CropToolbarProtocol) {
+        setFreeRatio()
     }
     
     public func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol) {
