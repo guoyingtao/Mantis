@@ -2,6 +2,19 @@
 
 -----
 
+## [2.5.0](https://www.github.com/guoyingtao/Mantis/compare/v2.4.0...v2.5.0) (2023-01-27)
+
+
+### Features
+
+* add CropRegion into CropInfo ([035b079](https://www.github.com/guoyingtao/Mantis/commit/035b07994dbd57157f0831a4c81cfa3ef6553f67))
+
+
+### Bug Fixes
+
+* fix reset issues ([b10d031](https://www.github.com/guoyingtao/Mantis/commit/b10d031242036149fb8ba2259044e937699eb114))
+* fix the issue when using canUseMultiplePresetFixedRatio with default ratio > 0 ([#252](https://www.github.com/guoyingtao/Mantis/issues/252)) ([cbd66dd](https://www.github.com/guoyingtao/Mantis/commit/cbd66dd6419406ec56f266b3aad073981750ffe4))
+
 ## [2.4.0](https://www.github.com/guoyingtao/Mantis/compare/v2.3.0...v2.4.0) (2023-01-16)
 
 
