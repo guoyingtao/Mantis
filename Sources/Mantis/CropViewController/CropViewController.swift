@@ -376,47 +376,47 @@ extension CropViewController: CropViewDelegate {
 }
 
 extension CropViewController: CropToolbarDelegate {
-    public func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleHorizontallyFlip()
     }
     
-    public func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleVerticallyFlip()
     }
     
-    public func didSelectCancel(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectCancel(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleCancel()
     }
     
-    public func didSelectCrop(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectCrop(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleCrop()
     }
     
-    public func didSelectCounterClockwiseRotate(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectCounterClockwiseRotate(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleRotate(withRotateType: .counterClockwise)
     }
     
-    public func didSelectClockwiseRotate(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectClockwiseRotate(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleRotate(withRotateType: .clockwise)
     }
     
-    public func didSelectReset(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectReset(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleReset()
     }
     
-    public func didSelectSetRatio(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectSetRatio(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleSetRatio()
     }
     
-    public func didSelectRatio(_ cropToolbar: CropToolbarProtocol, ratio: Double) {
+    public func didSelectRatio(_ cropToolbar: CropToolbarProtocol? = nil, ratio: Double) {
         setFixedRatio(ratio)
     }
     
-    public func didSelectFreeRatio(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectFreeRatio(_ cropToolbar: CropToolbarProtocol? = nil) {
         setFreeRatio()
     }
     
-    public func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol) {
+    public func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleAlterCropper90Degree()
     }    
 }
