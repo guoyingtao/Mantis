@@ -2,6 +2,13 @@
 
 -----
 
+### [2.5.1](https://www.github.com/guoyingtao/Mantis/compare/v2.5.0...v2.5.1) (2023-01-28)
+
+
+### Bug Fixes
+
+* use optional CropToolbarProtocol for CropToolbarDelegate ([#255](https://www.github.com/guoyingtao/Mantis/issues/255)) ([46a3af0](https://www.github.com/guoyingtao/Mantis/commit/46a3af06a2eecaa989970a208f5c5dfebd165432))
+
 ## [2.5.0](https://www.github.com/guoyingtao/Mantis/compare/v2.4.0...v2.5.0) (2023-01-27)
 
 
