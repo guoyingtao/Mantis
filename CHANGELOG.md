@@ -2,6 +2,13 @@
 
 -----
 
+### [2.5.2](https://www.github.com/guoyingtao/Mantis/compare/v2.5.1...v2.5.2) (2023-01-30)
+
+
+### Bug Fixes
+
+* fix the issue of output size does not match the crop ratio ([#260](https://www.github.com/guoyingtao/Mantis/issues/260)) ([459aa77](https://www.github.com/guoyingtao/Mantis/commit/459aa77cb19e2805ea7f8e6ef3cf169588766a3e))
+
 ### [2.5.1](https://www.github.com/guoyingtao/Mantis/compare/v2.5.0...v2.5.1) (2023-01-28)
 
 
