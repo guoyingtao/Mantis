@@ -36,10 +36,11 @@ public func cropViewController(image: UIImage,
 
 public func setupCropViewController(_ cropViewController: Mantis.CropViewController,
                                     with image: UIImage,
-                                    and config: Mantis.Config = Mantis.Config()) {
+                                    and config: Mantis.Config = Mantis.Config(),
+                                    cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)) {
     cropViewController.config = config
     cropViewController.cropView = buildCropView(with: image, and: config.cropViewConfig)
-    cropViewController.cropToolbar = CropToolbar(frame: .zero)
+    cropViewController.cropToolbar = cropToolbar
 }
 
 public func locateResourceBundle(by hostClass: AnyClass) {
