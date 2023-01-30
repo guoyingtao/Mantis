@@ -53,8 +53,8 @@ extension CGImage {
         }
         
         guard let context = CGContext(data: nil,
-                                      width: Int(outputSize.width),
-                                      height: Int(outputSize.height),
+                                      width: Int(round(outputSize.width)),
+                                      height: Int(round(outputSize.height)),
                                       bitsPerComponent: bitsPerComponent,
                                       bytesPerRow: bitmapBytesPerRow,
                                       space: colorSpaceRef,
