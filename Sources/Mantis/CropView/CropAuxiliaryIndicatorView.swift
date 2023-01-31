@@ -11,32 +11,36 @@ import UIKit
 class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var boarderNormalColor = UIColor.white
     private var boarderHintColor = UIColor.white
+    private let cornerHandleLength = CGFloat(20.0)
+    private let edgeLineHandleLength = CGFloat(30.0)
+    private let handleThickness = CGFloat(3.0)
+    private let borderThickness = CGFloat(1.0)
+    private let hineLineThickness = CGFloat(2.0)
+
     private var hintLine = UIView()
     private var tappedEdge: CropViewOverlayEdge = .none
+    private var gridColor = UIColor(white: 0.8, alpha: 1)
     
     var gridHidden = true
-    var gridColor = UIColor(white: 0.8, alpha: 1)
-    
-    private let cropOverLayerCornerWidth = CGFloat(20.0)
-    
+
     var gridLineNumberType: GridLineNumberType = .crop {
         didSet {
             setupGridLines()
             layoutGridLines()
         }
     }
+    
     private var horizontalGridLines: [UIView] = []
     private var verticalGridLines: [UIView] = []
     private var borderLine: UIView = UIView()
-    private var corners: [UIView] = []
-    private let borderThickness = CGFloat(1.0)
-    private let hineLineThickness = CGFloat(2.0)
+    private var cornerHandles: [UIView] = []
+    private var edgeLineHandles: [UIView] = []
     
     override var frame: CGRect {
         didSet {
-            if !corners.isEmpty {
+            if !cornerHandles.isEmpty {
                 layoutLines()
-                handleEdgeTouched(with: tappedEdge)
+                handleCornerHandleTouched(with: tappedEdge)
             }
         }
     }
@@ -66,7 +70,11 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         borderLine.layer.borderColor = boarderNormalColor.cgColor
         
         for _ in 0..<8 {
-            corners.append(createNewLine())
+            cornerHandles.append(createNewLine())
+        }
+        
+        for _ in 0..<4 {
+            edgeLineHandles.append(createNewLine())
         }
         
         setupGridLines()
@@ -76,7 +84,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        if !corners.isEmpty {
+        if !cornerHandles.isEmpty {
             layoutLines()
         }
     }
@@ -87,7 +95,8 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         }
         
         layoutOuterLines()
-        layoutCornerLines()
+        layoutCornerHandles()
+        layoutEdgeLineHandles()
         layoutGridLines()
         setGridShowStatus()
     }
@@ -146,19 +155,17 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         borderLine.layer.borderColor = boarderNormalColor.cgColor
     }
     
-    private func layoutCornerLines() {
-        let borderThickness = CGFloat(3.0)
+    private func layoutCornerHandles() {
+        let topLeftHorizonalLayerFrame = CGRect(x: -handleThickness, y: -handleThickness, width: cornerHandleLength, height: handleThickness)
+        let topLeftVerticalLayerFrame = CGRect(x: -handleThickness, y: -handleThickness, width: handleThickness, height: cornerHandleLength)
         
-        let topLeftHorizonalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: cropOverLayerCornerWidth, height: borderThickness)
-        let topLeftVerticalLayerFrame = CGRect(x: -borderThickness, y: -borderThickness, width: borderThickness, height: cropOverLayerCornerWidth)
+        let horizontalDistanceForHCorner = bounds.width + 2 * handleThickness - cornerHandleLength
+        let verticalDistanceForHCorner = bounds.height + handleThickness
+        let horizontalDistanceForVCorner = bounds.width + handleThickness
+        let veticalDistanceForVCorner = bounds.height + 2 * handleThickness - cornerHandleLength
         
-        let horizontalDistanceForHCorner = bounds.width + 2 * borderThickness - cropOverLayerCornerWidth
-        let verticalDistanceForHCorner = bounds.height + borderThickness
-        let horizontalDistanceForVCorner = bounds.width + borderThickness
-        let veticalDistanceForVCorner = bounds.height + 2 * borderThickness - cropOverLayerCornerWidth
-        
-        for (index, line) in corners.enumerated() {
-            let lineType: CornerLineType = CropAuxiliaryIndicatorView.CornerLineType(rawValue: index) ?? .topLeftVertical
+        for (index, line) in cornerHandles.enumerated() {
+            let lineType = CropAuxiliaryIndicatorView.CornerHandleType(rawValue: index) ?? .topLeftVertical
             switch lineType {
             case .topLeftHorizontal:
                 line.frame = topLeftHorizonalLayerFrame
@@ -176,6 +183,22 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
                 line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: 0, dy: verticalDistanceForHCorner)
             case .bottomLeftVertical:
                 line.frame = topLeftVerticalLayerFrame.offsetBy(dx: 0, dy: veticalDistanceForVCorner)
+            }
+        }
+    }
+    
+    private func layoutEdgeLineHandles() {
+        for (index, line) in edgeLineHandles.enumerated() {
+            let lineType = CropAuxiliaryIndicatorView.EdgeLineHandleType(rawValue: index) ?? .top
+            switch lineType {
+            case .top:
+                line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2, y: -handleThickness, width: edgeLineHandleLength, height: handleThickness)
+            case .right:
+                line.frame = CGRect(x: bounds.width, y: bounds.height / 2 - edgeLineHandleLength / 2, width: handleThickness, height: edgeLineHandleLength)
+            case .bottom:
+                line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2, y: bounds.height, width: edgeLineHandleLength, height: handleThickness)
+            case .left:
+                line.frame = CGRect(x: -handleThickness, y: bounds.height / 2 - edgeLineHandleLength / 2, width: handleThickness, height: edgeLineHandleLength)
             }
         }
     }
@@ -202,7 +225,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         gridLineNumberType = .none
     }
     
-    func handleEdgeTouched(with tappedEdge: CropViewOverlayEdge) {
+    func handleCornerHandleTouched(with tappedEdge: CropViewOverlayEdge) {
         guard tappedEdge != .none  else {
             return
         }
@@ -250,7 +273,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
 }
 
 extension CropAuxiliaryIndicatorView {
-    private enum CornerLineType: Int {
+    private enum CornerHandleType: Int {
         case topLeftVertical = 0
         case topLeftHorizontal
         case topRightVertical
@@ -259,5 +282,12 @@ extension CropAuxiliaryIndicatorView {
         case bottomRightHorizontal
         case bottomLeftVertical
         case bottomLeftHorizontal
-    }    
+    }
+    
+    private enum EdgeLineHandleType: Int {
+        case top = 0
+        case right
+        case bottom
+        case left
+    }
 }
