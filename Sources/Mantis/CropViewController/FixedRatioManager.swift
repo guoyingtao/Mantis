@@ -13,6 +13,17 @@ struct RatioItemType {
     var ratioH: Double
     var nameV: String
     var ratioV: Double
+    
+    init?(nameH: String, ratioH: Double, nameV: String, ratioV: Double) {
+        guard ratioH > 0 && ratioV > 0 else {
+            return nil
+        }
+        
+        self.nameH = nameH
+        self.ratioH = ratioH
+        self.nameV = nameV
+        self.ratioV = ratioV
+    }
 }
 
 class FixedRatioManager {
@@ -50,7 +61,7 @@ class FixedRatioManager {
         sort(isByHorizontal: (type == .horizontal))
     }
 
-    func getOriginalRatioItem() -> RatioItemType {
+    func getOriginalRatioItem() -> RatioItemType? {
         let originalText = LocalizedHelper.getString("Mantis.Original", value: "Original")
         return RatioItemType(nameH: originalText, ratioH: originalRatioH, nameV: originalText, ratioV: originalRatioH)
     }
@@ -115,8 +126,8 @@ extension FixedRatioManager {
         ratios.insert(ratioItem, at: 0)
     }
 
-    private func appendToTail(ratioItem: RatioItemType) {
-        guard contains(ratioItem: ratioItem) == false else { return }
+    private func appendToTail(ratioItem: RatioItemType?) {
+        guard let ratioItem = ratioItem, contains(ratioItem: ratioItem) == false else { return }
         ratios.append(ratioItem)
     }
 
@@ -142,9 +153,11 @@ extension FixedRatioManager {
         }
 
         if isByHorizontal {
-            ratios = ratios[...(fixedRatioNumber - 1)] + ratios[fixedRatioNumber...].sorted { getHeight(fromNameH: $0.nameH) < getHeight(fromNameH: $1.nameH) }
+            ratios = ratios[...(fixedRatioNumber - 1)] + ratios[fixedRatioNumber...]
+                .sorted { getHeight(fromNameH: $0.nameH) < getHeight(fromNameH: $1.nameH) }
         } else {
-            ratios = ratios[...(fixedRatioNumber - 1)] + ratios[fixedRatioNumber...].sorted { getWidth(fromNameH: $0.nameH) < getWidth(fromNameH: $1.nameH) }
+            ratios = ratios[...(fixedRatioNumber - 1)] + ratios[fixedRatioNumber...]
+                .sorted { getWidth(fromNameH: $0.nameH) < getWidth(fromNameH: $1.nameH) }
         }
     }
 }
