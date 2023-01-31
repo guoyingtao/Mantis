@@ -192,13 +192,25 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
             let lineType = CropAuxiliaryIndicatorView.EdgeLineHandleType(rawValue: index) ?? .top
             switch lineType {
             case .top:
-                line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2, y: -handleThickness, width: edgeLineHandleLength, height: handleThickness)
+                line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2,
+                                    y: -handleThickness,
+                                    width: edgeLineHandleLength,
+                                    height: handleThickness)
             case .right:
-                line.frame = CGRect(x: bounds.width, y: bounds.height / 2 - edgeLineHandleLength / 2, width: handleThickness, height: edgeLineHandleLength)
+                line.frame = CGRect(x: bounds.width,
+                                    y: bounds.height / 2 - edgeLineHandleLength / 2,
+                                    width: handleThickness,
+                                    height: edgeLineHandleLength)
             case .bottom:
-                line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2, y: bounds.height, width: edgeLineHandleLength, height: handleThickness)
+                line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2,
+                                    y: bounds.height,
+                                    width: edgeLineHandleLength,
+                                    height: handleThickness)
             case .left:
-                line.frame = CGRect(x: -handleThickness, y: bounds.height / 2 - edgeLineHandleLength / 2, width: handleThickness, height: edgeLineHandleLength)
+                line.frame = CGRect(x: -handleThickness,
+                                    y: bounds.height / 2 - edgeLineHandleLength / 2,
+                                    width: handleThickness,
+                                    height: edgeLineHandleLength)
             }
         }
     }
