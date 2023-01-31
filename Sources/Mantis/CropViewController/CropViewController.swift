@@ -72,7 +72,7 @@ public class CropViewController: UIViewController {
     }
     
     private func createCropToolbar() {
-        cropToolbar.cropToolbarDelegate = self
+        cropToolbar.delegate = self
         
         switch config.presetFixedRatioType {
         case .alwaysUsingOnePresetFixedRatio(let ratio):

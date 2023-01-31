@@ -17,7 +17,7 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
     
     var widthForHorizonOrientation: CGFloat?
     
-    var cropToolbarDelegate: CropToolbarDelegate?
+    var delegate: CropToolbarDelegate?
     
     var iconProvider: CropToolbarIconProvider?
     
@@ -45,14 +45,14 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc func crop() {
-        cropToolbarDelegate?.didSelectCrop(self)
+        delegate?.didSelectCrop(self)
     }
     
     @objc func cancel() {
-        cropToolbarDelegate?.didSelectCancel(self)
+        delegate?.didSelectCancel(self)
     }
     
     @objc func rotate() {
-        cropToolbarDelegate?.didSelectClockwiseRotate(self)
+        delegate?.didSelectClockwiseRotate(self)
     }
 }

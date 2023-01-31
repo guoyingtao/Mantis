@@ -49,10 +49,8 @@ public extension CropToolbarIconProvider {
 }
 
 public protocol CropToolbarProtocol: UIView {
-    var config: CropToolbarConfig { get }
-    
-    var cropToolbarDelegate: CropToolbarDelegate? { get set }
-    
+    var config: CropToolbarConfig { get set }
+    var delegate: CropToolbarDelegate? { get set }
     var iconProvider: CropToolbarIconProvider? { get set }
 
     func createToolbarUI(config: CropToolbarConfig)
@@ -61,10 +59,8 @@ public protocol CropToolbarProtocol: UIView {
     
     // MARK: - The following functions have default implementations
     func getRatioListPresentSourceView() -> UIView?
-    
     func respondToOrientationChange()
-    func adjustLayoutWhenOrientationChange()
-        
+    func adjustLayoutWhenOrientationChange()        
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeUnResettable()
 }

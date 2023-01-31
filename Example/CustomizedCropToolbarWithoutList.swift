@@ -11,7 +11,7 @@ import Mantis
 
 class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     var iconProvider: CropToolbarIconProvider?
-    weak var cropToolbarDelegate: CropToolbarDelegate?
+    weak var delegate: CropToolbarDelegate?
     
     var config = CropToolbarConfig()
     
@@ -89,19 +89,19 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     }
     
     @objc private func crop() {
-        cropToolbarDelegate?.didSelectCrop(self)
+        delegate?.didSelectCrop(self)
     }
     
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelectCancel(self)
+        delegate?.didSelectCancel(self)
     }
     
     @objc private func setPortraitRatio() {
-        cropToolbarDelegate?.didSelectRatio(self, ratio: 9 / 16)
+        delegate?.didSelectRatio(self, ratio: 9 / 16)
     }
     
     @objc private func setLandscapeRatio() {
-        cropToolbarDelegate?.didSelectRatio(self, ratio: 16 / 9)
+        delegate?.didSelectRatio(self, ratio: 16 / 9)
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
