@@ -49,13 +49,13 @@ public extension CropToolbarIconProvider {
 }
 
 public protocol CropToolbarProtocol: UIView {
-    var config: CropToolbarConfigProtocol? { get }
+    var config: CropToolbarConfig { get }
     
     var cropToolbarDelegate: CropToolbarDelegate? { get set }
     
     var iconProvider: CropToolbarIconProvider? { get set }
 
-    func createToolbarUI(config: CropToolbarConfigProtocol?)
+    func createToolbarUI(config: CropToolbarConfig)
     func handleFixedRatioSetted(ratio: Double)
     func handleFixedRatioUnSetted()
     

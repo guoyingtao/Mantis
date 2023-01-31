@@ -13,7 +13,7 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     var iconProvider: CropToolbarIconProvider?
     weak var cropToolbarDelegate: CropToolbarDelegate?
     
-    private (set)var config: CropToolbarConfigProtocol?
+    var config = CropToolbarConfig()
     
     private var fixedRatioSettingButton: UIButton?
     private var portraitRatioButton: UIButton?
@@ -24,7 +24,7 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
         
     var custom: ((Double) -> Void)?
     
-    func createToolbarUI(config: CropToolbarConfigProtocol?) {
+    func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
         
         backgroundColor = .darkGray
@@ -72,9 +72,6 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
-        guard let config = config else {
-            return superSize
-        }
         
         if Orientation.isPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
@@ -108,10 +105,6 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        guard let config = config else {
-            return UIButton()
-        }
-
         let buttonColor = UIColor.white
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
             config.optionButtonFontSizeForPad :

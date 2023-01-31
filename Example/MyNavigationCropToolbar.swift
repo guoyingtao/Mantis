@@ -11,7 +11,7 @@ import Mantis
 import UIKit
 
 class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
-    var config: CropToolbarConfigProtocol?
+    var config = CropToolbarConfig()
     
     var heightForVerticalOrientation: CGFloat?
     
@@ -23,7 +23,7 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
     
     weak var cropViewController: Mantis.CropViewController?
     
-    func createToolbarUI(config: CropToolbarConfigProtocol?) {
+    func createToolbarUI(config: CropToolbarConfig) {
         guard let cropViewController = cropViewController else {
             return
         }

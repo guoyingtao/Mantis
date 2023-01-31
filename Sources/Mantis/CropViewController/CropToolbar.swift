@@ -14,8 +14,7 @@ public enum CropToolbarMode {
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
-    private(set) public var config: CropToolbarConfigProtocol?
-    
+    public var config = CropToolbarConfig()
     public var iconProvider: CropToolbarIconProvider?
     
     public weak var cropToolbarDelegate: CropToolbarDelegate?
@@ -82,13 +81,9 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     private var resetButton: UIButton?
     private var optionButtonStackView: UIStackView?
     
-    public func createToolbarUI(config: CropToolbarConfigProtocol?) {
+    public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
-        
-        guard let config = config as? CropToolbarConfig else {
-            return
-        }
-        
+                
         backgroundColor = config.backgroundColor
                 
         if #available(macCatalyst 14.0, iOS 14.0, *) {
@@ -150,9 +145,6 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
-        guard let config = config else {
-            return superSize
-        }
 
         if Orientation.isPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
@@ -180,10 +172,6 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     public func handleFixedRatioUnSetted() {
-        guard let config = config else {
-            return
-        }
-
         fixedRatioSettingButton?.tintColor = config.foregroundColor
     }
 
@@ -238,10 +226,6 @@ extension CropToolbar {
 // private functions
 extension CropToolbar {
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        guard let config = config as? CropToolbarConfig else {
-            return UIButton()
-        }
-
         let buttonColor = config.foregroundColor
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
             config.optionButtonFontSizeForPad :

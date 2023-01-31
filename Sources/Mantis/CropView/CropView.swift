@@ -54,10 +54,7 @@ class CropView: UIView {
     
     var rotationDial: RotationDialProtocol? {
         didSet {
-            guard let rotationDial = rotationDial else {
-                return
-            }
-            addSubview(rotationDial)
+            addSubview(rotationDial!)
         }
     }
     
@@ -602,20 +599,21 @@ extension CropView {
     
     func addImageMask(to cropOutput: CropOutput) -> CropOutput {
         let (croppedImage, transformation, cropInfo) = cropOutput
-        
+
         guard let croppedImage = croppedImage else {
+            assertionFailure("croppedImage should not be nil")
             return cropOutput
         }
         
         switch cropViewConfig.cropShapeType {
         case .rect,
-                .square,
-                .circle(maskOnly: true),
-                .roundedRect(_, maskOnly: true),
-                .path(_, maskOnly: true),
-                .diamond(maskOnly: true),
-                .heart(maskOnly: true),
-                .polygon(_, _, maskOnly: true):
+             .square,
+             .circle(maskOnly: true),
+             .roundedRect(_, maskOnly: true),
+             .path(_, maskOnly: true),
+             .diamond(maskOnly: true),
+             .heart(maskOnly: true),
+             .polygon(_, _, maskOnly: true):
             
             let outputImage: UIImage?
             if cropViewConfig.cropBorderWidth > 0 {
