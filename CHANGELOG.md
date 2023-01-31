@@ -2,6 +2,13 @@
 
 -----
 
+## [2.6.0](https://www.github.com/guoyingtao/Mantis/compare/v2.5.2...v2.6.0) (2023-01-31)
+
+
+### Features
+
+* add 4 edge line handles on CropAuxiliaryIndicatorView ([#258](https://www.github.com/guoyingtao/Mantis/issues/258)) ([cbbc2e1](https://www.github.com/guoyingtao/Mantis/commit/cbbc2e1b283f2edb10341c96910228d476e576e4))
+
 ### [2.5.2](https://www.github.com/guoyingtao/Mantis/compare/v2.5.1...v2.5.2) (2023-01-30)
 
 
