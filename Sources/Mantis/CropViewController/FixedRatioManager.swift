@@ -8,7 +8,12 @@
 
 import Foundation
 
-typealias RatioItemType = (nameH: String, ratioH: Double, nameV: String, ratioV: Double)
+struct RatioItemType {
+    var nameH: String
+    var ratioH: Double
+    var nameV: String
+    var ratioV: Double
+}
 
 class FixedRatioManager {
     private (set) var ratios: [RatioItemType] = []
@@ -17,6 +22,7 @@ class FixedRatioManager {
 
     var type: RatioType = .horizontal
     var originalRatioH = 1.0
+    let fixedRatioNumber = 2
 
     init(type: RatioType, originalRatioH: Double, ratioOptions: RatioOptions = .all, customRatios: [RatioItemType] = []) {
 
@@ -29,7 +35,7 @@ class FixedRatioManager {
 
         if ratioOptions.contains(.square) {
             let squareText = LocalizedHelper.getString("Mantis.Square", value: "Square")
-            let square = (squareText, 1.0, squareText, 1.0)
+            let square = RatioItemType(nameH: squareText, ratioH: 1.0, nameV: squareText, ratioV: 1.0)
             appendToTail(ratioItem: square)
         }
 
@@ -46,19 +52,19 @@ class FixedRatioManager {
 
     func getOriginalRatioItem() -> RatioItemType {
         let originalText = LocalizedHelper.getString("Mantis.Original", value: "Original")
-        return (originalText, originalRatioH, originalText, originalRatioH)
+        return RatioItemType(nameH: originalText, ratioH: originalRatioH, nameV: originalText, ratioV: originalRatioH)
     }
 }
 
 // MARK: - Private methods
 extension FixedRatioManager {
     private func addExtraDefaultRatios() {
-        let scale3to2 = RatioItemType("3:2", 3.0/2.0, "2:3", 2.0/3.0)
-        let scale5to3 = RatioItemType("5:3", 5.0/3.0, "3:5", 3.0/5.0)
-        let scale4to3 = RatioItemType("4:3", 4.0/3.0, "3:4", 3.0/4.0)
-        let scale5to4 = RatioItemType("5:4", 5.0/4.0, "4:5", 4.0/5.0)
-        let scale7to5 = RatioItemType("7:5", 7.0/5.0, "5:7", 5.0/7.0)
-        let scale16to9 = RatioItemType("16:9", 16.0/9.0, "9:16", 9.0/16.0)
+        let scale3to2 = RatioItemType(nameH: "3:2", ratioH: 3.0/2.0, nameV: "2:3", ratioV: 2.0/3.0)
+        let scale5to3 = RatioItemType(nameH: "5:3", ratioH: 5.0/3.0, nameV: "3:5", ratioV: 3.0/5.0)
+        let scale4to3 = RatioItemType(nameH: "4:3", ratioH: 4.0/3.0, nameV: "3:4", ratioV: 3.0/4.0)
+        let scale5to4 = RatioItemType(nameH: "5:4", ratioH: 5.0/4.0, nameV: "4:5", ratioV: 4.0/5.0)
+        let scale7to5 = RatioItemType(nameH: "7:5", ratioH: 7.0/5.0, nameV: "5:7", ratioV: 5.0/7.0)
+        let scale16to9 = RatioItemType(nameH: "16:9", ratioH: 16.0/9.0, nameV: "9:16", ratioV: 9.0/16.0)
 
         appendToTail(ratioItem: scale3to2)
         appendToTail(ratioItem: scale5to3)
@@ -122,23 +128,23 @@ extension FixedRatioManager {
 
     private func appendToTail(items: [(width: Int, height: Int)]) {
         items.forEach {
-            let ratioItem = (String("\($0.width):\($0.height)"),
-                             Double($0.width)/Double($0.height),
-                             String("\($0.height):\($0.width)"),
-                             Double($0.height)/Double($0.width))
+            let ratioItem = RatioItemType(nameH: String("\($0.width):\($0.height)"),
+                                          ratioH: Double($0.width)/Double($0.height),
+                                          nameV: String("\($0.height):\($0.width)"),
+                                          ratioV: Double($0.height)/Double($0.width))
             appendToTail(ratioItem: ratioItem)
         }
     }
 
     private func sort(isByHorizontal: Bool) {
-        guard ratios.count > 1 else {
+        guard ratios.count > fixedRatioNumber - 1 else {
             return
         }
 
         if isByHorizontal {
-            ratios = ratios[...1] + ratios[2...].sorted { getHeight(fromNameH: $0.nameH) < getHeight(fromNameH: $1.nameH) }
+            ratios = ratios[...(fixedRatioNumber - 1)] + ratios[fixedRatioNumber...].sorted { getHeight(fromNameH: $0.nameH) < getHeight(fromNameH: $1.nameH) }
         } else {
-            ratios = ratios[...1] + ratios[2...].sorted { getWidth(fromNameH: $0.nameH) < getWidth(fromNameH: $1.nameH) }
+            ratios = ratios[...(fixedRatioNumber - 1)] + ratios[fixedRatioNumber...].sorted { getWidth(fromNameH: $0.nameH) < getWidth(fromNameH: $1.nameH) }
         }
     }
 }

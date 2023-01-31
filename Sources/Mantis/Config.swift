@@ -83,8 +83,8 @@ public struct Config {
 
     func getCustomRatioItems() -> [RatioItemType] {
         return customRatios.map {
-            (String("\($0.width):\($0.height)"), Double($0.width)/Double($0.height),
-             String("\($0.height):\($0.width)"), Double($0.height)/Double($0.width))
+            RatioItemType(nameH: String("\($0.width):\($0.height)"), ratioH: Double($0.width)/Double($0.height),
+                          nameV: String("\($0.height):\($0.width)"), ratioV: Double($0.height)/Double($0.width))
         }
     }
 }
