@@ -4,11 +4,19 @@ public struct CropViewConfig {
     /**
         This value is for how easy to drag crop box. The bigger, the easier.
      */
-    public var cropBoxHotAreaUnit: CGFloat = 32
+    public var cropBoxHotAreaUnit: CGFloat = 32 {
+        didSet {
+            assert(cropBoxHotAreaUnit > 0)
+        }
+    }
     
     public var cropShapeType: CropShapeType = .rect
     
-    public var cropBorderWidth: CGFloat = 0
+    public var cropBorderWidth: CGFloat = 0 {
+        didSet {
+            assert(cropBorderWidth > 0)
+        }
+    }
     
     public var cropBorderColor: UIColor = .clear
     
@@ -16,8 +24,11 @@ public struct CropViewConfig {
     
     public var presetTransformationType: PresetTransformationType = .none
     
-    /// minimumZoomScale must be no less than 1
-    public var minimumZoomScale: CGFloat = 1
+    public var minimumZoomScale: CGFloat = 1 {
+        didSet {
+            assert(minimumZoomScale >= 1)
+        }
+    }
     
     public var maximumZoomScale: CGFloat = 15
     
@@ -29,7 +40,11 @@ public struct CropViewConfig {
     
     public var showRotationDial = true
     
-    public var padding: CGFloat = 14
+    public var padding: CGFloat = 14 {
+        didSet {
+            assert(padding >= 3, "padding is need to be at least 3 in order to show the whole crop box handles")
+        }
+    }
     
     var minimumCropBoxSize: CGFloat = 42
 

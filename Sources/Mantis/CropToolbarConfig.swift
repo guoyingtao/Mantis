@@ -8,11 +8,29 @@
 import UIKit
 
 public struct CropToolbarConfig {
-    public var heightForVerticalOrientation: CGFloat = 44
-    public var widthForHorizontalOrientation: CGFloat = 80
+    public var heightForVerticalOrientation: CGFloat = 44 {
+        didSet {
+            assert(heightForVerticalOrientation >= 44)
+        }
+    }
+    
+    public var widthForHorizontalOrientation: CGFloat = 80 {
+        didSet {
+            assert(widthForHorizontalOrientation >= 44)
+        }
+    }
 
-    public var optionButtonFontSize: CGFloat = 14
-    public var optionButtonFontSizeForPad: CGFloat = 20
+    public var optionButtonFontSize: CGFloat = 14 {
+        didSet {
+            assert(optionButtonFontSize >= 10)
+        }
+    }
+    
+    public var optionButtonFontSizeForPad: CGFloat = 20 {
+        didSet {
+            assert(optionButtonFontSize >= 10)
+        }
+    }
 
     /**
      The color settings are not for Mac Catalyst (Optimize Interface for Mac) for now

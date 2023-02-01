@@ -70,10 +70,12 @@ public struct Config {
     public init() {}
 
     mutating public func addCustomRatio(byHorizontalWidth width: Int, andHorizontalHeight height: Int) {
+        assert(width > 0 && height > 0)
         customRatios.append((width, height))
     }
 
     mutating public func addCustomRatio(byVerticalWidth width: Int, andVerticalHeight height: Int) {
+        assert(width > 0 && height > 0)
         customRatios.append((height, width))
     }
 
