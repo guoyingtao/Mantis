@@ -14,11 +14,10 @@ public enum CropToolbarMode {
 }
 
 public class CropToolbar: UIView, CropToolbarProtocol {
-    private(set) public var config: CropToolbarConfigProtocol?
-    
+    public var config = CropToolbarConfig()
     public var iconProvider: CropToolbarIconProvider?
     
-    public weak var cropToolbarDelegate: CropToolbarDelegate?
+    public weak var delegate: CropToolbarDelegate?
         
     private lazy var counterClockwiseRotationButton: UIButton = {
         let button = createOptionButton(withTitle: nil, andAction: #selector(counterClockwiseRotate))
@@ -82,13 +81,9 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     private var resetButton: UIButton?
     private var optionButtonStackView: UIStackView?
     
-    public func createToolbarUI(config: CropToolbarConfigProtocol?) {
+    public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
-        
-        guard let config = config as? CropToolbarConfig else {
-            return
-        }
-        
+                
         backgroundColor = config.backgroundColor
                 
         if #available(macCatalyst 14.0, iOS 14.0, *) {
@@ -150,9 +145,6 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
-        guard let config = config else {
-            return superSize
-        }
 
         if Orientation.isPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
@@ -180,10 +172,6 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     public func handleFixedRatioUnSetted() {
-        guard let config = config else {
-            return
-        }
-
         fixedRatioSettingButton?.tintColor = config.foregroundColor
     }
 
@@ -199,49 +187,45 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 // Objc functions
 extension CropToolbar {
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelectCancel(self)
+        delegate?.didSelectCancel(self)
     }
 
     @objc private func setRatio() {
-        cropToolbarDelegate?.didSelectSetRatio(self)
+        delegate?.didSelectSetRatio(self)
     }
 
     @objc private func reset(_ sender: Any) {
-        cropToolbarDelegate?.didSelectReset(self)
+        delegate?.didSelectReset(self)
     }
 
     @objc private func counterClockwiseRotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectCounterClockwiseRotate(self)
+        delegate?.didSelectCounterClockwiseRotate(self)
     }
 
     @objc private func clockwiseRotate(_ sender: Any) {
-        cropToolbarDelegate?.didSelectClockwiseRotate(self)
+        delegate?.didSelectClockwiseRotate(self)
     }
 
     @objc private func alterCropper90Degree(_ sender: Any) {
-        cropToolbarDelegate?.didSelectAlterCropper90Degree(self)
+        delegate?.didSelectAlterCropper90Degree(self)
     }
     
     @objc private func horizontallyFlip(_ sender: Any) {
-        cropToolbarDelegate?.didSelectHorizontallyFlip(self)
+        delegate?.didSelectHorizontallyFlip(self)
     }
 
     @objc private func verticallyFlip(_ sender: Any) {
-        cropToolbarDelegate?.didSelectVerticallyFlip(self)
+        delegate?.didSelectVerticallyFlip(self)
     }
 
     @objc private func crop(_ sender: Any) {
-        cropToolbarDelegate?.didSelectCrop(self)
+        delegate?.didSelectCrop(self)
     }
 }
 
 // private functions
 extension CropToolbar {
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        guard let config = config as? CropToolbarConfig else {
-            return UIButton()
-        }
-
         let buttonColor = config.foregroundColor
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
             config.optionButtonFontSizeForPad :

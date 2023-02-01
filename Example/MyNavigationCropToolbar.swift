@@ -11,19 +11,19 @@ import Mantis
 import UIKit
 
 class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
-    var config: CropToolbarConfigProtocol?
+    var config = CropToolbarConfig()
     
     var heightForVerticalOrientation: CGFloat?
     
     var widthForHorizonOrientation: CGFloat?
     
-    var cropToolbarDelegate: CropToolbarDelegate?
+    var delegate: CropToolbarDelegate?
     
     var iconProvider: CropToolbarIconProvider?
     
     weak var cropViewController: Mantis.CropViewController?
     
-    func createToolbarUI(config: CropToolbarConfigProtocol?) {
+    func createToolbarUI(config: CropToolbarConfig) {
         guard let cropViewController = cropViewController else {
             return
         }
@@ -45,14 +45,14 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
     }
     
     @objc func crop() {
-        cropToolbarDelegate?.didSelectCrop(self)
+        delegate?.didSelectCrop(self)
     }
     
     @objc func cancel() {
-        cropToolbarDelegate?.didSelectCancel(self)
+        delegate?.didSelectCancel(self)
     }
     
     @objc func rotate() {
-        cropToolbarDelegate?.didSelectClockwiseRotate(self)
+        delegate?.didSelectClockwiseRotate(self)
     }
 }

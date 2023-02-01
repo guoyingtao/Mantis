@@ -12,9 +12,9 @@ import Mantis
 class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     var iconProvider: CropToolbarIconProvider?
     
-    weak var cropToolbarDelegate: CropToolbarDelegate?
+    weak var delegate: CropToolbarDelegate?
     
-    private (set)var config: CropToolbarConfigProtocol?
+    var config = CropToolbarConfig()
     
     private var fixedRatioSettingButton: UIButton?
     private var cropButton: UIButton?
@@ -23,12 +23,8 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     
     var custom: ((Double) -> Void)?
     
-    func createToolbarUI(config: CropToolbarConfigProtocol?) {
+    func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
-        
-        guard let config = config else {
-            return
-        }
         
         backgroundColor = config.backgroundColor
         
@@ -72,9 +68,6 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
-        guard let config = config else {
-            return superSize
-        }
         
         if Orientation.isPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
@@ -88,22 +81,18 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     }
             
     @objc private func crop() {
-        cropToolbarDelegate?.didSelectCrop(self)
+        delegate?.didSelectCrop(self)
     }
     
     @objc private func cancel() {
-        cropToolbarDelegate?.didSelectCancel(self)
+        delegate?.didSelectCancel(self)
     }
     
     @objc private func showRatioList() {
-        cropToolbarDelegate?.didSelectSetRatio(self)
+        delegate?.didSelectSetRatio(self)
     }
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
-        guard let config = config else {
-            return UIButton()
-        }
-
         let buttonColor = config.foregroundColor
         let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
             config.optionButtonFontSizeForPad :
