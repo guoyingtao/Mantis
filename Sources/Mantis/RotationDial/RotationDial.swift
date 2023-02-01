@@ -116,7 +116,8 @@ extension RotationDial {
     }
     
     private func createDialPlate(in container: UIView) {
-        var margin: CGFloat = CGFloat(dialConfig.margin)
+        var margin = CGFloat(dialConfig.margin)
+        
         if case .limit(let angle) = dialConfig.angleShowLimitType {
             margin = 0
             showRadiansLimit = angle.radians
@@ -243,7 +244,7 @@ extension RotationDial: RotationDialProtocol {
     
     func setRotationCenter(by point: CGPoint, of view: UIView) {
         let newPoint = view.convert(point, to: self)
-        dialConfig.rotationCenterType = .custom(newPoint)
+        dialConfig.rotationCenterType = .custom(center: newPoint)
     }
     
     func reset() {

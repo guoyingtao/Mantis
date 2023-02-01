@@ -12,12 +12,23 @@ import UIKit
 public struct DialConfig {
     public init() {}
 
-    public var margin: Double = 10
+    public var margin: Double = 10 {
+        didSet {
+            assert(margin >= 0)
+        }
+    }
+    
     public var interactable = false
     public var rotationLimitType: RotationLimitType = .limit(angle: CGAngle(degrees: 45))
     public var angleShowLimitType: AngleShowLimitType = .limit(angle: CGAngle(degrees: 40))
     public var rotationCenterType: RotationCenterType = .useDefault
-    public var numberShowSpan = 1
+    
+    public var numberShowSpan = 1 {
+        didSet {
+            assert(numberShowSpan > 0)
+        }
+    }
+    
     public var orientation: Orientation = .normal
 
     public var backgroundColor: UIColor = .clear
@@ -50,7 +61,7 @@ public struct DialConfig {
 
     public enum RotationCenterType {
         case useDefault
-        case custom(CGPoint)
+        case custom(center: CGPoint)
     }
 
     public enum AngleShowLimitType {
