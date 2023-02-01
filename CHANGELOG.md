@@ -2,6 +2,13 @@
 
 -----
 
+### [2.6.1](https://www.github.com/guoyingtao/Mantis/compare/v2.6.0...v2.6.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* add 48 and 24 bit image cases for getBitmapInfo() ([#268](https://www.github.com/guoyingtao/Mantis/issues/268)) ([63242ac](https://www.github.com/guoyingtao/Mantis/commit/63242ac83ed426312aac021a32e90b334eab1b62))
+
 ## [2.6.0](https://www.github.com/guoyingtao/Mantis/compare/v2.5.2...v2.6.0) (2023-01-31)
 
 
