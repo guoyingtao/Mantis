@@ -32,7 +32,7 @@ extension CGImage {
                 switch(bitsPerPixel, bitsPerComponent) {
                 case (16, 5):
                     return CGImageAlphaInfo.noneSkipFirst.rawValue
-                case (32, 8):
+                case (24, 8), (32, 8), (48, 16), (64, 16):
                     return CGImageAlphaInfo.premultipliedLast.rawValue
                 case (32, 10):
                     if #available(iOS 12, macOS 10.14, *) {
@@ -40,12 +40,10 @@ extension CGImage {
                     } else {
                         return bitmapInfo.rawValue
                     }
-                case (64, 16):
-                    return CGImageAlphaInfo.premultipliedLast.rawValue
                 case (128, 32):
                     return CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.floatComponents.rawValue
                 default:
-                    return bitmapInfo.rawValue
+                    break
                 }
             }
             
