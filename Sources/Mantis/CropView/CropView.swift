@@ -25,10 +25,10 @@
 import UIKit
 
 protocol CropViewDelegate: AnyObject {
-    func cropViewDidBecomeResettable(_ cropView: CropView)
-    func cropViewDidBecomeUnResettable(_ cropView: CropView)
-    func cropViewDidBeginResize(_ cropView: CropView)
-    func cropViewDidEndResize(_ cropView: CropView)
+    func cropViewDidBecomeResettable(_ cropView: CropViewProtocol)
+    func cropViewDidBecomeUnResettable(_ cropView: CropViewProtocol)
+    func cropViewDidBeginResize(_ cropView: CropViewProtocol)
+    func cropViewDidEndResize(_ cropView: CropViewProtocol)
 }
 
 class CropView: UIView {

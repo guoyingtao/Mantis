@@ -27,6 +27,10 @@
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F39298C01D100C4E11A /* CropToolbarTests.swift */; };
+		660D4F3D298C06A800C4E11A /* FakeCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F3C298C06A800C4E11A /* FakeCropToolbar.swift */; };
+		660D4F3F298C079600C4E11A /* FakeCropViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F3E298C079600C4E11A /* FakeCropViewControllerDelegate.swift */; };
+		660D4F41298C08FA00C4E11A /* CropViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */; };
+		660D4F43298C0AE400C4E11A /* FakeCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F42298C0AE400C4E11A /* FakeCropView.swift */; };
 		66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E06294B7059001C8593 /* CropViewProtocol.swift */; };
 		66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */; };
 		66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */; };
@@ -120,6 +124,10 @@
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		660D4F39298C01D100C4E11A /* CropToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropToolbarTests.swift; sourceTree = "<group>"; };
+		660D4F3C298C06A800C4E11A /* FakeCropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropToolbar.swift; sourceTree = "<group>"; };
+		660D4F3E298C079600C4E11A /* FakeCropViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropViewControllerDelegate.swift; sourceTree = "<group>"; };
+		660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewControllerTests.swift; sourceTree = "<group>"; };
+		660D4F42298C0AE400C4E11A /* FakeCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropView.swift; sourceTree = "<group>"; };
 		66100E06294B7059001C8593 /* CropViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewProtocol.swift; sourceTree = "<group>"; };
 		66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerProtocol.swift; sourceTree = "<group>"; };
 		66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -229,6 +237,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		660D4F3B298C069200C4E11A /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				660D4F3C298C06A800C4E11A /* FakeCropToolbar.swift */,
+				660D4F3E298C079600C4E11A /* FakeCropViewControllerDelegate.swift */,
+				660D4F42298C0AE400C4E11A /* FakeCropView.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
 		66100E05294B7040001C8593 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,11 +377,13 @@
 		OBJ_51 /* MantisTests */ = {
 			isa = PBXGroup;
 			children = (
+				660D4F3B298C069200C4E11A /* Mock */,
 				OBJ_52 /* MantisTests.swift */,
 				OBJ_53 /* XCTestManifests.swift */,
 				66F439892978539700728B52 /* RotationDialViewModelTests.swift */,
 				66F4398F2979472C00728B52 /* CropViewModelTests.swift */,
 				660D4F39298C01D100C4E11A /* CropToolbarTests.swift */,
+				660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -599,6 +619,7 @@
 				66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */,
 				660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */,
 				66F439902979472C00728B52 /* CropViewModelTests.swift in Sources */,
+				660D4F41298C08FA00C4E11A /* CropViewControllerTests.swift in Sources */,
 				OBJ_120 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -619,6 +640,7 @@
 				OBJ_75 /* CropView+UIScrollViewDelegate.swift in Sources */,
 				664A7E9F2884606800DF7C79 /* Global.swift in Sources */,
 				66F4398E2978F6E400728B52 /* UIViewExtensions.swift in Sources */,
+				660D4F3F298C079600C4E11A /* FakeCropViewControllerDelegate.swift in Sources */,
 				OBJ_76 /* CropView.swift in Sources */,
 				OBJ_77 /* CropViewModel.swift in Sources */,
 				6659429F2877DC8A0096A5DB /* Enum.swift in Sources */,
@@ -645,6 +667,7 @@
 				663FCF3928866DDA003D3B9E /* CropViewConfig.swift in Sources */,
 				OBJ_89 /* LocalizedHelper.swift in Sources */,
 				OBJ_90 /* Mantis.swift in Sources */,
+				660D4F43298C0AE400C4E11A /* FakeCropView.swift in Sources */,
 				5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */,
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,
@@ -655,6 +678,7 @@
 				269AF94227437EE400F7FAF6 /* DialConfig.swift in Sources */,
 				OBJ_94 /* RatioOptions.swift in Sources */,
 				OBJ_95 /* CGAngle.swift in Sources */,
+				660D4F3D298C06A800C4E11A /* FakeCropToolbar.swift in Sources */,
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
 				66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */,
