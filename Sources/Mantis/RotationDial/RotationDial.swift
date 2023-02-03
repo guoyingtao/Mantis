@@ -42,9 +42,10 @@ final class RotationDial: UIView {
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
     
-    init(frame: CGRect, dialConfig: DialConfig, viewModel: RotationDialViewModelProtocol) {
+    init(frame: CGRect, dialConfig: DialConfig, viewModel: RotationDialViewModelProtocol, dialPlate: RotationDialPlate) {
         self.dialConfig = dialConfig
         self.viewModel = viewModel
+        self.dialPlate = dialPlate
         super.init(frame: frame)
     }
     
@@ -140,7 +141,7 @@ extension RotationDial {
                                     height: dialPlateLength)
         
         dialPlate?.removeFromSuperview()
-        dialPlate = RotationDialPlate(frame: dialPlateFrame, dialConfig: dialConfig)
+        dialPlate?.setup(with: dialPlateFrame)
         container.addSubview(dialPlate!)
     }
     
@@ -193,7 +194,7 @@ extension RotationDial: RotationDialProtocol {
         
         let radians = angle.radians
         if case .limit = dialConfig.rotationLimitType {
-            if (getRotationAngle() * angle).radians > 0 && abs(getRotationAngle().radians + radians) >= angleLimit.radians {
+            if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) >= angleLimit.radians {
                 
                 if radians > 0 {
                     rotateDialPlate(to: angleLimit)

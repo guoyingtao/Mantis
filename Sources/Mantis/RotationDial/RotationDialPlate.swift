@@ -30,8 +30,7 @@ private let margin: CGFloat = 0
 private let spaceBetweenScaleAndNumber: CGFloat = 10
 
 class RotationDialPlate: UIView {
-
-    let smallDotLayer: CAReplicatorLayer = {
+    private let smallDotLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
         layer.instanceCount = smallDegreeScaleNumber
         layer.instanceTransform =
@@ -42,7 +41,7 @@ class RotationDialPlate: UIView {
         return layer
     }()
     
-    let bigDotLayer: CAReplicatorLayer = {
+    private let bigDotLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
         layer.instanceCount = bigDegreeScaleNumber
         layer.instanceTransform =
@@ -53,12 +52,11 @@ class RotationDialPlate: UIView {
         return layer
     }()
     
-    var dialConfig = Mantis.Config().cropViewConfig.dialConfig
+    private var dialConfig: DialConfig!
     
     init(frame: CGRect, dialConfig: DialConfig) {
         super.init(frame: frame)
         self.dialConfig = dialConfig
-        setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -70,7 +68,6 @@ class RotationDialPlate: UIView {
         mark.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
         mark.fillColor = dialConfig.smallScaleColor.cgColor
-        
         return mark
     }
     
@@ -78,9 +75,7 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 4, height: 4)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        
         mark.fillColor = dialConfig.smallScaleColor.cgColor
-        
         return mark
     }
     
@@ -160,7 +155,8 @@ class RotationDialPlate: UIView {
         self.layer.addSublayer(layer)
     }
     
-    private func setup() {
+    func setup(with frame: CGRect) {
+        self.frame = frame
         setupSmallScaleMarks()
         setupBigScaleMarks()
         setupAngleNumber()

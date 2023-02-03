@@ -122,8 +122,10 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
 private func setupRotationDialIfNeeded(with cropViewConfig: CropViewConfig, and cropView: CropView) {
     if cropViewConfig.showRotationDial {
         let viewModel = RotationDialViewModel()
+        let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.dialConfig)
         cropView.rotationDial = RotationDial(frame: .zero,
                                              dialConfig: cropViewConfig.dialConfig,
-                                             viewModel: viewModel)
+                                             viewModel: viewModel,
+                                             dialPlate: dialPlate)
     }
 }

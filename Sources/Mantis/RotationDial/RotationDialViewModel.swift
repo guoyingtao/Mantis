@@ -24,7 +24,7 @@ class RotationDialViewModel: RotationDialViewModelProtocol {
         }
     }
 
-    private var rotationAngle = CGAngle(degrees: 0) {
+    private(set) var rotationAngle = CGAngle(degrees: 0) {
         didSet {
             didSetRotationAngle(rotationAngle)
         }

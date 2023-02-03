@@ -38,6 +38,7 @@
 		660D4F4D298CBED900C4E11A /* FakeCropWorkbenchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4C298CBED900C4E11A /* FakeCropWorkbenchView.swift */; };
 		660D4F4F298CBF4400C4E11A /* FakeCropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4E298CBF4400C4E11A /* FakeCropMaskViewManager.swift */; };
 		660D4F57298CDA8C00C4E11A /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F56298CDA8C00C4E11A /* TestHelper.swift */; };
+		660D4F5B298D524A00C4E11A /* RotateDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F5A298D524A00C4E11A /* RotateDialTests.swift */; };
 		66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E06294B7059001C8593 /* CropViewProtocol.swift */; };
 		66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */; };
 		66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */; };
@@ -142,6 +143,7 @@
 		660D4F4C298CBED900C4E11A /* FakeCropWorkbenchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropWorkbenchView.swift; sourceTree = "<group>"; };
 		660D4F4E298CBF4400C4E11A /* FakeCropMaskViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropMaskViewManager.swift; sourceTree = "<group>"; };
 		660D4F56298CDA8C00C4E11A /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		660D4F5A298D524A00C4E11A /* RotateDialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateDialTests.swift; sourceTree = "<group>"; };
 		66100E06294B7059001C8593 /* CropViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewProtocol.swift; sourceTree = "<group>"; };
 		66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerProtocol.swift; sourceTree = "<group>"; };
 		66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 				660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */,
 				660D4F44298CBD2500C4E11A /* CropViewTests.swift */,
 				660D4F56298CDA8C00C4E11A /* TestHelper.swift */,
+				660D4F5A298D524A00C4E11A /* RotateDialTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -640,6 +643,7 @@
 				66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */,
 				660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */,
 				660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */,
+				660D4F5B298D524A00C4E11A /* RotateDialTests.swift in Sources */,
 				66F439902979472C00728B52 /* CropViewModelTests.swift in Sources */,
 				660D4F41298C08FA00C4E11A /* CropViewControllerTests.swift in Sources */,
 				OBJ_120 /* XCTestManifests.swift in Sources */,
