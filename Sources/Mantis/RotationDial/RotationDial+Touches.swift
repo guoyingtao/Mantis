@@ -42,4 +42,12 @@ extension RotationDial {
         didFinishedRotate()
         viewModel.touchPoint = nil
     }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPanGestureRecognizer {
+            return false
+        }
+        
+        return true
+    }
 }
