@@ -2,7 +2,7 @@
 //  FakeCropView.swift
 //  Mantis
 //
-//  Created by yingtguo on 2/2/23.
+//  Created by Yingtao Guo on 2/2/23.
 //
 
 import UIKit

@@ -748,7 +748,7 @@ extension CropView: CropViewProtocol {
         if viewModel.rotationType.isRotateByMultiple180 {
             return Double(image.horizontalToVerticalRatio())
         } else {
-            return Double(1/image.horizontalToVerticalRatio())
+            return Double(1 / image.horizontalToVerticalRatio())
         }
     }
         
