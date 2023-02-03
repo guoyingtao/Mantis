@@ -259,7 +259,7 @@ class CropView: UIView {
             self.viewModel.setBetweenOperationStatus()
         }
         
-        rotationDial.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+        rotationDial.rotateDialPlate(by: Angle(radians: viewModel.radians))
         rotationDial.bringSelfToFront()
                 
         adaptAngleDashboardToCropBox()
@@ -675,7 +675,7 @@ extension CropView {
     private func setRotation(byRadians radians: CGFloat) {
         cropWorkbenchView.transform = CGAffineTransform(rotationAngle: radians)
         updatePosition(by: radians)
-        rotationDial?.rotateDialPlate(to: CGAngle(radians: radians), animated: false)
+        rotationDial?.rotateDialPlate(to: Angle(radians: radians), animated: false)
     }
     
     func setFixedRatioCropBox(zoom: Bool = true, cropBox: CGRect? = nil) {
@@ -866,7 +866,7 @@ extension CropView: CropViewProtocol {
     }
     
     func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
-        viewModel.setRotatingStatus(by: CGAngle(radians: transformation.rotation))
+        viewModel.setRotatingStatus(by: Angle(radians: transformation.rotation))
         
         if transformation.cropWorkbenchViewBounds != .zero {
             cropWorkbenchView.bounds = transformation.cropWorkbenchViewBounds
@@ -882,7 +882,7 @@ extension CropView: CropViewProtocol {
         }
         
         if rotateDial {
-            rotationDial?.rotateDialPlate(by: CGAngle(radians: viewModel.radians))
+            rotationDial?.rotateDialPlate(by: Angle(radians: viewModel.radians))
             adaptAngleDashboardToCropBox()
         }
     }

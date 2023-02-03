@@ -45,7 +45,7 @@ protocol CropViewModelProtocol: AnyObject {
     
     // MARK: - Handle view status changes
     func setInitialStatus()
-    func setRotatingStatus(by angle: CGAngle)
+    func setRotatingStatus(by angle: Angle)
     func setDegree90RotatingStatus()
     func setTouchImageStatus()
     func setTouchRotationBoardStatus()

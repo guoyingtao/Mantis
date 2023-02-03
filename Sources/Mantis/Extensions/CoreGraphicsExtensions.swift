@@ -25,11 +25,7 @@
 import Foundation
 import UIKit
 
-typealias Angle = CGFloat
-
-extension Angle {
-    var reverse: Angle { return 2 * CGFloat.pi - self }
-}
+typealias RadiansAngle = CGFloat
 
 extension FloatingPoint {
     var isBad: Bool { return isNaN || isInfinite }
@@ -86,7 +82,7 @@ extension CGVector {
     var magnitude: CGFloat { return sqrt(pow(dx, 2) + pow(dy, 2)).checked }
     var normalized: CGVector { return CGVector(dx: dx / magnitude, dy: dy / magnitude).checked }
     var point: CGPoint { return CGPoint(x: dx, y: dy).checked }
-    func rotate(_ angle: Angle) -> CGVector { return CGVector(dx: dx * cos(angle) - dy * sin(angle), dy: dx * sin(angle) + dy * cos(angle) ).checked}
+    func rotate(_ angle: RadiansAngle) -> CGVector { return CGVector(dx: dx * cos(angle) - dy * sin(angle), dy: dx * sin(angle) + dy * cos(angle) ).checked}
     
     func dot(_ vec2: CGVector) -> CGFloat { return (dx * vec2.dx + dy * vec2.dy).checked}
     func add(_ vec2: CGVector) -> CGVector { return CGVector(dx: dx + vec2.dx, dy: dy + vec2.dy).checked}
@@ -103,7 +99,7 @@ extension CGVector {
         _ = self.checked
     }
     
-    init(angle: Angle) {
+    init(angle: RadiansAngle) {
         let compAngle = angle < 0 ? (angle + 2 * CGFloat.pi) : angle
         self.init()
         dx = cos(compAngle.checked)
@@ -111,10 +107,10 @@ extension CGVector {
         _ = self.checked
     }
     
-    var theta: Angle {
+    var theta: RadiansAngle {
         return atan2(dy, dx)}
     
-    static func theta(_ vec1: CGVector, vec2: CGVector) -> Angle {
+    static func theta(_ vec1: CGVector, vec2: CGVector) -> RadiansAngle {
         var result = vec1.normalized.dot(vec2.normalized)
         if result > 1 {
             result = 1
@@ -124,7 +120,7 @@ extension CGVector {
         return acos(result).checked
     }
     
-    static func signedTheta(_ vec1: CGVector, vec2: CGVector) -> Angle {
+    static func signedTheta(_ vec1: CGVector, vec2: CGVector) -> RadiansAngle {
         
         return (vec1.normalized.cross(vec2.normalized) > 0 ?  -1 : 1) * theta(vec1.normalized, vec2: vec2.normalized).checked
     }

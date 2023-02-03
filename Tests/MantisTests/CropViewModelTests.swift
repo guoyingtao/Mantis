@@ -132,18 +132,18 @@ final class CropViewModelTests: XCTestCase {
     
     func testGetTotalRadians() {
         viewModel.degrees = 31
-        let radians = CGAngle(degrees: 31).radians
+        let radians = Angle(degrees: 31).radians
         viewModel.rotationType = .none
         XCTAssertEqual(viewModel.getTotalRadians(), radians)
         
         viewModel.rotationType = .counterclockwise270
-        XCTAssertEqual(viewModel.getTotalRadians(), radians + CGAngle(degrees: viewModel.rotationType.rawValue).radians)
+        XCTAssertEqual(viewModel.getTotalRadians(), radians + Angle(degrees: viewModel.rotationType.rawValue).radians)
         
         viewModel.rotationType = .counterclockwise180
-        XCTAssertEqual(viewModel.getTotalRadians(), radians + CGAngle(degrees: viewModel.rotationType.rawValue).radians)
+        XCTAssertEqual(viewModel.getTotalRadians(), radians + Angle(degrees: viewModel.rotationType.rawValue).radians)
         
         viewModel.rotationType = .counterclockwise90
-        XCTAssertEqual(viewModel.getTotalRadians(), radians + CGAngle(degrees: viewModel.rotationType.rawValue).radians)
+        XCTAssertEqual(viewModel.getTotalRadians(), radians + Angle(degrees: viewModel.rotationType.rawValue).radians)
     }
     
     func testNeedCrop() {

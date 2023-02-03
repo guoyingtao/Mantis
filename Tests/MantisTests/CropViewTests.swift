@@ -33,7 +33,7 @@ final class CropViewTests: XCTestCase {
     }
     
     func testGetTotalRadians() {
-        cropViewModel.degrees = CGAngle(degrees: 30).degrees
+        cropViewModel.degrees = Angle(degrees: 30).degrees
         cropView = createCropView(viewModel: cropViewModel)
 
         print(cropView.getTotalRadians())

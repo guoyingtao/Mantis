@@ -36,42 +36,42 @@ final class RotateDialTests: XCTestCase {
     func testRotateDialPlate() {
         // Test valid plus rotation with limitation
         var dialConfig = Config().cropViewConfig.dialConfig
-        dialConfig.rotationLimitType = .limit(angle: CGAngle(degrees: 45))
+        dialConfig.rotationLimitType = .limit(degreeAngle: 45)
         setup(with: dialConfig)
         
         var dialPlateTransform = dialPlate.transform
-        var angle = CGAngle(degrees: 40)
+        var angle = Angle(degrees: 40)
         XCTAssertTrue(dial.rotateDialPlate(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         
         // Test invalid plus rotation with limitation
-        dialConfig.rotationLimitType = .limit(angle: CGAngle(degrees: 45))
+        dialConfig.rotationLimitType = .limit(degreeAngle: 45)
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
-        angle = CGAngle(degrees: 50)
+        angle = Angle(degrees: 50)
         XCTAssertFalse(dial.rotateDialPlate(by: angle))
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
-        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: CGAngle(degrees: 45).radians))
+        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: 45).radians))
         
         // Test valid minus rotation with limitation
-        dialConfig.rotationLimitType = .limit(angle: CGAngle(degrees: 45))
+        dialConfig.rotationLimitType = .limit(degreeAngle: 45)
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
-        angle = CGAngle(degrees: -40)
+        angle = Angle(degrees: -40)
         XCTAssertTrue(dial.rotateDialPlate(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         
         // Test invalid minus rotation with limitation
-        dialConfig.rotationLimitType = .limit(angle: CGAngle(degrees: 45))
+        dialConfig.rotationLimitType = .limit(degreeAngle: 45)
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
-        angle = CGAngle(degrees: -50)
+        angle = Angle(degrees: -50)
         XCTAssertFalse(dial.rotateDialPlate(by: angle))
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
-        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: CGAngle(degrees: -45).radians))
+        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: -45).radians))
         
         // Test no limit
         dialConfig = Config().cropViewConfig.dialConfig
@@ -79,7 +79,7 @@ final class RotateDialTests: XCTestCase {
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
-        angle = CGAngle(degrees: 70)
+        angle = Angle(degrees: 70)
         XCTAssertTrue(dial.rotateDialPlate(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
     }

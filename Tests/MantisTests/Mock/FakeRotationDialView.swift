@@ -14,7 +14,7 @@ class FakeRotationDialView: UIView, RotationDialProtocol {
     
     var pointerWidth: CGFloat = 0
     
-    var didRotate: (CGAngle) -> Void = { _ in }
+    var didRotate: (Angle) -> Void = { _ in }
     
     var didFinishedRotate: () -> Void = { }
     
@@ -22,11 +22,11 @@ class FakeRotationDialView: UIView, RotationDialProtocol {
         
     }
     
-    func rotateDialPlate(by angle: CGAngle) -> Bool {
+    func rotateDialPlate(by angle: Angle) -> Bool {
         false
     }
     
-    func rotateDialPlate(to angle: CGAngle, animated: Bool) {
+    func rotateDialPlate(to angle: Angle, animated: Bool) {
         
     }
     
@@ -34,7 +34,7 @@ class FakeRotationDialView: UIView, RotationDialProtocol {
         
     }
     
-    func getRotationAngle() -> CGAngle {
+    func getRotationAngle() -> Angle {
         .init(degrees: 0)
     }
     
