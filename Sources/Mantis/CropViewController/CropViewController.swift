@@ -44,11 +44,7 @@ open class CropViewController: UIViewController {
         print("CropViewController deinit.")
     }
 
-    public init(
-        image: UIImage,
-        config: Mantis.Config = Mantis.Config(),
-        cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)
-    ) {
+    required public init(config: Mantis.Config = Mantis.Config()) {
         self.config = config
 
         switch config.cropViewConfig.cropShapeType {
@@ -57,9 +53,6 @@ open class CropViewController: UIViewController {
         default:
             ()
         }
-
-        cropView = buildCropView(with: image, and: config.cropViewConfig)
-        self.cropToolbar = cropToolbar
 
         super.init(nibName: nil, bundle: nil)
     }
