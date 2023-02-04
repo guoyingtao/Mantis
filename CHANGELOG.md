@@ -2,6 +2,13 @@
 
 -----
 
+### [2.6.2](https://www.github.com/guoyingtao/Mantis/compare/v2.6.1...v2.6.2) (2023-02-03)
+
+
+### Bug Fixes
+
+* solve the gesture conflict when rotating dial for not full screen presentation ([#272](https://www.github.com/guoyingtao/Mantis/issues/272)) ([ca09343](https://www.github.com/guoyingtao/Mantis/commit/ca09343b6a7c3876fb016003718b1ff02956340e))
+
 ### [2.6.1](https://www.github.com/guoyingtao/Mantis/compare/v2.6.0...v2.6.1) (2023-02-01)
 
 
