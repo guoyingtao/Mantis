@@ -61,7 +61,7 @@ public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
 }
 
 // MARK: - internal section
-internal var localizationConfig = LocalizationConfig()
+var localizationConfig = LocalizationConfig()
 
 // MARK: - private section
 private(set) var bundle: Bundle? = {
