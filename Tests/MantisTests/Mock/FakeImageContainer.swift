@@ -13,6 +13,6 @@ class FakeImageContainer: UIView, ImageContainerProtocol {
     }
     
     func getCropRegion(withCropBoxFrame cropBoxFrame: CGRect, cropView: UIView) -> CropRegion {
-        CropRegion(.zero, .zero, .zero, .zero)
+        CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero)
     }
 }

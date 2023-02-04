@@ -84,13 +84,13 @@ class FakeCropView: UIView, CropViewProtocol {
     func crop() -> CropOutput {
         CropOutput(nil,
                    Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero),
-                   CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(.zero, .zero, .zero, .zero)))
+                   CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero)))
     }
     
     func crop(_ image: UIImage) -> CropOutput {
         CropOutput(nil,
                    Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero),
-                   CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(.zero, .zero, .zero, .zero)))
+                   CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero)))
     }
     
     func asyncCrop(completion: @escaping (CropOutput) -> Void) {
@@ -98,7 +98,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getCropInfo() -> CropInfo {
-        CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(.zero, .zero, .zero, .zero))
+        CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero))
     }
     
     func getExpectedCropImageSize() -> CGSize {

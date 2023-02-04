@@ -39,6 +39,7 @@
 		660D4F4F298CBF4400C4E11A /* FakeCropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4E298CBF4400C4E11A /* FakeCropMaskViewManager.swift */; };
 		660D4F57298CDA8C00C4E11A /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F56298CDA8C00C4E11A /* TestHelper.swift */; };
 		660D4F5B298D524A00C4E11A /* RotateDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F5A298D524A00C4E11A /* RotateDialTests.swift */; };
+		660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F5C298E33F800C4E11A /* ImageContainerTests.swift */; };
 		66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E06294B7059001C8593 /* CropViewProtocol.swift */; };
 		66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */; };
 		66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */; };
@@ -51,7 +52,7 @@
 		664A7E9F2884606800DF7C79 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A7E9E2884606800DF7C79 /* Global.swift */; };
 		6659429D2877DAE80096A5DB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429C2877DAE80096A5DB /* Config.swift */; };
 		6659429F2877DC8A0096A5DB /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6659429E2877DC8A0096A5DB /* Enum.swift */; };
-		665942A12877DD1C0096A5DB /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665942A02877DD1C0096A5DB /* TypeAlias.swift */; };
+		665942A12877DD1C0096A5DB /* CropData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665942A02877DD1C0096A5DB /* CropData.swift */; };
 		66EDABDC297E6D3200EAD5DC /* CGAffineTransformExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EDABDB297E6D3200EAD5DC /* CGAffineTransformExtensions.swift */; };
 		66F439882978376F00728B52 /* RotationDialViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F439872978376F00728B52 /* RotationDialViewModelProtocol.swift */; };
 		66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F439892978539700728B52 /* RotationDialViewModelTests.swift */; };
@@ -144,6 +145,7 @@
 		660D4F4E298CBF4400C4E11A /* FakeCropMaskViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropMaskViewManager.swift; sourceTree = "<group>"; };
 		660D4F56298CDA8C00C4E11A /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		660D4F5A298D524A00C4E11A /* RotateDialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateDialTests.swift; sourceTree = "<group>"; };
+		660D4F5C298E33F800C4E11A /* ImageContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerTests.swift; sourceTree = "<group>"; };
 		66100E06294B7059001C8593 /* CropViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewProtocol.swift; sourceTree = "<group>"; };
 		66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerProtocol.swift; sourceTree = "<group>"; };
 		66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -156,7 +158,7 @@
 		664A7E9E2884606800DF7C79 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		6659429C2877DAE80096A5DB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		6659429E2877DC8A0096A5DB /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
-		665942A02877DD1C0096A5DB /* TypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
+		665942A02877DD1C0096A5DB /* CropData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropData.swift; sourceTree = "<group>"; };
 		66EDABDB297E6D3200EAD5DC /* CGAffineTransformExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGAffineTransformExtensions.swift; sourceTree = "<group>"; };
 		66F439872978376F00728B52 /* RotationDialViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialViewModelProtocol.swift; sourceTree = "<group>"; };
 		66F439892978539700728B52 /* RotationDialViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialViewModelTests.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 				660D4F44298CBD2500C4E11A /* CropViewTests.swift */,
 				660D4F56298CDA8C00C4E11A /* TestHelper.swift */,
 				660D4F5A298D524A00C4E11A /* RotateDialTests.swift */,
+				660D4F5C298E33F800C4E11A /* ImageContainerTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -441,7 +444,7 @@
 				663FCF3728866DDA003D3B9E /* CropViewConfig.swift */,
 				663FCF3828866DDA003D3B9E /* CropToolbarConfig.swift */,
 				6659429E2877DC8A0096A5DB /* Enum.swift */,
-				665942A02877DD1C0096A5DB /* TypeAlias.swift */,
+				665942A02877DD1C0096A5DB /* CropData.swift */,
 				OBJ_41 /* RatioOptions.swift */,
 				5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */,
 				5F69CC5D26C0629400568B75 /* Definition.swift */,
@@ -640,6 +643,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_119 /* MantisTests.swift in Sources */,
+				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
 				66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */,
 				660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */,
 				660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */,
@@ -701,7 +705,7 @@
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,
 				FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */,
-				665942A12877DD1C0096A5DB /* TypeAlias.swift in Sources */,
+				665942A12877DD1C0096A5DB /* CropData.swift in Sources */,
 				FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */,
 				OBJ_93 /* CropVisualEffectView.swift in Sources */,
 				269AF94227437EE400F7FAF6 /* DialConfig.swift in Sources */,

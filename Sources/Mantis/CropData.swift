@@ -34,12 +34,12 @@ public typealias Transformation = (
     cropWorkbenchViewBounds: CGRect
 )
 
-public typealias CropRegion = (
-    topLeft: CGPoint,
-    topRight: CGPoint,
-    bottomLeft: CGPoint,
-    bottomRight: CGPoint
-)
+public struct CropRegion: Equatable {
+    var topLeft: CGPoint
+    var topRight: CGPoint
+    var bottomLeft: CGPoint
+    var bottomRight: CGPoint
+}
 
 public typealias CropInfo = (
     translation: CGPoint,
