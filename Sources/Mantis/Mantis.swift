@@ -28,10 +28,11 @@ import UIKit
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)) -> Mantis.CropViewController {
-    let cropViewController = CropViewController(config: config)
-    cropViewController.cropView = buildCropView(with: image, and: config.cropViewConfig)
-    cropViewController.cropToolbar = cropToolbar
-    return cropViewController
+    return CropViewController(
+        image: image,
+        config: config,
+        cropToolbar: cropToolbar
+    )
 }
 
 public func setupCropViewController(_ cropViewController: Mantis.CropViewController,
@@ -52,14 +53,14 @@ public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
 }
 
 // MARK: - internal section
-var localizationConfig = LocalizationConfig()
+internal var localizationConfig = LocalizationConfig()
 
 // MARK: - private section
 private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
 }()
 
-private func buildCropView(with image: UIImage, and cropViewConfig: CropViewConfig) -> CropViewProtocol {
+internal func buildCropView(with image: UIImage, and cropViewConfig: CropViewConfig) -> CropViewProtocol {
     let imageContainer = ImageContainer(image: image)
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,

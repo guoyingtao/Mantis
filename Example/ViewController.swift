@@ -43,8 +43,24 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         cropViewController.delegate = self
         
         let navigationController = UINavigationController(rootViewController: cropViewController)
-        cropViewController.title = "Demo"
-        cropViewController.view.backgroundColor = .white
+        navigationController.title = "Demo"
+        navigationController.view.backgroundColor = .white
+        present(navigationController, animated: true)
+    }
+
+    @IBAction func customViewController(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+
+        var config = Mantis.Config()
+        config.cropMode = .async
+        config.cropViewConfig.showRotationDial = false
+        config.showAttachedCropToolbar = false
+        let cropViewController = CustomViewController(image: image, config: config)
+        cropViewController.delegate = self
+
+        let navigationController = UINavigationController(rootViewController: cropViewController)
         present(navigationController, animated: true)
     }
     

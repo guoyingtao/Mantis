@@ -22,7 +22,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpr-TJ-i7J">
-                                        <rect key="frame" x="0.0" y="0.0" width="306" height="34"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="306" height="29"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                         <state key="normal" title="Select from Album"/>
@@ -31,10 +31,10 @@
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="0o0-4T-StV">
-                                        <rect key="frame" x="0.0" y="38" width="306" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="33" width="306" height="29.5"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sau-lB-dow">
-                                                <rect key="frame" x="0.0" y="0.0" width="95.5" height="33.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="95.5" height="29.5"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Normal"/>
@@ -43,7 +43,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY0-hE-TGk">
-                                                <rect key="frame" x="105.5" y="0.0" width="95" height="33.5"/>
+                                                <rect key="frame" x="105.5" y="0.0" width="95" height="29.5"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Embedded"/>
@@ -52,7 +52,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A41-u7-U97">
-                                                <rect key="frame" x="210.5" y="0.0" width="95.5" height="33.5"/>
+                                                <rect key="frame" x="210.5" y="0.0" width="95.5" height="29.5"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Transformation"/>
@@ -63,7 +63,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgZ-jD-v0j">
-                                        <rect key="frame" x="0.0" y="75.5" width="306" height="34"/>
+                                        <rect key="frame" x="0.0" y="66.5" width="306" height="29"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                         <state key="normal" title="AlwaysUseOnePresetRatio"/>
@@ -72,11 +72,20 @@
                                             <action selector="normalPresent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N2U-ea-YZw"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6JW-Rf-Zds">
+                                        <rect key="frame" x="0.0" y="99.5" width="306" height="29"/>
+                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <state key="normal" title="Custom View Controller"/>
+                                        <connections>
+                                            <action selector="customViewController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kne-tp-yHY"/>
+                                        </connections>
+                                    </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="12F-q3-2Fl">
-                                        <rect key="frame" x="0.0" y="113.5" width="306" height="34"/>
+                                        <rect key="frame" x="0.0" y="132.5" width="306" height="29"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQp-Zn-dI8" userLabel="Custom CropToolbar">
-                                                <rect key="frame" x="0.0" y="0.0" width="148" height="34"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="148" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Custom Toolbar (List)"/>
@@ -85,7 +94,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GXf-4G-I8W">
-                                                <rect key="frame" x="158" y="0.0" width="148" height="34"/>
+                                                <rect key="frame" x="158" y="0.0" width="148" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Custom Toolbar (Buttons)"/>
@@ -96,7 +105,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d2a-Mk-kD7">
-                                        <rect key="frame" x="0.0" y="151.5" width="306" height="34"/>
+                                        <rect key="frame" x="0.0" y="165.5" width="306" height="29.5"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                         <state key="normal" title="Clockwise roation"/>
@@ -105,10 +114,10 @@
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oNS-aX-GCH">
-                                        <rect key="frame" x="0.0" y="189.5" width="306" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="199" width="306" height="29"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8S-OJ-shA">
-                                                <rect key="frame" x="0.0" y="0.0" width="148" height="33.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="148" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Crop Shapes"/>
@@ -117,7 +126,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0b-7Q-V2t" userLabel="Hide Rotation Dial">
-                                                <rect key="frame" x="158" y="0.0" width="148" height="33.5"/>
+                                                <rect key="frame" x="158" y="0.0" width="148" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Hide Rotation Dial"/>
@@ -128,10 +137,10 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="bu4-cG-VOh">
-                                        <rect key="frame" x="0.0" y="227" width="306" height="34"/>
+                                        <rect key="frame" x="0.0" y="232" width="306" height="29"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9WR-aF-zl2">
-                                                <rect key="frame" x="0.0" y="0.0" width="98.5" height="34"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="98.5" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Dark Background"/>
@@ -141,7 +150,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FmB-6O-5mY">
-                                                <rect key="frame" x="103.5" y="0.0" width="99" height="34"/>
+                                                <rect key="frame" x="103.5" y="0.0" width="99" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Light Background"/>
@@ -151,7 +160,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iaH-5e-UFH">
-                                                <rect key="frame" x="207.5" y="0.0" width="98.5" height="34"/>
+                                                <rect key="frame" x="207.5" y="0.0" width="98.5" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="No Background"/>

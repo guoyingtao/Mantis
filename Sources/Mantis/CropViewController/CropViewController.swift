@@ -24,7 +24,7 @@
 
 import UIKit
 
-public class CropViewController: UIViewController {
+open class CropViewController: UIViewController {
     public weak var delegate: CropViewControllerDelegate?
     public var config = Mantis.Config()
     
@@ -43,8 +43,12 @@ public class CropViewController: UIViewController {
     deinit {
         print("CropViewController deinit.")
     }
-    
-    init(config: Mantis.Config = Mantis.Config()) {
+
+    public init(
+        image: UIImage,
+        config: Mantis.Config = Mantis.Config(),
+        cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)
+    ) {
         self.config = config
 
         switch config.cropViewConfig.cropShapeType {
@@ -52,12 +56,15 @@ public class CropViewController: UIViewController {
             self.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
         default:
             ()
-        }        
-        
+        }
+
+        cropView = buildCropView(with: image, and: config.cropViewConfig)
+        self.cropToolbar = cropToolbar
+
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -116,8 +123,8 @@ public class CropViewController: UIViewController {
                                  ratioOptions: config.ratioOptions,
                                  customRatios: config.getCustomRatioItems().compactMap { $0 })
     }
-    
-    override public func viewDidLoad() {
+
+    override open func viewDidLoad() {
         super.viewDidLoad()
 
 #if targetEnvironment(macCatalyst)
