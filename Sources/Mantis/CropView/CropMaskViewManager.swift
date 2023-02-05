@@ -11,7 +11,7 @@ import UIKit
 final class CropMaskViewManager {
     private let dimmingView: CropMaskProtocol
     private let visualEffectView: CropMaskProtocol
-    private let maskViews: [CropMaskProtocol]
+    private(set) var maskViews: [CropMaskProtocol]
     
     init(dimmingView: CropMaskProtocol,
          visualEffectView: CropMaskProtocol) {
