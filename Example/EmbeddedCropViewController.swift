@@ -40,7 +40,7 @@ class EmbeddedCropViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let cropViewController = segue.destination as? CropViewController, let image else {
+        guard let cropViewController = segue.destination as? CropViewController, let image = image else {
             return
         }
         

@@ -240,6 +240,30 @@ config.localizationConfig.tableName = // a localizaed strings file name within t
 ```
   
 </details>
+
+<details>
+    <summary><strong>Custom View Controller</strong></summary>
+
+- If needed you can subclass `CropViewController`:
+
+```swift
+class CustomViewController: CropViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do your custom logic here.
+        // The MantisExample project also has a showcase for a CustomViewController.
+    }
+}
+```
+
+- To get an instance, Mantis provides a factory method:
+
+```swift
+let cropViewController: CustomViewController = Mantis.cropViewController(image: image, config: config)
+```
+
+</details>
     
 ### Demo projects
 Mantis provide two demo projects
