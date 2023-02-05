@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@testable import Mantis
 
 class FakeRotationDialView: UIView, RotationDialProtocol {
     var pointerHeight: CGFloat = 0

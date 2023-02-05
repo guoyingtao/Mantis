@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@testable import Mantis
 
 class FakeCropViewControllerDelegate: CropViewControllerDelegate {
     var didCrop = false

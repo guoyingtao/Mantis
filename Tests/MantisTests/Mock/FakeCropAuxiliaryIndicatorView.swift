@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@testable import Mantis
 
 class FakeCropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     var gridLineNumberType: GridLineNumberType = .none

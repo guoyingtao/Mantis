@@ -27,19 +27,19 @@
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F39298C01D100C4E11A /* CropToolbarTests.swift */; };
-		660D4F3D298C06A800C4E11A /* FakeCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F3C298C06A800C4E11A /* FakeCropToolbar.swift */; };
-		660D4F3F298C079600C4E11A /* FakeCropViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F3E298C079600C4E11A /* FakeCropViewControllerDelegate.swift */; };
 		660D4F41298C08FA00C4E11A /* CropViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */; };
-		660D4F43298C0AE400C4E11A /* FakeCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F42298C0AE400C4E11A /* FakeCropView.swift */; };
 		660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F44298CBD2500C4E11A /* CropViewTests.swift */; };
-		660D4F47298CBD5B00C4E11A /* FakeRotationDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F46298CBD5B00C4E11A /* FakeRotationDialView.swift */; };
-		660D4F49298CBDED00C4E11A /* FakeCropAuxiliaryIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F48298CBDED00C4E11A /* FakeCropAuxiliaryIndicatorView.swift */; };
-		660D4F4B298CBE6400C4E11A /* FakeImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4A298CBE6400C4E11A /* FakeImageContainer.swift */; };
-		660D4F4D298CBED900C4E11A /* FakeCropWorkbenchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4C298CBED900C4E11A /* FakeCropWorkbenchView.swift */; };
-		660D4F4F298CBF4400C4E11A /* FakeCropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4E298CBF4400C4E11A /* FakeCropMaskViewManager.swift */; };
 		660D4F57298CDA8C00C4E11A /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F56298CDA8C00C4E11A /* TestHelper.swift */; };
 		660D4F5B298D524A00C4E11A /* RotateDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F5A298D524A00C4E11A /* RotateDialTests.swift */; };
 		660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F5C298E33F800C4E11A /* ImageContainerTests.swift */; };
+		660D4F5E298F981A00C4E11A /* FakeCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F3C298C06A800C4E11A /* FakeCropToolbar.swift */; };
+		660D4F5F298F981D00C4E11A /* FakeCropViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F3E298C079600C4E11A /* FakeCropViewControllerDelegate.swift */; };
+		660D4F60298F982200C4E11A /* FakeCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F42298C0AE400C4E11A /* FakeCropView.swift */; };
+		660D4F61298F982500C4E11A /* FakeRotationDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F46298CBD5B00C4E11A /* FakeRotationDialView.swift */; };
+		660D4F62298F982900C4E11A /* FakeCropAuxiliaryIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F48298CBDED00C4E11A /* FakeCropAuxiliaryIndicatorView.swift */; };
+		660D4F63298F982C00C4E11A /* FakeImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4A298CBE6400C4E11A /* FakeImageContainer.swift */; };
+		660D4F64298F983200C4E11A /* FakeCropWorkbenchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4C298CBED900C4E11A /* FakeCropWorkbenchView.swift */; };
+		660D4F65298F983700C4E11A /* FakeCropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F4E298CBF4400C4E11A /* FakeCropMaskViewManager.swift */; };
 		66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E06294B7059001C8593 /* CropViewProtocol.swift */; };
 		66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */; };
 		66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */; };
@@ -645,12 +645,20 @@
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
 				66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */,
+				660D4F60298F982200C4E11A /* FakeCropView.swift in Sources */,
 				660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */,
 				660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */,
+				660D4F65298F983700C4E11A /* FakeCropMaskViewManager.swift in Sources */,
 				660D4F5B298D524A00C4E11A /* RotateDialTests.swift in Sources */,
 				66F439902979472C00728B52 /* CropViewModelTests.swift in Sources */,
 				660D4F41298C08FA00C4E11A /* CropViewControllerTests.swift in Sources */,
+				660D4F5F298F981D00C4E11A /* FakeCropViewControllerDelegate.swift in Sources */,
+				660D4F62298F982900C4E11A /* FakeCropAuxiliaryIndicatorView.swift in Sources */,
+				660D4F5E298F981A00C4E11A /* FakeCropToolbar.swift in Sources */,
+				660D4F61298F982500C4E11A /* FakeRotationDialView.swift in Sources */,
 				OBJ_120 /* XCTestManifests.swift in Sources */,
+				660D4F63298F982C00C4E11A /* FakeImageContainer.swift in Sources */,
+				660D4F64298F983200C4E11A /* FakeCropWorkbenchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,12 +674,10 @@
 				OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */,
 				OBJ_73 /* CropWorkbenchView.swift in Sources */,
 				66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */,
-				660D4F49298CBDED00C4E11A /* FakeCropAuxiliaryIndicatorView.swift in Sources */,
 				OBJ_74 /* CropView+Touches.swift in Sources */,
 				OBJ_75 /* CropView+UIScrollViewDelegate.swift in Sources */,
 				664A7E9F2884606800DF7C79 /* Global.swift in Sources */,
 				66F4398E2978F6E400728B52 /* UIViewExtensions.swift in Sources */,
-				660D4F3F298C079600C4E11A /* FakeCropViewControllerDelegate.swift in Sources */,
 				OBJ_76 /* CropView.swift in Sources */,
 				660D4F57298CDA8C00C4E11A /* TestHelper.swift in Sources */,
 				OBJ_77 /* CropViewModel.swift in Sources */,
@@ -699,8 +705,6 @@
 				663FCF3928866DDA003D3B9E /* CropViewConfig.swift in Sources */,
 				OBJ_89 /* LocalizedHelper.swift in Sources */,
 				OBJ_90 /* Mantis.swift in Sources */,
-				660D4F4F298CBF4400C4E11A /* FakeCropMaskViewManager.swift in Sources */,
-				660D4F43298C0AE400C4E11A /* FakeCropView.swift in Sources */,
 				5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */,
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,
@@ -711,19 +715,15 @@
 				269AF94227437EE400F7FAF6 /* DialConfig.swift in Sources */,
 				OBJ_94 /* RatioOptions.swift in Sources */,
 				OBJ_95 /* CGAngle.swift in Sources */,
-				660D4F3D298C06A800C4E11A /* FakeCropToolbar.swift in Sources */,
 				OBJ_97 /* RotationCalculator.swift in Sources */,
 				OBJ_98 /* RotationDial+Touches.swift in Sources */,
 				66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */,
-				660D4F47298CBD5B00C4E11A /* FakeRotationDialView.swift in Sources */,
 				66F43992297A123400728B52 /* CropViewControllerDelegate.swift in Sources */,
 				OBJ_99 /* RotationDial.swift in Sources */,
 				6659429D2877DAE80096A5DB /* Config.swift in Sources */,
-				660D4F4B298CBE6400C4E11A /* FakeImageContainer.swift in Sources */,
 				OBJ_100 /* RotationDialPlate.swift in Sources */,
 				OBJ_101 /* RotationDialViewModel.swift in Sources */,
 				663FCF3A28866DDA003D3B9E /* CropToolbarConfig.swift in Sources */,
-				660D4F4D298CBED900C4E11A /* FakeCropWorkbenchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

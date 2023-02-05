@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@testable import Mantis
 
 class FakeCropToolbar: UIView, CropToolbarProtocol {
     var config = CropToolbarConfig()
