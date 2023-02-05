@@ -31,7 +31,7 @@ class CustomViewController: CropViewController {
 
         navigationItem.rightBarButtonItems = [
             done,
-            rotate,
+            rotate
         ]
     }
 
