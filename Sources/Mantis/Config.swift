@@ -59,13 +59,15 @@ public struct Config {
         guard let bundle = Bundle(identifier: bundleIdentifier) else {
             return nil
         }
-
-        if let url = bundle.url(forResource: "MantisResources", withExtension: "bundle") {
-            let bundle = Bundle(url: url)
-            return bundle
+        
+        guard let url = bundle.url(forResource: "MantisResources", withExtension: "bundle") else {
+            return nil
         }
-        return nil
+        
+        return Bundle(url: url)
     }()
+    
+    static var language: Language?
 
     public init() {}
 

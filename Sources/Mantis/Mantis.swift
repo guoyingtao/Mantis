@@ -60,6 +60,22 @@ public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
     return image.crop(by: cropInfo)
 }
 
+public struct Language {
+    var code: String
+    
+    public init(code: String) {
+        self.code = code
+    }
+}
+
+public func chooseLanguage(_ language: Language) {
+    Mantis.Config.language = language
+}
+
+public func resetLanguage() {
+    Mantis.Config.language = nil
+}
+
 // MARK: - internal section
 var localizationConfig = LocalizationConfig()
 
