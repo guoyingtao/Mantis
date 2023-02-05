@@ -68,7 +68,7 @@ public struct Language {
     }
 }
 
-public func chooseLanguage(by language: Language) {
+public func chooseLanguage(_ language: Language) {
     Mantis.Config.language = language
 }
 
