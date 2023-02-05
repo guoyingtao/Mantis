@@ -10,7 +10,7 @@ import Foundation
 
 struct LocalizedHelper {
     private static var bundle: Bundle?
-        
+    
     static func setBundle(_ bundle: Bundle) {
         guard let resourceBundleURL = bundle.url(
             forResource: "MantisResources", withExtension: "bundle")
@@ -28,6 +28,10 @@ struct LocalizedHelper {
 #if MANTIS_SPM
         let bundle = localizationConfig.bundle ?? Bundle.module
         
+        guard let bundle = convertToLanguageBundleIfNeeded(by: bundle) else {
+            return value
+        }
+        
         return NSLocalizedString(
             key,
             tableName: localizationConfig.tableName,
@@ -40,6 +44,10 @@ struct LocalizedHelper {
             return value
         }
         
+        guard let bundle = convertToLanguageBundleIfNeeded(by: bundle) else {
+            return value
+        }
+        
         return NSLocalizedString(
             key,
             tableName: localizationConfig.tableName,
@@ -48,5 +56,15 @@ struct LocalizedHelper {
             comment: ""
         )
 #endif
+    }
+    
+    static private func convertToLanguageBundleIfNeeded(by bundle: Bundle?) -> Bundle? {
+        if let languageCode = Mantis.Config.language?.code,
+           let languageBundlePath = bundle?.path(forResource: languageCode, ofType: "lproj"),
+           let languageBundle = Bundle(path: languageBundlePath) {
+            return languageBundle
+        }
+        
+        return bundle
     }
 }
