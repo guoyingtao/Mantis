@@ -2,6 +2,13 @@
 
 -----
 
+## [2.7.0](https://www.github.com/guoyingtao/Mantis/compare/v2.6.2...v2.7.0) (2023-02-05)
+
+
+### Features
+
+* Open up CropViewController for inheritance. ([#274](https://www.github.com/guoyingtao/Mantis/issues/274)) ([cdeafcd](https://www.github.com/guoyingtao/Mantis/commit/cdeafcd39f1666558160e4fbd47018ed3a8b6f5d))
+
 ### [2.6.2](https://www.github.com/guoyingtao/Mantis/compare/v2.6.1...v2.6.2) (2023-02-03)
 
 
