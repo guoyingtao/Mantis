@@ -6,7 +6,7 @@
 //  Copyright © 2019 Echo. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class RotationDialViewModel: RotationDialViewModelProtocol {
     var didSetRotationAngle: (CGAngle) -> Void = { _ in }
