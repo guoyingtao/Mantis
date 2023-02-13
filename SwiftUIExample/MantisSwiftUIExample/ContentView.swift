@@ -92,6 +92,9 @@ struct ImageCropper: UIViewControllerRepresentable {
         
         func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
         }
+        
+        func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
+        }
     }
     
     func makeCoordinator() -> Coordinator {
