@@ -30,14 +30,14 @@ class FakeCropView: UIView, CropViewProtocol {
         
     }
     
-    func prepareForDeviceRotation() {
+    func prepareForViewWillTransition() {
         
     }
     
-    func handleDeviceRotated() {
+    func handleViewWillTransition() {
         
     }
-    
+
     func setFixedRatio(_ ratio: Double, zoom: Bool, presetFixedRatioType: PresetFixedRatioType) {
         
     }
