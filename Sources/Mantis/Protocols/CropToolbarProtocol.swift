@@ -76,7 +76,7 @@ public extension CropToolbarProtocol {
         let highPriority: Float = 10000
         let lowPriority: Float = 1
 
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             setContentHuggingPriority(UILayoutPriority(highPriority), for: .vertical)
             setContentCompressionResistancePriority(UILayoutPriority(highPriority), for: .vertical)
             setContentHuggingPriority(UILayoutPriority(lowPriority), for: .horizontal)

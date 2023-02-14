@@ -146,7 +146,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
 
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
         } else {
             return CGSize(width: config.widthForHorizontalOrientation, height: superSize.height)
@@ -158,7 +158,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     }
 
     public func adjustLayoutWhenOrientationChange() {
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             optionButtonStackView?.axis = .horizontal
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         } else {
