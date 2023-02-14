@@ -14,50 +14,42 @@ public struct Orientation {
             return application.statusBarOrientation
         }
     }
-    
-    static var deviceOrientation: UIDeviceOrientation? {
-        device.orientation.isValidInterfaceOrientation
-        ? device.orientation
-        : nil
-    }
-    
+        
     private static var application: UIApplication { .shared }
-    private static var device: UIDevice { .current }
     
     /**
-     Whether or not the device is in landscape orientation.
+     Whether or not the interface is in landscape orientation.
      */
     public static var isLandscape: Bool {
-        device.orientation.isValidInterfaceOrientation
-        ? device.orientation.isLandscape
-        : interfaceOrientation.isLandscape
-        
+        interfaceOrientation.isLandscape
     }
     
     /**
-     Whether or not the device is in landscape left orientation.
+     Whether or not the interface is in landscape left orientation.
      */
     public static var isLandscapeLeft: Bool {
-        device.orientation.isValidInterfaceOrientation
-        ? device.orientation == .landscapeLeft
-        : interfaceOrientation == .landscapeLeft
+        interfaceOrientation == .landscapeLeft
     }
     
     /**
-     Whether or not the device is in landscape right orientation.
+     Whether or not the interface is in landscape right orientation.
      */
     public static var isLandscapeRight: Bool {
-        device.orientation.isValidInterfaceOrientation
-        ? device.orientation == .landscapeRight
-        : interfaceOrientation == .landscapeRight
+        interfaceOrientation == .landscapeRight
     }
     
     /**
-     Whether or not the device is in portrait orientation.
+     Whether or not the interface is in portrait orientation.
      */
     public static var isPortrait: Bool {
-        device.orientation.isValidInterfaceOrientation
-        ? device.orientation.isPortrait
-        : interfaceOrientation.isPortrait
+        interfaceOrientation.isPortrait
+    }
+    
+    /**
+     Whether or not the interface is treated as in portrait orientation.
+     For devices other than iPhone, they have enough space for landscape orientation, so we can always use portait layout for them.
+     */
+    public static var treatAsPortrait: Bool {
+        interfaceOrientation.isPortrait || UIDevice.current.userInterfaceIdiom != .phone
     }
 }

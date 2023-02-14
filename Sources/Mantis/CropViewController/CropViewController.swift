@@ -28,8 +28,6 @@ open class CropViewController: UIViewController {
     public weak var delegate: CropViewControllerDelegate?
     public var config = Mantis.Config()
     
-    private var orientation: UIInterfaceOrientation = .unknown
-
     var cropView: CropViewProtocol!
     var cropToolbar: CropToolbarProtocol!
     
@@ -153,19 +151,17 @@ open class CropViewController: UIViewController {
         return [.top, .bottom]
     }
     
+    // It is triggered by (1) - device rotation or (2) - split view operations on iPad
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        cropView.prepareForDeviceRotation()
-        handleDeviceRotated()
-    }    
+        cropView.prepareForViewWillTransition()
+        handleViewWillTransition()
+    }
     
-    @objc func handleDeviceRotated() {
+    @objc func handleViewWillTransition() {
         let currentOrientation = Orientation.interfaceOrientation
         
         guard currentOrientation != .unknown else { return }
-        guard currentOrientation != orientation else { return }
-        
-        orientation = currentOrientation
         
         if UIDevice.current.userInterfaceIdiom == .phone
             && currentOrientation == .portraitUpsideDown {
@@ -180,7 +176,7 @@ open class CropViewController: UIViewController {
         // So delay the execution to make sure handleRotate runs after the final
         // viewDidLayoutSubviews
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.cropView.handleDeviceRotated()
+            self?.cropView.handleViewWillTransition()
         }
     }    
     
@@ -321,7 +317,7 @@ extension CropViewController {
     }
     
     private func setStackViewAxis() {
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             stackView?.axis = .vertical
         } else if Orientation.isLandscape {
             stackView?.axis = .horizontal
@@ -338,7 +334,7 @@ extension CropViewController {
         stackView?.removeArrangedSubview(cropStackView)
         stackView?.removeArrangedSubview(cropToolbar)
         
-        if Orientation.isPortrait || Orientation.isLandscapeRight {
+        if Orientation.treatAsPortrait || Orientation.isLandscapeRight {
             stackView?.addArrangedSubview(cropStackView)
             stackView?.addArrangedSubview(cropToolbar)
         } else if Orientation.isLandscapeLeft {

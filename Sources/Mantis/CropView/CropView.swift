@@ -269,7 +269,7 @@ class CropView: UIView {
     private func adaptAngleDashboardToCropBox() {
         guard let rotationDial = rotationDial else { return }
         
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             rotationDial.transform = CGAffineTransform(rotationAngle: 0)
             rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
             (cropAuxiliaryIndicatorView.frame.width - rotationDial.frame.width) / 2
@@ -404,7 +404,7 @@ extension CropView {
         let rect = self.bounds
         var contentRect = CGRect.zero
         
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             contentRect.origin.x = rect.origin.x + cropViewPadding
             contentRect.origin.y = rect.origin.y + cropViewPadding
             
@@ -753,12 +753,12 @@ extension CropView: CropViewProtocol {
         }
     }
         
-    func prepareForDeviceRotation() {
+    func prepareForViewWillTransition() {
         viewModel.setDegree90RotatingStatus()
         saveAnchorPoints()
     }
     
-    func handleDeviceRotated() {
+    func handleViewWillTransition() {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
         cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)

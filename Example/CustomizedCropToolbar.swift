@@ -59,7 +59,7 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     }
     
     func adjustLayoutWhenOrientationChange() {
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             stackView?.axis = .horizontal
         } else {
             stackView?.axis = .vertical
@@ -69,7 +69,7 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
         
-        if Orientation.isPortrait {
+        if Orientation.treatAsPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
         } else {
             return CGSize(width: config.widthForHorizontalOrientation, height: superSize.height)

@@ -18,8 +18,8 @@ protocol CropViewProtocol: UIView {
     func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType
     func getImageHorizontalToVerticalRatio() -> Double
     func resetComponents()
-    func prepareForDeviceRotation()
-    func handleDeviceRotated()
+    func prepareForViewWillTransition()
+    func handleViewWillTransition()
     func setFixedRatio(_ ratio: Double, zoom: Bool, presetFixedRatioType: PresetFixedRatioType)
     func rotateBy90(withRotateType rotateType: RotateBy90DegreeType, completion: @escaping () -> Void)
     func handleAlterCropper90Degree()
