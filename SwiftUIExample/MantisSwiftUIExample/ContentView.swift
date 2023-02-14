@@ -82,19 +82,7 @@ struct ImageCropper: UIViewControllerRepresentable {
         
         func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
             parent.presentationMode.wrappedValue.dismiss()
-        }
-        
-        func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {
-        }
-        
-        func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {
-        }
-        
-        func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
-        }
-        
-        func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
-        }
+        }        
     }
     
     func makeCoordinator() -> Coordinator {

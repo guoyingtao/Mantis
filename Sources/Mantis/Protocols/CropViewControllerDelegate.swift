@@ -20,7 +20,7 @@ public protocol CropViewControllerDelegate: AnyObject {
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController)
 }
 
-public extension CropViewControllerDelegate where Self: UIViewController {
+public extension CropViewControllerDelegate {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
