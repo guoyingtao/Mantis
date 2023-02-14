@@ -47,6 +47,7 @@ public struct Orientation {
     
     /**
      Whether or not the interface is treated as in portrait orientation.
+     For devices other than iPhone, they have enough space for landscape orientation, so we can always use portait layout for them.
      */
     public static var treatAsPortrait: Bool {
         interfaceOrientation.isPortrait || UIDevice.current.userInterfaceIdiom != .phone
