@@ -64,6 +64,7 @@
 		66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F909BE287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift */; };
 		8EFB6F6725D16B0F00C0DDB2 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */; };
 		8EFB6FB125D187A000C0DDB2 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F5425D16A9E00C0DDB2 /* Resource.bundle */; };
+		F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */; };
 		FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8525205CC300D95667 /* RatioSelector.swift */; };
 		FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8B25205DE900D95667 /* RatioItemView.swift */; };
 		OBJ_100 /* RotationDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* RotationDialPlate.swift */; };
@@ -185,6 +186,7 @@
 		8EFB6F4225D154D900C0DDB2 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
 		8EFB6F5425D16A9E00C0DDB2 /* Resource.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Resource.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
+		F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchViewTests.swift; sourceTree = "<group>"; };
 		FEDAAD8525205CC300D95667 /* RatioSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioSelector.swift; sourceTree = "<group>"; };
 		FEDAAD8B25205DE900D95667 /* RatioItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioItemView.swift; sourceTree = "<group>"; };
 		"Mantis::Mantis::Product" /* Mantis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -417,6 +419,7 @@
 				660D4F5A298D524A00C4E11A /* RotateDialTests.swift */,
 				660D4F5C298E33F800C4E11A /* ImageContainerTests.swift */,
 				660D4F68298F99D900C4E11A /* CropMaskViewManagerTests.swift */,
+				F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -648,6 +651,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */,
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
 				66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */,
