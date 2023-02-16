@@ -11,6 +11,7 @@ import Mantis
 struct ContentView: View {
     @State private var uiImage: UIImage = UIImage(named: "sunflower")!
     @State private var showingCropper = false
+    @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     @State private var cropperType: ImageCropperType = .normal
@@ -22,13 +23,17 @@ struct ContentView: View {
         AdaptiveStack {
             createImageHolder()
             createFeatureDemoList()
-        }.fullScreenCover(isPresented: $showingCropper, content: {
+        }
+        .fullScreenCover(isPresented: $showingCropper, content: {
             ImageCropper(image: $uiImage,
                          cropShapeType: $cropShapeType,
                          presetFixedRatioType: $presetFixedRatioType,
                          type: $cropperType)
             .ignoresSafeArea()
         })
+        .sheet(isPresented: $showingCropShapeList) {
+            CropShapeListView(cropShapeType: $cropShapeType, selectedType: $showingCropper)
+        }
     }
     
     func reset() {
@@ -61,16 +66,15 @@ struct ContentView: View {
     }
     
     func createFeatureDemoListContent() -> some View {
-        VStack {
+        VStack(alignment: .leading) {
             Spacer()
-            Button("Normal") {
+            Button("Normal Crop") {
                 reset()
                 showingCropper = true
             }.font(.title)
-            Button("Circle Crop") {
+            Button("Select crop shape") {
                 reset()
-                cropShapeType = .circle()
-                showingCropper = true
+                showingCropShapeList = true
             }.font(.title)
             Button("Keep 1:1 ratio") {
                 reset()

@@ -44,7 +44,7 @@ public enum CropMaskVisualEffectType {
     case none
 }
 
-public enum CropShapeType {
+public enum CropShapeType: Hashable {
     case rect
 
     /**
@@ -82,6 +82,43 @@ public enum CropShapeType {
       Each point should have normailzed values whose range is 0...1
      */
     case path(points: [CGPoint], maskOnly: Bool = false)
+    
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .rect:
+            hasher.combine(0)
+        case .square:
+            hasher.combine(1)
+        case .ellipse(let maskOnly):
+            hasher.combine(2)
+            hasher.combine(maskOnly)
+        case .circle(let maskOnly):
+            hasher.combine(3)
+            hasher.combine(maskOnly)
+        case .roundedRect(let radiusToShortSide, let maskOnly):
+            hasher.combine(4)
+            hasher.combine(radiusToShortSide)
+            hasher.combine(maskOnly)
+        case .diamond(let maskOnly):
+            hasher.combine(5)
+            hasher.combine(maskOnly)
+        case .heart(let maskOnly):
+            hasher.combine(6)
+            hasher.combine(maskOnly)
+        case .polygon(let sides, let offset, let maskOnly):
+            hasher.combine(7)
+            hasher.combine(sides)
+            hasher.combine(offset)
+            hasher.combine(maskOnly)
+        case .path(let points, let maskOnly):
+            hasher.combine(8)
+            for point in points {
+                hasher.combine(point.x)
+                hasher.combine(point.y)
+            }
+            hasher.combine(maskOnly)
+        }
+    }
 }
 
 public enum RatioCandidatesShowType {

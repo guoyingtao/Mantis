@@ -15,6 +15,7 @@
 		F24836F5299DE6AD0008477C /* ImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F4299DE6AD0008477C /* ImageCropper.swift */; };
 		F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F6299DE7630008477C /* AdaptiveStack.swift */; };
 		F24836F9299E14B00008477C /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F8299E14B00008477C /* CustomViewController.swift */; };
+		F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836FA299E46C90008477C /* CropShapeListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		F24836F4299DE6AD0008477C /* ImageCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropper.swift; sourceTree = "<group>"; };
 		F24836F6299DE7630008477C /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		F24836F8299E14B00008477C /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
+		F24836FA299E46C90008477C /* CropShapeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropShapeListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				F24836F4299DE6AD0008477C /* ImageCropper.swift */,
 				F24836F6299DE7630008477C /* AdaptiveStack.swift */,
 				F24836F8299E14B00008477C /* CustomViewController.swift */,
+				F24836FA299E46C90008477C /* CropShapeListView.swift */,
 				5F5266B6263B490500615369 /* Assets.xcassets */,
 				5F5266BB263B490500615369 /* Info.plist */,
 				5F5266B8263B490500615369 /* Preview Content */,
@@ -215,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */,
 				5F5266B5263B490400615369 /* ContentView.swift in Sources */,
 				5F5266B3263B490400615369 /* MantisSwiftUIExampleApp.swift in Sources */,
 				F24836F9299E14B00008477C /* CustomViewController.swift in Sources */,
@@ -277,7 +281,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -332,7 +336,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -353,7 +357,7 @@
 				DEVELOPMENT_TEAM = 3V26Q55U3S;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MantisSwiftUIExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -376,7 +380,7 @@
 				DEVELOPMENT_TEAM = 3V26Q55U3S;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MantisSwiftUIExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
