@@ -11,12 +11,16 @@ import SwiftUI
 // https://www.hackingwithswift.com/quick-start/swiftui/how-to-automatically-switch-between-hstack-and-vstack-based-on-size-class
 struct AdaptiveStack<Content: View>: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     let horizontalAlignment: HorizontalAlignment
     let verticalAlignment: VerticalAlignment
     let spacing: CGFloat?
     let content: () -> Content
 
-    init(horizontalAlignment: HorizontalAlignment = .center, verticalAlignment: VerticalAlignment = .center, spacing: CGFloat? = nil, @ViewBuilder content: @escaping () -> Content) {
+    init(horizontalAlignment: HorizontalAlignment = .center,
+         verticalAlignment: VerticalAlignment = .center,
+         spacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content) {
         self.horizontalAlignment = horizontalAlignment
         self.verticalAlignment = verticalAlignment
         self.spacing = spacing

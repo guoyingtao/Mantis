@@ -14,6 +14,7 @@
 		5F5266BA263B490500615369 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F5266B9263B490500615369 /* Preview Assets.xcassets */; };
 		F24836F5299DE6AD0008477C /* ImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F4299DE6AD0008477C /* ImageCropper.swift */; };
 		F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F6299DE7630008477C /* AdaptiveStack.swift */; };
+		F24836F9299E14B00008477C /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F8299E14B00008477C /* CustomViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		D522526BBC7FB0BCB92F0553 /* Pods_MantisSwiftUIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisSwiftUIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F24836F4299DE6AD0008477C /* ImageCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropper.swift; sourceTree = "<group>"; };
 		F24836F6299DE7630008477C /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
+		F24836F8299E14B00008477C /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				5F5266B4263B490400615369 /* ContentView.swift */,
 				F24836F4299DE6AD0008477C /* ImageCropper.swift */,
 				F24836F6299DE7630008477C /* AdaptiveStack.swift */,
+				F24836F8299E14B00008477C /* CustomViewController.swift */,
 				5F5266B6263B490500615369 /* Assets.xcassets */,
 				5F5266BB263B490500615369 /* Info.plist */,
 				5F5266B8263B490500615369 /* Preview Content */,
@@ -214,6 +217,7 @@
 			files = (
 				5F5266B5263B490400615369 /* ContentView.swift in Sources */,
 				5F5266B3263B490400615369 /* MantisSwiftUIExampleApp.swift in Sources */,
+				F24836F9299E14B00008477C /* CustomViewController.swift in Sources */,
 				F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */,
 				F24836F5299DE6AD0008477C /* ImageCropper.swift in Sources */,
 			);
