@@ -10,7 +10,7 @@ import Foundation
 
 enum CropViewStatus: Equatable {
     case initial
-    case rotating(angle: CGAngle)
+    case rotating
     case degree90Rotating
     case touchImage
     case touchRotationBoard
