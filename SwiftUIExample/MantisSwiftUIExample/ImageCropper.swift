@@ -15,7 +15,7 @@ enum ImageCropperType {
 }
 
 struct ImageCropper: UIViewControllerRepresentable {
-    @Binding var image: UIImage
+    @Binding var image: UIImage?
     @Binding var cropShapeType: Mantis.CropShapeType
     @Binding var presetFixedRatioType: Mantis.PresetFixedRatioType
     @Binding var type: ImageCropperType
@@ -65,7 +65,7 @@ extension ImageCropper {
         var config = Mantis.Config()
         config.cropViewConfig.cropShapeType = cropShapeType
         config.presetFixedRatioType = presetFixedRatioType
-        let cropViewController = Mantis.cropViewController(image: image,
+        let cropViewController = Mantis.cropViewController(image: image!,
                                                            config: config)
         cropViewController.delegate = context.coordinator
         return cropViewController
@@ -74,7 +74,7 @@ extension ImageCropper {
     func makeImageCropperHiddingRotationDial(context: Context) -> UIViewController {
         var config = Mantis.Config()
         config.cropViewConfig.showRotationDial = false
-        let cropViewController = Mantis.cropViewController(image: image, config: config)
+        let cropViewController = Mantis.cropViewController(image: image!, config: config)
         cropViewController.delegate = context.coordinator
 
         return cropViewController
@@ -83,7 +83,7 @@ extension ImageCropper {
     func makeImageCropperWithoutAttachedToolbar(context: Context) -> UIViewController {
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
-        let cropViewController: CustomViewController = Mantis.cropViewController(image: image, config: config)
+        let cropViewController: CustomViewController = Mantis.cropViewController(image: image!, config: config)
         cropViewController.delegate = context.coordinator
 
         return UINavigationController(rootViewController: cropViewController)

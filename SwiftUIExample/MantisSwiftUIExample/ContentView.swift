@@ -9,13 +9,18 @@ import SwiftUI
 import Mantis
 
 struct ContentView: View {
-    @State private var uiImage: UIImage = UIImage(named: "sunflower")!
+    @State private var image: UIImage? = UIImage(named: "sunflower")!
     @State private var showingCropper = false
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
     @State private var cropperType: ImageCropperType = .normal
     @State private var contentHeight: CGFloat = 0
+    
+    @State private var showImagePicker = false
+    @State private var showCamera = false
+    @State private var showSourceTypeSelection = false
+    @State private var sourceType: UIImagePickerController.SourceType?
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -25,19 +30,28 @@ struct ContentView: View {
             createFeatureDemoList()
         }
         .fullScreenCover(isPresented: $showingCropper, content: {
-            ImageCropper(image: $uiImage,
+            ImageCropper(image: $image,
                          cropShapeType: $cropShapeType,
                          presetFixedRatioType: $presetFixedRatioType,
                          type: $cropperType)
+            .onDisappear(perform: reset)
             .ignoresSafeArea()
         })
         .sheet(isPresented: $showingCropShapeList) {
             CropShapeListView(cropShapeType: $cropShapeType, selectedType: $showingCropper)
         }
+        .sheet(isPresented: $showSourceTypeSelection) {
+            SourceTypeSelectionView(showSourceTypeSelection: $showSourceTypeSelection, showCamera: $showCamera, showImagePicker: $showImagePicker)
+        }
+        .sheet(isPresented: $showCamera) {
+            CameraView(image: $image)
+        }
+        .sheet(isPresented: $showImagePicker) {
+            ImagePickerView(image: $image)
+        }
     }
     
     func reset() {
-        uiImage = UIImage(named: "sunflower")!
         cropShapeType = .rect
         presetFixedRatioType = .canUseMultiplePresetFixedRatio()
         cropperType = .normal
@@ -46,9 +60,19 @@ struct ContentView: View {
     func createImageHolder() -> some View {
         VStack {
             Spacer()
-            Image(uiImage: uiImage)
+            Image(uiImage: image!)
                 .resizable().aspectRatio(contentMode: .fit)
                 .frame(width: 300, height: 300, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            HStack {
+                Button("Choose Image") {
+                    showSourceTypeSelection = true
+                }
+                .font(.title)
+                Button("Reset Image") {
+                    image = UIImage(named: "sunflower")!
+                }
+                .font(.title)
+            }
             Spacer()
         }
     }
@@ -69,25 +93,20 @@ struct ContentView: View {
         VStack(alignment: .leading) {
             Spacer()
             Button("Normal Crop") {
-                reset()
                 showingCropper = true
             }.font(.title)
             Button("Select crop shape") {
-                reset()
                 showingCropShapeList = true
             }.font(.title)
             Button("Keep 1:1 ratio") {
-                reset()
                 presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
                 showingCropper = true
             }.font(.title)
             Button("Hide Rotation Dial") {
-                reset()
                 cropperType = .noRotaionDial
                 showingCropper = true
             }.font(.title)
             Button("Hide Attached Toolbar") {
-                reset()
                 cropperType = .noAttachedToolbar
                 showingCropper = true
             }.font(.title)

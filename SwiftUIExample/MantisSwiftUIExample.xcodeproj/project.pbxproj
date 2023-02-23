@@ -16,6 +16,9 @@
 		F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F6299DE7630008477C /* AdaptiveStack.swift */; };
 		F24836F9299E14B00008477C /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F8299E14B00008477C /* CustomViewController.swift */; };
 		F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836FA299E46C90008477C /* CropShapeListView.swift */; };
+		F24DCFB529A3CAB100D8E8C1 /* SourceTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFB429A3CAB100D8E8C1 /* SourceTypeSelectionView.swift */; };
+		F24DCFB729A3CB9F00D8E8C1 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFB629A3CB9F00D8E8C1 /* ImagePickerView.swift */; };
+		F24DCFB929A3CC3F00D8E8C1 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFB829A3CC3F00D8E8C1 /* CameraView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		F24836F6299DE7630008477C /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		F24836F8299E14B00008477C /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 		F24836FA299E46C90008477C /* CropShapeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropShapeListView.swift; sourceTree = "<group>"; };
+		F24DCFB429A3CAB100D8E8C1 /* SourceTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceTypeSelectionView.swift; sourceTree = "<group>"; };
+		F24DCFB629A3CB9F00D8E8C1 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		F24DCFB829A3CC3F00D8E8C1 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +79,9 @@
 				F24836F6299DE7630008477C /* AdaptiveStack.swift */,
 				F24836F8299E14B00008477C /* CustomViewController.swift */,
 				F24836FA299E46C90008477C /* CropShapeListView.swift */,
+				F24DCFB829A3CC3F00D8E8C1 /* CameraView.swift */,
+				F24DCFB629A3CB9F00D8E8C1 /* ImagePickerView.swift */,
+				F24DCFB429A3CAB100D8E8C1 /* SourceTypeSelectionView.swift */,
 				5F5266B6263B490500615369 /* Assets.xcassets */,
 				5F5266BB263B490500615369 /* Info.plist */,
 				5F5266B8263B490500615369 /* Preview Content */,
@@ -218,9 +227,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F24DCFB529A3CAB100D8E8C1 /* SourceTypeSelectionView.swift in Sources */,
 				F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */,
 				5F5266B5263B490400615369 /* ContentView.swift in Sources */,
+				F24DCFB929A3CC3F00D8E8C1 /* CameraView.swift in Sources */,
 				5F5266B3263B490400615369 /* MantisSwiftUIExampleApp.swift in Sources */,
+				F24DCFB729A3CB9F00D8E8C1 /* ImagePickerView.swift in Sources */,
 				F24836F9299E14B00008477C /* CustomViewController.swift in Sources */,
 				F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */,
 				F24836F5299DE6AD0008477C /* ImageCropper.swift in Sources */,
