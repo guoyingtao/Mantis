@@ -46,6 +46,10 @@ public struct CropViewConfig {
         }
     }
     
+    public var cropActivityIndicator: ActivityIndicatorProtocol?
+    
+    public var cropActivityIndicatorSize = CGSize(width: 100, height: 100)
+    
     var minimumCropBoxSize: CGFloat = 42
 
     public init() {}

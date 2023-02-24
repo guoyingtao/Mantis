@@ -63,19 +63,22 @@ class CropView: UIView {
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
     
-    lazy private var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(frame: .zero)
-        activityIndicator.color = .white
-        let indicatorSize: CGFloat = 100
-        activityIndicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
-        
+    lazy private var activityIndicator: ActivityIndicatorProtocol = {
+        let activityIndicator: ActivityIndicatorProtocol
+        if let indicator = cropViewConfig.cropActivityIndicator {
+            activityIndicator = indicator
+        } else {
+            activityIndicator = UIActivityIndicatorView(frame: .zero)
+            (activityIndicator as! UIActivityIndicatorView).color = .white
+            activityIndicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+        }
+                
         addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
         activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        activityIndicator.widthAnchor.constraint(equalToConstant: indicatorSize).isActive = true
-        activityIndicator.heightAnchor.constraint(equalToConstant: indicatorSize).isActive = true
+        activityIndicator.widthAnchor.constraint(equalToConstant: cropViewConfig.cropActivityIndicatorSize.width).isActive = true
+        activityIndicator.heightAnchor.constraint(equalToConstant: cropViewConfig.cropActivityIndicatorSize.width).isActive = true
         
         return activityIndicator
     }()
@@ -578,6 +581,7 @@ extension CropView {
         DispatchQueue.global(qos: .userInteractive).async {
             let maskedCropOutput = self.addImageMask(to: cropOutput)
             DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
                 self.activityIndicator.isHidden = true
                 completion(maskedCropOutput)
             }
@@ -1066,4 +1070,8 @@ extension CropView: CropViewProtocol {
     func getExpectedCropImageSize() -> CGSize {
         image.getOutputCropImageSize(by: getCropInfo())
     }
+}
+
+extension UIActivityIndicatorView: ActivityIndicatorProtocol {
+    
 }
