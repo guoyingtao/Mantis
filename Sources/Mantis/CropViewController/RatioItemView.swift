@@ -9,6 +9,7 @@ import UIKit
 
 class RatioItemView: UIView {
     var didGetRatio: ((RatioItemType) -> Void) = { _ in }
+    
     var selected = false {
         didSet {
             UIView.animate(withDuration: 0.2) {
@@ -40,6 +41,7 @@ class RatioItemView: UIView {
         super.init(frame: .zero)
         self.ratio = item
         self.type = type
+        translatesAutoresizingMaskIntoConstraints = false
         setup()
     }
     
@@ -54,7 +56,6 @@ class RatioItemView: UIView {
     private func setup() {
         titleLabel.text = type == .vertical ? ratio.nameV : ratio.nameH
         addSubview(titleLabel)
-        translatesAutoresizingMaskIntoConstraints = false        
         titleLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true

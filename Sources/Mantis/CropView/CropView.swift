@@ -141,8 +141,7 @@ class CropView: UIView {
         switch viewStatus {
         case .initial:
             initialRender()
-        case .rotating(let angle):
-            viewModel.degrees = angle.degrees
+        case .rotating:
             rotateCropWorkbenchView()
         case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground(animated: true)
