@@ -58,7 +58,7 @@ extension CropViewModelProtocol {
         viewStatus = .initial
     }
     
-    func setRotatingStatus(by angle: CGAngle) {
+    func setRotatingStatus(by angle: Angle) {
         degrees = angle.degrees
         viewStatus = .rotating
     }

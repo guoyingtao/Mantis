@@ -200,4 +200,45 @@ final class CropViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.cropBoxFrame.width, refCropBox.width)
         XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
     }
+    
+    func testSetInitialStatus() {
+        viewModel.setInitialStatus()
+        XCTAssertEqual(viewModel.viewStatus, .initial)
+    }
+    
+    func testSetRotatingStatus() {
+        viewModel.setRotatingStatus(by: Angle(degrees: 30))
+        XCTAssertEqual(viewModel.viewStatus, .rotating)
+        XCTAssertEqual(viewModel.degrees, 30)
+    }
+    
+    func testSetDegree90RotatingStatus() {
+        viewModel.setDegree90RotatingStatus()
+        XCTAssertEqual(viewModel.viewStatus, .degree90Rotating)
+    }
+    
+    func testSetTouchImageStatus() {
+        viewModel.setTouchImageStatus()
+        XCTAssertEqual(viewModel.viewStatus, .touchImage)
+    }
+    
+    func testSetTouchRotationBoardStatus() {
+        viewModel.setTouchRotationBoardStatus()
+        XCTAssertEqual(viewModel.viewStatus, .touchRotationBoard)
+    }
+    
+    func testSetTouchCropboxHandleStatus() {
+        viewModel.tappedEdge = .top
+        viewModel.setTouchCropboxHandleStatus()
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .top))
+        
+        viewModel.tappedEdge = .bottom
+        viewModel.setTouchCropboxHandleStatus()
+        XCTAssertEqual(viewModel.viewStatus, .touchCropboxHandle(tappedEdge: .bottom))
+    }
+    
+    func testSetBetweenOperationStatus() {
+        viewModel.setBetweenOperationStatus()
+        XCTAssertEqual(viewModel.viewStatus, .betweenOperation)
+    }
 }
