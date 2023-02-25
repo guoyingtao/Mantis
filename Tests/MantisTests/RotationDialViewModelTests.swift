@@ -10,7 +10,7 @@ import XCTest
 
 final class RotationDialViewModelTests: XCTestCase {
     var rotationDialViewModel = RotationDialViewModel()
-    var outputRotationAngle = CGAngle(degrees: 0)
+    var outputRotationAngle = Angle(degrees: 0)
     
     override func setUpWithError() throws {
         rotationDialViewModel.setup(with: .zero)

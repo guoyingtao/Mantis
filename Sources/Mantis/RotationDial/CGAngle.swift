@@ -1,5 +1,5 @@
 //
-//  CGAngle.swift
+//  Angle.swift
 //  Puffer
 //
 //  Created by Echo on 5/22/19.
@@ -9,8 +9,8 @@
 import UIKit
 
 /// Use this class to make angle calculation to be simpler
-public class CGAngle: NSObject, Comparable {
-    public static func < (lhs: CGAngle, rhs: CGAngle) -> Bool {
+class Angle: NSObject, Comparable {
+    public static func < (lhs: Angle, rhs: Angle) -> Bool {
         return lhs.radians < rhs.radians
     }
     
@@ -37,29 +37,28 @@ public class CGAngle: NSObject, Comparable {
         return String(format: "%0.2f°", degrees)
     }
     
-    static public func + (lhs: CGAngle, rhs: CGAngle) -> CGAngle {
-        return CGAngle(radians: lhs.radians + rhs.radians)
+    static public func + (lhs: Angle, rhs: Angle) -> Angle {
+        return Angle(radians: lhs.radians + rhs.radians)
     }
     
-    static public func * (lhs: CGAngle, rhs: CGAngle) -> CGAngle {
-        return CGAngle(radians: lhs.radians * rhs.radians)
+    static public func * (lhs: Angle, rhs: Angle) -> Angle {
+        return Angle(radians: lhs.radians * rhs.radians)
     }
     
-    static public func - (lhs: CGAngle, rhs: CGAngle) -> CGAngle {
-        return CGAngle(radians: lhs.radians - rhs.radians)
+    static public func - (lhs: Angle, rhs: Angle) -> Angle {
+        return Angle(radians: lhs.radians - rhs.radians)
     }
     
-    static public prefix func - (rhs: CGAngle) -> CGAngle {
-        return CGAngle(radians: -rhs.radians)
+    static public prefix func - (rhs: Angle) -> Angle {
+        return Angle(radians: -rhs.radians)
     }
 
-    static public func / (lhs: CGAngle, rhs: CGAngle) -> CGAngle {
+    static public func / (lhs: Angle, rhs: Angle) -> Angle {
         guard rhs.radians != 0 else {
-            if lhs.radians == 0 { return CGAngle(radians: 0)}
-            if lhs.radians > 0 { return CGAngle(radians: CGFloat.infinity)}
-            return CGAngle(radians: -CGFloat.infinity)
+            if lhs.radians == 0 { return Angle(radians: 0)}
+            if lhs.radians > 0 { return Angle(radians: CGFloat.infinity)}
+            return Angle(radians: -CGFloat.infinity)
         }
-        return CGAngle(radians: lhs.radians / rhs.radians)
+        return Angle(radians: lhs.radians / rhs.radians)
     }
-
 }

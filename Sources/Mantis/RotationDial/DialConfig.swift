@@ -19,8 +19,8 @@ public struct DialConfig {
     }
     
     public var interactable = false
-    public var rotationLimitType: RotationLimitType = .limit(angle: CGAngle(degrees: 45))
-    public var angleShowLimitType: AngleShowLimitType = .limit(angle: CGAngle(degrees: 40))
+    public var rotationLimitType: RotationLimitType = .limit(degreeAngle: 45)
+    public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)
     public var rotationCenterType: RotationCenterType = .useDefault
     
     public var numberShowSpan = 1 {
@@ -66,12 +66,12 @@ public struct DialConfig {
 
     public enum AngleShowLimitType {
         case noLimit
-        case limit(angle: CGAngle)
+        case limit(degreeAngle: CGFloat)
     }
 
     public enum RotationLimitType {
         case noLimit
-        case limit(angle: CGAngle)
+        case limit(degreeAngle: CGFloat)
     }
 
     public enum Orientation {
