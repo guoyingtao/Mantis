@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+public protocol ActivityIndicatorProtocol: UIView {
+    func startAnimating()
+    func stopAnimating()
+}
+
 protocol CropViewProtocol: UIView {
     var image: UIImage { get set }
     var aspectRatioLockEnabled: Bool { get set }

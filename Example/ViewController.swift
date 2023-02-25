@@ -37,6 +37,9 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.cropMode = .async
+        
+        let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
+        config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip]
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
