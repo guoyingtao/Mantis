@@ -28,5 +28,8 @@ public struct ToolbarButtonOptions: OptionSet {
     static public let all: ToolbarButtonOptions = [counterclockwiseRotate,
                                                    clockwiseRotate,
                                                    reset,
-                                                   ratio]
+                                                   ratio,
+                                                   alterCropper90Degree,
+                                                   horizontallyFlip,
+                                                   verticallyFlip]
 }

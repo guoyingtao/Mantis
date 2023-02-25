@@ -23,6 +23,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         let button = createOptionButton(withTitle: nil, andAction: #selector(counterClockwiseRotate))
         let icon = iconProvider?.getCounterClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.rotateCCWImage()
         button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "CounterClockwiseRotationButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.CounterClockwise rotation", value: "CounterClockwise rotation")
         return button
     }()
 
@@ -30,6 +32,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         let button = createOptionButton(withTitle: nil, andAction: #selector(clockwiseRotate))
         let icon = iconProvider?.getClockwiseRotationIcon() ?? ToolBarButtonImageBuilder.rotateCWImage()
         button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "ClockwiseRotationButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Clockwise rotation", value: "Clockwise rotation")
         return button
     }()
 
@@ -37,6 +41,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         let button = createOptionButton(withTitle: nil, andAction: #selector(alterCropper90Degree))
         let icon = iconProvider?.getAlterCropper90DegreeIcon() ?? ToolBarButtonImageBuilder.alterCropper90DegreeImage()
         button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "AlterCropper90DegreeButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Alter cropper by 90 degrees", value: "Alter cropper by 90 degrees")
         return button
     }()
     
@@ -44,6 +50,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         let button = createOptionButton(withTitle: nil, andAction: #selector(horizontallyFlip))
         let icon = iconProvider?.getHorizontallyFlipIcon() ?? ToolBarButtonImageBuilder.horizontallyFlipImage()
         button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "HorizontallyFlipButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Horizontally flip", value: "Horizontally flip")
         return button
     }()
     
@@ -51,6 +59,8 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         let button = createOptionButton(withTitle: nil, andAction: #selector(verticallyFlip(_:)))
         let icon = iconProvider?.getVerticallyFlipIcon() ?? ToolBarButtonImageBuilder.verticallyFlipImage()
         button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "VerticallyFlipButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Vertically flip", value: "Vertically flip")
         return button
     }()
 
@@ -63,8 +73,13 @@ public class CropToolbar: UIView, CropToolbarProtocol {
             return button
         }
 
+        // Here we use Mantis.Cancel as a key in case of user want to use their own
+        // localized string, use this key can avoid possible key conflict
         let cancelText = LocalizedHelper.getString("Mantis.Cancel", value: "Cancel")
-        return createOptionButton(withTitle: cancelText, andAction: #selector(cancel))
+        let button = createOptionButton(withTitle: cancelText, andAction: #selector(cancel))
+        button.accessibilityIdentifier = "CancelButton"
+        button.accessibilityLabel = cancelText
+        return button
     }()
 
     private lazy var cropButton: UIButton = {
@@ -75,7 +90,10 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         }
         
         let doneText = LocalizedHelper.getString("Mantis.Done", value: "Done")
-        return createOptionButton(withTitle: doneText, andAction: #selector(crop))
+        let button = createOptionButton(withTitle: doneText, andAction: #selector(crop))
+        button.accessibilityIdentifier = "DoneButton"
+        button.accessibilityLabel = doneText
+        return button
     }()
 
     private var resetButton: UIButton?
@@ -244,25 +262,32 @@ extension CropToolbar {
 
         button.addTarget(self, action: action, for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
+        
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
 
         return button
     }
 
     private func createResetButton(with image: UIImage? = nil) -> UIButton {
+        let button: UIButton
         if let image = image {
-            let button = createOptionButton(withTitle: nil, andAction: #selector(reset))
+            button = createOptionButton(withTitle: nil, andAction: #selector(reset))
             button.setImage(image, for: .normal)
-            return button
         } else {
             let resetText = LocalizedHelper.getString("Mantis.Reset", value: "Reset")
-            return createOptionButton(withTitle: resetText, andAction: #selector(reset))
+            button = createOptionButton(withTitle: resetText, andAction: #selector(reset))
         }
+        
+        button.accessibilityIdentifier = "ResetButton"
+        return button
     }
     
     private func createSetRatioButton() -> UIButton {
         let button = createOptionButton(withTitle: nil, andAction: #selector(setRatio))
         let icon = iconProvider?.getSetRatioIcon() ?? ToolBarButtonImageBuilder.clampImage()
         button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "RatioButton"
         return button
     }
 

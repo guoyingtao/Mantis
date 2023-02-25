@@ -13,16 +13,27 @@ final class ImageContainerTests: XCTestCase {
     var imageContainer: ImageContainer!
     
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        imageContainer = ImageContainer(image: UIImage())
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    func testSetup() {
+        XCTAssertNotNil(sourceImage)
+    }
+    
+    func testAccessibility() throws {
+        let sourceImage = try XCTUnwrap(sourceImage)
+                
+        XCTAssertTrue(sourceImage.isAccessibilityElement)
+        XCTAssertEqual(sourceImage.accessibilityLabel, "Source Image")
+        XCTAssertEqual(sourceImage.accessibilityTraits, .image)
+    }
+    
     func testGetCropRegion() {
         let frame = CGRect(x: 0, y: 0, width: 200, height: 100)
-        imageContainer = ImageContainer(image: UIImage())
         imageContainer.frame = frame
         
         let parentView = UIView(frame: frame)
@@ -50,5 +61,10 @@ final class ImageContainerTests: XCTestCase {
                                     bottomLeft: CGPoint(x: 0.625, y: 1),
                                     bottomRight: CGPoint(x: 0.625, y: 0))
         XCTAssertEqual(region, expectedRegion)
+    }
+}
+
+extension ImageContainerTests {
+    private var sourceImage: UIImageView? { imageContainer.findSubview(withAccessibilityIdentifier: "SourceImage") as? UIImageView
     }
 }

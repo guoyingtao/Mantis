@@ -6,8 +6,8 @@
   Copyright © 2018 Echo. All rights reserved.
 */
 
-"Mantis.Done" = "Aceptar";
+"Mantis.Done" = "Hecho";
 "Mantis.Cancel" = "Cancelar";
-"Mantis.Reset" = "Cambiar";
+"Mantis.Reset" = "Restablecer";
 "Mantis.Original" = "Original";
 "Mantis.Square" = "Cuadrada";
