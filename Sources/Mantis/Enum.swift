@@ -144,3 +144,16 @@ enum RotateBy90DegreeType {
         }
     }
 }
+
+enum CropViewAuxiliaryIndicatorHandleType {
+    case none
+    case topLeft
+    case top
+    case topRight
+    case right
+    case bottomRight
+    case bottom
+    case bottomLeft
+    case left
+}
+

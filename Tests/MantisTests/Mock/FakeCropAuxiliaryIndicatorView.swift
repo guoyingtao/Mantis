@@ -21,7 +21,7 @@ class FakeCropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol
         
     }
     
-    func handleCornerHandleTouched(with tappedEdge: CropViewOverlayEdge) {
+    func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType) {
         
     }
     

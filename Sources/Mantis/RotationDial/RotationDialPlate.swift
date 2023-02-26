@@ -101,7 +101,7 @@ class RotationDialPlate: UIView {
             
             let numberLayer = CATextLayer()
             numberLayer.bounds.size = CGSize(width: 30, height: 15)
-            numberLayer.fontSize = numberFont.pointSize
+            numberLayer.fontSize = 12
             numberLayer.alignmentMode = CATextLayerAlignmentMode.center
             numberLayer.contentsScale = UIScreen.main.scale
             numberLayer.font = cgFont

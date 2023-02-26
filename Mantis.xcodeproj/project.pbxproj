@@ -45,7 +45,7 @@
 		66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E06294B7059001C8593 /* CropViewProtocol.swift */; };
 		66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */; };
 		66100E0B294BAE83001C8593 /* CropViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */; };
-		66100E0D294BAE94001C8593 /* CropOverlayViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */; };
+		66100E0D294BAE94001C8593 /* CropAuxiliaryIndicatorViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0C294BAE94001C8593 /* CropAuxiliaryIndicatorViewProtocol.swift */; };
 		66100E0F294BAEA5001C8593 /* RotationDialProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */; };
 		66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */; };
 		66100E13294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */; };
@@ -65,6 +65,7 @@
 		8EFB6F6725D16B0F00C0DDB2 /* MantisLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F3525D154D900C0DDB2 /* MantisLocalizable.strings */; };
 		8EFB6FB125D187A000C0DDB2 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8EFB6F5425D16A9E00C0DDB2 /* Resource.bundle */; };
 		F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4398D2978F6E400728B52 /* UIViewExtensions.swift */; };
+		F24DCFE829AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */; };
 		F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */; };
 		FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8525205CC300D95667 /* RatioSelector.swift */; };
 		FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8B25205DE900D95667 /* RatioItemView.swift */; };
@@ -155,7 +156,7 @@
 		66100E06294B7059001C8593 /* CropViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewProtocol.swift; sourceTree = "<group>"; };
 		66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerProtocol.swift; sourceTree = "<group>"; };
 		66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelProtocol.swift; sourceTree = "<group>"; };
-		66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropOverlayViewProtocol.swift; sourceTree = "<group>"; };
+		66100E0C294BAE94001C8593 /* CropAuxiliaryIndicatorViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorViewProtocol.swift; sourceTree = "<group>"; };
 		66100E0E294BAEA5001C8593 /* RotationDialProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialProtocol.swift; sourceTree = "<group>"; };
 		66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropScrollViewProtocol.swift; sourceTree = "<group>"; };
 		66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropMaskViewManagerProtocol.swift; sourceTree = "<group>"; };
@@ -187,6 +188,7 @@
 		8EFB6F4225D154D900C0DDB2 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
 		8EFB6F5425D16A9E00C0DDB2 /* Resource.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Resource.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
+		F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorViewTests.swift; sourceTree = "<group>"; };
 		F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchViewTests.swift; sourceTree = "<group>"; };
 		FEDAAD8525205CC300D95667 /* RatioSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioSelector.swift; sourceTree = "<group>"; };
 		FEDAAD8B25205DE900D95667 /* RatioItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioItemView.swift; sourceTree = "<group>"; };
@@ -284,7 +286,7 @@
 				66100E06294B7059001C8593 /* CropViewProtocol.swift */,
 				5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */,
 				66100E0A294BAE83001C8593 /* CropViewModelProtocol.swift */,
-				66100E0C294BAE94001C8593 /* CropOverlayViewProtocol.swift */,
+				66100E0C294BAE94001C8593 /* CropAuxiliaryIndicatorViewProtocol.swift */,
 				66100E10294BAEB6001C8593 /* CropScrollViewProtocol.swift */,
 				66100E12294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift */,
 				66100E08294BAE46001C8593 /* ImageContainerProtocol.swift */,
@@ -421,6 +423,7 @@
 				660D4F5C298E33F800C4E11A /* ImageContainerTests.swift */,
 				660D4F68298F99D900C4E11A /* CropMaskViewManagerTests.swift */,
 				F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */,
+				F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -657,6 +660,7 @@
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
 				66F4398A2978539700728B52 /* RotationDialViewModelTests.swift in Sources */,
+				F24DCFE829AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift in Sources */,
 				660D4F69298F99D900C4E11A /* CropMaskViewManagerTests.swift in Sources */,
 				660D4F60298F982200C4E11A /* FakeCropView.swift in Sources */,
 				660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */,
@@ -707,7 +711,7 @@
 				OBJ_81 /* CropViewController.swift in Sources */,
 				OBJ_82 /* FixedRatioManager.swift in Sources */,
 				OBJ_83 /* RatioPresenter.swift in Sources */,
-				66100E0D294BAE94001C8593 /* CropOverlayViewProtocol.swift in Sources */,
+				66100E0D294BAE94001C8593 /* CropAuxiliaryIndicatorViewProtocol.swift in Sources */,
 				OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */,
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,

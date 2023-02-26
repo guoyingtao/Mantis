@@ -14,9 +14,9 @@ struct CropBoxFreeAspectFrameUpdater {
     private var contentFrame = CGRect.zero
     private var cropOriginFrame = CGRect.zero
     private(set) var cropBoxFrame = CGRect.zero
-    private var tappedEdge = CropViewOverlayEdge.none
+    private var tappedEdge = CropViewAuxiliaryIndicatorHandleType.none
     
-    init(tappedEdge: CropViewOverlayEdge, contentFrame: CGRect, cropOriginFrame: CGRect, cropBoxFrame: CGRect) {
+    init(tappedEdge: CropViewAuxiliaryIndicatorHandleType, contentFrame: CGRect, cropOriginFrame: CGRect, cropBoxFrame: CGRect) {
         self.tappedEdge = tappedEdge
         self.contentFrame = contentFrame
         self.cropOriginFrame = cropOriginFrame
@@ -54,7 +54,7 @@ struct CropBoxFreeAspectFrameUpdater {
             }
         }
         
-        func getNewCropFrameSize(byTappedEdge tappedEdge: CropViewOverlayEdge) -> CGSize {
+        func getNewCropFrameSize(byTappedEdge tappedEdge: CropViewAuxiliaryIndicatorHandleType) -> CGSize {
             let tappedEdgeCropFrameUpdateRule: TappedEdgeCropFrameUpdateRule = [.left: (-xDelta, 0),
                                                                                 .right: (xDelta, 0),
                                                                                 .top: (0, -yDelta),

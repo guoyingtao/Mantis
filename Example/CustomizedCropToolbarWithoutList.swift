@@ -106,11 +106,8 @@ class CustomizedCropToolbarWithoutList: UIView, CropToolbarProtocol {
     
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = UIColor.white
-        let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
-            config.optionButtonFontSizeForPad :
-            config.optionButtonFontSize
         
-        let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
+        let buttonFont = UIFont.systemFont(ofSize: 16)
         
         let button = UIButton(type: .system)
         button.tintColor = .white

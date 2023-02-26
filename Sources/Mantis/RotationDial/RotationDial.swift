@@ -59,6 +59,9 @@ extension RotationDial {
     private func setupUI() {
         clipsToBounds = true
         backgroundColor = dialConfig.backgroundColor
+        isAccessibilityElement = true
+        accessibilityTraits = .none
+        accessibilityLabel = "Adjust image angle"
         
         dialPlateHolder?.removeFromSuperview()
         dialPlateHolder = getDialPlateHolder(by: dialConfig.orientation)
@@ -83,7 +86,9 @@ extension RotationDial {
         }
         
         if rotateDialPlate(by: angle) {
-            didRotate(getRotationAngle())
+            let newAngle = getRotationAngle()
+            accessibilityLabel = "Current angle is \(newAngle.degrees) degrees"
+            didRotate(newAngle)
         }
     }
     

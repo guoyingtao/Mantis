@@ -30,6 +30,6 @@ protocol CropAuxiliaryIndicatorViewProtocol: UIView {
     
     func setGrid(hidden: Bool, animated: Bool)
     func hideGrid()
-    func handleCornerHandleTouched(with tappedEdge: CropViewOverlayEdge)
+    func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType)
     func handleEdgeUntouched()
 }

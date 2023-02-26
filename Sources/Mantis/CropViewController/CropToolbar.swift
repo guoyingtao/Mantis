@@ -245,21 +245,38 @@ extension CropToolbar {
 extension CropToolbar {
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = config.foregroundColor
-        let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
-            config.optionButtonFontSizeForPad :
-            config.optionButtonFontSize
-
-        let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
-
+        
+        let buttonFont: UIFont = .preferredFont(forTextStyle: .body)
+        
+        let fontMetrics = UIFontMetrics(forTextStyle: .body)
+        let maxSize = UIFont.systemFontSize * 1.5
+        
         let button = UIButton(type: .system)
         button.tintColor = config.foregroundColor
-        button.titleLabel?.font = buttonFont
+        button.titleLabel?.font = fontMetrics.scaledFont(for: buttonFont, maximumPointSize: maxSize)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.minimumScaleFactor = 0.5
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set content hugging priority
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 250), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 250), for: .vertical)
+
+        // Set content compression resistance priority
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 10001), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 10001), for: .vertical)
+
+        // Set width constraint
+        let widthConstraint = button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.width)
+        widthConstraint.isActive = true
 
         if let title = title {
             button.setTitle(title, for: .normal)
             button.setTitleColor(buttonColor, for: .normal)
+            button.accessibilityIdentifier = "\(title)"
         }
-
+        
         button.addTarget(self, action: action, for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
         
