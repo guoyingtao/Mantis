@@ -52,16 +52,31 @@ final class RotationDial: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func accessibilityIncrement() {
+        viewModel.rotationAngle = Angle(degrees: 1)
+        setAccessibilityValue()
+    }
+    
+    override func accessibilityDecrement() {
+        viewModel.rotationAngle = -Angle(degrees: 1)
+        setAccessibilityValue()
+    }
 }
 
 // MARK: - private functions
 extension RotationDial {
+    private func setAccessibilityValue() {
+        accessibilityValue = "\(Int(round(getRotationAngle().degrees))) degrees"
+    }
+    
     private func setupUI() {
         clipsToBounds = true
         backgroundColor = dialConfig.backgroundColor
         isAccessibilityElement = true
-        accessibilityTraits = .none
+        accessibilityTraits = .adjustable
         accessibilityLabel = "Adjust image angle"
+        setAccessibilityValue()
         
         dialPlateHolder?.removeFromSuperview()
         dialPlateHolder = getDialPlateHolder(by: dialConfig.orientation)
@@ -87,7 +102,6 @@ extension RotationDial {
         
         if rotateDialPlate(by: angle) {
             let newAngle = getRotationAngle()
-            accessibilityLabel = "Current angle is \(newAngle.degrees) degrees"
             didRotate(newAngle)
         }
     }

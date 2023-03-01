@@ -36,6 +36,8 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var cornerHandles: [UIView] = []
     private var edgeLineHandles: [UIView] = []
     
+    var accessibilityHelperViews: [UIView] = []
+    
     override var frame: CGRect {
         didSet {
             if !cornerHandles.isEmpty {
@@ -79,6 +81,8 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         
         setupGridLines()
         hintLine.backgroundColor = boarderHintColor
+        
+        setupAccessibilityHelperViews()
     }
     
     override func didMoveToSuperview() {
@@ -87,6 +91,17 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         if !cornerHandles.isEmpty {
             layoutLines()
         }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        var result = false
+        
+        accessibilityHelperViews.forEach {
+            let convertedPoint = $0.convert(point, from: self)
+            result = result || $0.point(inside: convertedPoint, with: event)
+        }
+        
+        return result
     }
     
     private func layoutLines() {
@@ -99,6 +114,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         layoutEdgeLineHandles()
         layoutGridLines()
         setGridShowStatus()
+        layoutAccessibilityHelperViews()
     }
     
     private func setGridShowStatus() {
