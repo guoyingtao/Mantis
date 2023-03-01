@@ -162,4 +162,8 @@ class RotationDialPlate: UIView {
         setupAngleNumber()
         setCenterPart()
     }
+    
+    func reset() {
+        transform = .identity
+    }
 }

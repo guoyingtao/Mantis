@@ -249,6 +249,8 @@ extension RotationDial: RotationDialProtocol {
     }
     
     func reset() {
+        transform = .identity
+        dialPlate?.reset()
         dialConfig.rotationCenterType = .useDefault
     }
 }
