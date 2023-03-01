@@ -21,6 +21,8 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private (set)var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
     private var gridColor = UIColor(white: 0.8, alpha: 1)
     
+    var cropBoxHotAreaUnit: CGFloat = 42
+    
     var gridHidden = true
 
     var gridLineNumberType: GridLineNumberType = .crop {
@@ -47,9 +49,10 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         }
     }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, cropBoxHotAreaUnit: CGFloat) {
         super.init(frame: frame)
         clipsToBounds = false
+        self.cropBoxHotAreaUnit = cropBoxHotAreaUnit
         setup()
     }
     

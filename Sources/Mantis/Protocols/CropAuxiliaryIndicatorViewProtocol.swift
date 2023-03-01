@@ -27,6 +27,7 @@ enum GridLineNumberType {
 protocol CropAuxiliaryIndicatorViewProtocol: UIView {
     var gridLineNumberType: GridLineNumberType { get set }
     var gridHidden: Bool { get set }
+    var cropBoxHotAreaUnit: CGFloat { get set }
     
     func setGrid(hidden: Bool, animated: Bool)
     func hideGrid()

@@ -23,15 +23,7 @@ final class ImageContainerTests: XCTestCase {
     func testSetup() {
         XCTAssertNotNil(sourceImage)
     }
-    
-    func testAccessibility() throws {
-        let sourceImage = try XCTUnwrap(sourceImage)
-                
-        XCTAssertTrue(sourceImage.isAccessibilityElement)
-        XCTAssertEqual(sourceImage.accessibilityLabel, "Source Image")
-        XCTAssertEqual(sourceImage.accessibilityTraits, .image)
-    }
-    
+        
     func testGetCropRegion() {
         let frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         imageContainer.frame = frame

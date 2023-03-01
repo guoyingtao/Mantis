@@ -7,8 +7,6 @@
 
 import UIKit
 
-let cropBoxHotAreaUnit: CGFloat = 42
-
 extension CropAuxiliaryIndicatorView {
     func setupAccessibilityHelperViews () {
         guard UIAccessibility.isVoiceOverRunning else {
