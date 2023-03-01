@@ -67,7 +67,13 @@ final class RotationDial: UIView {
 // MARK: - private functions
 extension RotationDial {
     private func setAccessibilityValue() {
-        accessibilityValue = "\(Int(round(getRotationAngle().degrees))) degrees"
+        let degreeValue = Int(round(getRotationAngle().degrees))
+        
+        if degreeValue < 2 {
+            accessibilityValue = "\(degreeValue) degree"
+        } else {
+            accessibilityValue = "\(degreeValue) degrees"
+        }
     }
     
     private func setupUI() {
@@ -226,6 +232,8 @@ extension RotationDial: RotationDialProtocol {
         }
         
         dialPlate.transform = dialPlate.transform.rotated(by: radians)
+        setAccessibilityValue()
+        
         return true
     }
     

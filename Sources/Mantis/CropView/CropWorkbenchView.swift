@@ -40,7 +40,9 @@ final class CropWorkbenchView: UIScrollView {
         self.maximumZoomScale = maximumZoomScale
         initialMinimumZoomScale = minimumZoomScale
         self.imageContainer = imageContainer
-        addSubview(self.imageContainer!)                
+        addSubview(self.imageContainer!)
+        
+        isAccessibilityElement = false
     }
     
     required init?(coder: NSCoder) {

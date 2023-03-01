@@ -19,10 +19,6 @@ final class ImageContainer: UIView {
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         
-        imageView.accessibilityLabel = LocalizedHelper.getString("Mantis.Source Image", value: "Source Image")
-        imageView.accessibilityTraits = .image
-        imageView.isAccessibilityElement = true
-        
         return imageView
     }()
     

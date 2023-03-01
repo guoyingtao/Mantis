@@ -16,11 +16,39 @@ extension CropAuxiliaryIndicatorView {
         }
 
         accessibilityHelperViews.removeAll()
-        for _ in 0..<8 {
+        for i in 0..<8 {
             let helperView = UIView(frame: .zero)
             helperView.isAccessibilityElement = true
+            
             addSubview(helperView)
             accessibilityHelperViews.append(helperView)
+            
+            guard let handleType = CropViewAuxiliaryIndicatorHandleType(rawValue: i + 1) else {
+                continue
+            }
+            
+            switch handleType {
+            case .topLeft:
+                helperView.accessibilityLabel = "Top left crop handle"
+            case .top:
+                helperView.accessibilityLabel = "Top crop handle"
+            case .topRight:
+                helperView.accessibilityLabel = "Top right crop handle"
+            case .right:
+                helperView.accessibilityLabel = "Right crop handle"
+            case .bottomRight:
+                helperView.accessibilityLabel = "Bottom right crop handle"
+            case .bottom:
+                helperView.accessibilityLabel = "Bottom crop handle"
+            case .bottomLeft:
+                helperView.accessibilityLabel = "Bottom left crop handle"
+            case .left:
+                helperView.accessibilityLabel = "Left crop handle"
+            case .none:
+                break
+            }
+            
+            helperView.accessibilityHint = "Double tap and hold to adjust crop area"
         }
     }
     
@@ -30,11 +58,11 @@ extension CropAuxiliaryIndicatorView {
         }
         
         for (index, helperView) in accessibilityHelperViews.enumerated() {
-            guard let tappedEdge = CropViewAuxiliaryIndicatorHandleType(rawValue: index + 1) else {
+            guard let handleType = CropViewAuxiliaryIndicatorHandleType(rawValue: index + 1) else {
                 continue
             }
             
-            switch tappedEdge {
+            switch handleType {
             case .topLeft:
                 helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2, y: -cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
             case .top:

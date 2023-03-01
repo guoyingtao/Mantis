@@ -297,6 +297,7 @@ extension CropToolbar {
         }
         
         button.accessibilityIdentifier = "ResetButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Reset", value: "Reset")
         return button
     }
     
@@ -305,6 +306,7 @@ extension CropToolbar {
         let icon = iconProvider?.getSetRatioIcon() ?? ToolBarButtonImageBuilder.clampImage()
         button.setImage(icon, for: .normal)
         button.accessibilityIdentifier = "RatioButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Aspect ratio", value: "Aspect ratio")
         return button
     }
 
