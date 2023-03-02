@@ -157,3 +157,7 @@ enum CropViewAuxiliaryIndicatorHandleType: Int {
     case left
 }
 
+enum AutoLayoutPriorityType: Float {
+    case high = 10000
+    case low = 1
+}
