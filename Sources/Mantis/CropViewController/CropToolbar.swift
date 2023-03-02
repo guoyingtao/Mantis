@@ -256,24 +256,31 @@ extension CropToolbar {
         button.titleLabel?.minimumScaleFactor = 0.5
         button.translatesAutoresizingMaskIntoConstraints = false
         
+        let compressionPriority: Float
+        
+        if let title = title {
+            button.setTitle(title, for: .normal)
+            button.setTitleColor(buttonColor, for: .normal)
+            button.accessibilityIdentifier = "\(title)"
+            
+            // Set content compression resistance priority
+            compressionPriority = AutoLayoutPriorityType.high.rawValue + 2
+        } else {
+            // Set content compression resistance priority
+            compressionPriority = AutoLayoutPriorityType.high.rawValue + 1
+        }
+        
         // Set content hugging priority
         let huggingPriority: Float = 250
         button.setContentHuggingPriority(UILayoutPriority(rawValue: huggingPriority), for: .horizontal)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: huggingPriority), for: .vertical)
 
-        // Set content compression resistance priority
-        let compressionPriority = AutoLayoutPriorityType.high.rawValue + 1
+        // Set width constraint
+        button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.width).isActive = true
+        
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .vertical)
 
-        // Set width constraint
-        button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.width).isActive = true
-
-        if let title = title {
-            button.setTitle(title, for: .normal)
-            button.setTitleColor(buttonColor, for: .normal)
-            button.accessibilityIdentifier = "\(title)"
-        }
         
         button.addTarget(self, action: action, for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)

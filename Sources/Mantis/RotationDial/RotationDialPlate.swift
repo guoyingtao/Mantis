@@ -165,5 +165,6 @@ class RotationDialPlate: UIView {
     
     func reset() {
         transform = .identity
+        layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
     }
 }
