@@ -8,8 +8,14 @@
 import UIKit
 
 extension CropAuxiliaryIndicatorView {
+    private func ifAccessibilityHelperNeeded() -> Bool {
+        return UIAccessibility.isVoiceOverRunning
+        || UIAccessibility.isSwitchControlRunning
+        || UIAccessibility.isSpeakScreenEnabled
+    }
+    
     func setupAccessibilityHelperViews () {
-        guard UIAccessibility.isVoiceOverRunning else {
+        guard ifAccessibilityHelperNeeded() else {
             return
         }
 
@@ -27,31 +33,31 @@ extension CropAuxiliaryIndicatorView {
             
             switch handleType {
             case .topLeft:
-                helperView.accessibilityLabel = "Top left crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Top left crop handle", value: "Top left crop handle")
             case .top:
-                helperView.accessibilityLabel = "Top crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Top crop handle", value: "Top crop handle")
             case .topRight:
-                helperView.accessibilityLabel = "Top right crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Top right crop handle", value: "Top right crop handle")
             case .right:
-                helperView.accessibilityLabel = "Right crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Right crop handle", value: "Right crop handle")
             case .bottomRight:
-                helperView.accessibilityLabel = "Bottom right crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Bottom right crop handle", value: "Bottom right crop handle")
             case .bottom:
-                helperView.accessibilityLabel = "Bottom crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Bottom crop handle", value: "Bottom crop handle")
             case .bottomLeft:
-                helperView.accessibilityLabel = "Bottom left crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Bottom left crop handle", value: "Bottom left crop handle")
             case .left:
-                helperView.accessibilityLabel = "Left crop handle"
+                helperView.accessibilityLabel = LocalizedHelper.getString("Mantis.Left crop handle", value: "Left crop handle")
             case .none:
                 break
             }
             
-            helperView.accessibilityHint = "Double tap and hold to adjust crop area"
+            helperView.accessibilityHint = LocalizedHelper.getString("Mantis.Double tap and hold to adjust crop area", value: "Double tap and hold to adjust crop area")
         }
     }
     
     func layoutAccessibilityHelperViews() {
-        guard UIAccessibility.isVoiceOverRunning else {
+        guard ifAccessibilityHelperNeeded() else {
             return
         }
         

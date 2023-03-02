@@ -81,7 +81,7 @@ extension RotationDial {
         backgroundColor = dialConfig.backgroundColor
         isAccessibilityElement = true
         accessibilityTraits = .adjustable
-        accessibilityLabel = "Adjust image angle"
+        accessibilityLabel = LocalizedHelper.getString("Mantis.Adjust image angle", value: "Adjust image angle")
         setAccessibilityValue()
         
         dialPlateHolder?.removeFromSuperview()
