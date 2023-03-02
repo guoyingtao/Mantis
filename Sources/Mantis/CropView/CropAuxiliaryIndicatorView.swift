@@ -18,7 +18,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private let hineLineThickness = CGFloat(2.0)
 
     private var hintLine = UIView()
-    private (set)var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
+    private var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
     private var gridColor = UIColor(white: 0.8, alpha: 1)
     
     var cropBoxHotAreaUnit: CGFloat = 42
