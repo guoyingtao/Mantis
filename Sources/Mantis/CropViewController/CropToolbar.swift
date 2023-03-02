@@ -245,21 +245,36 @@ extension CropToolbar {
 extension CropToolbar {
     private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
         let buttonColor = config.foregroundColor
-        let buttonFontSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ?
-            config.optionButtonFontSizeForPad :
-            config.optionButtonFontSize
-
-        let buttonFont = UIFont.systemFont(ofSize: buttonFontSize)
-
+        let buttonFont: UIFont = .preferredFont(forTextStyle: .body)
+        let fontMetrics = UIFontMetrics(forTextStyle: .body)
+        let maxSize = UIFont.systemFontSize * 1.5
+        
         let button = UIButton(type: .system)
         button.tintColor = config.foregroundColor
-        button.titleLabel?.font = buttonFont
+        button.titleLabel?.font = fontMetrics.scaledFont(for: buttonFont, maximumPointSize: maxSize)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.titleLabel?.minimumScaleFactor = 0.5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set content hugging priority
+        let huggingPriority: Float = 250
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: huggingPriority), for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: huggingPriority), for: .vertical)
+
+        // Set content compression resistance priority
+        let compressionPriority = AutoLayoutPriorityType.high.rawValue + 1
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .vertical)
+
+        // Set width constraint
+        button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.width).isActive = true
 
         if let title = title {
             button.setTitle(title, for: .normal)
             button.setTitleColor(buttonColor, for: .normal)
+            button.accessibilityIdentifier = "\(title)"
         }
-
+        
         button.addTarget(self, action: action, for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
         
@@ -280,6 +295,7 @@ extension CropToolbar {
         }
         
         button.accessibilityIdentifier = "ResetButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Reset", value: "Reset")
         return button
     }
     
@@ -288,6 +304,7 @@ extension CropToolbar {
         let icon = iconProvider?.getSetRatioIcon() ?? ToolBarButtonImageBuilder.clampImage()
         button.setImage(icon, for: .normal)
         button.accessibilityIdentifier = "RatioButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Aspect ratio", value: "Aspect ratio")
         return button
     }
 

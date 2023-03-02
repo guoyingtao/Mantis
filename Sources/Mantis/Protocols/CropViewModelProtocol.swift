@@ -24,7 +24,7 @@ protocol CropViewModelProtocol: AnyObject {
     var statusChanged: (_ status: CropViewStatus) -> Void { get set }
     var viewStatus: CropViewStatus { get set }
     var panOriginPoint: CGPoint { get set }
-    var tappedEdge: CropViewOverlayEdge { get set }
+    var tappedEdge: CropViewAuxiliaryIndicatorHandleType { get set }
     var degrees: CGFloat { get set }
     var radians: CGFloat { get }
     var rotationType: ImageRotationType { get set }

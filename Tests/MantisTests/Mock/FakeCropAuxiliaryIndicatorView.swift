@@ -9,6 +9,8 @@ import UIKit
 @testable import Mantis
 
 class FakeCropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
+    var cropBoxHotAreaUnit: CGFloat = 42
+    
     var gridLineNumberType: GridLineNumberType = .none
     
     var gridHidden = false
@@ -21,7 +23,7 @@ class FakeCropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol
         
     }
     
-    func handleCornerHandleTouched(with tappedEdge: CropViewOverlayEdge) {
+    func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType) {
         
     }
     

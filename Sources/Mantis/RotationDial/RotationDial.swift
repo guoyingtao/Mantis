@@ -52,13 +52,37 @@ final class RotationDial: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func accessibilityIncrement() {
+        viewModel.rotationAngle = Angle(degrees: 1)
+        setAccessibilityValue()
+    }
+    
+    override func accessibilityDecrement() {
+        viewModel.rotationAngle = -Angle(degrees: 1)
+        setAccessibilityValue()
+    }
 }
 
 // MARK: - private functions
 extension RotationDial {
+    private func setAccessibilityValue() {
+        let degreeValue = Int(round(getRotationAngle().degrees))
+        
+        if degreeValue < 2 {
+            accessibilityValue = "\(degreeValue) degree"
+        } else {
+            accessibilityValue = "\(degreeValue) degrees"
+        }
+    }
+    
     private func setupUI() {
         clipsToBounds = true
         backgroundColor = dialConfig.backgroundColor
+        isAccessibilityElement = true
+        accessibilityTraits = .adjustable
+        accessibilityLabel = LocalizedHelper.getString("Mantis.Adjust image angle", value: "Adjust image angle")
+        setAccessibilityValue()
         
         dialPlateHolder?.removeFromSuperview()
         dialPlateHolder = getDialPlateHolder(by: dialConfig.orientation)
@@ -83,7 +107,8 @@ extension RotationDial {
         }
         
         if rotateDialPlate(by: angle) {
-            didRotate(getRotationAngle())
+            let newAngle = getRotationAngle()
+            didRotate(newAngle)
         }
     }
     
@@ -207,6 +232,8 @@ extension RotationDial: RotationDialProtocol {
         }
         
         dialPlate.transform = dialPlate.transform.rotated(by: radians)
+        setAccessibilityValue()
+        
         return true
     }
     

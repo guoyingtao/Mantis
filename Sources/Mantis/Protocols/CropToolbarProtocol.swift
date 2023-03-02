@@ -73,8 +73,8 @@ public extension CropToolbarProtocol {
     private func adjustIntrinsicContentSize() {
         invalidateIntrinsicContentSize()
         
-        let highPriority: Float = 10000
-        let lowPriority: Float = 1
+        let highPriority = AutoLayoutPriorityType.high.rawValue
+        let lowPriority = AutoLayoutPriorityType.low.rawValue
 
         if Orientation.treatAsPortrait {
             setContentHuggingPriority(UILayoutPriority(highPriority), for: .vertical)

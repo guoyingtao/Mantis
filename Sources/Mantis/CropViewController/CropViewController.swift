@@ -448,5 +448,4 @@ extension CropViewController {
     public func getExpectedCropImageSize() -> CGSize {
         cropView.getExpectedCropImageSize()
     }
-
 }

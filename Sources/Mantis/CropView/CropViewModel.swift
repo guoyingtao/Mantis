@@ -68,7 +68,7 @@ class CropViewModel: CropViewModelProtocol {
     }
     var cropBoxOriginFrame = CGRect.zero
     var panOriginPoint = CGPoint.zero
-    var tappedEdge = CropViewOverlayEdge.none
+    var tappedEdge = CropViewAuxiliaryIndicatorHandleType.none
     
     var degrees: CGFloat = 0
     
@@ -212,7 +212,7 @@ extension CropViewModel {
         return radians + rotationType.rawValue * CGFloat.pi / 180
     }
     
-    private func cropEdge(forPoint point: CGPoint) -> CropViewOverlayEdge {
+    private func cropEdge(forPoint point: CGPoint) -> CropViewAuxiliaryIndicatorHandleType {
         let touchRect = cropBoxFrame.insetBy(dx: -hotAreaUnit / 2, dy: -hotAreaUnit / 2)
         return GeometryHelper.getCropEdge(forPoint: point, byTouchRect: touchRect, hotAreaUnit: hotAreaUnit)
     }

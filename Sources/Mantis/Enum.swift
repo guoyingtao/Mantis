@@ -144,3 +144,20 @@ enum RotateBy90DegreeType {
         }
     }
 }
+
+enum CropViewAuxiliaryIndicatorHandleType: Int {
+    case none
+    case topLeft
+    case top
+    case topRight
+    case right
+    case bottomRight
+    case bottom
+    case bottomLeft
+    case left
+}
+
+enum AutoLayoutPriorityType: Float {
+    case high = 10000
+    case low = 1
+}

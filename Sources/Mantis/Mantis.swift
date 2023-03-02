@@ -89,7 +89,7 @@ private func buildCropView(with image: UIImage, and cropViewConfig: CropViewConf
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
                             viewModel: buildCropViewModel(with: cropViewConfig),
-                            cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorView(),
+                            cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorView(frame: .zero, cropBoxHotAreaUnit: cropViewConfig.cropBoxHotAreaUnit),
                             imageContainer: imageContainer,
                             cropWorkbenchView: buildCropWorkbenchView(with: cropViewConfig, and: imageContainer),
                             cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))

@@ -11,16 +11,13 @@ import UIKit
 final class ImageContainer: UIView {
     lazy private var imageView: UIImageView = {
         let imageView = UIImageView(frame: bounds)
+        addSubview(imageView)
+        
         imageView.layer.minificationFilter = .trilinear
         imageView.accessibilityIgnoresInvertColors = true
         imageView.accessibilityIdentifier = "SourceImage"
-        imageView.accessibilityLabel = LocalizedHelper.getString("Mantis.Source Image", value: "Source Image")
-        imageView.accessibilityTraits = .image
-        imageView.isAccessibilityElement = true
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
-        
-        addSubview(imageView)
         
         return imageView
     }()

@@ -8,18 +8,6 @@
 
 import UIKit
 
-enum CropViewOverlayEdge {
-    case none
-    case topLeft
-    case top
-    case topRight
-    case right
-    case bottomRight
-    case bottom
-    case bottomLeft
-    case left
-}
-
 struct GeometryHelper {    
     static func getInscribeRect(fromOutsideRect outsideRect: CGRect, andInsideRect insideRect: CGRect) -> CGRect {
         let insideRectRatio = insideRect.width / insideRect.height
@@ -39,7 +27,7 @@ struct GeometryHelper {
         return rect
     }
     
-    static func getCropEdge(forPoint point: CGPoint, byTouchRect touchRect: CGRect, hotAreaUnit: CGFloat) -> CropViewOverlayEdge {
+    static func getCropEdge(forPoint point: CGPoint, byTouchRect touchRect: CGRect, hotAreaUnit: CGFloat) -> CropViewAuxiliaryIndicatorHandleType {
         // Make sure the corners take priority
         let touchSize = CGSize(width: hotAreaUnit, height: hotAreaUnit)
         

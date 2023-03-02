@@ -9,4 +9,4 @@ import Foundation
 import UIKit
 
 typealias OverlayEdgeType = (xDelta: CGFloat, yDelta: CGFloat)
-typealias TappedEdgeCropFrameUpdateRule = [CropViewOverlayEdge: OverlayEdgeType]
+typealias TappedEdgeCropFrameUpdateRule = [CropViewAuxiliaryIndicatorHandleType: OverlayEdgeType]

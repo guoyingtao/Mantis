@@ -18,8 +18,10 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private let hineLineThickness = CGFloat(2.0)
 
     private var hintLine = UIView()
-    private var tappedEdge: CropViewOverlayEdge = .none
+    private var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
     private var gridColor = UIColor(white: 0.8, alpha: 1)
+    
+    var cropBoxHotAreaUnit: CGFloat = 42
     
     var gridHidden = true
 
@@ -36,18 +38,21 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var cornerHandles: [UIView] = []
     private var edgeLineHandles: [UIView] = []
     
+    var accessibilityHelperViews: [UIView] = []
+    
     override var frame: CGRect {
         didSet {
             if !cornerHandles.isEmpty {
                 layoutLines()
-                handleCornerHandleTouched(with: tappedEdge)
+                handleIndicatorHandleTouched(with: tappedEdge)
             }
         }
     }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, cropBoxHotAreaUnit: CGFloat) {
         super.init(frame: frame)
         clipsToBounds = false
+        self.cropBoxHotAreaUnit = cropBoxHotAreaUnit
         setup()
     }
     
@@ -57,7 +62,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     
     private func createNewLine() -> UIView {
         let view = UIView()
-        view.frame = CGRect.zero
+        view.frame = .zero
         view.backgroundColor = .white
         addSubview(view)
         return view
@@ -79,6 +84,8 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         
         setupGridLines()
         hintLine.backgroundColor = boarderHintColor
+        
+        setupAccessibilityHelperViews()
     }
     
     override func didMoveToSuperview() {
@@ -87,6 +94,17 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         if !cornerHandles.isEmpty {
             layoutLines()
         }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        var result = false
+        
+        accessibilityHelperViews.forEach {
+            let convertedPoint = $0.convert(point, from: self)
+            result = result || $0.point(inside: convertedPoint, with: event)
+        }
+        
+        return result
     }
     
     private func layoutLines() {
@@ -99,6 +117,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         layoutEdgeLineHandles()
         layoutGridLines()
         setGridShowStatus()
+        layoutAccessibilityHelperViews()
     }
     
     private func setGridShowStatus() {
@@ -165,7 +184,9 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         let veticalDistanceForVCorner = bounds.height + 2 * handleThickness - cornerHandleLength
         
         for (index, line) in cornerHandles.enumerated() {
-            let lineType = CropAuxiliaryIndicatorView.CornerHandleType(rawValue: index) ?? .topLeftVertical
+            guard let lineType = CropAuxiliaryIndicatorView.CornerHandleType(rawValue: index) else {
+                continue
+            }
             switch lineType {
             case .topLeftHorizontal:
                 line.frame = topLeftHorizonalLayerFrame
@@ -189,7 +210,10 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     
     private func layoutEdgeLineHandles() {
         for (index, line) in edgeLineHandles.enumerated() {
-            let lineType = CropAuxiliaryIndicatorView.EdgeLineHandleType(rawValue: index) ?? .top
+            guard let lineType = CropAuxiliaryIndicatorView.EdgeLineHandleType(rawValue: index) else {
+                continue
+            }
+            
             switch lineType {
             case .top:
                 line.frame = CGRect(x: bounds.width / 2 - edgeLineHandleLength / 2,
@@ -237,7 +261,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         gridLineNumberType = .none
     }
     
-    func handleCornerHandleTouched(with tappedEdge: CropViewOverlayEdge) {
+    func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType) {
         guard tappedEdge != .none  else {
             return
         }
@@ -247,34 +271,42 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         setGrid(hidden: false, animated: true)
         gridLineNumberType = .crop
         
-        if hintLine.superview == nil {
-            addSubview(hintLine)
+        func handleHintLine() {
+            guard [.top, .bottom, .left, .right].contains(tappedEdge) else {
+                return
+            }
+            
+            if hintLine.superview == nil {
+                addSubview(hintLine)
+            }
+            
+            switch tappedEdge {
+            case .top:
+                hintLine.frame = CGRect(x: borderLine.frame.minX,
+                                        y: borderLine.frame.minY,
+                                        width: borderLine.frame.width,
+                                        height: hineLineThickness)
+            case .bottom:
+                hintLine.frame = CGRect(x: borderLine.frame.minX,
+                                        y: borderLine.frame.maxY - hineLineThickness,
+                                        width: borderLine.frame.width,
+                                        height: hineLineThickness)
+            case .left:
+                hintLine.frame = CGRect(x: borderLine.frame.minX,
+                                        y: borderLine.frame.minY,
+                                        width: hineLineThickness,
+                                        height: borderLine.frame.height)
+            case .right:
+                hintLine.frame = CGRect(x: borderLine.frame.maxX - hineLineThickness,
+                                        y: borderLine.frame.minY,
+                                        width: hineLineThickness,
+                                        height: borderLine.frame.height)
+            default:
+                break
+            }
         }
         
-        switch tappedEdge {
-        case .top:
-            hintLine.frame = CGRect(x: borderLine.frame.minX,
-                                    y: borderLine.frame.minY,
-                                    width: borderLine.frame.width,
-                                    height: hineLineThickness)
-        case .bottom:
-            hintLine.frame = CGRect(x: borderLine.frame.minX,
-                                    y: borderLine.frame.maxY - hineLineThickness,
-                                    width: borderLine.frame.width,
-                                    height: hineLineThickness)
-        case .left:
-            hintLine.frame = CGRect(x: borderLine.frame.minX,
-                                    y: borderLine.frame.minY,
-                                    width: hineLineThickness,
-                                    height: borderLine.frame.height)
-        case .right:
-            hintLine.frame = CGRect(x: borderLine.frame.maxX - hineLineThickness,
-                                    y: borderLine.frame.minY,
-                                    width: hineLineThickness,
-                                    height: borderLine.frame.height)
-        default:
-            hintLine.removeFromSuperview()
-        }
+        handleHintLine()
     }
     
     func handleEdgeUntouched() {
