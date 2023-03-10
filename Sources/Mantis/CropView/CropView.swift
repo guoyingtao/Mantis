@@ -333,9 +333,10 @@ class CropView: UIView {
         }
         
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
+        let aspectRatioLimit = cropViewConfig.aspectRatioLimit
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,
                                                            andContentFrame: contentBounds,
-                                                           aspectRatioLockEnabled: aspectRatioLockEnabled)
+                                                           aspectRatioLockEnabled: aspectRatioLockEnabled, aspectRatioLimit: aspectRatioLimit)
         
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
                 && newCropBoxFrame.minX >= contentBounds.minX

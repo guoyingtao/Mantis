@@ -152,7 +152,7 @@ class CropViewModel: CropViewModelProtocol {
         
     func getNewCropBoxFrame(withTouchPoint touchPoint: CGPoint,
                             andContentFrame contentFrame: CGRect,
-                            aspectRatioLockEnabled: Bool) -> CGRect {
+                            aspectRatioLockEnabled: Bool, aspectRatioLimit: CGFloat) -> CGRect {
         var touchPoint = touchPoint
         touchPoint.x = max(contentFrame.origin.x - cropViewPadding, touchPoint.x)
         touchPoint.y = max(contentFrame.origin.y - cropViewPadding, touchPoint.y)
@@ -175,6 +175,7 @@ class CropViewModel: CropViewModelProtocol {
                                                                               cropOriginFrame: cropBoxOriginFrame,
                                                                               cropBoxFrame: cropBoxFrame)
             cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
+            cropBoxFreeAspectFrameUpdater.minimumAspectRatio = aspectRatioLimit
             newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
         }
 

@@ -18,6 +18,8 @@ public struct CropViewConfig {
         }
     }
     
+    public var aspectRatioLimit: CGFloat = 0
+    
     public var cropBorderColor: UIColor = .clear
     
     /**
