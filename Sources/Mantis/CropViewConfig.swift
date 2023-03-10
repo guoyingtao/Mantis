@@ -9,7 +9,7 @@ public struct CropViewConfig {
             assert(cropBoxHotAreaUnit > 0)
         }
     }
-    
+    ///
     public var cropShapeType: CropShapeType = .rect
     
     public var cropBorderWidth: CGFloat = 0 {
