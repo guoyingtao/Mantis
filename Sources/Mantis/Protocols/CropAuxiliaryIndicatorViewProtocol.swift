@@ -29,8 +29,6 @@ protocol CropAuxiliaryIndicatorViewProtocol: UIView {
     var gridHidden: Bool { get set }
     var cropBoxHotAreaUnit: CGFloat { get set }
     
-    func setGrid(hidden: Bool, animated: Bool)
-    func hideGrid()
     func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType)
     func handleEdgeUntouched()
 }

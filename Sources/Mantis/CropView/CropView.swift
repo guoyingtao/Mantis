@@ -153,14 +153,14 @@ class CropView: UIView {
         case .touchImage:
             cropMaskViewManager.showDimmingBackground(animated: true)
             cropAuxiliaryIndicatorView.gridLineNumberType = .crop
-            cropAuxiliaryIndicatorView.setGrid(hidden: false, animated: true)
+            cropAuxiliaryIndicatorView.gridHidden = false
         case .touchCropboxHandle(let tappedEdge):
             cropAuxiliaryIndicatorView.handleIndicatorHandleTouched(with: tappedEdge)
             rotationDial?.isHidden = true
             cropMaskViewManager.showDimmingBackground(animated: true)
         case .touchRotationBoard:
             cropAuxiliaryIndicatorView.gridLineNumberType = .rotate
-            cropAuxiliaryIndicatorView.setGrid(hidden: false, animated: true)
+            cropAuxiliaryIndicatorView.gridHidden = false
             cropMaskViewManager.showDimmingBackground(animated: true)
         case .betweenOperation:
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
