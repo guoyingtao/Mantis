@@ -108,9 +108,9 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     
     override func draw(_ rect: CGRect) {
         if !gridHidden {
-            let helpLineNumber = gridLineNumberType.getHelpLineNumber()
+            let indicatorLineNumber = gridLineNumberType.getIndicatorLineNumber()
             
-            for index in 0..<helpLineNumber {
+            for index in 0..<indicatorLineNumber {
                 if gridLineNumberType == .rotate && (index + 1) % 3 != 0 {
                     gridSecondaryColor.setStroke()
                 } else {
@@ -120,11 +120,11 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
                 let indicatorLinePath = UIBezierPath()
                 indicatorLinePath.lineWidth = 1
                 
-                let horizontalY = CGFloat(index + 1) * frame.height / CGFloat(helpLineNumber + 1)
+                let horizontalY = CGFloat(index + 1) * frame.height / CGFloat(indicatorLineNumber + 1)
                 indicatorLinePath.move(to: CGPoint(x: 0, y: horizontalY))
                 indicatorLinePath.addLine(to: CGPoint(x: frame.width, y: horizontalY))
                 
-                let horizontalX = CGFloat(index + 1) * frame.width / CGFloat(helpLineNumber + 1)
+                let horizontalX = CGFloat(index + 1) * frame.width / CGFloat(indicatorLineNumber + 1)
                 indicatorLinePath.move(to: CGPoint(x: horizontalX, y: 0))
                 indicatorLinePath.addLine(to: CGPoint(x: horizontalX, y: frame.height))
                 

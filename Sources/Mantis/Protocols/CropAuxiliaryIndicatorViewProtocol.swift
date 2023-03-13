@@ -12,7 +12,7 @@ enum GridLineNumberType {
     case crop
     case rotate
     
-    func getHelpLineNumber() -> Int {
+    func getIndicatorLineNumber() -> Int {
         switch self {
         case .none:
             return 0
