@@ -59,40 +59,7 @@ final class CropAuxiliaryIndicatorViewTests: XCTestCase {
         XCTAssertEqual(cropAuxiliaryIndicatorView.subviews.count, subviewCount + 1)
         XCTAssertEqual(cropAuxiliaryIndicatorView.gridLineNumberType, .crop)        
     }
-
-    func testHideGrid() {
-        cropAuxiliaryIndicatorView.gridLineNumberType = .crop
-        XCTAssertEqual(cropAuxiliaryIndicatorView.gridLineNumberType, .crop)
-        cropAuxiliaryIndicatorView.hideGrid()
-        XCTAssertEqual(cropAuxiliaryIndicatorView.gridLineNumberType, .none)
-    }
-    
-    func testSetGrid() {
-        cropAuxiliaryIndicatorView.setGrid(hidden: true)
-        XCTAssertTrue(cropAuxiliaryIndicatorView.gridHidden)
         
-        var visibleSubViewsCount = cropAuxiliaryIndicatorView.subviews.filter { $0.alpha == 1 }.count
-        
-        cropAuxiliaryIndicatorView.gridLineNumberType = .crop
-        cropAuxiliaryIndicatorView.setGrid(hidden: false)
-        XCTAssertFalse(cropAuxiliaryIndicatorView.gridHidden)
-        
-        var visibleSubViewsCount1 = cropAuxiliaryIndicatorView.subviews.filter { $0.alpha == 1 }.count
-        XCTAssertEqual(visibleSubViewsCount1, visibleSubViewsCount + 2 * 2)
-        
-        cropAuxiliaryIndicatorView.setGrid(hidden: true)
-        XCTAssertTrue(cropAuxiliaryIndicatorView.gridHidden)
-        
-        visibleSubViewsCount = cropAuxiliaryIndicatorView.subviews.filter { $0.alpha == 1 }.count
-        
-        cropAuxiliaryIndicatorView.gridLineNumberType = .rotate
-        cropAuxiliaryIndicatorView.setGrid(hidden: false)
-        XCTAssertFalse(cropAuxiliaryIndicatorView.gridHidden)
-        
-        visibleSubViewsCount1 = cropAuxiliaryIndicatorView.subviews.filter { $0.alpha == 1 }.count
-        XCTAssertEqual(visibleSubViewsCount1, visibleSubViewsCount + 2 * 8)
-    }
-    
     func testHandleCornerHandleTouched() {
         let subviewCount = cropAuxiliaryIndicatorView.subviews.count
         cropAuxiliaryIndicatorView.handleIndicatorHandleTouched(with: .none)

@@ -12,7 +12,7 @@ enum GridLineNumberType {
     case crop
     case rotate
     
-    func getHelpLineNumber() -> Int {
+    func getIndicatorLineNumber() -> Int {
         switch self {
         case .none:
             return 0
@@ -29,8 +29,6 @@ protocol CropAuxiliaryIndicatorViewProtocol: UIView {
     var gridHidden: Bool { get set }
     var cropBoxHotAreaUnit: CGFloat { get set }
     
-    func setGrid(hidden: Bool, animated: Bool)
-    func hideGrid()
     func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType)
     func handleEdgeUntouched()
 }

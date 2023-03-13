@@ -19,21 +19,19 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
 
     private var hintLine = UIView()
     private var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
-    private var gridColor = UIColor(white: 0.8, alpha: 1)
+    private var gridMainColor = UIColor.white
+    private var gridSecondaryColor = UIColor.lightGray
     
     var cropBoxHotAreaUnit: CGFloat = 42
     
-    var gridHidden = true
-
-    var gridLineNumberType: GridLineNumberType = .crop {
+    var gridHidden = true {
         didSet {
-            setupGridLines()
-            layoutGridLines()
+            setNeedsDisplay()
         }
     }
+
+    var gridLineNumberType: GridLineNumberType = .crop
     
-    private var horizontalGridLines: [UIView] = []
-    private var verticalGridLines: [UIView] = []
     private var borderLine: UIView = UIView()
     private var cornerHandles: [UIView] = []
     private var edgeLineHandles: [UIView] = []
@@ -52,12 +50,14 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     init(frame: CGRect, cropBoxHotAreaUnit: CGFloat) {
         super.init(frame: frame)
         clipsToBounds = false
+        backgroundColor = .clear
         self.cropBoxHotAreaUnit = cropBoxHotAreaUnit
         setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        backgroundColor = .clear
     }
     
     private func createNewLine() -> UIView {
@@ -82,7 +82,6 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
             edgeLineHandles.append(createNewLine())
         }
         
-        setupGridLines()
         hintLine.backgroundColor = boarderHintColor
         
         setupAccessibilityHelperViews()
@@ -107,6 +106,33 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         return result
     }
     
+    override func draw(_ rect: CGRect) {
+        if !gridHidden {
+            let indicatorLineNumber = gridLineNumberType.getIndicatorLineNumber()
+            
+            for index in 0..<indicatorLineNumber {
+                if gridLineNumberType == .rotate && (index + 1) % 3 != 0 {
+                    gridSecondaryColor.setStroke()
+                } else {
+                    gridMainColor.setStroke()
+                }
+                
+                let indicatorLinePath = UIBezierPath()
+                indicatorLinePath.lineWidth = 1
+                
+                let horizontalY = CGFloat(index + 1) * frame.height / CGFloat(indicatorLineNumber + 1)
+                indicatorLinePath.move(to: CGPoint(x: 0, y: horizontalY))
+                indicatorLinePath.addLine(to: CGPoint(x: frame.width, y: horizontalY))
+                
+                let horizontalX = CGFloat(index + 1) * frame.width / CGFloat(indicatorLineNumber + 1)
+                indicatorLinePath.move(to: CGPoint(x: horizontalX, y: 0))
+                indicatorLinePath.addLine(to: CGPoint(x: horizontalX, y: frame.height))
+                
+                indicatorLinePath.stroke()
+            }
+        }
+    }
+    
     private func layoutLines() {
         guard bounds.isEmpty == false else {
             return
@@ -115,55 +141,9 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         layoutOuterLines()
         layoutCornerHandles()
         layoutEdgeLineHandles()
-        layoutGridLines()
-        setGridShowStatus()
         layoutAccessibilityHelperViews()
     }
-    
-    private func setGridShowStatus() {
-        horizontalGridLines.forEach { $0.alpha = gridHidden ? 0 : 1 }
-        verticalGridLines.forEach { $0.alpha = gridHidden ? 0 : 1 }
-    }
-    
-    private func layoutGridLines() {
-        let helpLineNumber = gridLineNumberType.getHelpLineNumber()
-        for index in 0..<helpLineNumber {
-            horizontalGridLines[index].frame = CGRect(x: 0,
-                                                      y: CGFloat(index + 1) * frame.height / CGFloat(helpLineNumber + 1),
-                                                      width: frame.width,
-                                                      height: 1)
-            verticalGridLines[index].frame = CGRect(x: CGFloat(index + 1) * frame.width / CGFloat(helpLineNumber + 1),
-                                                    y: 0,
-                                                    width: 1,
-                                                    height: frame.height)
-        }
-    }
-    
-    private func setupGridLines() {
-        setupVerticalGridLines()
-        setupHorizontalGridLines()
-    }
-    
-    private func setupHorizontalGridLines() {
-        horizontalGridLines.forEach { $0.removeFromSuperview() }
-        horizontalGridLines.removeAll()
-        for _ in 0..<gridLineNumberType.getHelpLineNumber() {
-            let view = createNewLine()
-            view.backgroundColor = gridColor
-            horizontalGridLines.append(view)
-        }
-    }
-    
-    private func setupVerticalGridLines() {
-        verticalGridLines.forEach { $0.removeFromSuperview() }
-        verticalGridLines.removeAll()
-        for _ in 0..<gridLineNumberType.getHelpLineNumber() {
-            let view = createNewLine()
-            view.backgroundColor = gridColor
-            verticalGridLines.append(view)
-        }
-    }
-    
+        
     private func layoutOuterLines() {
         borderLine.frame = CGRect(x: -borderThickness,
                                   y: -borderThickness,
@@ -238,29 +218,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
             }
         }
     }
-    
-    func setGrid(hidden: Bool, animated: Bool = false) {
-        self.gridHidden = hidden
-        
-        func setGridLinesShowStatus () {
-            horizontalGridLines.forEach { $0.alpha = hidden ? 0 : 1 }
-            verticalGridLines.forEach { $0.alpha = hidden ? 0 : 1}
-        }
-        
-        if animated {
-            let duration = hidden ? 0.35 : 0.2
-            UIView.animate(withDuration: duration) {
-                setGridLinesShowStatus()
-            }
-        } else {
-            setGridLinesShowStatus()
-        }
-    }
-    
-    func hideGrid() {
-        gridLineNumberType = .none
-    }
-    
+            
     func handleIndicatorHandleTouched(with tappedEdge: CropViewAuxiliaryIndicatorHandleType) {
         guard tappedEdge != .none  else {
             return
@@ -268,7 +226,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         
         self.tappedEdge = tappedEdge
         
-        setGrid(hidden: false, animated: true)
+        gridHidden = false
         gridLineNumberType = .crop
         
         func handleHintLine() {
@@ -310,7 +268,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     }
     
     func handleEdgeUntouched() {
-        setGrid(hidden: true, animated: true)
+        gridHidden = true
         hintLine.removeFromSuperview()
         tappedEdge = .none
     }
