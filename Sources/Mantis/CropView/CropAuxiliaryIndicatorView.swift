@@ -117,21 +117,18 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
                     gridMainColor.setStroke()
                 }
                 
-                let horizontalPath = UIBezierPath()
-                horizontalPath.lineWidth = 1
-                let horizontalY = CGFloat(index + 1) * frame.height / CGFloat(helpLineNumber + 1)
-                horizontalPath.move(to: CGPoint(x: 0,
-                                                y: horizontalY))
-                horizontalPath.addLine(to: CGPoint(x: frame.width, y: horizontalY))
-                horizontalPath.stroke()
+                let indicatorLinePath = UIBezierPath()
+                indicatorLinePath.lineWidth = 1
                 
-                let verticalPath = UIBezierPath()
-                verticalPath.lineWidth = 1
+                let horizontalY = CGFloat(index + 1) * frame.height / CGFloat(helpLineNumber + 1)
+                indicatorLinePath.move(to: CGPoint(x: 0, y: horizontalY))
+                indicatorLinePath.addLine(to: CGPoint(x: frame.width, y: horizontalY))
+                
                 let horizontalX = CGFloat(index + 1) * frame.width / CGFloat(helpLineNumber + 1)
-                verticalPath.move(to: CGPoint(x: horizontalX,
-                                              y: 0))
-                verticalPath.addLine(to: CGPoint(x: horizontalX, y: frame.height))
-                verticalPath.stroke()
+                indicatorLinePath.move(to: CGPoint(x: horizontalX, y: 0))
+                indicatorLinePath.addLine(to: CGPoint(x: horizontalX, y: frame.height))
+                
+                indicatorLinePath.stroke()
             }
         }
     }
