@@ -16,7 +16,7 @@ extension CropView {
             return rotationDial
         }
         
-        if isHitGridOverlayView(by: newPoint) {
+        if !cropViewConfig.disableCropBoxDeformation && isHitGridOverlayView(by: newPoint) {
             return self
         }
         

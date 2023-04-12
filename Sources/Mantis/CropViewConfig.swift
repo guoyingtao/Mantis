@@ -52,5 +52,7 @@ public struct CropViewConfig {
     
     var minimumCropBoxSize: CGFloat = 42
 
+    public var disableCropBoxDeformation = false
+    
     public init() {}
 }

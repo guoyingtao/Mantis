@@ -21,6 +21,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
     private var gridMainColor = UIColor.white
     private var gridSecondaryColor = UIColor.lightGray
+    private var disableCropBoxDeformation = false
     
     var cropBoxHotAreaUnit: CGFloat = 42
     
@@ -47,11 +48,12 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         }
     }
     
-    init(frame: CGRect, cropBoxHotAreaUnit: CGFloat) {
+    init(frame: CGRect, cropBoxHotAreaUnit: CGFloat, disableCropBoxDeformation: Bool = false) {
         super.init(frame: frame)
         clipsToBounds = false
         backgroundColor = .clear
         self.cropBoxHotAreaUnit = cropBoxHotAreaUnit
+        self.disableCropBoxDeformation = disableCropBoxDeformation
         setup()
     }
     
@@ -139,6 +141,11 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
         }
         
         layoutOuterLines()
+        
+        guard !disableCropBoxDeformation else {
+            return
+        }
+        
         layoutCornerHandles()
         layoutEdgeLineHandles()
         layoutAccessibilityHelperViews()
