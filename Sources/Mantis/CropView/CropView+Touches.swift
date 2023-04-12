@@ -16,7 +16,7 @@ extension CropView {
             return rotationDial
         }
         
-        if isHitGridOverlayView(by: newPoint) {
+        if !cropViewConfig.disableCropBoxDeformation && isHitGridOverlayView(by: newPoint) {
             return self
         }
         
@@ -28,10 +28,6 @@ extension CropView {
     }
     
     private func isHitGridOverlayView(by touchPoint: CGPoint) -> Bool {
-        guard !cropViewConfig.disableCropBoxDeformation else {
-            return false
-        }
-        
         let hotAreaUnit = cropViewConfig.cropBoxHotAreaUnit
         
         return cropAuxiliaryIndicatorView.frame.insetBy(dx: -hotAreaUnit/2, dy: -hotAreaUnit/2).contains(touchPoint)
