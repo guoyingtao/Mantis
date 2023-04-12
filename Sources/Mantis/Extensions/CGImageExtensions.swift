@@ -61,10 +61,7 @@ extension CGImage {
         }
                 
         context.setFillColor(UIColor.clear.cgColor)
-        context.fill(CGRect(x: 0,
-                            y: 0,
-                            width: outputSize.width,
-                            height: outputSize.height))
+        context.fill(CGRect(origin: .zero, size: outputSize))
         
         var uiCoords = CGAffineTransform(scaleX: outputSize.width / cropSize.width,
                                          y: outputSize.height / cropSize.height)
