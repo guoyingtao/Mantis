@@ -458,6 +458,10 @@ extension CropView {
                             animation: Bool = true,
                             zoom: Bool = true,
                             completion: @escaping () -> Void) {
+        guard viewModel.cropBoxFrame.size.width > 0 && viewModel.cropBoxFrame.size.height > 0 else {
+            return
+        }
+                
         let scaleX = contentRect.width / viewModel.cropBoxFrame.size.width
         let scaleY = contentRect.height / viewModel.cropBoxFrame.size.height
         
