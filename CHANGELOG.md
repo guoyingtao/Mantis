@@ -2,6 +2,22 @@
 
 -----
 
+## [2.9.0](https://www.github.com/guoyingtao/Mantis/compare/v2.8.0...v2.9.0) (2023-04-13)
+
+
+### Features
+
+* Added flag to disable deformation of crop box ([#296](https://www.github.com/guoyingtao/Mantis/issues/296)) ([ba65283](https://www.github.com/guoyingtao/Mantis/commit/ba652836c18414afdb8b62529b12a3af606a7086))
+* support custom waiting animation for async crop ([#284](https://www.github.com/guoyingtao/Mantis/issues/284)) ([7800c07](https://www.github.com/guoyingtao/Mantis/commit/7800c0775958a35ecb6bafac7b61092dd28945c5))
+
+
+### Bug Fixes
+
+* add guard to make sure scaleX and scaleY are not infinite ([#297](https://www.github.com/guoyingtao/Mantis/issues/297)) ([05a418d](https://www.github.com/guoyingtao/Mantis/commit/05a418dc1f08f3ec2b4c5fe983419bc4f2d82fff))
+* fix resetting rotation dial caused UI issue ([#287](https://www.github.com/guoyingtao/Mantis/issues/287)) ([f432e36](https://www.github.com/guoyingtao/Mantis/commit/f432e362b7ceda8dba028b71e375bbf735066eaa))
+* fix RotationDial reset issue ([82cc00e](https://www.github.com/guoyingtao/Mantis/commit/82cc00ebb9087da3651eac76992b2cb40045c66e))
+* fix vertical flip button icon image issue ([643884b](https://www.github.com/guoyingtao/Mantis/commit/643884b050b95c7978b90e86f7959fe605c3f780))
+
 ## [2.8.0](https://www.github.com/guoyingtao/Mantis/compare/v2.7.0...v2.8.0) (2023-02-14)
 
 
