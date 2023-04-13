@@ -463,6 +463,10 @@ extension CropView {
         
         let scale = min(scaleX, scaleY)
         
+        guard scale > 0 else {
+            return
+        }
+        
         let newCropBounds = CGRect(x: 0, y: 0, width: viewModel.cropBoxFrame.width * scale, height: viewModel.cropBoxFrame.height * scale)
         
         let radians = viewModel.getTotalRadians()
@@ -470,6 +474,10 @@ extension CropView {
         // calculate the new bounds of scroll view
         let newBoundWidth = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
         let newBoundHeight = abs(sin(radians)) * newCropBounds.size.width + abs(cos(radians)) * newCropBounds.size.height
+        
+        guard newBoundWidth > 0 && newBoundHeight > 0 else {
+            return
+        }
         
         // calculate the zoom area of scroll view
         var scaleFrame = viewModel.cropBoxFrame
