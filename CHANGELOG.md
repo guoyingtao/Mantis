@@ -2,6 +2,13 @@
 
 -----
 
+### [2.9.1](https://www.github.com/guoyingtao/Mantis/compare/v2.9.0...v2.9.1) (2023-04-13)
+
+
+### Bug Fixes
+
+* fix the guard logics for adjustUIForNewCrop ([c093c15](https://www.github.com/guoyingtao/Mantis/commit/c093c157ea1d237a261a15e8fb38848c7de69cb1))
+
 ## [2.9.0](https://www.github.com/guoyingtao/Mantis/compare/v2.8.0...v2.9.0) (2023-04-13)
 
 
