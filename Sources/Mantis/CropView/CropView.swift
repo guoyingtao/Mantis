@@ -458,14 +458,15 @@ extension CropView {
                             animation: Bool = true,
                             zoom: Bool = true,
                             completion: @escaping () -> Void) {
+        
+        guard viewModel.cropBoxFrame.size.width > 0 && viewModel.cropBoxFrame.size.height > 0 else {
+            return
+        }
+        
         let scaleX = contentRect.width / viewModel.cropBoxFrame.size.width
         let scaleY = contentRect.height / viewModel.cropBoxFrame.size.height
         
         let scale = min(scaleX, scaleY)
-        
-        guard scale > 0 else {
-            return
-        }
         
         let newCropBounds = CGRect(x: 0, y: 0, width: viewModel.cropBoxFrame.width * scale, height: viewModel.cropBoxFrame.height * scale)
         
@@ -475,7 +476,8 @@ extension CropView {
         let newBoundWidth = abs(cos(radians)) * newCropBounds.size.width + abs(sin(radians)) * newCropBounds.size.height
         let newBoundHeight = abs(sin(radians)) * newCropBounds.size.width + abs(cos(radians)) * newCropBounds.size.height
         
-        guard newBoundWidth > 0 && newBoundHeight > 0 else {
+        guard newBoundWidth > 0 && newBoundWidth != .infinity
+           && newBoundHeight > 0 && newBoundHeight != .infinity else {
             return
         }
         
