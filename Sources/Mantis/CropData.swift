@@ -35,10 +35,10 @@ public typealias Transformation = (
 )
 
 public struct CropRegion: Equatable {
-    var topLeft: CGPoint
-    var topRight: CGPoint
-    var bottomLeft: CGPoint
-    var bottomRight: CGPoint
+    public var topLeft: CGPoint
+    public var topRight: CGPoint
+    public var bottomLeft: CGPoint
+    public var bottomRight: CGPoint
 }
 
 public typealias CropInfo = (
