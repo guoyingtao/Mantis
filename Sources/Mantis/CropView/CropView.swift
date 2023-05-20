@@ -68,9 +68,10 @@ class CropView: UIView {
         if let indicator = cropViewConfig.cropActivityIndicator {
             activityIndicator = indicator
         } else {
-            activityIndicator = UIActivityIndicatorView(frame: .zero)
-            (activityIndicator as! UIActivityIndicatorView).color = .white
-            activityIndicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+            let indicator = UIActivityIndicatorView(frame: .zero)
+            indicator.color = .white
+            indicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+            activityIndicator = indicator
         }
                 
         addSubview(activityIndicator)
