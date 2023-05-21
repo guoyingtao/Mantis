@@ -31,10 +31,6 @@ class FakeRotationDialView: UIView, RotationDialProtocol {
         
     }
     
-    func resetAngle(animated: Bool) {
-        
-    }
-    
     func getRotationAngle() -> Angle {
         .init(degrees: 0)
     }

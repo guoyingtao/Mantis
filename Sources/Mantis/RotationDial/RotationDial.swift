@@ -259,10 +259,6 @@ extension RotationDial: RotationDialProtocol {
         }
     }
     
-    func resetAngle(animated: Bool) {
-        rotateDialPlate(to: Angle(radians: 0), animated: animated)
-    }
-    
     func getRotationAngle() -> Angle {
         guard let dialPlate = dialPlate else { return Angle(degrees: 0) }
         
