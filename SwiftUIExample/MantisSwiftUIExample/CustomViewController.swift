@@ -41,4 +41,3 @@ class CustomViewController: Mantis.CropViewController {
         crop()
     }
 }
-

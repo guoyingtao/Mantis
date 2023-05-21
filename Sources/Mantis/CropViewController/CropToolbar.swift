@@ -281,7 +281,6 @@ extension CropToolbar {
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .vertical)
 
-        
         button.addTarget(self, action: action, for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
         

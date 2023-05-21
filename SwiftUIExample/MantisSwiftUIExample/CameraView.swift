@@ -31,7 +31,7 @@ struct CameraView: UIViewControllerRepresentable {
             _image = image
         }
 
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let selectedImage = info[.originalImage] as? UIImage {
                 self.image = selectedImage
             }
@@ -43,4 +43,3 @@ struct CameraView: UIViewControllerRepresentable {
         }
     }
 }
-

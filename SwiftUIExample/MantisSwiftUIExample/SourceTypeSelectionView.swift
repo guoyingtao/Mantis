@@ -41,7 +41,6 @@ struct SourceTypeSelectionView: View {
     }
 }
 
-
 struct SourceTypeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         SourceTypeSelectionView(showSourceTypeSelection: .constant(false), showCamera: .constant(false), showImagePicker: .constant(false))

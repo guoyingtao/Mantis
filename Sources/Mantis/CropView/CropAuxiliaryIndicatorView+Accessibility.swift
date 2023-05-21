@@ -52,7 +52,8 @@ extension CropAuxiliaryIndicatorView {
                 break
             }
             
-            helperView.accessibilityHint = LocalizedHelper.getString("Mantis.Double tap and hold to adjust crop area", value: "Double tap and hold to adjust crop area")
+            helperView.accessibilityHint = LocalizedHelper.getString("Mantis.Double tap and hold to adjust crop area",
+                                                                     value: "Double tap and hold to adjust crop area")
         }
     }
     
@@ -68,21 +69,45 @@ extension CropAuxiliaryIndicatorView {
             
             switch handleType {
             case .topLeft:
-                helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2, y: -cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2,
+                                          y: -cropBoxHotAreaUnit/2,
+                                          width: cropBoxHotAreaUnit,
+                                          height: cropBoxHotAreaUnit)
             case .top:
-                helperView.frame = CGRect(x: cropBoxHotAreaUnit/2, y: -cropBoxHotAreaUnit/2, width: bounds.width - cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: cropBoxHotAreaUnit/2,
+                                          y: -cropBoxHotAreaUnit/2,
+                                          width: bounds.width - cropBoxHotAreaUnit,
+                                          height: cropBoxHotAreaUnit)
             case .topRight:
-                helperView.frame = CGRect(x: bounds.width - cropBoxHotAreaUnit/2, y: -cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: bounds.width - cropBoxHotAreaUnit/2,
+                                          y: -cropBoxHotAreaUnit/2,
+                                          width: cropBoxHotAreaUnit,
+                                          height: cropBoxHotAreaUnit)
             case .right:
-                helperView.frame = CGRect(x: bounds.width - cropBoxHotAreaUnit/2, y: cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: bounds.height - cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: bounds.width - cropBoxHotAreaUnit/2,
+                                          y: cropBoxHotAreaUnit/2,
+                                          width: cropBoxHotAreaUnit,
+                                          height: bounds.height - cropBoxHotAreaUnit)
             case .bottomRight:
-                helperView.frame = CGRect(x: bounds.width - cropBoxHotAreaUnit/2, y: bounds.height - cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: bounds.width - cropBoxHotAreaUnit/2,
+                                          y: bounds.height - cropBoxHotAreaUnit/2,
+                                          width: cropBoxHotAreaUnit,
+                                          height: cropBoxHotAreaUnit)
             case .bottom:
-                helperView.frame = CGRect(x: cropBoxHotAreaUnit/2, y: bounds.height - cropBoxHotAreaUnit/2, width: bounds.width - cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: cropBoxHotAreaUnit/2,
+                                          y: bounds.height - cropBoxHotAreaUnit/2,
+                                          width: bounds.width - cropBoxHotAreaUnit,
+                                          height: cropBoxHotAreaUnit)
             case .bottomLeft:
-                helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2, y: bounds.height - cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2,
+                                          y: bounds.height - cropBoxHotAreaUnit/2,
+                                          width: cropBoxHotAreaUnit,
+                                          height: cropBoxHotAreaUnit)
             case .left:
-                helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2, y: cropBoxHotAreaUnit/2, width: cropBoxHotAreaUnit, height: bounds.height - cropBoxHotAreaUnit)
+                helperView.frame = CGRect(x: -cropBoxHotAreaUnit/2,
+                                          y: cropBoxHotAreaUnit/2,
+                                          width: cropBoxHotAreaUnit,
+                                          height: bounds.height - cropBoxHotAreaUnit)
             case .none:
                 break
             }

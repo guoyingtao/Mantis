@@ -145,7 +145,7 @@ class RotationDialPlate: UIView {
     private func setCenterPart() {
         let layer = CAShapeLayer()
         let radius: CGFloat = 4
-        layer.frame = CGRect(x: (self.layer.bounds.width - radius) / 2 ,
+        layer.frame = CGRect(x: (self.layer.bounds.width - radius) / 2,
                              y: (self.layer.bounds.height - radius) / 2,
                              width: radius,
                              height: radius)
