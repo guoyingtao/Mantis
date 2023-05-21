@@ -2,6 +2,13 @@
 
 -----
 
+### [2.9.2](https://www.github.com/guoyingtao/Mantis/compare/v2.9.1...v2.9.2) (2023-05-21)
+
+
+### Bug Fixes
+
+* make CropRegion props public ([#299](https://www.github.com/guoyingtao/Mantis/issues/299)) ([d919e54](https://www.github.com/guoyingtao/Mantis/commit/d919e546f49af922df2fcb5de01e742bc82829cf))
+
 ### [2.9.1](https://www.github.com/guoyingtao/Mantis/compare/v2.9.0...v2.9.1) (2023-04-13)
 
 
