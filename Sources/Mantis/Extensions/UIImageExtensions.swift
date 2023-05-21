@@ -100,14 +100,25 @@ extension UIImage {
         transform.transformed(by: cropInfo)
         
         let outputSize = getOutputCropImageSize(by: cropInfo)
-        guard let transformedCGImage = fixedOrientationImage.transformedImage(transform,
-                                                                              outputSize: outputSize,
-                                                                              cropSize: cropInfo.cropSize,
-                                                                              imageViewSize: cropInfo.imageViewSize) else {
+        
+        do {
+            guard let transformedCGImage = try fixedOrientationImage.transformedImage(transform,
+                                                                                      outputSize: outputSize,
+                                                                                      cropSize: cropInfo.cropSize,
+                                                                                      imageViewSize: cropInfo.imageViewSize) else {
+                return nil
+            }
+            
+            return UIImage(cgImage: transformedCGImage)
+        } catch {
+            print("*** Failed to get transfromed image ***")
+
+            if let error = error as? ImageProcessError {
+                print("Failed reason: \(error)")
+            }
+            
             return nil
         }
-        
-        return UIImage(cgImage: transformedCGImage)
     }
     
     func getOutputCropImageSize(by cropInfo: CropInfo) -> CGSize {

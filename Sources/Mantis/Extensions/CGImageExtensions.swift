@@ -11,13 +11,18 @@
 
 import UIKit
 
+enum ImageProcessError: Error {
+    case noColorSpace
+    case failedToBuildContext(colorSpaceModel: CGColorSpaceModel, bitsPerPixel: Int, bitsPerComponent: Int)
+}
+
 extension CGImage {
     func transformedImage(_ transform: CGAffineTransform,
                           outputSize: CGSize,
                           cropSize: CGSize,
-                          imageViewSize: CGSize) -> CGImage? {
+                          imageViewSize: CGSize) throws -> CGImage? {
         guard var colorSpaceRef = self.colorSpace else {
-            return self
+            throw ImageProcessError.noColorSpace
         }
         
         // If the color space does not allow output, default to the RGB color space
@@ -32,16 +37,18 @@ extension CGImage {
                 switch(bitsPerPixel, bitsPerComponent) {
                 case (16, 5):
                     return CGImageAlphaInfo.noneSkipFirst.rawValue
-                case (24, 8), (32, 8), (48, 16), (64, 16):
+                case (24, 8), (48, 16):
+                    return CGImageAlphaInfo.none.rawValue
+                case (32, 8), (64, 16):
                     return CGImageAlphaInfo.premultipliedLast.rawValue
                 case (32, 10):
                     if #available(iOS 12, macOS 10.14, *) {
                         return CGImageAlphaInfo.alphaOnly.rawValue | CGImagePixelFormatInfo.RGBCIF10.rawValue
                     } else {
-                        return bitmapInfo.rawValue
+                        break
                     }
                 case (128, 32):
-                    return CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.floatComponents.rawValue
+                    return CGImageAlphaInfo.premultipliedLast.rawValue | (bitmapInfo.rawValue & CGBitmapInfo.floatComponents.rawValue)
                 default:
                     break
                 }
@@ -57,7 +64,9 @@ extension CGImage {
                                       bytesPerRow: bitmapBytesPerRow,
                                       space: colorSpaceRef,
                                       bitmapInfo: getBitmapInfo()) else {
-            return self
+            throw ImageProcessError.failedToBuildContext(colorSpaceModel: colorSpaceRef.model,
+                                                         bitsPerPixel: bitsPerPixel,
+                                                         bitsPerComponent: bitsPerComponent)
         }
                 
         context.setFillColor(UIColor.clear.cgColor)

@@ -21,20 +21,26 @@ final class CropWorkbenchViewTests: XCTestCase {
     }
 
     func testUpdateMinZoomScale() {
-        workbechView = CropWorkbenchView(frame: .zero, minimumZoomScale: 1.0, maximumZoomScale: 15, imageContainer: FakeImageContainer(frame: .init(x: 0, y: 0, width: 200, height: 100)))
+        let fakeImageContainer = FakeImageContainer(frame: .init(x: 0, y: 0, width: 200, height: 100))
+        workbechView = CropWorkbenchView(frame: .zero,
+                                         minimumZoomScale: 1.0,
+                                         maximumZoomScale: 15,
+                                         imageContainer: fakeImageContainer)
         workbechView.bounds = CGRect(x: 0, y: 0, width: 400, height: 100)
         workbechView.updateMinZoomScale()
         
         XCTAssertEqual(workbechView.minimumZoomScale, 2)
         
-        workbechView = CropWorkbenchView(frame: .zero, minimumZoomScale: 1.0, maximumZoomScale: 15, imageContainer: FakeImageContainer(frame: .init(x: 0, y: 0, width: 200, height: 100)))
+        workbechView = CropWorkbenchView(frame: .zero,
+                                         minimumZoomScale: 1.0,
+                                         maximumZoomScale: 15,
+                                         imageContainer: fakeImageContainer)
         workbechView.bounds = CGRect(x: 0, y: 0, width: 400, height: 300)
         workbechView.updateMinZoomScale()
         
         XCTAssertEqual(workbechView.minimumZoomScale, 3)
     }
 
-    
     func testShouldScale() {
         workbechView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
         workbechView.contentSize = CGSize(width: 200, height: 100)

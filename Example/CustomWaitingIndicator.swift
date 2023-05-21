@@ -50,4 +50,3 @@ class CustomWaitingIndicator: UIView, Mantis.ActivityIndicatorProtocol {
         circleLayer.removeAnimation(forKey: "rotationAnimation")
     }
 }
-
