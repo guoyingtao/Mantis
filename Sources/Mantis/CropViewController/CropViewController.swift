@@ -96,7 +96,7 @@ open class CropViewController: UIViewController {
     private func getRatioType() -> RatioType {
         switch config.cropToolbarConfig.fixedRatiosShowType {
         case .adaptive:
-            return cropView.getRatioType(byImageIsOriginalisHorizontal: cropView.image.isHorizontal())
+            return cropView.getRatioType(byImageIsOriginalHorizontal: cropView.image.isHorizontal())
         case .horizontal:
             return .horizontal
         case .vertical:

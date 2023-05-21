@@ -15,7 +15,7 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private let edgeLineHandleLength = CGFloat(30.0)
     private let handleThickness = CGFloat(3.0)
     private let borderThickness = CGFloat(1.0)
-    private let hineLineThickness = CGFloat(2.0)
+    private let hintLineThickness = CGFloat(2.0)
 
     private var hintLine = UIView()
     private var tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none
@@ -162,13 +162,13 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     }
     
     private func layoutCornerHandles() {
-        let topLeftHorizonalLayerFrame = CGRect(x: -handleThickness, y: -handleThickness, width: cornerHandleLength, height: handleThickness)
+        let topLeftHorizontalLayerFrame = CGRect(x: -handleThickness, y: -handleThickness, width: cornerHandleLength, height: handleThickness)
         let topLeftVerticalLayerFrame = CGRect(x: -handleThickness, y: -handleThickness, width: handleThickness, height: cornerHandleLength)
         
         let horizontalDistanceForHCorner = bounds.width + 2 * handleThickness - cornerHandleLength
         let verticalDistanceForHCorner = bounds.height + handleThickness
         let horizontalDistanceForVCorner = bounds.width + handleThickness
-        let veticalDistanceForVCorner = bounds.height + 2 * handleThickness - cornerHandleLength
+        let verticalDistanceForVCorner = bounds.height + 2 * handleThickness - cornerHandleLength
         
         for (index, line) in cornerHandles.enumerated() {
             guard let lineType = CropAuxiliaryIndicatorView.CornerHandleType(rawValue: index) else {
@@ -176,21 +176,21 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
             }
             switch lineType {
             case .topLeftHorizontal:
-                line.frame = topLeftHorizonalLayerFrame
+                line.frame = topLeftHorizontalLayerFrame
             case .topLeftVertical:
                 line.frame = topLeftVerticalLayerFrame
             case .topRightHorizontal:
-                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: horizontalDistanceForHCorner, dy: 0)
+                line.frame = topLeftHorizontalLayerFrame.offsetBy(dx: horizontalDistanceForHCorner, dy: 0)
             case .topRightVertical:
                 line.frame = topLeftVerticalLayerFrame.offsetBy(dx: horizontalDistanceForVCorner, dy: 0)
             case .bottomRightHorizontal:
-                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: horizontalDistanceForHCorner, dy: verticalDistanceForHCorner)
+                line.frame = topLeftHorizontalLayerFrame.offsetBy(dx: horizontalDistanceForHCorner, dy: verticalDistanceForHCorner)
             case .bottomRightVertical:
-                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: horizontalDistanceForVCorner, dy: veticalDistanceForVCorner)
+                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: horizontalDistanceForVCorner, dy: verticalDistanceForVCorner)
             case .bottomLeftHorizontal:
-                line.frame = topLeftHorizonalLayerFrame.offsetBy(dx: 0, dy: verticalDistanceForHCorner)
+                line.frame = topLeftHorizontalLayerFrame.offsetBy(dx: 0, dy: verticalDistanceForHCorner)
             case .bottomLeftVertical:
-                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: 0, dy: veticalDistanceForVCorner)
+                line.frame = topLeftVerticalLayerFrame.offsetBy(dx: 0, dy: verticalDistanceForVCorner)
             }
         }
     }
@@ -250,21 +250,21 @@ class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
                 hintLine.frame = CGRect(x: borderLine.frame.minX,
                                         y: borderLine.frame.minY,
                                         width: borderLine.frame.width,
-                                        height: hineLineThickness)
+                                        height: hintLineThickness)
             case .bottom:
                 hintLine.frame = CGRect(x: borderLine.frame.minX,
-                                        y: borderLine.frame.maxY - hineLineThickness,
+                                        y: borderLine.frame.maxY - hintLineThickness,
                                         width: borderLine.frame.width,
-                                        height: hineLineThickness)
+                                        height: hintLineThickness)
             case .left:
                 hintLine.frame = CGRect(x: borderLine.frame.minX,
                                         y: borderLine.frame.minY,
-                                        width: hineLineThickness,
+                                        width: hintLineThickness,
                                         height: borderLine.frame.height)
             case .right:
-                hintLine.frame = CGRect(x: borderLine.frame.maxX - hineLineThickness,
+                hintLine.frame = CGRect(x: borderLine.frame.maxX - hintLineThickness,
                                         y: borderLine.frame.minY,
-                                        width: hineLineThickness,
+                                        width: hintLineThickness,
                                         height: borderLine.frame.height)
             default:
                 break

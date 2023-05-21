@@ -10,7 +10,7 @@ import XCTest
 
 final class CropWorkbenchViewTests: XCTestCase {
     
-    var workbechView = CropWorkbenchView(frame: .zero, minimumZoomScale: 1.0, maximumZoomScale: 15, imageContainer: FakeImageContainer(frame: .zero))
+    var workbenchView = CropWorkbenchView(frame: .zero, minimumZoomScale: 1.0, maximumZoomScale: 15, imageContainer: FakeImageContainer(frame: .zero))
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -22,36 +22,36 @@ final class CropWorkbenchViewTests: XCTestCase {
 
     func testUpdateMinZoomScale() {
         let fakeImageContainer = FakeImageContainer(frame: .init(x: 0, y: 0, width: 200, height: 100))
-        workbechView = CropWorkbenchView(frame: .zero,
+        workbenchView = CropWorkbenchView(frame: .zero,
                                          minimumZoomScale: 1.0,
                                          maximumZoomScale: 15,
                                          imageContainer: fakeImageContainer)
-        workbechView.bounds = CGRect(x: 0, y: 0, width: 400, height: 100)
-        workbechView.updateMinZoomScale()
+        workbenchView.bounds = CGRect(x: 0, y: 0, width: 400, height: 100)
+        workbenchView.updateMinZoomScale()
         
-        XCTAssertEqual(workbechView.minimumZoomScale, 2)
+        XCTAssertEqual(workbenchView.minimumZoomScale, 2)
         
-        workbechView = CropWorkbenchView(frame: .zero,
+        workbenchView = CropWorkbenchView(frame: .zero,
                                          minimumZoomScale: 1.0,
                                          maximumZoomScale: 15,
                                          imageContainer: fakeImageContainer)
-        workbechView.bounds = CGRect(x: 0, y: 0, width: 400, height: 300)
-        workbechView.updateMinZoomScale()
+        workbenchView.bounds = CGRect(x: 0, y: 0, width: 400, height: 300)
+        workbenchView.updateMinZoomScale()
         
-        XCTAssertEqual(workbechView.minimumZoomScale, 3)
+        XCTAssertEqual(workbenchView.minimumZoomScale, 3)
     }
 
     func testShouldScale() {
-        workbechView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
-        workbechView.contentSize = CGSize(width: 200, height: 100)
-        XCTAssertTrue(workbechView.shouldScale())
+        workbenchView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
+        workbenchView.contentSize = CGSize(width: 200, height: 100)
+        XCTAssertTrue(workbenchView.shouldScale())
         
-        workbechView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
-        workbechView.contentSize = CGSize(width: 100, height: 80)
-        XCTAssertTrue(workbechView.shouldScale())
+        workbenchView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
+        workbenchView.contentSize = CGSize(width: 100, height: 80)
+        XCTAssertTrue(workbenchView.shouldScale())
         
-        workbechView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
-        workbechView.contentSize = CGSize(width: 300, height: 200)
-        XCTAssertFalse(workbechView.shouldScale())
+        workbenchView.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
+        workbenchView.contentSize = CGSize(width: 300, height: 200)
+        XCTAssertFalse(workbenchView.shouldScale())
     }
 }

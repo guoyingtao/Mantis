@@ -18,7 +18,7 @@ class FakeCropView: UIView, CropViewProtocol {
     func initialSetup(delegate: CropViewDelegate, presetFixedRatioType: PresetFixedRatioType) {
     }
     
-    func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
+    func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType {
         .horizontal
     }
     
@@ -62,7 +62,7 @@ class FakeCropView: UIView, CropViewProtocol {
         Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero)
     }
     
-    func getTransformInfo(byNormalizedInfo normailizedInfo: CGRect) -> Transformation {
+    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
         Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero)
     }
     

@@ -27,7 +27,7 @@ import UIKit
 public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
-    case presetNormalizedInfo(normailizedInfo: CGRect)
+    case presetNormalizedInfo(normalizedInfo: CGRect)
 }
 
 public enum PresetFixedRatioType {
@@ -79,7 +79,7 @@ public enum CropShapeType: Hashable {
     case polygon(sides: Int, offset: CGFloat = 0, maskOnly: Bool = false)
 
     /**
-      Each point should have normailzed values whose range is 0...1
+      Each point should have normalized values whose range is 0...1
      */
     case path(points: [CGPoint], maskOnly: Bool = false)
     

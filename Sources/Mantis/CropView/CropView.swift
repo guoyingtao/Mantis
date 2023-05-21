@@ -605,7 +605,7 @@ extension CropView {
             rotation: getTotalRadians(),
             scale: cropWorkbenchView.zoomScale,
             manualZoomed: manualZoomed,
-            intialMaskFrame: getInitialCropBoxRect(),
+            initialMaskFrame: getInitialCropBoxRect(),
             maskFrame: cropAuxiliaryIndicatorView.frame,
             cropWorkbenchViewBounds: cropWorkbenchView.bounds
         )
@@ -755,7 +755,7 @@ extension CropView: CropViewProtocol {
         setForceFixedRatio(by: presetFixedRatioType)
     }
     
-    func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType {
+    func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType {
         return viewModel.getRatioType(byImageIsOriginalHorizontal: isHorizontal)
     }
     
@@ -845,7 +845,7 @@ extension CropView: CropViewProtocol {
             updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
         }
         
-        func handleRoteteCompletion() {
+        func handleRotateCompletion() {
             cropWorkbenchView.updateMinZoomScale()
             viewModel.rotateBy90(withRotateType: newRotateType)
             viewModel.setBetweenOperationStatus()
@@ -855,7 +855,7 @@ extension CropView: CropViewProtocol {
         UIView.animate(withDuration: 0.25, animations: {
             handleRotateAnimation()
         }, completion: { _ in
-            handleRoteteCompletion()
+            handleRotateCompletion()
         })
     }
     
@@ -937,36 +937,36 @@ extension CropView: CropViewProtocol {
         return newTransform
     }
     
-    func getTransformInfo(byNormalizedInfo normailizedInfo: CGRect) -> Transformation {
+    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
         let cropFrame = viewModel.cropBoxFrame
         
-        let scale: CGFloat = min(1/normailizedInfo.width, 1/normailizedInfo.height)
+        let scale: CGFloat = min(1/normalizedInfo.width, 1/normalizedInfo.height)
         
         var offset = cropFrame.origin
-        offset.x = cropFrame.width * normailizedInfo.origin.x * scale
-        offset.y = cropFrame.height * normailizedInfo.origin.y * scale
+        offset.x = cropFrame.width * normalizedInfo.origin.x * scale
+        offset.y = cropFrame.height * normalizedInfo.origin.y * scale
         
         var maskFrame = cropFrame
         
-        if normailizedInfo.width > normailizedInfo.height {
-            let adjustScale = 1 / normailizedInfo.width
-            maskFrame.size.height = normailizedInfo.height * cropFrame.height * adjustScale
+        if normalizedInfo.width > normalizedInfo.height {
+            let adjustScale = 1 / normalizedInfo.width
+            maskFrame.size.height = normalizedInfo.height * cropFrame.height * adjustScale
             maskFrame.origin.y += (cropFrame.height - maskFrame.height) / 2
-        } else if normailizedInfo.width < normailizedInfo.height {
-            let adjustScale = 1 / normailizedInfo.height
-            maskFrame.size.width = normailizedInfo.width * cropFrame.width * adjustScale
+        } else if normalizedInfo.width < normalizedInfo.height {
+            let adjustScale = 1 / normalizedInfo.height
+            maskFrame.size.width = normalizedInfo.width * cropFrame.width * adjustScale
             maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2
         }
         
         let manualZoomed = (scale != 1.0)
-        let transformantion = Transformation(offset: offset,
+        let transformation = Transformation(offset: offset,
                                              rotation: 0,
                                              scale: scale,
                                              manualZoomed: manualZoomed,
-                                             intialMaskFrame: .zero,
+                                             initialMaskFrame: .zero,
                                              maskFrame: maskFrame,
                                              cropWorkbenchViewBounds: .zero)
-        return transformantion
+        return transformation
     }
     
     func processPresetTransformation(completion: (Transformation) -> Void) {
@@ -979,12 +979,12 @@ extension CropView: CropViewProtocol {
             
             // The second transform is for adjusting the scale of transformInfo
             let adjustScale = (viewModel.cropBoxFrame.width / viewModel.cropBoxOriginFrame.width)
-            / (transformInfo.maskFrame.width / transformInfo.intialMaskFrame.width)
+            / (transformInfo.maskFrame.width / transformInfo.initialMaskFrame.width)
             newTransform.scale *= adjustScale
             transform(byTransformInfo: newTransform)
             completion(transformInfo)
-        case .presetNormalizedInfo(let normailizedInfo):
-            let transformInfo = getTransformInfo(byNormalizedInfo: normailizedInfo)
+        case .presetNormalizedInfo(let normalizedInfo):
+            let transformInfo = getTransformInfo(byNormalizedInfo: normalizedInfo)
             transform(byTransformInfo: transformInfo)
             cropWorkbenchView.frame = transformInfo.maskFrame
             completion(transformInfo)

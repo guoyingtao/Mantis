@@ -31,20 +31,20 @@ final class CropAuxiliaryIndicatorViewTests: XCTestCase {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
         container.addSubview(cropAuxiliaryIndicatorView)
         
-        for subivew in cropAuxiliaryIndicatorView.subviews {
-            XCTAssertEqual(subivew.frame, .zero)
+        for subview in cropAuxiliaryIndicatorView.subviews {
+            XCTAssertEqual(subview.frame, .zero)
         }
         
         cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), cropBoxHotAreaUnit: 42)
         
-        for subivew in cropAuxiliaryIndicatorView.subviews {
-            XCTAssertEqual(subivew.frame, .zero)
+        for subview in cropAuxiliaryIndicatorView.subviews {
+            XCTAssertEqual(subview.frame, .zero)
         }
         
         container.addSubview(cropAuxiliaryIndicatorView)
         
-        for subivew in cropAuxiliaryIndicatorView.subviews {
-            XCTAssertNotEqual(subivew.frame, .zero)
+        for subview in cropAuxiliaryIndicatorView.subviews {
+            XCTAssertNotEqual(subview.frame, .zero)
         }
     }
     
