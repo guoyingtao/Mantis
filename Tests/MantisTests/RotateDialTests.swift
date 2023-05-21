@@ -30,7 +30,7 @@ final class RotateDialTests: XCTestCase {
                             dialConfig: dialConfig,
                             viewModel: viewModel,
                             dialPlate: dialPlate)
-        dial.setup(with: .zero)
+        dial.setupUI(with: .zero)
     }
     
     func testRotateDialPlate() {
@@ -41,7 +41,7 @@ final class RotateDialTests: XCTestCase {
         
         var dialPlateTransform = dialPlate.transform
         var angle = Angle(degrees: 40)
-        XCTAssertTrue(dial.rotateDialPlate(by: angle))
+        XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         
         // Test invalid plus rotation with limitation
@@ -50,7 +50,7 @@ final class RotateDialTests: XCTestCase {
         
         dialPlateTransform = dialPlate.transform
         angle = Angle(degrees: 50)
-        XCTAssertFalse(dial.rotateDialPlate(by: angle))
+        XCTAssertFalse(dial.updateRotationValue(by: angle))
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: 45).radians))
         
@@ -60,7 +60,7 @@ final class RotateDialTests: XCTestCase {
         
         dialPlateTransform = dialPlate.transform
         angle = Angle(degrees: -40)
-        XCTAssertTrue(dial.rotateDialPlate(by: angle))
+        XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         
         // Test invalid minus rotation with limitation
@@ -69,7 +69,7 @@ final class RotateDialTests: XCTestCase {
         
         dialPlateTransform = dialPlate.transform
         angle = Angle(degrees: -50)
-        XCTAssertFalse(dial.rotateDialPlate(by: angle))
+        XCTAssertFalse(dial.updateRotationValue(by: angle))
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: -45).radians))
         
@@ -80,7 +80,7 @@ final class RotateDialTests: XCTestCase {
         
         dialPlateTransform = dialPlate.transform
         angle = Angle(degrees: 70)
-        XCTAssertTrue(dial.rotateDialPlate(by: angle))
+        XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
     }
 }

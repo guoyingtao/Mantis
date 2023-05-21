@@ -29,8 +29,8 @@ final class RotationDial: UIView {
     var spanBetweenDialPlateAndPointer: CGFloat = 6
     var pointerWidth: CGFloat = 8 * sqrt(2)
     
-    var didRotate: (_ angle: Angle) -> Void = { _ in }
-    var didFinishedRotate: () -> Void = { }
+    var beingRotated: (_ realtimeAngle: Angle) -> Void = { _ in }
+    var didFinishRotation: () -> Void = { }
     
     var viewModel: RotationDialViewModelProtocol
     
@@ -106,9 +106,9 @@ extension RotationDial {
             }
         }
         
-        if rotateDialPlate(by: angle) {
+        if updateRotationValue(by: angle) {
             let newAngle = getRotationAngle()
-            didRotate(newAngle)
+            beingRotated(newAngle)
         }
     }
     
@@ -202,7 +202,7 @@ extension RotationDial {
 }
 
 extension RotationDial: RotationDialProtocol {
-    func setup(with frame: CGRect) {
+    func setupUI(with frame: CGRect) {
         self.frame = frame
         
         if case .limit(let degreeAngle) = dialConfig.rotationLimitType {
@@ -214,12 +214,12 @@ extension RotationDial: RotationDialProtocol {
     }
     
     @discardableResult
-    func rotateDialPlate(by angle: Angle) -> Bool {
+    func updateRotationValue(by angle: Angle) -> Bool {
         guard let dialPlate = dialPlate else { return false }
         
         let radians = angle.radians
         if case .limit = dialConfig.rotationLimitType {
-            if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) >= angleLimit.radians {
+            if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
                 
                 if radians > 0 {
                     rotateDialPlate(to: angleLimit)

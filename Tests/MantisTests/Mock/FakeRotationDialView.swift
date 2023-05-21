@@ -15,15 +15,15 @@ class FakeRotationDialView: UIView, RotationDialProtocol {
     
     var pointerWidth: CGFloat = 0
     
-    var didRotate: (Angle) -> Void = { _ in }
+    var beingRotated: (Angle) -> Void = { _ in }
     
-    var didFinishedRotate: () -> Void = { }
+    var didFinishRotation: () -> Void = { }
     
-    func setup(with frame: CGRect) {
+    func setupUI(with frame: CGRect) {
         
     }
     
-    func rotateDialPlate(by angle: Angle) -> Bool {
+    func updateRotationValue(by angle: Angle) -> Bool {
         false
     }
     

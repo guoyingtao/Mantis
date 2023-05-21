@@ -39,7 +39,7 @@ extension RotationDial {
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        didFinishedRotate()
+        didFinishRotation()
         viewModel.touchPoint = nil
     }
     

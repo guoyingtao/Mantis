@@ -50,6 +50,8 @@ public struct CropViewConfig {
     
     public var cropActivityIndicatorSize = CGSize(width: 100, height: 100)
     
+    public var rotationControlViewHeight: CGFloat = 60
+    
     var minimumCropBoxSize: CGFloat = 42
 
     public var disableCropBoxDeformation = false
