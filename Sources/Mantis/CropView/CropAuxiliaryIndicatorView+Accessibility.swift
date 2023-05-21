@@ -20,14 +20,14 @@ extension CropAuxiliaryIndicatorView {
         }
 
         accessibilityHelperViews.removeAll()
-        for i in 0..<8 {
+        for index in 0..<8 {
             let helperView = UIView(frame: .zero)
             helperView.isAccessibilityElement = true
             
             addSubview(helperView)
             accessibilityHelperViews.append(helperView)
             
-            guard let handleType = CropViewAuxiliaryIndicatorHandleType(rawValue: i + 1) else {
+            guard let handleType = CropViewAuxiliaryIndicatorHandleType(rawValue: index + 1) else {
                 continue
             }
             

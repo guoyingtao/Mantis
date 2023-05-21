@@ -85,11 +85,14 @@ private(set) var bundle: Bundle? = {
 }()
 
 private func buildCropView(with image: UIImage, and cropViewConfig: CropViewConfig) -> CropViewProtocol {
+    let cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: .zero,
+                                                                cropBoxHotAreaUnit: cropViewConfig.cropBoxHotAreaUnit,
+                                                                disableCropBoxDeformation: cropViewConfig.disableCropBoxDeformation)
     let imageContainer = ImageContainer(image: image)
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
                             viewModel: buildCropViewModel(with: cropViewConfig),
-                            cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorView(frame: .zero, cropBoxHotAreaUnit: cropViewConfig.cropBoxHotAreaUnit, disableCropBoxDeformation: cropViewConfig.disableCropBoxDeformation),
+                            cropAuxiliaryIndicatorView: cropAuxiliaryIndicatorView,
                             imageContainer: imageContainer,
                             cropWorkbenchView: buildCropWorkbenchView(with: cropViewConfig, and: imageContainer),
                             cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
