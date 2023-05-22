@@ -249,21 +249,21 @@ class CropView: UIView {
                                width: boardLength,
                                height: cropViewConfig.rotationControlViewHeight)
         rotationDial.isUserInteractionEnabled = true
-        
-        rotationDial.setupUI(with: dialFrame)
-        
-        if let rotationDial = rotationDial as? RotationDialProtocol {
-            rotationDial.setRotationCenter(by: cropAuxiliaryIndicatorView.center, of: self)
-        }
-        
-        rotationDial.beingRotated = { [unowned self] realtimeAngle in
-            self.viewModel.setRotatingStatus(by: realtimeAngle)
+
+        rotationDial.didUpdateRotationValue = { [unowned self] angle in
+            self.viewModel.setRotatingStatus(by: angle)
         }
         
         rotationDial.didFinishRotation = { [unowned self] in
             self.viewModel.setBetweenOperationStatus()
         }
+
+        rotationDial.setupUI(withAllowableFrame: dialFrame)
         
+        if let rotationDial = rotationDial as? RotationDialProtocol {
+            rotationDial.setRotationCenter(by: cropAuxiliaryIndicatorView.center, of: self)
+        }
+                
         rotationDial.updateRotationValue(by: Angle(radians: viewModel.radians))
         rotationDial.bringSelfToFront()
                 

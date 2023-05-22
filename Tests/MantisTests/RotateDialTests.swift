@@ -30,7 +30,7 @@ final class RotateDialTests: XCTestCase {
                             dialConfig: dialConfig,
                             viewModel: viewModel,
                             dialPlate: dialPlate)
-        dial.setupUI(with: .zero)
+        dial.setupUI(withAllowableFrame: .zero)
     }
     
     func testRotateDialPlate() {
