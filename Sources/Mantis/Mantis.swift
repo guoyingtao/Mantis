@@ -108,7 +108,7 @@ private func buildCropView(withImage image: UIImage,
                             cropWorkbenchView: buildCropWorkbenchView(with: cropViewConfig, and: imageContainer),
                             cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
     
-    setupRotationDialIfNeeded(withConfig: cropViewConfig, cropView: cropView, rotationControlView: rotationControlView)
+    setupRotationControlViewIfNeeded(withConfig: cropViewConfig, cropView: cropView, rotationControlView: rotationControlView)
     return cropView
 }
 
@@ -133,16 +133,16 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
 }
 
-private func setupRotationDialIfNeeded(withConfig cropViewConfig: CropViewConfig, cropView: CropView, rotationControlView: RotationControlViewProtocol?) {
+private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig, cropView: CropView, rotationControlView: RotationControlViewProtocol?) {
     if cropViewConfig.showRotationControlView {
-        let viewModel = RotationDialViewModel()
-        let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.dialConfig)
-        
         if let rotationControlView = rotationControlView {
             cropView.rotationControlView = rotationControlView
         } else {
+            let viewModel = RotationDialViewModel()
+            let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.rotationControlViewConfig)
+
             cropView.rotationControlView = RotationDial(frame: .zero,
-                                                        dialConfig: cropViewConfig.dialConfig,
+                                                        dialConfig: cropViewConfig.rotationControlViewConfig,
                                                         viewModel: viewModel,
                                                         dialPlate: dialPlate)
         }

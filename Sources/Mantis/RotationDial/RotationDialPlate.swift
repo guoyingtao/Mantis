@@ -52,9 +52,9 @@ class RotationDialPlate: UIView {
         return layer
     }()
     
-    private var dialConfig: DialConfig!
+    private var dialConfig: RotationControlViewConfig!
     
-    init(frame: CGRect, dialConfig: DialConfig) {
+    init(frame: CGRect, dialConfig: RotationControlViewConfig) {
         super.init(frame: frame)
         self.dialConfig = dialConfig
     }

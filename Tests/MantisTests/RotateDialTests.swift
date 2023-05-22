@@ -15,7 +15,7 @@ final class RotateDialTests: XCTestCase {
     var viewModel: RotationDialViewModel!
 
     override func setUpWithError() throws {
-        let dialConfig = Config().cropViewConfig.dialConfig
+        let dialConfig = Config().cropViewConfig.rotationControlViewConfig
         setup(with: dialConfig)
     }
 
@@ -23,7 +23,7 @@ final class RotateDialTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    private func setup(with dialConfig: DialConfig) {
+    private func setup(with dialConfig: RotationControlViewConfig) {
         viewModel = RotationDialViewModel()
         dialPlate = RotationDialPlate(frame: .zero, dialConfig: dialConfig)
         dial = RotationDial(frame: .zero,
@@ -35,7 +35,7 @@ final class RotateDialTests: XCTestCase {
     
     func testRotateDialPlate() {
         // Test valid plus rotation with limitation
-        var dialConfig = Config().cropViewConfig.dialConfig
+        var dialConfig = Config().cropViewConfig.rotationControlViewConfig
         dialConfig.rotationLimitType = .limit(degreeAngle: 45)
         setup(with: dialConfig)
         
@@ -74,7 +74,7 @@ final class RotateDialTests: XCTestCase {
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: -45).radians))
         
         // Test no limit
-        dialConfig = Config().cropViewConfig.dialConfig
+        dialConfig = Config().cropViewConfig.rotationControlViewConfig
         dialConfig.rotationLimitType = .noLimit
         setup(with: dialConfig)
         

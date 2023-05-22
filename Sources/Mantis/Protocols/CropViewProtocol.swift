@@ -30,7 +30,7 @@ protocol CropViewProtocol: UIView {
     func handleAlterCropper90Degree()
     func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation)
     
-    func transform(byTransformInfo transformation: Transformation, rotateDial: Bool)
+    func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool)
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation
     func processPresetTransformation(completion: (Transformation) -> Void)

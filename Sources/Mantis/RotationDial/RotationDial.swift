@@ -34,7 +34,7 @@ final class RotationDial: UIView {
     
     var viewModel: RotationDialViewModelProtocol
     
-    private var dialConfig: DialConfig
+    private var dialConfig: RotationControlViewConfig
     
     private var angleLimit = Angle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
@@ -42,7 +42,10 @@ final class RotationDial: UIView {
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
     
-    init(frame: CGRect, dialConfig: DialConfig, viewModel: RotationDialViewModelProtocol, dialPlate: RotationDialPlate) {
+    init(frame: CGRect,
+         dialConfig: RotationControlViewConfig,
+         viewModel: RotationDialViewModelProtocol,
+         dialPlate: RotationDialPlate) {
         self.dialConfig = dialConfig
         self.viewModel = viewModel
         self.dialPlate = dialPlate
@@ -112,7 +115,7 @@ extension RotationDial {
         }
     }
     
-    private func getDialPlateHolder(by orientation: DialConfig.Orientation) -> UIView {
+    private func getDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) -> UIView {
         let view = UIView(frame: bounds)
         
         switch orientation {
@@ -125,7 +128,7 @@ extension RotationDial {
         return view
     }
     
-    private func setDialPlateHolder(by orientation: DialConfig.Orientation) {
+    private func setDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) {
         switch orientation {
         case .normal:
             ()

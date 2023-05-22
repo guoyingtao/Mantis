@@ -164,7 +164,7 @@ class CropView: UIView {
         case .betweenOperation:
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
             rotationControlView?.isHidden = false
-            adaptAngleDashboardToCropBox()
+            adaptRotationControlViewToCropBox()
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
         }
@@ -267,10 +267,10 @@ class CropView: UIView {
         rotationDial.updateRotationValue(by: Angle(radians: viewModel.radians))
         rotationDial.bringSelfToFront()
                 
-        adaptAngleDashboardToCropBox()
+        adaptRotationControlViewToCropBox()
     }
     
-    private func adaptAngleDashboardToCropBox() {
+    private func adaptRotationControlViewToCropBox() {
         guard let rotationDial = rotationControlView else { return }
         
         if Orientation.treatAsPortrait {
@@ -702,7 +702,7 @@ extension CropView {
             self.viewModel.setBetweenOperationStatus()
         }
         
-        adaptAngleDashboardToCropBox()
+        adaptRotationControlViewToCropBox()
         cropWorkbenchView.updateMinZoomScale()
     }
     
@@ -875,7 +875,7 @@ extension CropView: CropViewProtocol {
         }
     }
     
-    func transform(byTransformInfo transformation: Transformation, rotateDial: Bool = true) {
+    func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {
         viewModel.setRotatingStatus(by: Angle(radians: transformation.rotation))
         
         if transformation.cropWorkbenchViewBounds != .zero {
@@ -891,9 +891,9 @@ extension CropView: CropViewProtocol {
             viewModel.cropBoxFrame = transformation.maskFrame
         }
         
-        if rotateDial {
+        if isUpdateRotationControlView {
             rotationControlView?.updateRotationValue(by: Angle(radians: viewModel.radians))
-            adaptAngleDashboardToCropBox()
+            adaptRotationControlViewToCropBox()
         }
     }
     
@@ -970,7 +970,7 @@ extension CropView: CropViewProtocol {
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
             // The first transform is just for retrieving the final cropBoxFrame
-            transform(byTransformInfo: newTransform, rotateDial: false)
+            transform(byTransformInfo: newTransform, isUpdateRotationControlView: false)
             
             // The second transform is for adjusting the scale of transformInfo
             let adjustScale = (viewModel.cropBoxFrame.width / viewModel.cropBoxOriginFrame.width)
