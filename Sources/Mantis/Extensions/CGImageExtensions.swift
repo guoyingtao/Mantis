@@ -38,7 +38,7 @@ extension CGImage {
                 case (16, 5):
                     return CGImageAlphaInfo.noneSkipFirst.rawValue
                 case (24, 8), (48, 16):
-                    return CGImageAlphaInfo.none.rawValue
+                    return CGImageAlphaInfo.noneSkipLast.rawValue
                 case (32, 8), (64, 16):
                     return CGImageAlphaInfo.premultipliedLast.rawValue
                 case (32, 10):
