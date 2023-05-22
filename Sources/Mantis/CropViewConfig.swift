@@ -38,7 +38,14 @@ public struct CropViewConfig {
      */
     public var dialConfig = DialConfig()
     
-    public var showRotationDial = true
+    @available(*, deprecated, message: "Use showRotationControlView instead")
+    public var showRotationDial = true {
+        didSet {
+            showRotationControlView = showRotationDial
+        }
+    }
+    
+    public var showRotationControlView = true
     
     public var padding: CGFloat = 14 {
         didSet {
