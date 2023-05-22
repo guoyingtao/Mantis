@@ -58,7 +58,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
 
         var config = Mantis.Config()
         config.cropMode = .async
-        config.cropViewConfig.showRotationControlView = false
+        config.cropViewConfig.showAttachedRotationControlView = false
         config.showAttachedCropToolbar = false
         let cropViewController: CustomViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.delegate = self
@@ -101,7 +101,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
-        config.cropViewConfig.showRotationControlView = false
+        config.cropViewConfig.showAttachedRotationControlView = false
         config.cropViewConfig.minimumZoomScale = 2.0
         config.cropViewConfig.maximumZoomScale = 10.0
         
