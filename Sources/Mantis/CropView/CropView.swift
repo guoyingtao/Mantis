@@ -52,7 +52,9 @@ class CropView: UIView {
     
     var rotationControlView: RotationControlViewProtocol? {
         didSet {
-            addSubview(rotationControlView!)
+            if rotationControlView?.isAttachedToCropView == true {
+                addSubview(rotationControlView!)
+            }
         }
     }
     
@@ -237,35 +239,37 @@ class CropView: UIView {
     }
     
     private func setupRotationDial() {
-        guard cropViewConfig.showRotationControlView, let rotationDial = rotationControlView else {
+        guard cropViewConfig.showRotationControlView, let rotationControlView = rotationControlView else {
             return
         }
         
-        rotationDial.reset()
+        rotationControlView.reset()
         
         let boardLength = min(bounds.width, bounds.height) * 0.6
         let dialFrame = CGRect(x: 0,
                                y: 0,
                                width: boardLength,
                                height: cropViewConfig.rotationControlViewHeight)
-        rotationDial.isUserInteractionEnabled = true
+        rotationControlView.isUserInteractionEnabled = true
 
-        rotationDial.didUpdateRotationValue = { [unowned self] angle in
+        rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setRotatingStatus(by: angle)
         }
         
-        rotationDial.didFinishRotation = { [unowned self] in
+        rotationControlView.didFinishRotation = { [unowned self] in
             self.viewModel.setBetweenOperationStatus()
         }
 
-        rotationDial.setupUI(withAllowableFrame: dialFrame)
+        if rotationControlView.isAttachedToCropView {
+            rotationControlView.setupUI(withAllowableFrame: dialFrame)
+        }
         
-        if let rotationDial = rotationDial as? RotationDialProtocol {
+        if let rotationDial = rotationControlView as? RotationDialProtocol {
             rotationDial.setRotationCenter(by: cropAuxiliaryIndicatorView.center, of: self)
         }
                 
-        rotationDial.updateRotationValue(by: Angle(radians: viewModel.radians))
-        rotationDial.bringSelfToFront()
+        rotationControlView.updateRotationValue(by: Angle(radians: viewModel.radians))
+        rotationControlView.bringSelfToFront()
                 
         adaptRotationControlViewToCropBox()
     }

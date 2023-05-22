@@ -25,6 +25,8 @@ import UIKit
 
 @IBDesignable
 final class RotationDial: UIView {
+    var isAttachedToCropView = true
+    
     var pointerHeight: CGFloat = 8
     var spanBetweenDialPlateAndPointer: CGFloat = 6
     var pointerWidth: CGFloat = 8 * sqrt(2)

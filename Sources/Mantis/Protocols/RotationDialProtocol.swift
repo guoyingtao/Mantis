@@ -9,6 +9,12 @@ import UIKit
 
 public protocol RotationControlViewProtocol: UIView {
     /**
+     Set it to true if you want CropView to control the frame of your own rotation control view.
+     Otherwise set it to false
+     */
+    var isAttachedToCropView: Bool { get set }
+    
+    /**
      It should be called every time updating the roation value by your own rotaion control view
      */
     var didUpdateRotationValue: (_ angle: Angle) -> Void { get set }
@@ -19,7 +25,7 @@ public protocol RotationControlViewProtocol: UIView {
     var didFinishRotation: () -> Void { get set }
     
     /**
-     The allowableFrame is set by its container view
+     The allowableFrame is set by CropView. No need to implement it if isAttachedToCropView is false
      */
     func setupUI(withAllowableFrame allowableFrame: CGRect)
     
@@ -33,6 +39,10 @@ public protocol RotationControlViewProtocol: UIView {
      Reset rotation control view to initial status
      */
     func reset()
+}
+
+extension RotationControlViewProtocol {
+    func setupUI(withAllowableFrame allowableFrame: CGRect) {}    
 }
 
 protocol RotationDialProtocol: RotationControlViewProtocol {
