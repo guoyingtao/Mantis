@@ -41,10 +41,10 @@ final class CropViewTests: XCTestCase {
     }
     
     func testGetRatioType() {
-        XCTAssertEqual(cropView.getRatioType(byImageIsOriginalisHorizontal: true), cropViewModel.getRatioType(byImageIsOriginalHorizontal: true))
-        XCTAssertEqual(cropView.getRatioType(byImageIsOriginalisHorizontal: false), cropViewModel.getRatioType(byImageIsOriginalHorizontal: false))
-        XCTAssertNotEqual(cropView.getRatioType(byImageIsOriginalisHorizontal: true), cropViewModel.getRatioType(byImageIsOriginalHorizontal: false))
-        XCTAssertNotEqual(cropView.getRatioType(byImageIsOriginalisHorizontal: false), cropViewModel.getRatioType(byImageIsOriginalHorizontal: true))
+        XCTAssertEqual(cropView.getRatioType(byImageIsOriginalHorizontal: true), cropViewModel.getRatioType(byImageIsOriginalHorizontal: true))
+        XCTAssertEqual(cropView.getRatioType(byImageIsOriginalHorizontal: false), cropViewModel.getRatioType(byImageIsOriginalHorizontal: false))
+        XCTAssertNotEqual(cropView.getRatioType(byImageIsOriginalHorizontal: true), cropViewModel.getRatioType(byImageIsOriginalHorizontal: false))
+        XCTAssertNotEqual(cropView.getRatioType(byImageIsOriginalHorizontal: false), cropViewModel.getRatioType(byImageIsOriginalHorizontal: true))
     }
     
     private func testGetImageHorizontalToVerticalRatioWithUpDownAndMirror(testImage: UIImage) {

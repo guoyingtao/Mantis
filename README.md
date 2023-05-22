@@ -54,7 +54,7 @@ github "guoyingtao/Mantis"
 <details>
  <summary><strong>Swift Packages</strong></summary>
 
-* Respository: https://github.com/guoyingtao/Mantis.git
+* Repository: https://github.com/guoyingtao/Mantis.git
 * Rules: Version - Exact - 2.9.1
 
 </details>
@@ -80,7 +80,7 @@ public protocol CropViewControllerDelegate: class {
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
     
-    // The implementaion of the following functions are optional
+    // The implementation of the following functions are optional
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)     
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)    
@@ -188,10 +188,10 @@ public enum CropShapeType {
 public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
-    case presetNormalizedInfo(normailizedInfo: CGRect)
+    case presetNormalizedInfo(normalizedInfo: CGRect)
 }
 ```
-Please use the transformation infomation obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, , cropInfo: CropInfo).
+Please use the transformation information obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, , cropInfo: CropInfo).
 
 </details>
                 
@@ -199,7 +199,7 @@ Please use the transformation infomation obtained previously from delegate metho
     <summary><strong>Localization</strong></summary>
     
 * UIKit project    
-    Add more languages support to the Localizaions section for Project Info tab 
+    Add more languages support to the Localizations section for Project Info tab 
     
 <p align="center">
     <img src="https://user-images.githubusercontent.com/26723384/128650945-5a1da648-7e7d-4faf-9c95-232725b05dcc.png" height="200" alt="Mantis" />
@@ -236,7 +236,7 @@ Then you'll need to configure Mantis:
 ```
 let config = Mantis.Config()
 config.localizationConfig.bundle = // a bundle where strings file is located
-config.localizationConfig.tableName = // a localizaed strings file name within the bundle
+config.localizationConfig.tableName = // a localized strings file name within the bundle
 ```
   
 </details>

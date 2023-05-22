@@ -115,13 +115,13 @@ extension ToolBarButtonImageBuilder {
         rightarrowPath.fill()
         
         let mirrorWidth = wholeWidth / 2 - 1
-        let mirrowHeight = wholeHeight - 8
+        let mirrorHeight = wholeHeight - 8
         
         // left mirror
         let leftMirror = UIBezierPath()
         leftMirror.move(to: CGPoint(x: 0, y: wholeHeight))
         leftMirror.addLine(to: CGPoint(x: mirrorWidth, y: wholeHeight))
-        leftMirror.addLine(to: CGPoint(x: mirrorWidth, y: wholeHeight - mirrowHeight))
+        leftMirror.addLine(to: CGPoint(x: mirrorWidth, y: wholeHeight - mirrorHeight))
         leftMirror.addLine(to: CGPoint(x: 0, y: wholeHeight))
         leftMirror.close()
         UIColor.white.setFill()
@@ -131,7 +131,7 @@ extension ToolBarButtonImageBuilder {
         let rightMirror = UIBezierPath()
         rightMirror.move(to: CGPoint(x: wholeWidth, y: wholeHeight))
         rightMirror.addLine(to: CGPoint(x: wholeWidth - mirrorWidth, y: wholeHeight))
-        rightMirror.addLine(to: CGPoint(x: wholeWidth - mirrorWidth, y: wholeHeight - mirrowHeight))
+        rightMirror.addLine(to: CGPoint(x: wholeWidth - mirrorWidth, y: wholeHeight - mirrorHeight))
         rightMirror.addLine(to: CGPoint(x: wholeWidth, y: wholeHeight))
         rightMirror.close()
         UIColor.white.setFill()
@@ -152,9 +152,9 @@ extension ToolBarButtonImageBuilder {
         context?.rotate(by: -.pi / 2)
         context?.translateBy(x: -flippedHorizontallyImage.size.height, y: 0)
         context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: flippedHorizontallyImage.size.height, height: flippedHorizontallyImage.size.width))
-        let fippedVerticallyImage: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
+        let flippedVerticallyImage: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return fippedVerticallyImage
+        return flippedVerticallyImage
     }
     
     static func drawClampImage() -> UIImage? {

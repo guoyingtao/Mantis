@@ -20,7 +20,7 @@ protocol CropViewProtocol: UIView {
     
     func initialSetup(delegate: CropViewDelegate, presetFixedRatioType: PresetFixedRatioType)
     func setViewDefaultProperties()
-    func getRatioType(byImageIsOriginalisHorizontal isHorizontal: Bool) -> RatioType
+    func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType
     func getImageHorizontalToVerticalRatio() -> Double
     func resetComponents()
     func prepareForViewWillTransition()
@@ -32,7 +32,7 @@ protocol CropViewProtocol: UIView {
     
     func transform(byTransformInfo transformation: Transformation, rotateDial: Bool)
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation
-    func getTransformInfo(byNormalizedInfo normailizedInfo: CGRect) -> Transformation
+    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation
     func processPresetTransformation(completion: (Transformation) -> Void)
         
     func horizontallyFlip()

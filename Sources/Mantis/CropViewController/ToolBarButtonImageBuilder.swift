@@ -87,15 +87,15 @@ struct ToolBarButtonImageBuilder {
     
     static func verticallyFlipImage() -> UIImage? {
         if #available(macCatalyst 13.1, iOS 13.0, *) {
-            guard let horizontallyFippedImage = horizontallyFlipImage(),
-                  let cgImage = horizontallyFippedImage.cgImage else {
+            guard let horizontallyFlippedImage = horizontallyFlipImage(),
+                  let cgImage = horizontallyFlippedImage.cgImage else {
                 return nil
             }
             
-            let rotatedImage = UIImage(cgImage: cgImage, scale: horizontallyFippedImage.scale, orientation: .leftMirrored)
+            let rotatedImage = UIImage(cgImage: cgImage, scale: horizontallyFlippedImage.scale, orientation: .leftMirrored)
             
-            let newSize = CGSize(width: horizontallyFippedImage.size.height, height: horizontallyFippedImage.size.width)
-            UIGraphicsBeginImageContextWithOptions(newSize, false, horizontallyFippedImage.scale)
+            let newSize = CGSize(width: horizontallyFlippedImage.size.height, height: horizontallyFlippedImage.size.width)
+            UIGraphicsBeginImageContextWithOptions(newSize, false, horizontallyFlippedImage.scale)
             rotatedImage.draw(in: CGRect(origin: .zero, size: newSize))
             
             let newImage = UIGraphicsGetImageFromCurrentImageContext()
