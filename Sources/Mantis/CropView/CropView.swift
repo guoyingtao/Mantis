@@ -239,7 +239,7 @@ class CropView: UIView {
     }
     
     private func setupRotationDial() {
-        guard cropViewConfig.showRotationControlView, let rotationControlView = rotationControlView else {
+        guard cropViewConfig.showAttachedRotationControlView, let rotationControlView = rotationControlView else {
             return
         }
         

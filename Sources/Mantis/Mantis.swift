@@ -134,7 +134,7 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
 }
 
 private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig, cropView: CropView, rotationControlView: RotationControlViewProtocol?) {
-    if cropViewConfig.showRotationControlView {
+    if cropViewConfig.showAttachedRotationControlView {
         if let rotationControlView = rotationControlView {
             cropView.rotationControlView = rotationControlView
         } else {

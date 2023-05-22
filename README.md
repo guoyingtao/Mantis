@@ -145,7 +145,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
 
 When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
 
-* If you want to hide rotation control view, set Mantis.Config.cropViewConfig.showRotationControlView = false
+* If you want to hide rotation control view, set Mantis.Config.cropViewConfig.showAttachedRotationControlView = false
 * If you want to use ratio list instead of presenter, set Mantis.CropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
 
 ```swift
