@@ -78,7 +78,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                        rotation: 0.5929909348487854,
                                        scale: 2.841958076098717,
                                        manualZoomed: true,
-                                       intialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
+                                       initialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
                                        maskFrame: CGRect(x: 59.47694524495677, y: 14.0, width: 256.04610951008647, height: 617.0),
                                        cropWorkbenchViewBounds: CGRect(x: 231.66666666666666,
                                                                 y: 439.6666666666667,
