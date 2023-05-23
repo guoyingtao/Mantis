@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -146,7 +146,6 @@
                                                 <state key="normal" title="Dark Background"/>
                                                 <connections>
                                                     <action selector="darkBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="edW-tG-CJq"/>
-                                                    <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Chc-Ek-cMW"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FmB-6O-5mY">
@@ -156,16 +155,15 @@
                                                 <state key="normal" title="Light Background"/>
                                                 <connections>
                                                     <action selector="lightBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="K1m-Uc-kdy"/>
-                                                    <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tYd-3z-IQT"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iaH-5e-UFH">
                                                 <rect key="frame" x="207.5" y="0.0" width="98.5" height="29"/>
                                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                <state key="normal" title="No Background"/>
+                                                <state key="normal" title="Color Background"/>
                                                 <connections>
-                                                    <action selector="noBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7oq-dx-dxn"/>
+                                                    <action selector="customColorBackgroundEffect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2nA-kh-Ri9"/>
                                                 </connections>
                                             </button>
                                         </subviews>

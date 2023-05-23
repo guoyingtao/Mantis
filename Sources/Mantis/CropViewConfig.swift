@@ -20,6 +20,15 @@ public struct CropViewConfig {
     
     public var cropBorderColor: UIColor = .clear
     
+    /**
+     When backgroundColor is set, cropMaskVisualEffectType is automatically set to custom type
+     */
+    public var backgroundColor: UIColor? {
+        didSet {
+            cropMaskVisualEffectType = .custom(color: backgroundColor!)
+        }
+    }
+    
     public var cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark
     
     public var presetTransformationType: PresetTransformationType = .none

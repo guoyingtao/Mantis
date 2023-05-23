@@ -198,8 +198,19 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         presentWith(backgroundEffect: .light)
     }
     
-    @IBAction func noBackgroundEffect(_ sender: Any) {
-        presentWith(backgroundEffect: .none)
+    @IBAction func customColorBackgroundEffect(_ sender: Any) {
+        guard let image = image else {
+            return
+        }
+        
+        var config = Mantis.Config()
+        config.cropViewConfig.backgroundColor = .yellow
+        let cropViewController = Mantis.cropViewController(image: image,
+                                                           config: config)
+        cropViewController.modalPresentationStyle = .fullScreen
+        cropViewController.delegate = self
+        present(cropViewController, animated: true)
+
     }
     
     typealias CropShapeItem = (type: Mantis.CropShapeType, title: String)

@@ -14,6 +14,7 @@ private let initialFrameLength: CGFloat = 1000
 protocol CropMaskProtocol: UIView {
     var cropShapeType: CropShapeType { get set }
     var innerLayer: CALayer? { get set }
+    var overLayerFillColor: CGColor { get set }
     
     func initialize(cropRatio: CGFloat)
     func setMask(cropRatio: CGFloat)
@@ -123,7 +124,7 @@ extension CropMaskProtocol {
         let fillLayer = CAShapeLayer()
         fillLayer.path = path.cgPath
         fillLayer.fillRule = .evenOdd
-        fillLayer.fillColor = UIColor.black.cgColor
+        fillLayer.fillColor = overLayerFillColor
         fillLayer.opacity = opacity
         return fillLayer
     }

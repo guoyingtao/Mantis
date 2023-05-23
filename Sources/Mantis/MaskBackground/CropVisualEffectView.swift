@@ -9,6 +9,8 @@
 import UIKit
 
 class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
+    var overLayerFillColor: CGColor = UIColor.black.cgColor
+    
     var innerLayer: CALayer?
     
     var cropShapeType: CropShapeType = .rect
@@ -47,7 +49,9 @@ class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
             return (nil, UIColor.black.withAlphaComponent(0.75))
         case .light:
             return (nil, UIColor.black.withAlphaComponent(0.35))
-        case .none:
+        case .custom(let color):
+            return(nil, color)
+        case .default:
             return (nil, .black)
         }
     }
