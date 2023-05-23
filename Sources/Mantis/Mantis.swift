@@ -119,6 +119,12 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
     let dimmingView = CropDimmingView(cropShapeType: cropViewConfig.cropShapeType)
     let visualEffectView = CropMaskVisualEffectView(cropShapeType: cropViewConfig.cropShapeType,
                                                     effectType: cropViewConfig.cropMaskVisualEffectType)
+    
+    if let color = cropViewConfig.backgroundColor {
+        dimmingView.overLayerFillColor = color.cgColor
+        visualEffectView.overLayerFillColor = color.cgColor
+    }
+    
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
 }
 

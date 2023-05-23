@@ -106,6 +106,10 @@ class CropView: UIView {
         self.cropMaskViewManager = cropMaskViewManager
         
         super.init(frame: .zero)
+
+        if let color = cropViewConfig.backgroundColor {
+            self.backgroundColor = color
+        }
         
         viewModel.statusChanged = { [weak self] status in
             self?.render(by: status)

@@ -41,7 +41,8 @@ public enum CropMaskVisualEffectType {
     case blurDark
     case dark
     case light
-    case none
+    case custom(color: UIColor)
+    case `default`
 }
 
 public enum CropShapeType: Hashable {
