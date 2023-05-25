@@ -150,14 +150,14 @@ class CropView: UIView {
         case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             cropAuxiliaryIndicatorView.isHidden = true
-            rotationControlView?.isHidden = true
+            toggleRotationControlViewIsNeeded(isHidden: true)
         case .touchImage:
             cropMaskViewManager.showDimmingBackground(animated: true)
             cropAuxiliaryIndicatorView.gridLineNumberType = .crop
             cropAuxiliaryIndicatorView.gridHidden = false
         case .touchCropboxHandle(let tappedEdge):
             cropAuxiliaryIndicatorView.handleIndicatorHandleTouched(with: tappedEdge)
-            rotationControlView?.isHidden = true
+            toggleRotationControlViewIsNeeded(isHidden: true)
             cropMaskViewManager.showDimmingBackground(animated: true)
         case .touchRotationBoard:
             cropAuxiliaryIndicatorView.gridLineNumberType = .rotate
@@ -165,10 +165,16 @@ class CropView: UIView {
             cropMaskViewManager.showDimmingBackground(animated: true)
         case .betweenOperation:
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
-            rotationControlView?.isHidden = false
+            toggleRotationControlViewIsNeeded(isHidden: false)
             adaptRotationControlViewToCropBox()
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
+        }
+    }
+    
+    private func toggleRotationControlViewIsNeeded(isHidden: Bool) {
+        if rotationControlView?.isAttachedToCropView == true {
+            rotationControlView?.isHidden = isHidden
         }
     }
         
@@ -239,17 +245,13 @@ class CropView: UIView {
     }
     
     private func setupRotationDial() {
-        guard cropViewConfig.showAttachedRotationControlView, let rotationControlView = rotationControlView else {
+        guard cropViewConfig.showAttachedRotationControlView,
+                let rotationControlView = rotationControlView else {
             return
         }
         
         rotationControlView.reset()
         
-        let boardLength = min(bounds.width, bounds.height) * 0.6
-        let dialFrame = CGRect(x: 0,
-                               y: 0,
-                               width: boardLength,
-                               height: cropViewConfig.rotationControlViewHeight)
         rotationControlView.isUserInteractionEnabled = true
 
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
@@ -261,6 +263,12 @@ class CropView: UIView {
         }
 
         if rotationControlView.isAttachedToCropView {
+            let boardLength = min(bounds.width, bounds.height) * 0.6
+            let dialFrame = CGRect(x: 0,
+                                   y: 0,
+                                   width: boardLength,
+                                   height: cropViewConfig.rotationControlViewHeight)
+
             rotationControlView.setupUI(withAllowableFrame: dialFrame)
         }
         
@@ -275,23 +283,24 @@ class CropView: UIView {
     }
     
     private func adaptRotationControlViewToCropBox() {
-        guard let rotationDial = rotationControlView else { return }
+        guard let rotationControlView = rotationControlView,
+        rotationControlView.isAttachedToCropView else { return }
         
         if Orientation.treatAsPortrait {
-            rotationDial.transform = CGAffineTransform(rotationAngle: 0)
-            rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
-            (cropAuxiliaryIndicatorView.frame.width - rotationDial.frame.width) / 2
-            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
+            rotationControlView.transform = CGAffineTransform(rotationAngle: 0)
+            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
+            (cropAuxiliaryIndicatorView.frame.width - rotationControlView.frame.width) / 2
+            rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
         } else if Orientation.isLandscapeLeft {
-            rotationDial.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-            rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
-            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
-            (cropAuxiliaryIndicatorView.frame.height - rotationDial.frame.height) / 2
+            rotationControlView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
+            rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
+            (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         } else if Orientation.isLandscapeRight {
-            rotationDial.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            rotationDial.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationDial.frame.width
-            rotationDial.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
-            (cropAuxiliaryIndicatorView.frame.height - rotationDial.frame.height) / 2
+            rotationControlView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationControlView.frame.width
+            rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
+            (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         }
     }
     
@@ -412,21 +421,27 @@ extension CropView {
         let rect = self.bounds
         var contentRect = CGRect.zero
         
+        var rotationControlViewHeight: CGFloat = 0
+        
+        if cropViewConfig.showAttachedRotationControlView && rotationControlView?.isAttachedToCropView == true {
+            rotationControlViewHeight = cropViewConfig.rotationControlViewHeight
+        }
+        
         if Orientation.treatAsPortrait {
             contentRect.origin.x = rect.origin.x + cropViewPadding
             contentRect.origin.y = rect.origin.y + cropViewPadding
             
             contentRect.size.width = rect.width - 2 * cropViewPadding
-            contentRect.size.height = rect.height - 2 * cropViewPadding - cropViewConfig.rotationControlViewHeight
+            contentRect.size.height = rect.height - 2 * cropViewPadding - rotationControlViewHeight
         } else if Orientation.isLandscape {
-            contentRect.size.width = rect.width - 2 * cropViewPadding - cropViewConfig.rotationControlViewHeight
+            contentRect.size.width = rect.width - 2 * cropViewPadding - rotationControlViewHeight
             contentRect.size.height = rect.height - 2 * cropViewPadding
             
             contentRect.origin.y = rect.origin.y + cropViewPadding
             if Orientation.isLandscapeLeft {
                 contentRect.origin.x = rect.origin.x + cropViewPadding
             } else {
-                contentRect.origin.x = rect.origin.x + cropViewPadding + cropViewConfig.rotationControlViewHeight
+                contentRect.origin.x = rect.origin.x + cropViewPadding + rotationControlViewHeight
             }
         }
         
