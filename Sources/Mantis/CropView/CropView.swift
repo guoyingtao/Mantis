@@ -255,6 +255,7 @@ class CropView: UIView {
         rotationControlView.isUserInteractionEnabled = true
 
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
+            self.viewModel.setTouchRotationBoardStatus()
             self.viewModel.setRotatingStatus(by: angle)
         }
         

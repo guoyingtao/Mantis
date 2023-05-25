@@ -45,7 +45,6 @@ extension CropView {
         delegate?.cropViewDidBeginResize(self)
         
         if touch.view is RotationControlViewProtocol {
-            viewModel.setTouchRotationBoardStatus()
             return
         }
         
