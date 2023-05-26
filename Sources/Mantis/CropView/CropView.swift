@@ -214,7 +214,7 @@ class CropView: UIView {
         cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
         cropAuxiliaryIndicatorView.bringSelfToFront()
         
-        setupRotationDial()
+        setupRotationDialIfNeeded()
         
         if aspectRatioLockEnabled {
             setFixedRatioCropBox()
@@ -244,7 +244,7 @@ class CropView: UIView {
         addSubview(cropAuxiliaryIndicatorView)
     }
     
-    private func setupRotationDial() {
+    private func setupRotationDialIfNeeded() {
         guard let rotationControlView = rotationControlView else {
             return
         }
