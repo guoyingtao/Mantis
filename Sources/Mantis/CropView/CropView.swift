@@ -166,7 +166,7 @@ class CropView: UIView {
         case .betweenOperation:
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
             toggleRotationControlViewIsNeeded(isHidden: false)
-            adaptRotationControlViewToCropBox()
+            adaptRotationControlViewToCropBoxIfNeeded()
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
         }
@@ -245,13 +245,11 @@ class CropView: UIView {
     }
     
     private func setupRotationDial() {
-        guard cropViewConfig.showAttachedRotationControlView,
-                let rotationControlView = rotationControlView else {
+        guard let rotationControlView = rotationControlView else {
             return
         }
         
         rotationControlView.reset()
-        
         rotationControlView.isUserInteractionEnabled = true
 
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
@@ -278,12 +276,13 @@ class CropView: UIView {
         }
                 
         rotationControlView.updateRotationValue(by: Angle(radians: viewModel.radians))
+        viewModel.setBetweenOperationStatus()
+        
+        adaptRotationControlViewToCropBoxIfNeeded()
         rotationControlView.bringSelfToFront()
-                
-        adaptRotationControlViewToCropBox()
     }
     
-    private func adaptRotationControlViewToCropBox() {
+    private func adaptRotationControlViewToCropBoxIfNeeded() {
         guard let rotationControlView = rotationControlView,
         rotationControlView.isAttachedToCropView else { return }
         
@@ -722,7 +721,7 @@ extension CropView {
             self.viewModel.setBetweenOperationStatus()
         }
         
-        adaptRotationControlViewToCropBox()
+        adaptRotationControlViewToCropBoxIfNeeded()
         cropWorkbenchView.updateMinZoomScale()
     }
     
@@ -913,7 +912,7 @@ extension CropView: CropViewProtocol {
         
         if isUpdateRotationControlView {
             rotationControlView?.updateRotationValue(by: Angle(radians: viewModel.radians))
-            adaptRotationControlViewToCropBox()
+            adaptRotationControlViewToCropBoxIfNeeded()
         }
     }
     

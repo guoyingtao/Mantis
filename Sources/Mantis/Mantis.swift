@@ -133,9 +133,14 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
 }
 
-private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig, cropView: CropView, rotationControlView: RotationControlViewProtocol?) {
+private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig,
+                                              cropView: CropView,
+                                              rotationControlView: RotationControlViewProtocol?) {
     if let rotationControlView = rotationControlView {
-        cropView.rotationControlView = rotationControlView
+        if rotationControlView.isAttachedToCropView == false ||
+            rotationControlView.isAttachedToCropView && cropViewConfig.showAttachedRotationControlView {
+            cropView.rotationControlView = rotationControlView
+        }
     } else {
         if cropViewConfig.showAttachedRotationControlView {
             let viewModel = RotationDialViewModel()
