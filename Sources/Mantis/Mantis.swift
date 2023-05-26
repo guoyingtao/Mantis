@@ -134,13 +134,13 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
 }
 
 private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig, cropView: CropView, rotationControlView: RotationControlViewProtocol?) {
-    if cropViewConfig.showAttachedRotationControlView {
-        if let rotationControlView = rotationControlView {
-            cropView.rotationControlView = rotationControlView
-        } else {
+    if let rotationControlView = rotationControlView {
+        cropView.rotationControlView = rotationControlView
+    } else {
+        if cropViewConfig.showAttachedRotationControlView {
             let viewModel = RotationDialViewModel()
             let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.rotationControlViewConfig)
-
+            
             cropView.rotationControlView = RotationDial(frame: .zero,
                                                         dialConfig: cropViewConfig.rotationControlViewConfig,
                                                         viewModel: viewModel,
