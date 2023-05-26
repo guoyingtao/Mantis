@@ -27,18 +27,24 @@ import UIKit
 // MARK: - APIs
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
-                               cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)) -> Mantis.CropViewController {
+                               cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
+                               rotationControlView: RotationControlViewProtocol? = nil) -> Mantis.CropViewController {
     let cropViewController = CropViewController(config: config)
-    cropViewController.cropView = buildCropView(with: image, and: config.cropViewConfig)
+    cropViewController.cropView = buildCropView(withImage: image,
+                                                config: config.cropViewConfig,
+                                                rotationControlView: rotationControlView)
     cropViewController.cropToolbar = cropToolbar
     return cropViewController
 }
 
 public func cropViewController<T: CropViewController>(image: UIImage,
                                                       config: Mantis.Config = Mantis.Config(),
-                                                      cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)) -> T {
+                                                      cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
+                                                      rotationControlView: RotationControlViewProtocol? = nil) -> T {
     let cropViewController = T(config: config)
-    cropViewController.cropView = buildCropView(with: image, and: config.cropViewConfig)
+    cropViewController.cropView = buildCropView(withImage: image,
+                                                config: config.cropViewConfig,
+                                                rotationControlView: rotationControlView)
     cropViewController.cropToolbar = cropToolbar
     return cropViewController
 }
@@ -46,9 +52,12 @@ public func cropViewController<T: CropViewController>(image: UIImage,
 public func setupCropViewController(_ cropViewController: Mantis.CropViewController,
                                     with image: UIImage,
                                     and config: Mantis.Config = Mantis.Config(),
-                                    cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero)) {
+                                    cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
+                                    rotationControlView: RotationControlViewProtocol? = nil) {
     cropViewController.config = config
-    cropViewController.cropView = buildCropView(with: image, and: config.cropViewConfig)
+    cropViewController.cropView = buildCropView(withImage: image,
+                                                config: config.cropViewConfig,
+                                                rotationControlView: rotationControlView)
     cropViewController.cropToolbar = cropToolbar
 }
 
@@ -84,7 +93,9 @@ private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
 }()
 
-private func buildCropView(with image: UIImage, and cropViewConfig: CropViewConfig) -> CropViewProtocol {
+private func buildCropView(withImage image: UIImage,
+                           config cropViewConfig: CropViewConfig,
+                           rotationControlView: RotationControlViewProtocol?) -> CropViewProtocol {
     let cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: .zero,
                                                                 cropBoxHotAreaUnit: cropViewConfig.cropBoxHotAreaUnit,
                                                                 disableCropBoxDeformation: cropViewConfig.disableCropBoxDeformation)
@@ -97,7 +108,7 @@ private func buildCropView(with image: UIImage, and cropViewConfig: CropViewConf
                             cropWorkbenchView: buildCropWorkbenchView(with: cropViewConfig, and: imageContainer),
                             cropMaskViewManager: buildCropMaskViewManager(with: cropViewConfig))
     
-    setupRotationDialIfNeeded(with: cropViewConfig, and: cropView)
+    setupRotationControlViewIfNeeded(withConfig: cropViewConfig, cropView: cropView, rotationControlView: rotationControlView)
     return cropView
 }
 
@@ -128,13 +139,23 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
 }
 
-private func setupRotationDialIfNeeded(with cropViewConfig: CropViewConfig, and cropView: CropView) {
-    if cropViewConfig.showRotationDial {
-        let viewModel = RotationDialViewModel()
-        let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.dialConfig)
-        cropView.rotationDial = RotationDial(frame: .zero,
-                                             dialConfig: cropViewConfig.dialConfig,
-                                             viewModel: viewModel,
-                                             dialPlate: dialPlate)
+private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig,
+                                              cropView: CropView,
+                                              rotationControlView: RotationControlViewProtocol?) {
+    if let rotationControlView = rotationControlView {
+        if rotationControlView.isAttachedToCropView == false ||
+            rotationControlView.isAttachedToCropView && cropViewConfig.showAttachedRotationControlView {
+            cropView.rotationControlView = rotationControlView
+        }
+    } else {
+        if cropViewConfig.showAttachedRotationControlView {
+            let viewModel = RotationDialViewModel()
+            let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.rotationControlViewConfig)
+            
+            cropView.rotationControlView = RotationDial(frame: .zero,
+                                                        dialConfig: cropViewConfig.rotationControlViewConfig,
+                                                        viewModel: viewModel,
+                                                        dialPlate: dialPlate)
+        }
     }
 }

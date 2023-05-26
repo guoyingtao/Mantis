@@ -29,7 +29,7 @@
 ## Breaking Changes in 2.x.x
 * Add CropViewConfig
   * move some properties from Config to CropViewConfig
-  * make dialConfig as a property of CropViewConfig
+  * make roationControlViewConfig as a property of CropViewConfig
 * Refactor CropToolbarConfigProtocol
   * rename some properties
 
@@ -145,7 +145,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
 
 When choose alwaysUsingOnePresetFixedRatio, fixed-ratio setting button does not show.
 
-* If you want to hide rotation dial, set Mantis.Config..cropViewConfig.dialConfig = nil
+* If you want to hide rotation control view, set Mantis.Config.cropViewConfig.showAttachedRotationControlView = false
 * If you want to use ratio list instead of presenter, set Mantis.CropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
 
 ```swift

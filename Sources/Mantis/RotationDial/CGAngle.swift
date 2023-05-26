@@ -1,6 +1,6 @@
 //
 //  Angle.swift
-//  Puffer
+//  Mantis
 //
 //  Created by Echo on 5/22/19.
 //  Copyright © 2019 Echo. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 
 /// Use this class to make angle calculation to be simpler
-class Angle: NSObject, Comparable {
+public class Angle: NSObject, Comparable {
     public static func < (lhs: Angle, rhs: Angle) -> Bool {
         return lhs.radians < rhs.radians
     }

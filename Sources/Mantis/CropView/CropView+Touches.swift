@@ -12,8 +12,8 @@ extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let newPoint = convert(point, to: self)
         
-        if let rotationDial = rotationDial, rotationDial.frame.contains(newPoint) {
-            return rotationDial
+        if let rotationControlView = rotationControlView, rotationControlView.frame.contains(newPoint) {
+            return rotationControlView
         }
         
         if !cropViewConfig.disableCropBoxDeformation && isHitGridOverlayView(by: newPoint) {
@@ -44,8 +44,7 @@ extension CropView {
         // A resize event has begun by grabbing the crop UI, so notify delegate
         delegate?.cropViewDidBeginResize(self)
         
-        if touch.view is RotationDial {
-            viewModel.setTouchRotationBoardStatus()
+        if touch.view is RotationControlViewProtocol {
             return
         }
         
@@ -60,7 +59,7 @@ extension CropView {
             return
         }
         
-        if touch.view is RotationDial {
+        if touch.view is RotationControlViewProtocol {
             return
         }
         

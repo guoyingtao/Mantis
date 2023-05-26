@@ -25,16 +25,18 @@ import UIKit
 
 @IBDesignable
 final class RotationDial: UIView {
+    var isAttachedToCropView = true
+    
     var pointerHeight: CGFloat = 8
     var spanBetweenDialPlateAndPointer: CGFloat = 6
     var pointerWidth: CGFloat = 8 * sqrt(2)
     
-    var didRotate: (_ angle: Angle) -> Void = { _ in }
-    var didFinishedRotate: () -> Void = { }
+    var didUpdateRotationValue: (_ angle: Angle) -> Void = { _ in }
+    var didFinishRotation: () -> Void = { }
     
     var viewModel: RotationDialViewModelProtocol
     
-    private var dialConfig: DialConfig
+    private var dialConfig: RotationControlViewConfig
     
     private var angleLimit = Angle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
@@ -42,7 +44,10 @@ final class RotationDial: UIView {
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
     
-    init(frame: CGRect, dialConfig: DialConfig, viewModel: RotationDialViewModelProtocol, dialPlate: RotationDialPlate) {
+    init(frame: CGRect,
+         dialConfig: RotationControlViewConfig,
+         viewModel: RotationDialViewModelProtocol,
+         dialPlate: RotationDialPlate) {
         self.dialConfig = dialConfig
         self.viewModel = viewModel
         self.dialPlate = dialPlate
@@ -106,13 +111,13 @@ extension RotationDial {
             }
         }
         
-        if rotateDialPlate(by: angle) {
+        if updateRotationValue(by: angle) {
             let newAngle = getRotationAngle()
-            didRotate(newAngle)
+            didUpdateRotationValue(newAngle)
         }
     }
     
-    private func getDialPlateHolder(by orientation: DialConfig.Orientation) -> UIView {
+    private func getDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) -> UIView {
         let view = UIView(frame: bounds)
         
         switch orientation {
@@ -125,7 +130,7 @@ extension RotationDial {
         return view
     }
     
-    private func setDialPlateHolder(by orientation: DialConfig.Orientation) {
+    private func setDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) {
         switch orientation {
         case .normal:
             ()
@@ -202,8 +207,8 @@ extension RotationDial {
 }
 
 extension RotationDial: RotationDialProtocol {
-    func setup(with frame: CGRect) {
-        self.frame = frame
+    func setupUI(withAllowableFrame allowableFrame: CGRect) {
+        self.frame = allowableFrame
         
         if case .limit(let degreeAngle) = dialConfig.rotationLimitType {
             angleLimit = Angle(degrees: degreeAngle)
@@ -214,12 +219,12 @@ extension RotationDial: RotationDialProtocol {
     }
     
     @discardableResult
-    func rotateDialPlate(by angle: Angle) -> Bool {
+    func updateRotationValue(by angle: Angle) -> Bool {
         guard let dialPlate = dialPlate else { return false }
         
         let radians = angle.radians
         if case .limit = dialConfig.rotationLimitType {
-            if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) >= angleLimit.radians {
+            if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
                 
                 if radians > 0 {
                     rotateDialPlate(to: angleLimit)

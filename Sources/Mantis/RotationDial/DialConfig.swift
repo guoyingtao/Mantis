@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: - DialConfig
-public struct DialConfig {
+public struct RotationControlViewConfig {
     public init() {}
 
     public var margin: Double = 10 {
