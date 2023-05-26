@@ -2,6 +2,21 @@
 
 -----
 
+## [2.10.0](https://www.github.com/guoyingtao/Mantis/compare/v2.9.1...v2.10.0) (2023-05-26)
+
+
+### Features
+
+* allow user to set CropView background color via config ([#309](https://www.github.com/guoyingtao/Mantis/issues/309)) ([a54521b](https://www.github.com/guoyingtao/Mantis/commit/a54521bbc44bf90c155f8e7a2420ac93e4a307c5))
+* make rotation view customizable ([#308](https://www.github.com/guoyingtao/Mantis/issues/308)) ([07d1b32](https://www.github.com/guoyingtao/Mantis/commit/07d1b3243313de1b7dea5fb39619a9434b91be24))
+* output image processing errors ([#305](https://www.github.com/guoyingtao/Mantis/issues/305)) ([cdb7117](https://www.github.com/guoyingtao/Mantis/commit/cdb71173e3b84ca19e1baacadbd3ac6346e48604))
+
+
+### Bug Fixes
+
+* make CropRegion props public ([#299](https://www.github.com/guoyingtao/Mantis/issues/299)) ([d919e54](https://www.github.com/guoyingtao/Mantis/commit/d919e546f49af922df2fcb5de01e742bc82829cf))
+* use CGImageAlphaInfo.noneSkipLast.rawValue instead of CGImageAlphaInfo.none.rawValue ([3882317](https://www.github.com/guoyingtao/Mantis/commit/388231755e1f8dc0df002620a45ce4e4d3d8d6ac))
+
 ### [2.9.1](https://www.github.com/guoyingtao/Mantis/compare/v2.9.0...v2.9.1) (2023-04-13)
 
 
