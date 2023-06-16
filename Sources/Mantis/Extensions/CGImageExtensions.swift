@@ -32,7 +32,10 @@ extension CGImage {
         
         var bitmapBytesPerRow = 0
         
-        // handle Indexed Color Image (or Palette-based Image)
+        /*
+         for Indexed Color Image (or Palette-based Image)
+         we output the edited image with RGBA format
+        */
         if bitsPerPixel == 8 && bitsPerComponent == 8 {
             bitmapBytesPerRow = Int(round(outputSize.width)) * 4
         }
