@@ -9,6 +9,8 @@ import UIKit
 
 private let slideRulerSpan: CGFloat = 50
 private let indicatorSize = CGSize(width: 40, height: 40)
+private let positiveColor: UIColor = .yellow
+private let negativeColor: UIColor = .white
 
 final class SlideDial: UIView, RotationControlViewProtocol {
     var isAttachedToCropView = true
@@ -23,10 +25,13 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             
     @discardableResult func updateRotationValue(by angle: Angle) -> Bool {
         indicator.text = "\(Int(round(angle.degrees)))"
+        indicator.textColor = angle.degrees > 0 ? positiveColor : negativeColor
+        
         return true
     }
     
     func reset() {
+        transform = .identity
         if let slideRuler = slideRuler {
             slideRuler.reset()
         }
@@ -34,6 +39,20 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     func getTouchTarget() -> UIView {
         slideRuler.getTouchTarget()
+    }
+    
+    func getLengthRatio() -> CGFloat {
+        0.8
+    }
+    
+    func handleDeviceRotation() {
+        if Orientation.treatAsPortrait {
+            indicator.transform = CGAffineTransform(rotationAngle: 0)
+        } else if Orientation.isLandscapeLeft {
+            indicator.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+        } else if Orientation.isLandscapeRight {
+            indicator.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+        }
     }
             
     func setupUI(withAllowableFrame allowableFrame: CGRect) {
@@ -68,7 +87,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             slideRuler.delegate = self
             slideRuler.forceAlignCenterFeedback = true
             addSubview(slideRuler)
-        }        
+        }
     }
 }
 

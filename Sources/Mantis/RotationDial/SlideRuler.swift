@@ -182,7 +182,7 @@ class SlideRuler: UIView {
     
     func getTouchTarget() -> UIView {
         return scrollRulerView
-    }
+    }    
 }
 
 extension SlideRuler: UIScrollViewDelegate {

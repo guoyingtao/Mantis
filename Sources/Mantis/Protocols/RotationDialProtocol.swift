@@ -41,12 +41,22 @@ public protocol RotationControlViewProtocol: UIView {
     func reset()
     
     func getTouchTarget() -> UIView
+    
+    func handleDeviceRotation()
+    
+    func getLengthRatio() -> CGFloat
 }
 
 extension RotationControlViewProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {}
     func getTouchTarget() -> UIView {
         return self
+    }
+    
+    func handleDeviceRotation() {}
+    
+    func getLengthRatio() -> CGFloat {
+        return 0.6
     }
 }
 
