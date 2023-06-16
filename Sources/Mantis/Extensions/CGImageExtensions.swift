@@ -30,7 +30,15 @@ extension CGImage {
             colorSpaceRef = CGColorSpaceCreateDeviceRGB()
         }
         
-        let bitmapBytesPerRow = 0
+        var bitmapBytesPerRow = 0
+        
+        /*
+         for Indexed Color Image (or Palette-based Image)
+         we output the edited image with RGBA format
+        */
+        if bitsPerPixel == 8 && bitsPerComponent == 8 {
+            bitmapBytesPerRow = Int(round(outputSize.width)) * 4
+        }
         
         func getBitmapInfo() -> UInt32 {
             if colorSpaceRef.model == .rgb {
@@ -39,7 +47,7 @@ extension CGImage {
                     return CGImageAlphaInfo.noneSkipFirst.rawValue
                 case (24, 8), (48, 16):
                     return CGImageAlphaInfo.noneSkipLast.rawValue
-                case (32, 8), (64, 16):
+                case (8, 8), (32, 8), (64, 16):
                     return CGImageAlphaInfo.premultipliedLast.rawValue
                 case (32, 10):
                     if #available(iOS 12, macOS 10.14, *) {
