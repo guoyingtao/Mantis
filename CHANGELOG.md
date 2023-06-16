@@ -2,6 +2,13 @@
 
 -----
 
+## [2.11.0](https://www.github.com/guoyingtao/Mantis/compare/v2.10.0...v2.11.0) (2023-06-16)
+
+
+### Features
+
+* add support for Index Color Image ([#314](https://www.github.com/guoyingtao/Mantis/issues/314)) ([f616cfb](https://www.github.com/guoyingtao/Mantis/commit/f616cfb2af43e6baacdcad738d7e107814218b8a))
+
 ## [2.10.0](https://www.github.com/guoyingtao/Mantis/compare/v2.9.1...v2.10.0) (2023-05-26)
 
 
