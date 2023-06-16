@@ -72,5 +72,12 @@ public struct CropViewConfig {
 
     public var disableCropBoxDeformation = false
     
+    public enum BuiltInRotationControlViewType {
+        case rotationDial
+        case slideDial
+    }
+    
+    public var builtInRotationControlViewType: BuiltInRotationControlViewType = .rotationDial
+    
     public init() {}
 }

@@ -18,7 +18,6 @@ public struct RotationControlViewConfig {
         }
     }
     
-    public var interactable = false
     public var rotationLimitType: RotationLimitType = .limit(degreeAngle: 45)
     public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)
     public var rotationCenterType: RotationCenterType = .useDefault

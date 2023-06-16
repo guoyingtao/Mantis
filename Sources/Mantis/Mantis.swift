@@ -149,13 +149,18 @@ private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropVie
         }
     } else {
         if cropViewConfig.showAttachedRotationControlView {
-            let viewModel = RotationDialViewModel()
-            let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.rotationControlViewConfig)
-            
-            cropView.rotationControlView = RotationDial(frame: .zero,
-                                                        dialConfig: cropViewConfig.rotationControlViewConfig,
-                                                        viewModel: viewModel,
-                                                        dialPlate: dialPlate)
+            switch cropViewConfig.builtInRotationControlViewType {
+            case .rotationDial:
+                let viewModel = RotationDialViewModel()
+                let dialPlate = RotationDialPlate(frame: .zero, dialConfig: cropViewConfig.rotationControlViewConfig)
+                
+                cropView.rotationControlView = RotationDial(frame: .zero,
+                                                            dialConfig: cropViewConfig.rotationControlViewConfig,
+                                                            viewModel: viewModel,
+                                                            dialPlate: dialPlate)
+            case .slideDial:
+                cropView.rotationControlView = SlideDial(frame: .zero)
+            }
         }
     }
 }

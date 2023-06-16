@@ -39,10 +39,15 @@ public protocol RotationControlViewProtocol: UIView {
      Reset rotation control view to initial status
      */
     func reset()
+    
+    func getTouchTarget() -> UIView
 }
 
 extension RotationControlViewProtocol {
-    func setupUI(withAllowableFrame allowableFrame: CGRect) {}    
+    func setupUI(withAllowableFrame allowableFrame: CGRect) {}
+    func getTouchTarget() -> UIView {
+        return self
+    }
 }
 
 protocol RotationDialProtocol: RotationControlViewProtocol {

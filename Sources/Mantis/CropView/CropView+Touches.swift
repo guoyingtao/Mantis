@@ -13,7 +13,7 @@ extension CropView {
         let newPoint = convert(point, to: self)
         
         if let rotationControlView = rotationControlView, rotationControlView.frame.contains(newPoint) {
-            return rotationControlView
+            return rotationControlView.getTouchTarget()
         }
         
         if !cropViewConfig.disableCropBoxDeformation && isHitGridOverlayView(by: newPoint) {
@@ -69,6 +69,14 @@ extension CropView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
+        
+        guard touches.count == 1, let touch = touches.first else {
+            return
+        }
+        
+        if touch.view is RotationControlViewProtocol {
+            return
+        }
         
         if viewModel.needCrop() {
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
