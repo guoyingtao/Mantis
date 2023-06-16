@@ -40,7 +40,7 @@ public protocol RotationControlViewProtocol: UIView {
      */
     func reset()
     
-    func getTouchTarget() -> UIView
+    func getTouchTarget(with point: CGPoint) -> UIView
     
     func handleDeviceRotation()
     
@@ -49,7 +49,7 @@ public protocol RotationControlViewProtocol: UIView {
 
 extension RotationControlViewProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {}
-    func getTouchTarget() -> UIView {
+    func getTouchTarget(with point: CGPoint) -> UIView {
         return self
     }
     

@@ -27,6 +27,8 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         indicator.text = "\(Int(round(angle.degrees)))"
         indicator.textColor = angle.degrees > 0 ? positiveColor : negativeColor
         
+        didUpdateRotationValue(angle)
+        
         return true
     }
     
@@ -37,8 +39,14 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         }
     }
     
-    func getTouchTarget() -> UIView {
-        slideRuler.getTouchTarget()
+    func getTouchTarget(with point: CGPoint) -> UIView {
+        let newPoint = convert(point, to: self)
+        
+        if indicator.frame.contains(newPoint) {
+            return indicator
+        }
+        
+        return slideRuler.getTouchTarget()
     }
     
     func getLengthRatio() -> CGFloat {
@@ -71,7 +79,18 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             indicator.textColor = .white
             indicator.textAlignment = .center
             addSubview(indicator)
+            
+            indicator.isUserInteractionEnabled = true
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleIndicatorTapped))
+            indicator.addGestureRecognizer(tap)
         }
+    }
+    
+    @objc func handleIndicatorTapped() {
+        reset()
+        updateRotationValue(by: Angle(degrees: 0))
+        didFinishRotation()
     }
     
     func createSlideRuler() {
@@ -99,6 +118,5 @@ extension SlideDial: SlideRulerDelegate {
     func didGetOffsetRatio(from slideRuler: SlideRuler, offsetRatio: CGFloat) {
         let angle = Angle(degrees: 40 * offsetRatio)
         updateRotationValue(by: angle)
-        didUpdateRotationValue(angle)
     }
 }

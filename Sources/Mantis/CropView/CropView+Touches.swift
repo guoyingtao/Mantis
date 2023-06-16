@@ -13,7 +13,8 @@ extension CropView {
         let newPoint = convert(point, to: self)
         
         if let rotationControlView = rotationControlView, rotationControlView.frame.contains(newPoint) {
-            return rotationControlView.getTouchTarget()
+            let pointInRotationControlView = rotationControlView.convert(newPoint, from: self)
+            return rotationControlView.getTouchTarget(with: pointInRotationControlView)
         }
         
         if !cropViewConfig.disableCropBoxDeformation && isHitGridOverlayView(by: newPoint) {
