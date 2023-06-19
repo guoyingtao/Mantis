@@ -49,8 +49,11 @@ class SlideRuler: UIView {
         }
     }
     
-    override init(frame: CGRect) {
+    var config = SlideDialConfig()
+    
+    init(frame: CGRect, config: SlideDialConfig) {
         super.init(frame: frame)
+        self.config = config
         positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
         positionInfoHelper.slideRuler = self
         setupUI()
@@ -131,14 +134,14 @@ class SlideRuler: UIView {
     private func makeRuler() {
         scaleBarLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         
-        let scaleBar = makeBarScaleMark(byColor: UIColor.gray.cgColor)
+        let scaleBar = makeBarScaleMark(byColor: config.scaleColor)
         scaleBarLayer.addSublayer(scaleBar)
         
         scrollRulerView.layer.addSublayer(scaleBarLayer)
         
         majorScaleBarLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
 
-        let majorScaleBar = makeBarScaleMark(byColor: UIColor.white.cgColor)
+        let majorScaleBar = makeBarScaleMark(byColor: config.majorScaleColor)
         majorScaleBarLayer.addSublayer(majorScaleBar)
         
         scrollRulerView.layer.addSublayer(majorScaleBarLayer)
@@ -158,27 +161,10 @@ class SlideRuler: UIView {
         scrollRulerView.delegate = self
         
         centralDot.isHidden = true
-        let color = UIColor.gray.cgColor
-        scaleBarLayer.sublayers?.forEach { $0.backgroundColor = color}
-        majorScaleBarLayer.sublayers?.forEach { $0.backgroundColor = color}
+        scaleBarLayer.sublayers?.forEach { $0.backgroundColor = config.scaleColor}
+        majorScaleBarLayer.sublayers?.forEach { $0.backgroundColor = config.majorScaleColor}
     }
-    
-    func handleRemoveTempResetWith(progress: Float) {
-        centralDot.fillColor = UIColor.white.cgColor
         
-        scaleBarLayer.sublayers?.forEach { $0.backgroundColor = UIColor.gray.cgColor}
-        majorScaleBarLayer.sublayers?.forEach { $0.backgroundColor = UIColor.white.cgColor}
-        
-        scrollRulerView.delegate = nil
-        
-        let offsetX = positionInfoHelper.getRulerOffsetX(with: CGFloat(progress))
-        let offset = CGPoint(x: offsetX, y: 0)
-        scrollRulerView.setContentOffset(offset, animated: false)
-        scrollRulerView.delegate = self
-        
-        checkCentralDotHiddenStatus()
-    }
-    
     func checkCentralDotHiddenStatus() {
         centralDot.isHidden = (scrollRulerView.contentOffset.x == frame.width / 2)
     }

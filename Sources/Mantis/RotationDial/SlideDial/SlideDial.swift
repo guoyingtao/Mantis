@@ -46,10 +46,6 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             indicator.textColor = angle.degrees > 0 ? positiveColor : negativeColor
         }
         
-        if let slideRuler = slideRuler {
-            slideRuler.setOffset(offsetRatio: angle.degrees / config.limitation)
-        }
-
         didUpdateRotationValue(angle)
     }
     
@@ -59,6 +55,11 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         }
         
         viewModel.rotationAngle = angle
+        
+        if let slideRuler = slideRuler {
+            slideRuler.setOffset(offsetRatio: angle.degrees / config.limitation)
+        }
+
         return true
     }
     
@@ -132,7 +133,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         if let slideRuler = slideRuler {
             slideRuler.frame = sliderFrame
         } else {
-            slideRuler = SlideRuler(frame: sliderFrame)
+            slideRuler = SlideRuler(frame: sliderFrame, config: config)
             slideRuler.delegate = self
             slideRuler.forceAlignCenterFeedback = true
             addSubview(slideRuler)
