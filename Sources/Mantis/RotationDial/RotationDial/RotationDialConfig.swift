@@ -1,5 +1,5 @@
 //
-//  DialConfig.swift
+//  RotationDialConfig.swift
 //  Mantis
 //
 //  Created by Echo on 5/22/19.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-// MARK: - DialConfig
-public struct RotationControlViewConfig {
+// MARK: - RotationDialConfig
+public struct RotationDialConfig {
     public init() {}
 
     public var margin: Double = 10 {
@@ -17,6 +17,8 @@ public struct RotationControlViewConfig {
             assert(margin >= 0)
         }
     }
+    
+    public var lengthRatio: CGFloat = 0.6
     
     public var rotationLimitType: RotationLimitType = .limit(degreeAngle: 45)
     public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)

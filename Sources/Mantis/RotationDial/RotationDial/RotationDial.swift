@@ -36,7 +36,7 @@ final class RotationDial: UIView {
     
     var viewModel: RotationDialViewModelProtocol
     
-    private var dialConfig: RotationControlViewConfig
+    private var dialConfig: RotationDialConfig
     
     private var angleLimit = Angle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
@@ -45,7 +45,7 @@ final class RotationDial: UIView {
     private var pointer: CAShapeLayer = CAShapeLayer()
     
     init(frame: CGRect,
-         dialConfig: RotationControlViewConfig,
+         dialConfig: RotationDialConfig,
          viewModel: RotationDialViewModelProtocol,
          dialPlate: RotationDialPlate) {
         self.dialConfig = dialConfig
@@ -117,7 +117,7 @@ extension RotationDial {
         }
     }
     
-    private func getDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) -> UIView {
+    private func getDialPlateHolder(by orientation: RotationDialConfig.Orientation) -> UIView {
         let view = UIView(frame: bounds)
         
         switch orientation {
@@ -130,7 +130,7 @@ extension RotationDial {
         return view
     }
     
-    private func setDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) {
+    private func setDialPlateHolder(by orientation: RotationDialConfig.Orientation) {
         switch orientation {
         case .normal:
             ()
@@ -280,5 +280,9 @@ extension RotationDial: RotationDialProtocol {
         transform = .identity
         dialPlate?.reset()
         dialConfig.rotationCenterType = .useDefault
+    }
+    
+    func getLengthRatio() -> CGFloat {
+        dialConfig.lengthRatio
     }
 }

@@ -16,6 +16,7 @@ protocol SlideRulerPositionHelper {
     func getForceAlignCenterX() -> CGFloat
     func getOffsetRatio() -> CGFloat
     func handleOffsetRatioWhenScrolling(_ scrollView: UIScrollView)
+    func setOffset(offsetRatio: CGFloat)
 }
 
 extension SlideRulerPositionHelper {
@@ -48,6 +49,11 @@ class UnilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
     func getOffsetRatio() -> CGFloat {
         let offsetRatio = slideRuler.scrollRulerView.contentOffset.x / slideRuler.scrollRulerView.bounds.width
         return min(1, max(0, offsetRatio))
+    }
+    
+    func setOffset(offsetRatio: CGFloat) {
+        let offsetX = offsetRatio * slideRuler.scrollRulerView.frame.width / 2
+        slideRuler.scrollRulerView.contentOffset = CGPoint(x: offsetX, y: 0)
     }
 }
 
@@ -91,5 +97,11 @@ class BilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
         if scrollView.frame.width > 0 {
             slideRuler.sliderOffsetRatio = scrollView.contentOffset.x / scrollView.frame.width
         }
+    }
+    
+    func setOffset(offsetRatio: CGFloat) {
+        let limitLength = slideRuler.scrollRulerView.frame.width / 2
+        let offsetX = (offsetRatio * limitLength) + limitLength
+        slideRuler.scrollRulerView.contentOffset = CGPoint(x: offsetX, y: 0)
     }
 }

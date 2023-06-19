@@ -22,18 +22,49 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     var indicator: UILabel!
     
     var slideRuler: SlideRuler!
-            
-    @discardableResult func updateRotationValue(by angle: Angle) -> Bool {
-        indicator.text = "\(Int(round(angle.degrees)))"
-        indicator.textColor = angle.degrees > 0 ? positiveColor : negativeColor
+    
+    var viewModel = SlideDialViewModel()
+    
+    var config = SlideDialConfig()
+    
+    init(frame: CGRect, config: SlideDialConfig = SlideDialConfig()) {
+        super.init(frame: frame)
+        self.config = config
         
+        viewModel.didSetRotationAngle = { [weak self] angle in
+            self?.handleRotation(by: angle)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func handleRotation(by angle: Angle) {
+        if let indicator = indicator {
+            indicator.text = "\(Int(round(angle.degrees)))"
+            indicator.textColor = angle.degrees > 0 ? positiveColor : negativeColor
+        }
+        
+        if let slideRuler = slideRuler {
+            slideRuler.setOffset(offsetRatio: angle.degrees / config.limitation)
+        }
+
         didUpdateRotationValue(angle)
+    }
+    
+    @discardableResult func updateRotationValue(by angle: Angle) -> Bool {
+        guard angle.degrees <= config.limitation else {
+            return false
+        }
         
+        viewModel.rotationAngle = angle
         return true
     }
     
     func reset() {
         transform = .identity
+        viewModel.reset()
         if let slideRuler = slideRuler {
             slideRuler.reset()
         }
@@ -50,7 +81,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
     
     func getLengthRatio() -> CGFloat {
-        0.8
+        config.lengthRatio
     }
     
     func handleDeviceRotation() {
@@ -89,7 +120,6 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     @objc func handleIndicatorTapped() {
         reset()
-        updateRotationValue(by: Angle(degrees: 0))
         didFinishRotation()
     }
     
@@ -116,7 +146,7 @@ extension SlideDial: SlideRulerDelegate {
     }
     
     func didGetOffsetRatio(from slideRuler: SlideRuler, offsetRatio: CGFloat) {
-        let angle = Angle(degrees: 40 * offsetRatio)
-        updateRotationValue(by: angle)
+        let angle = Angle(degrees: config.limitation * offsetRatio)
+        viewModel.rotationAngle = angle
     }
 }

@@ -45,7 +45,7 @@ public struct CropViewConfig {
      Rotation control view currently is tightly coupled with other parts of CropView, we see rotation control view as a part of CropView,
      so we put RotationControlViewConfig inside CropViewConfig
      */
-    public var rotationControlViewConfig = RotationControlViewConfig()
+    public var rotationControlViewConfig = RotationDialConfig()
     
     @available(*, deprecated, message: "Use showAttachedRotationControlView instead")
     public var showRotationDial = true {

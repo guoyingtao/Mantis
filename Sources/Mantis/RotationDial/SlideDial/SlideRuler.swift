@@ -25,7 +25,7 @@ class SlideRuler: UIView {
     let scrollRulerView = UIScrollView()
     let dotWidth: CGFloat = 6
     var sliderOffsetRatio: CGFloat = 0.5
-    var positionInfoProvider: SlideRulerPositionHelper = BilateralTypeSlideRulerPositionHelper()
+    var positionInfoHelper: SlideRulerPositionHelper = BilateralTypeSlideRulerPositionHelper()
     
     let scaleBarLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
@@ -51,8 +51,8 @@ class SlideRuler: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        positionInfoProvider = BilateralTypeSlideRulerPositionHelper()
-        positionInfoProvider.slideRuler = self
+        positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
+        positionInfoHelper.slideRuler = self
         setupUI()
     }
     
@@ -73,8 +73,8 @@ class SlideRuler: UIView {
         scrollRulerView.delegate = self
     }
     
-    public func setUIFrames() {
-        sliderOffsetRatio = positionInfoProvider.getInitialOffsetRatio()
+    func setUIFrames() {
+        sliderOffsetRatio = positionInfoHelper.getInitialOffsetRatio()
         scrollRulerView.frame = bounds
 
         offsetValue = sliderOffsetRatio * scrollRulerView.frame.width
@@ -84,9 +84,12 @@ class SlideRuler: UIView {
         
         perform(#selector(setSliderDelegate), with: nil, afterDelay: 0.1)
 
-        pointer.frame = CGRect(x: (frame.width / 2 - pointerWidth / 2), y: bounds.origin.y + frame.height * 0.4, width: pointerWidth, height: frame.height * 0.6)
+        pointer.frame = CGRect(x: (frame.width / 2 - pointerWidth / 2),
+                               y: bounds.origin.y + frame.height * 0.4,
+                               width: pointerWidth,
+                               height: frame.height * 0.6)
         
-        let centralDotOriginX = positionInfoProvider.getCentralDotOriginX()
+        let centralDotOriginX = positionInfoHelper.getCentralDotOriginX()
         centralDot.frame = CGRect(x: centralDotOriginX, y: frame.height * 0.35, width: dotWidth, height: dotWidth)
         
         centralDot.path = UIBezierPath(ovalIn: centralDot.bounds).cgPath
@@ -168,7 +171,7 @@ class SlideRuler: UIView {
         
         scrollRulerView.delegate = nil
         
-        let offsetX = positionInfoProvider.getRulerOffsetX(with: CGFloat(progress))
+        let offsetX = positionInfoHelper.getRulerOffsetX(with: CGFloat(progress))
         let offset = CGPoint(x: offsetX, y: 0)
         scrollRulerView.setContentOffset(offset, animated: false)
         scrollRulerView.delegate = self
@@ -182,7 +185,11 @@ class SlideRuler: UIView {
     
     func getTouchTarget() -> UIView {
         return scrollRulerView
-    }    
+    }
+    
+    func setOffset(offsetRatio: CGFloat) {
+        positionInfoHelper.setOffset(offsetRatio: offsetRatio)
+    }
 }
 
 extension SlideRuler: UIScrollViewDelegate {
@@ -199,7 +206,7 @@ extension SlideRuler: UIScrollViewDelegate {
         let limit = frame.width / CGFloat((scaleBarNumber - 1) * 2)
         
         func checkIsCenterPosition() -> Bool {
-            return positionInfoProvider.checkIsCenterPosition(with: limit)
+            return positionInfoHelper.checkIsCenterPosition(with: limit)
         }        
         
         if checkIsCenterPosition() && abs(speed.x) < 10.0 {
@@ -213,7 +220,7 @@ extension SlideRuler: UIScrollViewDelegate {
                 }
                 
                 func forceAlignCenter() {
-                    let offset = CGPoint(x: positionInfoProvider.getForceAlignCenterX(), y: 0)
+                    let offset = CGPoint(x: positionInfoHelper.getForceAlignCenterX(), y: 0)
                     scrollView.setContentOffset(offset, animated: false)
                     delegate?.didGetOffsetRatio(from: self, offsetRatio: 0)
                 }
@@ -231,9 +238,9 @@ extension SlideRuler: UIScrollViewDelegate {
             isReset = false
         }
         
-        let offsetRatio = positionInfoProvider.getOffsetRatio()
+        let offsetRatio = positionInfoHelper.getOffsetRatio()
         delegate?.didGetOffsetRatio(from: self, offsetRatio: offsetRatio)
         
-        positionInfoProvider.handleOffsetRatioWhenScrolling(scrollView)
+        positionInfoHelper.handleOffsetRatioWhenScrolling(scrollView)
     }
 }
