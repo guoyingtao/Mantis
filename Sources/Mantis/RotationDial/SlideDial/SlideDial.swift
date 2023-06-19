@@ -7,11 +7,6 @@
 
 import UIKit
 
-private let slideRulerSpan: CGFloat = 50
-private let indicatorSize = CGSize(width: 40, height: 40)
-private let positiveColor: UIColor = .yellow
-private let negativeColor: UIColor = .white
-
 final class SlideDial: UIView, RotationControlViewProtocol {
     var isAttachedToCropView = true
     
@@ -43,7 +38,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     private func handleRotation(by angle: Angle) {
         if let indicator = indicator {
             indicator.text = "\(Int(round(angle.degrees)))"
-            indicator.textColor = angle.degrees > 0 ? positiveColor : negativeColor
+            indicator.textColor = angle.degrees > 0 ? config.positiveIndicatorColor : config.notPositiveIndicatorColor
         }
         
         didUpdateRotationValue(angle)
@@ -102,6 +97,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
     
     func createIndicator() {
+        let indicatorSize = config.indicatorSize
         let indicatorFrame = CGRect(origin: CGPoint(x: (frame.width - indicatorSize.width) / 2, y: 0), size: indicatorSize)
         
         if let indicator = indicator {
@@ -126,9 +122,9 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     func createSlideRuler() {
         let sliderFrame = CGRect(x: 0,
-                                 y: frame.height - slideRulerSpan,
+                                 y: frame.height - config.slideRulerHeight,
                                  width: frame.width,
-                                 height: slideRulerSpan)
+                                 height: config.slideRulerHeight)
         
         if let slideRuler = slideRuler {
             slideRuler.frame = sliderFrame

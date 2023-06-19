@@ -9,8 +9,17 @@ import Foundation
 
 struct SlideDialConfig {
     var lengthRatio: CGFloat = 0.8
-    var limitation: CGFloat = 40
+    var limitation: CGFloat = 45
     
-    let scaleColor = UIColor.gray.cgColor
-    let majorScaleColor = UIColor.white.cgColor
+    var scaleBarNumber = 41
+    var majorScaleBarNumber = 5
+    
+    var scaleColor = UIColor.gray
+    var majorScaleColor = UIColor.white
+    
+    var positiveIndicatorColor = UIColor.yellow
+    var notPositiveIndicatorColor = UIColor.white
+    
+    var indicatorSize = CGSize(width: 40, height: 40)
+    var slideRulerHeight: CGFloat = 50
 }

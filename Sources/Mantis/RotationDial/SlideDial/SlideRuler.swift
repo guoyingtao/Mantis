@@ -8,8 +8,6 @@
 
 import UIKit
 
-private let scaleBarNumber = 41
-private let majorScaleBarNumber = 5
 private let scaleWidth: CGFloat = 1
 private let pointerWidth: CGFloat = 1
 
@@ -26,16 +24,16 @@ class SlideRuler: UIView {
     let dotWidth: CGFloat = 6
     var sliderOffsetRatio: CGFloat = 0.5
     var positionInfoHelper: SlideRulerPositionHelper = BilateralTypeSlideRulerPositionHelper()
-    
-    let scaleBarLayer: CAReplicatorLayer = {
+        
+    lazy var scaleBarLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
-        layer.instanceCount = scaleBarNumber
+        layer.instanceCount = config.scaleBarNumber
         return layer
     }()
     
-    let majorScaleBarLayer: CAReplicatorLayer = {
+    lazy var majorScaleBarLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
-        layer.instanceCount = majorScaleBarNumber
+        layer.instanceCount = config.majorScaleBarNumber
         return layer
     }()
     
@@ -49,13 +47,20 @@ class SlideRuler: UIView {
         }
     }
     
-    var config = SlideDialConfig()
+    let config: SlideDialConfig!
+    let scaleColor: CGColor!
+    let majorScaleColor: CGColor!
     
     init(frame: CGRect, config: SlideDialConfig) {
-        super.init(frame: frame)
         self.config = config
+        scaleColor = config.scaleColor.cgColor
+        majorScaleColor = config.majorScaleColor.cgColor
+
+        super.init(frame: frame)
+        
         positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
         positionInfoHelper.slideRuler = self
+        
         setupUI()
     }
     
@@ -98,14 +103,14 @@ class SlideRuler: UIView {
         centralDot.path = UIBezierPath(ovalIn: centralDot.bounds).cgPath
         
         scaleBarLayer.frame = CGRect(x: frame.width / 2, y: 0.6 * frame.height, width: frame.width, height: 0.4 * frame.height)
-        scaleBarLayer.instanceTransform = CATransform3DMakeTranslation((frame.width - scaleWidth) / CGFloat((scaleBarNumber - 1)), 0, 0)
+        scaleBarLayer.instanceTransform = CATransform3DMakeTranslation((frame.width - scaleWidth) / CGFloat((config.scaleBarNumber - 1)), 0, 0)
 
         scaleBarLayer.sublayers?.forEach {
             $0.frame = CGRect(x: 0, y: 0, width: 1, height: scaleBarLayer.frame.height)
         }
         
         majorScaleBarLayer.frame = scaleBarLayer.frame
-        majorScaleBarLayer.instanceTransform = CATransform3DMakeTranslation((frame.width - scaleWidth) / CGFloat((majorScaleBarNumber - 1)), 0, 0)
+        majorScaleBarLayer.instanceTransform = CATransform3DMakeTranslation((frame.width - scaleWidth) / CGFloat((config.majorScaleBarNumber - 1)), 0, 0)
         
         majorScaleBarLayer.sublayers?.forEach {
             $0.frame = CGRect(x: 0, y: 0, width: 1, height: majorScaleBarLayer.frame.height)
@@ -134,14 +139,14 @@ class SlideRuler: UIView {
     private func makeRuler() {
         scaleBarLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
         
-        let scaleBar = makeBarScaleMark(byColor: config.scaleColor)
+        let scaleBar = makeBarScaleMark(byColor: scaleColor)
         scaleBarLayer.addSublayer(scaleBar)
         
         scrollRulerView.layer.addSublayer(scaleBarLayer)
         
         majorScaleBarLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
 
-        let majorScaleBar = makeBarScaleMark(byColor: config.majorScaleColor)
+        let majorScaleBar = makeBarScaleMark(byColor: majorScaleColor)
         majorScaleBarLayer.addSublayer(majorScaleBar)
         
         scrollRulerView.layer.addSublayer(majorScaleBarLayer)
@@ -161,8 +166,8 @@ class SlideRuler: UIView {
         scrollRulerView.delegate = self
         
         centralDot.isHidden = true
-        scaleBarLayer.sublayers?.forEach { $0.backgroundColor = config.scaleColor}
-        majorScaleBarLayer.sublayers?.forEach { $0.backgroundColor = config.majorScaleColor}
+        scaleBarLayer.sublayers?.forEach { $0.backgroundColor = scaleColor}
+        majorScaleBarLayer.sublayers?.forEach { $0.backgroundColor = majorScaleColor}
     }
         
     func checkCentralDotHiddenStatus() {
@@ -186,12 +191,16 @@ extension SlideRuler: UIScrollViewDelegate {
         delegate?.didFinishScroll()
     }
     
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        delegate?.didFinishScroll()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         centralDot.isHidden = false
         
         let speed = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
         
-        let limit = frame.width / CGFloat((scaleBarNumber - 1) * 2)
+        let limit = frame.width / CGFloat((config.scaleBarNumber - 1) * 2)
         
         func checkIsCenterPosition() -> Bool {
             return positionInfoHelper.checkIsCenterPosition(with: limit)
