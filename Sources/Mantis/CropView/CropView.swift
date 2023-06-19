@@ -259,7 +259,6 @@ class CropView: UIView {
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
             self.viewModel.setRotatingStatus(by: angle)
-            print("===== didUpdateRotationValue")
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
@@ -267,7 +266,6 @@ class CropView: UIView {
                 self.delegate?.cropViewDidEndResize(self)
             }
             self.viewModel.setBetweenOperationStatus()
-            print("===== didFinishRotation")
         }
 
         if rotationControlView.isAttachedToCropView {
