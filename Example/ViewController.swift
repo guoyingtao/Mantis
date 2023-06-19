@@ -18,7 +18,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
@@ -48,7 +47,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         let navigationController = UINavigationController(rootViewController: cropViewController)
         cropViewController.title = "Demo"
-        cropViewController.view.backgroundColor = .white
         present(navigationController, animated: true)
     }
 

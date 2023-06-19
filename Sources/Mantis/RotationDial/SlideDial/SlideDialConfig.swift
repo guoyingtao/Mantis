@@ -21,5 +21,5 @@ struct SlideDialConfig {
     var notPositiveIndicatorColor = UIColor.white
     
     var indicatorSize = CGSize(width: 40, height: 40)
-    var slideRulerHeight: CGFloat = 50
+    var slideRulerHeight: CGFloat = 45
 }
