@@ -52,17 +52,27 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
     
     @discardableResult func updateRotationValue(by angle: Angle) -> Bool {
-        guard angle.degrees <= config.limitation else {
-            return false
+        var rotationAngle = angle
+        
+        var isInRange = true
+        
+        if angle.degrees > config.limitation {
+            rotationAngle = Angle(degrees: config.limitation)
+            isInRange = false
         }
         
-        viewModel.rotationAngle = angle
+        if angle.degrees < -config.limitation {
+            rotationAngle = Angle(degrees: -config.limitation)
+            isInRange = false
+        }
+                
+        viewModel.rotationAngle = rotationAngle
         
         if let slideRuler = slideRuler {
             slideRuler.setOffset(offsetRatio: angle.degrees / config.limitation)
         }
 
-        return true
+        return isInRange
     }
     
     func reset() {

@@ -83,4 +83,20 @@ final class RotateDialTests: XCTestCase {
         XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
     }
+    
+    func testReset() {
+        var dialConfig = RotationDialConfig()
+        dialConfig.rotationLimitType = .limit(degreeAngle: 45)
+        setup(with: dialConfig)
+        
+        let dialPlateTransform = dialPlate.transform
+        let angle = Angle(degrees: 40)
+        XCTAssertTrue(dial.updateRotationValue(by: angle))
+        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
+
+        dial.reset()
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 0)
+        XCTAssertEqual(dial.transform, .identity)
+    }
+
 }
