@@ -108,7 +108,7 @@
                                         <rect key="frame" x="0.0" y="165.5" width="306" height="29.5"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <state key="normal" title="Clockwise roation"/>
+                                        <state key="normal" title="Clockwise roation with slide dial"/>
                                         <connections>
                                             <action selector="clockwiseRotationButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OTw-CB-LFi"/>
                                         </connections>

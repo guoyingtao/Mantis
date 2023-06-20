@@ -81,6 +81,10 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
     
     func handleDeviceRotation() {
+        guard let indicator = indicator else {
+            return
+        }
+        
         if Orientation.treatAsPortrait {
             indicator.transform = CGAffineTransform(rotationAngle: 0)
         } else if Orientation.isLandscapeLeft {

@@ -36,7 +36,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
         config.cropMode = .async
-        config.cropViewConfig.builtInRotationControlViewType = .slideDial
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
@@ -177,6 +176,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
         config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 2.0 / 1.0)
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial
                 
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
