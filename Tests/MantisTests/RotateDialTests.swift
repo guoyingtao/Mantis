@@ -15,19 +15,19 @@ final class RotateDialTests: XCTestCase {
     var viewModel: RotationDialViewModel!
 
     override func setUpWithError() throws {
-        let dialConfig = RotationDialConfig()
-        setup(with: dialConfig)
+        let config = RotationDialConfig()
+        setup(with: config)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    private func setup(with dialConfig: RotationDialConfig) {
+    private func setup(with config: RotationDialConfig) {
         viewModel = RotationDialViewModel()
-        dialPlate = RotationDialPlate(frame: .zero, dialConfig: dialConfig)
+        dialPlate = RotationDialPlate(frame: .zero, config: config)
         dial = RotationDial(frame: .zero,
-                            dialConfig: dialConfig,
+                            config: config,
                             viewModel: viewModel,
                             dialPlate: dialPlate)
         dial.setupUI(withAllowableFrame: .zero)

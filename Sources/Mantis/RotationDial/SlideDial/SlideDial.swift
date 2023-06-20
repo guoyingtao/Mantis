@@ -22,10 +22,16 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     var config = SlideDialConfig()
     
-    init(frame: CGRect, config: SlideDialConfig, viewModel: SlideDialViewModel) {
+    init(frame: CGRect,
+         config: SlideDialConfig,
+         viewModel: SlideDialViewModel,
+         slideRuler: SlideRuler) {
         super.init(frame: frame)
         self.config = config
         self.viewModel = viewModel
+        self.slideRuler = slideRuler
+        
+        addSubview(slideRuler)
         
         self.viewModel.didSetRotationAngle = { [weak self] angle in
             self?.handleRotation(by: angle)
@@ -98,7 +104,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {
         frame = allowableFrame
         createIndicator()
-        createSlideRuler()
+        setupSlideRuler()
     }
     
     func createIndicator() {
@@ -125,20 +131,15 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         didFinishRotation()
     }
     
-    func createSlideRuler() {
+    func setupSlideRuler() {
         let sliderFrame = CGRect(x: 0,
                                  y: frame.height - config.slideRulerHeight,
                                  width: frame.width,
                                  height: config.slideRulerHeight)
-        
-        if let slideRuler = slideRuler {
-            slideRuler.frame = sliderFrame
-        } else {
-            slideRuler = SlideRuler(frame: sliderFrame, config: config)
-            slideRuler.delegate = self
-            slideRuler.forceAlignCenterFeedback = true
-            addSubview(slideRuler)
-        }
+        slideRuler.frame = sliderFrame
+        slideRuler.delegate = self
+        slideRuler.forceAlignCenterFeedback = true
+        slideRuler.setupUI()
     }
 }
 

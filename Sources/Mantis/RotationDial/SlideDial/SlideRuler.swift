@@ -60,15 +60,13 @@ class SlideRuler: UIView {
         
         positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
         positionInfoHelper.slideRuler = self
-        
-        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError()
     }
         
-    private func setupUI() {
+    func setupUI() {
         setupSlider()
         makeRuler()
         makeCentralDot()
