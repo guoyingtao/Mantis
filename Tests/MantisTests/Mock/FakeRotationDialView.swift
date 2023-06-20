@@ -9,6 +9,8 @@ import UIKit
 @testable import Mantis
 
 class FakeRotationDialView: UIView, RotationDialProtocol {
+    var isAttachedToCropView = true
+    
     var pointerHeight: CGFloat = 0
     
     var spanBetweenDialPlateAndPointer: CGFloat = 0

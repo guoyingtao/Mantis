@@ -176,7 +176,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
         config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 2.0 / 1.0)
-        config.cropViewConfig.builtInRotationControlViewType = .slideDial
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial()
                 
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)

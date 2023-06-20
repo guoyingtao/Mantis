@@ -22,11 +22,12 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     var config = SlideDialConfig()
     
-    init(frame: CGRect, config: SlideDialConfig = SlideDialConfig()) {
+    init(frame: CGRect, config: SlideDialConfig, viewModel: SlideDialViewModel) {
         super.init(frame: frame)
         self.config = config
+        self.viewModel = viewModel
         
-        viewModel.didSetRotationAngle = { [weak self] angle in
+        self.viewModel.didSetRotationAngle = { [weak self] angle in
             self?.handleRotation(by: angle)
         }
     }

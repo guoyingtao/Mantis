@@ -110,7 +110,8 @@ class SlideRuler: UIView {
         }
         
         majorScaleBarLayer.frame = scaleBarLayer.frame
-        majorScaleBarLayer.instanceTransform = CATransform3DMakeTranslation((frame.width - scaleWidth) / CGFloat((config.majorScaleBarNumber - 1)), 0, 0)
+        let transationX = (frame.width - scaleWidth) / CGFloat((config.majorScaleBarNumber - 1))
+        majorScaleBarLayer.instanceTransform = CATransform3DMakeTranslation(transationX, 0, 0)
         
         majorScaleBarLayer.sublayers?.forEach {
             $0.frame = CGRect(x: 0, y: 0, width: 1, height: majorScaleBarLayer.frame.height)

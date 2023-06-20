@@ -5,7 +5,7 @@
 //  Created by Yingtao Guo on 6/19/23.
 //
 
-import Foundation
+import UIKit
 
 public struct SlideDialConfig {
     public init() {}
