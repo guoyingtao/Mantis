@@ -23,12 +23,7 @@ public protocol RotationControlViewProtocol: UIView {
      It should be called every time updating the rotation value by your own roation conrol view is done
      */
     var didFinishRotation: () -> Void { get set }
-    
-    /**
-     The allowableFrame is set by CropView. No need to implement it if isAttachedToCropView is false
-     */
-    func setupUI(withAllowableFrame allowableFrame: CGRect)
-    
+        
     /**
      - Return true when the value does not exceeds the limitation or there is no limitation
      - Return false when the value exceeds the limitation
@@ -40,10 +35,29 @@ public protocol RotationControlViewProtocol: UIView {
      */
     func reset()
     
-    func getTouchTarget(with point: CGPoint) -> UIView
-    
+    /**
+     If you need to adjust UI when rotationg device, implement this function.
+     Otherwise not.
+     */
     func handleDeviceRotation()
+        
+    // MARK: If isAttachedToCropView is true, implement functions below
+    /**
+     The allowableFrame is set by CropView.
+     No need to implement it if isAttachedToCropView is false
+     */
+    func setupUI(withAllowableFrame allowableFrame: CGRect)
     
+    /**
+     Handle touch target when user touchs the crop view area
+     No need to implement it if isAttachedToCropView is false
+     */
+    func getTouchTarget(with point: CGPoint) -> UIView
+        
+    /**
+     It sets the size ratio comparing rotation control view with the crop view.
+     No need to implement it if isAttachedToCropView is false
+     */
     func getLengthRatio() -> CGFloat
 }
 
