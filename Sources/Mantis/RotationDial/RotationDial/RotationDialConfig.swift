@@ -8,7 +8,6 @@
 
 import UIKit
 
-// MARK: - RotationDialConfig
 public struct RotationDialConfig {
     public init() {}
 

@@ -7,19 +7,21 @@
 
 import Foundation
 
-struct SlideDialConfig {
-    var lengthRatio: CGFloat = 0.8
-    var limitation: CGFloat = 45
+public struct SlideDialConfig {
+    public init() {}
     
-    var scaleBarNumber = 41
-    var majorScaleBarNumber = 5
+    public var lengthRatio: CGFloat = 0.8
+    public var limitation: CGFloat = 45
     
-    var scaleColor = UIColor.gray
-    var majorScaleColor = UIColor.white
+    public var scaleBarNumber = 41
+    public var majorScaleBarNumber = 5
     
-    var positiveIndicatorColor = UIColor.yellow
-    var notPositiveIndicatorColor = UIColor.white
+    public var scaleColor = UIColor.gray
+    public var majorScaleColor = UIColor.white
     
-    var indicatorSize = CGSize(width: 40, height: 40)
-    var slideRulerHeight: CGFloat = 45
+    public var positiveIndicatorColor = UIColor.yellow
+    public var notPositiveIndicatorColor = UIColor.white
+    
+    public var indicatorSize = CGSize(width: 40, height: 40)
+    public var slideRulerHeight: CGFloat = 45
 }
