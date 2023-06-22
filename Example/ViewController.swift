@@ -307,6 +307,10 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
         print("image is transformed.")
     }
+    
+    func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {
+        print("Is resettable: \(resettable)")
+    }
 }
 
 extension ViewController: ImagePickerDelegate {
