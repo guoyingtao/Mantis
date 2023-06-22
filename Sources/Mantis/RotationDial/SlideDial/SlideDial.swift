@@ -36,6 +36,8 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         self.viewModel.didSetRotationAngle = { [weak self] angle in
             self?.handleRotation(by: angle)
         }
+        
+        setAccessibilities()
     }
     
     required init?(coder: NSCoder) {
@@ -150,6 +152,20 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         slideRuler.delegate = self
         slideRuler.forceAlignCenterFeedback = true
         slideRuler.setupUI()
+    }
+    
+    override func accessibilityIncrement() {
+        viewModel.rotationAngle += Angle(degrees: 1)
+        setAccessibilityValue()
+    }
+    
+    override func accessibilityDecrement() {
+        viewModel.rotationAngle -= Angle(degrees: -1)
+        setAccessibilityValue()
+    }
+        
+    func getTotalRotationValue() -> CGFloat {
+        viewModel.rotationAngle.degrees
     }
 }
 

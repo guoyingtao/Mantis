@@ -59,6 +59,21 @@ public protocol RotationControlViewProtocol: UIView {
      No need to implement it if isAttachedToCropView is false
      */
     func getLengthRatio() -> CGFloat
+    
+    /**
+     Set accessibilities of the view which includes accessibilityTraits, accessibilityLabel and accessibilityLabel
+     */
+    func setAccessibilities()
+    
+    /**
+     Set accessibilityValue of the view
+     */
+    func setAccessibilityValue()
+    
+    /**
+     Get total rotation value of the dial. (Unit: degree)
+     */
+    func getTotalRotationValue() -> CGFloat
 }
 
 extension RotationControlViewProtocol {
@@ -71,6 +86,23 @@ extension RotationControlViewProtocol {
     
     func getLengthRatio() -> CGFloat {
         return 0.6
+    }
+    
+    func setAccessibilities() {
+        isAccessibilityElement = true
+        accessibilityTraits = .adjustable
+        accessibilityLabel = LocalizedHelper.getString("Mantis.Adjust image angle", value: "Adjust image angle")
+        setAccessibilityValue()
+    }
+    
+    func setAccessibilityValue() {
+        let degreeValue = Int(round(getTotalRotationValue()))
+        
+        if degreeValue < 2 {
+            accessibilityValue = "\(degreeValue) degree"
+        } else {
+            accessibilityValue = "\(degreeValue) degrees"
+        }
     }
 }
 

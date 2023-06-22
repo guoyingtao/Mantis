@@ -41,12 +41,20 @@ public class Angle: NSObject, Comparable {
         return Angle(radians: lhs.radians + rhs.radians)
     }
     
+    static public func += (lhs: inout Angle, rhs: Angle) {
+        lhs = Angle(radians: lhs.radians + rhs.radians)
+    }
+    
     static public func * (lhs: Angle, rhs: Angle) -> Angle {
         return Angle(radians: lhs.radians * rhs.radians)
     }
     
     static public func - (lhs: Angle, rhs: Angle) -> Angle {
         return Angle(radians: lhs.radians - rhs.radians)
+    }
+    
+    static public func -= (lhs: inout Angle, rhs: Angle) {
+        lhs = Angle(radians: lhs.radians - rhs.radians)
     }
     
     static public prefix func - (rhs: Angle) -> Angle {
