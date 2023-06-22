@@ -2,6 +2,13 @@
 
 -----
 
+## [2.12.0](https://www.github.com/guoyingtao/Mantis/compare/v2.11.0...v2.12.0) (2023-06-22)
+
+
+### Features
+
+* add new delegate function to output resettable information ([#317](https://www.github.com/guoyingtao/Mantis/issues/317)) ([03a7052](https://www.github.com/guoyingtao/Mantis/commit/03a70527fa8a4507da789105ec5cddbf57ceecf3))
+
 ## [2.11.0](https://www.github.com/guoyingtao/Mantis/compare/v2.10.0...v2.11.0) (2023-06-16)
 
 
