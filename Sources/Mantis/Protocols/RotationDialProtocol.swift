@@ -23,12 +23,7 @@ public protocol RotationControlViewProtocol: UIView {
      It should be called every time updating the rotation value by your own roation conrol view is done
      */
     var didFinishRotation: () -> Void { get set }
-    
-    /**
-     The allowableFrame is set by CropView. No need to implement it if isAttachedToCropView is false
-     */
-    func setupUI(withAllowableFrame allowableFrame: CGRect)
-    
+        
     /**
      - Return true when the value does not exceeds the limitation or there is no limitation
      - Return false when the value exceeds the limitation
@@ -39,10 +34,76 @@ public protocol RotationControlViewProtocol: UIView {
      Reset rotation control view to initial status
      */
     func reset()
+    
+    /**
+     If you need to adjust UI when rotationg device, implement this function.
+     Otherwise not.
+     */
+    func handleDeviceRotation()
+        
+    // MARK: If isAttachedToCropView is true, implement functions below
+    /**
+     The allowableFrame is set by CropView.
+     No need to implement it if isAttachedToCropView is false
+     */
+    func setupUI(withAllowableFrame allowableFrame: CGRect)
+    
+    /**
+     Handle touch target when user touchs the crop view area
+     No need to implement it if isAttachedToCropView is false
+     */
+    func getTouchTarget(with point: CGPoint) -> UIView
+        
+    /**
+     It sets the size ratio comparing rotation control view with the crop view.
+     No need to implement it if isAttachedToCropView is false
+     */
+    func getLengthRatio() -> CGFloat
+    
+    /**
+     Set accessibilities of the view which includes accessibilityTraits, accessibilityLabel and accessibilityLabel
+     */
+    func setAccessibilities()
+    
+    /**
+     Set accessibilityValue of the view
+     */
+    func setAccessibilityValue()
+    
+    /**
+     Get total rotation value of the dial. (Unit: degree)
+     */
+    func getTotalRotationValue() -> CGFloat
 }
 
 extension RotationControlViewProtocol {
-    func setupUI(withAllowableFrame allowableFrame: CGRect) {}    
+    func setupUI(withAllowableFrame allowableFrame: CGRect) {}
+    func getTouchTarget(with point: CGPoint) -> UIView {
+        return self
+    }
+    
+    func handleDeviceRotation() {}
+    
+    func getLengthRatio() -> CGFloat {
+        return 0.6
+    }
+    
+    func setAccessibilities() {
+        isAccessibilityElement = true
+        accessibilityTraits = .adjustable
+        accessibilityLabel = LocalizedHelper.getString("Mantis.Adjust image angle", value: "Adjust image angle")
+        setAccessibilityValue()
+    }
+    
+    func setAccessibilityValue() {
+        let degreeValue = Int(round(getTotalRotationValue()))
+        
+        if degreeValue < 2 {
+            accessibilityValue = "\(degreeValue) degree"
+        } else {
+            accessibilityValue = "\(degreeValue) degrees"
+        }
+    }
 }
 
 protocol RotationDialProtocol: RotationControlViewProtocol {

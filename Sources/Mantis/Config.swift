@@ -37,7 +37,7 @@ public struct Config {
         case sync
         case async // We may need this mode when cropping big images
     }
-    
+        
     public var cropMode: CropMode = .sync
     
     public var cropViewConfig = CropViewConfig()    

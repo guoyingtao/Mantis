@@ -36,7 +36,7 @@ final class RotationDial: UIView {
     
     var viewModel: RotationDialViewModelProtocol
     
-    private var dialConfig: RotationControlViewConfig
+    private var config: RotationDialConfig
     
     private var angleLimit = Angle(radians: .pi)
     private var showRadiansLimit: CGFloat = .pi
@@ -45,10 +45,10 @@ final class RotationDial: UIView {
     private var pointer: CAShapeLayer = CAShapeLayer()
     
     init(frame: CGRect,
-         dialConfig: RotationControlViewConfig,
+         config: RotationDialConfig,
          viewModel: RotationDialViewModelProtocol,
          dialPlate: RotationDialPlate) {
-        self.dialConfig = dialConfig
+        self.config = config
         self.viewModel = viewModel
         self.dialPlate = dialPlate
         super.init(frame: frame)
@@ -64,37 +64,24 @@ final class RotationDial: UIView {
     }
     
     override func accessibilityDecrement() {
-        viewModel.rotationAngle = -Angle(degrees: 1)
+        viewModel.rotationAngle = Angle(degrees: -1)
         setAccessibilityValue()
     }
 }
 
 // MARK: - private functions
 extension RotationDial {
-    private func setAccessibilityValue() {
-        let degreeValue = Int(round(getRotationAngle().degrees))
-        
-        if degreeValue < 2 {
-            accessibilityValue = "\(degreeValue) degree"
-        } else {
-            accessibilityValue = "\(degreeValue) degrees"
-        }
-    }
-    
     private func setupUI() {
         clipsToBounds = true
-        backgroundColor = dialConfig.backgroundColor
-        isAccessibilityElement = true
-        accessibilityTraits = .adjustable
-        accessibilityLabel = LocalizedHelper.getString("Mantis.Adjust image angle", value: "Adjust image angle")
-        setAccessibilityValue()
+        backgroundColor = config.backgroundColor
+        setAccessibilities()
         
         dialPlateHolder?.removeFromSuperview()
-        dialPlateHolder = getDialPlateHolder(by: dialConfig.orientation)
+        dialPlateHolder = getDialPlateHolder(by: config.orientation)
         addSubview(dialPlateHolder!)
-        createDialPlate(in: dialPlateHolder!)
+        setupDialPlate(in: dialPlateHolder!)
         setupPointer(in: dialPlateHolder!)
-        setDialPlateHolder(by: dialConfig.orientation)
+        setDialPlateHolder(by: config.orientation)
     }
     
     private func setupViewModel() {
@@ -105,7 +92,7 @@ extension RotationDial {
     }
     
     private func handleRotation(by angle: Angle) {
-        if case .limit = dialConfig.rotationLimitType {
+        if case .limit = config.rotationLimitType {
             guard angle <= angleLimit else {
                 return
             }
@@ -117,7 +104,7 @@ extension RotationDial {
         }
     }
     
-    private func getDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) -> UIView {
+    private func getDialPlateHolder(by orientation: RotationDialConfig.Orientation) -> UIView {
         let view = UIView(frame: bounds)
         
         switch orientation {
@@ -130,7 +117,7 @@ extension RotationDial {
         return view
     }
     
-    private func setDialPlateHolder(by orientation: RotationControlViewConfig.Orientation) {
+    private func setDialPlateHolder(by orientation: RotationDialConfig.Orientation) {
         switch orientation {
         case .normal:
             ()
@@ -146,10 +133,10 @@ extension RotationDial {
         }
     }
     
-    private func createDialPlate(in container: UIView) {
-        var margin = CGFloat(dialConfig.margin)
+    private func setupDialPlate(in container: UIView) {
+        var margin = CGFloat(config.margin)
         
-        if case .limit(let degreeAngle) = dialConfig.angleShowLimitType {
+        if case .limit(let degreeAngle) = config.angleShowLimitType {
             margin = 0
             showRadiansLimit = Angle(degrees: degreeAngle).radians
         } else {
@@ -189,7 +176,7 @@ extension RotationDial {
         path.addLine(to: pointLeft)
         path.addLine(to: pointRight)
         path.addLine(to: pointTop)
-        pointer.fillColor = dialConfig.indicatorColor.cgColor
+        pointer.fillColor = config.indicatorColor.cgColor
         pointer.path = path
         container.layer.addSublayer(pointer)
     }
@@ -197,7 +184,7 @@ extension RotationDial {
     private func getRotationCenter() -> CGPoint {
         guard let dialPlate = dialPlate else { return .zero }
         
-        if case .custom(let center) = dialConfig.rotationCenterType {
+        if case .custom(let center) = config.rotationCenterType {
             return center
         } else {
             let point = CGPoint(x: dialPlate.bounds.midX, y: dialPlate.bounds.midY)
@@ -210,7 +197,7 @@ extension RotationDial: RotationDialProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {
         self.frame = allowableFrame
         
-        if case .limit(let degreeAngle) = dialConfig.rotationLimitType {
+        if case .limit(let degreeAngle) = config.rotationLimitType {
             angleLimit = Angle(degrees: degreeAngle)
         }
         
@@ -223,7 +210,7 @@ extension RotationDial: RotationDialProtocol {
         guard let dialPlate = dialPlate else { return false }
         
         let radians = angle.radians
-        if case .limit = dialConfig.rotationLimitType {
+        if case .limit = config.rotationLimitType {
             if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
                 
                 if radians > 0 {
@@ -245,7 +232,7 @@ extension RotationDial: RotationDialProtocol {
     func rotateDialPlate(to angle: Angle, animated: Bool = false) {
         let radians = angle.radians
         
-        if case .limit = dialConfig.rotationLimitType {
+        if case .limit = config.rotationLimitType {
             guard abs(radians) <= angleLimit.radians else {
                 return
             }
@@ -265,20 +252,26 @@ extension RotationDial: RotationDialProtocol {
     }
     
     func getRotationAngle() -> Angle {
-        guard let dialPlate = dialPlate else { return Angle(degrees: 0) }
-        
-        let radians = CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
-        return Angle(radians: radians)
+        guard let dialPlate = dialPlate else { return Angle(degrees: 0) }        
+        return dialPlate.getRotationAngle()
     }
     
     func setRotationCenter(by point: CGPoint, of view: UIView) {
         let newPoint = view.convert(point, to: self)
-        dialConfig.rotationCenterType = .custom(center: newPoint)
+        config.rotationCenterType = .custom(center: newPoint)
     }
     
     func reset() {
         transform = .identity
         dialPlate?.reset()
-        dialConfig.rotationCenterType = .useDefault
+        config.rotationCenterType = .useDefault
+    }
+    
+    func getLengthRatio() -> CGFloat {
+        config.lengthRatio
+    }
+    
+    func getTotalRotationValue() -> CGFloat {
+        getRotationAngle().degrees
     }
 }

@@ -18,7 +18,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
@@ -47,7 +46,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         let navigationController = UINavigationController(rootViewController: cropViewController)
         cropViewController.title = "Demo"
-        cropViewController.view.backgroundColor = .white
         present(navigationController, animated: true)
     }
 
@@ -178,6 +176,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
         config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 2.0 / 1.0)
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial()
                 
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)

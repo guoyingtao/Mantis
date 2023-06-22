@@ -52,11 +52,11 @@ class RotationDialPlate: UIView {
         return layer
     }()
     
-    private var dialConfig: RotationControlViewConfig!
+    private var config: RotationDialConfig!
     
-    init(frame: CGRect, dialConfig: RotationControlViewConfig) {
+    init(frame: CGRect, config: RotationDialConfig) {
         super.init(frame: frame)
-        self.dialConfig = dialConfig
+        self.config = config
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,7 +67,7 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = dialConfig.smallScaleColor.cgColor
+        mark.fillColor = config.smallScaleColor.cgColor
         return mark
     }
     
@@ -75,7 +75,7 @@ class RotationDialPlate: UIView {
         let mark = CAShapeLayer()
         mark.frame = CGRect(x: 0, y: 0, width: 4, height: 4)
         mark.path = UIBezierPath(ovalIn: mark.bounds).cgPath
-        mark.fillColor = dialConfig.smallScaleColor.cgColor
+        mark.fillColor = config.smallScaleColor.cgColor
         return mark
     }
     
@@ -95,7 +95,7 @@ class RotationDialPlate: UIView {
         
         for index in (0 ..< bigDegreeScaleNumber) {
             
-            guard index % dialConfig.numberShowSpan == 0 else {
+            guard index % config.numberShowSpan == 0 else {
                 continue
             }
             
@@ -107,7 +107,7 @@ class RotationDialPlate: UIView {
             numberLayer.font = cgFont
             let angle = (index > bigDegreeScaleNumber / 2 ? index - bigDegreeScaleNumber : index) * 10
             numberLayer.string = "\(angle)"
-            numberLayer.foregroundColor = dialConfig.numberColor.cgColor
+            numberLayer.foregroundColor = config.numberColor.cgColor
             
             let stepChange = CGFloat(index) * step
             numberLayer.position = CGVector(fromPoint: origin, toPoint: startPos)
@@ -150,7 +150,7 @@ class RotationDialPlate: UIView {
                              width: radius,
                              height: radius)
         layer.path = UIBezierPath(ovalIn: layer.bounds).cgPath
-        layer.fillColor = dialConfig.centerAxisColor.cgColor
+        layer.fillColor = config.centerAxisColor.cgColor
         
         self.layer.addSublayer(layer)
     }
@@ -166,5 +166,10 @@ class RotationDialPlate: UIView {
     func reset() {
         transform = .identity
         layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
+    }
+    
+    func getRotationAngle() -> Angle {        
+        let radians = CGFloat(atan2f(Float(transform.b), Float(transform.a)))
+        return Angle(radians: radians)
     }
 }

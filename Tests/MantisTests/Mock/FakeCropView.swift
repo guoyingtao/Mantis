@@ -54,7 +54,7 @@ class FakeCropView: UIView, CropViewProtocol {
         
     }
     
-    func transform(byTransformInfo transformation: Transformation, rotateDial: Bool) {
+    func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool) {
         
     }
     

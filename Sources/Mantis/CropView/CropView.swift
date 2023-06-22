@@ -262,11 +262,14 @@ class CropView: UIView {
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
+            if !self.viewModel.needCrop() {
+                self.delegate?.cropViewDidEndResize(self)
+            }
             self.viewModel.setBetweenOperationStatus()
         }
 
         if rotationControlView.isAttachedToCropView {
-            let boardLength = min(bounds.width, bounds.height) * 0.6
+            let boardLength = min(bounds.width, bounds.height) * rotationControlView.getLengthRatio()
             let dialFrame = CGRect(x: 0,
                                    y: 0,
                                    width: boardLength,
@@ -306,6 +309,8 @@ class CropView: UIView {
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         }
+        
+        rotationControlView.handleDeviceRotation()
     }
     
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
