@@ -64,7 +64,7 @@ final class RotationDial: UIView {
     }
     
     override func accessibilityDecrement() {
-        viewModel.rotationAngle = -Angle(degrees: 1)
+        viewModel.rotationAngle = Angle(degrees: -1)
         setAccessibilityValue()
     }
 }
@@ -265,10 +265,8 @@ extension RotationDial: RotationDialProtocol {
     }
     
     func getRotationAngle() -> Angle {
-        guard let dialPlate = dialPlate else { return Angle(degrees: 0) }
-        
-        let radians = CGFloat(atan2f(Float(dialPlate.transform.b), Float(dialPlate.transform.a)))
-        return Angle(radians: radians)
+        guard let dialPlate = dialPlate else { return Angle(degrees: 0) }        
+        return dialPlate.getRotationAngle()
     }
     
     func setRotationCenter(by point: CGPoint, of view: UIView) {

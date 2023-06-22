@@ -167,4 +167,9 @@ class RotationDialPlate: UIView {
         transform = .identity
         layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
     }
+    
+    func getRotationAngle() -> Angle {        
+        let radians = CGFloat(atan2f(Float(transform.b), Float(transform.a)))
+        return Angle(radians: radians)
+    }
 }
