@@ -177,7 +177,7 @@ class SlideRuler: UIView {
         return scrollRulerView
     }
     
-    func setOffset(offsetRatio: CGFloat) {
+    func setOffsetRatio(_ offsetRatio: CGFloat) {
         scrollRulerView.delegate = nil
         positionInfoHelper.setOffset(offsetRatio: offsetRatio)
         scrollRulerView.delegate = self

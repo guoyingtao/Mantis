@@ -71,7 +71,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         viewModel.rotationAngle = rotationAngle
         
         if let slideRuler = slideRuler {
-            slideRuler.setOffset(offsetRatio: angle.degrees / config.limitation)
+            slideRuler.setOffsetRatio(angle.degrees / config.limitation)
         }
 
         return isInRange
