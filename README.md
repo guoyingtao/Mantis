@@ -13,8 +13,8 @@
    Mantis is an iOS Image cropping library, which mimics the Photo App written in Swift and provides rich cropping interactions for your iOS/Mac app (Catalyst only).
    
 <p align="center">
-    <img src="Images/RotaionDial.png" width="500" alt="Mantis RotaionDial" />
-    <img src="Images/SlideDial.png" width="500" alt="Mantis SlideDial" />
+    <img src="Images/RotationDial.png" height="400" alt="Mantis RotaionDial" />
+    <img src="Images/SlideDial.png" height="400" alt="Mantis SlideDial" />
 </p>
    
    Mantis also provides rich crop shapes from the basic circle/square to polygon to arbitrary paths(We even provide a heart shape ❤️ 😏).
