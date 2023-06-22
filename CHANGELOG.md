@@ -2,6 +2,13 @@
 
 -----
 
+## [2.13.0](https://www.github.com/guoyingtao/Mantis/compare/v2.12.0...v2.13.0) (2023-06-22)
+
+
+### Features
+
+* add a new type of rotation dial ([#312](https://www.github.com/guoyingtao/Mantis/issues/312)) ([9605c3d](https://www.github.com/guoyingtao/Mantis/commit/9605c3d39a0e92a1991d375668cc4d6e90ce4dcd))
+
 ## [2.12.0](https://www.github.com/guoyingtao/Mantis/compare/v2.11.0...v2.12.0) (2023-06-22)
 
 
