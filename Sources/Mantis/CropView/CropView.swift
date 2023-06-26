@@ -1104,6 +1104,11 @@ extension CropView: CropViewProtocol {
     func getExpectedCropImageSize() -> CGSize {
         image.getOutputCropImageSize(by: getCropInfo())
     }
+    
+    func rotate(by angle: Angle) {
+        viewModel.setRotatingStatus(by: angle)
+        rotationControlView?.updateRotationValue(by: angle)
+    }
 }
 
 extension UIActivityIndicatorView: ActivityIndicatorProtocol {
