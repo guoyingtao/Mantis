@@ -22,6 +22,20 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol?)
     func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol?)
     func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol?)
+    func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?, isActive: Bool)
+}
+
+public extension CropToolbarDelegate {
+    func didSelectCounterClockwiseRotate(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectClockwiseRotate(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectReset(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectSetRatio(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectRatio(_ cropToolbar: CropToolbarProtocol?, ratio: Double) {}
+    func didSelectFreeRatio(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?) {}
 }
 
 public protocol CropToolbarIconProvider: AnyObject {
@@ -34,6 +48,7 @@ public protocol CropToolbarIconProvider: AnyObject {
     func getCropIcon() -> UIImage?
     func getHorizontallyFlipIcon() -> UIImage?
     func getVerticallyFlipIcon() -> UIImage?
+    func getAutoAdjustIcon() -> UIImage?
 }
 
 public extension CropToolbarIconProvider {
@@ -46,6 +61,7 @@ public extension CropToolbarIconProvider {
     func getCropIcon() -> UIImage? { return nil }
     func getHorizontallyFlipIcon() -> UIImage? { return nil }
     func getVerticallyFlipIcon() -> UIImage? { return nil }
+    func getAutoAdjustIcon() -> UIImage? { return nil }
 }
 
 public protocol CropToolbarProtocol: UIView {
@@ -63,6 +79,8 @@ public protocol CropToolbarProtocol: UIView {
     func adjustLayoutWhenOrientationChange()        
     func handleCropViewDidBecomeResettable()
     func handleCropViewDidBecomeUnResettable()
+    func handleImageAutoAdjustable()
+    func handleImageNotAutoAdjustable()
 }
 
 public extension CropToolbarProtocol {
@@ -99,4 +117,8 @@ public extension CropToolbarProtocol {
     func handleCropViewDidBecomeResettable() {}
     
     func handleCropViewDidBecomeUnResettable() {}
+    
+    func handleImageAutoAdjustable() {}
+    
+    func handleImageNotAutoAdjustable() {}
 }

@@ -28,18 +28,17 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     @IBAction func getImageFromAlbum(_ sender: UIButton) {
         imagePicker.present(from: sender)
     }
-    
+        
     @IBAction func normalPresent(_ sender: Any) {
         guard let image = image else {
             return
-        }
-        
+        }        
         var config = Mantis.Config()
         config.cropMode = .async
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
-        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip]
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust]
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self

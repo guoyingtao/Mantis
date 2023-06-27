@@ -28,8 +28,15 @@ open class CropViewController: UIViewController {
     public weak var delegate: CropViewControllerDelegate?
     public var config = Mantis.Config()
     
-    var cropView: CropViewProtocol!
+    var cropView: CropViewProtocol! {
+        didSet {
+            if config.cropToolbarConfig.toolbarButtonOptions.contains(.autoAdjust) {
+                imageAdjustHelper = ImageAutoAdjustHelper(image: cropView.image)
+            }
+        }
+    }
     var cropToolbar: CropToolbarProtocol!
+    private var imageAdjustHelper: ImageAutoAdjustHelper?
     
     private var ratioPresenter: RatioPresenter?
     private var ratioSelector: RatioSelector?
@@ -131,7 +138,16 @@ open class CropViewController: UIViewController {
             createRatioSelector()
         }
         initLayout()
-        updateLayout()        
+        updateLayout()
+        showImageAutoAdjustStatusIfNeeded()
+    }
+    
+    func showImageAutoAdjustStatusIfNeeded() {
+        if let imageAdjustHelper = imageAdjustHelper {
+            if imageAdjustHelper.detectHorizon() {
+                cropToolbar.handleImageAutoAdjustable()
+            }
+        }
     }
     
     override public func viewDidLayoutSubviews() {
@@ -263,6 +279,7 @@ open class CropViewController: UIViewController {
         cropView.reset()
         ratioSelector?.reset()
         ratioSelector?.update(fixedRatioManager: getFixedRatioManager())
+        showImageAutoAdjustStatusIfNeeded()
     }
     
     private func handleRotate(withRotateType rotateType: RotateBy90DegreeType) {
@@ -285,6 +302,15 @@ open class CropViewController: UIViewController {
     
     private func handleVerticallyFlip() {
         cropView.verticallyFlip()
+    }
+    
+    private func handleAutoAdjust(isActive: Bool) {
+        if let angle = imageAdjustHelper?.adjustAngle {
+            cropView.reset()
+            if isActive {
+                cropView.rotate(by: angle)
+            }
+        }
     }
     
     private func handleCrop() {
@@ -363,6 +389,7 @@ extension CropViewController: CropViewDelegate {
     }
     
     func cropViewDidBeginResize(_ cropView: CropViewProtocol) {
+        cropToolbar.handleImageNotAutoAdjustable()
         delegate?.cropViewControllerDidBeginResize(self)
     }
     
@@ -416,7 +443,11 @@ extension CropViewController: CropToolbarDelegate {
     
     public func didSelectAlterCropper90Degree(_ cropToolbar: CropToolbarProtocol? = nil) {
         handleAlterCropper90Degree()
-    }    
+    }
+    
+    public func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?, isActive: Bool) {
+        handleAutoAdjust(isActive: isActive)
+    }
 }
 
 // API

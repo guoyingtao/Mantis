@@ -63,6 +63,15 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         button.accessibilityLabel = LocalizedHelper.getString("Mantis.Vertically flip", value: "Vertically flip")
         return button
     }()
+    
+    private lazy var autoAdjustButton: UIButton = {
+        let button = createOptionButton(withTitle: nil, andAction: #selector(autoAdjust(_:)))
+        let icon = iconProvider?.getAutoAdjustIcon() ?? ToolBarButtonImageBuilder.autoAdjustImage()
+        button.setImage(icon, for: .normal)
+        button.accessibilityIdentifier = "AutoAdjustButton"
+        button.accessibilityLabel = LocalizedHelper.getString("Mantis.Auto adjust", value: "Auto adjust")
+        return button
+    }()
 
     private var fixedRatioSettingButton: UIButton?
     
@@ -98,6 +107,16 @@ public class CropToolbar: UIView, CropToolbarProtocol {
 
     private var resetButton: UIButton?
     private var optionButtonStackView: UIStackView?
+    
+    private var autoAdjustButtonActive = false {
+        didSet {
+            if autoAdjustButtonActive {
+                autoAdjustButton.tintColor = .yellow
+            } else {
+                autoAdjustButton.tintColor = .gray
+            }
+        }
+    }
     
     public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
@@ -135,6 +154,12 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         
         if config.toolbarButtonOptions.contains(.verticallyFlip) {
             addButtonsToContainer(button: verticallyFlipButton)
+        }
+        
+        if config.toolbarButtonOptions.contains(.autoAdjust) {
+            addButtonsToContainer(button: autoAdjustButton)
+            autoAdjustButton.isHidden = true
+            autoAdjustButtonActive = false
         }
 
         if config.toolbarButtonOptions.contains(.reset) {
@@ -200,6 +225,15 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     public func handleCropViewDidBecomeUnResettable() {
         resetButton?.isHidden = true
     }
+    
+    public func handleImageAutoAdjustable() {
+        autoAdjustButton.isHidden = false
+    }
+    
+    public func handleImageNotAutoAdjustable() {
+        autoAdjustButton.isHidden = true
+        autoAdjustButtonActive = false
+    }
 }
 
 // Objc functions
@@ -234,6 +268,11 @@ extension CropToolbar {
 
     @objc private func verticallyFlip(_ sender: Any) {
         delegate?.didSelectVerticallyFlip(self)
+    }
+    
+    @objc private func autoAdjust(_ sender: Any) {
+        autoAdjustButtonActive.toggle()
+        delegate?.didSelectAutoAdjust(self, isActive: autoAdjustButtonActive)
     }
 
     @objc private func crop(_ sender: Any) {
