@@ -108,7 +108,15 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     private var resetButton: UIButton?
     private var optionButtonStackView: UIStackView?
     
-    private var autoAdjustButtonActive = false
+    private var autoAdjustButtonActive = false {
+        didSet {
+            if autoAdjustButtonActive {
+                autoAdjustButton.tintColor = .yellow
+            } else {
+                autoAdjustButton.tintColor = .gray
+            }
+        }
+    }
     
     public func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
@@ -151,7 +159,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         if config.toolbarButtonOptions.contains(.autoAdjust) {
             addButtonsToContainer(button: autoAdjustButton)
             autoAdjustButton.isHidden = true
-            autoAdjustButton.tintColor = .gray
+            autoAdjustButtonActive = false
         }
 
         if config.toolbarButtonOptions.contains(.reset) {
@@ -224,6 +232,7 @@ public class CropToolbar: UIView, CropToolbarProtocol {
     
     public func handleImageNotAutoAdjustable() {
         autoAdjustButton.isHidden = true
+        autoAdjustButtonActive = false
     }
 }
 
@@ -263,11 +272,6 @@ extension CropToolbar {
     
     @objc private func autoAdjust(_ sender: Any) {
         autoAdjustButtonActive.toggle()
-        if autoAdjustButtonActive {
-            autoAdjustButton.tintColor = .yellow
-        } else {
-            autoAdjustButton.tintColor = .gray
-        }
         delegate?.didSelectAutoAdjust(self, isActive: autoAdjustButtonActive)
     }
 
