@@ -16,6 +16,13 @@
     <img src="Images/RotationDial.png" height="400" alt="Mantis RotaionDial" />
     <img src="Images/SlideDial.png" height="400" alt="Mantis SlideDial" />
 </p>
+
+### Demos
+
+<p align="center">
+    <img src="Images/Rotation dial demos.gif" alt="Mantis RotaionDial Demos" />
+    <img src="Images/Slide dial with flip demos.gif" alt="Mantis SlideDial Demos" />
+</p>
    
    Mantis also provides rich crop shapes from the basic circle/square to polygon to arbitrary paths(We even provide a heart shape ❤️ 😏).
 <p align="center">
