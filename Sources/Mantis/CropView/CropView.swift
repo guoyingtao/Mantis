@@ -63,6 +63,8 @@ class CropView: UIView {
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
     
+    private var flipOddTimes = false
+    
     lazy private var activityIndicator: ActivityIndicatorProtocol = {
         let activityIndicator: ActivityIndicatorProtocol
         if let indicator = cropViewConfig.cropActivityIndicator {
@@ -752,12 +754,26 @@ extension CropView {
             }
         }
         
+        func flip() {
+            flipOddTimes.toggle()
+            
+            let flipTransform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
+            
+            let coff: CGFloat = flipOddTimes ? 2 : -2
+            
+//            let coff: CGFloat = viewModel.radians < 0 ? 2 : -2
+            cropWorkbenchView.transform = flipTransform.rotated(by: coff*viewModel.radians)
+            
+            viewModel.degrees *= -1
+            rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.degrees))
+        }
+        
         if animated {
             UIView.animate(withDuration: 0.5) {
-                self.cropWorkbenchView.transform = self.cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
+                flip()
             }
         } else {
-            cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
+            flip()
         }
     }
 }
@@ -1029,6 +1045,7 @@ extension CropView: CropViewProtocol {
     }
     
     func reset() {
+        flipOddTimes = false
         aspectRatioLockEnabled = forceFixedRatio
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         

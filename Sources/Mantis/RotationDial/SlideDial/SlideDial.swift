@@ -44,37 +44,26 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setIndicator(with angle: Angle) {
+        indicator?.text = "\(Int(round(angle.degrees)))"
+        indicator?.textColor = angle.degrees > 0 ? config.positiveIndicatorColor : config.notPositiveIndicatorColor
+    }
+    
     private func handleRotation(by angle: Angle) {
-        if let indicator = indicator {
-            indicator.text = "\(Int(round(angle.degrees)))"
-            indicator.textColor = angle.degrees > 0 ? config.positiveIndicatorColor : config.notPositiveIndicatorColor
-        }
-        
+        setIndicator(with: angle)
         didUpdateRotationValue(angle)
     }
     
-    @discardableResult func updateRotationValue(by angle: Angle) -> Bool {
-        var rotationAngle = angle
-        
-        var isInRange = true
-        
-        if angle.degrees > config.limitation {
-            rotationAngle = Angle(degrees: config.limitation)
-            isInRange = false
+    @discardableResult
+    func updateRotationValue(by angle: Angle) -> Bool {
+        guard abs(angle.degrees) < config.limitation else {
+            return false
         }
         
-        if angle.degrees < -config.limitation {
-            rotationAngle = Angle(degrees: -config.limitation)
-            isInRange = false
-        }
-                
-        viewModel.rotationAngle = rotationAngle
-        
-        if let slideRuler = slideRuler {
-            slideRuler.setOffsetRatio(angle.degrees / config.limitation)
-        }
+        slideRuler?.setOffsetRatio(angle.degrees / config.limitation)
+        setIndicator(with: angle)
 
-        return isInRange
+        return true
     }
     
     func reset() {
@@ -127,7 +116,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             indicator.frame = indicatorFrame
         } else {
             indicator = UILabel(frame: indicatorFrame)
-            indicator.textColor = .white
+            indicator.textColor = config.notPositiveIndicatorColor
             indicator.textAlignment = .center
             addSubview(indicator)
             

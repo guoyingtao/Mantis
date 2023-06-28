@@ -38,7 +38,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
-        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust]
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
@@ -83,6 +83,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                                                 height: 654.7511809035641))
                 
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial()
         
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
