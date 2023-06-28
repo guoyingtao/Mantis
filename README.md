@@ -20,9 +20,9 @@
 ### Demos
 
 <p align="center">
-    <img src="Images/Normal demos.gif" alt="Mantis Normal Demos" /> 
-    <img src="Images/Rotation dial demos.gif" alt="Mantis RotaionDial Demos" /> 
-    <img src="Images/Slide dial with flip demos.gif" alt="Mantis SlideDial Demos" /> 
+    <img src="Images/Normal demos.gif" width="200" alt="Mantis Normal Demos" /> 
+    <img src="Images/Rotation dial demos.gif" width="200" alt="Mantis RotaionDial Demos" /> 
+    <img src="Images/Slide dial with flip demos.gif" width="200" alt="Mantis SlideDial Demos" /> 
 </p>
    
    Mantis also provides rich crop shapes from the basic circle/square to polygon to arbitrary paths(We even provide a heart shape ❤️ 😏).
