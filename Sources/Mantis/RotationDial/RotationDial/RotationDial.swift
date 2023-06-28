@@ -98,7 +98,7 @@ extension RotationDial {
             }
         }
         
-        if updateRotationValue(by: angle) {
+        if updateRotation(bySteppingAngle: angle) {
             let newAngle = getRotationAngle()
             didUpdateRotationValue(newAngle)
         }
@@ -205,13 +205,12 @@ extension RotationDial: RotationDialProtocol {
         setupViewModel()
     }
     
-    @discardableResult
-    func updateRotationValue(by angle: Angle) -> Bool {
+    private func updateRotation(bySteppingAngle steppingAngle: Angle) -> Bool {
         guard let dialPlate = dialPlate else { return false }
         
-        let radians = angle.radians
+        let radians = steppingAngle.radians
         if case .limit = config.rotationLimitType {
-            if (getRotationAngle() * angle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
+            if (getRotationAngle() * steppingAngle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
                 
                 if radians > 0 {
                     rotateDialPlate(to: angleLimit)
@@ -224,6 +223,20 @@ extension RotationDial: RotationDialProtocol {
         }
         
         dialPlate.transform = dialPlate.transform.rotated(by: radians)
+        setAccessibilityValue()
+        
+        return true
+    }
+    
+    @discardableResult
+    func updateRotationValue(by angle: Angle) -> Bool {
+        if case .limit = config.rotationLimitType {
+            if abs(angle.degrees) > angleLimit.degrees {
+                return false
+            }
+        }
+        
+        rotateDialPlate(to: angle)
         setAccessibilityValue()
         
         return true
