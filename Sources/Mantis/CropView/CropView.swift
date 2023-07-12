@@ -322,10 +322,11 @@ class CropView: UIView {
             return
         }
         
+        let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)        
         let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
                                 y: cropWorkbenchView.frame.origin.y - cropWorkbenchView.contentOffset.y,
-                                width: imageContainer.frame.width,
-                                height: imageContainer.frame.height)
+                                width: imageContainerRect.size.width,
+                                height: imageContainerRect.size.height)
         
         guard imageFrame.contains(touchPoint) else {
             return
