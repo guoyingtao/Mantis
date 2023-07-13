@@ -2,6 +2,13 @@
 
 -----
 
+### [2.14.1](https://www.github.com/guoyingtao/Mantis/compare/v2.14.0...v2.14.1) (2023-07-13)
+
+
+### Bug Fixes
+
+* fix wrong image container rect values after rotating ([#325](https://www.github.com/guoyingtao/Mantis/issues/325)) ([a4c5013](https://www.github.com/guoyingtao/Mantis/commit/a4c50137d342e0e561b7fc80ec9603fe621493ab))
+
 ## [2.14.0](https://www.github.com/guoyingtao/Mantis/compare/v2.13.0...v2.14.0) (2023-06-28)
 
 
