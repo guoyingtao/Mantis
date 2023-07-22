@@ -201,7 +201,7 @@ open class CropViewController: UIViewController {
         cropView.setFixedRatio(ratio, zoom: zoom, presetFixedRatioType: config.presetFixedRatioType)
     }
     
-    private func setFreeRatio() {
+    public func setFreeRatio() {
         resetRatioButton()
     }
     
