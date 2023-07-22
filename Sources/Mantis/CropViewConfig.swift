@@ -41,12 +41,6 @@ public struct CropViewConfig {
     
     public var maximumZoomScale: CGFloat = 15
     
-    /**
-     Rotation control view currently is tightly coupled with other parts of CropView, we see rotation control view as a part of CropView,
-     so we put RotationControlViewConfig inside CropViewConfig
-     */
-    public var rotationControlViewConfig = RotationControlViewConfig()
-    
     @available(*, deprecated, message: "Use showAttachedRotationControlView instead")
     public var showRotationDial = true {
         didSet {
@@ -71,6 +65,13 @@ public struct CropViewConfig {
     var minimumCropBoxSize: CGFloat = 42
 
     public var disableCropBoxDeformation = false
+    
+    public enum BuiltInRotationControlViewType {
+        case rotationDial(config: RotationDialConfig = .init())
+        case slideDial(config: SlideDialConfig = .init())
+    }
+    
+    public var builtInRotationControlViewType: BuiltInRotationControlViewType = .rotationDial()
     
     public init() {}
 }

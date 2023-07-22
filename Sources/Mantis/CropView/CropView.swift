@@ -63,6 +63,8 @@ class CropView: UIView {
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
     
+    private var flipOddTimes = false
+    
     lazy private var activityIndicator: ActivityIndicatorProtocol = {
         let activityIndicator: ActivityIndicatorProtocol
         if let indicator = cropViewConfig.cropActivityIndicator {
@@ -262,11 +264,14 @@ class CropView: UIView {
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
+            if !self.viewModel.needCrop() {
+                self.delegate?.cropViewDidEndResize(self)
+            }
             self.viewModel.setBetweenOperationStatus()
         }
 
         if rotationControlView.isAttachedToCropView {
-            let boardLength = min(bounds.width, bounds.height) * 0.6
+            let boardLength = min(bounds.width, bounds.height) * rotationControlView.getLengthRatio()
             let dialFrame = CGRect(x: 0,
                                    y: 0,
                                    width: boardLength,
@@ -306,6 +311,8 @@ class CropView: UIView {
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         }
+        
+        rotationControlView.handleDeviceRotation()
     }
     
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
@@ -315,10 +322,11 @@ class CropView: UIView {
             return
         }
         
+        let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)        
         let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
                                 y: cropWorkbenchView.frame.origin.y - cropWorkbenchView.contentOffset.y,
-                                width: imageContainer.frame.width,
-                                height: imageContainer.frame.height)
+                                width: imageContainerRect.size.width,
+                                height: imageContainerRect.size.height)
         
         guard imageFrame.contains(touchPoint) else {
             return
@@ -747,12 +755,26 @@ extension CropView {
             }
         }
         
+        func flip() {
+            flipOddTimes.toggle()
+            
+            let flipTransform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
+            
+            let coff: CGFloat = flipOddTimes ? 2 : -2
+            
+//            let coff: CGFloat = viewModel.radians < 0 ? 2 : -2
+            cropWorkbenchView.transform = flipTransform.rotated(by: coff*viewModel.radians)
+            
+            viewModel.degrees *= -1
+            rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.degrees))
+        }
+        
         if animated {
             UIView.animate(withDuration: 0.5) {
-                self.cropWorkbenchView.transform = self.cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
+                flip()
             }
         } else {
-            cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
+            flip()
         }
     }
 }
@@ -1024,6 +1046,7 @@ extension CropView: CropViewProtocol {
     }
     
     func reset() {
+        flipOddTimes = false
         aspectRatioLockEnabled = forceFixedRatio
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         
@@ -1098,6 +1121,11 @@ extension CropView: CropViewProtocol {
     
     func getExpectedCropImageSize() -> CGSize {
         image.getOutputCropImageSize(by: getCropInfo())
+    }
+    
+    func rotate(by angle: Angle) {
+        viewModel.setRotatingStatus(by: angle)
+        rotationControlView?.updateRotationValue(by: angle)
     }
 }
 

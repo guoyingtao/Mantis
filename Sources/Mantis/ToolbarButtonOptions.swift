@@ -20,6 +20,7 @@ public struct ToolbarButtonOptions: OptionSet {
     static public let alterCropper90Degree = ToolbarButtonOptions(rawValue: 1 << 4)
     static public let horizontallyFlip = ToolbarButtonOptions(rawValue: 1 << 5)
     static public let verticallyFlip = ToolbarButtonOptions(rawValue: 1 << 6)
+    static public let autoAdjust = ToolbarButtonOptions(rawValue: 1 << 7)
     
     static public let `default`: ToolbarButtonOptions = [counterclockwiseRotate,
                                                          reset,

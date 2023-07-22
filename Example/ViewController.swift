@@ -18,7 +18,6 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
@@ -29,25 +28,23 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     @IBAction func getImageFromAlbum(_ sender: UIButton) {
         imagePicker.present(from: sender)
     }
-    
+        
     @IBAction func normalPresent(_ sender: Any) {
         guard let image = image else {
             return
-        }
-        
+        }        
         var config = Mantis.Config()
         config.cropMode = .async
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
-        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .horizontallyFlip]
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
         
         let navigationController = UINavigationController(rootViewController: cropViewController)
         cropViewController.title = "Demo"
-        cropViewController.view.backgroundColor = .white
         present(navigationController, animated: true)
     }
 
@@ -86,6 +83,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                                                 height: 654.7511809035641))
                 
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial()
         
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
@@ -178,6 +176,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         config.cropToolbarConfig.foregroundColor = .gray
         config.cropToolbarConfig.ratioCandidatesShowType = .alwaysShowRatioList
         config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 2.0 / 1.0)
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial()
                 
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
@@ -306,6 +305,10 @@ class ViewController: UIViewController, CropViewControllerDelegate {
     
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
         print("image is transformed.")
+    }
+    
+    func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {
+        print("Is resettable: \(resettable)")
     }
 }
 

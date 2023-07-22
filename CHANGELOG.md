@@ -2,6 +2,39 @@
 
 -----
 
+### [2.14.1](https://www.github.com/guoyingtao/Mantis/compare/v2.14.0...v2.14.1) (2023-07-13)
+
+
+### Bug Fixes
+
+* fix wrong image container rect values after rotating ([#325](https://www.github.com/guoyingtao/Mantis/issues/325)) ([a4c5013](https://www.github.com/guoyingtao/Mantis/commit/a4c50137d342e0e561b7fc80ec9603fe621493ab))
+
+## [2.14.0](https://www.github.com/guoyingtao/Mantis/compare/v2.13.0...v2.14.0) (2023-06-28)
+
+
+### Features
+
+* support auto adjusting an image ([#321](https://www.github.com/guoyingtao/Mantis/issues/321)) ([da22bf5](https://www.github.com/guoyingtao/Mantis/commit/da22bf52b0dd3d7bf2c51f2ccae511258ac0f274))
+
+
+### Bug Fixes
+
+* fix flip animation issue ([#323](https://www.github.com/guoyingtao/Mantis/issues/323)) ([c8f2fc5](https://www.github.com/guoyingtao/Mantis/commit/c8f2fc5bb1e9dbc8b58d0fbdd6511364bcf77fd0))
+
+## [2.13.0](https://www.github.com/guoyingtao/Mantis/compare/v2.12.0...v2.13.0) (2023-06-22)
+
+
+### Features
+
+* add a new type of rotation dial ([#312](https://www.github.com/guoyingtao/Mantis/issues/312)) ([9605c3d](https://www.github.com/guoyingtao/Mantis/commit/9605c3d39a0e92a1991d375668cc4d6e90ce4dcd))
+
+## [2.12.0](https://www.github.com/guoyingtao/Mantis/compare/v2.11.0...v2.12.0) (2023-06-22)
+
+
+### Features
+
+* add new delegate function to output resettable information ([#317](https://www.github.com/guoyingtao/Mantis/issues/317)) ([03a7052](https://www.github.com/guoyingtao/Mantis/commit/03a70527fa8a4507da789105ec5cddbf57ceecf3))
+
 ## [2.11.0](https://www.github.com/guoyingtao/Mantis/compare/v2.10.0...v2.11.0) (2023-06-16)
 
 

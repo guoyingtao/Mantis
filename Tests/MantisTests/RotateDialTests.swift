@@ -15,19 +15,19 @@ final class RotateDialTests: XCTestCase {
     var viewModel: RotationDialViewModel!
 
     override func setUpWithError() throws {
-        let dialConfig = Config().cropViewConfig.rotationControlViewConfig
-        setup(with: dialConfig)
+        let config = RotationDialConfig()
+        setup(with: config)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    private func setup(with dialConfig: RotationControlViewConfig) {
+    private func setup(with config: RotationDialConfig) {
         viewModel = RotationDialViewModel()
-        dialPlate = RotationDialPlate(frame: .zero, dialConfig: dialConfig)
+        dialPlate = RotationDialPlate(frame: .zero, config: config)
         dial = RotationDial(frame: .zero,
-                            dialConfig: dialConfig,
+                            config: config,
                             viewModel: viewModel,
                             dialPlate: dialPlate)
         dial.setupUI(withAllowableFrame: .zero)
@@ -35,7 +35,7 @@ final class RotateDialTests: XCTestCase {
     
     func testRotateDialPlate() {
         // Test valid plus rotation with limitation
-        var dialConfig = Config().cropViewConfig.rotationControlViewConfig
+        var dialConfig = RotationDialConfig()
         dialConfig.rotationLimitType = .limit(degreeAngle: 45)
         setup(with: dialConfig)
         
@@ -74,7 +74,7 @@ final class RotateDialTests: XCTestCase {
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: -45).radians))
         
         // Test no limit
-        dialConfig = Config().cropViewConfig.rotationControlViewConfig
+        dialConfig = RotationDialConfig()
         dialConfig.rotationLimitType = .noLimit
         setup(with: dialConfig)
         
@@ -83,4 +83,20 @@ final class RotateDialTests: XCTestCase {
         XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
     }
+    
+    func testReset() {
+        var dialConfig = RotationDialConfig()
+        dialConfig.rotationLimitType = .limit(degreeAngle: 45)
+        setup(with: dialConfig)
+        
+        let dialPlateTransform = dialPlate.transform
+        let angle = Angle(degrees: 40)
+        XCTAssertTrue(dial.updateRotationValue(by: angle))
+        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
+
+        dial.reset()
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 0)
+        XCTAssertEqual(dial.transform, .identity)
+    }
+
 }
