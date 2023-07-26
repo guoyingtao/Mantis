@@ -407,7 +407,7 @@ extension CropView {
             }
         }
         
-        updatePosition(by: totalRadians)
+        adjustWorkbenchView(by: totalRadians)
     }
     
     private func getInitialCropBoxRect() -> CGRect {
@@ -548,7 +548,7 @@ extension CropView {
                                        to: cropWorkbenchView.imageContainer)
                 cropWorkbenchView.zoom(to: zoomRect, animated: false)
             }
-            cropWorkbenchView.checkContentOffset()
+            cropWorkbenchView.updateContentOffset()
             makeSureImageContainsCropOverlay()
         }
         
@@ -572,7 +572,7 @@ extension CropView {
         }
     }
     
-    private func updatePosition(by radians: CGFloat) {
+    private func adjustWorkbenchView(by radians: CGFloat) {
         let width = abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.height
         let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
         
@@ -585,7 +585,7 @@ extension CropView {
             cropWorkbenchView.updateMinZoomScale()
         }
         
-        cropWorkbenchView.checkContentOffset()
+        cropWorkbenchView.updateContentOffset()
     }
     
     func updatePositionFor90Rotation(by radians: CGFloat) {
@@ -611,7 +611,7 @@ extension CropView {
         cropWorkbenchView.minimumZoomScale = newZoomScale
         cropWorkbenchView.zoomScale = newZoomScale
         
-        cropWorkbenchView.checkContentOffset()
+        cropWorkbenchView.updateContentOffset()
     }
 }
 
