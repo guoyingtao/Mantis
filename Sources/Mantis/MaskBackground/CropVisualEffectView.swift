@@ -9,10 +9,8 @@
 import UIKit
 
 class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
-    var overLayerFillColor: CGColor = UIColor.black.cgColor
-    
-    var innerLayer: CALayer?
-    
+    var overLayerFillColor = UIColor.black.cgColor
+    var maskLayer: CALayer?
     var cropShapeType: CropShapeType = .rect
     var imageRatio: CGFloat = 1.0
     
@@ -30,13 +28,12 @@ class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
     }
         
     func setMask(cropRatio: CGFloat) {
-        let layer = createOverLayer(opacity: 0.98, cropRatio: cropRatio)
+        maskLayer?.removeFromSuperlayer()        
+        maskLayer = createMaskLayer(opacity: 0.98, cropRatio: cropRatio)
         
         let maskView = UIView(frame: self.bounds)
         maskView.clipsToBounds = true
-        maskView.layer.addSublayer(layer)
-        
-        innerLayer = layer
+        maskView.layer.addSublayer(maskLayer!)
         
         self.mask = maskView
     }
@@ -55,5 +52,4 @@ class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
             return (nil, .black)
         }
     }
-    
 }
