@@ -25,7 +25,7 @@ class ImageAutoAdjustHelper {
             return false
         }
 
-        let request = VNDetectHorizonRequest { [weak self] request, error in
+        let request = VNDetectHorizonRequest { [weak self] request, _ in
             guard let observations = request.results as? [VNHorizonObservation] else {
                 return
             }

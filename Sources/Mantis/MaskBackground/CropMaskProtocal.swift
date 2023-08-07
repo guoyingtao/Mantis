@@ -13,7 +13,7 @@ private let initialFrameLength: CGFloat = 1000
 
 protocol CropMaskProtocol: UIView {
     var cropShapeType: CropShapeType { get set }
-    var innerLayer: CALayer? { get set }
+    var maskLayer: CALayer? { get set }
     var overLayerFillColor: CGColor { get set }
     
     func initialize(cropRatio: CGFloat)
@@ -44,7 +44,7 @@ extension CropMaskProtocol {
         
         switch cropShapeType {
         case .roundedRect:
-            innerLayer?.removeFromSuperlayer()
+            maskLayer?.removeFromSuperlayer()
             setMask(cropRatio: cropRatio)
             scaleX = cropRect.width / (minOverLayerUnit * cropRatio)
         default:
@@ -62,7 +62,7 @@ extension CropMaskProtocol {
         self.frame.origin.y = cropRect.midY - self.frame.height / 2
     }
     
-    func createOverLayer(opacity: Float, cropRatio: CGFloat = 1.0) -> CAShapeLayer {
+    func createMaskLayer(opacity: Float, cropRatio: CGFloat = 1.0) -> CAShapeLayer {
         let coff: CGFloat
         switch cropShapeType {
         case .roundedRect:

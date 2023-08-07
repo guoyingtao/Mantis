@@ -9,10 +9,8 @@
 import UIKit
 
 class CropDimmingView: UIView, CropMaskProtocol {
-    var overLayerFillColor: CGColor = UIColor.black.cgColor
-    
-    var innerLayer: CALayer?
-    
+    var overLayerFillColor = UIColor.black.cgColor    
+    var maskLayer: CALayer?
     var cropShapeType: CropShapeType = .rect
     var imageRatio: CGFloat = 1.0
     
@@ -22,8 +20,8 @@ class CropDimmingView: UIView, CropMaskProtocol {
     }
     
     func setMask(cropRatio: CGFloat) {
-        let layer = createOverLayer(opacity: 0.5, cropRatio: cropRatio)
-        self.layer.addSublayer(layer)
-        innerLayer = layer
+        maskLayer?.removeFromSuperlayer()
+        maskLayer = createMaskLayer(opacity: 0.5, cropRatio: cropRatio)
+        layer.addSublayer(maskLayer!)
     }
 }
