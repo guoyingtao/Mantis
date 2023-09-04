@@ -422,10 +422,19 @@ extension CropView {
         let outsideRect = getContentBounds()
         let insideRect: CGRect
         
+        let widthIsLess = image.size.width < image.size.height
+        let minSide = min(image.size.width, image.size.height)
+        
+        let width = widthIsLess ? image.size.width : min(minSide * cropViewConfig.aspectRatioLimit, image.size.width)
+        let height = widthIsLess ? min(minSide * cropViewConfig.aspectRatioLimit, image.size.height) : image.size.height
+        
+        let x = (image.size.width - width) / 2
+        let y = (image.size.height - height) / 2
+        
         if viewModel.isUpOrUpsideDown() {
-            insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+            insideRect = CGRect(x: x, y: y, width: width, height: height)
         } else {
-            insideRect = CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width)
+            insideRect = CGRect(x: y, y: x, width: height, height: width)
         }
         
         return GeometryHelper.getInscribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
