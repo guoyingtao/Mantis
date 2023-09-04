@@ -18,6 +18,6 @@ protocol CropWorkbenchViewProtocol: UIScrollView {
     func zoomScaleToBound(animated: Bool)
     func shouldScale() -> Bool
     func updateLayout(byNewSize newSize: CGSize)
-    func reset(by rect: CGRect)
-    func resetImageContent(by cropBoxFrame: CGRect)
+    func reset(by rect: CGRect, widthAdj: CGFloat, heightAdj: CGFloat)
+    func resetImageContent(by cropBoxFrame: CGRect, widthAdj: CGFloat, heightAdj: CGFloat)
 }

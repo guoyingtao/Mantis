@@ -44,6 +44,24 @@ class CropView: UIView {
     
     var aspectRatioLockEnabled = false
     
+    var adjustedSize: CGSize {
+        let widthIsLess = image.size.width < image.size.height
+        let minSide = min(image.size.width, image.size.height)
+        let maxSide = minSide * cropViewConfig.aspectRatioLimit
+        
+        let width = widthIsLess ? image.size.width : min(image.size.width, maxSide)
+        let height = widthIsLess ? min(image.size.height, maxSide) : image.size.height
+        
+        return CGSize(width: width, height: height)
+    }
+    
+    var adjustments: (width: CGFloat, height: CGFloat) {
+        let widthAdj = image.size.width / adjustedSize.width
+        let heightAdj = image.size.height / adjustedSize.height
+        
+        return (width: widthAdj, height: heightAdj)
+    }
+    
     // Referred to in extension
     let imageContainer: ImageContainerProtocol
     let cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorViewProtocol
@@ -217,7 +235,7 @@ class CropView: UIView {
         cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageHorizontalToVerticalRatio()))
         
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
-        cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
+        cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame, widthAdj: adjustments.width, heightAdj: adjustments.height)
         cropAuxiliaryIndicatorView.bringSelfToFront()
         
         setupRotationDialIfNeeded()
@@ -422,19 +440,15 @@ extension CropView {
         let outsideRect = getContentBounds()
         let insideRect: CGRect
         
-        let widthIsLess = image.size.width < image.size.height
-        let minSide = min(image.size.width, image.size.height)
+        let fixedSize = adjustedSize
         
-        let width = widthIsLess ? image.size.width : min(minSide * cropViewConfig.aspectRatioLimit, image.size.width)
-        let height = widthIsLess ? min(minSide * cropViewConfig.aspectRatioLimit, image.size.height) : image.size.height
-        
-        let x = (image.size.width - width) / 2
-        let y = (image.size.height - height) / 2
+        let rectX = (image.size.width - fixedSize.width) / 2
+        let rectY = (image.size.height - fixedSize.height) / 2
         
         if viewModel.isUpOrUpsideDown() {
-            insideRect = CGRect(x: x, y: y, width: width, height: height)
+            insideRect = CGRect(x: rectX, y: rectY, width: fixedSize.width, height: fixedSize.height)
         } else {
-            insideRect = CGRect(x: y, y: x, width: height, height: width)
+            insideRect = CGRect(x: rectY, y: rectX, width: fixedSize.height, height: fixedSize.width)
         }
         
         return GeometryHelper.getInscribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
@@ -829,7 +843,7 @@ extension CropView: CropViewProtocol {
         viewModel.resetCropFrame(by: getInitialCropBoxRect())
         
         cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)
-        cropWorkbenchView.reset(by: viewModel.cropBoxFrame)
+        cropWorkbenchView.reset(by: viewModel.cropBoxFrame, widthAdj: adjustments.width, heightAdj: adjustments.height)
         
         rotateCropWorkbenchView()
         

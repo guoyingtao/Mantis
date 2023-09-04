@@ -120,22 +120,23 @@ extension CropWorkbenchView: CropWorkbenchViewProtocol {
         center = oldScrollViewcenter
     }
     
-    func reset(by rect: CGRect) {
+    func reset(by rect: CGRect, widthAdj: CGFloat = 1, heightAdj: CGFloat = 1) {
         // Reseting zoom need to be before resetting frame and contentsize
         minimumZoomScale = max(1.0, initialMinimumZoomScale)
         zoomScale = minimumZoomScale
         
         let newRect = CGRect(x: rect.origin.x,
                              y: rect.origin.y,
-                             width: rect.width * minimumZoomScale,
-                             height: rect.height * minimumZoomScale)
+                             width: rect.width * minimumZoomScale * widthAdj,
+                             height: rect.height * minimumZoomScale * heightAdj)
         frame = rect
+        
         contentSize = newRect.size
     }
     
-    func resetImageContent(by cropBoxFrame: CGRect) {
+    func resetImageContent(by cropBoxFrame: CGRect, widthAdj: CGFloat = 1, heightAdj: CGFloat = 1) {
         transform = .identity
-        reset(by: cropBoxFrame)
+        reset(by: cropBoxFrame, widthAdj: widthAdj, heightAdj: heightAdj)
         
         guard let imageContainer = imageContainer else {
             assertionFailure("We must have an imageContainer")
