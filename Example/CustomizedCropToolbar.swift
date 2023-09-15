@@ -111,4 +111,8 @@ class CustomizedCropToolbar: UIView, CropToolbarProtocol {
         
         return button
     }
+    
+    func setInteraction(enabled: Bool) {
+        isUserInteractionEnabled = enabled
+    }
 }

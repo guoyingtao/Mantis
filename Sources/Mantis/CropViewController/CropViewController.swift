@@ -390,10 +390,12 @@ extension CropViewController: CropViewDelegate {
     
     func cropViewDidBeginResize(_ cropView: CropViewProtocol) {
         cropToolbar.handleImageNotAutoAdjustable()
+        cropToolbar.setInteraction(enabled: false)
         delegate?.cropViewControllerDidBeginResize(self)
     }
     
     func cropViewDidEndResize(_ cropView: CropViewProtocol) {
+        cropToolbar.setInteraction(enabled: true)
         delegate?.cropViewControllerDidEndResize(self,
                                                  original: cropView.image,
                                                  cropInfo: cropView.getCropInfo())

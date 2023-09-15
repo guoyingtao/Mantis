@@ -55,4 +55,8 @@ class MyNavigationCropToolbar: UIView, CropToolbarProtocol {
     @objc func rotate() {
         delegate?.didSelectClockwiseRotate(self)
     }
+    
+    func setInteraction(enabled: Bool) {
+        isUserInteractionEnabled = enabled
+    }
 }

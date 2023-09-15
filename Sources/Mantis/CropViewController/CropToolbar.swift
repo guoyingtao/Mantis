@@ -234,6 +234,10 @@ public class CropToolbar: UIView, CropToolbarProtocol {
         autoAdjustButton.isHidden = true
         autoAdjustButtonActive = false
     }
+    
+    public func setInteraction(enabled: Bool) {
+        isUserInteractionEnabled = enabled
+    }
 }
 
 // Objc functions

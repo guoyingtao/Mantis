@@ -81,6 +81,7 @@ public protocol CropToolbarProtocol: UIView {
     func handleCropViewDidBecomeUnResettable()
     func handleImageAutoAdjustable()
     func handleImageNotAutoAdjustable()
+    func setInteraction(enabled: Bool)
 }
 
 public extension CropToolbarProtocol {
