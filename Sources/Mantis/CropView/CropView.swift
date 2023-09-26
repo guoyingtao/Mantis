@@ -43,6 +43,7 @@ class CropView: UIView {
     }
     
     var aspectRatioLockEnabled = false
+    var cropInProgress = false
     
     var adjustedSize: CGSize {
         let widthIsLess = image.size.width < image.size.height

@@ -50,6 +50,7 @@ extension CropView {
         }
         
         let point = touch.location(in: self)
+        cropInProgress = true
         viewModel.prepareForCrop(byTouchPoint: point)
     }
     
@@ -64,8 +65,29 @@ extension CropView {
             return
         }
         
+        guard cropInProgress else { return }
+        
         let touchPoint = touch.location(in: self)
-        updateCropBoxFrame(withTouchPoint: touchPoint)
+        
+        if cropWorkbenchView.frame.contains(touchPoint) {
+            updateCropBoxFrame(withTouchPoint: touchPoint)
+        } else {
+            if viewModel.needCrop() {
+                cropAuxiliaryIndicatorView.handleEdgeUntouched()
+                let contentRect = getContentBounds()
+                adjustUIForNewCrop(contentRect: contentRect) {[weak self] in
+                    guard let self = self else { return }
+                    self.delegate?.cropViewDidEndResize(self)
+                    self.viewModel.setBetweenOperationStatus()
+                    self.cropWorkbenchView.updateMinZoomScale()
+                }
+            } else {
+                delegate?.cropViewDidEndResize(self)
+                viewModel.setBetweenOperationStatus()
+            }
+            
+            cropInProgress = false
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -78,6 +100,8 @@ extension CropView {
         if touch.view is RotationControlViewProtocol {
             return
         }
+        
+        guard cropInProgress else { return }
         
         if viewModel.needCrop() {
             cropAuxiliaryIndicatorView.handleEdgeUntouched()
@@ -92,6 +116,8 @@ extension CropView {
             delegate?.cropViewDidEndResize(self)
             viewModel.setBetweenOperationStatus()
         }
+        
+        cropInProgress = false
     }
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
