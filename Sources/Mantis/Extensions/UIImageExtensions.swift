@@ -74,21 +74,11 @@ extension UIImage {
     }
     
     func isHorizontal() -> Bool {
-        let orientationArray: [UIImage.Orientation] = [.up, .upMirrored, .down, .downMirrored]
-        if orientationArray.contains(imageOrientation) {
-            return size.width > size.height
-        } else {
-            return size.height > size.width
-        }
+        return size.width > size.height
     }
     
     func horizontalToVerticalRatio() -> CGFloat {
-        let orientationArray: [UIImage.Orientation] = [.up, .upMirrored, .down, .downMirrored]
-        if orientationArray.contains(imageOrientation) {
-            return size.width / size.height
-        } else {
-            return size.height / size.width
-        }
+        return size.width / size.height
     }
     
     func crop(by cropInfo: CropInfo) -> UIImage? {
