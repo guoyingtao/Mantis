@@ -283,9 +283,7 @@ class CropView: UIView {
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
-            if !self.viewModel.needCrop() {
-                self.delegate?.cropViewDidEndResize(self)
-            }
+            self.delegate?.cropViewDidEndResize(self)
             self.viewModel.setBetweenOperationStatus()
         }
 
