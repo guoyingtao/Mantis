@@ -315,8 +315,8 @@ class CropView: UIView {
         rotationControlView.handleDeviceRotation()
     }
     
-    private func updateTouchPointIfNeeded(touchPoint: CGPoint, rect: CGRect) -> CGPoint {
-        var updatedPoint = touchPoint
+    private func confineTouchPoint(_ touchPoint: CGPoint, in rect: CGRect) -> CGPoint {
+        var confinedPoint = touchPoint
         
         // Get the frame dimensions
         let frameWidth = frame.size.width
@@ -324,18 +324,18 @@ class CropView: UIView {
         
         // Check if the touch point is outside the frame
         if touchPoint.x < frame.origin.x {
-            updatedPoint.x = frame.origin.x
+            confinedPoint.x = frame.origin.x
         } else if touchPoint.x > (frame.origin.x + frameWidth) {
-            updatedPoint.x = frame.origin.x + frameWidth
+            confinedPoint.x = frame.origin.x + frameWidth
         }
         
         if touchPoint.y < frame.origin.y {
-            updatedPoint.y = frame.origin.y
+            confinedPoint.y = frame.origin.y
         } else if touchPoint.y > (frame.origin.y + frameHeight) {
-            updatedPoint.y = frame.origin.y + frameHeight
+            confinedPoint.y = frame.origin.y + frameHeight
         }
         
-        return updatedPoint
+        return confinedPoint
     }
 
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
@@ -345,7 +345,7 @@ class CropView: UIView {
                                 width: imageContainerRect.size.width,
                                 height: imageContainerRect.size.height)
         
-        let touchPoint = updateTouchPointIfNeeded(touchPoint: touchPoint, rect: imageFrame)
+        let touchPoint = confineTouchPoint(touchPoint, in: imageFrame)
         let contentBounds = getContentBounds()
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,
