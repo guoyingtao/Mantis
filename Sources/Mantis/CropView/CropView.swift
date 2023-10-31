@@ -315,34 +315,45 @@ class CropView: UIView {
         rotationControlView.handleDeviceRotation()
     }
     
-    func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
-        let contentBounds = getContentBounds()
+    private func updateTouchPointIfNeeded(touchPoint: CGPoint, rect: CGRect) -> CGPoint {
+        var updatedPoint = touchPoint
         
-        guard contentBounds.contains(touchPoint) else {
-            return
+        // Get the frame dimensions
+        let frameWidth = frame.size.width
+        let frameHeight = frame.size.height
+        
+        // Check if the touch point is outside the frame
+        if touchPoint.x < frame.origin.x {
+            updatedPoint.x = frame.origin.x
+        } else if touchPoint.x > (frame.origin.x + frameWidth) {
+            updatedPoint.x = frame.origin.x + frameWidth
         }
         
-        let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)        
+        if touchPoint.y < frame.origin.y {
+            updatedPoint.y = frame.origin.y
+        } else if touchPoint.y > (frame.origin.y + frameHeight) {
+            updatedPoint.y = frame.origin.y + frameHeight
+        }
+        
+        return updatedPoint
+    }
+
+    func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
+        let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)
         let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
                                 y: cropWorkbenchView.frame.origin.y - cropWorkbenchView.contentOffset.y,
                                 width: imageContainerRect.size.width,
                                 height: imageContainerRect.size.height)
         
-        guard imageFrame.contains(touchPoint) else {
-            return
-        }
-        
+        let touchPoint = updateTouchPointIfNeeded(touchPoint: touchPoint, rect: imageFrame)
+        let contentBounds = getContentBounds()
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,
                                                            andContentFrame: contentBounds,
                                                            aspectRatioLockEnabled: aspectRatioLockEnabled)
         
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
-                && newCropBoxFrame.minX >= contentBounds.minX
-                && newCropBoxFrame.maxX <= contentBounds.maxX
-                && newCropBoxFrame.height >= cropViewMinimumBoxSize
-                && newCropBoxFrame.minY >= contentBounds.minY
-                && newCropBoxFrame.maxY <= contentBounds.maxY else {
+           && newCropBoxFrame.height >= cropViewMinimumBoxSize else {
             return
         }
         
