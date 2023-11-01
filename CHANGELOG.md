@@ -2,6 +2,21 @@
 
 -----
 
+## [2.15.0](https://www.github.com/guoyingtao/Mantis/compare/v2.14.1...v2.15.0) (2023-11-01)
+
+
+### Features
+
+* support dragging the crop box when touch point outside the crop box ([#339](https://www.github.com/guoyingtao/Mantis/issues/339)) ([646a239](https://www.github.com/guoyingtao/Mantis/commit/646a239ad00fb2d40df2a67e6376c959a07c4ecf))
+
+
+### Bug Fixes
+
+* fix flip issue for preset transformation ([#342](https://www.github.com/guoyingtao/Mantis/issues/342)) ([2d06e2e](https://www.github.com/guoyingtao/Mantis/commit/2d06e2e37c69da9c9e267328a9aa2a88dad207e6))
+* fix initial view show-up issue for preset transformation ([#343](https://www.github.com/guoyingtao/Mantis/issues/343)) ([4b94612](https://www.github.com/guoyingtao/Mantis/commit/4b946120925f4ffecc8128a8bc565a95d3e76f60))
+* fix the crop masks become darker and darker when resetting multiple times ([#331](https://www.github.com/guoyingtao/Mantis/issues/331)) ([4f996c1](https://www.github.com/guoyingtao/Mantis/commit/4f996c171d3a63b76906cb372046e9df41776d09))
+* remove unnecessary checking logic for image origentations ([#336](https://www.github.com/guoyingtao/Mantis/issues/336)) ([08a684a](https://www.github.com/guoyingtao/Mantis/commit/08a684a55bfd9e90fb6a23ae4c55c87cefbe1338))
+
 ### [2.14.1](https://www.github.com/guoyingtao/Mantis/compare/v2.14.0...v2.14.1) (2023-07-13)
 
 
