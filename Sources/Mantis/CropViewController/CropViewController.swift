@@ -140,13 +140,6 @@ open class CropViewController: UIViewController {
         initLayout()
         updateLayout()
         showImageAutoAdjustStatusIfNeeded()
-        
-        switch config.cropViewConfig.presetTransformationType {
-        case .presetInfo(_), .presetNormalizedInfo(_):
-            view.alpha = 0
-        default:
-            break
-        }
     }
     
     func showImageAutoAdjustStatusIfNeeded() {
@@ -163,6 +156,14 @@ open class CropViewController: UIViewController {
             initialLayout = true
             view.layoutIfNeeded()
             cropView.resetComponents()
+            
+            cropView.processPresetTransformation { [weak self] transformation in
+                guard let self = self else { return }
+                if case .alwaysUsingOnePresetFixedRatio(let ratio) = self.config.presetFixedRatioType {
+                    self.cropToolbar.handleFixedRatioSetted(ratio: ratio)
+                    self.cropView.handlePresetFixedRatio(ratio, transformation: transformation)
+                }
+            }
         }
     }
     
@@ -210,27 +211,6 @@ open class CropViewController: UIViewController {
     
     private func setFreeRatio() {
         resetRatioButton()
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        cropView.processPresetTransformation { [weak self] transformation in
-            guard let self = self else { return }
-            if case .alwaysUsingOnePresetFixedRatio(let ratio) = self.config.presetFixedRatioType {
-                self.cropToolbar.handleFixedRatioSetted(ratio: ratio)
-                self.cropView.handlePresetFixedRatio(ratio, transformation: transformation)
-            }
-        }
-        
-        switch config.cropViewConfig.presetTransformationType {
-        case .presetInfo(_), .presetNormalizedInfo(_):
-            UIView.animate(withDuration: 0.1) {
-                self.view.alpha = 1
-            }
-        default:
-            break
-        }
     }
     
     private func handleCancel() {
