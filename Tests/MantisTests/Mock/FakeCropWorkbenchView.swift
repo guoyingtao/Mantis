@@ -21,6 +21,10 @@ class FakeCropWorkbenchView: UIScrollView, CropWorkbenchViewProtocol {
         
     }
     
+    func updateContentOffset() {
+        
+    }
+    
     func updateMinZoomScale() {
         
     }

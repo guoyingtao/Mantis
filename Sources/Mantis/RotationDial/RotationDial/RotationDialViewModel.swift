@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RotationDialViewModel: RotationDialViewModelProtocol {
+final class RotationDialViewModel: RotationDialViewModelProtocol {
     var didSetRotationAngle: (Angle) -> Void = { _ in }
     
     var touchPoint: CGPoint? {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
+final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
     var overLayerFillColor = UIColor.black.cgColor
     var maskLayer: CALayer?
     var cropShapeType: CropShapeType = .rect

@@ -40,7 +40,7 @@ enum ImageRotationType: CGFloat {
     }
 }
 
-class CropViewModel: CropViewModelProtocol {
+final class CropViewModel: CropViewModelProtocol {
     init(
         cropViewPadding: CGFloat,
         hotAreaUnit: CGFloat

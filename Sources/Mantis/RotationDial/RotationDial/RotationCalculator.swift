@@ -9,7 +9,7 @@
 //
 import UIKit
 
-class RotationCalculator {
+final class RotationCalculator {
     
     // midpoint for gesture recognizer
     var midPoint = CGPoint.zero

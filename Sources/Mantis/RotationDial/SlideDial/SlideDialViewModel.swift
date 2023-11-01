@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SlideDialViewModel {
+final class SlideDialViewModel {
     var didSetRotationAngle: (Angle) -> Void = { _ in }
     
     var rotationAngle = Angle(degrees: 0) {

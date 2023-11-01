@@ -9,7 +9,7 @@
 import UIKit
 
 /// Use this class to make angle calculation to be simpler
-public class Angle: NSObject, Comparable {
+public final class Angle: NSObject, Comparable {
     public static func < (lhs: Angle, rhs: Angle) -> Bool {
         return lhs.radians < rhs.radians
     }

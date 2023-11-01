@@ -31,7 +31,7 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidEndResize(_ cropView: CropViewProtocol)
 }
 
-class CropView: UIView {
+final class CropView: UIView {
     var image: UIImage
     
     let viewModel: CropViewModelProtocol

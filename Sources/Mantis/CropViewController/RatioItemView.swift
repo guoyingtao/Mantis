@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RatioItemView: UIView {
+final class RatioItemView: UIView {
     var didGetRatio: ((RatioItemType) -> Void) = { _ in }
     
     var selected = false {
