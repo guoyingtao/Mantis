@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CropDimmingView: UIView, CropMaskProtocol {
+final class CropDimmingView: UIView, CropMaskProtocol {
     var overLayerFillColor = UIColor.black.cgColor    
     var maskLayer: CALayer?
     var cropShapeType: CropShapeType = .rect

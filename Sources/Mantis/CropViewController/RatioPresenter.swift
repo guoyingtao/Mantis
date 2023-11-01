@@ -13,7 +13,7 @@ enum RatioType {
     case vertical
 }
 
-class RatioPresenter {
+final class RatioPresenter {
     var didGetRatio: ((Double) -> Void) = { _ in }
     private var type: RatioType = .vertical
     private var originalRatioH: Double

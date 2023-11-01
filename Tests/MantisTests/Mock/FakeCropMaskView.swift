@@ -9,6 +9,8 @@ import UIKit
 @testable import Mantis
 
 class FakeCropMaskView: UIView, CropMaskProtocol {
+    var maskLayer: CALayer?
+    
     var overLayerFillColor: CGColor = UIColor.black.cgColor
     
     var cropShapeType: Mantis.CropShapeType = .rect

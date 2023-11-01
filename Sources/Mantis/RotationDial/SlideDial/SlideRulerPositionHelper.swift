@@ -23,7 +23,7 @@ extension SlideRulerPositionHelper {
     func handleOffsetRatioWhenScrolling(_ scrollView: UIScrollView) {}
 }
 
-class UnilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
+final class UnilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
     var slideRuler: SlideRuler!
     
     func getInitialOffsetRatio() -> CGFloat {
@@ -57,7 +57,7 @@ class UnilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
     }
 }
 
-class BilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
+final class BilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
     var slideRuler: SlideRuler!
     
     func getInitialOffsetRatio() -> CGFloat {

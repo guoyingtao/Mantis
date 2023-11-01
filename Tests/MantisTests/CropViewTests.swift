@@ -68,19 +68,19 @@ final class CropViewTests: XCTestCase {
     private func testGetImageHorizontalToVerticalRatioWithLeftRightAndMirror(testImage: UIImage) {
         cropViewModel.rotationType = .none
         cropView = createCropView(with: testImage, viewModel: cropViewModel)
-        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.height / testImage.size.width))
+        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.width / testImage.size.height))
 
         cropViewModel.rotationType = .counterclockwise180
         cropView = createCropView(with: testImage, viewModel: cropViewModel)
-        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.height / testImage.size.width))
+        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.width / testImage.size.height))
         
         cropViewModel.rotationType = .counterclockwise90
         cropView = createCropView(with: testImage, viewModel: cropViewModel)
-        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.width / testImage.size.height))
+        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.height / testImage.size.width))
         
         cropViewModel.rotationType = .counterclockwise270
         cropView = createCropView(with: testImage, viewModel: cropViewModel)
-        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.width / testImage.size.height))
+        XCTAssertEqual(cropView.getImageHorizontalToVerticalRatio(), Double(testImage.size.height / testImage.size.width))
     }
     
     func testGetImageHorizontalToVerticalRatio() {

@@ -29,7 +29,7 @@ private let smallDegreeScaleNumber = bigDegreeScaleNumber * 5
 private let margin: CGFloat = 0
 private let spaceBetweenScaleAndNumber: CGFloat = 10
 
-class RotationDialPlate: UIView {
+final class RotationDialPlate: UIView {
     private let smallDotLayer: CAReplicatorLayer = {
         var layer = CAReplicatorLayer()
         layer.instanceCount = smallDegreeScaleNumber
