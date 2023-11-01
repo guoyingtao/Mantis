@@ -387,10 +387,7 @@ class CropView: UIView {
 
 // MARK: - Adjust UI
 extension CropView {
-    private func rotateCropWorkbenchView() {
-        let totalRadians = viewModel.getTotalRadians()
-        cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
-        
+    private func flipCropWorkbenchViewIfNeeded() {
         if viewModel.horizontallyFlip {
             if viewModel.rotationType.isRotateByMultiple180 {
                 cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: -1, y: 1)
@@ -406,7 +403,12 @@ extension CropView {
                 cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: -1, y: 1)
             }
         }
-        
+    }
+    
+    private func rotateCropWorkbenchView() {
+        let totalRadians = viewModel.getTotalRadians()
+        cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
+        flipCropWorkbenchViewIfNeeded()
         adjustWorkbenchView(by: totalRadians)
     }
     
@@ -639,7 +641,9 @@ extension CropView {
             manualZoomed: manualZoomed,
             initialMaskFrame: getInitialCropBoxRect(),
             maskFrame: cropAuxiliaryIndicatorView.frame,
-            cropWorkbenchViewBounds: cropWorkbenchView.bounds
+            cropWorkbenchViewBounds: cropWorkbenchView.bounds,
+            horizontallyFlipped: viewModel.horizontallyFlip,
+            verticallyFlipped: viewModel.verticallyFlip
         )
     }
     
@@ -758,11 +762,8 @@ extension CropView {
         func flip() {
             flipOddTimes.toggle()
             
-            let flipTransform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
-            
+            let flipTransform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)            
             let coff: CGFloat = flipOddTimes ? 2 : -2
-            
-//            let coff: CGFloat = viewModel.radians < 0 ? 2 : -2
             cropWorkbenchView.transform = flipTransform.rotated(by: coff*viewModel.radians)
             
             viewModel.degrees *= -1
@@ -931,7 +932,7 @@ extension CropView: CropViewProtocol {
         cropWorkbenchView.zoomScale = transformation.scale
         cropWorkbenchView.contentOffset = transformation.offset
         viewModel.setBetweenOperationStatus()
-        
+                
         if transformation.maskFrame != .zero {
             viewModel.cropBoxFrame = transformation.maskFrame
         }
@@ -1000,18 +1001,31 @@ extension CropView: CropViewProtocol {
         
         let manualZoomed = (scale != 1.0)
         let transformation = Transformation(offset: offset,
-                                             rotation: 0,
-                                             scale: scale,
-                                             manualZoomed: manualZoomed,
-                                             initialMaskFrame: .zero,
-                                             maskFrame: maskFrame,
-                                             cropWorkbenchViewBounds: .zero)
+                                            rotation: 0,
+                                            scale: scale,
+                                            manualZoomed: manualZoomed,
+                                            initialMaskFrame: .zero,
+                                            maskFrame: maskFrame,
+                                            cropWorkbenchViewBounds: .zero,
+                                            horizontallyFlipped: viewModel.horizontallyFlip,
+                                            verticallyFlipped: viewModel.verticallyFlip)
         return transformation
     }
     
     func processPresetTransformation(completion: (Transformation) -> Void) {
         switch cropViewConfig.presetTransformationType {
         case .presetInfo(let transformInfo):
+            viewModel.horizontallyFlip = transformInfo.horizontallyFlipped
+            viewModel.verticallyFlip = transformInfo.verticallyFlipped
+            
+            if transformInfo.horizontallyFlipped {
+                flipOddTimes.toggle()
+            }
+            
+            if transformInfo.verticallyFlipped {
+                flipOddTimes.toggle()
+            }
+            
             var newTransform = getTransformInfo(byTransformInfo: transformInfo)
             
             // The first transform is just for retrieving the final cropBoxFrame

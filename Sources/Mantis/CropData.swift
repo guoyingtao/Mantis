@@ -31,7 +31,9 @@ public typealias Transformation = (
     manualZoomed: Bool,
     initialMaskFrame: CGRect,
     maskFrame: CGRect,
-    cropWorkbenchViewBounds: CGRect
+    cropWorkbenchViewBounds: CGRect,
+    horizontallyFlipped: Bool,
+    verticallyFlipped: Bool
 )
 
 public struct CropRegion: Equatable {
