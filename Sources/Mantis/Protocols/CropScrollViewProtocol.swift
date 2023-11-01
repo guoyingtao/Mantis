@@ -13,7 +13,7 @@ protocol CropWorkbenchViewProtocol: UIScrollView {
     var touchesCancelled: () -> Void { get set }
     var touchesEnded: () -> Void { get set }
     
-    func checkContentOffset()
+    func updateContentOffset()
     func updateMinZoomScale()
     func zoomScaleToBound(animated: Bool)
     func shouldScale() -> Bool

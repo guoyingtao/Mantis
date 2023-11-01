@@ -78,14 +78,14 @@ final class CropWorkbenchView: UIScrollView {
 }
 
 extension CropWorkbenchView: CropWorkbenchViewProtocol {
-    func checkContentOffset() {
+    func updateContentOffset() {
         contentOffset.x = max(contentOffset.x, 0)
         contentOffset.y = max(contentOffset.y, 0)
         
         if contentSize.height - contentOffset.y <= bounds.size.height {
             contentOffset.y = contentSize.height - bounds.size.height
         }
-        
+
         if contentSize.width - contentOffset.x <= bounds.size.width {
             contentOffset.x = contentSize.width - bounds.size.width
         }
