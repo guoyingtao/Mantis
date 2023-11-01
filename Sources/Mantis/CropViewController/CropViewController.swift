@@ -156,6 +156,14 @@ open class CropViewController: UIViewController {
             initialLayout = true
             view.layoutIfNeeded()
             cropView.resetComponents()
+            
+            cropView.processPresetTransformation { [weak self] transformation in
+                guard let self = self else { return }
+                if case .alwaysUsingOnePresetFixedRatio(let ratio) = self.config.presetFixedRatioType {
+                    self.cropToolbar.handleFixedRatioSetted(ratio: ratio)
+                    self.cropView.handlePresetFixedRatio(ratio, transformation: transformation)
+                }
+            }
         }
     }
     
@@ -203,17 +211,6 @@ open class CropViewController: UIViewController {
     
     private func setFreeRatio() {
         resetRatioButton()
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        cropView.processPresetTransformation { [weak self] transformation in
-            guard let self = self else { return }
-            if case .alwaysUsingOnePresetFixedRatio(let ratio) = self.config.presetFixedRatioType {
-                self.cropToolbar.handleFixedRatioSetted(ratio: ratio)
-                self.cropView.handlePresetFixedRatio(ratio, transformation: transformation)
-            }
-        }
     }
     
     private func handleCancel() {
