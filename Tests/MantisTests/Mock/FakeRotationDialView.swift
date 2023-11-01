@@ -44,4 +44,8 @@ class FakeRotationDialView: UIView, RotationDialProtocol {
     func reset() {
         
     }
+    
+    func getTotalRotationValue() -> CGFloat {
+        return 0
+    }
 }

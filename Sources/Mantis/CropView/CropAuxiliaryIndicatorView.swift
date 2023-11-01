@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
+final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
     private var boarderNormalColor = UIColor.white
     private var boarderHintColor = UIColor.white
     private let cornerHandleLength = CGFloat(20.0)

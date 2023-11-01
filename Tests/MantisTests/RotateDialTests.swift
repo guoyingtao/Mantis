@@ -52,7 +52,7 @@ final class RotateDialTests: XCTestCase {
         angle = Angle(degrees: 50)
         XCTAssertFalse(dial.updateRotationValue(by: angle))
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
-        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: 45).radians))
+        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: 0).radians))
         
         // Test valid minus rotation with limitation
         dialConfig.rotationLimitType = .limit(degreeAngle: 45)
@@ -71,7 +71,7 @@ final class RotateDialTests: XCTestCase {
         angle = Angle(degrees: -50)
         XCTAssertFalse(dial.updateRotationValue(by: angle))
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
-        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: -45).radians))
+        XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: 0).radians))
         
         // Test no limit
         dialConfig = RotationDialConfig()

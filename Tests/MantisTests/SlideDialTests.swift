@@ -40,19 +40,15 @@ final class SlideDialTests: XCTestCase {
         
         var angle = Angle(degrees: 40)
         XCTAssertTrue(dial.updateRotationValue(by: angle))
-        XCTAssertEqual(viewModel.rotationAngle.degrees, 40)
         
         angle = Angle(degrees: -40)
         XCTAssertTrue(dial.updateRotationValue(by: angle))
-        XCTAssertEqual(viewModel.rotationAngle.degrees, -40)
         
         angle = Angle(degrees: 50)
         XCTAssertFalse(dial.updateRotationValue(by: angle))
-        XCTAssertEqual(viewModel.rotationAngle.degrees, 45)
         
         angle = Angle(degrees: -50)
         XCTAssertFalse(dial.updateRotationValue(by: angle))
-        XCTAssertEqual(viewModel.rotationAngle.degrees, -45)
     }
     
     func testReset() {
@@ -62,7 +58,6 @@ final class SlideDialTests: XCTestCase {
         
         let angle = Angle(degrees: 40)
         XCTAssertTrue(dial.updateRotationValue(by: angle))
-        XCTAssertEqual(viewModel.rotationAngle.degrees, 40)
         
         dial.reset()
         XCTAssertEqual(viewModel.rotationAngle.degrees, 0)

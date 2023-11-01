@@ -71,17 +71,19 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         
         var config = Mantis.Config()
                 
-        let transform = Transformation(offset: CGPoint(x: 231.66666666666666, y: 439.6666666666667),
-                                       rotation: 0.5929909348487854,
-                                       scale: 2.841958076098717,
+        let transform = Transformation(offset: CGPoint(x: 169, y: 152),
+                                       rotation: -0.46043267846107483,
+                                       scale: 2.129973210831677,
                                        manualZoomed: true,
-                                       initialMaskFrame: CGRect(x: 14.0, y: 62.25, width: 347.0, height: 520.5),
-                                       maskFrame: CGRect(x: 59.47694524495677, y: 14.0, width: 256.04610951008647, height: 617.0),
-                                       cropWorkbenchViewBounds: CGRect(x: 231.66666666666666,
-                                                                y: 439.6666666666667,
-                                                                width: 557.1387432741491,
-                                                                height: 654.7511809035641))
-                
+                                       initialMaskFrame: CGRect(x: 14.0, y: 33, width: 402, height: 603),
+                                       maskFrame: CGRect(x: 67.90047201716507, y: 14.0, width: 294.19905596566986, height: 641.0),
+                                       cropWorkbenchViewBounds: CGRect(x: 169,
+                                                                y: 152,
+                                                                width: 548.380489739444,
+                                                                height: 704.9696330065433),
+                                       horizontallyFlipped: true,
+                                       verticallyFlipped:false)
+        config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         config.cropViewConfig.builtInRotationControlViewType = .slideDial()
         

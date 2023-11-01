@@ -16,7 +16,7 @@ protocol SlideRulerDelegate: AnyObject {
     func didFinishScroll()
 }
 
-class SlideRuler: UIView {
+final class SlideRuler: UIView {
     var forceAlignCenterFeedback = true
     let pointer = CALayer()
     let centralDot = CAShapeLayer()
