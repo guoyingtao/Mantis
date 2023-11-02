@@ -863,8 +863,8 @@ extension CropView: CropViewProtocol {
     func setFixedRatio(_ ratio: Double, zoom: Bool = true, presetFixedRatioType: PresetFixedRatioType) {
         aspectRatioLockEnabled = true
         
-        if viewModel.aspectRatio != CGFloat(ratio) {
-            viewModel.aspectRatio = CGFloat(ratio)
+        if viewModel.fixedImageRatio != CGFloat(ratio) {
+            viewModel.fixedImageRatio = CGFloat(ratio)
             
             setForceFixedRatio(by: presetFixedRatioType)
             
@@ -920,7 +920,7 @@ extension CropView: CropViewProtocol {
     func handleAlterCropper90Degree() {
         let ratio = Double(cropAuxiliaryIndicatorView.frame.height / cropAuxiliaryIndicatorView.frame.width)
         
-        viewModel.aspectRatio = CGFloat(ratio)
+        viewModel.fixedImageRatio = CGFloat(ratio)
         
         UIView.animate(withDuration: 0.5) {
             self.setFixedRatioCropBox()
@@ -931,16 +931,16 @@ extension CropView: CropViewProtocol {
         aspectRatioLockEnabled = true
         
         if ratio == 0 {
-            viewModel.aspectRatio = transformation.maskFrame.width / transformation.maskFrame.height
+            viewModel.fixedImageRatio = transformation.maskFrame.width / transformation.maskFrame.height
         } else {
-            viewModel.aspectRatio = CGFloat(ratio)
+            viewModel.fixedImageRatio = CGFloat(ratio)
             setFixedRatioCropBox(zoom: false, cropBox: viewModel.cropBoxFrame)
         }
     }
     
     func setFreeCrop() {
         aspectRatioLockEnabled = false
-        viewModel.aspectRatio = -1
+        viewModel.fixedImageRatio = -1
     }
     
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {

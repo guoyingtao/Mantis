@@ -77,7 +77,7 @@ final class CropViewModel: CropViewModelProtocol {
     }
     
     var rotationType: ImageRotationType = .none
-    var aspectRatio: CGFloat = -1    
+    var fixedImageRatio: CGFloat = -1    
     var cropLeftTopOnImage = CGPoint.zero
     var cropRightBottomOnImage = CGPoint(x: 1, y: 1)
     
@@ -95,7 +95,7 @@ final class CropViewModel: CropViewModelProtocol {
         rotationType = .none
         
         if forceFixedRatio == false {
-            aspectRatio = -1
+            fixedImageRatio = -1
         }        
         
         cropLeftTopOnImage = .zero
@@ -185,10 +185,10 @@ final class CropViewModel: CropViewModelProtocol {
         var cropBoxFrame = refCropBox
         let center = cropBoxFrame.center
         
-        if aspectRatio > CGFloat(imageHorizontalToVerticalRatio.ratio) {
-            cropBoxFrame.size.height = cropBoxFrame.width / aspectRatio
+        if fixedImageRatio > CGFloat(imageHorizontalToVerticalRatio.ratio) {
+            cropBoxFrame.size.height = cropBoxFrame.width / fixedImageRatio
         } else {
-            cropBoxFrame.size.width = cropBoxFrame.height * aspectRatio
+            cropBoxFrame.size.width = cropBoxFrame.height * fixedImageRatio
         }
         
         cropBoxFrame.origin.x = center.x - cropBoxFrame.width / 2
