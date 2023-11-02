@@ -28,7 +28,7 @@ protocol CropViewModelProtocol: AnyObject {
     var degrees: CGFloat { get set }
     var radians: CGFloat { get }
     var rotationType: ImageRotationType { get set }
-    var aspectRatio: CGFloat { get set }
+    var fixedImageRatio: CGFloat { get set }
     var cropLeftTopOnImage: CGPoint { get set }
     var cropRightBottomOnImage: CGPoint { get set }
     var horizontallyFlip: Bool { get set }

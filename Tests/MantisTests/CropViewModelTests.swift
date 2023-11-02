@@ -21,15 +21,15 @@ final class CropViewModelTests: XCTestCase {
     }
     
     func testReset() {
-        viewModel.aspectRatio = 1
+        viewModel.fixedImageRatio = 1
         viewModel.reset(forceFixedRatio: true)
         assertResetStatus()
-        XCTAssertEqual(viewModel.aspectRatio, 1)
+        XCTAssertEqual(viewModel.fixedImageRatio, 1)
         
-        viewModel.aspectRatio = 1
+        viewModel.fixedImageRatio = 1
         viewModel.reset(forceFixedRatio: false)
         assertResetStatus()
-        XCTAssertEqual(viewModel.aspectRatio, -1)
+        XCTAssertEqual(viewModel.fixedImageRatio, -1)
     }
     
     private func assertResetStatus() {
@@ -187,18 +187,18 @@ final class CropViewModelTests: XCTestCase {
     
     func testSetCropBoxFrame() {
         let refCropBox = CGRect(x: 20, y: 20, width: 100, height: 200)
-        viewModel.aspectRatio = 0.9
+        viewModel.fixedImageRatio = 0.9
         let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: 1.2)
         viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         XCTAssertEqual(viewModel.cropBoxFrame.center, refCropBox.center)
         XCTAssertEqual(viewModel.cropBoxFrame.height, refCropBox.height)
-        XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
+        XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.fixedImageRatio)
         
-        viewModel.aspectRatio = 1.4
+        viewModel.fixedImageRatio = 1.4
         viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         XCTAssertEqual(viewModel.cropBoxFrame.center, refCropBox.center)
         XCTAssertEqual(viewModel.cropBoxFrame.width, refCropBox.width)
-        XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.aspectRatio)
+        XCTAssertEqual(viewModel.cropBoxFrame.width / viewModel.cropBoxFrame.height, viewModel.fixedImageRatio)
     }
     
     func testSetInitialStatus() {

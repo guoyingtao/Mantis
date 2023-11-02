@@ -82,7 +82,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
                                                                 width: 548.380489739444,
                                                                 height: 704.9696330065433),
                                        horizontallyFlipped: true,
-                                       verticallyFlipped:false)
+                                       verticallyFlipped: false)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         config.cropViewConfig.builtInRotationControlViewType = .slideDial()

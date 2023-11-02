@@ -218,7 +218,7 @@ open class CropViewController: UIViewController {
     }
     
     private func resetRatioButton() {
-        cropView.aspectRatioLockEnabled = false
+        cropView.setFreeCrop()
         cropToolbar.handleFixedRatioUnSetted()
     }
     
