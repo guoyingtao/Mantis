@@ -319,20 +319,20 @@ final class CropView: UIView {
         var confinedPoint = touchPoint
         
         // Get the frame dimensions
-        let frameWidth = frame.size.width
-        let frameHeight = frame.size.height
+        let rectWidth = rect.size.width
+        let rectHeight = rect.size.height
         
         // Check if the touch point is outside the frame
-        if touchPoint.x < frame.origin.x {
-            confinedPoint.x = frame.origin.x
-        } else if touchPoint.x > (frame.origin.x + frameWidth) {
-            confinedPoint.x = frame.origin.x + frameWidth
+        if touchPoint.x < rect.origin.x {
+            confinedPoint.x = rect.origin.x
+        } else if touchPoint.x > (rect.origin.x + rectWidth) {
+            confinedPoint.x = rect.origin.x + rectWidth
         }
         
-        if touchPoint.y < frame.origin.y {
-            confinedPoint.y = frame.origin.y
-        } else if touchPoint.y > (frame.origin.y + frameHeight) {
-            confinedPoint.y = frame.origin.y + frameHeight
+        if touchPoint.y < rect.origin.y {
+            confinedPoint.y = rect.origin.y
+        } else if touchPoint.y > (rect.origin.y + rectHeight) {
+            confinedPoint.y = rect.origin.y + rectHeight
         }
         
         return confinedPoint
@@ -352,6 +352,8 @@ final class CropView: UIView {
                                                            andContentFrame: contentBounds,
                                                            aspectRatioLockEnabled: aspectRatioLockEnabled)
         
+        print("newCropBoxFrame is \(newCropBoxFrame.width) - \(newCropBoxFrame.height)")
+        
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
            && newCropBoxFrame.height >= cropViewMinimumBoxSize else {
             return
@@ -360,6 +362,10 @@ final class CropView: UIView {
         if imageContainer.contains(rect: newCropBoxFrame, fromView: self, tolerance: 0.5) {
             viewModel.cropBoxFrame = newCropBoxFrame
         } else {
+            if aspectRatioLockEnabled {
+                return
+            }
+            
             let minX = max(viewModel.cropBoxFrame.minX, newCropBoxFrame.minX)
             let minY = max(viewModel.cropBoxFrame.minY, newCropBoxFrame.minY)
             let maxX = min(viewModel.cropBoxFrame.maxX, newCropBoxFrame.maxX)
