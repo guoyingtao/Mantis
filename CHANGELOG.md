@@ -2,6 +2,13 @@
 
 -----
 
+### [2.15.1](https://www.github.com/guoyingtao/Mantis/compare/v2.15.0...v2.15.1) (2023-11-02)
+
+
+### Bug Fixes
+
+* fix wrong fix ratios when dragging CropBox outside ([#348](https://www.github.com/guoyingtao/Mantis/issues/348)) ([2d5c9ac](https://www.github.com/guoyingtao/Mantis/commit/2d5c9ac1c68bcebc8ec7899221651be9e55ced6a))
+
 ## [2.15.0](https://www.github.com/guoyingtao/Mantis/compare/v2.14.1...v2.15.0) (2023-11-01)
 
 
