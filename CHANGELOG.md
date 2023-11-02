@@ -2,6 +2,13 @@
 
 -----
 
+## [2.16.0](https://www.github.com/guoyingtao/Mantis/compare/v2.15.0...v2.16.0) (2023-11-02)
+
+
+### Features
+
+* loose dragging outside restrictions for fix ratios ([0ccd247](https://www.github.com/guoyingtao/Mantis/commit/0ccd247597bd5bf066b876e8de72ef6a53a6e370))
+
 ## [2.15.0](https://www.github.com/guoyingtao/Mantis/compare/v2.14.1...v2.15.0) (2023-11-01)
 
 
