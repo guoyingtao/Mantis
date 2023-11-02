@@ -2,6 +2,13 @@
 
 -----
 
+### [2.16.1](https://www.github.com/guoyingtao/Mantis/compare/v2.16.0...v2.16.1) (2023-11-02)
+
+
+### Bug Fixes
+
+* fix fix-ratio not changing when switch to free ratio, change crop box then switch back ([#351](https://www.github.com/guoyingtao/Mantis/issues/351)) ([744cc2a](https://www.github.com/guoyingtao/Mantis/commit/744cc2a50efcdd9245f23767eda0071768abd0dc))
+
 ## [2.16.0](https://www.github.com/guoyingtao/Mantis/compare/v2.15.0...v2.16.0) (2023-11-02)
 
 
