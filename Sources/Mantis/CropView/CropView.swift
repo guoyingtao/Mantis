@@ -938,6 +938,11 @@ extension CropView: CropViewProtocol {
         }
     }
     
+    func setFreeCrop() {
+        aspectRatioLockEnabled = false
+        viewModel.aspectRatio = -1
+    }
+    
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {
         viewModel.setRotatingStatus(by: Angle(radians: transformation.rotation))
         

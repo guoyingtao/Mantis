@@ -35,6 +35,7 @@ protocol CropViewProtocol: UIView {
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation
     func processPresetTransformation(completion: (Transformation) -> Void)
         
+    func setFreeCrop()
     func horizontallyFlip()
     func verticallyFlip()
     func reset()

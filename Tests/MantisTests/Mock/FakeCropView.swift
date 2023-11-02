@@ -50,6 +50,10 @@ class FakeCropView: UIView, CropViewProtocol {
         
     }
     
+    func setFreeCrop() {
+        
+    }
+    
     func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation) {
         
     }
@@ -59,11 +63,11 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
-        Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero)
+        Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false)
     }
     
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
-        Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero)
+        Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false)
     }
     
     func processPresetTransformation(completion: (Transformation) -> Void) {
@@ -84,7 +88,7 @@ class FakeCropView: UIView, CropViewProtocol {
     
     func crop() -> CropOutput {
         CropOutput(nil,
-                   Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero),
+                   Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false),
                    CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
@@ -94,7 +98,7 @@ class FakeCropView: UIView, CropViewProtocol {
     
     func crop(_ image: UIImage) -> CropOutput {
         CropOutput(nil,
-                   Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero),
+                   Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false),
                    CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
