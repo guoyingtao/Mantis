@@ -80,15 +80,9 @@ final class CropWorkbenchView: UIScrollView {
 extension CropWorkbenchView: CropWorkbenchViewProtocol {
     func updateContentOffset() {
         contentOffset.x = max(contentOffset.x, 0)
-        contentOffset.y = max(contentOffset.y, 0)
-        
-        if contentSize.height - contentOffset.y <= bounds.size.height {
-            contentOffset.y = contentSize.height - bounds.size.height
-        }
-
-        if contentSize.width - contentOffset.x <= bounds.size.width {
-            contentOffset.x = contentSize.width - bounds.size.width
-        }
+        contentOffset.y = max(contentOffset.y, 0)        
+        contentOffset.x = min(contentOffset.x, contentSize.width - bounds.size.width)
+        contentOffset.y = min(contentOffset.y, contentSize.height - bounds.size.height)
     }
     
     func updateMinZoomScale() {
