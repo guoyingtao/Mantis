@@ -185,7 +185,9 @@ final class CropView: UIView {
     }
         
     private func imageStatusChanged() -> Bool {
-        if viewModel.getTotalRadians() != 0 { return true }
+        if viewModel.getTotalRadians() != 0 {
+            return true
+        }
         
         if forceFixedRatio {
             if checkForForceFixedRatioFlag {
@@ -352,8 +354,6 @@ final class CropView: UIView {
                                                            andContentFrame: contentBounds,
                                                            aspectRatioLockEnabled: aspectRatioLockEnabled)
         
-        print("newCropBoxFrame is \(newCropBoxFrame.width) - \(newCropBoxFrame.height)")
-        
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
            && newCropBoxFrame.height >= cropViewMinimumBoxSize else {
             return
@@ -406,19 +406,13 @@ final class CropView: UIView {
 extension CropView {
     private func flipCropWorkbenchViewIfNeeded() {
         if viewModel.horizontallyFlip {
-            if viewModel.rotationType.isRotateByMultiple180 {
-                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: -1, y: 1)
-            } else {
-                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: 1, y: -1)
-            }
+            let scale: CGFloat = viewModel.rotationType.isRotatedByMultiple180 ? -1 : 1
+            cropWorkbenchView.transformScaleBy(xScale: scale, yScale: -scale)
         }
         
         if viewModel.verticallyFlip {
-            if viewModel.rotationType.isRotateByMultiple180 {
-                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: 1, y: -1)
-            } else {
-                cropWorkbenchView.transform = cropWorkbenchView.transform.scaledBy(x: -1, y: 1)
-            }
+            let scale: CGFloat = viewModel.rotationType.isRotatedByMultiple180 ? 1 : -1
+            cropWorkbenchView.transformScaleBy(xScale: scale, yScale: -scale)
         }
     }
     
@@ -613,7 +607,7 @@ extension CropView {
             let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
             
             let newSize: CGSize
-            if viewModel.rotationType.isRotateByMultiple180 {
+            if viewModel.rotationType.isRotatedByMultiple180 {
                 newSize = CGSize(width: width, height: height)
             } else {
                 newSize = CGSize(width: height, height: width)
@@ -763,13 +757,13 @@ extension CropView {
         var scaleY: CGFloat = 1
         
         if isHorizontal {
-            if viewModel.rotationType.isRotateByMultiple180 {
+            if viewModel.rotationType.isRotatedByMultiple180 {
                 scaleX = -scaleX
             } else {
                 scaleY = -scaleY
             }
         } else {
-            if viewModel.rotationType.isRotateByMultiple180 {
+            if viewModel.rotationType.isRotatedByMultiple180 {
                 scaleY = -scaleY
             } else {
                 scaleX = -scaleX
@@ -818,7 +812,7 @@ extension CropView: CropViewProtocol {
     }
     
     func getImageHorizontalToVerticalRatio() -> Double {
-        if viewModel.rotationType.isRotateByMultiple180 {
+        if viewModel.rotationType.isRotatedByMultiple180 {
             return Double(image.horizontalToVerticalRatio())
         } else {
             return Double(1 / image.horizontalToVerticalRatio())
@@ -1125,7 +1119,7 @@ extension CropView: CropViewProtocol {
         var scaleY = cropWorkbenchView.zoomScale
         
         if viewModel.horizontallyFlip {
-            if viewModel.rotationType.isRotateByMultiple180 {
+            if viewModel.rotationType.isRotatedByMultiple180 {
                 scaleX = -scaleX
             } else {
                 scaleY = -scaleY
@@ -1133,7 +1127,7 @@ extension CropView: CropViewProtocol {
         }
         
         if viewModel.verticallyFlip {
-            if viewModel.rotationType.isRotateByMultiple180 {
+            if viewModel.rotationType.isRotatedByMultiple180 {
                 scaleY = -scaleY
             } else {
                 scaleX = -scaleX

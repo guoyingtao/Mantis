@@ -129,7 +129,7 @@ struct CropBoxLockedAspectFrameUpdater {
             case .bottomRight:
                 handleBottomRightEdgeFrameUpdate()
             default:
-                print("none")
+                break
             }
         }
         

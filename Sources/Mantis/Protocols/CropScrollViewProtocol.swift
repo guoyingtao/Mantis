@@ -20,4 +20,11 @@ protocol CropWorkbenchViewProtocol: UIScrollView {
     func updateLayout(byNewSize newSize: CGSize)
     func reset(by rect: CGRect)
     func resetImageContent(by cropBoxFrame: CGRect)
+    func transformScaleBy(xScale: CGFloat, yScale: CGFloat)
+}
+
+extension CropWorkbenchViewProtocol {
+    func transformScaleBy(xScale: CGFloat, yScale: CGFloat) {
+        transform = transform.scaledBy(x: xScale, y: yScale)
+    }
 }

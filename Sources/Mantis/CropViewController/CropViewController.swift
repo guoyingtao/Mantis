@@ -56,7 +56,7 @@ open class CropViewController: UIViewController {
         case .circle, .square, .heart:
             self.config.presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
         default:
-            ()
+            break
         }
 
         super.init(nibName: nil, bundle: nil)
