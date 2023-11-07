@@ -260,7 +260,18 @@ final class CropView: UIView {
 
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
-            self.viewModel.setRotatingStatus(by: angle)
+            
+            // The code below is for correct flip. If rotating angle is exact ±45 degrees,
+            // the flip behaviour will be incorrect. So we need to limit the rotating angle.
+            let error = 1e-10
+            let newAngle: Angle
+            if angle.degrees > 0 {
+                newAngle = min(angle, Angle(degrees: Constants.rotationDegreeLimit - error))
+            } else {
+                newAngle = max(angle, Angle(degrees: -Constants.rotationDegreeLimit + error))
+            }
+                        
+            self.viewModel.setRotatingStatus(by: newAngle)
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in

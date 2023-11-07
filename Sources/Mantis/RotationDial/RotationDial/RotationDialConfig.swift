@@ -11,7 +11,7 @@ import UIKit
 public struct RotationDialConfig {
     public init() {}
 
-    public var margin: Double = 10 {
+    public var margin: Double = 0 {
         didSet {
             assert(margin >= 0)
         }
@@ -19,8 +19,28 @@ public struct RotationDialConfig {
     
     public var lengthRatio: CGFloat = 0.6
     
-    public var rotationLimitType: RotationLimitType = .limit(degreeAngle: 45)
+    @available(*, deprecated, message: "Use rotationLimit instead")
+    public var rotationLimitType: RotationLimitType = .limit(degreeAngle: Constants.rotationDegreeLimit)
+    
+    @available(*, deprecated, message: "This property is not used anymore")
     public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)
+    
+    private var _rotationLimit: Double = Constants.rotationDegreeLimit
+        
+    /** 
+     The rotationLimit property should be in the range 0 to 45 degrees.
+     */
+    var rotationLimit: Double {
+        get {
+            return _rotationLimit
+        }
+        set {
+            _rotationLimit = max(0, min(Constants.rotationDegreeLimit, newValue))
+        }
+    }
+    
+    var angleShowLimit: Double = 40
+    
     public var rotationCenterType: RotationCenterType = .useDefault
     
     public var numberShowSpan = 1 {
@@ -64,11 +84,13 @@ public struct RotationDialConfig {
         case custom(center: CGPoint)
     }
 
+    @available(*, deprecated, message: "This enum is not used anymore")
     public enum AngleShowLimitType {
         case noLimit
         case limit(degreeAngle: CGFloat)
     }
 
+    @available(*, deprecated, message: "This enum is not used anymore")
     public enum RotationLimitType {
         case noLimit
         case limit(degreeAngle: CGFloat)

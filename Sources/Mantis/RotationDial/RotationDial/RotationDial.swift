@@ -38,8 +38,8 @@ final class RotationDial: UIView {
     
     private var config: RotationDialConfig
     
-    private var angleLimit = Angle(radians: .pi)
-    private var showRadiansLimit: CGFloat = .pi
+    private var angleLimit = Angle(radians: .pi / 4)
+    private var showRadiansLimit: CGFloat = .pi / 4
     private var dialPlate: RotationDialPlate?
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
@@ -92,12 +92,10 @@ extension RotationDial {
     }
     
     private func handleRotation(by angle: Angle) {
-        if case .limit = config.rotationLimitType {
-            guard angle <= angleLimit else {
-                return
-            }
+        guard angle <= angleLimit else {
+            return
         }
-        
+
         if updateRotation(bySteppingAngle: angle) {
             let newAngle = getRotationAngle()
             didUpdateRotationValue(newAngle)
@@ -134,15 +132,9 @@ extension RotationDial {
     }
     
     private func setupDialPlate(in container: UIView) {
-        var margin = CGFloat(config.margin)
-        
-        if case .limit(let degreeAngle) = config.angleShowLimitType {
-            margin = 0
-            showRadiansLimit = Angle(degrees: degreeAngle).radians
-        } else {
-            showRadiansLimit = CGFloat.pi
-        }
-        
+        let margin = CGFloat(config.margin)
+        showRadiansLimit = Angle(degrees: config.angleShowLimit).radians
+        angleLimit = Angle(degrees: config.rotationLimit)
         var dialPlateShowHeight = container.frame.height - margin - pointerHeight - spanBetweenDialPlateAndPointer
         var radius = dialPlateShowHeight / (1 - cos(showRadiansLimit))
         
@@ -196,10 +188,7 @@ extension RotationDial {
 extension RotationDial: RotationDialProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {
         self.frame = allowableFrame
-        
-        if case .limit(let degreeAngle) = config.rotationLimitType {
-            angleLimit = Angle(degrees: degreeAngle)
-        }
+        angleLimit = Angle(degrees: config.rotationLimit)
         
         setupUI()
         setupViewModel()
@@ -209,19 +198,17 @@ extension RotationDial: RotationDialProtocol {
         guard let dialPlate = dialPlate else { return false }
         
         let radians = steppingAngle.radians
-        if case .limit = config.rotationLimitType {
-            if (getRotationAngle() * steppingAngle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
-                
-                if radians > 0 {
-                    rotateDialPlate(to: angleLimit)
-                } else {
-                    rotateDialPlate(to: -angleLimit)
-                }
-                
-                return false
+        if (getRotationAngle() * steppingAngle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
+            
+            if radians > 0 {
+                rotateDialPlate(to: angleLimit)
+            } else {
+                rotateDialPlate(to: -angleLimit)
             }
+            
+            return false
         }
-        
+
         dialPlate.transform = dialPlate.transform.rotated(by: radians)
         setAccessibilityValue()
         
@@ -230,12 +217,10 @@ extension RotationDial: RotationDialProtocol {
     
     @discardableResult
     func updateRotationValue(by angle: Angle) -> Bool {
-        if case .limit = config.rotationLimitType {
-            if abs(angle.degrees) > angleLimit.degrees {
-                return false
-            }
+        if abs(angle.degrees) > angleLimit.degrees {
+            return false
         }
-        
+
         rotateDialPlate(to: angle)
         setAccessibilityValue()
         
@@ -243,16 +228,8 @@ extension RotationDial: RotationDialProtocol {
     }
     
     func rotateDialPlate(to angle: Angle, animated: Bool = false) {
-        let radians = angle.radians
-        
-        if case .limit = config.rotationLimitType {
-            guard abs(radians) <= angleLimit.radians else {
-                return
-            }
-        }
-        
-        func rotate() {
-            dialPlate?.transform = CGAffineTransform(rotationAngle: radians)
+        guard abs(angle.radians) <= angleLimit.radians else {
+            return
         }
         
         if animated {
@@ -261,6 +238,10 @@ extension RotationDial: RotationDialProtocol {
             }
         } else {
             rotate()
+        }
+        
+        func rotate() {
+            dialPlate?.transform = CGAffineTransform(rotationAngle: angle.radians)
         }
     }
     
