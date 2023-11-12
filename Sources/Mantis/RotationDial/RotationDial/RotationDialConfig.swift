@@ -18,13 +18,7 @@ public struct RotationDialConfig {
     }
     
     public var lengthRatio: CGFloat = 0.6
-    
-    @available(*, deprecated, message: "Use rotationLimit instead")
-    public var rotationLimitType: RotationLimitType = .limit(degreeAngle: Constants.rotationDegreeLimit)
-    
-    @available(*, deprecated, message: "This property is not used anymore")
-    public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)
-        
+            
     public var rotationCenterType: RotationCenterType = .useDefault
     
     public var numberShowSpan = 1 {
@@ -66,18 +60,6 @@ public struct RotationDialConfig {
     public enum RotationCenterType {
         case useDefault
         case custom(center: CGPoint)
-    }
-
-    @available(*, deprecated, message: "This enum is not used anymore")
-    public enum AngleShowLimitType {
-        case noLimit
-        case limit(degreeAngle: CGFloat)
-    }
-
-    @available(*, deprecated, message: "This enum is not used anymore")
-    public enum RotationLimitType {
-        case noLimit
-        case limit(degreeAngle: CGFloat)
     }
 
     public enum Orientation {
