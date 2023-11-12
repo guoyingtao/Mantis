@@ -38,8 +38,8 @@ final class RotationDial: UIView {
     
     private var config: RotationDialConfig
     
-    private var angleLimit = Angle(radians: .pi / 4)
-    private var showRadiansLimit: CGFloat = .pi / 4
+    private let angleLimit = Angle(degrees: Constants.rotationDegreeLimit)
+    private let showRadiansLimit: CGFloat = 40 * .pi / 180
     private var dialPlate: RotationDialPlate?
     private var dialPlateHolder: UIView?
     private var pointer: CAShapeLayer = CAShapeLayer()
@@ -133,8 +133,6 @@ extension RotationDial {
     
     private func setupDialPlate(in container: UIView) {
         let margin = CGFloat(config.margin)
-        showRadiansLimit = Angle(degrees: config.angleShowLimit).radians
-        angleLimit = Angle(degrees: config.rotationLimit)
         var dialPlateShowHeight = container.frame.height - margin - pointerHeight - spanBetweenDialPlateAndPointer
         var radius = dialPlateShowHeight / (1 - cos(showRadiansLimit))
         
@@ -187,9 +185,7 @@ extension RotationDial {
 
 extension RotationDial: RotationDialProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {
-        self.frame = allowableFrame
-        angleLimit = Angle(degrees: config.rotationLimit)
-        
+        self.frame = allowableFrame        
         setupUI()
         setupViewModel()
     }

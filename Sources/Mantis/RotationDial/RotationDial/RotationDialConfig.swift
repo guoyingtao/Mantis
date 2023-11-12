@@ -24,23 +24,7 @@ public struct RotationDialConfig {
     
     @available(*, deprecated, message: "This property is not used anymore")
     public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)
-    
-    private var _rotationLimit: Double = Constants.rotationDegreeLimit
         
-    /** 
-     The rotationLimit property should be in the range 0 to 45 degrees.
-     */
-    var rotationLimit: Double {
-        get {
-            return _rotationLimit
-        }
-        set {
-            _rotationLimit = max(0, min(Constants.rotationDegreeLimit, newValue))
-        }
-    }
-    
-    var angleShowLimit: Double = 40
-    
     public var rotationCenterType: RotationCenterType = .useDefault
     
     public var numberShowSpan = 1 {

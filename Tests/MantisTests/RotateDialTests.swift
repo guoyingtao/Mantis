@@ -34,9 +34,8 @@ final class RotateDialTests: XCTestCase {
     }
     
     func testRotateDialPlate() {
-        // Test valid plus rotation with limitation
-        var dialConfig = RotationDialConfig()
-        dialConfig.rotationLimit = 45
+        // Test valid plus rotation
+        let dialConfig = RotationDialConfig()
         setup(with: dialConfig)
         
         var dialPlateTransform = dialPlate.transform
@@ -44,8 +43,7 @@ final class RotateDialTests: XCTestCase {
         XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         
-        // Test invalid plus rotation with limitation
-        dialConfig.rotationLimit = 45
+        // Test invalid plus rotation
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
@@ -54,8 +52,7 @@ final class RotateDialTests: XCTestCase {
         XCTAssertNotEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: Angle(degrees: 0).radians))
         
-        // Test valid minus rotation with limitation
-        dialConfig.rotationLimit = 45
+        // Test valid minus rotation
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
@@ -63,8 +60,7 @@ final class RotateDialTests: XCTestCase {
         XCTAssertTrue(dial.updateRotationValue(by: angle))
         XCTAssertEqual(dialPlate.transform, dialPlateTransform.rotated(by: angle.radians))
         
-        // Test invalid minus rotation with limitation
-        dialConfig.rotationLimit = 45
+        // Test invalid minus rotation
         setup(with: dialConfig)
         
         dialPlateTransform = dialPlate.transform
@@ -75,8 +71,7 @@ final class RotateDialTests: XCTestCase {
     }
     
     func testReset() {
-        var dialConfig = RotationDialConfig()
-        dialConfig.rotationLimit = 45
+        let dialConfig = RotationDialConfig()
         setup(with: dialConfig)
         
         let dialPlateTransform = dialPlate.transform
