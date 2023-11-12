@@ -75,7 +75,7 @@ final class CropView: UIView {
             indicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
             activityIndicator = indicator
         }
-                
+        
         addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -108,7 +108,7 @@ final class CropView: UIView {
         self.cropMaskViewManager = cropMaskViewManager
         
         super.init(frame: .zero)
-
+        
         if let color = cropViewConfig.backgroundColor {
             self.backgroundColor = color
         }
@@ -183,7 +183,7 @@ final class CropView: UIView {
             rotationControlView?.isHidden = isHidden
         }
     }
-        
+    
     private func imageStatusChanged() -> Bool {
         if viewModel.getTotalRadians() != 0 { return true }
         
@@ -250,6 +250,17 @@ final class CropView: UIView {
         addSubview(cropAuxiliaryIndicatorView)
     }
     
+    /** This function is for correct flips. If rotating angle is exact ±45 degrees,
+     the flip behaviour will be incorrect. So we need to limit the rotating angle. */
+    private func clampAngle(_ angle: Angle) -> Angle {
+        let errorMargin = 1e-10
+        let rotationLimit = Constants.rotationDegreeLimit
+        
+        return angle.degrees > 0
+        ? min(angle, Angle(degrees: rotationLimit - errorMargin))
+        : max(angle, Angle(degrees: -rotationLimit + errorMargin))
+    }
+    
     private func setupRotationDialIfNeeded() {
         guard let rotationControlView = rotationControlView else {
             return
@@ -257,21 +268,10 @@ final class CropView: UIView {
         
         rotationControlView.reset()
         rotationControlView.isUserInteractionEnabled = true
-
+        
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
-            
-            // The code below is for correct flip. If rotating angle is exact ±45 degrees,
-            // the flip behaviour will be incorrect. So we need to limit the rotating angle.
-            let error = 1e-10
-            let newAngle: Angle
-            if angle.degrees > 0 {
-                newAngle = min(angle, Angle(degrees: Constants.rotationDegreeLimit - error))
-            } else {
-                newAngle = max(angle, Angle(degrees: -Constants.rotationDegreeLimit + error))
-            }
-                        
-            self.viewModel.setRotatingStatus(by: newAngle)
+            self.viewModel.setRotatingStatus(by: clampAngle(angle))
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
@@ -280,21 +280,21 @@ final class CropView: UIView {
             }
             self.viewModel.setBetweenOperationStatus()
         }
-
+        
         if rotationControlView.isAttachedToCropView {
             let boardLength = min(bounds.width, bounds.height) * rotationControlView.getLengthRatio()
             let dialFrame = CGRect(x: 0,
                                    y: 0,
                                    width: boardLength,
                                    height: cropViewConfig.rotationControlViewHeight)
-
+            
             rotationControlView.setupUI(withAllowableFrame: dialFrame)
         }
         
         if let rotationDial = rotationControlView as? RotationDialProtocol {
             rotationDial.setRotationCenter(by: cropAuxiliaryIndicatorView.center, of: self)
         }
-                
+        
         rotationControlView.updateRotationValue(by: Angle(radians: viewModel.radians))
         viewModel.setBetweenOperationStatus()
         
@@ -304,7 +304,7 @@ final class CropView: UIView {
     
     private func adaptRotationControlViewToCropBoxIfNeeded() {
         guard let rotationControlView = rotationControlView,
-        rotationControlView.isAttachedToCropView else { return }
+              rotationControlView.isAttachedToCropView else { return }
         
         if Orientation.treatAsPortrait {
             rotationControlView.transform = CGAffineTransform(rotationAngle: 0)
@@ -348,7 +348,7 @@ final class CropView: UIView {
         
         return confinedPoint
     }
-
+    
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
         let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)
         let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
@@ -366,7 +366,7 @@ final class CropView: UIView {
         print("newCropBoxFrame is \(newCropBoxFrame.width) - \(newCropBoxFrame.height)")
         
         guard newCropBoxFrame.width >= cropViewMinimumBoxSize
-           && newCropBoxFrame.height >= cropViewMinimumBoxSize else {
+                && newCropBoxFrame.height >= cropViewMinimumBoxSize else {
             return
         }
         
@@ -540,7 +540,7 @@ extension CropView {
         let newBoundHeight = abs(sin(radians)) * newCropBounds.size.width + abs(cos(radians)) * newCropBounds.size.height
         
         guard newBoundWidth > 0 && newBoundWidth != .infinity
-           && newBoundHeight > 0 && newBoundHeight != .infinity else {
+                && newBoundHeight > 0 && newBoundHeight != .infinity else {
             return
         }
         
@@ -677,7 +677,7 @@ extension CropView {
     
     func addImageMask(to cropOutput: CropOutput) -> CropOutput {
         let (croppedImage, transformation, cropInfo) = cropOutput
-
+        
         guard let croppedImage = croppedImage else {
             assertionFailure("croppedImage should not be nil")
             return cropOutput
@@ -685,13 +685,13 @@ extension CropView {
         
         switch cropViewConfig.cropShapeType {
         case .rect,
-             .square,
-             .circle(maskOnly: true),
-             .roundedRect(_, maskOnly: true),
-             .path(_, maskOnly: true),
-             .diamond(maskOnly: true),
-             .heart(maskOnly: true),
-             .polygon(_, _, maskOnly: true):
+                .square,
+                .circle(maskOnly: true),
+                .roundedRect(_, maskOnly: true),
+                .path(_, maskOnly: true),
+                .diamond(maskOnly: true),
+                .heart(maskOnly: true),
+                .polygon(_, _, maskOnly: true):
             
             let outputImage: UIImage?
             if cropViewConfig.cropBorderWidth > 0 {
@@ -750,7 +750,7 @@ extension CropView {
     func getTotalRadians() -> CGFloat {
         return viewModel.getTotalRadians()
     }
-        
+    
     func setFixedRatioCropBox(zoom: Bool = true, cropBox: CGRect? = nil) {
         let refCropBox = cropBox ?? getInitialCropBoxRect()
         let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: getImageHorizontalToVerticalRatio())
@@ -790,7 +790,7 @@ extension CropView {
         func flip() {
             flipOddTimes.toggle()
             
-            let flipTransform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)            
+            let flipTransform = cropWorkbenchView.transform.scaledBy(x: scaleX, y: scaleY)
             let coff: CGFloat = flipOddTimes ? 2 : -2
             cropWorkbenchView.transform = flipTransform.rotated(by: coff*viewModel.radians)
             
@@ -835,7 +835,7 @@ extension CropView: CropViewProtocol {
             return Double(1 / image.horizontalToVerticalRatio())
         }
     }
-        
+    
     func prepareForViewWillTransition() {
         viewModel.setDegree90RotatingStatus()
         saveAnchorPoints()
@@ -906,7 +906,7 @@ extension CropView: CropViewProtocol {
             var rect = cropAuxiliaryIndicatorView.frame
             rect.size.width = cropAuxiliaryIndicatorView.frame.height
             rect.size.height = cropAuxiliaryIndicatorView.frame.width
-
+            
             let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
             viewModel.cropBoxFrame = newRect
             let rotateAngle = newRotateType == .clockwise ? CGFloat.pi / 2 : -CGFloat.pi / 2
@@ -965,7 +965,7 @@ extension CropView: CropViewProtocol {
         cropWorkbenchView.zoomScale = transformation.scale
         cropWorkbenchView.contentOffset = transformation.offset
         viewModel.setBetweenOperationStatus()
-                
+        
         if transformation.maskFrame != .zero {
             viewModel.cropBoxFrame = transformation.maskFrame
         }
@@ -1004,9 +1004,9 @@ extension CropView: CropViewProtocol {
                                         width: maskFrameWidth,
                                         height: maskFrameHeight)
         newTransform.cropWorkbenchViewBounds = CGRect(x: transformInfo.cropWorkbenchViewBounds.origin.x * adjustScale,
-                                               y: transformInfo.cropWorkbenchViewBounds.origin.y * adjustScale,
-                                               width: transformInfo.cropWorkbenchViewBounds.width * adjustScale,
-                                               height: transformInfo.cropWorkbenchViewBounds.height * adjustScale)
+                                                      y: transformInfo.cropWorkbenchViewBounds.origin.y * adjustScale,
+                                                      width: transformInfo.cropWorkbenchViewBounds.width * adjustScale,
+                                                      height: transformInfo.cropWorkbenchViewBounds.height * adjustScale)
         
         return newTransform
     }
