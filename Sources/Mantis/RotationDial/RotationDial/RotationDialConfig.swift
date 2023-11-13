@@ -11,16 +11,14 @@ import UIKit
 public struct RotationDialConfig {
     public init() {}
 
-    public var margin: Double = 10 {
+    public var margin: Double = 0 {
         didSet {
             assert(margin >= 0)
         }
     }
     
     public var lengthRatio: CGFloat = 0.6
-    
-    public var rotationLimitType: RotationLimitType = .limit(degreeAngle: 45)
-    public var angleShowLimitType: AngleShowLimitType = .limit(degreeAngle: 40)
+            
     public var rotationCenterType: RotationCenterType = .useDefault
     
     public var numberShowSpan = 1 {
@@ -62,16 +60,6 @@ public struct RotationDialConfig {
     public enum RotationCenterType {
         case useDefault
         case custom(center: CGPoint)
-    }
-
-    public enum AngleShowLimitType {
-        case noLimit
-        case limit(degreeAngle: CGFloat)
-    }
-
-    public enum RotationLimitType {
-        case noLimit
-        case limit(degreeAngle: CGFloat)
     }
 
     public enum Orientation {

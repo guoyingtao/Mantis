@@ -11,7 +11,7 @@ public struct SlideDialConfig {
     public init() {}
     
     public var lengthRatio: CGFloat = 0.8
-    public var limitation: CGFloat = 45
+    public var limitation: CGFloat = Constants.rotationDegreeLimit
     
     public var scaleBarNumber = 41
     public var majorScaleBarNumber = 5
