@@ -2,6 +2,13 @@
 
 -----
 
+### [2.16.2](https://www.github.com/guoyingtao/Mantis/compare/v2.16.1...v2.16.2) (2023-11-13)
+
+
+### Bug Fixes
+
+* fix flip issue when rotating angle is exact 45 or -45 degrees ([#353](https://www.github.com/guoyingtao/Mantis/issues/353)) ([6f73382](https://www.github.com/guoyingtao/Mantis/commit/6f733820efcfff17c1c50ea59e9134fbce218161))
+
 ### [2.16.1](https://www.github.com/guoyingtao/Mantis/compare/v2.16.0...v2.16.1) (2023-11-02)
 
 
