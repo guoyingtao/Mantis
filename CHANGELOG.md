@@ -2,6 +2,18 @@
 
 -----
 
+## [2.17.0](https://www.github.com/guoyingtao/Mantis/compare/v2.16.1...v2.17.0) (2023-11-16)
+
+
+### Features
+
+* support a new feature of fixing crop box when rotating 90 degree ([#357](https://www.github.com/guoyingtao/Mantis/issues/357)) ([5e125f0](https://www.github.com/guoyingtao/Mantis/commit/5e125f02abf920dc231c855e207253ee42b28c9d))
+
+
+### Bug Fixes
+
+* fix flip issue when rotating angle is exact 45 or -45 degrees ([#353](https://www.github.com/guoyingtao/Mantis/issues/353)) ([6f73382](https://www.github.com/guoyingtao/Mantis/commit/6f733820efcfff17c1c50ea59e9134fbce218161))
+
 ### [2.16.1](https://www.github.com/guoyingtao/Mantis/compare/v2.16.0...v2.16.1) (2023-11-02)
 
 
