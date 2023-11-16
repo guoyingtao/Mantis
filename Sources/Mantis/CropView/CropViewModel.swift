@@ -35,7 +35,7 @@ enum ImageRotationType: CGFloat {
         }
     }
     
-    var isRotateByMultiple180: Bool {
+    var isRotatedByMultiple180: Bool {
         return self == .none || self == .counterclockwise180
     }
 }
