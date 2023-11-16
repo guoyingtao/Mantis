@@ -903,7 +903,7 @@ extension CropView: CropViewProtocol {
         }
         
         func handleRotateAnimation() {
-            if cropViewConfig.rotatingCropBoxWhenRotatingImage90Degree {
+            if cropViewConfig.rotateCropBoxFor90DegreeRotation {
                 var rect = cropAuxiliaryIndicatorView.frame
                 rect.size.width = cropAuxiliaryIndicatorView.frame.height
                 rect.size.height = cropAuxiliaryIndicatorView.frame.width
@@ -915,7 +915,7 @@ extension CropView: CropViewProtocol {
             let rotateAngle = newRotateType == .clockwise ? CGFloat.pi / 2 : -CGFloat.pi / 2
             cropWorkbenchView.transform = cropWorkbenchView.transform.rotated(by: rotateAngle)
             
-            if cropViewConfig.rotatingCropBoxWhenRotatingImage90Degree {
+            if cropViewConfig.rotateCropBoxFor90DegreeRotation {
                 updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
             } else {
                 adjustWorkbenchView(by: rotateAngle + viewModel.radians)
