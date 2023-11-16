@@ -62,6 +62,8 @@ public struct CropViewConfig {
     
     public var rotationControlViewHeight: CGFloat = 60
     
+    public var fixCropBoxWhenRotating90Degree = false
+    
     var minimumCropBoxSize: CGFloat = 42
 
     public var disableCropBoxDeformation = false

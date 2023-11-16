@@ -903,15 +903,23 @@ extension CropView: CropViewProtocol {
         }
         
         func handleRotateAnimation() {
-            var rect = cropAuxiliaryIndicatorView.frame
-            rect.size.width = cropAuxiliaryIndicatorView.frame.height
-            rect.size.height = cropAuxiliaryIndicatorView.frame.width
+            if !cropViewConfig.fixCropBoxWhenRotating90Degree {
+                var rect = cropAuxiliaryIndicatorView.frame
+                rect.size.width = cropAuxiliaryIndicatorView.frame.height
+                rect.size.height = cropAuxiliaryIndicatorView.frame.width
+                
+                let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
+                viewModel.cropBoxFrame = newRect
+            }
             
-            let newRect = GeometryHelper.getInscribeRect(fromOutsideRect: getContentBounds(), andInsideRect: rect)
-            viewModel.cropBoxFrame = newRect
             let rotateAngle = newRotateType == .clockwise ? CGFloat.pi / 2 : -CGFloat.pi / 2
             cropWorkbenchView.transform = cropWorkbenchView.transform.rotated(by: rotateAngle)
-            updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
+            
+            if cropViewConfig.fixCropBoxWhenRotating90Degree {
+                adjustWorkbenchView(by: rotateAngle + viewModel.radians)
+            } else {
+                updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
+            }
         }
         
         func handleRotateCompletion() {
