@@ -13,7 +13,9 @@ import UIKit
 
 enum ImageProcessError: Error {
     case noColorSpace
-    case failedToBuildContext(colorSpaceModel: CGColorSpaceModel, bitsPerPixel: Int, bitsPerComponent: Int)
+    case failedToBuildContext(colorSpaceModel: CGColorSpaceModel, 
+                              bitsPerPixel: Int,
+                              bitsPerComponent: Int)
 }
 
 extension CGImage {
@@ -41,22 +43,19 @@ extension CGImage {
         }
         
         func getBitmapInfo() -> UInt32 {
+            // Handle some special cases for alpha info
             if colorSpaceRef.model == .rgb {
                 switch(bitsPerPixel, bitsPerComponent) {
                 case (16, 5):
                     return CGImageAlphaInfo.noneSkipFirst.rawValue
-                case (24, 8), (48, 16):
+                case (8, 8), (24, 8), (48, 16):
                     return CGImageAlphaInfo.noneSkipLast.rawValue
-                case (8, 8), (32, 8), (64, 16):
-                    return CGImageAlphaInfo.premultipliedLast.rawValue
                 case (32, 10):
                     if #available(iOS 12, macOS 10.14, *) {
                         return CGImageAlphaInfo.alphaOnly.rawValue | CGImagePixelFormatInfo.RGBCIF10.rawValue
                     } else {
                         break
                     }
-                case (128, 32):
-                    return CGImageAlphaInfo.premultipliedLast.rawValue | (bitmapInfo.rawValue & CGBitmapInfo.floatComponents.rawValue)
                 default:
                     break
                 }
