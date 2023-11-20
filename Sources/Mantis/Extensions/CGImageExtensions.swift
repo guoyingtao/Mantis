@@ -37,7 +37,7 @@ extension CGImage {
         var bitmapInfoData = bitmapInfo.rawValue
         /*
          for Indexed Color Image (or Palette-based Image)
-         we output the edited image with RGBA format
+         we output the edited image with RGB format
          */
         if bitsPerPixel == 8 && bitsPerComponent == 8 {
             bitmapBytesPerRow = Int(round(outputSize.width)) * 4
@@ -86,6 +86,9 @@ extension CGImage {
         return context.makeImage()
     }
     
+    /**
+     Just in case the bitmapInfo from original image is not supported by CGContext, we will use this backup bitmapInfo instead.
+     */
     private func getBackupBitmapInfo(_ colorSpaceRef: CGColorSpace) -> UInt32 {
         // https://developer.apple.com/forums/thread/679891
         if colorSpaceRef.model == .rgb {
