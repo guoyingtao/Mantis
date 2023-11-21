@@ -13,7 +13,9 @@ import UIKit
 
 enum ImageProcessError: Error {
     case noColorSpace
-    case failedToBuildContext(colorSpaceModel: CGColorSpaceModel, bitsPerPixel: Int, bitsPerComponent: Int)
+    case failedToBuildContext(colorSpaceModel: CGColorSpaceModel,
+                              bitsPerPixel: Int,
+                              bitsPerComponent: Int)
 }
 
 extension CGImage {
@@ -32,51 +34,38 @@ extension CGImage {
         
         var bitmapBytesPerRow = 0
         
+        var bitmapInfoData = bitmapInfo.rawValue
         /*
          for Indexed Color Image (or Palette-based Image)
-         we output the edited image with RGBA format
-        */
+         we output the edited image with RGB format
+         */
         if bitsPerPixel == 8 && bitsPerComponent == 8 {
             bitmapBytesPerRow = Int(round(outputSize.width)) * 4
+            bitmapInfoData = CGImageAlphaInfo.noneSkipLast.rawValue
         }
         
-        func getBitmapInfo() -> UInt32 {
-            if colorSpaceRef.model == .rgb {
-                switch(bitsPerPixel, bitsPerComponent) {
-                case (16, 5):
-                    return CGImageAlphaInfo.noneSkipFirst.rawValue
-                case (24, 8), (48, 16):
-                    return CGImageAlphaInfo.noneSkipLast.rawValue
-                case (8, 8), (32, 8), (64, 16):
-                    return CGImageAlphaInfo.premultipliedLast.rawValue
-                case (32, 10):
-                    if #available(iOS 12, macOS 10.14, *) {
-                        return CGImageAlphaInfo.alphaOnly.rawValue | CGImagePixelFormatInfo.RGBCIF10.rawValue
-                    } else {
-                        break
-                    }
-                case (128, 32):
-                    return CGImageAlphaInfo.premultipliedLast.rawValue | (bitmapInfo.rawValue & CGBitmapInfo.floatComponents.rawValue)
-                default:
-                    break
-                }
-            }
-            
-            return bitmapInfo.rawValue
-        }
+        let context = CGContext(data: nil,
+                                width: Int(round(outputSize.width)),
+                                height: Int(round(outputSize.height)),
+                                bitsPerComponent: bitsPerComponent,
+                                bytesPerRow: bitmapBytesPerRow,
+                                space: colorSpaceRef,
+                                bitmapInfo: bitmapInfoData)
+        ??
+        CGContext(data: nil,
+                  width: Int(round(outputSize.width)),
+                  height: Int(round(outputSize.height)),
+                  bitsPerComponent: bitsPerComponent,
+                  bytesPerRow: bitmapBytesPerRow,
+                  space: colorSpaceRef,
+                  bitmapInfo: getBackupBitmapInfo(colorSpaceRef))
         
-        guard let context = CGContext(data: nil,
-                                      width: Int(round(outputSize.width)),
-                                      height: Int(round(outputSize.height)),
-                                      bitsPerComponent: bitsPerComponent,
-                                      bytesPerRow: bitmapBytesPerRow,
-                                      space: colorSpaceRef,
-                                      bitmapInfo: getBitmapInfo()) else {
+        guard let context = context else {
             throw ImageProcessError.failedToBuildContext(colorSpaceModel: colorSpaceRef.model,
                                                          bitsPerPixel: bitsPerPixel,
                                                          bitsPerComponent: bitsPerComponent)
         }
-                
+        
         context.setFillColor(UIColor.clear.cgColor)
         context.fill(CGRect(origin: .zero, size: outputSize))
         
@@ -95,5 +84,34 @@ extension CGImage {
                                       height: imageViewSize.height))
         
         return context.makeImage()
+    }
+    
+    /**
+     Just in case the bitmapInfo from original image is not supported by CGContext, we will use this backup bitmapInfo instead.
+     */
+    private func getBackupBitmapInfo(_ colorSpaceRef: CGColorSpace) -> UInt32 {
+        // https://developer.apple.com/forums/thread/679891
+        if colorSpaceRef.model == .rgb {
+            switch(bitsPerPixel, bitsPerComponent) {
+            case (16, 5):
+                return CGImageAlphaInfo.noneSkipFirst.rawValue
+            case (24, 8), (48, 16):
+                return CGImageAlphaInfo.noneSkipLast.rawValue
+            case (32, 8), (64, 16):
+                return CGImageAlphaInfo.premultipliedLast.rawValue
+            case (32, 10):
+                if #available(iOS 12, macOS 10.14, *) {
+                    return CGImageAlphaInfo.alphaOnly.rawValue | CGImagePixelFormatInfo.RGBCIF10.rawValue
+                } else {
+                    break
+                }
+            case (128, 32):
+                return CGImageAlphaInfo.premultipliedLast.rawValue | (bitmapInfo.rawValue & CGBitmapInfo.floatComponents.rawValue)
+            default:
+                break
+            }
+        }
+        
+        return bitmapInfo.rawValue
     }
 }
