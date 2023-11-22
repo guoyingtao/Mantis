@@ -2,6 +2,13 @@
 
 -----
 
+### [2.17.1](https://www.github.com/guoyingtao/Mantis/compare/v2.17.0...v2.17.1) (2023-11-21)
+
+
+### Bug Fixes
+
+* update the logic of getting bitmapInfo to honor the original alpha channel information ([#360](https://www.github.com/guoyingtao/Mantis/issues/360)) ([f3180fe](https://www.github.com/guoyingtao/Mantis/commit/f3180fed54bc8c1e0e9ef0d32d4c4c69b171ff15))
+
 ## [2.17.0](https://www.github.com/guoyingtao/Mantis/compare/v2.16.1...v2.17.0) (2023-11-16)
 
 
