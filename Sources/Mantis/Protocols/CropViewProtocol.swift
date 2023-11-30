@@ -47,6 +47,7 @@ protocol CropViewProtocol: UIView {
     func getExpectedCropImageSize() -> CGSize
     
     func rotate(by angle: Angle)
+    func makeTransformation() -> Transformation
 }
 
 extension CropViewProtocol {
