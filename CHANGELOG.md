@@ -2,6 +2,13 @@
 
 -----
 
+## [2.18.0](https://www.github.com/guoyingtao/Mantis/compare/v2.17.1...v2.18.0) (2023-12-05)
+
+
+### Features
+
+* Output realtime transformation for a special use case ([#363](https://www.github.com/guoyingtao/Mantis/issues/363)) ([a5f9728](https://www.github.com/guoyingtao/Mantis/commit/a5f9728a691b1a9c6cbc2785fb0357dbd36d0156))
+
 ### [2.17.1](https://www.github.com/guoyingtao/Mantis/compare/v2.17.0...v2.17.1) (2023-11-21)
 
 
