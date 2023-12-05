@@ -9,7 +9,7 @@
 import UIKit
 import Mantis
 
-class ViewController: UIViewController, CropViewControllerDelegate {
+class ViewController: UIViewController {
     var image = UIImage(named: "sunflower.jpg")
     
     @IBOutlet weak var croppedImageView: UIImageView!
@@ -74,7 +74,7 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         let transform = Transformation(offset: CGPoint(x: 169, y: 152),
                                        rotation: -0.46043267846107483,
                                        scale: 2.129973210831677,
-                                       manualZoomed: true,
+                                       isManuallyZoomed: true,
                                        initialMaskFrame: CGRect(x: 14.0, y: 33, width: 402, height: 603),
                                        maskFrame: CGRect(x: 67.90047201716507, y: 14.0, width: 294.19905596566986, height: 641.0),
                                        cropWorkbenchViewBounds: CGRect(x: 169,
@@ -300,13 +300,15 @@ class ViewController: UIViewController, CropViewControllerDelegate {
         croppedImageView.image = cropped
         dismiss(animated: true)
     }
-    
+}
+
+extension ViewController: CropViewControllerDelegate {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         dismiss(animated: true)
     }
     
-    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
-        print("image is transformed.")
+    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {
+        print("image is transformed. transformation is \(transformation)")
     }
     
     func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {

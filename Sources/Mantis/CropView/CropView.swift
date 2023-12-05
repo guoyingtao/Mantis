@@ -58,7 +58,7 @@ final class CropView: UIView {
         }
     }
     
-    var manualZoomed = false
+    var isManuallyZoomed = false
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
@@ -587,7 +587,7 @@ extension CropView {
             completion()
         }
         
-        manualZoomed = true
+        isManuallyZoomed = true
     }
     
     func makeSureImageContainsCropOverlay() {
@@ -602,9 +602,9 @@ extension CropView {
         
         cropWorkbenchView.updateLayout(byNewSize: CGSize(width: width, height: height))
         
-        if !manualZoomed || cropWorkbenchView.shouldScale() {
+        if !isManuallyZoomed || cropWorkbenchView.shouldScale() {
             cropWorkbenchView.zoomScaleToBound(animated: false)
-            manualZoomed = false
+            isManuallyZoomed = false
         } else {
             cropWorkbenchView.updateMinZoomScale()
         }
@@ -660,7 +660,7 @@ extension CropView {
             offset: cropWorkbenchView.contentOffset,
             rotation: getTotalRadians(),
             scale: cropWorkbenchView.zoomScale,
-            manualZoomed: manualZoomed,
+            isManuallyZoomed: isManuallyZoomed,
             initialMaskFrame: getInitialCropBoxRect(),
             maskFrame: cropAuxiliaryIndicatorView.frame,
             cropWorkbenchViewBounds: cropWorkbenchView.bounds,
@@ -963,7 +963,7 @@ extension CropView: CropViewProtocol {
             cropWorkbenchView.bounds = transformation.cropWorkbenchViewBounds
         }
         
-        manualZoomed = transformation.manualZoomed
+        isManuallyZoomed = transformation.isManuallyZoomed
         cropWorkbenchView.zoomScale = transformation.scale
         cropWorkbenchView.contentOffset = transformation.offset
         viewModel.setBetweenOperationStatus()
@@ -1034,11 +1034,11 @@ extension CropView: CropViewProtocol {
             maskFrame.origin.x += (cropFrame.width - maskFrame.width) / 2
         }
         
-        let manualZoomed = (scale != 1.0)
+        let isManuallyZoomed = (scale != 1.0)
         let transformation = Transformation(offset: offset,
                                             rotation: 0,
                                             scale: scale,
-                                            manualZoomed: manualZoomed,
+                                            isManuallyZoomed: isManuallyZoomed,
                                             initialMaskFrame: .zero,
                                             maskFrame: maskFrame,
                                             cropWorkbenchViewBounds: .zero,

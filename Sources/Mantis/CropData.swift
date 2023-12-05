@@ -28,7 +28,7 @@ public typealias Transformation = (
     offset: CGPoint,
     rotation: CGFloat,
     scale: CGFloat,
-    manualZoomed: Bool,
+    isManuallyZoomed: Bool,
     initialMaskFrame: CGRect,
     maskFrame: CGRect,
     cropWorkbenchViewBounds: CGRect,

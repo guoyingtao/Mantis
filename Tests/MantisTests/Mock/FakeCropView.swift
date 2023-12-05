@@ -86,6 +86,10 @@ class FakeCropView: UIView, CropViewProtocol {
         
     }
     
+    func makeTransformation() -> Mantis.Transformation {
+        return Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false)
+    }
+    
     func crop() -> CropOutput {
         CropOutput(nil,
                    Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false),
