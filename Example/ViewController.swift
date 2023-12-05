@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         let transform = Transformation(offset: CGPoint(x: 169, y: 152),
                                        rotation: -0.46043267846107483,
                                        scale: 2.129973210831677,
-                                       manualZoomed: true,
+                                       isManuallyZoomed: true,
                                        initialMaskFrame: CGRect(x: 14.0, y: 33, width: 402, height: 603),
                                        maskFrame: CGRect(x: 67.90047201716507, y: 14.0, width: 294.19905596566986, height: 641.0),
                                        cropWorkbenchViewBounds: CGRect(x: 169,

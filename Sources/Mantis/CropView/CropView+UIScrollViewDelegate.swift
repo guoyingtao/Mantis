@@ -31,7 +31,7 @@ extension CropView: UIScrollViewDelegate {
 	        delegate?.cropViewDidEndResize(self)
         makeSureImageContainsCropOverlay()
         
-        manualZoomed = true
+        isManuallyZoomed = true
         viewModel.setBetweenOperationStatus()
     }
     
