@@ -98,7 +98,8 @@ private func buildCropView(withImage image: UIImage,
                            rotationControlView: RotationControlViewProtocol?) -> CropViewProtocol {
     let cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: .zero,
                                                                 cropBoxHotAreaUnit: cropViewConfig.cropBoxHotAreaUnit,
-                                                                disableCropBoxDeformation: cropViewConfig.disableCropBoxDeformation)
+                                                                disableCropBoxDeformation: cropViewConfig.disableCropBoxDeformation,
+                                                                style: cropViewConfig.cropAuxiliaryIndicatorStyle)
     let imageContainer = ImageContainer(image: image)
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,

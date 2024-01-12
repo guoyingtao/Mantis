@@ -146,6 +146,11 @@ enum RotateBy90DegreeType {
     }
 }
 
+public enum CropAuxiliaryIndicatorStyleType {
+    case normal
+    case transparent
+}
+
 enum CropViewAuxiliaryIndicatorHandleType: Int {
     case none
     case topLeft

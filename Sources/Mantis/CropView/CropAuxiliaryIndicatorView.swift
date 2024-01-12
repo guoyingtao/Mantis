@@ -22,6 +22,7 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
     private var gridMainColor = UIColor.white
     private var gridSecondaryColor = UIColor.lightGray
     private var disableCropBoxDeformation = false
+    private var style: CropAuxiliaryIndicatorStyleType = .normal
     
     var cropBoxHotAreaUnit: CGFloat = 42
     
@@ -48,12 +49,16 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         }
     }
     
-    init(frame: CGRect, cropBoxHotAreaUnit: CGFloat, disableCropBoxDeformation: Bool = false) {
+    init(frame: CGRect, 
+         cropBoxHotAreaUnit: CGFloat,
+         disableCropBoxDeformation: Bool = false,
+         style: CropAuxiliaryIndicatorStyleType = .normal) {
         super.init(frame: frame)
         clipsToBounds = false
         backgroundColor = .clear
         self.cropBoxHotAreaUnit = cropBoxHotAreaUnit
         self.disableCropBoxDeformation = disableCropBoxDeformation
+        self.style = style
         setup()
     }
     
@@ -65,7 +70,11 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
     private func createNewLine() -> UIView {
         let view = UIView()
         view.frame = .zero
-        view.backgroundColor = .white
+        if style == .normal {
+            view.backgroundColor = .white
+        } else {
+            view.backgroundColor = .clear
+        }
         addSubview(view)
         return view
     }
@@ -74,7 +83,14 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         borderLine = createNewLine()
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
-        borderLine.layer.borderColor = boarderNormalColor.cgColor
+        
+        if style == .normal {
+            borderLine.layer.borderColor = boarderNormalColor.cgColor
+            hintLine.backgroundColor = boarderHintColor
+        } else {
+            borderLine.layer.borderColor = UIColor.clear.cgColor
+            hintLine.backgroundColor = .clear
+        }
         
         for _ in 0..<8 {
             cornerHandles.append(createNewLine())
@@ -83,8 +99,6 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         for _ in 0..<4 {
             edgeLineHandles.append(createNewLine())
         }
-        
-        hintLine.backgroundColor = boarderHintColor
         
         setupAccessibilityHelperViews()
     }
@@ -109,6 +123,10 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
     }
     
     override func draw(_ rect: CGRect) {
+        if style == .transparent {
+            return
+        }
+        
         if !gridHidden {
             let indicatorLineNumber = gridLineNumberType.getIndicatorLineNumber()
             
@@ -158,7 +176,11 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
                                   height: bounds.height + 2 * borderThickness)
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
-        borderLine.layer.borderColor = boarderNormalColor.cgColor
+        if style == .normal {
+            borderLine.layer.borderColor = boarderNormalColor.cgColor
+        } else {
+            borderLine.layer.borderColor = UIColor.clear.cgColor
+        }
     }
     
     private func layoutCornerHandles() {
