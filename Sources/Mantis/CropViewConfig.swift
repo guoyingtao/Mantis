@@ -31,6 +31,8 @@ public struct CropViewConfig {
     
     public var cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark
     
+    public var cropAuxiliaryIndicatorStyle: CropAuxiliaryIndicatorStyleType = .normal
+    
     public var presetTransformationType: PresetTransformationType = .none
     
     public var minimumZoomScale: CGFloat = 1 {
