@@ -175,6 +175,8 @@ final class CropView: UIView {
             adaptRotationControlViewToCropBoxIfNeeded()
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
+        case .imageAlphaUpdating:
+            setImageAlphaCropWorkbenchView()
         }
     }
     
@@ -432,6 +434,11 @@ extension CropView {
         cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
         flipCropWorkbenchViewIfNeeded()
         adjustWorkbenchView(by: totalRadians)
+    }
+    
+    private func setImageAlphaCropWorkbenchView() {
+        let alpha = viewModel.alpha
+        imageContainer.setImageAlpha(v: alpha)
     }
     
     private func getInitialCropBoxRect() -> CGRect {
@@ -1111,7 +1118,12 @@ extension CropView: CropViewProtocol {
     
     func crop(_ image: UIImage) -> CropOutput {
         let cropInfo = getCropInfo()
-        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
+        let alpha = viewModel.alpha
+        var croppedUIImage = image.crop(by: cropInfo)
+        if alpha != 1.0 {
+            croppedUIImage = croppedUIImage?.setImageAlpha(v: alpha) ?? croppedUIImage
+        }
+        let cropOutput = (croppedUIImage, makeTransformation(), cropInfo)
         return addImageMask(to: cropOutput)
     }
     
@@ -1176,6 +1188,11 @@ extension CropView: CropViewProtocol {
         viewModel.setRotatingStatus(by: angle)
         rotationControlView?.updateRotationValue(by: angle)
     }
+    
+    func setImageAlpha(v: Double) {
+        viewModel.setImageAlpha(by: v)
+    }
+    
 }
 
 extension UIActivityIndicatorView: ActivityIndicatorProtocol {

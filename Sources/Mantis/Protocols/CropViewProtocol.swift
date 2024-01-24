@@ -48,6 +48,8 @@ protocol CropViewProtocol: UIView {
     
     func rotate(by angle: Angle)
     func makeTransformation() -> Transformation
+    
+    func setImageAlpha(v: Double)
 }
 
 extension CropViewProtocol {

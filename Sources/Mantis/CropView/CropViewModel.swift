@@ -83,6 +83,8 @@ final class CropViewModel: CropViewModelProtocol {
     
     var horizontallyFlip = false
     var verticallyFlip = false
+    
+    var alpha: CGFloat = 1.0
 
     private let cropViewPadding: CGFloat
     private let hotAreaUnit: CGFloat

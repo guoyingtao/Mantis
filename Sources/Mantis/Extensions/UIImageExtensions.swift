@@ -81,6 +81,14 @@ extension UIImage {
         return size.width / size.height
     }
     
+    func setImageAlpha(v: Double) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        draw(at: .zero, blendMode: .normal, alpha: v)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
     func crop(by cropInfo: CropInfo) -> UIImage? {
         guard let fixedOrientationImage = cgImageWithFixedOrientation() else {
             return nil

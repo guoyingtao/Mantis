@@ -33,6 +33,7 @@ protocol CropViewModelProtocol: AnyObject {
     var cropRightBottomOnImage: CGPoint { get set }
     var horizontallyFlip: Bool { get set }
     var verticallyFlip: Bool { get set }
+    var alpha: CGFloat { get set }
     
     func reset(forceFixedRatio: Bool)
     func rotateBy90(withRotateType type: RotateBy90DegreeType)
@@ -51,6 +52,7 @@ protocol CropViewModelProtocol: AnyObject {
     func setTouchRotationBoardStatus()
     func setTouchCropboxHandleStatus()
     func setBetweenOperationStatus()
+    func setImageAlpha(by v: Double)
 }
 
 extension CropViewModelProtocol {
@@ -81,5 +83,10 @@ extension CropViewModelProtocol {
     
     func setBetweenOperationStatus() {
         viewStatus = .betweenOperation
+    }
+    
+    func setImageAlpha(by v: Double) {
+        alpha = CGFloat(v)
+        viewStatus = .imageAlphaUpdating
     }
 }

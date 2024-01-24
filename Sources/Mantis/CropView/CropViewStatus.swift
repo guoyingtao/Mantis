@@ -16,4 +16,5 @@ enum CropViewStatus: Equatable {
     case touchRotationBoard
     case touchCropboxHandle(tappedEdge: CropViewAuxiliaryIndicatorHandleType = .none)
     case betweenOperation
+    case imageAlphaUpdating
 }

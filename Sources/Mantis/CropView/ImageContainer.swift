@@ -65,4 +65,8 @@ extension ImageContainer: ImageContainerProtocol {
                           bottomLeft: bottomLeft,
                           bottomRight: bottomRight)
     }
+    
+    public func setImageAlpha(v: CGFloat) {
+        imageView.alpha = v
+    }
 }
