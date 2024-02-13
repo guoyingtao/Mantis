@@ -280,7 +280,7 @@ Mantis provide two demo projects
 - MantisSwiftUIExample (using SwiftUI)
 
 ## Credits
-* The crop are strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 
+* The crop feature is strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 
 * The rotation feature is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks)
 * The rotation dial is inspired by [10clock](https://github.com/joedaniels29/10Clock)
 * Thanks [Leo Dabus](https://stackoverflow.com/users/2303865/leo-dabus) for helping me to solve the problem of cropping an ellipse image with transparent background https://stackoverflow.com/a/59805317/288724
