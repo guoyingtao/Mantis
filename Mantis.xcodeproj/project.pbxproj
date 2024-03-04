@@ -181,6 +181,7 @@
 		66F4398F2979472C00728B52 /* CropViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewModelTests.swift; sourceTree = "<group>"; };
 		66F43991297A123400728B52 /* CropViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewControllerDelegate.swift; sourceTree = "<group>"; };
 		66F909BE287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToolBarButtonImageBuilder+DrawImage.swift"; sourceTree = "<group>"; };
+		7E0E3C242B95E32700AADCB0 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F3625D154D900C0DDB2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F3725D154D900C0DDB2 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		8EFB6F3825D154D900C0DDB2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MantisLocalizable.strings"; sourceTree = "<group>"; };
@@ -620,6 +621,7 @@
 				fr,
 				"pt-PT",
 				nl,
+				tr,
 			);
 			mainGroup = OBJ_5;
 			productRefGroup = OBJ_54 /* Products */;
@@ -831,6 +833,7 @@
 				8EFB6F4125D154D900C0DDB2 /* fr */,
 				8EFB6F4225D154D900C0DDB2 /* pt-PT */,
 				E86127BD26206D01008365BC /* nl */,
+				7E0E3C242B95E32700AADCB0 /* tr */,
 			);
 			name = MantisLocalizable.strings;
 			sourceTree = "<group>";
