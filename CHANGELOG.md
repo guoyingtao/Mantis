@@ -7,7 +7,7 @@
 
 ### Features
 
-* Add cropAuxiliaryIndicatorStyle in CropViewConfig for the issue [#366](https://www.github.com/guoyingtao/Mantis/issues/366) ([#367](https://www.github.com/guoyingtao/Mantis/issues/367)) ([4f7e842](https://www.github.com/guoyingtao/Mantis/commit/4f7e842becc54f5fa704e780ff3d2297a6577990))
+* Add cropAuxiliaryIndicatorStyle in CropViewConfig for the issue [#366](https://www.github.com/guoyingtao/Mantis/issues/366) ([(#367)](https://www.github.com/guoyingtao/Mantis/issues/367)) ([4f7e842](https://www.github.com/guoyingtao/Mantis/commit/4f7e842becc54f5fa704e780ff3d2297a6577990))
 
 * Add turkish localizable [#375](https://github.com/guoyingtao/Mantis/pull/375) ([f625d81](https://github.com/guoyingtao/Mantis/commit/f625d81723ca8a25c1d7324bc2839a80ac9f9b78))
 
