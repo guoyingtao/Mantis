@@ -9,6 +9,8 @@
 
 * Add cropAuxiliaryIndicatorStyle in CropViewConfig for the issue [#366](https://www.github.com/guoyingtao/Mantis/issues/366) ([#367](https://www.github.com/guoyingtao/Mantis/issues/367)) ([4f7e842](https://www.github.com/guoyingtao/Mantis/commit/4f7e842becc54f5fa704e780ff3d2297a6577990))
 
+* Add turkish localizable [375](https://github.com/guoyingtao/Mantis/pull/375)
+
 ## [2.18.0](https://www.github.com/guoyingtao/Mantis/compare/v2.17.1...v2.18.0) (2023-12-05)
 
 
