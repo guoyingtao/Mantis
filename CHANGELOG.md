@@ -2,6 +2,13 @@
 
 -----
 
+## [2.19.0](https://www.github.com/guoyingtao/Mantis/compare/v2.18.0...v2.19.0) (2024-03-04)
+
+
+### Features
+
+* Add cropAuxiliaryIndicatorStyle in CropViewConfig for the issue [#366](https://www.github.com/guoyingtao/Mantis/issues/366) ([#367](https://www.github.com/guoyingtao/Mantis/issues/367)) ([4f7e842](https://www.github.com/guoyingtao/Mantis/commit/4f7e842becc54f5fa704e780ff3d2297a6577990))
+
 ## [2.18.0](https://www.github.com/guoyingtao/Mantis/compare/v2.17.1...v2.18.0) (2023-12-05)
 
 
