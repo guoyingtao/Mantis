@@ -497,6 +497,10 @@ extension CropViewController: CropToolbarDelegate {
         redo()
     }
     
+    public func isUndoSupported() -> Bool {
+        return config.enableUndo
+    }
+    
     public func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol? = nil) {
         if config.enableUndo {
             previousCropState = cropView.makeCropState()
@@ -603,52 +607,60 @@ extension CropViewController {
 extension CropViewController: TransformDelegate {
    
     public func enableUndo(_ enable: Bool) {
-        delegate?.cropViewControllerDidEnableUndo(enable)
+        if config.enableUndo {
+            delegate?.cropViewControllerDidEnableUndo(enable)
+        }
     }
     
     public func enableRedo(_ enable: Bool) {
-        delegate?.cropViewControllerDidEnableRedo(enable)
+        if config.enableUndo {
+            delegate?.cropViewControllerDidEnableRedo(enable)
+        }
     }
     
     public func enableReset(_ enable: Bool) {
-        delegate?.cropViewControllerDidEnableReset(enable)
+        if config.enableUndo {
+            delegate?.cropViewControllerDidEnableReset(enable)
+        }
     }
     
     public func undoManager() -> UndoManager {
         return _undoManager
     }
     
-    public func isUndoing() -> Bool {
-        return true
-    }
-    
-    public func isRedoing() -> Bool {
-        return true
-    }
-    
     public func undo() {
-        
-        // Change State
-        if _undoManager.canUndo {
-            _undoManager.undo()
+        if config.enableUndo {
+            // Change State
+            if _undoManager.canUndo {
+                _undoManager.undo()
+            }
         }
     }
     
     public func redo() {
-        
-        // Change State
-        if _undoManager.canRedo {
-                        
-            _undoManager.redo()
+        if config.enableUndo {
+            // Change State
+            if _undoManager.canRedo {
+                
+                _undoManager.redo()
+            }
         }
     }
     
     public func isRedoEnabled() -> Bool {
-        return _undoManager.canRedo
+        if config.enableUndo {
+            return _undoManager.canRedo
+        } else {
+            return false
+        }
     }
     
     public func isUndoEnabled() -> Bool {
-        return _undoManager.canUndo
+        if config.enableUndo {
+            return _undoManager.canUndo
+        } else {
+            return false
+        }
     }
     
     public func updateCropState(_ cropState: CropState) {

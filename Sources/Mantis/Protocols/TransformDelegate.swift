@@ -11,8 +11,6 @@ public protocol TransformDelegate: AnyObject {
     func undoManager() -> UndoManager
     func isUndoEnabled() -> Bool
     func isRedoEnabled() -> Bool
-    func isUndoing() -> Bool
-    func isRedoing() -> Bool
     func undo()
     func redo()
     func updateCropState(_ cropState: CropState)

@@ -91,36 +91,55 @@ class EmbeddedCropViewController: UIViewController {
         return nil
     }
     
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        
+        if action == #selector(EmbeddedCropViewController.undoButtonPressed(_:)) ||
+           action == #selector(EmbeddedCropViewController.redoButtonPressed(_:))  ||
+           action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
+            
+            guard let toolbarDelegate = toolbarDelegate else { return false }
+
+            return toolbarDelegate.isUndoSupported()
+        }
+        
+        return true
+    }
+    
     override func validate(_ command: UICommand) {
         
-        if command.action == #selector(EmbeddedCropViewController.undoButtonPressed(_:)) {
-            
-            let undoString = NSLocalizedString("Undo", comment: "Undo")
-            
-            command.title = TransformStack.shared.transformDelegate.isUndoEnabled() ? "\(undoString) \(TransformStack.shared.transformDelegate.undoManager().undoActionName)" : undoString
-            
-            if !TransformStack.shared.transformDelegate.isUndoEnabled() {
-                command.attributes = [.disabled]
-            }
-        }
+        guard let toolbarDelegate = toolbarDelegate else { return }
         
-        if command.action == #selector(EmbeddedCropViewController.redoButtonPressed(_:)) {
-            
-            let redoString = NSLocalizedString("Redo", comment: "Redo")
-            
-            command.title = TransformStack.shared.transformDelegate.isRedoEnabled() ? "\(redoString) \(TransformStack.shared.transformDelegate.undoManager().redoActionName)" : redoString
-            
-            if !TransformStack.shared.transformDelegate.isRedoEnabled() {
-                command.attributes = [.disabled]
+        if toolbarDelegate.isUndoSupported() {
+           
+            if command.action == #selector(EmbeddedCropViewController.undoButtonPressed(_:)) {
+                
+                let undoString = NSLocalizedString("Undo", comment: "Undo")
+                
+                command.title = TransformStack.shared.transformDelegate.isUndoEnabled() ? "\(undoString) \(TransformStack.shared.transformDelegate.undoManager().undoActionName)" : undoString
+                
+                if !TransformStack.shared.transformDelegate.isUndoEnabled() {
+                    command.attributes = [.disabled]
+                }
             }
-        }
-        
-        if command.action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
-                        
-            command.title = NSLocalizedString("Revert to Original", comment: "Revert to Original")
             
-            if !self.resetButton.isEnabled {
-                command.attributes = [.disabled]
+            if command.action == #selector(EmbeddedCropViewController.redoButtonPressed(_:)) {
+                
+                let redoString = NSLocalizedString("Redo", comment: "Redo")
+                
+                command.title = TransformStack.shared.transformDelegate.isRedoEnabled() ? "\(redoString) \(TransformStack.shared.transformDelegate.undoManager().redoActionName)" : redoString
+                
+                if !TransformStack.shared.transformDelegate.isRedoEnabled() {
+                    command.attributes = [.disabled]
+                }
+            }
+            
+            if command.action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
+                
+                command.title = NSLocalizedString("Revert to Original", comment: "Revert to Original")
+                
+                if !self.resetButton.isEnabled {
+                    command.attributes = [.disabled]
+                }
             }
         }
     }

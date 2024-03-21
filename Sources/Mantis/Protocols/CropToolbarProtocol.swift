@@ -25,6 +25,8 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?, isActive: Bool)
     func didSelectUndo()
     func didSelectRedo()
+    func isUndoSupported() -> Bool
+
 }
 
 public extension CropToolbarDelegate {
