@@ -1,7 +1,7 @@
 import UIKit
 
 
-public class TransformStack: NSObject {
+class TransformStack: NSObject {
     
     public static var shared: TransformStack = TransformStack()
     
