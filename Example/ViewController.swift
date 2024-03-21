@@ -304,14 +304,15 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CropViewControllerDelegate {
-    
-    func cropViewControllerDidReset(previous: Mantis.CropState, current: Mantis.CropState) {
+    func cropViewControllerDidEnableUndo(_ enable: Bool) {
         
     }
     
-    func cropViewControllerDidTransformImage(previous: CropState,
-                                             current: CropState,
-                                             userGenerated: Bool) {
+    func cropViewControllerDidEnableRedo(_ enable: Bool) {
+        
+    }
+    
+    func cropViewControllerDidEnableReset(_ enable: Bool) {
         
     }
     

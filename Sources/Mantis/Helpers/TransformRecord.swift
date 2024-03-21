@@ -5,31 +5,14 @@ public enum TransformType {
     case transform
 }
 
-public protocol TransformDelegate: AnyObject {
-    
-    var undoButton: UIBarButtonItem! { get set }
-    var redoButton: UIBarButtonItem! { get set }
-    var resetButton: UIBarButtonItem! { get set }
-    
-    func undoManager() -> UndoManager
-    func isUndoEnabled() -> Bool
-    func isRedoEnabled() -> Bool
-    func isUndoing() -> Bool
-    func isRedoing() -> Bool
-    func undo()
-    func redo()
-    func updateCropState(_ cropState: Any)
-    func enableReset(_ enable: Bool)
-}
-
 public class TransformRecord: NSObject {
     
     let transformType : TransformType!
-   
+    
     public var actionName : String!
-
+    
     var useCurrent : Bool! = true
-
+    
     let previousValues :  Dictionary<String, Any?>!
     var currentValues : Dictionary<String, Any?>!
     
@@ -42,15 +25,15 @@ public class TransformRecord: NSObject {
         
         super.init()
     }
-
+    
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     public func updateTransformState() {
-            let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] as! CropState : self.previousValues[.kCurrentTransformState] as! CropState
-            
-        TransformStack.shared.sharedTransformDelegate.updateCropState(cropState)
+        let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] as! CropState : self.previousValues[.kCurrentTransformState] as! CropState
+        
+        TransformStack.shared.transformDelegate.updateCropState(cropState)
     }
     
     // Add/Redo
@@ -66,33 +49,33 @@ public class TransformRecord: NSObject {
         }
         
         TransformStack.shared.pushTransformRecord(self)
-
+        
         // register the undo event
-        TransformStack.shared.sharedTransformDelegate.undoManager().registerUndo(withTarget: self, selector: #selector(removeAdjustmentFromStack), object: nil)
+        TransformStack.shared.transformDelegate.undoManager().registerUndo(withTarget: self, selector: #selector(removeAdjustmentFromStack), object: nil)
         
-        TransformStack.shared.sharedTransformDelegate.undoManager().setActionName(self.actionName)
+        TransformStack.shared.transformDelegate.undoManager().setActionName(self.actionName)
         
-        TransformStack.shared.sharedTransformDelegate.enableReset(self.transformType != .resetTransforms)
+        TransformStack.shared.transformDelegate.enableReset(self.transformType != .resetTransforms)
     }
     
     // Undo
-     @objc public func removeAdjustmentFromStack() {
+    @objc public func removeAdjustmentFromStack() {
         
-         self.useCurrent = false
-         
-         self.updateTransformState()
-         
-         TransformStack.shared.popTransformStack()
-         let applyTransform = true
-         TransformStack.shared.sharedTransformDelegate.undoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
+        self.useCurrent = false
         
-         TransformStack.shared.sharedTransformDelegate.undoManager().setActionName(self.actionName)
-         
-         if self.transformType == .resetTransforms {
-             TransformStack.shared.sharedTransformDelegate.enableReset(true)
-         } else if 0 == TransformStack.shared.top {
-             TransformStack.shared.sharedTransformDelegate.enableReset(false)
-         }
+        self.updateTransformState()
+        
+        TransformStack.shared.popTransformStack()
+        let applyTransform = true
+        TransformStack.shared.transformDelegate.undoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
+        
+        TransformStack.shared.transformDelegate.undoManager().setActionName(self.actionName)
+        
+        if self.transformType == .resetTransforms {
+            TransformStack.shared.transformDelegate.enableReset(true)
+        } else if 0 == TransformStack.shared.top {
+            TransformStack.shared.transformDelegate.enableReset(false)
+        }
     }
 }
 

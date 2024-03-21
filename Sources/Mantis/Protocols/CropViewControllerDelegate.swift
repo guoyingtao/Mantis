@@ -25,9 +25,11 @@ public protocol CropViewControllerDelegate: AnyObject {
     
     func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool)
     
-    func cropViewControllerDidReset(previous: CropState, current: CropState)
+    func cropViewControllerDidEnableUndo(_ enable: Bool)
     
-    func cropViewControllerDidTransformImage(previous: CropState, current: CropState, userGenerated: Bool)    
+    func cropViewControllerDidEnableRedo(_ enable: Bool)
+    
+    func cropViewControllerDidEnableReset(_ enable: Bool)
 }
 
 public extension CropViewControllerDelegate {

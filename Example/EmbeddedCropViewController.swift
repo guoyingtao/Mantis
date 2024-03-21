@@ -11,13 +11,10 @@ import Mantis
 
 class EmbeddedCropViewController: UIViewController {
 
-    let _undoManager : UndoManager! = UndoManager()
-    
     var image: UIImage?
     var cropViewController: CropViewController?
     
     weak var toolbarDelegate: CropToolbarDelegate?
-    
     
     var didGetCroppedImage: ((UIImage) -> Void)?
     
@@ -32,7 +29,6 @@ class EmbeddedCropViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        TransformStack.shared.sharedTransformDelegate = self
         undoButton.title = "Undo"
         redoButton.title = "Redo"
         cancelButton.title = "Cancel"
@@ -50,11 +46,11 @@ class EmbeddedCropViewController: UIViewController {
     }
     
     @IBAction func undoButtonPressed(_ sender: Any) {
-        undo()
+        toolbarDelegate?.didSelectUndo()
     }
     
     @IBAction func redoButtonPressed(_ sender: Any) {
-        redo()
+        toolbarDelegate?.didSelectRedo()
     }
     
     @IBAction func resetButtonPressed(_ sender: Any) {
@@ -78,6 +74,7 @@ class EmbeddedCropViewController: UIViewController {
                     
         var config = Mantis.Config()
         config.cropToolbarConfig.mode = .embedded
+        config.enableUndo = true
         
         config.cropToolbarConfig.toolbarButtonOptions = [.counterclockwiseRotate, .clockwiseRotate, .horizontallyFlip, .verticallyFlip]
         
@@ -100,9 +97,9 @@ class EmbeddedCropViewController: UIViewController {
             
             let undoString = NSLocalizedString("Undo", comment: "Undo")
             
-            command.title = self._undoManager.canUndo ? "\(undoString) \(self._undoManager.undoActionName)" : undoString
+            command.title = TransformStack.shared.transformDelegate.isUndoEnabled() ? "\(undoString) \(TransformStack.shared.transformDelegate.undoManager().undoActionName)" : undoString
             
-            if !self._undoManager.canUndo {
+            if !TransformStack.shared.transformDelegate.isUndoEnabled() {
                 command.attributes = [.disabled]
             }
         }
@@ -111,12 +108,11 @@ class EmbeddedCropViewController: UIViewController {
             
             let redoString = NSLocalizedString("Redo", comment: "Redo")
             
-            command.title = self._undoManager.canRedo ? "\(redoString) \(self._undoManager.redoActionName)" : redoString
+            command.title = TransformStack.shared.transformDelegate.isRedoEnabled() ? "\(redoString) \(TransformStack.shared.transformDelegate.undoManager().redoActionName)" : redoString
             
-            if !self._undoManager.canRedo {
+            if !TransformStack.shared.transformDelegate.isRedoEnabled() {
                 command.attributes = [.disabled]
             }
-            
         }
         
         if command.action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
@@ -128,36 +124,22 @@ class EmbeddedCropViewController: UIViewController {
             }
         }
     }
+
 }
 
 extension EmbeddedCropViewController: CropViewControllerDelegate {
-    
-    func cropViewControllerDidReset(previous: CropState, current: CropState) {
-        
-        let actionString = NSLocalizedString("Reset Changes", comment: "Reset Changes")
-        
-        let previousValue :  [String : Any?] = [.kCurrentTransformState : previous]
-        let currentValue :  [String : Any?] = [.kCurrentTransformState : current]
-        
-        let transformRecord = TransformRecord(transformType: .resetTransforms, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
-        
-        transformRecord.addAdjustmentToStack()
+    func cropViewControllerDidEnableUndo(_ enable: Bool) {
+        self.undoButton.isEnabled = enable
     }
     
-    func cropViewControllerDidTransformImage(previous: Mantis.CropState, current: Mantis.CropState, userGenerated: Bool) {
-        
-        if userGenerated {
-            let actionString = NSLocalizedString("Change Crop", comment: "Change Crop")
-            
-            let previousValue :  [String : Any?] = [.kCurrentTransformState : previous]
-            let currentValue :  [String : Any?] = [.kCurrentTransformState : current]
-            
-            let transformRecord = TransformRecord(transformType: .transform, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
-            
-            transformRecord.addAdjustmentToStack()
-        }
+    func cropViewControllerDidEnableRedo(_ enable: Bool) {
+        self.redoButton.isEnabled = enable
     }
     
+    func cropViewControllerDidEnableReset(_ enable: Bool) {
+        self.resetButton.isEnabled = enable
+    }
+
     func cropViewControllerDidCrop(_ cropViewController: CropViewController,
                                    cropped: UIImage,
                                    transformation: Transformation,
@@ -178,55 +160,5 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
         let size = cropViewController.getExpectedCropImageSize()
         self.resolutionLabel.text = "\(Int(size.width)) x \(Int(size.height)) pixels"
     }
-
 }
 
-extension EmbeddedCropViewController: TransformDelegate {
-    
-    func enableReset(_ enable: Bool) {
-        self.resetButton.isEnabled = enable
-    }
-    
-    func undoManager() -> UndoManager {
-        return _undoManager
-    }
-    
-    func isUndoing() -> Bool {
-        return true
-    }
-    
-    func isRedoing() -> Bool {
-        return true
-    }
-    
-    func undo() {
-        
-        // Change State
-        if _undoManager.canUndo {
-            
-            _undoManager.undo()
-        }
-    }
-    
-    func redo() {
-        
-        // Change State
-        if _undoManager.canRedo {
-                        
-            _undoManager.redo()
-        }
-    }
-    
-    func isRedoEnabled() -> Bool {
-        return _undoManager.canRedo
-    }
-    
-    func isUndoEnabled() -> Bool {
-        return _undoManager.canUndo
-    }
-    
-    func updateCropState(_ cropState: Any) {
-        guard let cropState = cropState as? CropState else { return }
-        toolbarDelegate?.didSelectTransform(with: cropState)
-    }
-}
