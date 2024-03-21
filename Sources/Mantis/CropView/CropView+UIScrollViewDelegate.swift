@@ -14,7 +14,7 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        delegate?.cropViewDidBeginCrop(cropView: self)
+        delegate?.cropViewDidBeginCrop(self)
         viewModel.setTouchImageStatus()
     }
     

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ImageRotationType: CGFloat {
+enum ImageRotationType: CGFloat {
     case none = 0
     case counterclockwise90 = -90
     case counterclockwise180 = -180

@@ -304,18 +304,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CropViewControllerDelegate {
-    func cropViewControllerDidEnableUndo(_ enable: Bool) {
-        
-    }
-    
-    func cropViewControllerDidEnableRedo(_ enable: Bool) {
-        
-    }
-    
-    func cropViewControllerDidEnableReset(_ enable: Bool) {
-        
-    }
-    
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         dismiss(animated: true)
     }

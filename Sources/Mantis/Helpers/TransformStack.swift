@@ -5,7 +5,7 @@ public class TransformStack: NSObject {
     
     public static var shared: TransformStack = TransformStack()
     
-    public weak var transformDelegate : TransformDelegate!
+    weak var transformDelegate : TransformDelegate!
     
     public var transformAdjustmentsStack : Array = [TransformRecord]()
     

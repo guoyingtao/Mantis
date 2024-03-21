@@ -74,7 +74,7 @@ class EmbeddedCropViewController: UIViewController {
                     
         var config = Mantis.Config()
         config.cropToolbarConfig.mode = .embedded
-        config.enableUndo = true
+        config.enableUndoRedo = true
         
         config.cropToolbarConfig.toolbarButtonOptions = [.counterclockwiseRotate, .clockwiseRotate, .horizontallyFlip, .verticallyFlip]
         
@@ -115,9 +115,9 @@ class EmbeddedCropViewController: UIViewController {
                 
                 let undoString = NSLocalizedString("Undo", comment: "Undo")
                 
-                command.title = TransformStack.shared.transformDelegate.isUndoEnabled() ? "\(undoString) \(TransformStack.shared.transformDelegate.undoManager().undoActionName)" : undoString
+                command.title = self.undoButton.isEnabled ? "\(undoString) \(toolbarDelegate.undoActionName())" : undoString
                 
-                if !TransformStack.shared.transformDelegate.isUndoEnabled() {
+                if !self.undoButton.isEnabled {
                     command.attributes = [.disabled]
                 }
             }
@@ -126,9 +126,9 @@ class EmbeddedCropViewController: UIViewController {
                 
                 let redoString = NSLocalizedString("Redo", comment: "Redo")
                 
-                command.title = TransformStack.shared.transformDelegate.isRedoEnabled() ? "\(redoString) \(TransformStack.shared.transformDelegate.undoManager().redoActionName)" : redoString
+                command.title = self.redoButton.isEnabled ? "\(redoString) \(toolbarDelegate.redoActionName())" : redoString
                 
-                if !TransformStack.shared.transformDelegate.isRedoEnabled() {
+                if !self.redoButton.isEnabled {
                     command.attributes = [.disabled]
                 }
             }

@@ -10,11 +10,11 @@ public class TransformRecord: NSObject {
     let transformType : TransformType!
     
     public var actionName : String!
+        
+    let previousValues :  Dictionary<String, Any?>!
+    let currentValues : Dictionary<String, Any?>!
     
     var useCurrent : Bool! = true
-    
-    let previousValues :  Dictionary<String, Any?>!
-    var currentValues : Dictionary<String, Any?>!
     
     public init(transformType: TransformType, actionName: String, previousValues: [String : Any?], currentValues: [String : Any?]) {
         

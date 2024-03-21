@@ -26,7 +26,8 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectUndo()
     func didSelectRedo()
     func isUndoSupported() -> Bool
-
+    func undoActionName() -> String
+    func redoActionName() -> String
 }
 
 public extension CropToolbarDelegate {
