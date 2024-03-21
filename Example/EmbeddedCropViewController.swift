@@ -181,9 +181,9 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
 
 }
 
-extension EmbeddedCropViewController : TransformDelegate {
+extension EmbeddedCropViewController: TransformDelegate {
     
-    func enableResetButton(_ enable: Bool) {
+    func enableReset(_ enable: Bool) {
         self.resetButton.isEnabled = enable
     }
     

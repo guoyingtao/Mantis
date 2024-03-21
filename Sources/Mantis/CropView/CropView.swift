@@ -656,32 +656,6 @@ extension CropView {
         }
     }
     
-    func makeCoreImageTransformInfo( ) -> (CGAffineTransform, CGRect) {
-        
-        
-        var transform: CGAffineTransform = .identity
-        let cropInfo = getCropInfo()
-        transform.transformed(by: cropInfo)
-        
-        let outputSize = image.getOutputCropImageSize(by: cropInfo)
-        
-        
-        var cropRect: CGRect = CGRect(origin: .zero, size: outputSize)
-        
-        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
-     
-        
-        // affine transform
-        
-        // offset: cropWorkbenchView.contentOffset,
-        // rotation: getTotalRadians(),
-        // scale: cropWorkbenchView.zoomScale,
-        
-        // crop rect
-        
-        return (transform, cropRect)
-    }
-    
     public func makeCropState() -> CropState {
         
         return CropState(

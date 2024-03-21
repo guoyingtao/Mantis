@@ -1,11 +1,11 @@
 import UIKit
 
-public enum TransformType: Int {
+public enum TransformType {
     case resetTransforms
     case transform
 }
 
-public protocol TransformDelegate : AnyObject {
+public protocol TransformDelegate: AnyObject {
     
     var undoButton: UIBarButtonItem! { get set }
     var redoButton: UIBarButtonItem! { get set }
@@ -19,7 +19,7 @@ public protocol TransformDelegate : AnyObject {
     func undo()
     func redo()
     func updateCropState(_ cropState: Any)
-    func enableResetButton(_ enable: Bool)
+    func enableReset(_ enable: Bool)
 }
 
 public class TransformRecord: NSObject {
@@ -72,7 +72,7 @@ public class TransformRecord: NSObject {
         
         TransformStack.shared.sharedTransformDelegate.undoManager().setActionName(self.actionName)
         
-        TransformStack.shared.sharedTransformDelegate.enableResetButton(self.transformType != .resetTransforms)
+        TransformStack.shared.sharedTransformDelegate.enableReset(self.transformType != .resetTransforms)
     }
     
     // Undo
@@ -89,9 +89,9 @@ public class TransformRecord: NSObject {
          TransformStack.shared.sharedTransformDelegate.undoManager().setActionName(self.actionName)
          
          if self.transformType == .resetTransforms {
-             TransformStack.shared.sharedTransformDelegate.enableResetButton(true)
+             TransformStack.shared.sharedTransformDelegate.enableReset(true)
          } else if 0 == TransformStack.shared.top {
-             TransformStack.shared.sharedTransformDelegate.enableResetButton(false)
+             TransformStack.shared.sharedTransformDelegate.enableReset(false)
          }
     }
 }
