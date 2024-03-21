@@ -29,6 +29,7 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidBecomeUnResettable(_ cropView: CropViewProtocol)
     func cropViewDidBeginResize(_ cropView: CropViewProtocol)
     func cropViewDidEndResize(_ cropView: CropViewProtocol)
+    func cropViewDidBeginCrop(cropView: CropViewProtocol)
 }
 
 final class CropView: UIView {
@@ -655,6 +656,44 @@ extension CropView {
         }
     }
     
+    func makeCoreImageTransformInfo( ) -> (CGAffineTransform, CGRect) {
+        
+        
+        var transform: CGAffineTransform = .identity
+        let cropInfo = getCropInfo()
+        transform.transformed(by: cropInfo)
+        
+        let outputSize = image.getOutputCropImageSize(by: cropInfo)
+        
+        
+        var cropRect: CGRect = CGRect(origin: .zero, size: outputSize)
+        
+        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
+     
+        
+        // affine transform
+        
+        // offset: cropWorkbenchView.contentOffset,
+        // rotation: getTotalRadians(),
+        // scale: cropWorkbenchView.zoomScale,
+        
+        // crop rect
+        
+        return (transform, cropRect)
+    }
+    
+    public func makeCropState() -> CropState {
+        
+        return CropState(
+            rotationType: viewModel.rotationType,
+            degrees: viewModel.degrees,
+            aspectRatioLockEnabled: aspectRatioLockEnabled,
+            aspectRato: viewModel.fixedImageRatio,
+            flipOddTimes: flipOddTimes,
+            transformation: makeTransformation()
+        )
+    }
+    
     func makeTransformation() -> Transformation {
         Transformation(
             offset: cropWorkbenchView.contentOffset,
@@ -866,6 +905,7 @@ extension CropView: CropViewProtocol {
     }
     
     func setFixedRatio(_ ratio: Double, zoom: Bool = true, presetFixedRatioType: PresetFixedRatioType) {
+       
         aspectRatioLockEnabled = true
         
         if viewModel.fixedImageRatio != CGFloat(ratio) {
@@ -956,7 +996,27 @@ extension CropView: CropViewProtocol {
         viewModel.fixedImageRatio = -1
     }
     
+    public func applyCropState(with cropState: CropState) {
+        viewModel.rotationType = .none
+        viewModel.horizontallyFlip = cropState.transformation.horizontallyFlipped
+        viewModel.verticallyFlip = cropState.transformation.verticallyFlipped
+        viewModel.fixedImageRatio = cropState.aspectRato
+        flipOddTimes = cropState.flipOddTimes
+        
+        let newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
+        
+        // The first transform is just for retrieving the final cropBoxFrame
+        transform(byTransformInfo: newTransform, isUpdateRotationControlView: true)
+        
+        transform(byTransformInfo: newTransform)
+        
+        viewModel.degrees = cropState.degrees
+        viewModel.rotationType = cropState.rotationType
+        aspectRatioLockEnabled = cropState.aspectRatioLockEnabled
+    }
+    
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {
+        
         viewModel.setRotatingStatus(by: Angle(radians: transformation.rotation))
         
         if transformation.cropWorkbenchViewBounds != .zero {
@@ -966,6 +1026,7 @@ extension CropView: CropViewProtocol {
         isManuallyZoomed = transformation.isManuallyZoomed
         cropWorkbenchView.zoomScale = transformation.scale
         cropWorkbenchView.contentOffset = transformation.offset
+        
         viewModel.setBetweenOperationStatus()
         
         if transformation.maskFrame != .zero {
@@ -987,13 +1048,17 @@ extension CropView: CropViewProtocol {
         var maskFrameHeight: CGFloat
         
         if transformInfo.maskFrame.height / transformInfo.maskFrame.width >= contentBound.height / contentBound.width {
+            
             maskFrameHeight = contentBound.height
             maskFrameWidth = transformInfo.maskFrame.width / transformInfo.maskFrame.height * maskFrameHeight
             adjustScale = maskFrameHeight / transformInfo.maskFrame.height
+            
         } else {
+            
             maskFrameWidth = contentBound.width
             maskFrameHeight = transformInfo.maskFrame.height / transformInfo.maskFrame.width * maskFrameWidth
             adjustScale = maskFrameWidth / transformInfo.maskFrame.width
+            
         }
         
         var newTransform = transformInfo

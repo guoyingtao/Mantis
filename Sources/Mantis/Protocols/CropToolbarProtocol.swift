@@ -23,6 +23,7 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol?)
     func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol?)
     func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?, isActive: Bool)
+    func didSelectTransform(with cropState: CropState)
 }
 
 public extension CropToolbarDelegate {

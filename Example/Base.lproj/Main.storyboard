@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -174,7 +174,7 @@
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
-                                <rect key="frame" x="32" y="16" width="311" height="342"/>
+                                <rect key="frame" x="32" y="36" width="311" height="322"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -247,6 +247,23 @@
                                 <action selector="cancel:" destination="aIe-ND-Zfg" id="j3e-ai-8lv"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem title="Undo" id="HSP-G5-UOE">
+                            <color key="tintColor" systemColor="systemYellowColor"/>
+                            <connections>
+                                <action selector="undoButtonPressed:" destination="aIe-ND-Zfg" id="8eI-4B-Rt7"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Redo" id="l1v-fT-hP5">
+                            <color key="tintColor" systemColor="systemYellowColor"/>
+                            <connections>
+                                <action selector="redoButtonPressed:" destination="aIe-ND-Zfg" id="pck-70-va2"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Reset" id="eee-mM-zNC">
+                            <connections>
+                                <action selector="resetButtonPressed:" destination="aIe-ND-Zfg" id="S6Q-y0-GYz"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="DsY-rM-AWO"/>
                         <barButtonItem systemItem="bookmarks" id="sQZ-M0-ZLt">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -270,7 +287,10 @@
                     <connections>
                         <outlet property="cancelButton" destination="5p4-Ob-R9b" id="kQq-ir-MSf"/>
                         <outlet property="doneButton" destination="kZP-3N-vXv" id="RPY-W3-vWu"/>
+                        <outlet property="redoButton" destination="l1v-fT-hP5" id="jYe-4F-ear"/>
+                        <outlet property="resetButton" destination="eee-mM-zNC" id="Jfu-qz-XAZ"/>
                         <outlet property="resolutionLabel" destination="NDR-Th-Zyy" id="rUQ-h6-q2i"/>
+                        <outlet property="undoButton" destination="HSP-G5-UOE" id="BLL-45-Dfn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xP6-ML-BEH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -321,6 +341,9 @@
         <image name="sunflower" width="3648" height="5472"/>
         <systemColor name="systemGray6Color">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -83,6 +83,7 @@ class ViewController: UIViewController {
                                                                 height: 704.9696330065433),
                                        horizontallyFlipped: true,
                                        verticallyFlipped: false)
+        
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         config.cropViewConfig.builtInRotationControlViewType = .slideDial()
@@ -303,6 +304,17 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CropViewControllerDelegate {
+    
+    func cropViewControllerDidReset(previous: Mantis.CropState, current: Mantis.CropState) {
+        
+    }
+    
+    func cropViewControllerDidTransformImage(previous: CropState,
+                                             current: CropState,
+                                             userGenerated: Bool) {
+        
+    }
+    
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         dismiss(animated: true)
     }

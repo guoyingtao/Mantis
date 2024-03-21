@@ -194,6 +194,9 @@ extension RotationDial: RotationDialProtocol {
         guard let dialPlate = dialPlate else { return false }
         
         let radians = steppingAngle.radians
+        
+        guard radians != 0 else { return false }
+        
         if (getRotationAngle() * steppingAngle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
             
             if radians > 0 {

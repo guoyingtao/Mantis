@@ -40,3 +40,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
 }
+
+extension AppDelegate {
+    
+    override func buildMenu(with builder: UIMenuBuilder) {
+        super.buildMenu(with: builder)
+        
+        // Ensure that the builder is modifying the menu bar system.
+        guard builder.system == UIMenuSystem.main else { return }
+        
+        // remove items from Edit menu
+        builder.remove(menu: .undoRedo)
+        
+        // Undo
+        let undoCommand = UIKeyCommand(title: "Undo",
+                                       action: #selector(EmbeddedCropViewController.undoButtonPressed(_:)),
+                                       input: "z",
+                                       modifierFlags: [.command])
+        
+        
+        // Redo
+        let redoCommand = UIKeyCommand(title: "Redo",
+                                       action: #selector(EmbeddedCropViewController.redoButtonPressed(_:)),
+                                       input: "z",
+                                       modifierFlags: [.shift, .command])
+        
+        // Revert
+        let revertCommand = UIKeyCommand(title: "Revert to Original",
+                                       action: #selector(EmbeddedCropViewController.resetButtonPressed(_:)),
+                                       input: "r",
+                                         modifierFlags: [.alternate])
+        
+        let undoMenu = UIMenu(title: "", identifier: .undoRedo, options: .displayInline, children: [undoCommand, redoCommand, revertCommand ])
+        
+        builder.insertChild(undoMenu, atStartOfMenu: .edit)
+        
+    }
+}
