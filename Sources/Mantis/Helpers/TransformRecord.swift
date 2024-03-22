@@ -11,12 +11,12 @@ class TransformRecord: NSObject {
     
     private let actionName: String
     
-    private let previousValues:  Dictionary<String, Any?>
-    private let currentValues: Dictionary<String, Any?>
+    private let previousValues:  Dictionary<String, CropState>
+    private let currentValues: Dictionary<String, CropState>
     
     private var useCurrent: Bool = true
     
-    init(transformType: TransformType, actionName: String, previousValues: [String: Any?], currentValues: [String: Any?]) {
+    init(transformType: TransformType, actionName: String, previousValues: [String: CropState], currentValues: [String: CropState]) {
         
         self.transformType = transformType
         self.actionName = actionName
@@ -31,7 +31,7 @@ class TransformRecord: NSObject {
     }
     
     func updateTransformState() {
-        let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] as! CropState : self.previousValues[.kCurrentTransformState] as! CropState
+        guard let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] : self.previousValues[.kCurrentTransformState] else { return }
         
         TransformStack.shared.transformDelegate.updateCropState(cropState)
     }

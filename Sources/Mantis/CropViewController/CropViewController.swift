@@ -449,8 +449,8 @@ extension CropViewController: CropViewDelegate {
                 actionString = LocalizedHelper.getString("Mantis.ResetChanges", value: "Reset Changes")
             }
             
-            let previousValue:  [String: Any?] = [.kCurrentTransformState: previous]
-            let currentValue:  [String: Any?] = [.kCurrentTransformState: current]
+            let previousValue:  [String: CropState] = [.kCurrentTransformState: previous]
+            let currentValue:  [String: CropState] = [.kCurrentTransformState: current]
             
             let transformRecord = TransformRecord(transformType: transformType, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
             
