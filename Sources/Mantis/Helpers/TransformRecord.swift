@@ -9,7 +9,7 @@ class TransformRecord: NSObject {
     
     let transformType : TransformType!
     
-    public var actionName : String!
+    var actionName : String!
         
     let previousValues :  Dictionary<String, Any?>!
     let currentValues : Dictionary<String, Any?>!
@@ -26,18 +26,18 @@ class TransformRecord: NSObject {
         super.init()
     }
     
-    public required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func updateTransformState() {
+    func updateTransformState() {
         let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] as! CropState : self.previousValues[.kCurrentTransformState] as! CropState
         
         TransformStack.shared.transformDelegate.updateCropState(cropState)
     }
     
     // Add/Redo
-    @objc public func addAdjustmentToStack(_ applyTransform: NSNumber? = nil) {
+    @objc func addAdjustmentToStack(_ applyTransform: NSNumber? = nil) {
         
         self.useCurrent = true
         
@@ -59,7 +59,7 @@ class TransformRecord: NSObject {
     }
     
     // Undo
-    @objc public func removeAdjustmentFromStack() {
+    @objc func removeAdjustmentFromStack() {
         
         self.useCurrent = false
         
@@ -80,6 +80,6 @@ class TransformRecord: NSObject {
 }
 
 extension String {
-    public static let kCurrentTransformState = "CurrentTransformState"
+    static let kCurrentTransformState = "CurrentTransformState"
 }
 
