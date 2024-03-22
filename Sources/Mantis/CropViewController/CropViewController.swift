@@ -444,9 +444,9 @@ extension CropViewController: CropViewDelegate {
             
             switch transformType {
             case .transform:
-                actionString = NSLocalizedString("Change Crop", comment: "Change Crop")
+                actionString = LocalizedHelper.getString("Mantis.ChangeCrop", value: "Change Crop")
             case .resetTransforms:
-                actionString = NSLocalizedString("Reset Changes", comment: "Reset Changes")
+                actionString = LocalizedHelper.getString("Mantis.ResetChanges", value: "Reset Changes")
             }
             
             let previousValue:  [String: Any?] = [.kCurrentTransformState: previous]

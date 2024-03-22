@@ -11,4 +11,5 @@
 "Mantis.Reset" = "Reset";
 "Mantis.Original" = "Original";
 "Mantis.Square" = "Square";
-
+"Mantis.ChangeCrop" = "Change Crop";
+"Mantis.ResetChanges" = "Reset Changes";
