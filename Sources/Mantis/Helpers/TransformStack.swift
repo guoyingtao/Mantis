@@ -31,8 +31,7 @@ class TransformStack: NSObject {
             object: nil)
     }
     
-    public func pushTransformRecord(_ record: TransformRecord)
-    {
+    public func pushTransformRecord(_ record: TransformRecord) {
         if transformAdjustmentsStack.count > top {
             transformAdjustmentsStack.remove(at: top)
         }
@@ -40,8 +39,7 @@ class TransformStack: NSObject {
         top += 1
     }
 
-    public func popTransformStack()
-    {
+    public func popTransformStack() {
         top -= 1
     }
     
