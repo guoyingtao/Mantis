@@ -328,8 +328,6 @@ open class CropViewController: UIViewController {
     
     private func handleTransform(with cropState: CropState) {
         
-        guard let cropView = cropView as? CropView else { return }
-                
         cropView.applyCropState(with: cropState)
         
         view.setNeedsLayout()
