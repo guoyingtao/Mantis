@@ -3,19 +3,19 @@ import UIKit
 
 class TransformStack: NSObject {
     
-    public static var shared: TransformStack = TransformStack()
+    static var shared: TransformStack = TransformStack()
     
     weak var transformDelegate : TransformDelegate!
     
-    public var transformAdjustmentsStack : Array = [TransformRecord]()
+    var transformAdjustmentsStack : Array = [TransformRecord]()
     
-    public var isRotated : Bool! = false
+    var isRotated : Bool! = false
     
-    public var bottom : Int = 0
-    public var top : Int = 0
+    var bottom : Int = 0
+    var top : Int = 0
     
-    public var transformStackBottom : Int = 0
-    public var transformStackTop : Int = 0
+    var transformStackBottom : Int = 0
+    var transformStackTop : Int = 0
         
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -31,7 +31,7 @@ class TransformStack: NSObject {
             object: nil)
     }
     
-    public func pushTransformRecord(_ record: TransformRecord) {
+    func pushTransformRecord(_ record: TransformRecord) {
         if transformAdjustmentsStack.count > top {
             transformAdjustmentsStack.remove(at: top)
         }
@@ -39,11 +39,11 @@ class TransformStack: NSObject {
         top += 1
     }
 
-    public func popTransformStack() {
+    func popTransformStack() {
         top -= 1
     }
     
-    public func reset() {
+    func reset() {
         transformAdjustmentsStack.removeAll()
         top = 0
         bottom = 0
