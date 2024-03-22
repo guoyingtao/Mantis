@@ -308,10 +308,6 @@ extension ViewController: CropViewControllerDelegate {
         dismiss(animated: true)
     }
     
-    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {
-        print("image is transformed. transformation is \(transformation)")
-    }
-    
     func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {
         print("Is resettable: \(resettable)")
     }
