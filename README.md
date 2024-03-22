@@ -203,6 +203,17 @@ public enum PresetTransformationType {
 Please use the transformation information obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, , cropInfo: CropInfo).
 
 </details>
+
+<details>
+<summary><strong>Undo/Redo Support</strong></summary>
+
+* Mantis offers full support for Undo, Redo, Revert to Original in both iOS and Catalyst.
+
+* If you want to add support for this feature, set Mantis.Config.enableUndoRedo = true
+
+* Catalyst menus for this feature are localized.
+
+</details>
                 
 <details>
     <summary><strong>Localization</strong></summary>
