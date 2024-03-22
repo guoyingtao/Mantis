@@ -70,7 +70,7 @@ class TransformRecord: NSObject {
         
         TransformStack.shared.popTransformStack()
         let applyTransform = true
-        transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
+        transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(value: applyTransform))
         
         transformDelegate.getUndoManager().setActionName(self.actionName)
         
