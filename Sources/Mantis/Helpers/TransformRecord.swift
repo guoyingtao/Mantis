@@ -45,11 +45,8 @@ class TransformRecord: NSObject {
         
         self.useCurrent = true
         
-        if let applyTransform = applyTransform?.boolValue {
-            
-            if applyTransform {
-                self.updateTransformState()
-            }
+        if applyTransform?.boolValue == true {
+            updateTransformState()
         }
         
         TransformStack.shared.pushTransformRecord(self)
