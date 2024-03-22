@@ -31,13 +31,17 @@ class TransformRecord: NSObject {
     }
     
     func updateTransformState() {
+        guard let transformDelegate = TransformStack.shared.transformDelegate else { return }
+
         guard let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] : self.previousValues[.kCurrentTransformState] else { return }
         
-        TransformStack.shared.transformDelegate.updateCropState(cropState)
+        transformDelegate.updateCropState(cropState)
     }
     
     // Add/Redo
     @objc func addAdjustmentToStack(_ applyTransform: NSNumber? = nil) {
+        
+        guard let transformDelegate = TransformStack.shared.transformDelegate else { return }
         
         self.useCurrent = true
         
@@ -51,15 +55,17 @@ class TransformRecord: NSObject {
         TransformStack.shared.pushTransformRecord(self)
         
         // register the undo event
-        TransformStack.shared.transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(removeAdjustmentFromStack), object: nil)
+        transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(removeAdjustmentFromStack), object: nil)
         
-        TransformStack.shared.transformDelegate.getUndoManager().setActionName(self.actionName)
+        transformDelegate.getUndoManager().setActionName(self.actionName)
         
-        TransformStack.shared.transformDelegate.updateEnableStateForReset(self.transformType != .resetTransforms)
+        transformDelegate.updateEnableStateForReset(self.transformType != .resetTransforms)
     }
     
     // Undo
     @objc func removeAdjustmentFromStack() {
+        
+        guard let transformDelegate = TransformStack.shared.transformDelegate else { return }
         
         self.useCurrent = false
         
@@ -67,14 +73,14 @@ class TransformRecord: NSObject {
         
         TransformStack.shared.popTransformStack()
         let applyTransform = true
-        TransformStack.shared.transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
+        transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
         
-        TransformStack.shared.transformDelegate.getUndoManager().setActionName(self.actionName)
+        transformDelegate.getUndoManager().setActionName(self.actionName)
         
         if self.transformType == .resetTransforms {
-            TransformStack.shared.transformDelegate.updateEnableStateForReset(true)
+            transformDelegate.updateEnableStateForReset(true)
         } else if 0 == TransformStack.shared.top {
-            TransformStack.shared.transformDelegate.updateEnableStateForReset(false)
+            transformDelegate.updateEnableStateForReset(false)
         }
     }
 }

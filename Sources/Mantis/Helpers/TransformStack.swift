@@ -5,7 +5,7 @@ class TransformStack: NSObject {
     
     static var shared: TransformStack = TransformStack()
     
-    weak var transformDelegate : TransformDelegate!
+    weak var transformDelegate : TransformDelegate?
     
     var transformAdjustmentsStack : Array = [TransformRecord]()
     
@@ -51,6 +51,7 @@ class TransformStack: NSObject {
     }
     
     @objc func undoStatusChanged(notification: NSNotification?) {
+        guard let transformDelegate = transformDelegate else { return }
         transformDelegate.updateEnableStateForUndo(transformDelegate.isUndoEnabled())
         transformDelegate.updateEnableStateForRedo(transformDelegate.isRedoEnabled())
     }
