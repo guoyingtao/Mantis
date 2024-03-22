@@ -612,29 +612,29 @@ extension CropViewController {
 
 extension CropViewController: TransformDelegate {
    
-    public func enableUndo(_ enable: Bool) {
+    func enableUndo(_ enable: Bool) {
         if config.enableUndoRedo {
             delegate?.cropViewControllerDidUpdateEnableStateForUndo(enable)
         }
     }
     
-    public func enableRedo(_ enable: Bool) {
+    func enableRedo(_ enable: Bool) {
         if config.enableUndoRedo {
             delegate?.cropViewControllerDidUpdateEnableStateForRedo(enable)
         }
     }
     
-    public func enableReset(_ enable: Bool) {
+    func enableReset(_ enable: Bool) {
         if config.enableUndoRedo {
             delegate?.cropViewControllerDidUpdateEnableStateForReset(enable)
         }
     }
     
-    public func undoManager() -> UndoManager {
+    func undoManager() -> UndoManager {
         return _undoManager
     }
     
-    public func undo() {
+    func undo() {
         if config.enableUndoRedo {
             // Change State
             if _undoManager.canUndo {
@@ -643,7 +643,7 @@ extension CropViewController: TransformDelegate {
         }
     }
     
-    public func redo() {
+    func redo() {
         if config.enableUndoRedo {
             // Change State
             if _undoManager.canRedo {
@@ -653,7 +653,7 @@ extension CropViewController: TransformDelegate {
         }
     }
     
-    public func isRedoEnabled() -> Bool {
+    func isRedoEnabled() -> Bool {
         if config.enableUndoRedo {
             return _undoManager.canRedo
         } else {
@@ -661,7 +661,7 @@ extension CropViewController: TransformDelegate {
         }
     }
     
-    public func isUndoEnabled() -> Bool {
+    func isUndoEnabled() -> Bool {
         if config.enableUndoRedo {
             return _undoManager.canUndo
         } else {
