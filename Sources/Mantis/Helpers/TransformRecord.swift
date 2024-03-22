@@ -16,7 +16,7 @@ public class TransformRecord: NSObject {
     
     var useCurrent : Bool! = true
     
-    public init(transformType: TransformType, actionName: String, previousValues: [String : Any?], currentValues: [String : Any?]) {
+    public init(transformType: TransformType, actionName: String, previousValues: [String: Any?], currentValues: [String: Any?]) {
         
         self.transformType = transformType
         self.actionName = actionName

@@ -449,8 +449,8 @@ extension CropViewController: CropViewDelegate {
                 actionString = NSLocalizedString("Reset Changes", comment: "Reset Changes")
             }
             
-            let previousValue:  [String : Any?] = [.kCurrentTransformState : previous]
-            let currentValue:  [String : Any?] = [.kCurrentTransformState : current]
+            let previousValue:  [String: Any?] = [.kCurrentTransformState: previous]
+            let currentValue:  [String: Any?] = [.kCurrentTransformState: current]
             
             let transformRecord = TransformRecord(transformType: transformType, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
             
