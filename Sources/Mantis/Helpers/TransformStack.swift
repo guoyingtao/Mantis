@@ -9,8 +9,6 @@ class TransformStack: NSObject {
     
     private var transformAdjustmentsStack: [TransformRecord] = []
     
-    private var isRotated: Bool = false
-    
     private var bottom: Int = 0
     
     var top: Int = 0
@@ -48,7 +46,6 @@ class TransformStack: NSObject {
         transformAdjustmentsStack.removeAll()
         top = 0
         bottom = 0
-        isRotated = false
     }
     
     @objc func undoStatusChanged(notification: NSNotification?) {
