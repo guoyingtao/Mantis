@@ -22,11 +22,11 @@ public protocol CropViewControllerDelegate: AnyObject {
     
     func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool)
     
-    func cropViewControllerDidUpdateEnableStateForUndo(_ enable: Bool)
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForUndo enable: Bool)
     
-    func cropViewControllerDidUpdateEnableStateForRedo(_ enable: Bool)
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForRedo enable: Bool)
     
-    func cropViewControllerDidUpdateEnableStateForReset(_ enable: Bool)
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForReset enable: Bool)
 }
 
 public extension CropViewControllerDelegate {
@@ -35,7 +35,9 @@ public extension CropViewControllerDelegate {
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {}
     func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {}
-    func cropViewControllerDidUpdateEnableStateForUndo(_ enable: Bool) {}
-    func cropViewControllerDidUpdateEnableStateForRedo(_ enable: Bool) {}
-    func cropViewControllerDidUpdateEnableStateForReset(_ enable: Bool) {}
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForUndo enable: Bool) {}
+    
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForRedo enable: Bool) {}
+    
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForReset enable: Bool) {}
 }

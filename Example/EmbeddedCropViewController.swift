@@ -147,18 +147,19 @@ class EmbeddedCropViewController: UIViewController {
 }
 
 extension EmbeddedCropViewController: CropViewControllerDelegate {
-    func cropViewControllerDidUpdateEnableStateForUndo(_ enable: Bool) {
+    
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForUndo enable: Bool) {
         self.undoButton.isEnabled = enable
     }
     
-    func cropViewControllerDidUpdateEnableStateForRedo(_ enable: Bool) {
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForRedo enable: Bool) {
         self.redoButton.isEnabled = enable
     }
     
-    func cropViewControllerDidUpdateEnableStateForReset(_ enable: Bool) {
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForReset enable: Bool) {
         self.resetButton.isEnabled = enable
     }
-
+    
     func cropViewControllerDidCrop(_ cropViewController: CropViewController,
                                    cropped: UIImage,
                                    transformation: Transformation,
