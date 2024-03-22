@@ -442,7 +442,7 @@ extension CropViewController: CropViewDelegate {
     private func pushTransformRecordOntoStack(transformType: TransformType, previous: CropState, current: CropState, userGenerated: Bool) {
         if userGenerated {
             
-            let actionString: String!
+            let actionString: String
             
             switch transformType {
             case .transform:
