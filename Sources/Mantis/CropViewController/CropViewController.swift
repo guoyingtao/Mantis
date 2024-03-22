@@ -636,7 +636,6 @@ extension CropViewController: TransformDelegate {
     
     func undo() {
         if config.enableUndoRedo {
-            // Change State
             if _undoManager.canUndo {
                 _undoManager.undo()
             }
@@ -645,9 +644,7 @@ extension CropViewController: TransformDelegate {
     
     func redo() {
         if config.enableUndoRedo {
-            // Change State
             if _undoManager.canRedo {
-                
                 _undoManager.redo()
             }
         }
