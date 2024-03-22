@@ -612,25 +612,25 @@ extension CropViewController {
 
 extension CropViewController: TransformDelegate {
    
-    func enableUndo(_ enable: Bool) {
+    func updateEnableStateForUndo(_ enable: Bool) {
         if config.enableUndoRedo {
             delegate?.cropViewControllerDidUpdateEnableStateForUndo(enable)
         }
     }
     
-    func enableRedo(_ enable: Bool) {
+    func updateEnableStateForRedo(_ enable: Bool) {
         if config.enableUndoRedo {
             delegate?.cropViewControllerDidUpdateEnableStateForRedo(enable)
         }
     }
     
-    func enableReset(_ enable: Bool) {
+    func updateEnableStateForReset(_ enable: Bool) {
         if config.enableUndoRedo {
             delegate?.cropViewControllerDidUpdateEnableStateForReset(enable)
         }
     }
     
-    func undoManager() -> UndoManager {
+    func getUndoManager() -> UndoManager {
         return _undoManager
     }
     

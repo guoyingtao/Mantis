@@ -21,7 +21,7 @@ class TransformStack: NSObject {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override init() {
+    private override init() {
         super.init()
         
         NotificationCenter.default.addObserver(
@@ -51,7 +51,7 @@ class TransformStack: NSObject {
     }
     
     @objc func undoStatusChanged(notification: NSNotification?) {
-        transformDelegate.enableUndo(transformDelegate.isUndoEnabled())
-        transformDelegate.enableRedo(transformDelegate.isRedoEnabled())
+        transformDelegate.updateEnableStateForUndo(transformDelegate.isUndoEnabled())
+        transformDelegate.updateEnableStateForRedo(transformDelegate.isRedoEnabled())
     }
 }

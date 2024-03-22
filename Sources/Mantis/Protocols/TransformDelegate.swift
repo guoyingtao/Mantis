@@ -8,14 +8,14 @@
 import Foundation
 
 protocol TransformDelegate: AnyObject {
-    func undoManager() -> UndoManager
+    func getUndoManager() -> UndoManager
     func isUndoEnabled() -> Bool
     func isRedoEnabled() -> Bool
     func undo()
     func redo()
     func updateCropState(_ cropState: CropState)
-    func enableUndo(_ enable: Bool)
-    func enableRedo(_ enable: Bool)
-    func enableReset(_ enable: Bool)
+    func updateEnableStateForUndo(_ enable: Bool)
+    func updateEnableStateForRedo(_ enable: Bool)
+    func updateEnableStateForReset(_ enable: Bool)
 }
 

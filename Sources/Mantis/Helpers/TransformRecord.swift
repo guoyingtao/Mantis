@@ -51,11 +51,11 @@ class TransformRecord: NSObject {
         TransformStack.shared.pushTransformRecord(self)
         
         // register the undo event
-        TransformStack.shared.transformDelegate.undoManager().registerUndo(withTarget: self, selector: #selector(removeAdjustmentFromStack), object: nil)
+        TransformStack.shared.transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(removeAdjustmentFromStack), object: nil)
         
-        TransformStack.shared.transformDelegate.undoManager().setActionName(self.actionName)
+        TransformStack.shared.transformDelegate.getUndoManager().setActionName(self.actionName)
         
-        TransformStack.shared.transformDelegate.enableReset(self.transformType != .resetTransforms)
+        TransformStack.shared.transformDelegate.updateEnableStateForReset(self.transformType != .resetTransforms)
     }
     
     // Undo
@@ -67,14 +67,14 @@ class TransformRecord: NSObject {
         
         TransformStack.shared.popTransformStack()
         let applyTransform = true
-        TransformStack.shared.transformDelegate.undoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
+        TransformStack.shared.transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(booleanLiteral: applyTransform))
         
-        TransformStack.shared.transformDelegate.undoManager().setActionName(self.actionName)
+        TransformStack.shared.transformDelegate.getUndoManager().setActionName(self.actionName)
         
         if self.transformType == .resetTransforms {
-            TransformStack.shared.transformDelegate.enableReset(true)
+            TransformStack.shared.transformDelegate.updateEnableStateForReset(true)
         } else if 0 == TransformStack.shared.top {
-            TransformStack.shared.transformDelegate.enableReset(false)
+            TransformStack.shared.transformDelegate.updateEnableStateForReset(false)
         }
     }
 }
