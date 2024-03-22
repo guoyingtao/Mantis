@@ -7,14 +7,14 @@ enum TransformType {
 
 class TransformRecord: NSObject {
     
-    let transformType : TransformType!
+    private let transformType: TransformType
     
-    var actionName : String!
-        
-    let previousValues :  Dictionary<String, Any?>!
-    let currentValues : Dictionary<String, Any?>!
+    private let actionName: String
     
-    var useCurrent : Bool! = true
+    private let previousValues:  Dictionary<String, Any?>
+    private let currentValues: Dictionary<String, Any?>
+    
+    private var useCurrent: Bool = true
     
     init(transformType: TransformType, actionName: String, previousValues: [String: Any?], currentValues: [String: Any?]) {
         
