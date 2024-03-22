@@ -36,7 +36,7 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
         didEndResize = true
     }
     
-    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController) {
+    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {
         didImageTransformed = true
     }
 }
