@@ -1,11 +1,11 @@
 import UIKit
 
-public enum TransformType {
+enum TransformType {
     case resetTransforms
     case transform
 }
 
-public class TransformRecord: NSObject {
+class TransformRecord: NSObject {
     
     let transformType : TransformType!
     
@@ -16,7 +16,7 @@ public class TransformRecord: NSObject {
     
     var useCurrent : Bool! = true
     
-    public init(transformType: TransformType, actionName: String, previousValues: [String: Any?], currentValues: [String: Any?]) {
+    init(transformType: TransformType, actionName: String, previousValues: [String: Any?], currentValues: [String: Any?]) {
         
         self.transformType = transformType
         self.actionName = actionName

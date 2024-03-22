@@ -17,7 +17,7 @@ class TransformStack: NSObject {
     public var transformStackBottom : Int = 0
     public var transformStackTop : Int = 0
         
-    public required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
