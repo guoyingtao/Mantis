@@ -11,8 +11,8 @@ class TransformRecord: NSObject {
     
     private let actionName: String
     
-    private let previousValues:  Dictionary<String, CropState>
-    private let currentValues: Dictionary<String, CropState>
+    private let previousValues: [String: CropState]
+    private let currentValues: [String: CropState]
     
     private var useCurrent: Bool = true
     
