@@ -11,5 +11,5 @@
 "Mantis.Reset" = "リセット";
 "Mantis.Original" = "オリジナル";
 "Mantis.Square" = "正方形";
-"Mantis.ChangeCrop" = "Change Crop";
-"Mantis.ResetChanges" = "Reset Changes";
+"Mantis.ChangeCrop" = "クロップの変更";
+"Mantis.ResetChanges" = "変更をリセットする";
