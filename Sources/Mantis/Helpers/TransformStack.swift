@@ -47,4 +47,25 @@ class TransformStack: NSObject {
         transformDelegate.updateEnableStateForUndo(transformDelegate.isUndoEnabled())
         transformDelegate.updateEnableStateForRedo(transformDelegate.isRedoEnabled())
     }
+    
+    func pushTransformRecordOntoStack(transformType: TransformType, previous: CropState, current: CropState, userGenerated: Bool) {
+        if userGenerated {
+            
+            let actionString: String
+            
+            switch transformType {
+            case .transform:
+                actionString = LocalizedHelper.getString("Mantis.ChangeCrop", value: "Change Crop")
+            case .resetTransforms:
+                actionString = LocalizedHelper.getString("Mantis.ResetChanges", value: "Reset Changes")
+            }
+            
+            let previousValue:  [String: CropState] = [.kCurrentTransformState: previous]
+            let currentValue:  [String: CropState] = [.kCurrentTransformState: current]
+            
+            let transformRecord = TransformRecord(transformType: transformType, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
+            
+            transformRecord.addAdjustmentToStack()
+        }
+    }
 }

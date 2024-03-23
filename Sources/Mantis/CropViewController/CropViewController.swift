@@ -312,7 +312,7 @@ open class CropViewController: UIViewController {
         
         if config.enableUndoRedo {
             let current = cropView.makeCropState()
-            pushTransformRecordOntoStack(transformType: .resetTransforms, previous: previous, current: current, userGenerated: true)
+            TransformStack.shared.pushTransformRecordOntoStack(transformType: .resetTransforms, previous: previous, current: current, userGenerated: true)
         }
     }
     
@@ -429,32 +429,11 @@ extension CropViewController: CropViewDelegate {
             currentCropState = cropView.makeCropState()
             
             if previous != currentCropState {
-                pushTransformRecordOntoStack(transformType: .transform, previous: previous, current: currentCropState, userGenerated: userGenerated)
+                TransformStack.shared.pushTransformRecordOntoStack(transformType: .transform, previous: previous, current: currentCropState, userGenerated: userGenerated)
             }
             
             previousCropState = nil
             currentCropState = nil
-        }
-    }
-    
-    private func pushTransformRecordOntoStack(transformType: TransformType, previous: CropState, current: CropState, userGenerated: Bool) {
-        if userGenerated {
-            
-            let actionString: String
-            
-            switch transformType {
-            case .transform:
-                actionString = LocalizedHelper.getString("Mantis.ChangeCrop", value: "Change Crop")
-            case .resetTransforms:
-                actionString = LocalizedHelper.getString("Mantis.ResetChanges", value: "Reset Changes")
-            }
-            
-            let previousValue:  [String: CropState] = [.kCurrentTransformState: previous]
-            let currentValue:  [String: CropState] = [.kCurrentTransformState: current]
-            
-            let transformRecord = TransformRecord(transformType: transformType, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
-            
-            transformRecord.addAdjustmentToStack()
         }
     }
     
