@@ -979,8 +979,9 @@ extension CropView: CropViewProtocol {
         
         let newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
         
-        // The first transform is just for retrieving the final cropBoxFrame
-        transform(byTransformInfo: newTransform, isUpdateRotationControlView: true)
+        if newTransform.maskFrame != .zero {
+             viewModel.cropBoxFrame = newTransform.maskFrame
+        }
         
         transform(byTransformInfo: newTransform)
         
