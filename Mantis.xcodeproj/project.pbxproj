@@ -67,6 +67,7 @@
 		97D3A0192BAD491A00DEB1D6 /* TransformStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D3A0172BAD491A00DEB1D6 /* TransformStack.swift */; };
 		97D3A01A2BAD491A00DEB1D6 /* TransformRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D3A0182BAD491A00DEB1D6 /* TransformRecord.swift */; };
 		97D3A01C2BAD494300DEB1D6 /* TransformDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D3A01B2BAD494300DEB1D6 /* TransformDelegate.swift */; };
+		97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */; };
 		F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */; };
 		F2058F272A400508008DEBAA /* SlideDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F262A400508008DEBAA /* SlideDialViewModel.swift */; };
 		F2058F292A417D97008DEBAA /* SlideDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F282A417D97008DEBAA /* SlideDialTests.swift */; };
@@ -202,6 +203,7 @@
 		97D3A0172BAD491A00DEB1D6 /* TransformStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformStack.swift; sourceTree = "<group>"; };
 		97D3A0182BAD491A00DEB1D6 /* TransformRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformRecord.swift; sourceTree = "<group>"; };
 		97D3A01B2BAD494300DEB1D6 /* TransformDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformDelegate.swift; sourceTree = "<group>"; };
+		97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformStackTests.swift; sourceTree = "<group>"; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialConfig.swift; sourceTree = "<group>"; };
 		F2058F262A400508008DEBAA /* SlideDialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialViewModel.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				660D4F68298F99D900C4E11A /* CropMaskViewManagerTests.swift */,
 				F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */,
 				F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */,
+				97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -707,6 +710,7 @@
 			buildActionMask = 0;
 			files = (
 				F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */,
+				97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */,
 				F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */,
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
