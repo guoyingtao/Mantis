@@ -18,4 +18,3 @@ protocol TransformDelegate: AnyObject {
     func updateEnableStateForRedo(_ enable: Bool)
     func updateEnableStateForReset(_ enable: Bool)
 }
-

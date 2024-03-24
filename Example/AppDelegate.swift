@@ -58,7 +58,6 @@ extension AppDelegate {
                                        input: "z",
                                        modifierFlags: [.command])
         
-        
         // Redo
         let redoCommand = UIKeyCommand(title: "Redo",
                                        action: #selector(EmbeddedCropViewController.redoButtonPressed(_:)),

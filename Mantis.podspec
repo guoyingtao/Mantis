@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/guoyingtao"
   s.platform     = :ios
   s.swift_version = "5.0"
-  s.ios.deployment_target = "11.0"
+  s.ios.deployment_target = "12.0"
   s.source       = { :git => "https://github.com/guoyingtao/Mantis.git", :tag => "v#{s.version}" }
   s.source_files  = "Sources/**/*.{h,swift}"
   s.resource_bundles = {

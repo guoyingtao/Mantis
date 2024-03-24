@@ -176,4 +176,3 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
         self.resolutionLabel.text = "\(Int(size.width)) x \(Int(size.height)) pixels"
     }
 }
-

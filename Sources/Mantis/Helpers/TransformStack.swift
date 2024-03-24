@@ -1,11 +1,10 @@
 import UIKit
 
-
 class TransformStack: NSObject {
     
     static var shared: TransformStack = TransformStack()
     
-    weak var transformDelegate : TransformDelegate?
+    weak var transformDelegate: TransformDelegate?
     
     private var transformAdjustmentsStack: [TransformRecord] = []
     
@@ -62,10 +61,13 @@ class TransformStack: NSObject {
                 actionString = LocalizedHelper.getString("Mantis.ResetChanges", value: "Reset Changes")
             }
             
-            let previousValue:  [String: CropState] = [.kCurrentTransformState: previous]
-            let currentValue:  [String: CropState] = [.kCurrentTransformState: current]
+            let previousValue: [String: CropState] = [.kCurrentTransformState: previous]
+            let currentValue: [String: CropState] = [.kCurrentTransformState: current]
             
-            let transformRecord = TransformRecord(transformType: transformType, actionName: actionString, previousValues: previousValue, currentValues: currentValue)
+            let transformRecord = TransformRecord(transformType: transformType, 
+                                                  actionName: actionString,
+                                                  previousValues: previousValue,
+                                                  currentValues: currentValue)
             
             transformRecord.addAdjustmentToStack()
         }
