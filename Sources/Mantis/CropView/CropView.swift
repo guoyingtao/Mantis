@@ -215,21 +215,7 @@ final class CropView: UIView {
             delegate?.cropViewDidBecomeUnResettable(self)
         }
     }
-    
-    func resetComponents() {
-        cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageHorizontalToVerticalRatio()))
         
-        viewModel.resetCropFrame(by: getInitialCropBoxRect())
-        cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
-        cropAuxiliaryIndicatorView.bringSelfToFront()
-        
-        setupRotationDialIfNeeded()
-        
-        if aspectRatioLockEnabled {
-            setFixedRatioCropBox()
-        }
-    }
-    
     private func setupCropWorkbenchView() {
         cropWorkbenchView.touchesBegan = { [weak self] in
             self?.viewModel.setTouchImageStatus()
@@ -416,6 +402,20 @@ final class CropView: UIView {
 
 // MARK: - Adjust UI
 extension CropView {
+    func resetComponents() {
+        cropMaskViewManager.setup(in: self, cropRatio: CGFloat(getImageHorizontalToVerticalRatio()))
+        
+        viewModel.resetCropFrame(by: getInitialCropBoxRect())
+        cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
+        cropAuxiliaryIndicatorView.bringSelfToFront()
+        
+        setupRotationDialIfNeeded()
+        
+        if aspectRatioLockEnabled {
+            setFixedRatioCropBox()
+        }
+    }
+
     private func flipCropWorkbenchViewIfNeeded() {
         if viewModel.horizontallyFlip {
             let scale: CGFloat = viewModel.rotationType.isRotatedByMultiple180 ? -1 : 1
