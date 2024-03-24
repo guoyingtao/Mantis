@@ -60,6 +60,8 @@ final class TransformStackTests: XCTestCase {
         XCTAssertEqual(TransformStack.shared.top, 1)
         TransformStack.shared.popTransformStack()
         XCTAssertEqual(TransformStack.shared.top, 0)
+        TransformStack.shared.popTransformStack()
+        XCTAssertEqual(TransformStack.shared.top, 0)
     }
     
     func testExample() throws {
