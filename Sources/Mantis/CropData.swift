@@ -53,6 +53,18 @@ public struct Transformation: Equatable {
     var horizontallyFlipped: Bool
     var verticallyFlipped: Bool
     
+    public init(offset: CGPoint, rotation: CGFloat, scale: CGFloat, isManuallyZoomed: Bool, initialMaskFrame: CGRect, maskFrame: CGRect, cropWorkbenchViewBounds: CGRect, horizontallyFlipped: Bool, verticallyFlipped: Bool) {
+        self.offset = offset
+        self.rotation = rotation
+        self.scale = scale
+        self.isManuallyZoomed = isManuallyZoomed
+        self.initialMaskFrame = initialMaskFrame
+        self.maskFrame = maskFrame
+        self.cropWorkbenchViewBounds = cropWorkbenchViewBounds
+        self.horizontallyFlipped = horizontallyFlipped
+        self.verticallyFlipped = verticallyFlipped
+    }
+    
     public static func == (lhs: Transformation, rhs: Transformation) -> Bool {
         return lhs.offset == rhs.offset
         && lhs.rotation == rhs.rotation
