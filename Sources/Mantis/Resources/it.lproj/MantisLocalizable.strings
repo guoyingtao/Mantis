@@ -11,4 +11,5 @@
 "Mantis.Reset" = "Resetta";
 "Mantis.Original" = "Originale";
 "Mantis.Square" = "Quadrato";
-
+"Mantis.ChangeCrop" = "Cambia ritaglio";
+"Mantis.ResetChanges" = "Reimposta modifiche";

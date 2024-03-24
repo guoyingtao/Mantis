@@ -67,6 +67,8 @@ public struct Config {
         return Bundle(url: url)
     }()
     
+    public var enableUndoRedo: Bool = false
+    
     static var language: Language?
 
     public init() {}

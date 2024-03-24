@@ -24,17 +24,68 @@
 
 import UIKit
 
-public typealias Transformation = (
-    offset: CGPoint,
-    rotation: CGFloat,
-    scale: CGFloat,
-    isManuallyZoomed: Bool,
-    initialMaskFrame: CGRect,
-    maskFrame: CGRect,
-    cropWorkbenchViewBounds: CGRect,
-    horizontallyFlipped: Bool,
-    verticallyFlipped: Bool
-)
+struct CropState: Equatable {
+    var rotationType: ImageRotationType
+    var degrees: CGFloat
+    var aspectRatioLockEnabled: Bool
+    var aspectRato: CGFloat
+    var flipOddTimes: Bool
+    var transformation: Transformation
+    
+    init(rotationType: ImageRotationType, degrees: CGFloat, aspectRatioLockEnabled: Bool, aspectRato: CGFloat, flipOddTimes: Bool, transformation: Transformation) {
+        self.rotationType = rotationType
+        self.degrees = degrees
+        self.aspectRatioLockEnabled = aspectRatioLockEnabled
+        self.aspectRato = aspectRato
+        self.flipOddTimes = flipOddTimes
+        self.transformation = transformation
+    }
+    
+    static func ==(lhs: CropState, rhs: CropState) -> Bool {
+        return lhs.rotationType == rhs.rotationType
+        && lhs.degrees == rhs.degrees
+        && lhs.aspectRatioLockEnabled == rhs.aspectRatioLockEnabled
+        && lhs.aspectRato == rhs.aspectRato
+        && lhs.flipOddTimes == rhs.flipOddTimes
+        && lhs.transformation == rhs.transformation
+    }
+}
+
+public struct Transformation: Equatable {
+    var offset: CGPoint
+    var rotation: CGFloat
+    var scale: CGFloat
+    var isManuallyZoomed: Bool
+    var initialMaskFrame: CGRect
+    var maskFrame: CGRect
+    var cropWorkbenchViewBounds: CGRect
+    var horizontallyFlipped: Bool
+    var verticallyFlipped: Bool
+    
+    public init(offset: CGPoint, rotation: CGFloat, scale: CGFloat, isManuallyZoomed: Bool, initialMaskFrame: CGRect, maskFrame: CGRect, cropWorkbenchViewBounds: CGRect, horizontallyFlipped: Bool, verticallyFlipped: Bool) {
+        self.offset = offset
+        self.rotation = rotation
+        self.scale = scale
+        self.isManuallyZoomed = isManuallyZoomed
+        self.initialMaskFrame = initialMaskFrame
+        self.maskFrame = maskFrame
+        self.cropWorkbenchViewBounds = cropWorkbenchViewBounds
+        self.horizontallyFlipped = horizontallyFlipped
+        self.verticallyFlipped = verticallyFlipped
+    }
+    
+    public static func ==(lhs: Transformation, rhs: Transformation) -> Bool {
+        return lhs.offset == rhs.offset
+        && lhs.rotation == rhs.rotation
+        && lhs.scale == rhs.scale
+        && lhs.isManuallyZoomed == rhs.isManuallyZoomed
+        && lhs.initialMaskFrame == rhs.initialMaskFrame
+        && lhs.maskFrame == rhs.maskFrame
+        && lhs.cropWorkbenchViewBounds == rhs.cropWorkbenchViewBounds
+        && lhs.horizontallyFlipped == rhs.horizontallyFlipped
+        && lhs.verticallyFlipped == rhs.verticallyFlipped
+    }
+}
 
 public struct CropRegion: Equatable {
     public var topLeft: CGPoint

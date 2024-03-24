@@ -11,4 +11,6 @@
 "Mantis.Reset" = "재설정";
 "Mantis.Original" = "원본";
 "Mantis.Square" = "정사각형";
+"Mantis.ChangeCrop" = "자르기 변경";
+"Mantis.ResetChanges" = "변경 사항 재설정";
 

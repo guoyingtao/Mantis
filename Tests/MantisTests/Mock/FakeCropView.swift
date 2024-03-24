@@ -9,6 +9,21 @@ import UIKit
 @testable import Mantis
 
 class FakeCropView: UIView, CropViewProtocol {
+    func applyCropState(with cropState: Mantis.CropState) {
+        
+    }
+    
+    func makeCropState() -> Mantis.CropState {
+        return CropState(
+            rotationType: .none,
+            degrees: 0.0,
+            aspectRatioLockEnabled: false,
+            aspectRato: 0.0,
+            flipOddTimes: false,
+            transformation: makeTransformation()
+        )
+    }
+    
     var image = UIImage()
     
     var aspectRatioLockEnabled = false
@@ -63,11 +78,11 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
-        Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false)
+        Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false)
     }
     
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
-        Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false)
+        Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false)
     }
     
     func processPresetTransformation(completion: (Transformation) -> Void) {
@@ -87,12 +102,12 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func makeTransformation() -> Mantis.Transformation {
-        return Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false)
+        return Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false)
     }
     
     func crop() -> CropOutput {
         CropOutput(nil,
-                   Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false),
+                   Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false),
                    CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
@@ -102,7 +117,7 @@ class FakeCropView: UIView, CropViewProtocol {
     
     func crop(_ image: UIImage) -> CropOutput {
         CropOutput(nil,
-                   Transformation(.zero, .zero, .zero, false, .zero, .zero, .zero, false, false),
+                   Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false),
                    CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
