@@ -34,7 +34,9 @@ class TransformStack: NSObject {
     }
 
     func popTransformStack() {
-        top -= 1
+        if top > 0 {
+            top -= 1
+        }
     }
     
     func reset() {
