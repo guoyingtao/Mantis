@@ -51,7 +51,7 @@ open class CropViewController: UIViewController {
     private var initialLayout = false
     private var disableRotation = false
     
-    private lazy var _undoManager : UndoManager = {
+    private lazy var _undoManager: UndoManager = {
         return UndoManager()
     }()
    
@@ -312,7 +312,12 @@ open class CropViewController: UIViewController {
         
         if config.enableUndoRedo {
             let current = cropView.makeCropState()
-            TransformStack.shared.pushTransformRecordOntoStack(transformType: .resetTransforms, previous: previous, current: current, userGenerated: true)
+            TransformStack
+                .shared
+                .pushTransformRecordOntoStack(transformType: .resetTransforms,
+                                              previous: previous,
+                                              current: current,
+                                              userGenerated: true)
         }
     }
     
@@ -429,7 +434,12 @@ extension CropViewController: CropViewDelegate {
             currentCropState = cropView.makeCropState()
             
             if previous != currentCropState {
-                TransformStack.shared.pushTransformRecordOntoStack(transformType: .transform, previous: previous, current: currentCropState, userGenerated: userGenerated)
+                TransformStack
+                    .shared
+                    .pushTransformRecordOntoStack(transformType: .transform,
+                                                  previous: previous, current:
+                                                    currentCropState,
+                                                  userGenerated: userGenerated)
             }
             
             previousCropState = nil
@@ -455,7 +465,6 @@ extension CropViewController: CropViewDelegate {
             previousCropState = cropView.makeCropState()
         }
     }
-    
     
     func cropViewDidEndResize(_ cropView: CropViewProtocol) {
         delegate?.cropViewControllerDidEndResize(self,

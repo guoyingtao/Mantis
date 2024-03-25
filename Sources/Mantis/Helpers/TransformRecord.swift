@@ -33,7 +33,11 @@ class TransformRecord: NSObject {
     func updateTransformState() {
         guard let transformDelegate = TransformStack.shared.transformDelegate else { return }
 
-        guard let cropState = self.useCurrent ? self.currentValues[.kCurrentTransformState] : self.previousValues[.kCurrentTransformState] else { return }
+        guard let cropState = self.useCurrent ?
+                self.currentValues[.kCurrentTransformState]
+                : self.previousValues[.kCurrentTransformState] else {
+            return
+        }
         
         transformDelegate.updateCropState(cropState)
     }
@@ -70,7 +74,11 @@ class TransformRecord: NSObject {
         
         TransformStack.shared.popTransformStack()
         let applyTransform = true
-        transformDelegate.getUndoManager().registerUndo(withTarget: self, selector: #selector(addAdjustmentToStack), object: NSNumber(value: applyTransform))
+        transformDelegate
+            .getUndoManager()
+            .registerUndo(withTarget: self,
+                          selector: #selector(addAdjustmentToStack),
+                          object: NSNumber(value: applyTransform))
         
         transformDelegate.getUndoManager().setActionName(self.actionName)
         
@@ -85,4 +93,3 @@ class TransformRecord: NSObject {
 extension String {
     static let kCurrentTransformState = "CurrentTransformState"
 }
-

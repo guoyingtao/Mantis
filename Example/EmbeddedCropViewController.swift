@@ -14,8 +14,6 @@ class EmbeddedCropViewController: UIViewController {
     var image: UIImage?
     var cropViewController: CropViewController?
     
-    weak var toolbarDelegate: CropToolbarDelegate?
-    
     var didGetCroppedImage: ((UIImage) -> Void)?
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
@@ -46,11 +44,11 @@ class EmbeddedCropViewController: UIViewController {
     }
     
     @IBAction func undoButtonPressed(_ sender: Any) {
-        toolbarDelegate?.didSelectUndo()
+        cropViewController?.didSelectUndo()
     }
     
     @IBAction func redoButtonPressed(_ sender: Any) {
-        toolbarDelegate?.didSelectRedo()
+        cropViewController?.didSelectRedo()
     }
     
     @IBAction func resetButtonPressed(_ sender: Any) {
@@ -81,7 +79,6 @@ class EmbeddedCropViewController: UIViewController {
         Mantis.setupCropViewController(cropViewController, with: image, and: config)
         
         self.cropViewController = cropViewController
-        self.toolbarDelegate = cropViewController
     }
     
     private func getResolution(image: UIImage?) -> String? {
@@ -97,9 +94,7 @@ class EmbeddedCropViewController: UIViewController {
            action == #selector(EmbeddedCropViewController.redoButtonPressed(_:))  ||
            action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
             
-            guard let toolbarDelegate = toolbarDelegate else { return false }
-
-            return toolbarDelegate.isUndoSupported()
+            return cropViewController!.isUndoSupported()
         }
         
         return true
@@ -107,15 +102,15 @@ class EmbeddedCropViewController: UIViewController {
     
     override func validate(_ command: UICommand) {
         
-        guard let toolbarDelegate = toolbarDelegate else { return }
+        guard let cropViewController else { return }
         
-        if toolbarDelegate.isUndoSupported() {
+        if cropViewController.isUndoSupported() {
            
             if command.action == #selector(EmbeddedCropViewController.undoButtonPressed(_:)) {
                 
                 let undoString = NSLocalizedString("Undo", comment: "Undo")
                 
-                command.title = self.undoButton.isEnabled ? "\(undoString) \(toolbarDelegate.undoActionName())" : undoString
+                command.title = self.undoButton.isEnabled ? "\(undoString) \(cropViewController.undoActionName())" : undoString
                 
                 if !self.undoButton.isEnabled {
                     command.attributes = [.disabled]
@@ -126,7 +121,7 @@ class EmbeddedCropViewController: UIViewController {
                 
                 let redoString = NSLocalizedString("Redo", comment: "Redo")
                 
-                command.title = self.redoButton.isEnabled ? "\(redoString) \(toolbarDelegate.redoActionName())" : redoString
+                command.title = self.redoButton.isEnabled ? "\(redoString) \(cropViewController.redoActionName())" : redoString
                 
                 if !self.redoButton.isEnabled {
                     command.attributes = [.disabled]
@@ -181,4 +176,3 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
         self.resolutionLabel.text = "\(Int(size.width)) x \(Int(size.height)) pixels"
     }
 }
-

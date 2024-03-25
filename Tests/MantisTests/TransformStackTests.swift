@@ -47,13 +47,19 @@ final class TransformStackTests: XCTestCase {
         var previousState = cropView.makeCropState()
         var currentState = cropView.makeCropState()
         
-        TransformStack.shared.pushTransformRecordOntoStack(transformType: .transform, previous: previousState, current: currentState, userGenerated: true)
+        TransformStack.shared.pushTransformRecordOntoStack(transformType: .transform, 
+                                                           previous: previousState,
+                                                           current: currentState,
+                                                           userGenerated: true)
         XCTAssertEqual(TransformStack.shared.top, 1)
         
         previousState = cropView.makeCropState()
         currentState = cropView.makeCropState()
         
-        TransformStack.shared.pushTransformRecordOntoStack(transformType: .resetTransforms, previous: previousState, current: currentState, userGenerated: true)
+        TransformStack.shared.pushTransformRecordOntoStack(transformType: .resetTransforms,
+                                                           previous: previousState,
+                                                           current: currentState,
+                                                           userGenerated: true)
         
         XCTAssertEqual(TransformStack.shared.top, 2)
         TransformStack.shared.popTransformStack()

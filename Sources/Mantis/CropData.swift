@@ -32,16 +32,7 @@ struct CropState: Equatable {
     var flipOddTimes: Bool
     var transformation: Transformation
     
-    init(rotationType: ImageRotationType, degrees: CGFloat, aspectRatioLockEnabled: Bool, aspectRato: CGFloat, flipOddTimes: Bool, transformation: Transformation) {
-        self.rotationType = rotationType
-        self.degrees = degrees
-        self.aspectRatioLockEnabled = aspectRatioLockEnabled
-        self.aspectRato = aspectRato
-        self.flipOddTimes = flipOddTimes
-        self.transformation = transformation
-    }
-    
-    static func ==(lhs: CropState, rhs: CropState) -> Bool {
+    static func == (lhs: CropState, rhs: CropState) -> Bool {
         return lhs.rotationType == rhs.rotationType
         && lhs.degrees == rhs.degrees
         && lhs.aspectRatioLockEnabled == rhs.aspectRatioLockEnabled
@@ -74,7 +65,7 @@ public struct Transformation: Equatable {
         self.verticallyFlipped = verticallyFlipped
     }
     
-    public static func ==(lhs: Transformation, rhs: Transformation) -> Bool {
+    public static func == (lhs: Transformation, rhs: Transformation) -> Bool {
         return lhs.offset == rhs.offset
         && lhs.rotation == rhs.rotation
         && lhs.scale == rhs.scale

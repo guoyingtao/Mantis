@@ -78,11 +78,27 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
-        Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false)
+        Transformation(offset: .zero, 
+                       rotation: .zero,
+                       scale: .zero,
+                       isManuallyZoomed: false,
+                       initialMaskFrame: .zero,
+                       maskFrame: .zero,
+                       cropWorkbenchViewBounds: .zero,
+                       horizontallyFlipped: false,
+                       verticallyFlipped: false)
     }
     
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
-        Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false)
+        Transformation(offset: .zero, 
+                       rotation: .zero,
+                       scale: .zero,
+                       isManuallyZoomed: false,
+                       initialMaskFrame: .zero,
+                       maskFrame: .zero,
+                       cropWorkbenchViewBounds: .zero,
+                       horizontallyFlipped: false,
+                       verticallyFlipped: false)
     }
     
     func processPresetTransformation(completion: (Transformation) -> Void) {
@@ -102,12 +118,28 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func makeTransformation() -> Mantis.Transformation {
-        return Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false)
+        return Transformation(offset: .zero, 
+                              rotation: .zero,
+                              scale: .zero,
+                              isManuallyZoomed: false,
+                              initialMaskFrame: .zero,
+                              maskFrame: .zero,
+                              cropWorkbenchViewBounds: .zero,
+                              horizontallyFlipped: false,
+                              verticallyFlipped: false)
     }
     
     func crop() -> CropOutput {
         CropOutput(nil,
-                   Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false),
+                   Transformation(offset: .zero, 
+                                  rotation: .zero,
+                                  scale: .zero,
+                                  isManuallyZoomed: false,
+                                  initialMaskFrame: .zero,
+                                  maskFrame: .zero,
+                                  cropWorkbenchViewBounds: .zero,
+                                  horizontallyFlipped: false,
+                                  verticallyFlipped: false),
                    CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
@@ -117,7 +149,15 @@ class FakeCropView: UIView, CropViewProtocol {
     
     func crop(_ image: UIImage) -> CropOutput {
         CropOutput(nil,
-                   Transformation(offset: .zero, rotation: .zero, scale: .zero, isManuallyZoomed: false, initialMaskFrame: .zero, maskFrame: .zero, cropWorkbenchViewBounds: .zero, horizontallyFlipped: false, verticallyFlipped: false),
+                   Transformation(offset: .zero, 
+                                  rotation: .zero,
+                                  scale: .zero,
+                                  isManuallyZoomed: false,
+                                  initialMaskFrame: .zero,
+                                  maskFrame: .zero,
+                                  cropWorkbenchViewBounds: .zero,
+                                  horizontallyFlipped: false,
+                                  verticallyFlipped: false),
                    CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,

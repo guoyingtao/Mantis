@@ -31,7 +31,7 @@
 </p>
 
 ## Requirements
-* iOS 11.0+
+* iOS 12.0+
 * MacOS 10.15+
 * Xcode 10.0+
 
