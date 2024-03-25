@@ -2,6 +2,13 @@
 
 -----
 
+## [2.20.0](https://www.github.com/guoyingtao/Mantis/compare/v2.19.0...v2.20.0) (2024-03-25)
+
+
+### Features
+
+* Undo/Redo Feature for Mantis ([#379](https://www.github.com/guoyingtao/Mantis/issues/379)) ([9a1e67a](https://www.github.com/guoyingtao/Mantis/commit/9a1e67af3e7d078d4629d43997d4248d2c4cf7a1))
+
 ## [2.19.0](https://www.github.com/guoyingtao/Mantis/compare/v2.18.0...v2.19.0) (2024-03-04)
 
 
