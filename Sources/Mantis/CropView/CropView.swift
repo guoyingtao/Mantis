@@ -657,7 +657,6 @@ extension CropView {
     }
     
     public func makeCropState() -> CropState {
-        
         return CropState(
             rotationType: viewModel.rotationType,
             degrees: viewModel.degrees,
@@ -1218,6 +1217,7 @@ extension CropView: CropViewProtocol {
     }
     
     func update(_ image: UIImage) {
+        self.image = image
         imageContainer.update(image)
     }
 }
