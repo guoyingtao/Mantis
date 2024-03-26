@@ -49,6 +49,8 @@ protocol CropViewProtocol: UIView {
     func rotate(by angle: Angle)
     func makeTransformation() -> Transformation
     func makeCropState() -> CropState
+    
+    func update(_ image: UIImage)
 }
 
 extension CropViewProtocol {
@@ -58,4 +60,6 @@ extension CropViewProtocol {
     }
     
     func rotate(by angle: Angle) {}
+    
+    func update(_ image: UIImage) {}
 }

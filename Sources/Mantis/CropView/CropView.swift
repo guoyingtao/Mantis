@@ -1216,6 +1216,10 @@ extension CropView: CropViewProtocol {
         viewModel.setRotatingStatus(by: angle)
         rotationControlView?.updateRotationValue(by: angle)
     }
+    
+    func update(_ image: UIImage) {
+        imageContainer.update(image)
+    }
 }
 
 extension UIActivityIndicatorView: ActivityIndicatorProtocol {

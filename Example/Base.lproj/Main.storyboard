@@ -268,8 +268,11 @@
                         <barButtonItem systemItem="bookmarks" id="sQZ-M0-ZLt">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
-                        <barButtonItem systemItem="organize" id="EKa-xq-dX9">
+                        <barButtonItem image="camera.filters" catalog="system" id="EKa-xq-dX9">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="updateImage:" destination="aIe-ND-Zfg" id="0bA-SX-yC1"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem systemItem="action" id="Dzq-Lk-Lna">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -338,9 +341,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="camera.filters" catalog="system" width="128" height="119"/>
         <image name="sunflower" width="3648" height="5472"/>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

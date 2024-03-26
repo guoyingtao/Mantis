@@ -596,6 +596,10 @@ extension CropViewController {
     public func getExpectedCropImageSize() -> CGSize {
         cropView.getExpectedCropImageSize()
     }
+    
+    public func update(_ image: UIImage) {
+        cropView.update(image)
+    }
 }
 
 extension CropViewController: TransformDelegate {
