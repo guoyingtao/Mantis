@@ -10,7 +10,7 @@ import UIKit
 import Mantis
 
 class EmbeddedCropViewController: UIViewController {
-
+    
     var image: UIImage?
     var cropViewController: CropViewController?
     
@@ -63,13 +63,21 @@ class EmbeddedCropViewController: UIViewController {
         cropViewController?.crop()
     }
     
+    @IBAction func updateImage(_ sender: Any) {
+        guard let image else {
+            return
+        }
+        
+        cropViewController?.update(image.addFilter(filter: .Mono))
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let cropViewController = segue.destination as? CropViewController, let image = image else {
             return
         }
         
         cropViewController.delegate = self
-                    
+        
         var config = Mantis.Config()
         config.cropToolbarConfig.mode = .embedded
         config.enableUndoRedo = true
@@ -91,8 +99,8 @@ class EmbeddedCropViewController: UIViewController {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         
         if action == #selector(EmbeddedCropViewController.undoButtonPressed(_:)) ||
-           action == #selector(EmbeddedCropViewController.redoButtonPressed(_:))  ||
-           action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
+            action == #selector(EmbeddedCropViewController.redoButtonPressed(_:))  ||
+            action == #selector(EmbeddedCropViewController.resetButtonPressed(_:)) {
             
             return cropViewController!.isUndoSupported()
         }
@@ -105,7 +113,7 @@ class EmbeddedCropViewController: UIViewController {
         guard let cropViewController else { return }
         
         if cropViewController.isUndoSupported() {
-           
+            
             if command.action == #selector(EmbeddedCropViewController.undoButtonPressed(_:)) {
                 
                 let undoString = NSLocalizedString("Undo", comment: "Undo")
@@ -138,7 +146,7 @@ class EmbeddedCropViewController: UIViewController {
             }
         }
     }
-
+    
 }
 
 extension EmbeddedCropViewController: CropViewControllerDelegate {
@@ -174,5 +182,31 @@ extension EmbeddedCropViewController: CropViewControllerDelegate {
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
         let size = cropViewController.getExpectedCropImageSize()
         self.resolutionLabel.text = "\(Int(size.width)) x \(Int(size.height)) pixels"
+    }
+}
+
+enum FilterType : String {
+    case Chrome = "CIPhotoEffectChrome"
+    case Fade = "CIPhotoEffectFade"
+    case Instant = "CIPhotoEffectInstant"
+    case Mono = "CIPhotoEffectMono"
+    case Noir = "CIPhotoEffectNoir"
+    case Process = "CIPhotoEffectProcess"
+    case Tonal = "CIPhotoEffectTonal"
+    case Transfer = "CIPhotoEffectTransfer"
+}
+
+extension UIImage {
+    func addFilter(filter : FilterType) -> UIImage {
+        let filter = CIFilter(name: filter.rawValue)
+        // convert UIImage to CIImage and set as input
+        let ciInput = CIImage(image: self)
+        filter?.setValue(ciInput, forKey: "inputImage")
+        // get output CIImage, render as CGImage first to retain proper UIImage scale
+        let ciOutput = filter?.outputImage
+        let ciContext = CIContext()
+        let cgImage = ciContext.createCGImage(ciOutput!, from: (ciOutput?.extent)!)
+        //Return the image
+        return UIImage(cgImage: cgImage!)
     }
 }
