@@ -2,6 +2,13 @@
 
 -----
 
+## [2.21.0](https://www.github.com/guoyingtao/Mantis/compare/v2.20.0...v2.21.0) (2024-03-27)
+
+
+### Features
+
+* support updating image while cropping ([#387](https://www.github.com/guoyingtao/Mantis/issues/387)) ([e08e341](https://www.github.com/guoyingtao/Mantis/commit/e08e3419a65a26bc09194684f8d7ccfbcf39e5b4))
+
 ## [2.20.0](https://www.github.com/guoyingtao/Mantis/compare/v2.19.0...v2.20.0) (2024-03-25)
 
 
