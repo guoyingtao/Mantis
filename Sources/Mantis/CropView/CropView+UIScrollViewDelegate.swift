@@ -24,6 +24,19 @@ extension CropView: UIScrollViewDelegate {
         viewModel.setTouchImageStatus()
     }
     
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        guard scrollView.subviews.count > 0 else {
+            return
+        }
+        
+        let subView = scrollView.subviews[0]
+        
+        let offsetX: CGFloat = max((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0)
+        let offsetY: CGFloat = max((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0)
+        
+        subView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY)
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         viewModel.setBetweenOperationStatus()
     }
