@@ -976,7 +976,15 @@ extension CropView: CropViewProtocol {
         viewModel.fixedImageRatio = cropState.aspectRato
         flipOddTimes = cropState.flipOddTimes
         
-        let newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
+        var newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
+        
+        if viewModel.horizontallyFlip {
+            newTransform.rotation = -newTransform.rotation
+        }
+        
+        if viewModel.verticallyFlip {
+            newTransform.rotation = -newTransform.rotation
+        }
         
         if newTransform.maskFrame != .zero {
              viewModel.cropBoxFrame = newTransform.maskFrame
