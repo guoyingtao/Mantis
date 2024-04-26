@@ -985,11 +985,7 @@ extension CropView: CropViewProtocol {
             return -rotation90s + localRotation
         }
         
-        if viewModel.horizontallyFlip {
-            newTransform.rotation = getRotationWhenFlipped()
-        }
-        
-        if viewModel.verticallyFlip {
+        if flipOddTimes {
             newTransform.rotation = getRotationWhenFlipped()
         }
         
