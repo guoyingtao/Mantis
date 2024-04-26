@@ -978,15 +978,10 @@ extension CropView: CropViewProtocol {
         
         var newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
         
-        func getRotationWhenFlipped() -> CGFloat {
+        if flipOddTimes {
             let localRotation = newTransform.rotation.truncatingRemainder(dividingBy: .pi/2)
             let rotation90s = newTransform.rotation - localRotation
-            
-            return -rotation90s + localRotation
-        }
-        
-        if flipOddTimes {
-            newTransform.rotation = getRotationWhenFlipped()
+            newTransform.rotation = -rotation90s + localRotation
         }
         
         if newTransform.maskFrame != .zero {
