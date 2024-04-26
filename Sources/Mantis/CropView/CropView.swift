@@ -978,12 +978,10 @@ extension CropView: CropViewProtocol {
         
         var newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
         
-        if viewModel.horizontallyFlip {
-            newTransform.rotation = -newTransform.rotation
-        }
-        
-        if viewModel.verticallyFlip {
-            newTransform.rotation = -newTransform.rotation
+        if flipOddTimes {
+            let localRotation = newTransform.rotation.truncatingRemainder(dividingBy: .pi/2)
+            let rotation90s = newTransform.rotation - localRotation
+            newTransform.rotation = -rotation90s + localRotation
         }
         
         if newTransform.maskFrame != .zero {
