@@ -76,6 +76,10 @@ final class CropViewModel: CropViewModelProtocol {
         degrees * CGFloat.pi / 180
     }
     
+    var rotationAdjustmentMode: RotationAdjustmentType = .straighten
+    
+    var horizontalPerspectiveAmount: CGFloat = 0.0
+    var verticalPerspectiveAmount: CGFloat = 0.0 
     var rotationType: ImageRotationType = .none
     var fixedImageRatio: CGFloat = -1    
     var cropLeftTopOnImage = CGPoint.zero

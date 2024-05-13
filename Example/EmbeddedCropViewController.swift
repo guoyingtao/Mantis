@@ -11,6 +11,8 @@ import Mantis
 
 class EmbeddedCropViewController: UIViewController {
     
+    var adjustmentModeMenu: UIMenu!
+
     var image: UIImage?
     var cropViewController: CropViewController?
     
@@ -23,6 +25,9 @@ class EmbeddedCropViewController: UIViewController {
     @IBOutlet weak var undoButton: UIBarButtonItem!
     @IBOutlet weak var redoButton: UIBarButtonItem!
     @IBOutlet weak var resetButton: UIBarButtonItem!
+    
+    
+    @IBOutlet weak var straightenModeButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +46,24 @@ class EmbeddedCropViewController: UIViewController {
         self.undoButton.isEnabled = false
         self.redoButton.isEnabled = false
         self.resetButton.isEnabled = false
+        
+        self.adjustmentModeMenu = createStraightenAdjustmentModeMenu()
+        if #available(macCatalyst 14.0, *) {
+            if #available(iOS 14.0, *) {
+                self.straightenModeButton.menu = self.adjustmentModeMenu
+            } else {
+                // Fallback on earlier versions
+            }
+            //self.straightenModeButton.showsMenuAsPrimaryAction = true
+            self.straightenModeButton.tintColor = .white
+            //self.straightenModeButton.contentMode = .scaleAspectFit
+            //self.straightenModeButton.imageView?.contentMode = .scaleAspectFit
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        self.straightenModeButton.image = StraightenAdjustmentMode.straighten.buttonIcon
+       
     }
     
     @IBAction func undoButtonPressed(_ sender: Any) {
@@ -69,6 +92,62 @@ class EmbeddedCropViewController: UIViewController {
         }
         
         cropViewController?.update(image.addFilter(filter: .Mono))
+    }
+    
+    func createStraightenAdjustmentModeMenu() -> UIMenu? {
+        let adjustmentModeItems: [StraightenAdjustmentMode] = StraightenAdjustmentMode.allCases
+        
+        var actions: [UIAction] = []
+       
+        let imageConfiguration: UIImage.SymbolConfiguration = UIImage.SymbolConfiguration(scale: .large)
+        
+        for mode in adjustmentModeItems {
+            
+            // Show/Hide Control Panel While Scrolling (Localize)
+            let actionString = mode.description
+            
+            let actionImage = mode.menuIcon?.withConfiguration(imageConfiguration)
+            
+            let action: UIAction = UIAction(title: actionString, image: actionImage, identifier: nil) { [self] action in
+                
+                didSelectAdjustmentMode(mode)
+            }
+            
+            actions.append(action)
+        }
+        
+        actions[0].state = .on
+        if #available(macCatalyst 15.0, *) {
+            if #available(iOS 15.0, *) {
+                let adjustmentModeMenu: UIMenu = UIMenu(title: "", image: nil, identifier: nil, options: .singleSelection, children: actions)
+
+                return adjustmentModeMenu
+
+            } else {
+                // Fallback on earlier versions
+                return nil
+            }
+            
+
+        } else {
+            // Fallback on earlier versions
+            let adjustmentModeMenu: UIMenu = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: actions)
+            
+            return adjustmentModeMenu
+
+        }
+        
+    }
+    
+    func didSelectAdjustmentMode(_ mode: StraightenAdjustmentMode) {
+        
+        //self.rotateButtonGroupView.isHidden = (mode != .straighten)
+        let icon = mode.buttonIcon
+        self.straightenModeButton.image = icon
+        
+//        guard StraightenAdjustmentMode(rawValue: mode.rawValue) != nil else { return }
+        
+        cropViewController?.setRotationAdjustmentType(RotationAdjustmentType(rawValue: mode.rawValue)!)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -208,5 +287,81 @@ extension UIImage {
         let cgImage = ciContext.createCGImage(ciOutput!, from: (ciOutput?.extent)!)
         //Return the image
         return UIImage(cgImage: cgImage!)
+    }
+    
+    func rotate(radians: Float, flipHorizontal: Bool = false, flipVertical: Bool = false) -> UIImage? {
+        var newSize = CGRect(origin: CGPoint.zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
+        // Trim off the extremely small float value to prevent core graphics from rounding it up
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        
+        // Move origin to middle
+        context.translateBy(x: newSize.width/2, y: newSize.height/2)
+        
+        let xScale: CGFloat = flipHorizontal ? -1 : 1.0
+        let yScale: CGFloat = flipVertical ? -1 : 1.0
+        
+        context.scaleBy(x: xScale, y: yScale)
+        // Rotate around middle
+        context.rotate(by: CGFloat(radians))
+        // Draw the image at its center
+        self.draw(in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+    
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+}
+
+enum StraightenAdjustmentMode: Int, CaseIterable {
+    
+    case straighten
+    case horizontalPerspective
+    case verticalPerspective
+    
+    var description: String {
+        switch self {
+        case .straighten:
+            return NSLocalizedString("Straighten", comment: "Straighten")
+        case .horizontalPerspective:
+            return NSLocalizedString("Horizontal Perspective", comment: "Horizontal Perspective")
+        case .verticalPerspective:
+            return NSLocalizedString("Vertical Perspective", comment: "Vertical Perspective")
+            
+        }
+    }
+    
+    var menuIcon: UIImage? {
+        
+        var image: UIImage? = nil
+        
+        switch self {
+        case .straighten:
+            image = UIImage(systemName: "rectangle.slash")?.rotate(radians: -.pi/4, flipHorizontal: true)
+        case .horizontalPerspective:
+            image = UIImage(systemName: "perspective")?.rotate(radians: .pi)
+        case .verticalPerspective:
+            image = UIImage(systemName: "perspective")?.rotate(radians: -.pi/2)
+        }
+        return image?.withRenderingMode(.alwaysTemplate) // ?.withRenderingMode(.alwaysOriginal)
+    }
+    
+    public var buttonIcon: UIImage? {
+        
+        var image: UIImage? = nil
+        
+        switch self {
+        case .straighten:
+            image = UIImage(systemName: "rectangle.slash")?.rotate(radians: -.pi/4, flipHorizontal: true)
+        case .horizontalPerspective:
+            image = UIImage(systemName: "perspective")?.rotate(radians: .pi)
+        case .verticalPerspective:
+            image = UIImage(systemName: "perspective")?.rotate(radians: -.pi/2)
+        }
+        return image?.withRenderingMode(.alwaysTemplate) // ?.withRenderingMode(.alwaysOriginal)
     }
 }

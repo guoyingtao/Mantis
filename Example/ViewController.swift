@@ -304,6 +304,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CropViewControllerDelegate {
+    
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         dismiss(animated: true)
     }

@@ -30,6 +30,7 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidBeginResize(_ cropView: CropViewProtocol)
     func cropViewDidEndResize(_ cropView: CropViewProtocol)
     func cropViewDidBeginCrop(_ cropView: CropViewProtocol)
+    func cropViewDidAdjustPerspective(_ cropView: CropViewProtocol)
 }
 
 final class CropView: UIView {
@@ -260,7 +261,18 @@ final class CropView: UIView {
         
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
-            self.viewModel.setRotatingStatus(by: clampAngle(angle))
+            
+            if self.viewModel.rotationAdjustmentMode == .straighten {
+                self.viewModel.setRotatingStatus(by: clampAngle(angle))
+            } else if self.viewModel.rotationAdjustmentMode == .horizontal_perspective {
+                //print("clamp angle: \(clampAngle(angle)) ")
+                self.viewModel.horizontalPerspectiveAmount = clampAngle(angle).degrees
+                self.delegate?.cropViewDidAdjustPerspective(self)
+            } else if self.viewModel.rotationAdjustmentMode == .vertical_perspective {
+                //print("clamp angle: \(clampAngle(angle)) ")
+                self.viewModel.verticalPerspectiveAmount = clampAngle(angle).degrees
+                self.delegate?.cropViewDidAdjustPerspective(self)
+            }
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
@@ -815,6 +827,15 @@ extension CropView {
 }
 
 extension CropView: CropViewProtocol {
+    func perspectiveValues() -> (CGFloat, CGFloat) {
+        return (self.viewModel.horizontalPerspectiveAmount, self.viewModel.verticalPerspectiveAmount
+        )
+    }
+    
+    func setRotationAdjustmentType(_ rotationType: RotationAdjustmentType) {
+        self.viewModel.rotationAdjustmentMode = rotationType
+    }
+    
     private func setForceFixedRatio(by presetFixedRatioType: PresetFixedRatioType) {
         switch presetFixedRatioType {
         case .alwaysUsingOnePresetFixedRatio:

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="ipad7_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -135,6 +135,9 @@
                         <barButtonItem systemItem="action" id="Dzq-Lk-Lna">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
+                        <barButtonItem image="perspective" catalog="system" id="Re3-gp-HrC">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="lfe-cp-v6N"/>
                         <barButtonItem title="Crop" id="kZP-3N-vXv">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -150,6 +153,7 @@
                         <outlet property="doneButton" destination="kZP-3N-vXv" id="RPY-W3-vWu"/>
                         <outlet property="redoButton" destination="eY1-KB-ReS" id="NnV-9U-A2e"/>
                         <outlet property="resetButton" destination="R4y-9o-HJD" id="V2b-qs-QBP"/>
+                        <outlet property="straightenModeButton" destination="Re3-gp-HrC" id="Pra-kC-4yV"/>
                         <outlet property="undoButton" destination="Trh-my-yCW" id="ZQx-n1-lmk"/>
                     </connections>
                 </viewController>
@@ -198,6 +202,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="perspective" catalog="system" width="128" height="115"/>
         <image name="sunflower" width="3648" height="5472"/>
     </resources>
 </document>
