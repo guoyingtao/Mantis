@@ -156,7 +156,7 @@ final class CropView: UIView {
         case .rotating:
             rotateCropWorkbenchView()
         case .skewing:
-            skewCropScrollView()
+            skewCropWorkbenchView()
         case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             cropAuxiliaryIndicatorView.isHidden = true
@@ -449,7 +449,7 @@ extension CropView {
         adjustWorkbenchView(by: totalRadians)
     }
     
-    private func skewCropScrollView() {
+    private func skewCropWorkbenchView() {
         var quadPoints = viewModel.getQuadPoints()
         quadPoints.1.x += cropWorkbenchView.frame.size.width
         quadPoints.2.y += cropWorkbenchView.frame.size.height
