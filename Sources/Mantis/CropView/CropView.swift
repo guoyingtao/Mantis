@@ -268,10 +268,10 @@ final class CropView: UIView {
             case .straighten:
                 self.viewModel.setRotatingStatus(by: clampAngle(angle))
             case .horizontal_perspective:
-                self.viewModel.setHorizontalSkewState(by: clampAngle(angle))
+                self.viewModel.setHorizontalSkewStatus(by: clampAngle(angle))
                 self.delegate?.cropViewDidAdjustPerspective(self)
             case .vertical_perspective:
-                self.viewModel.setVerticalSkewState(by: clampAngle(angle))
+                self.viewModel.setVerticalSkewStatus(by: clampAngle(angle))
                 self.delegate?.cropViewDidAdjustPerspective(self)
             }
         }

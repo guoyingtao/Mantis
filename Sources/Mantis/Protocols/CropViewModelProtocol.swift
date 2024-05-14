@@ -51,8 +51,8 @@ protocol CropViewModelProtocol: AnyObject {
     // MARK: - Handle view status changes
     func setInitialStatus()
     func setRotatingStatus(by angle: Angle)
-    func setHorizontalSkewState(by angle: Angle)
-    func setVerticalSkewState(by angle: Angle)
+    func setHorizontalSkewStatus(by angle: Angle)
+    func setVerticalSkewStatus(by angle: Angle)
     func setDegree90RotatingStatus()
     func setTouchImageStatus()
     func setTouchRotationBoardStatus()
@@ -70,12 +70,12 @@ extension CropViewModelProtocol {
         viewStatus = .rotating
     }
     
-    func setHorizontalSkewState(by angle: Angle) {
+    func setHorizontalSkewStatus(by angle: Angle) {
         horizontalSkewDegrees = angle.degrees
         viewStatus = .skewing
     }
     
-    func setVerticalSkewState(by angle: Angle) {
+    func setVerticalSkewStatus(by angle: Angle) {
         verticalSkewDegrees = angle.degrees
         viewStatus = .skewing
     }

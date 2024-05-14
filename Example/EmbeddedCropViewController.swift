@@ -351,7 +351,6 @@ enum StraightenAdjustmentMode: Int, CaseIterable {
     }
     
     public var buttonIcon: UIImage? {
-        
         var image: UIImage? = nil
         
         switch self {
