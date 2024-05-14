@@ -442,7 +442,6 @@ extension CropView {
     }
     
     private func rotateCropWorkbenchView() {
-        //cropWorkbenchView.imageContainer?.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         let totalRadians = viewModel.getTotalRadians()
         cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
         flipCropWorkbenchViewIfNeeded()
