@@ -52,8 +52,6 @@ protocol CropViewProtocol: UIView {
     
     func update(_ image: UIImage)
     
-    func perspectiveValues() -> (CGFloat, CGFloat)
-    
     func setRotationAdjustmentType(_ rotationType: RotationAdjustmentType)
 }
 

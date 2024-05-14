@@ -155,6 +155,8 @@ final class CropView: UIView {
             initialRender()
         case .rotating:
             rotateCropWorkbenchView()
+        case .skewing:
+            skewCropScrollView()
         case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             cropAuxiliaryIndicatorView.isHidden = true
@@ -265,12 +267,10 @@ final class CropView: UIView {
             if self.viewModel.rotationAdjustmentMode == .straighten {
                 self.viewModel.setRotatingStatus(by: clampAngle(angle))
             } else if self.viewModel.rotationAdjustmentMode == .horizontal_perspective {
-                //print("clamp angle: \(clampAngle(angle)) ")
-                self.viewModel.horizontalPerspectiveAmount = clampAngle(angle).degrees
+                self.viewModel.setHorizontalSkewState(by: clampAngle(angle))
                 self.delegate?.cropViewDidAdjustPerspective(self)
             } else if self.viewModel.rotationAdjustmentMode == .vertical_perspective {
-                //print("clamp angle: \(clampAngle(angle)) ")
-                self.viewModel.verticalPerspectiveAmount = clampAngle(angle).degrees
+                self.viewModel.setVerticalSkewState(by: clampAngle(angle))
                 self.delegate?.cropViewDidAdjustPerspective(self)
             }
         }
@@ -441,12 +441,27 @@ extension CropView {
     }
     
     private func rotateCropWorkbenchView() {
+        //cropWorkbenchView.imageContainer?.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         let totalRadians = viewModel.getTotalRadians()
         cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
         flipCropWorkbenchViewIfNeeded()
         adjustWorkbenchView(by: totalRadians)
     }
     
+    private func skewCropScrollView() {
+        //cropWorkbenchView.imageContainer?.layer.anchorPoint = .zero
+
+        var quadPoints = viewModel.getQuadPoints()
+        quadPoints.1.x += cropWorkbenchView.frame.size.width
+        quadPoints.2.y += cropWorkbenchView.frame.size.height
+        quadPoints.3.x += cropWorkbenchView.frame.size.width
+        quadPoints.3.y += cropWorkbenchView.frame.size.height
+        
+        //print("quadPoints: \(quadPoints)")
+
+        cropWorkbenchView.imageContainer?.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
+    }
+
     private func getInitialCropBoxRect() -> CGRect {
         guard image.size.width > 0 && image.size.height > 0 else {
             return .zero
@@ -827,13 +842,17 @@ extension CropView {
 }
 
 extension CropView: CropViewProtocol {
-    func perspectiveValues() -> (CGFloat, CGFloat) {
-        return (self.viewModel.horizontalPerspectiveAmount, self.viewModel.verticalPerspectiveAmount
-        )
-    }
-    
     func setRotationAdjustmentType(_ rotationType: RotationAdjustmentType) {
+        
         self.viewModel.rotationAdjustmentMode = rotationType
+       
+        if rotationType == .straighten {
+            rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.degrees))
+        } else if rotationType == .horizontal_perspective {
+            rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.horizontalSkewDegrees))
+        } else if rotationType == .vertical_perspective {
+            rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.verticalSkewDegrees))
+        }
     }
     
     private func setForceFixedRatio(by presetFixedRatioType: PresetFixedRatioType) {

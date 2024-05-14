@@ -76,12 +76,27 @@ final class CropViewModel: CropViewModelProtocol {
         degrees * CGFloat.pi / 180
     }
     
+    var QuadUpperLeft: CGPoint = .zero
+    var QuadUpperRight: CGPoint = .zero
+    var QuadLowerLeft: CGPoint = .zero
+    var QuadLowerRight: CGPoint = .zero
+    
     var rotationAdjustmentMode: RotationAdjustmentType = .straighten
     
-    var horizontalPerspectiveAmount: CGFloat = 0.0
-    var verticalPerspectiveAmount: CGFloat = 0.0 
+    var horizontalSkewDegrees: CGFloat = 0.0 {
+        didSet {
+            updateQuadValues()
+        }
+    }
+
+    var verticalSkewDegrees: CGFloat = 0.0 {
+        didSet {
+            updateQuadValues()
+        }
+    }
+
     var rotationType: ImageRotationType = .none
-    var fixedImageRatio: CGFloat = -1    
+    var fixedImageRatio: CGFloat = -1
     var cropLeftTopOnImage = CGPoint.zero
     var cropRightBottomOnImage = CGPoint(x: 1, y: 1)
     
@@ -126,6 +141,10 @@ final class CropViewModel: CropViewModelProtocol {
         } else {
             return isHorizontal ? .vertical : .horizontal
         }
+    }
+    
+    public func getQuadPoints() -> (CGPoint, CGPoint, CGPoint, CGPoint) {
+        return (QuadUpperLeft, QuadUpperRight, QuadLowerLeft, QuadLowerRight)
     }
     
     func isUpOrUpsideDown() -> Bool {
@@ -204,6 +223,38 @@ final class CropViewModel: CropViewModelProtocol {
 
 // MARK: - private
 extension CropViewModel {
+    
+    private func updateQuadValues() {
+        QuadUpperLeft = .zero
+        QuadUpperRight = .zero
+        QuadLowerLeft = .zero
+        QuadLowerRight = .zero
+        
+        let magnitude: CGFloat = 100
+        
+        if horizontalSkewDegrees > 0 {
+            QuadUpperRight = CGPoint(x: horizontalSkewDegrees/45 * magnitude, y: -horizontalSkewDegrees/45 * magnitude)
+            QuadLowerRight = CGPoint(x: horizontalSkewDegrees/45 * magnitude, y: horizontalSkewDegrees/45 * magnitude)
+        } else if horizontalSkewDegrees < 0 {
+            QuadUpperLeft = CGPoint(x: horizontalSkewDegrees/45 * magnitude, y: horizontalSkewDegrees/45 * magnitude)
+            QuadLowerLeft = CGPoint(x: horizontalSkewDegrees/45 * magnitude, y: -horizontalSkewDegrees/45 * magnitude)
+        }
+                
+        if verticalSkewDegrees > 0 {
+            QuadLowerLeft.x += -verticalSkewDegrees/45 * magnitude
+            QuadLowerLeft.y += verticalSkewDegrees/45 * magnitude
+            
+            QuadLowerRight.x += verticalSkewDegrees/45 * magnitude
+            QuadLowerRight.y += verticalSkewDegrees/45 * magnitude
+        } else if verticalSkewDegrees < 0 {
+            QuadUpperLeft.x += verticalSkewDegrees/45 * magnitude
+            QuadUpperLeft.y += verticalSkewDegrees/45 * magnitude
+            
+            QuadUpperRight.x += -verticalSkewDegrees/45 * magnitude
+            QuadUpperRight.y += verticalSkewDegrees/45 * magnitude
+        }
+    }
+
     private func counterclockwiseRotateBy90() {
         rotationType.counterclockwiseRotate90()
     }
