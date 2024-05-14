@@ -449,16 +449,12 @@ extension CropView {
     }
     
     private func skewCropScrollView() {
-        //cropWorkbenchView.imageContainer?.layer.anchorPoint = .zero
-
         var quadPoints = viewModel.getQuadPoints()
         quadPoints.1.x += cropWorkbenchView.frame.size.width
         quadPoints.2.y += cropWorkbenchView.frame.size.height
         quadPoints.3.x += cropWorkbenchView.frame.size.width
         quadPoints.3.y += cropWorkbenchView.frame.size.height
         
-        //print("quadPoints: \(quadPoints)")
-
         cropWorkbenchView.imageContainer?.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
     }
 
