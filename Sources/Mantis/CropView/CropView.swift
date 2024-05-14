@@ -264,12 +264,13 @@ final class CropView: UIView {
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
             
-            if self.viewModel.rotationAdjustmentMode == .straighten {
+            switch self.viewModel.rotationAdjustmentMode {
+            case .straighten:
                 self.viewModel.setRotatingStatus(by: clampAngle(angle))
-            } else if self.viewModel.rotationAdjustmentMode == .horizontal_perspective {
+            case .horizontal_perspective:
                 self.viewModel.setHorizontalSkewState(by: clampAngle(angle))
                 self.delegate?.cropViewDidAdjustPerspective(self)
-            } else if self.viewModel.rotationAdjustmentMode == .vertical_perspective {
+            case .vertical_perspective:
                 self.viewModel.setVerticalSkewState(by: clampAngle(angle))
                 self.delegate?.cropViewDidAdjustPerspective(self)
             }
@@ -842,11 +843,12 @@ extension CropView: CropViewProtocol {
         
         self.viewModel.rotationAdjustmentMode = rotationType
        
-        if rotationType == .straighten {
+        switch rotationType {
+        case .straighten:
             rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.degrees))
-        } else if rotationType == .horizontal_perspective {
+        case .horizontal_perspective:
             rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.horizontalSkewDegrees))
-        } else if rotationType == .vertical_perspective {
+        case .vertical_perspective:
             rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.verticalSkewDegrees))
         }
     }
