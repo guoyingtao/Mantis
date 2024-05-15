@@ -450,12 +450,22 @@ extension CropView {
     
     private func skewCropWorkbenchView() {
         var quadPoints = viewModel.getQuadPoints()
-        quadPoints.1.x += cropWorkbenchView.frame.size.width
-        quadPoints.2.y += cropWorkbenchView.frame.size.height
-        quadPoints.3.x += cropWorkbenchView.frame.size.width
-        quadPoints.3.y += cropWorkbenchView.frame.size.height
+
+        let frame = viewModel.cropBoxFrame
         
-        cropWorkbenchView.imageContainer?.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
+        quadPoints.0.x += frame.origin.x
+        quadPoints.0.y += frame.origin.y
+        
+        quadPoints.1.x += (frame.origin.x + frame.size.width)
+        quadPoints.1.y += frame.origin.y
+        
+        quadPoints.2.x += frame.origin.x
+        quadPoints.2.y += (frame.origin.y + frame.size.height)
+        
+        quadPoints.3.x += (frame.origin.x + frame.size.width)
+        quadPoints.3.y += (frame.origin.y + frame.size.height)
+        
+        cropWorkbenchView.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
     }
 
     private func getInitialCropBoxRect() -> CGRect {
