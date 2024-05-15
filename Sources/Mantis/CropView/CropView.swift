@@ -466,6 +466,13 @@ extension CropView {
         quadPoints.3.y += (frame.origin.y + frame.size.height)
         
         cropWorkbenchView.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
+        
+        let q0 = self.convert(quadPoints.0, to:cropWorkbenchView.imageContainer!)
+        let q1 = self.convert(quadPoints.1, to: cropWorkbenchView.imageContainer!)
+        let q2 = self.convert(quadPoints.2, to: cropWorkbenchView.imageContainer!)
+        let q3 = self.convert(quadPoints.3, to: cropWorkbenchView.imageContainer!)
+        
+        cropWorkbenchView.imageContainer?.transformToFitQuad(tl: q0, tr: q1, bl: q2, br: q3)
     }
 
     private func getInitialCropBoxRect() -> CGRect {
