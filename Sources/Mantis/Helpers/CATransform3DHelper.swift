@@ -97,7 +97,7 @@ extension UIView {
         
         let fullTransform = CATransform3DConcat(CATransform3DConcat(transPos, transform), transNeg)
         
-        self.layer.transform = fullTransform
+        self.transform3D = fullTransform
     }
 }
 

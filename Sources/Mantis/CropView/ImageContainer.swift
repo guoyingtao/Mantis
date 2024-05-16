@@ -16,7 +16,7 @@ final class ImageContainer: UIView {
         imageView.layer.minificationFilter = .trilinear
         imageView.accessibilityIgnoresInvertColors = true
         imageView.accessibilityIdentifier = "SourceImage"
-        imageView.contentMode = .scaleAspectFit
+        //imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         
         return imageView
