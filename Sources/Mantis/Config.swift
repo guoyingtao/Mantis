@@ -69,6 +69,8 @@ public struct Config {
     
     public var enableUndoRedo: Bool = false
     
+    public var enableSkew: Bool = false
+    
     static var language: Language?
 
     public init() {}

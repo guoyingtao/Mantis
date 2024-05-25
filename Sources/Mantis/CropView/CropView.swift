@@ -30,6 +30,7 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidBeginResize(_ cropView: CropViewProtocol)
     func cropViewDidEndResize(_ cropView: CropViewProtocol)
     func cropViewDidBeginCrop(_ cropView: CropViewProtocol)
+    func cropViewDidAdjustPerspective(_ cropView: CropViewProtocol)
 }
 
 final class CropView: UIView {
@@ -260,7 +261,17 @@ final class CropView: UIView {
         
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
-            self.viewModel.setRotatingStatus(by: clampAngle(angle))
+            
+            switch self.viewModel.rotationAdjustmentMode {
+            case .straighten:
+                self.viewModel.setRotatingStatus(by: clampAngle(angle))
+            case .horizontal_perspective:
+                self.viewModel.setHorizontalSkewStatus(by: clampAngle(angle))
+                self.delegate?.cropViewDidAdjustPerspective(self)
+            case .vertical_perspective:
+                self.viewModel.setVerticalSkewStatus(by: clampAngle(angle))
+                self.delegate?.cropViewDidAdjustPerspective(self)
+            }
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
@@ -429,12 +440,54 @@ extension CropView {
     }
     
     private func rotateCropWorkbenchView() {
+        
+        cropWorkbenchView.transform3D = CATransform3DIdentity
         let totalRadians = viewModel.getTotalRadians()
-        cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
-        flipCropWorkbenchViewIfNeeded()
-        adjustWorkbenchView(by: totalRadians)
+        let rotationTransform3D = CATransform3DMakeAffineTransform(CGAffineTransform(rotationAngle: totalRadians))
+        
+        
+        skewCropWorkbenchView()
+        
+        cropWorkbenchView.transform3D = CATransform3DConcat(cropWorkbenchView.transform3D, rotationTransform3D)
+
+//        flipCropWorkbenchViewIfNeeded()
+//        adjustWorkbenchView(by: totalRadians)
+       
     }
     
+    private func skewCropWorkbenchView() {
+        
+        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+            
+            guard let imageContainer = cropWorkbenchView.imageContainer else { return }
+            
+            var quadPoints = viewModel.getQuadPoints()
+            
+            let frame = viewModel.cropBoxFrame
+            
+            quadPoints.0.x += frame.origin.x
+            quadPoints.0.y += frame.origin.y
+            
+            quadPoints.1.x += (frame.origin.x + frame.size.width)
+            quadPoints.1.y += frame.origin.y
+            
+            quadPoints.2.x += frame.origin.x
+            quadPoints.2.y += (frame.origin.y + frame.size.height)
+            
+            quadPoints.3.x += (frame.origin.x + frame.size.width)
+            quadPoints.3.y += (frame.origin.y + frame.size.height)
+            
+            cropWorkbenchView.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
+            
+            let q0 = self.convert(quadPoints.0, to:cropWorkbenchView.imageContainer!)
+            let q1 = self.convert(quadPoints.1, to: cropWorkbenchView.imageContainer!)
+            let q2 = self.convert(quadPoints.2, to: cropWorkbenchView.imageContainer!)
+            let q3 = self.convert(quadPoints.3, to: cropWorkbenchView.imageContainer!)
+            
+            imageContainer.transformToFitQuad(tl: q0, tr: q1, bl: q2, br: q3)
+        }
+    }
+
     private func getInitialCropBoxRect() -> CGRect {
         guard image.size.width > 0 && image.size.height > 0 else {
             return .zero
@@ -815,6 +868,20 @@ extension CropView {
 }
 
 extension CropView: CropViewProtocol {
+    func setRotationAdjustmentType(_ rotationType: RotationAdjustmentType) {
+        
+        self.viewModel.rotationAdjustmentMode = rotationType
+       
+        switch rotationType {
+        case .straighten:
+            rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.degrees))
+        case .horizontal_perspective:
+            rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.horizontalSkewDegrees))
+        case .vertical_perspective:
+            rotationControlView?.updateRotationValue(by: Angle(degrees: self.viewModel.verticalSkewDegrees))
+        }
+    }
+    
     private func setForceFixedRatio(by presetFixedRatioType: PresetFixedRatioType) {
         switch presetFixedRatioType {
         case .alwaysUsingOnePresetFixedRatio:

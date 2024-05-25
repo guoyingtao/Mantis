@@ -171,3 +171,9 @@ enum AutoLayoutPriorityType: Float {
 enum Constants {
     static let rotationDegreeLimit: CGFloat = 45
 }
+
+public enum RotationAdjustmentType: Int {
+    case straighten
+    case horizontal_perspective
+    case vertical_perspective
+}

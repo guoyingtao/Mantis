@@ -471,6 +471,10 @@ extension CropViewController: CropViewDelegate {
                                                  original: cropView.image,
                                                  cropInfo: cropView.getCropInfo())
     }
+    
+    func cropViewDidAdjustPerspective(_ cropView: CropViewProtocol) {
+        
+    }
 }
 
 extension CropViewController: CropToolbarDelegate {
@@ -599,6 +603,10 @@ extension CropViewController {
     
     public func update(_ image: UIImage) {
         cropView.update(image)
+    }
+    
+    public func setRotationAdjustmentType(_ type: RotationAdjustmentType) {
+        cropView.setRotationAdjustmentType(type)
     }
 }
 

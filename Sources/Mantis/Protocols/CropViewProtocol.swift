@@ -51,6 +51,8 @@ protocol CropViewProtocol: UIView {
     func makeCropState() -> CropState
     
     func update(_ image: UIImage)
+    
+    func setRotationAdjustmentType(_ rotationType: RotationAdjustmentType)
 }
 
 extension CropViewProtocol {

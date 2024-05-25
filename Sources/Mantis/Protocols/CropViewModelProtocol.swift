@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct ImageHorizontalToVerticalRatio {
     var ratio: Double
@@ -27,17 +28,21 @@ protocol CropViewModelProtocol: AnyObject {
     var tappedEdge: CropViewAuxiliaryIndicatorHandleType { get set }
     var degrees: CGFloat { get set }
     var radians: CGFloat { get }
+    var horizontalSkewDegrees: CGFloat { get set }
+    var verticalSkewDegrees: CGFloat { get set }
     var rotationType: ImageRotationType { get set }
     var fixedImageRatio: CGFloat { get set }
     var cropLeftTopOnImage: CGPoint { get set }
     var cropRightBottomOnImage: CGPoint { get set }
     var horizontallyFlip: Bool { get set }
     var verticallyFlip: Bool { get set }
+    var rotationAdjustmentMode: RotationAdjustmentType { get set }
     
     func reset(forceFixedRatio: Bool)
     func rotateBy90(withRotateType type: RotateBy90DegreeType)
     func getTotalRadians() -> CGFloat
     func getRatioType(byImageIsOriginalHorizontal isHorizontal: Bool) -> RatioType
+    func getQuadPoints() -> (CGPoint, CGPoint, CGPoint, CGPoint)
     func isUpOrUpsideDown() -> Bool
     func prepareForCrop(byTouchPoint point: CGPoint)
     
@@ -46,6 +51,8 @@ protocol CropViewModelProtocol: AnyObject {
     // MARK: - Handle view status changes
     func setInitialStatus()
     func setRotatingStatus(by angle: Angle)
+    func setHorizontalSkewStatus(by angle: Angle)
+    func setVerticalSkewStatus(by angle: Angle)
     func setDegree90RotatingStatus()
     func setTouchImageStatus()
     func setTouchRotationBoardStatus()
@@ -60,6 +67,16 @@ extension CropViewModelProtocol {
     
     func setRotatingStatus(by angle: Angle) {
         degrees = angle.degrees
+        viewStatus = .rotating
+    }
+    
+    func setHorizontalSkewStatus(by angle: Angle) {
+        horizontalSkewDegrees = angle.degrees
+        viewStatus = .rotating
+    }
+    
+    func setVerticalSkewStatus(by angle: Angle) {
+        verticalSkewDegrees = angle.degrees
         viewStatus = .rotating
     }
     

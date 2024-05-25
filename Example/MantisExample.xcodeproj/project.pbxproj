@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		400EDDBCCA9845FE75EE819D /* Pods_MantisExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CF216417113B7016C51B96 /* Pods_MantisExample.framework */; };
 		5F0852B5237918510031B75D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0852B4237918510031B75D /* ImagePicker.swift */; };
 		5FC10B15217A9EDF00582874 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B14217A9EDF00582874 /* AppDelegate.swift */; };
 		5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B16217A9EDF00582874 /* ViewController.swift */; };
@@ -19,8 +18,9 @@
 		5FEBA88221961E4A0018DE62 /* EmbeddedCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */; };
 		66F909BD287B601A007E2FC6 /* MyNavigationCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F909BC287B601A007E2FC6 /* MyNavigationCropToolbar.swift */; };
 		85DDBACD298E5A54004FBFE7 /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DDBACC298E5A54004FBFE7 /* CustomViewController.swift */; };
+		99209D438723C89A5CB7ABE8 /* libPods-MantisExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 035F6594BFCB215B1F273A89 /* libPods-MantisExampleTests.a */; };
+		ADB68C08F2BFB69B3DB78EDC /* libPods-MantisExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8850D71A49C7B27BB1222A3C /* libPods-MantisExample.a */; };
 		CCBF2F602525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */; };
-		D3F0CC0EBFCD7968170A98D3 /* Pods_MantisExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5010346E303DA6E138E2528F /* Pods_MantisExampleTests.framework */; };
 		F24DCFE529A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,9 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		12CF216417113B7016C51B96 /* Pods_MantisExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		035F6594BFCB215B1F273A89 /* libPods-MantisExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MantisExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC821D838EDAC646C860226 /* Pods-MantisExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-MantisExampleTests/Pods-MantisExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5010346E303DA6E138E2528F /* Pods_MantisExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F0852B4237918510031B75D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		5F21BBB22448036100B7B0C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5F21BBB32448036100B7B0C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,6 +56,7 @@
 		61C386518C3C25E57F8C83A5 /* Pods-MantisExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExampleTests.release.xcconfig"; path = "Target Support Files/Pods-MantisExampleTests/Pods-MantisExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		66F909BC287B601A007E2FC6 /* MyNavigationCropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNavigationCropToolbar.swift; sourceTree = "<group>"; };
 		85DDBACC298E5A54004FBFE7 /* CustomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
+		8850D71A49C7B27BB1222A3C /* libPods-MantisExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MantisExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C5370690AB91AB238B90E9 /* Pods-MantisExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.release.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.release.xcconfig"; sourceTree = "<group>"; };
 		9326C1CDF121300C5CAAE2BE /* Pods-MantisExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.debug.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.debug.xcconfig"; sourceTree = "<group>"; };
 		CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizedCropToolbarWithoutList.swift; sourceTree = "<group>"; };
@@ -68,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				400EDDBCCA9845FE75EE819D /* Pods_MantisExample.framework in Frameworks */,
+				ADB68C08F2BFB69B3DB78EDC /* libPods-MantisExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3F0CC0EBFCD7968170A98D3 /* Pods_MantisExampleTests.framework in Frameworks */,
+				99209D438723C89A5CB7ABE8 /* libPods-MantisExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +86,8 @@
 		5F3BE15921993A7C005C4BD8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				12CF216417113B7016C51B96 /* Pods_MantisExample.framework */,
-				5010346E303DA6E138E2528F /* Pods_MantisExampleTests.framework */,
+				8850D71A49C7B27BB1222A3C /* libPods-MantisExample.a */,
+				035F6594BFCB215B1F273A89 /* libPods-MantisExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -156,7 +156,7 @@
 				5FC10B0D217A9EDF00582874 /* Sources */,
 				5FC10B0E217A9EDF00582874 /* Frameworks */,
 				5FC10B0F217A9EDF00582874 /* Resources */,
-				1E61E7730599A9D7AF36C55B /* [CP] Embed Pods Frameworks */,
+				7C88D55FEEB4D8F88A59EADF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -270,21 +270,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1E61E7730599A9D7AF36C55B /* [CP] Embed Pods Frameworks */ = {
+		7C88D55FEEB4D8F88A59EADF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MantisExample/Pods-MantisExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B990B0C0191568D739FE220D /* [CP] Check Pods Manifest.lock */ = {
@@ -421,7 +421,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -478,7 +478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -498,9 +498,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = 3V26Q55U3S;
+				DEVELOPMENT_TEAM = Z9GT6JU7N2;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -524,9 +524,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_TEAM = 3V26Q55U3S;
+				DEVELOPMENT_TEAM = Z9GT6JU7N2;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
