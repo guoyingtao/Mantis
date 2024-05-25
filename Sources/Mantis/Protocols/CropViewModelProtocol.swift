@@ -72,12 +72,12 @@ extension CropViewModelProtocol {
     
     func setHorizontalSkewStatus(by angle: Angle) {
         horizontalSkewDegrees = angle.degrees
-        viewStatus = .skewing
+        viewStatus = .rotating
     }
     
     func setVerticalSkewStatus(by angle: Angle) {
         verticalSkewDegrees = angle.degrees
-        viewStatus = .skewing
+        viewStatus = .rotating
     }
     
     func setDegree90RotatingStatus() {

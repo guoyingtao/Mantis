@@ -155,8 +155,6 @@ final class CropView: UIView {
             initialRender()
         case .rotating:
             rotateCropWorkbenchView()
-        case .skewing:
-            skewCropWorkbenchView()
         case .degree90Rotating:
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             cropAuxiliaryIndicatorView.isHidden = true
@@ -443,36 +441,48 @@ extension CropView {
     
     private func rotateCropWorkbenchView() {
         let totalRadians = viewModel.getTotalRadians()
-        cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
-        flipCropWorkbenchViewIfNeeded()
-        adjustWorkbenchView(by: totalRadians)
+        let rotationTransform3D = CATransform3DMakeAffineTransform(CGAffineTransform(rotationAngle: totalRadians))
+        
+        skewCropWorkbenchView()
+        
+        cropWorkbenchView.transform3D = CATransform3DConcat(cropWorkbenchView.transform3D, rotationTransform3D)
+
+//        flipCropWorkbenchViewIfNeeded()
+//        adjustWorkbenchView(by: totalRadians)
+       
     }
     
     private func skewCropWorkbenchView() {
-        var quadPoints = viewModel.getQuadPoints()
-
-        let frame = viewModel.cropBoxFrame
         
-        quadPoints.0.x += frame.origin.x
-        quadPoints.0.y += frame.origin.y
-        
-        quadPoints.1.x += (frame.origin.x + frame.size.width)
-        quadPoints.1.y += frame.origin.y
-        
-        quadPoints.2.x += frame.origin.x
-        quadPoints.2.y += (frame.origin.y + frame.size.height)
-        
-        quadPoints.3.x += (frame.origin.x + frame.size.width)
-        quadPoints.3.y += (frame.origin.y + frame.size.height)
-        
-        cropWorkbenchView.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
-        
-        let q0 = self.convert(quadPoints.0, to:cropWorkbenchView.imageContainer!)
-        let q1 = self.convert(quadPoints.1, to: cropWorkbenchView.imageContainer!)
-        let q2 = self.convert(quadPoints.2, to: cropWorkbenchView.imageContainer!)
-        let q3 = self.convert(quadPoints.3, to: cropWorkbenchView.imageContainer!)
-        
-        cropWorkbenchView.imageContainer?.transformToFitQuad(tl: q0, tr: q1, bl: q2, br: q3)
+        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+            
+            guard let imageContainer = cropWorkbenchView.imageContainer else { return }
+            
+            var quadPoints = viewModel.getQuadPoints()
+            
+            let frame = viewModel.cropBoxFrame
+            
+            quadPoints.0.x += frame.origin.x
+            quadPoints.0.y += frame.origin.y
+            
+            quadPoints.1.x += (frame.origin.x + frame.size.width)
+            quadPoints.1.y += frame.origin.y
+            
+            quadPoints.2.x += frame.origin.x
+            quadPoints.2.y += (frame.origin.y + frame.size.height)
+            
+            quadPoints.3.x += (frame.origin.x + frame.size.width)
+            quadPoints.3.y += (frame.origin.y + frame.size.height)
+            
+            cropWorkbenchView.transformToFitQuad(tl: quadPoints.0, tr: quadPoints.1, bl: quadPoints.2, br: quadPoints.3)
+            
+            let q0 = self.convert(quadPoints.0, to:cropWorkbenchView.imageContainer!)
+            let q1 = self.convert(quadPoints.1, to: cropWorkbenchView.imageContainer!)
+            let q2 = self.convert(quadPoints.2, to: cropWorkbenchView.imageContainer!)
+            let q3 = self.convert(quadPoints.3, to: cropWorkbenchView.imageContainer!)
+            
+            imageContainer.transformToFitQuad(tl: q0, tr: q1, bl: q2, br: q3)
+        }
     }
 
     private func getInitialCropBoxRect() -> CGRect {

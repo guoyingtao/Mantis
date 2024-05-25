@@ -11,7 +11,6 @@ import Foundation
 enum CropViewStatus: Equatable {
     case initial
     case rotating
-    case skewing
     case degree90Rotating
     case touchImage
     case touchRotationBoard
