@@ -440,8 +440,11 @@ extension CropView {
     }
     
     private func rotateCropWorkbenchView() {
+        
+        cropWorkbenchView.transform3D = CATransform3DIdentity
         let totalRadians = viewModel.getTotalRadians()
         let rotationTransform3D = CATransform3DMakeAffineTransform(CGAffineTransform(rotationAngle: totalRadians))
+        
         
         skewCropWorkbenchView()
         
