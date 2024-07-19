@@ -90,7 +90,11 @@ public struct CropViewConfig {
     
     public var rotateCropBoxFor90DegreeRotation = true
     
-    public var minimumCropBoxSize: CGFloat = 42
+    public var minimumCropBoxSize: CGFloat = 42 {
+        didSet {
+            assert(minimumCropBoxSize >= 4)
+        }
+    }
     
     public enum BuiltInRotationControlViewType {
         case rotationDial(config: RotationDialConfig = .init())
