@@ -2,6 +2,14 @@
 
 -----
 
+### [2.21.1](https://www.github.com/guoyingtao/Mantis/compare/v2.21.0...v2.21.1) (2024-07-20)
+
+
+### Bug Fixes
+
+* fix the rotation issue when undo/redo for a flipped image ([#393](https://www.github.com/guoyingtao/Mantis/issues/393)) ([#394](https://www.github.com/guoyingtao/Mantis/issues/394)) ([2ad6323](https://www.github.com/guoyingtao/Mantis/commit/2ad632377a099824990e15303c5caf736f73bf91))
+* fix undo redo rotation issues when flipped ([#396](https://www.github.com/guoyingtao/Mantis/issues/396)) ([29b6fec](https://www.github.com/guoyingtao/Mantis/commit/29b6fec55cfe2d7c5bb59324d0cfb75bd7426c7a))
+
 ## [2.21.0](https://www.github.com/guoyingtao/Mantis/compare/v2.20.0...v2.21.0) (2024-04-10)
 
 
