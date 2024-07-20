@@ -13,7 +13,7 @@ final class CropAuxiliaryIndicatorViewTests: XCTestCase {
     var cropAuxiliaryIndicatorView: CropAuxiliaryIndicatorView!
 
     override func setUpWithError() throws {
-        cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: .zero, cropBoxHotAreaUnit: 42)
+        cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: .zero)
     }
 
     override func tearDownWithError() throws {
@@ -35,7 +35,7 @@ final class CropAuxiliaryIndicatorViewTests: XCTestCase {
             XCTAssertEqual(subview.frame, .zero)
         }
         
-        cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), cropBoxHotAreaUnit: 42)
+        cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         for subview in cropAuxiliaryIndicatorView.subviews {
             XCTAssertEqual(subview.frame, .zero)
