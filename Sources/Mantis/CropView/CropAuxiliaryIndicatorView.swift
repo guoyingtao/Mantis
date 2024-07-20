@@ -9,10 +9,8 @@
 import UIKit
 
 final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtocol {
-    private var borderNormalColor = UIColor.white
-    private var borderHintColor = UIColor.white
-    private var cornerHandleColor = UIColor.white
-    private var edgeLineHandleColor = UIColor.white
+    private var boarderNormalColor = UIColor.white
+    private var boarderHintColor = UIColor.white
     private let cornerHandleLength = CGFloat(20.0)
     private let edgeLineHandleLength = CGFloat(30.0)
     private let handleThickness = CGFloat(3.0)
@@ -51,22 +49,16 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         }
     }
     
-    init(frame: CGRect, config: CropAuxiliaryIndicatorConfig = CropAuxiliaryIndicatorConfig()) {
+    init(frame: CGRect, 
+         cropBoxHotAreaUnit: CGFloat,
+         disableCropBoxDeformation: Bool = false,
+         style: CropAuxiliaryIndicatorStyleType = .normal) {
         super.init(frame: frame)
         clipsToBounds = false
         backgroundColor = .clear
-        
-        cropBoxHotAreaUnit = config.cropBoxHotAreaUnit
-        disableCropBoxDeformation = config.disableCropBoxDeformation
-        style = config.style
-        
-        borderNormalColor = config.borderNormalColor
-        borderHintColor = config.borderHintColor
-        cornerHandleColor = config.cornerHandleColor
-        edgeLineHandleColor = config.edgeLineHandleColor
-        gridMainColor = config.gridMainColor
-        gridSecondaryColor = config.gridSecondaryColor
-        
+        self.cropBoxHotAreaUnit = cropBoxHotAreaUnit
+        self.disableCropBoxDeformation = disableCropBoxDeformation
+        self.style = style
         setup()
     }
     
@@ -75,18 +67,15 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         backgroundColor = .clear
     }
     
-    private func createNewLine(withNormalColor normalColor: UIColor = .white) -> UIView {
+    private func createNewLine() -> UIView {
         let view = UIView()
         view.frame = .zero
-        
         if style == .normal {
-            view.backgroundColor = normalColor
+            view.backgroundColor = .white
         } else {
             view.backgroundColor = .clear
         }
-        
         addSubview(view)
-        
         return view
     }
     
@@ -96,19 +85,19 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         borderLine.layer.borderWidth = borderThickness
         
         if style == .normal {
-            borderLine.layer.borderColor = borderNormalColor.cgColor
-            hintLine.backgroundColor = borderHintColor
+            borderLine.layer.borderColor = boarderNormalColor.cgColor
+            hintLine.backgroundColor = boarderHintColor
         } else {
             borderLine.layer.borderColor = UIColor.clear.cgColor
             hintLine.backgroundColor = .clear
         }
         
         for _ in 0..<8 {
-            cornerHandles.append(createNewLine(withNormalColor: cornerHandleColor))
+            cornerHandles.append(createNewLine())
         }
         
         for _ in 0..<4 {
-            edgeLineHandles.append(createNewLine(withNormalColor: edgeLineHandleColor))
+            edgeLineHandles.append(createNewLine())
         }
         
         setupAccessibilityHelperViews()
@@ -188,7 +177,7 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         borderLine.layer.backgroundColor = UIColor.clear.cgColor
         borderLine.layer.borderWidth = borderThickness
         if style == .normal {
-            borderLine.layer.borderColor = borderNormalColor.cgColor
+            borderLine.layer.borderColor = boarderNormalColor.cgColor
         } else {
             borderLine.layer.borderColor = UIColor.clear.cgColor
         }
