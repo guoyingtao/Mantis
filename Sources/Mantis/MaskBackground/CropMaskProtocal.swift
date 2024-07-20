@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let minOverLayerUnit: CGFloat = 4
+private let minOverLayerUnit: CGFloat = 30
 private let initialFrameLength: CGFloat = 1000
 
 protocol CropMaskProtocol: UIView {
