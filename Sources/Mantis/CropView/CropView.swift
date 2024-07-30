@@ -1059,7 +1059,17 @@ extension CropView: CropViewProtocol {
     }
     
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect, imageRotationType: ImageRotationType) -> Transformation {
+        let originalWidth = viewModel.cropBoxFrame.width
+        viewModel.rotationType = imageRotationType
+        viewModel.resetCropFrame(by: getInitialCropBoxRect())
         let cropFrame = viewModel.cropBoxFrame
+        viewModel.rotationType = .none
+        
+        var rotationScale: CGFloat = 1.0
+        
+        if imageRotationType == .counterclockwise270 || imageRotationType == .counterclockwise90 {
+            rotationScale = cropFrame.height / originalWidth
+        }
         
         let scale: CGFloat = min(1/normalizedInfo.width, 1/normalizedInfo.height)
         
@@ -1099,7 +1109,7 @@ extension CropView: CropViewProtocol {
         let isManuallyZoomed = (scale != 1.0)
         let transformation = Transformation(offset: offset,
                                             rotation: rotationRadius,
-                                            scale: scale,
+                                            scale: scale * rotationScale,
                                             isManuallyZoomed: isManuallyZoomed,
                                             initialMaskFrame: .zero,
                                             maskFrame: maskFrame,
