@@ -1071,16 +1071,16 @@ extension CropView: CropViewProtocol {
             offset.x = cropFrame.width * normalizedInfo.origin.x * scale
             offset.y = cropFrame.height * normalizedInfo.origin.y * scale
         case .counterclockwise90:
-            offset.x = cropFrame.height * normalizedInfo.origin.y * scale
-            offset.y = cropFrame.width * (1 - normalizedInfo.origin.x - normalizedInfo.width) * scale
+            offset.x = cropFrame.height * (1 - normalizedInfo.maxY) * scale
+            offset.y = cropFrame.width * normalizedInfo.origin.x * scale
             rotationRadius = -90.0 * CGFloat.pi / 180.0
         case .counterclockwise180:
-            offset.x = cropFrame.width * (1 - normalizedInfo.origin.x - normalizedInfo.width) * scale
-            offset.y = cropFrame.height * (1 - normalizedInfo.origin.y - normalizedInfo.height) * scale
+            offset.x = cropFrame.width * (1 - normalizedInfo.maxX) * scale
+            offset.y = cropFrame.height * (1 - normalizedInfo.maxY) * scale
             rotationRadius = -CGFloat.pi
         case .counterclockwise270:
-            offset.x = cropFrame.height * (1 - normalizedInfo.origin.y - normalizedInfo.height) * scale
-            offset.y = cropFrame.width * normalizedInfo.origin.x * scale
+            offset.x = cropFrame.height * normalizedInfo.origin.y * scale
+            offset.y = cropFrame.width * (1 - normalizedInfo.maxX) * scale
             rotationRadius = -270.0 * CGFloat.pi / 180.0
         }
         
