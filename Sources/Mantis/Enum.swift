@@ -27,7 +27,7 @@ import UIKit
 public enum PresetTransformationType {
     case none
     case presetInfo(info: Transformation)
-    case presetNormalizedInfo(normalizedInfo: CGRect)
+    case presetNormalizedInfo(normalizedInfo: CGRect, imageRotationType: ImageRotationType = .none)
 }
 
 public enum PresetFixedRatioType {

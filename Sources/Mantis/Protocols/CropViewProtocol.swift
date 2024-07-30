@@ -32,7 +32,7 @@ protocol CropViewProtocol: UIView {
     func applyCropState(with cropState: CropState)
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool)
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation
-    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation
+    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect, imageRotationType: ImageRotationType) -> Transformation
     func processPresetTransformation(completion: (Transformation) -> Void)
         
     func setFreeCrop()
