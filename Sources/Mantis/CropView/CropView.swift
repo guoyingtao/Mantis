@@ -1058,14 +1058,31 @@ extension CropView: CropViewProtocol {
         return newTransform
     }
     
-    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
+    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect, imageRotationType: ImageRotationType) -> Transformation {
         let cropFrame = viewModel.cropBoxFrame
         
         let scale: CGFloat = min(1/normalizedInfo.width, 1/normalizedInfo.height)
         
         var offset = cropFrame.origin
-        offset.x = cropFrame.width * normalizedInfo.origin.x * scale
-        offset.y = cropFrame.height * normalizedInfo.origin.y * scale
+        var rotationRadius: CGFloat = 0
+        
+        switch imageRotationType {
+        case .none:
+            offset.x = cropFrame.width * normalizedInfo.origin.x * scale
+            offset.y = cropFrame.height * normalizedInfo.origin.y * scale
+        case .counterclockwise90:
+            offset.x = cropFrame.height * normalizedInfo.origin.y * scale
+            offset.y = cropFrame.width * (1 - normalizedInfo.origin.x - normalizedInfo.width) * scale
+            rotationRadius = -90.0 * CGFloat.pi / 180.0
+        case .counterclockwise180:
+            offset.x = cropFrame.width * (1 - normalizedInfo.origin.x - normalizedInfo.width) * scale
+            offset.y = cropFrame.height * (1 - normalizedInfo.origin.y - normalizedInfo.height) * scale
+            rotationRadius = -CGFloat.pi
+        case .counterclockwise270:
+            offset.x = cropFrame.height * (1 - normalizedInfo.origin.y - normalizedInfo.height) * scale
+            offset.y = cropFrame.width * normalizedInfo.origin.x * scale
+            rotationRadius = -270.0 * CGFloat.pi / 180.0
+        }
         
         var maskFrame = cropFrame
         
@@ -1081,7 +1098,7 @@ extension CropView: CropViewProtocol {
         
         let isManuallyZoomed = (scale != 1.0)
         let transformation = Transformation(offset: offset,
-                                            rotation: 0,
+                                            rotation: rotationRadius,
                                             scale: scale,
                                             isManuallyZoomed: isManuallyZoomed,
                                             initialMaskFrame: .zero,
@@ -1117,8 +1134,8 @@ extension CropView: CropViewProtocol {
             newTransform.scale *= adjustScale
             transform(byTransformInfo: newTransform)
             completion(transformInfo)
-        case .presetNormalizedInfo(let normalizedInfo):
-            let transformInfo = getTransformInfo(byNormalizedInfo: normalizedInfo)
+        case .presetNormalizedInfo(let normalizedInfo, let imageRorationType):
+            let transformInfo = getTransformInfo(byNormalizedInfo: normalizedInfo, imageRotationType: imageRorationType)
             transform(byTransformInfo: transformInfo)
             cropWorkbenchView.frame = transformInfo.maskFrame
             completion(transformInfo)

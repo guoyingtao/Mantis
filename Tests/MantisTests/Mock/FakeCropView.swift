@@ -89,7 +89,7 @@ class FakeCropView: UIView, CropViewProtocol {
                        verticallyFlipped: false)
     }
     
-    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation {
+    func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect, imageRotationType: ImageRotationType) -> Transformation {
         Transformation(offset: .zero, 
                        rotation: .zero,
                        scale: .zero,
