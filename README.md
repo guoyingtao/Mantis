@@ -289,6 +289,8 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 Mantis provide two demo projects
 - MantisExample (using Storyboard)
 - MantisSwiftUIExample (using SwiftUI)
+### Backers & Sponsors
+Become a sponsor through [GitHub Sponsors](https://github.com/sponsors/guoyingtao). 
 
 ## Credits
 * The crop feature is strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 
