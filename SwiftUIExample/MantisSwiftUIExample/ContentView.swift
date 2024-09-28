@@ -22,6 +22,8 @@ struct ContentView: View {
     @State private var showSourceTypeSelection = false
     @State private var sourceType: UIImagePickerController.SourceType?
     
+    @State private var transformation: Transformation?
+    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
@@ -33,7 +35,7 @@ struct ContentView: View {
             ImageCropper(image: $image,
                          cropShapeType: $cropShapeType,
                          presetFixedRatioType: $presetFixedRatioType,
-                         type: $cropperType)
+                         type: $cropperType, transformation: $transformation)
             .onDisappear(perform: reset)
             .ignoresSafeArea()
         })

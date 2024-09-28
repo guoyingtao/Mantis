@@ -19,6 +19,7 @@ struct ImageCropper: UIViewControllerRepresentable {
     @Binding var cropShapeType: Mantis.CropShapeType
     @Binding var presetFixedRatioType: Mantis.PresetFixedRatioType
     @Binding var type: ImageCropperType
+    @Binding var transformation: Transformation?
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -31,7 +32,7 @@ struct ImageCropper: UIViewControllerRepresentable {
         
         func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             parent.image = cropped
-            print("transformation is \(transformation)")
+            parent.transformation = transformation
             parent.presentationMode.wrappedValue.dismiss()
         }
         
@@ -73,7 +74,7 @@ extension ImageCropper {
     
     func makeImageCropperHiddingRotationDial(context: Context) -> UIViewController {
         var config = Mantis.Config()
-        config.cropViewConfig.showRotationDial = false
+        config.cropViewConfig.showAttachedRotationControlView = false
         let cropViewController = Mantis.cropViewController(image: image!, config: config)
         cropViewController.delegate = context.coordinator
 
