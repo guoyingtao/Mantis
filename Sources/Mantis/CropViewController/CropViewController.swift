@@ -143,7 +143,7 @@ open class CropViewController: UIViewController {
         return FixedRatioManager(type: type,
                                  originalRatioH: ratio,
                                  ratioOptions: config.ratioOptions,
-                                 customRatios: config.getCustomRatioItems().compactMap { $0 })
+                                 customRatios: config.customRatioItems.compactMap { $0 })
     }
 
     override open func viewDidLoad() {
