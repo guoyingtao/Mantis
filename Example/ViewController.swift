@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     var imagePicker: ImagePicker!
     @IBOutlet weak var cropShapesButton: UIButton!
     
-    private func createConfig() -> Config {
+    private func createConfigWithPresetTransformation() -> Config {
         var config = Mantis.Config()
         
         if let transformation = transformation {
@@ -44,7 +44,7 @@ class ViewController: UIViewController {
         guard let image = image else {
             return
         }        
-        var config = createConfig()
+        var config = createConfigWithPresetTransformation()
         config.cropMode = .async
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
