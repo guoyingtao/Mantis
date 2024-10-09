@@ -52,13 +52,7 @@ extension CGImage {
                                 space: colorSpaceRef,
                                 bitmapInfo: bitmapInfoData)
         ??
-        CGContext(data: nil,
-                  width: Int(round(outputSize.width)),
-                  height: Int(round(outputSize.height)),
-                  bitsPerComponent: bitsPerComponent,
-                  bytesPerRow: bitmapBytesPerRow,
-                  space: colorSpaceRef,
-                  bitmapInfo: getBackupBitmapInfo(colorSpaceRef))
+        createBackupCGContext(size: outputSize, bitmapBytesPerRow: bitsPerComponent, colorSpaceRef: colorSpaceRef)
         
         guard let context = context else {
             throw ImageProcessError.failedToBuildContext(colorSpaceModel: colorSpaceRef.model,
@@ -86,6 +80,29 @@ extension CGImage {
         return context.makeImage()
     }
     
+    func createBackupCGContext(size: CGSize,
+                               bitmapBytesPerRow: Int = 0,
+                               colorSpaceRef: CGColorSpace) -> CGContext? {
+        var actualBitsPerComponent = bitsPerComponent
+        var actualBitmapBytesPerRow = bitmapBytesPerRow
+        
+        /* Convert a 10-bit image to a 16-bit image to preserve accuracy.
+        Since we haven't successfully created a 10-bit image CGContext yet, we're temporarily using this method.
+         */
+        if (32, 10) == (bitsPerPixel, bitsPerComponent) {
+            actualBitsPerComponent = 16
+            actualBitmapBytesPerRow = Int(round(size.width)) * 8
+        }
+        
+        return CGContext(data: nil,
+                         width: Int(round(size.width)),
+                         height: Int(round(size.height)),
+                         bitsPerComponent: actualBitsPerComponent,
+                         bytesPerRow: actualBitmapBytesPerRow,
+                         space: colorSpaceRef,
+                         bitmapInfo: getBackupBitmapInfo(colorSpaceRef))
+    }
+    
     /**
      Just in case the bitmapInfo from original image is not supported by CGContext, we will use this backup bitmapInfo instead.
      */
@@ -100,11 +117,7 @@ extension CGImage {
             case (32, 8), (64, 16):
                 return CGImageAlphaInfo.premultipliedLast.rawValue
             case (32, 10):
-                if #available(iOS 12, macOS 10.14, *) {
-                    return CGImageAlphaInfo.alphaOnly.rawValue | CGImagePixelFormatInfo.RGBCIF10.rawValue
-                } else {
-                    break
-                }
+                return CGImageAlphaInfo.premultipliedLast.rawValue
             case (128, 32):
                 return CGImageAlphaInfo.premultipliedLast.rawValue | (bitmapInfo.rawValue & CGBitmapInfo.floatComponents.rawValue)
             default:
