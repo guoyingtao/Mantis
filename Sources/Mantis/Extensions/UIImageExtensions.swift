@@ -12,7 +12,7 @@ extension UIImage {
         if imageOrientation == .up {
             return cgImage
         }
-
+        
         guard let cgImage = cgImage, let colorSpace = cgImage.colorSpace else {
             return nil
         }
@@ -49,7 +49,7 @@ extension UIImage {
             break
         }
         
-        guard let context = CGContext(
+        var context = CGContext(
             data: nil,
             width: Int(width),
             height: Int(height),
@@ -57,8 +57,14 @@ extension UIImage {
             bytesPerRow: 0,
             space: colorSpace,
             bitmapInfo: UInt32(cgImage.bitmapInfo.rawValue)
-            ) else {
-                return nil
+            )
+        
+        if context == nil {
+            context = cgImage.createBackupCGContext(size: size, bitmapBytesPerRow: 0, colorSpaceRef: colorSpace)
+        }
+        
+        guard let context else {
+            return nil
         }
         
         context.concatenate(transform)
