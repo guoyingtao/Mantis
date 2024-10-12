@@ -103,5 +103,7 @@ public struct CropViewConfig {
     
     public var builtInRotationControlViewType: BuiltInRotationControlViewType = .rotationDial()
     
+    public var keyboardZoomScaleFactor: CGFloat = 1.1
+    
     public init() {}
 }

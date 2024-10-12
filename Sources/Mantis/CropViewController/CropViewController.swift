@@ -69,6 +69,20 @@ open class CropViewController: UIViewController {
         }
     }
     
+    open override var keyCommands: [UIKeyCommand]? {
+        if ProcessInfo.processInfo.isMacCatalystApp {
+            let zoomInCommand = UIKeyCommand(input: "+", modifierFlags: .command, action: #selector(zoomIn))
+            zoomInCommand.discoverabilityTitle = "Zoom In"
+            
+            let zoomOutCommand = UIKeyCommand(input: "-", modifierFlags: .command, action: #selector(zoomOut))
+            zoomOutCommand.discoverabilityTitle = "Zoom Out"
+            
+            return [zoomInCommand, zoomOutCommand]
+        } else {
+            return nil
+        }
+    }
+    
     deinit {
         print("CropViewController deinit.")
     }
@@ -204,6 +218,14 @@ open class CropViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
         cropView.prepareForViewWillTransition()
         handleViewWillTransition()
+    }
+    
+    @objc func zoomIn() {
+        cropView.zoomIn()
+    }
+    
+    @objc func zoomOut() {
+        cropView.zoomOut()
     }
     
     @objc func handleViewWillTransition() {

@@ -27,7 +27,7 @@ struct RatioItemType {
 }
 
 final class FixedRatioManager {
-    private (set) var ratios: [RatioItemType] = []
+    private(set) var ratios: [RatioItemType] = []
     private var ratioOptions: RatioOptions = .all
     private var customRatios: [RatioItemType] = []
 
