@@ -2,6 +2,13 @@
 
 -----
 
+### [2.22.1](https://www.github.com/guoyingtao/Mantis/compare/v2.22.0...v2.22.1) (2024-10-13)
+
+
+### Bug Fixes
+
+* use createBackupCGContext in cgImageWithFixedOrientation ([#414](https://www.github.com/guoyingtao/Mantis/issues/414)) ([3430aaf](https://www.github.com/guoyingtao/Mantis/commit/3430aaf1d72db718c6a6be7bde4dd6ca391b6a74))
+
 ## [2.22.0](https://www.github.com/guoyingtao/Mantis/compare/v2.21.0...v2.22.0) (2024-07-20)
 
 
