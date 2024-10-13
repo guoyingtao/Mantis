@@ -70,17 +70,13 @@ open class CropViewController: UIViewController {
     }
     
     open override var keyCommands: [UIKeyCommand]? {
-        if ProcessInfo.processInfo.isMacCatalystApp {
-            let zoomInCommand = UIKeyCommand(input: "+", modifierFlags: .command, action: #selector(zoomIn))
-            zoomInCommand.discoverabilityTitle = "Zoom In"
-            
-            let zoomOutCommand = UIKeyCommand(input: "-", modifierFlags: .command, action: #selector(zoomOut))
-            zoomOutCommand.discoverabilityTitle = "Zoom Out"
-            
-            return [zoomInCommand, zoomOutCommand]
-        } else {
-            return nil
-        }
+        let zoomInCommand = UIKeyCommand(input: "+", modifierFlags: .command, action: #selector(zoomIn))
+        zoomInCommand.discoverabilityTitle = "Zoom In"
+        
+        let zoomOutCommand = UIKeyCommand(input: "-", modifierFlags: .command, action: #selector(zoomOut))
+        zoomOutCommand.discoverabilityTitle = "Zoom Out"
+        
+        return [zoomInCommand, zoomOutCommand]
     }
     
     deinit {
