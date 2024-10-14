@@ -2,6 +2,18 @@
 
 -----
 
+## [2.23.0](https://www.github.com/guoyingtao/Mantis/compare/v2.22.0...v2.23.0) (2024-10-14)
+
+
+### Features
+
+* support keyboard zoom in/out for Mac Catalyst ([#416](https://www.github.com/guoyingtao/Mantis/issues/416)) ([291e5a7](https://www.github.com/guoyingtao/Mantis/commit/291e5a70d5b8146025e85ee9889b77e09f34f745))
+
+
+### Bug Fixes
+
+* use createBackupCGContext in cgImageWithFixedOrientation ([#414](https://www.github.com/guoyingtao/Mantis/issues/414)) ([3430aaf](https://www.github.com/guoyingtao/Mantis/commit/3430aaf1d72db718c6a6be7bde4dd6ca391b6a74))
+
 ## [2.22.0](https://www.github.com/guoyingtao/Mantis/compare/v2.21.0...v2.22.0) (2024-07-20)
 
 
