@@ -289,6 +289,14 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 Mantis provide two demo projects
 - MantisExample (using Storyboard)
 - MantisSwiftUIExample (using SwiftUI)
+
+### Showcases
+
+Below are apps that use the Mantis framework. If your app also uses Mantis and you’d like it to be showcased here, please submit a PR following the existing format.
+
+| <a href="https://apps.apple.com/us/app/pictopoem/id6692614035"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/65/d9/b7/65d9b774-3b3d-06ae-1972-79156dc53672/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/460x0w.webp" width="100" alt="Pictopoem"></a><br/>[**Pictopoem**](https://apps.apple.com/us/app/pictopoem/id6692614035)<br/>Where Images Whisper Poems | <a href="https://apps.apple.com/us/app/pictopoem/id6692614035"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f8/f0/20/f8f0201e-8b1d-add5-e08c-76fbf04c7fef/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/460x0w.webp" width="100" alt="Text Behind Me"></a><br/>[**Text Behind Me**](https://apps.apple.com/us/app/pictopoem/id6692614035)<br/>Add Depth to Your Photos |
+|---|---|
+
 ### Backers & Sponsors
 Become a sponsor through [GitHub Sponsors](https://github.com/sponsors/guoyingtao). 
 
