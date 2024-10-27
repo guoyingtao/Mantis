@@ -89,7 +89,8 @@ extension CGImage {
         /* Convert a 10-bit image to a 16-bit image to preserve accuracy.
         Since we haven't successfully created a 10-bit image CGContext yet, we're temporarily using this method.
          */
-        if (32, 10) == (bitsPerPixel, bitsPerComponent) {
+        if (32, 10) == (bitsPerPixel, bitsPerComponent)
+            || (48, 16) == (bitsPerPixel, bitsPerComponent) {
             actualBitsPerComponent = 16
             actualBitmapBytesPerRow = Int(round(size.width)) * 8
         }
