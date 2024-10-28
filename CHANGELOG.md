@@ -2,6 +2,13 @@
 
 -----
 
+### [2.23.1](https://www.github.com/guoyingtao/Mantis/compare/v2.23.0...v2.23.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* fix a crash for 48 bits bitmap ([#423](https://www.github.com/guoyingtao/Mantis/issues/423)) ([c2ea51a](https://www.github.com/guoyingtao/Mantis/commit/c2ea51aff165dea0712e4ec8ef1e89f52ef1986f))
+
 ## [2.23.0](https://www.github.com/guoyingtao/Mantis/compare/v2.22.0...v2.23.0) (2024-10-14)
 
 
