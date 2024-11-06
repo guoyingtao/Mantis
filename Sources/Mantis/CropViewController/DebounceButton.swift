@@ -75,19 +75,14 @@ class DebounceButton: UIButton {
     
     /// Executes the stored crop operation with proper state management
     private func performCropOperation() {
-        guard let operation = cropOperation else {
+        guard let cropOperation = cropOperation else {
             isProcessing = false
             return
         }
         
-        // Disable the button while processing
-        isEnabled = false
+        isEnabled = false        
+        cropOperation()
         
-        // Execute the stored crop operation
-        cropOperation?()
-        
-        // Simulate async operation completion
-        // In real implementation, this should be called after the actual crop operation completes
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             // Re-enable the button and reset processing state
             self?.isEnabled = true
