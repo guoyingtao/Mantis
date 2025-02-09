@@ -300,12 +300,12 @@ final class CropView: UIView {
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
             (cropAuxiliaryIndicatorView.frame.width - rotationControlView.frame.width) / 2
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
-        } else if Orientation.isLandscapeLeft {
+        } else if Orientation.isLandscapeRight {
             rotationControlView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
-        } else if Orientation.isLandscapeRight {
+        } else if Orientation.isLandscapeLeft {
             rotationControlView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationControlView.frame.width
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
@@ -483,7 +483,7 @@ extension CropView {
             contentRect.size.height = rect.height - 2 * cropViewPadding
             
             contentRect.origin.y = rect.origin.y + cropViewPadding
-            if Orientation.isLandscapeLeft {
+            if Orientation.isLandscapeRight {
                 contentRect.origin.x = rect.origin.x + cropViewPadding
             } else {
                 contentRect.origin.x = rect.origin.x + cropViewPadding + rotationControlViewHeight
