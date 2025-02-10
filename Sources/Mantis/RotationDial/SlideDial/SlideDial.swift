@@ -95,9 +95,9 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         
         if Orientation.treatAsPortrait {
             indicator.transform = CGAffineTransform(rotationAngle: 0)
-        } else if Orientation.isLandscapeLeft {
-            indicator.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
         } else if Orientation.isLandscapeRight {
+            indicator.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+        } else if Orientation.isLandscapeLeft {
             indicator.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
         }
     }
