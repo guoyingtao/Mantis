@@ -2,6 +2,13 @@
 
 -----
 
+### [2.23.2](https://www.github.com/guoyingtao/Mantis/compare/v2.23.1...v2.23.2) (2025-02-10)
+
+
+### Bug Fixes
+
+* fix the issue that rotation control jumps during orientation change ([#433](https://www.github.com/guoyingtao/Mantis/issues/433)) ([2b08f10](https://www.github.com/guoyingtao/Mantis/commit/2b08f10dd9d171a61eadcb72440e17b19555a63c))
+
 ### [2.23.1](https://www.github.com/guoyingtao/Mantis/compare/v2.23.0...v2.23.1) (2024-10-28)
 
 
