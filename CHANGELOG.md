@@ -2,6 +2,13 @@
 
 -----
 
+## [2.24.0](https://www.github.com/guoyingtao/Mantis/compare/v2.23.2...v2.24.0) (2025-03-26)
+
+
+### Features
+
+* make Transformation and CropRegion completely public ([#437](https://www.github.com/guoyingtao/Mantis/issues/437)) ([0ffcbd7](https://www.github.com/guoyingtao/Mantis/commit/0ffcbd7764c2b662479785c1cefeae78f246b36c))
+
 ### [2.23.2](https://www.github.com/guoyingtao/Mantis/compare/v2.23.1...v2.23.2) (2025-02-10)
 
 
