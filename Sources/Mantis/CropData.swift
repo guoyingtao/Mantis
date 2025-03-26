@@ -43,17 +43,25 @@ struct CropState: Equatable {
 }
 
 public struct Transformation: Equatable {
-    var offset: CGPoint
-    var rotation: CGFloat
-    var scale: CGFloat
-    var isManuallyZoomed: Bool
-    var initialMaskFrame: CGRect
-    var maskFrame: CGRect
-    var cropWorkbenchViewBounds: CGRect
-    var horizontallyFlipped: Bool
-    var verticallyFlipped: Bool
+    public var offset: CGPoint
+    public var rotation: CGFloat
+    public var scale: CGFloat
+    public var isManuallyZoomed: Bool
+    public var initialMaskFrame: CGRect
+    public var maskFrame: CGRect
+    public var cropWorkbenchViewBounds: CGRect
+    public var horizontallyFlipped: Bool
+    public var verticallyFlipped: Bool
     
-    public init(offset: CGPoint, rotation: CGFloat, scale: CGFloat, isManuallyZoomed: Bool, initialMaskFrame: CGRect, maskFrame: CGRect, cropWorkbenchViewBounds: CGRect, horizontallyFlipped: Bool, verticallyFlipped: Bool) {
+    public init(offset: CGPoint,
+                rotation: CGFloat,
+                scale: CGFloat,
+                isManuallyZoomed: Bool,
+                initialMaskFrame: CGRect,
+                maskFrame: CGRect,
+                cropWorkbenchViewBounds: CGRect,
+                horizontallyFlipped: Bool,
+                verticallyFlipped: Bool) {
         self.offset = offset
         self.rotation = rotation
         self.scale = scale
@@ -83,6 +91,23 @@ public struct CropRegion: Equatable {
     public var topRight: CGPoint
     public var bottomLeft: CGPoint
     public var bottomRight: CGPoint
+    
+    public init(topLeft: CGPoint,
+                topRight: CGPoint,
+                bottomLeft: CGPoint,
+                bottomRight: CGPoint) {
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+    }
+    
+    public static func == (lhs: CropRegion, rhs: CropRegion) -> Bool {
+        return lhs.topLeft == rhs.topLeft
+        && lhs.topRight == rhs.topRight
+        && lhs.bottomLeft == rhs.bottomLeft
+        && lhs.bottomRight == rhs.bottomRight
+    }
 }
 
 public typealias CropInfo = (
