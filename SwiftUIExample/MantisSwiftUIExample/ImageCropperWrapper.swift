@@ -12,7 +12,7 @@ struct ImageCropperWrapper: View {
     @Binding var image: UIImage?
     @Binding var cropShapeType: Mantis.CropShapeType
     @Binding var presetFixedRatioType: Mantis.PresetFixedRatioType
-    @Binding var type: MantisImageCropperType
+    @Binding var type: ImageCropper.CropperType
     @Binding var transformation: Transformation?
     
     @Environment(\.presentationMode) var presentationMode

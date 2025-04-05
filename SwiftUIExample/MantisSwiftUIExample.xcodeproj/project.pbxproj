@@ -19,7 +19,6 @@
 		F24DCFB529A3CAB100D8E8C1 /* SourceTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFB429A3CAB100D8E8C1 /* SourceTypeSelectionView.swift */; };
 		F24DCFB729A3CB9F00D8E8C1 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFB629A3CB9F00D8E8C1 /* ImagePickerView.swift */; };
 		F24DCFB929A3CC3F00D8E8C1 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFB829A3CC3F00D8E8C1 /* CameraView.swift */; };
-		F2D700362DA1B24A0063EE6C /* ImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D700352DA1B24A0063EE6C /* ImageCropper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +38,6 @@
 		F24DCFB429A3CAB100D8E8C1 /* SourceTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceTypeSelectionView.swift; sourceTree = "<group>"; };
 		F24DCFB629A3CB9F00D8E8C1 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		F24DCFB829A3CC3F00D8E8C1 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		F2D700352DA1B24A0063EE6C /* ImageCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +76,6 @@
 				5F5266B2263B490400615369 /* MantisSwiftUIExampleApp.swift */,
 				5F5266B4263B490400615369 /* ContentView.swift */,
 				F24836F4299DE6AD0008477C /* ImageCropperWrapper.swift */,
-				F2D700352DA1B24A0063EE6C /* ImageCropper.swift */,
 				F24836F6299DE7630008477C /* AdaptiveStack.swift */,
 				F24836F8299E14B00008477C /* CustomViewController.swift */,
 				F24836FA299E46C90008477C /* CropShapeListView.swift */,
@@ -231,7 +228,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F24DCFB529A3CAB100D8E8C1 /* SourceTypeSelectionView.swift in Sources */,
-				F2D700362DA1B24A0063EE6C /* ImageCropper.swift in Sources */,
 				F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */,
 				5F5266B5263B490400615369 /* ContentView.swift in Sources */,
 				F24DCFB929A3CC3F00D8E8C1 /* CameraView.swift in Sources */,
