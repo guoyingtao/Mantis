@@ -13,7 +13,7 @@ import SwiftUI
 public struct ImageCropper: UIViewControllerRepresentable {
     public enum CropperType {
         case normal
-        case noRotaionDial
+        case noRotationDial
         case noAttachedToolbar
     }
 
