@@ -1,5 +1,5 @@
 //
-//  ImageCropper.swift
+//  ImageCropperWrapper.swift
 //  MantisSwiftUIExample
 //
 //  Created by Yingtao Guo on 2/16/23.
@@ -12,7 +12,7 @@ struct ImageCropperWrapper: View {
     @Binding var image: UIImage?
     @Binding var cropShapeType: Mantis.CropShapeType
     @Binding var presetFixedRatioType: Mantis.PresetFixedRatioType
-    @Binding var type: ImageCropper.CropperType
+    @Binding var type: CropperType
     @Binding var transformation: Transformation?
     
     @Environment(\.presentationMode) var presentationMode
@@ -22,7 +22,7 @@ struct ImageCropperWrapper: View {
         case .normal:
             makeNormalImageCropper()
         case .noRotationDial:
-            makeImageCropperHiddingRotationDial()
+            makeImageCropperHidingRotationDial()
         case .noAttachedToolbar:
             makeImageCropperWithoutAttachedToolbar()
         }

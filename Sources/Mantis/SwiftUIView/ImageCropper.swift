@@ -11,12 +11,6 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct ImageCropper: UIViewControllerRepresentable {
-    public enum CropperType {
-        case normal
-        case noRotationDial
-        case noAttachedToolbar
-    }
-
     let config: Mantis.Config
     
     @Binding var image: UIImage?
@@ -45,6 +39,7 @@ public struct ImageCropper: UIViewControllerRepresentable {
         public func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             parent.image = cropped
             parent.transformation = transformation
+            parent.cropInfo = cropInfo
             parent.presentationMode.wrappedValue.dismiss()
         }
         

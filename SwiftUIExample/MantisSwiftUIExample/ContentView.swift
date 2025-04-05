@@ -8,13 +8,19 @@
 import SwiftUI
 import Mantis
 
+public enum CropperType {
+    case normal
+    case noRotationDial
+    case noAttachedToolbar
+}
+
 struct ContentView: View {
     @State private var image: UIImage? = UIImage(named: "sunflower")!
     @State private var showingCropper = false
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
-    @State private var cropperType: ImageCropper.CropperType = .normal
+    @State private var cropperType: CropperType = .normal
     @State private var contentHeight: CGFloat = 0
     
     @State private var showImagePicker = false
@@ -105,7 +111,7 @@ struct ContentView: View {
                 showingCropper = true
             }.font(.title)
             Button("Hide Rotation Dial") {
-                cropperType = .noRotaionDial
+                cropperType = .noRotationDial
                 showingCropper = true
             }.font(.title)
             Button("Hide Attached Toolbar") {
