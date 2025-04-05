@@ -21,7 +21,7 @@ struct ImageCropperWrapper: View {
         switch type {
         case .normal:
             makeNormalImageCropper()
-        case .noRotaionDial:
+        case .noRotationDial:
             makeImageCropperHiddingRotationDial()
         case .noAttachedToolbar:
             makeImageCropperWithoutAttachedToolbar()
