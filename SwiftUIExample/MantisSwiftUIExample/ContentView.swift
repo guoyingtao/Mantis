@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
-    @State private var cropperType: ImageCropperType = .normal
+    @State private var cropperType: MantisImageCropperType = .normal
     @State private var contentHeight: CGFloat = 0
     
     @State private var showImagePicker = false
@@ -32,7 +32,7 @@ struct ContentView: View {
             createFeatureDemoList()
         }
         .fullScreenCover(isPresented: $showingCropper, content: {
-            ImageCropper(image: $image,
+            ImageCropperWrapper(image: $image,
                          cropShapeType: $cropShapeType,
                          presetFixedRatioType: $presetFixedRatioType,
                          type: $cropperType, transformation: $transformation)
