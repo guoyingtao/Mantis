@@ -77,5 +77,7 @@ public struct ImageCropper: UIViewControllerRepresentable {
     
     public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         // No updates needed as we recreate the view controller when necessary
+        // If future requirements allow for dynamic updates without recreation (e.g., changing
+        // configuration while preserving crop state), this method would need implementation.
     }
 }
