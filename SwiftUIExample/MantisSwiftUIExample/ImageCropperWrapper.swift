@@ -38,7 +38,7 @@ extension ImageCropperWrapper {
         return ImageCropper(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
     }
     
-    func makeImageCropperHiddingRotationDial() -> some View {
+    func makeImageCropperHidingRotationDial() -> some View {
         var config = Mantis.Config()
         config.cropViewConfig.showAttachedRotationControlView = false
 
