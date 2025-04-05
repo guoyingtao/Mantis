@@ -8,6 +8,11 @@
 import Mantis
 import SwiftUI
 
+/**
+* A SwiftUI wrapper that provides different configurations for the Mantis image cropper.
+* This view adapts to different cropper types and provides a convenient API for
+* integrating the Mantis image cropping functionality into SwiftUI views.
+*/
 struct ImageCropperWrapper: View {
     @Binding var image: UIImage?
     @Binding var cropShapeType: Mantis.CropShapeType

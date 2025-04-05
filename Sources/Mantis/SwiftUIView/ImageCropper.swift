@@ -53,13 +53,29 @@ public struct ImageCropper: UIViewControllerRepresentable {
     }
     
     public func makeUIViewController(context: Context) -> UIViewController {
-        let cropViewController = Mantis.cropViewController(image: image!,
+        guard let imageToEdit = image else {
+            // Return an appropriate fallback view controller or handle the nil case
+            let emptyVC = UIViewController()
+            // Optionally add a label explaining the error
+            let label = UILabel()
+            label.text = "No image provided for cropping"
+            label.textAlignment = .center
+            emptyVC.view.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                label.centerXAnchor.constraint(equalTo: emptyVC.view.centerXAnchor),
+                label.centerYAnchor.constraint(equalTo: emptyVC.view.centerYAnchor)
+            ])
+            return emptyVC
+        }
+        
+        let cropViewController = Mantis.cropViewController(image: imageToEdit,
                                                            config: config)
         cropViewController.delegate = context.coordinator
         return cropViewController
     }
     
     public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        
+        // No updates needed as we recreate the view controller when necessary
     }
 }
