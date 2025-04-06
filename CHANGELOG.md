@@ -2,6 +2,13 @@
 
 -----
 
+## [2.25.0](https://www.github.com/guoyingtao/Mantis/compare/v2.24.0...v2.25.0) (2025-04-06)
+
+
+### Features
+
+* add ImageCropperView wrapped for SwiftUI users ([fd33295](https://www.github.com/guoyingtao/Mantis/commit/fd332959193801990f7e32ef8c00ca4c0db0fe91))
+
 ## [2.24.0](https://www.github.com/guoyingtao/Mantis/compare/v2.23.2...v2.24.0) (2025-03-26)
 
 
