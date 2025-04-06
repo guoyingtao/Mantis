@@ -66,11 +66,11 @@ github "guoyingtao/Mantis"
 <details>
 <summary><strong>Basic</strong></summary>
 
-* Create a CropViewController of Mantis with default config
+* Create a CropViewController from Mantis with default config
 
 **You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13+ when the cropViewController is presented**
 
-  ** UIKit **
+  ### UIKit
 
 ```Swift
     let cropViewController = Mantis.cropViewController(image: <Your Image>)
@@ -78,9 +78,9 @@ github "guoyingtao/Mantis"
     <Your ViewController>.present(cropViewController, animated: true)
 ```
 
-  ** SwiftUI **
+  ### SwiftUI
 
-* Create a ImageCropperView of Mantis with default config
+* Create an ImageCropperView from Mantis with default config
 
 ```Swift
 struct MyView: View {
