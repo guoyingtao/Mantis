@@ -10,6 +10,25 @@ import SwiftUI
 #endif
 
 @available(iOS 13.0, *)
+
+/// A SwiftUI view that wraps the Mantis image cropping functionality.
+///
+/// Use this view to present a cropping interface to the user. The cropped image,
+/// transformation, and crop information will be returned through bindings.
+///
+/// Example usage:
+/// ```
+/// @State private var image: UIImage?
+/// @State private var transformation: Transformation?
+/// @State private var cropInfo: CropInfo?
+///
+/// var body: some View {
+///     ImageCropper(
+///         image: $image,
+///         transformation: $transformation,
+///         cropInfo: $cropInfo
+///     )
+/// }
 public struct ImageCropper: UIViewControllerRepresentable {
     let config: Mantis.Config
     
@@ -26,7 +45,7 @@ public struct ImageCropper: UIViewControllerRepresentable {
         self.config = config
         self._image = image
         self._transformation = transformation
-        self._cropInfo = cropInfo        
+        self._cropInfo = cropInfo
     }
     
     public class Coordinator: CropViewControllerDelegate {
@@ -69,8 +88,10 @@ public struct ImageCropper: UIViewControllerRepresentable {
             return emptyVC
         }
         
-        let cropViewController = Mantis.cropViewController(image: imageToEdit,
-                                                           config: config)
+        let cropViewController = Mantis.cropViewController(
+            image: imageToEdit,
+            config: config
+        )
         cropViewController.delegate = context.coordinator
         return cropViewController
     }
