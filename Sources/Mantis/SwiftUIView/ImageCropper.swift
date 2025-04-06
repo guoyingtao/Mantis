@@ -32,6 +32,13 @@ import SwiftUI
 ///     )
 /// }
 /// `
+/// This view handles the `cropViewControllerDidCrop` and `cropViewControllerDidCancel` delegate methods
+/// of `Mantis.CropViewController`. These methods are implemented by default in the `Coordinator`.
+///
+/// If you need to handle more delegate methods (e.g., `cropViewControllerDidBeginResize`,
+/// `cropViewControllerDidImageTransformed`, etc.), you will need to implement your own `UIViewControllerRepresentable`
+/// and `Coordinator` to manage those delegate methods.
+/// 
 public struct ImageCropperView: UIViewControllerRepresentable {
     let config: Mantis.Config
     
