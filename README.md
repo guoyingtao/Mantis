@@ -35,13 +35,6 @@
 * MacOS 10.15+
 * Xcode 10.0+
 
-## Breaking Changes in 2.x.x
-* Add CropViewConfig
-  * move some properties from Config to CropViewConfig
-  * make roationControlViewConfig as a property of CropViewConfig
-* Refactor CropToolbarConfigProtocol
-  * rename some properties
-
 ## Install
 
 <details>
@@ -73,14 +66,36 @@ github "guoyingtao/Mantis"
 <details>
 <summary><strong>Basic</strong></summary>
 
-* Create a cropViewController in Mantis with default config and default mode
+* Create a CropViewController from Mantis with default config
 
 **You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13+ when the cropViewController is presented**
+
+### UIKit
 
 ```Swift
     let cropViewController = Mantis.cropViewController(image: <Your Image>)
     cropViewController.delegate = self
     <Your ViewController>.present(cropViewController, animated: true)
+```
+
+### SwiftUI
+
+* Create an ImageCropperView from Mantis with default config
+
+```Swift
+struct MyView: View {
+    @State private var image: UIImage?
+    @State private var transformation: Transformation?
+    @State private var cropInfo: CropInfo?
+
+    var body: some View {
+        ImageCropperView(
+            image: $image,
+            transformation: $transformation,
+            cropInfo: $cropInfo
+        )
+    }
+}
 ```
 
 * The caller needs to conform CropViewControllerDelegate
