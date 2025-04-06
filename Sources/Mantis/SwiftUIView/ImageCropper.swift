@@ -16,20 +16,23 @@ import SwiftUI
 /// Use this view to present a cropping interface to the user. The cropped image,
 /// transformation, and crop information will be returned through bindings.
 ///
-/// Example usage:
-/// ```
+/// - Important: Requires importing the Mantis framework.
+///
+/// ### Example
+/// ```swift
 /// @State private var image: UIImage?
 /// @State private var transformation: Transformation?
 /// @State private var cropInfo: CropInfo?
 ///
 /// var body: some View {
-///     ImageCropper(
+///     ImageCropperView(
 ///         image: $image,
 ///         transformation: $transformation,
 ///         cropInfo: $cropInfo
 ///     )
 /// }
-public struct ImageCropper: UIViewControllerRepresentable {
+/// `
+public struct ImageCropperView: UIViewControllerRepresentable {
     let config: Mantis.Config
     
     @Binding var image: UIImage?
@@ -38,6 +41,13 @@ public struct ImageCropper: UIViewControllerRepresentable {
     
     @Environment(\.presentationMode) var presentationMode
     
+    /// Creates an `ImageCropper` view with optional custom configuration and required image bindings.
+    ///
+    /// - Parameters:
+    ///   - config: An optional `Mantis.Config` object to customize the cropping behavior. Defaults to `.init()`.
+    ///   - image: A binding to the original image to be cropped.
+    ///   - transformation: A binding to receive the transformation (rotation, scaling, etc.) applied to the image.
+    ///   - cropInfo: A binding to receive information about the selected crop area.
     public init(config: Mantis.Config = Mantis.Config(),
                 image: Binding<UIImage?>,
                 transformation: Binding<Transformation?>,
@@ -49,9 +59,9 @@ public struct ImageCropper: UIViewControllerRepresentable {
     }
     
     public class Coordinator: CropViewControllerDelegate {
-        var parent: ImageCropper
+        var parent: ImageCropperView
         
-        init(_ parent: ImageCropper) {
+        init(_ parent: ImageCropperView) {
             self.parent = parent
         }
         

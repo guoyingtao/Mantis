@@ -40,20 +40,20 @@ extension ImageCropperWrapper {
         config.cropViewConfig.cropShapeType = cropShapeType
         config.presetFixedRatioType = presetFixedRatioType
         
-        return ImageCropper(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
+        return ImageCropperView(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
     }
     
     func makeImageCropperHidingRotationDial() -> some View {
         var config = Mantis.Config()
         config.cropViewConfig.showAttachedRotationControlView = false
 
-        return ImageCropper(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
+        return ImageCropperView(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
     }
     
     func makeImageCropperWithoutAttachedToolbar() -> some View {
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
         
-        return ImageCropper(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
+        return ImageCropperView(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil))
     }
 }
