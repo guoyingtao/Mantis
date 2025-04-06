@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "Mantis"
-  s.version      = "2.24.0"
+  s.version      = "2.25.0"
   s.summary      = "An iOS Image cropping library, which mimics the Photo App written in Swift and provides rich cropping interactions."
 
   s.description  = <<-DESC
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/guoyingtao/Mantis"
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author             = { "Yingtao Guo" => "guoyingtao@outlook.com" }
-  s.social_media_url   = "http://twitter.com/guoyingtao"
+  s.social_media_url   = "https://x.com/guoyingtao"
   s.platform     = :ios
   s.swift_version = "5.0"
   s.ios.deployment_target = "12.0"
