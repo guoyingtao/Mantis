@@ -52,7 +52,7 @@ extension CGImage {
                                 space: colorSpaceRef,
                                 bitmapInfo: bitmapInfoData)
         ??
-        createBackupCGContext(size: outputSize, bitmapBytesPerRow: bitsPerComponent, colorSpaceRef: colorSpaceRef)
+        createBackupCGContext(size: outputSize, bitmapBytesPerRow: bitmapBytesPerRow, colorSpaceRef: colorSpaceRef)
         
         guard let context = context else {
             throw ImageProcessError.failedToBuildContext(colorSpaceModel: colorSpaceRef.model,
