@@ -2,6 +2,13 @@
 
 -----
 
+### [2.25.1](https://www.github.com/guoyingtao/Mantis/compare/v2.25.0...v2.25.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* fix the wrong parameter issue for createBackupCGContext ([#447](https://www.github.com/guoyingtao/Mantis/issues/447)) ([d7c7c3b](https://www.github.com/guoyingtao/Mantis/commit/d7c7c3b50c614d01ae6e1d61b058fc0d50820e6c))
+
 ## [2.25.0](https://www.github.com/guoyingtao/Mantis/compare/v2.24.0...v2.25.0) (2025-04-06)
 
 
