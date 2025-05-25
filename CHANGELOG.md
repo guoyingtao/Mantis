@@ -2,6 +2,13 @@
 
 -----
 
+### [2.25.2](https://www.github.com/guoyingtao/Mantis/compare/v2.25.1...v2.25.2) (2025-05-25)
+
+
+### Bug Fixes
+
+* drop macOS support and update min support version to v12 for iOS ([#452](https://www.github.com/guoyingtao/Mantis/issues/452)) ([a977c8c](https://www.github.com/guoyingtao/Mantis/commit/a977c8c67ee4934eabc22d4a44a11dcc81a215eb))
+
 ### [2.25.1](https://www.github.com/guoyingtao/Mantis/compare/v2.25.0...v2.25.1) (2025-05-16)
 
 
