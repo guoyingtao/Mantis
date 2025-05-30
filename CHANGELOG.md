@@ -2,6 +2,13 @@
 
 -----
 
+### [2.25.3](https://www.github.com/guoyingtao/Mantis/compare/v2.25.2...v2.25.3) (2025-05-30)
+
+
+### Bug Fixes
+
+* Add macCatalyst as a supported platform in Package.swift ([941d4c4](https://www.github.com/guoyingtao/Mantis/commit/941d4c45fa393a2e937e69f5d365d46743d5583c))
+
 ### [2.25.2](https://www.github.com/guoyingtao/Mantis/compare/v2.25.1...v2.25.2) (2025-05-25)
 
 
