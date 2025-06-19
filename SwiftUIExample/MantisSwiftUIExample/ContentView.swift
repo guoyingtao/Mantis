@@ -39,9 +39,9 @@ struct ContentView: View {
         }
         .fullScreenCover(isPresented: $showingCropper, content: {
             ImageCropperWrapper(image: $image,
-                         cropShapeType: $cropShapeType,
-                         presetFixedRatioType: $presetFixedRatioType,
-                         type: $cropperType, transformation: $transformation)
+                                cropShapeType: $cropShapeType,
+                                presetFixedRatioType: $presetFixedRatioType,
+                                type: $cropperType, transformation: $transformation)
             .onDisappear(perform: reset)
             .ignoresSafeArea()
         })
