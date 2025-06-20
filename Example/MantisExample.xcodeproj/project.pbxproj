@@ -22,6 +22,7 @@
 		CCBF2F602525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */; };
 		D38FDBDF8FE14BEE4ECFCCBA /* libPods-MantisExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C12649D57221BADDF13056F /* libPods-MantisExampleTests.a */; };
 		F24DCFE529A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */; };
+		F2C58BD82E03AD08006F92CF /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C58BD72E03AD08006F92CF /* DemoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		9326C1CDF121300C5CAAE2BE /* Pods-MantisExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.debug.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.debug.xcconfig"; sourceTree = "<group>"; };
 		CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizedCropToolbarWithoutList.swift; sourceTree = "<group>"; };
 		F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWaitingIndicator.swift; sourceTree = "<group>"; };
+		F2C58BD72E03AD08006F92CF /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 		5FC10B08217A9EDF00582874 = {
 			isa = PBXGroup;
 			children = (
+				F2C58BD72E03AD08006F92CF /* DemoViewController.swift */,
 				F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */,
 				66F909BC287B601A007E2FC6 /* MyNavigationCropToolbar.swift */,
 				5F90A3CA23DCEBE800D9F27E /* MantisExample.entitlements */,
@@ -316,6 +319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2C58BD82E03AD08006F92CF /* DemoViewController.swift in Sources */,
 				F24DCFE529A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift in Sources */,
 				5FD045EA245619D400B9D3D2 /* CustomizedCropToolbar.swift in Sources */,
 				5FC10B17217A9EDF00582874 /* ViewController.swift in Sources */,

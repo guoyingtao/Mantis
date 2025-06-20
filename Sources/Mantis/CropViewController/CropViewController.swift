@@ -585,6 +585,27 @@ extension CropViewController: CropToolbarDelegate {
 
 // API
 extension CropViewController {
+    @available(iOS 13.0, *)
+    public func crop(by cropInfo: CropInfo) {
+        guard let image = cropView.image.crop(by: cropInfo) else {
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                self.delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
+            }
+            return
+        }
+        
+        let transformation = cropView.makeTransformation()
+        
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            delegate?.cropViewControllerDidCrop(self,
+                                                cropped: image,
+                                                transformation: transformation,
+                                                cropInfo: cropInfo)
+        }
+    }
+        
     public func crop() {
         switch config.cropMode {
         case .sync:
