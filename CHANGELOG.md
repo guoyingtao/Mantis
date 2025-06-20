@@ -2,6 +2,13 @@
 
 -----
 
+## [2.26.0](https://www.github.com/guoyingtao/Mantis/compare/v2.25.3...v2.26.0) (2025-06-20)
+
+
+### Features
+
+* add headless crop support ([#463](https://www.github.com/guoyingtao/Mantis/issues/463)) ([22994b8](https://www.github.com/guoyingtao/Mantis/commit/22994b8a642c2b10752f27a91c4bdb5ba394f6bf))
+
 ### [2.25.3](https://www.github.com/guoyingtao/Mantis/compare/v2.25.2...v2.25.3) (2025-05-30)
 
 
