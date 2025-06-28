@@ -187,6 +187,10 @@ open class CropViewController: UIViewController {
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if initialLayout == false {
+            guard cropView.bounds.size != .zero else {
+                return
+            }
+            
             initialLayout = true
             view.layoutIfNeeded()
             cropView.resetComponents()
