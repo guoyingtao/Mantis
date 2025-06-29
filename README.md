@@ -315,8 +315,6 @@ Below are apps that use the Mantis framework. If your app also uses Mantis and y
 ### Backers & Sponsors
 Become a sponsor through [GitHub Sponsors](https://github.com/sponsors/guoyingtao). 
 
-[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
-
 ## Credits
 * The crop feature is strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 
 * The rotation feature is inspired by [IGRPhotoTweaks](https://github.com/IGRSoft/IGRPhotoTweaks)
