@@ -2,6 +2,13 @@
 
 -----
 
+### [2.26.1](https://www.github.com/guoyingtao/Mantis/compare/v2.26.0...v2.26.1) (2025-08-09)
+
+
+### Bug Fixes
+
+* fix crop view displaying issue on iOS 26 ([#466](https://www.github.com/guoyingtao/Mantis/issues/466)) ([7462405](https://www.github.com/guoyingtao/Mantis/commit/74624054cdef2d8bee1ac3daf55ca1589bc42167))
+
 ## [2.26.0](https://www.github.com/guoyingtao/Mantis/compare/v2.25.3...v2.26.0) (2025-06-20)
 
 
