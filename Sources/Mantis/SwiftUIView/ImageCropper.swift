@@ -21,7 +21,7 @@ public enum CropAction {
 
 @available(iOS 13.0, *)
 public enum CropStatus {
-    case successed
+    case succeeded
     case failed
 }
 @available(iOS 13.0, *)
@@ -112,17 +112,20 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             DispatchQueue.main.async {
                 self.isProcessingAction = false
                 self.parent.onDismiss()
-                self.parent.onCropCompleted(.successed)
+                self.parent.onCropCompleted(.succeeded)
             }
         }
         
         public func cropViewControllerDidCancel(_ cropViewController: Mantis.CropViewController, original: UIImage) {
-            parent.onDismiss()
+            DispatchQueue.main.async {
+                self.parent.onDismiss()
+            }
         }
         
-        public func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {
+        public func cropViewControllerDidFailToCrop(_ cropViewController: Mantis.CropViewController, original: UIImage) {
             DispatchQueue.main.async {
                 self.isProcessingAction = false
+                self.lastProcessedAction = nil
                 self.parent.onDismiss()
                 self.parent.onCropCompleted(.failed)
             }
