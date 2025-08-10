@@ -20,6 +20,11 @@ public enum CropAction {
 }
 
 @available(iOS 13.0, *)
+public enum CropStatus {
+    case successed
+    case failed
+}
+@available(iOS 13.0, *)
 /// A SwiftUI view that wraps the Mantis image cropping functionality.
 ///
 /// Use this view to present a cropping interface to the user. The cropped image,
@@ -48,6 +53,7 @@ public enum CropAction {
 /// `cropViewControllerDidImageTransformed`, etc.), you will need to implement your own `UIViewControllerRepresentable`
 /// and `Coordinator` to manage those delegate methods.
 ///
+
 public struct ImageCropperView: UIViewControllerRepresentable {
     let config: Mantis.Config
     
@@ -57,6 +63,7 @@ public struct ImageCropperView: UIViewControllerRepresentable {
     @Binding var action: CropAction?
     
     let onDismiss: () -> Void
+    let onCropCompleted: (_ status: CropStatus) -> Void
     
     /// Creates an `ImageCropper` view with optional custom configuration and required image bindings.
     ///
@@ -70,13 +77,15 @@ public struct ImageCropperView: UIViewControllerRepresentable {
                 transformation: Binding<Transformation?>,
                 cropInfo: Binding<CropInfo?>,
                 action: Binding<CropAction?> = .constant(nil),
-                onDismiss: @escaping () -> Void = {}) {
+                onDismiss: @escaping () -> Void = {},
+                onCropCompleted: @escaping (_ status: CropStatus) -> Void = { _  in}) {
         self.config = config
         self._image = image
         self._transformation = transformation
         self._cropInfo = cropInfo
         self._action = action
         self.onDismiss = onDismiss
+        self.onCropCompleted = onCropCompleted
     }
     
     public class Coordinator: CropViewControllerDelegate {
@@ -103,11 +112,20 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             DispatchQueue.main.async {
                 self.isProcessingAction = false
                 self.parent.onDismiss()
+                self.parent.onCropCompleted(.successed)
             }
         }
         
         public func cropViewControllerDidCancel(_ cropViewController: Mantis.CropViewController, original: UIImage) {
             parent.onDismiss()
+        }
+        
+        public func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {
+            DispatchQueue.main.async {
+                self.isProcessingAction = false
+                self.parent.onDismiss()
+                self.parent.onCropCompleted(.failed)
+            }
         }
         
         func handleAction() {
