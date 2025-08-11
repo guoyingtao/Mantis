@@ -2,6 +2,18 @@
 
 -----
 
+## [2.27.0](https://www.github.com/guoyingtao/Mantis/compare/v2.26.0...v2.27.0) (2025-08-11)
+
+
+### Features
+
+* support callback when crop is done ([#471](https://www.github.com/guoyingtao/Mantis/issues/471)) ([dcf5728](https://www.github.com/guoyingtao/Mantis/commit/dcf5728c58e9d8e058d2e69fc61b21e3141b2288))
+
+
+### Bug Fixes
+
+* fix crop view displaying issue on iOS 26 ([#466](https://www.github.com/guoyingtao/Mantis/issues/466)) ([7462405](https://www.github.com/guoyingtao/Mantis/commit/74624054cdef2d8bee1ac3daf55ca1589bc42167))
+
 ## [2.26.0](https://www.github.com/guoyingtao/Mantis/compare/v2.25.3...v2.26.0) (2025-06-20)
 
 
