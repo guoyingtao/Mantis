@@ -98,6 +98,14 @@ struct MyView: View {
 }
 ```
 
+> **Note:**  
+> - To start a crop operation programmatically, use the existing `action` binding(for `ImageCropperView`):  
+>   ```swift
+>   action = .crop
+>   ```
+> - To receive the result of the crop (success or failure), use the new `onCropCompleted` callback.  
+>   This is especially useful because cropping may not complete instantly in all cases, so relying on this callback ensures you update your UI only after the operation finishes.
+
 * The caller needs to conform CropViewControllerDelegate
 ```swift
 public protocol CropViewControllerDelegate: class {
