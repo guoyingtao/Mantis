@@ -105,11 +105,11 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         public func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             isProcessingAction = true
             
-            parent.image = cropped
-            parent.transformation = transformation
-            parent.cropInfo = cropInfo
-            
             DispatchQueue.main.async {
+                self.parent.image = cropped
+                self.parent.transformation = transformation
+                self.parent.cropInfo = cropInfo
+                
                 self.isProcessingAction = false
                 self.parent.onDismiss()
                 self.parent.onCropCompleted(.succeeded)
