@@ -104,7 +104,8 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         
         public func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             isProcessingAction = true
-            DispatchQueue.main.async {
+
+          DispatchQueue.main.async {
                 self.parent.image = cropped
                 self.parent.transformation = transformation
                 self.parent.cropInfo = cropInfo
