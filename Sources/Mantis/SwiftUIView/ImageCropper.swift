@@ -11,12 +11,12 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public enum CropAction {
-//    case reset
-//    case rotateLeft
-//    case rotateRight
+    //    case reset
+    //    case rotateLeft
+    //    case rotateRight
     case crop
-//    case undo
-//    case setAspectRatio(CGFloat)
+    //    case undo
+    //    case setAspectRatio(CGFloat)
 }
 
 @available(iOS 13.0, *)
@@ -45,7 +45,7 @@ public enum CropStatus {
 ///         cropInfo: $cropInfo
 ///     )
 /// }
-/// `
+/// ```
 /// This view handles the `cropViewControllerDidCrop` and `cropViewControllerDidCancel` delegate methods
 /// of `Mantis.CropViewController`. These methods are implemented by default in the `Coordinator`.
 ///
@@ -104,8 +104,8 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         
         public func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             isProcessingAction = true
-
-          DispatchQueue.main.async {
+            
+            DispatchQueue.main.async {
                 self.parent.image = cropped
                 self.parent.transformation = transformation
                 self.parent.cropInfo = cropInfo
@@ -134,7 +134,7 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             guard !isProcessingAction else { return }
             
             guard let cropVC = cropViewController else { return }
-                        
+            
             guard let currentAction = actionBinding.wrappedValue else { return }
             
             if let lastAction = lastProcessedAction, areActionsEqual(lastAction, currentAction) {
