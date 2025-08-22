@@ -422,6 +422,7 @@ extension CropViewController {
         guard config.showAttachedCropToolbar else {
             stackView?.removeArrangedSubview(cropStackView)
             stackView?.addArrangedSubview(cropStackView)
+            view.layoutIfNeeded()
             return
         }
         
