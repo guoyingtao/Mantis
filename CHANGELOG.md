@@ -2,6 +2,21 @@
 
 -----
 
+## [2.27.0](https://www.github.com/guoyingtao/Mantis/compare/v2.26.0...v2.27.0) (2025-08-22)
+
+
+### Features
+
+* support callback when crop is done ([#471](https://www.github.com/guoyingtao/Mantis/issues/471)) ([dcf5728](https://www.github.com/guoyingtao/Mantis/commit/dcf5728c58e9d8e058d2e69fc61b21e3141b2288))
+
+
+### Bug Fixes
+
+* avoid SwiftUI warning by scheduling binding updates async in cropViewControllerDidCrop ([#475](https://www.github.com/guoyingtao/Mantis/issues/475)) ([d1069ce](https://www.github.com/guoyingtao/Mantis/commit/d1069ce75468e7a301b4e74e57c03d103f4626e9))
+* fix crop view displaying issue on iOS 26 ([#466](https://www.github.com/guoyingtao/Mantis/issues/466)) ([7462405](https://www.github.com/guoyingtao/Mantis/commit/74624054cdef2d8bee1ac3daf55ca1589bc42167))
+* fix crop view displaying issue on iOS 26 ([#476](https://www.github.com/guoyingtao/Mantis/issues/476)) ([c19db4a](https://www.github.com/guoyingtao/Mantis/commit/c19db4a0613e829a5274f19b3910f73b415f645d))
+* publishing changes from not main thread ([#474](https://www.github.com/guoyingtao/Mantis/issues/474)) ([4ddb8ff](https://www.github.com/guoyingtao/Mantis/commit/4ddb8ff72a8cfb05a84cc3f32cc930f53dd2e45b))
+
 ## [2.26.0](https://www.github.com/guoyingtao/Mantis/compare/v2.25.3...v2.26.0) (2025-06-20)
 
 
