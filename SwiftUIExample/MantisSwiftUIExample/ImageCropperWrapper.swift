@@ -40,13 +40,38 @@ struct ImageCropperWrapper: View {
             .if(type == .noAttachedToolbar) { view in
                 view.toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button(action: {
                             presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "xmark")
                         }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
+                        Button(action: {
+                            action = .rotateLeft
+                        }) {
+                            Image(systemName: "rotate.left")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            action = .rotateRight
+                        }) {
+                            Image(systemName: "rotate.right")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            action = .reset
+                        }) {
+                            Image(systemName: "arrow.counterclockwise")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
                             action = .crop
+                        }) {
+                            Image(systemName: "checkmark")
                         }
                     }
                 }

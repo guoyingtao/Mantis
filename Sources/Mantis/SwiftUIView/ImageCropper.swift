@@ -11,9 +11,9 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public enum CropAction {
-    //    case reset
-    //    case rotateLeft
-    //    case rotateRight
+    case reset
+    case rotateLeft
+    case rotateRight
     case crop
     //    case undo
     //    case setAspectRatio(CGFloat)
@@ -150,14 +150,17 @@ public struct ImageCropperView: UIViewControllerRepresentable {
                 DispatchQueue.main.async {
                     self.isProcessingAction = false
                 }
-            default:
-                DispatchQueue.main.async {
-                    self.isProcessingAction = false
-                    self.lastProcessedAction = nil
-                }
+            case .reset:
+                cropVC.didSelectReset()
+            case .rotateLeft:
+                cropVC.didSelectCounterClockwiseRotate()
+            case .rotateRight:
+                cropVC.didSelectClockwiseRotate()
             }
             
             DispatchQueue.main.async {
+                self.isProcessingAction = false
+                self.lastProcessedAction = nil
                 self.actionBinding.wrappedValue = nil
             }
         }
