@@ -2,6 +2,13 @@
 
 -----
 
+## [2.28.0](https://www.github.com/guoyingtao/Mantis/compare/v2.27.0...v2.28.0) (2025-10-18)
+
+
+### Features
+
+* support more actions for CropAction ([#480](https://www.github.com/guoyingtao/Mantis/issues/480)) ([3b3f45b](https://www.github.com/guoyingtao/Mantis/commit/3b3f45bbbeb0469c6b3acd90840dd8cd6428584d))
+
 ## [2.27.0](https://www.github.com/guoyingtao/Mantis/compare/v2.26.0...v2.27.0) (2025-08-22)
 
 
