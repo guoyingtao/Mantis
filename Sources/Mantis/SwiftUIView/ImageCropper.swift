@@ -15,7 +15,8 @@ public enum CropAction {
     case rotateLeft
     case rotateRight
     case crop
-    //    case undo
+    case undo
+    case redo
     //    case setAspectRatio(CGFloat)
 }
 
@@ -147,15 +148,16 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             switch currentAction {
             case .crop:
                 cropVC.crop()
-                DispatchQueue.main.async {
-                    self.isProcessingAction = false
-                }
             case .reset:
                 cropVC.didSelectReset()
             case .rotateLeft:
                 cropVC.didSelectCounterClockwiseRotate()
             case .rotateRight:
                 cropVC.didSelectClockwiseRotate()
+            case .undo:
+                cropVC.didSelectUndo()
+            case .redo:
+                cropVC.didSelectRedo()
             }
             
             DispatchQueue.main.async {
