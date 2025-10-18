@@ -1,4 +1,3 @@
-//
 //  ImageCropper.swift
 //  Mantis
 //
@@ -81,10 +80,10 @@ public struct ImageCropperView: UIViewControllerRepresentable {
                 onDismiss: @escaping () -> Void = {},
                 onCropCompleted: @escaping (_ status: CropStatus) -> Void = { _  in}) {
         self.config = config
-        self._image = image
-        self._transformation = transformation
-        self._cropInfo = cropInfo
-        self._action = action
+        _image = image
+        _transformation = transformation
+        _cropInfo = cropInfo
+        _action = action
         self.onDismiss = onDismiss
         self.onCropCompleted = onCropCompleted
     }
@@ -100,35 +99,30 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         
         init(_ parent: ImageCropperView) {
             self.parent = parent
-            self.actionBinding = parent._action
+            actionBinding = parent._action
         }
         
+        @MainActor
         public func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
-            isProcessingAction = true
-            
-            DispatchQueue.main.async {
-                self.parent.image = cropped
-                self.parent.transformation = transformation
-                self.parent.cropInfo = cropInfo
-                self.isProcessingAction = false
-                self.parent.onDismiss()
-                self.parent.onCropCompleted(.succeeded)
-            }
+            parent.image = cropped
+            parent.transformation = transformation
+            parent.cropInfo = cropInfo
+
+            parent.onDismiss()
+            parent.onCropCompleted(.succeeded)
         }
         
+        @MainActor
         public func cropViewControllerDidCancel(_ cropViewController: Mantis.CropViewController, original: UIImage) {
-            DispatchQueue.main.async {
-                self.parent.onDismiss()
-            }
+            parent.onDismiss()
         }
         
+        @MainActor
         public func cropViewControllerDidFailToCrop(_ cropViewController: Mantis.CropViewController, original: UIImage) {
-            DispatchQueue.main.async {
-                self.isProcessingAction = false
-                self.lastProcessedAction = nil
-                self.parent.onDismiss()
-                self.parent.onCropCompleted(.failed)
-            }
+            isProcessingAction = false
+            lastProcessedAction = nil
+            parent.onDismiss()
+            parent.onCropCompleted(.failed)
         }
         
         func handleAction() {
@@ -160,11 +154,9 @@ public struct ImageCropperView: UIViewControllerRepresentable {
                 cropVC.didSelectRedo()
             }
             
-            DispatchQueue.main.async {
-                self.isProcessingAction = false
-                self.lastProcessedAction = nil
-                self.actionBinding.wrappedValue = nil
-            }
+            isProcessingAction = false
+            lastProcessedAction = nil
+            actionBinding.wrappedValue = nil
         }
         
         private func areActionsEqual(_ lhs: CropAction, _ rhs: CropAction) -> Bool {
@@ -177,8 +169,8 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         }
         
         func updateParent(_ newParent: ImageCropperView) {
-            self.parent = newParent
-            self.actionBinding = newParent._action
+            parent = newParent
+            actionBinding = newParent._action
         }
     }
     
@@ -218,3 +210,4 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         context.coordinator.handleAction()
     }
 }
+
