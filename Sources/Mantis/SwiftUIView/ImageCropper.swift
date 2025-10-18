@@ -107,6 +107,9 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             parent.image = cropped
             parent.transformation = transformation
             parent.cropInfo = cropInfo
+            
+            isProcessingAction = false
+            lastProcessedAction = nil
 
             parent.onDismiss()
             parent.onCropCompleted(.succeeded)
@@ -143,6 +146,9 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             switch currentAction {
             case .crop:
                 cropVC.crop()
+                actionBinding.wrappedValue = nil
+                // Let delegate callbacks handle state cleanup for `.crop`.
+                return
             case .reset:
                 cropVC.didSelectReset()
             case .rotateLeft:
