@@ -125,6 +125,7 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             parent.onCropCompleted(.failed)
         }
         
+        @MainActor
         func handleAction() {
             guard !isProcessingAction else { return }
             
