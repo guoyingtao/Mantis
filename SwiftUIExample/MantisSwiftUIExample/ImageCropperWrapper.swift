@@ -35,18 +35,56 @@ struct ImageCropperWrapper: View {
                     makeImageCropperWithoutAttachedToolbar()
                 }
             }
-            .navigationTitle("Crop Image")
             .navigationBarTitleDisplayMode(.inline)
             .if(type == .noAttachedToolbar) { view in
                 view.toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button(action: {
                             presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "xmark")
                         }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
+                        Button(action: {
+                            action = .rotateLeft
+                        }) {
+                            Image(systemName: "rotate.left")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            action = .rotateRight
+                        }) {
+                            Image(systemName: "rotate.right")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            action = .reset
+                        }) {
+                            Image(systemName: "arrow.counterclockwise")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            action = .undo
+                        }) {
+                            Image(systemName: "arrow.uturn.backward")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            action = .redo
+                        }) {
+                            Image(systemName: "arrow.uturn.forward")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
                             action = .crop
+                        }) {
+                            Image(systemName: "checkmark")
                         }
                     }
                 }
@@ -81,6 +119,7 @@ extension ImageCropperWrapper {
     func makeImageCropperWithoutAttachedToolbar() -> some View {
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
+        config.enableUndoRedo = true
         
         return ImageCropperView(config: config,
                                 image: $image,
