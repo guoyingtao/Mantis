@@ -38,49 +38,59 @@ struct ImageCropperWrapper: View {
             .navigationBarTitleDisplayMode(.inline)
             .if(type == .noAttachedToolbar) { view in
                 view.toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
+                    ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button(action: {
                             presentationMode.wrappedValue.dismiss()
                         }) {
                             Image(systemName: "xmark")
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button(action: {
                             action = .rotateLeft
                         }) {
                             Image(systemName: "rotate.left")
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            action = .rotateRight
-                        }) {
-                            Image(systemName: "rotate.right")
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                        
+                        
                         Button(action: {
                             action = .reset
                         }) {
                             Image(systemName: "arrow.counterclockwise")
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            action = .undo
-                        }) {
-                            Image(systemName: "arrow.uturn.backward")
+                        
+                        Menu {
+                            Button(action: {
+                                action = .rotateRight
+                            }) {
+                                HStack {
+                                    Image(systemName: "rotate.right")
+                                    Text("Rotate Right")
+                                }
+                            }
+                            
+                            Button(action: {
+                                action = .undo
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.uturn.backward")
+                                    Text("Undo")
+                                }
+                            }
+
+                            Button(action: {
+                                action = .redo
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.uturn.forward")
+                                    Text("Redo")
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            action = .redo
-                        }) {
-                            Image(systemName: "arrow.uturn.forward")
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                        
                         Button(action: {
                             action = .crop
                         }) {
