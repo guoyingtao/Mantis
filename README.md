@@ -312,6 +312,8 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 Mantis provide two demo projects
 - MantisExample (using Storyboard)
 - MantisSwiftUIExample (using SwiftUI)
+  - Mantis provides an **out-of-the-box SwiftUI wrapper** named `ImageCropperView`,  
+making it easy to integrate the image cropping interface directly in SwiftUI apps.
 
 ### Showcases
 
