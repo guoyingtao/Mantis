@@ -14,6 +14,7 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        delegate?.cropViewDidBeginCrop(self)
         viewModel.setTouchImageStatus()
     }
     
@@ -21,6 +22,19 @@ extension CropView: UIScrollViewDelegate {
         // A resize event has begun via gesture on the photo (scrollview), so notify delegate
         delegate?.cropViewDidBeginResize(self)
         viewModel.setTouchImageStatus()
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        guard !scrollView.subviews.isEmpty else {
+            return
+        }
+        
+        let subView = scrollView.subviews[0]
+        
+        let offsetX: CGFloat = max((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0)
+        let offsetY: CGFloat = max((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0)
+        
+        subView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

@@ -11,4 +11,5 @@
 "Mantis.Reset" = "Réinitialiser";
 "Mantis.Original" = "D’origine";
 "Mantis.Square" = "Carré";
-
+"Mantis.ChangeCrop" = "Changer la culture";
+"Mantis.ResetChanges" = "Réinitialiser les modifications";

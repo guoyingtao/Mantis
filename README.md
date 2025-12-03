@@ -31,16 +31,9 @@
 </p>
 
 ## Requirements
-* iOS 11.0+
+* iOS 12.0+
 * MacOS 10.15+
 * Xcode 10.0+
-
-## Breaking Changes in 2.x.x
-* Add CropViewConfig
-  * move some properties from Config to CropViewConfig
-  * make roationControlViewConfig as a property of CropViewConfig
-* Refactor CropToolbarConfigProtocol
-  * rename some properties
 
 ## Install
 
@@ -48,7 +41,7 @@
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 2.18.0'
+pod 'Mantis', '~> 2.28.0'
 ```
 </details>
 
@@ -64,7 +57,7 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Repository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 2.18.0
+* Rules: Version - Exact - 2.28.0
 
 </details>
 
@@ -73,15 +66,45 @@ github "guoyingtao/Mantis"
 <details>
 <summary><strong>Basic</strong></summary>
 
-* Create a cropViewController in Mantis with default config and default mode
+* Create a CropViewController from Mantis with default config
 
 **You need set (cropViewController or its navigation controller).modalPresentationStyle = .fullscreen for iOS 13+ when the cropViewController is presented**
+
+### UIKit
 
 ```Swift
     let cropViewController = Mantis.cropViewController(image: <Your Image>)
     cropViewController.delegate = self
     <Your ViewController>.present(cropViewController, animated: true)
 ```
+
+### SwiftUI
+
+* Create an ImageCropperView from Mantis with default config
+
+```Swift
+struct MyView: View {
+    @State private var image: UIImage?
+    @State private var transformation: Transformation?
+    @State private var cropInfo: CropInfo?
+
+    var body: some View {
+        ImageCropperView(
+            image: $image,
+            transformation: $transformation,
+            cropInfo: $cropInfo
+        )
+    }
+}
+```
+
+> **Note:**  
+> - To start a crop operation programmatically, use the existing `action` binding(for `ImageCropperView`):  
+>   ```swift
+>   action = .crop
+>   ```
+> - To receive the result of the crop (success or failure), use the new `onCropCompleted` callback.  
+>   This is especially useful because cropping may not complete instantly in all cases, so relying on this callback ensures you update your UI only after the operation finishes.
 
 * The caller needs to conform CropViewControllerDelegate
 ```swift
@@ -203,6 +226,17 @@ public enum PresetTransformationType {
 Please use the transformation information obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, , cropInfo: CropInfo).
 
 </details>
+
+<details>
+<summary><strong>Undo/Redo Support</strong></summary>
+
+* Mantis offers full support for Undo, Redo, Revert to Original in both iOS and Catalyst.
+
+* If you want to add support for this feature, set Mantis.Config.enableUndoRedo = true
+
+* Catalyst menus for this feature are localized.
+
+</details>
                 
 <details>
     <summary><strong>Localization</strong></summary>
@@ -278,6 +312,18 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 Mantis provide two demo projects
 - MantisExample (using Storyboard)
 - MantisSwiftUIExample (using SwiftUI)
+  - Mantis provides an **out-of-the-box SwiftUI wrapper** named `ImageCropperView`,  
+making it easy to integrate the image cropping interface directly in SwiftUI apps.
+
+### Showcases
+
+Below are apps that use the Mantis framework. If your app also uses Mantis and you’d like it to be showcased here, please submit a PR following the existing format.
+
+| <a href="https://apps.apple.com/us/app/pictopoem/id6692614035"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/65/d9/b7/65d9b774-3b3d-06ae-1972-79156dc53672/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/460x0w.webp" width="100" alt="Pictopoem"></a><br/>[**Pictopoem**](https://apps.apple.com/us/app/pictopoem/id6692614035)<br/>Where Images Whisper Poems | <a href="https://apps.apple.com/us/app/text-behind-me/id6736535053"><img src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f8/f0/20/f8f0201e-8b1d-add5-e08c-76fbf04c7fef/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/460x0w.webp" width="100" alt="Text Behind Me"></a><br/>[**Text Behind Me**](https://apps.apple.com/us/app/text-behind-me/id6736535053)<br/>Add Depth to Your Photos |
+|---|---|
+
+### Backers & Sponsors
+Become a sponsor through [GitHub Sponsors](https://github.com/sponsors/guoyingtao). 
 
 ## Credits
 * The crop feature is strongly inspired by [TOCropViewController](https://github.com/TimOliver/TOCropViewController) 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="ipad7_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,11 +13,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MantisExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="744" height="1133"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-So-c13">
-                                <rect key="frame" x="57" y="626" width="300" height="216"/>
+                                <rect key="frame" x="222" y="877" width="300" height="216"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpr-TJ-i7J">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="36"/>
@@ -74,7 +74,7 @@
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunflower" translatesAutoresizingMaskIntoConstraints="NO" id="pUS-Eo-0ui" userLabel="Cropped Image">
-                                <rect key="frame" x="40" y="44" width="334" height="558"/>
+                                <rect key="frame" x="40" y="24" width="664" height="829"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -100,31 +100,29 @@
         <scene sceneID="Mwe-jr-1zI">
             <objects>
                 <viewController id="aIe-ND-Zfg" customClass="EmbeddedCropViewController" customModule="MantisExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="FS5-2F-Jir">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lwW-G6-m16">
-                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
-                                <connections>
-                                    <segue destination="xJq-Ev-XcJ" kind="embed" id="WEI-AV-e4o"/>
-                                </connections>
-                            </containerView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="cY0-Cd-i0E"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="lwW-G6-m16" firstAttribute="top" secondItem="cY0-Cd-i0E" secondAttribute="top" id="F4s-gV-IK0"/>
-                            <constraint firstItem="lwW-G6-m16" firstAttribute="leading" secondItem="cY0-Cd-i0E" secondAttribute="leading" id="Rbf-LE-Lbb"/>
-                            <constraint firstItem="cY0-Cd-i0E" firstAttribute="trailing" secondItem="lwW-G6-m16" secondAttribute="trailing" id="XLc-Sl-Rfe"/>
-                            <constraint firstItem="cY0-Cd-i0E" firstAttribute="bottom" secondItem="lwW-G6-m16" secondAttribute="bottom" id="yuD-jJ-uPY"/>
-                        </constraints>
-                    </view>
                     <toolbarItems>
                         <barButtonItem title="Cancel" id="5p4-Ob-R9b">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="cancel:" destination="aIe-ND-Zfg" id="j3e-ai-8lv"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Undo" style="plain" id="Trh-my-yCW">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="undoButtonPressed:" destination="aIe-ND-Zfg" id="xT7-QW-5SL"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Redo" id="eY1-KB-ReS">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="redoButtonPressed:" destination="aIe-ND-Zfg" id="UZD-3H-yAt"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Reset" id="R4y-9o-HJD">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="resetButtonPressed:" destination="aIe-ND-Zfg" id="fnZ-db-bPg"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="DsY-rM-AWO"/>
@@ -150,6 +148,9 @@
                     <connections>
                         <outlet property="cancelButton" destination="5p4-Ob-R9b" id="kQq-ir-MSf"/>
                         <outlet property="doneButton" destination="kZP-3N-vXv" id="RPY-W3-vWu"/>
+                        <outlet property="redoButton" destination="eY1-KB-ReS" id="NnV-9U-A2e"/>
+                        <outlet property="resetButton" destination="R4y-9o-HJD" id="V2b-qs-QBP"/>
+                        <outlet property="undoButton" destination="Trh-my-yCW" id="ZQx-n1-lmk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xP6-ML-BEH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -168,7 +169,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="KpB-vr-mGb">
-                        <rect key="frame" x="0.0" y="813" width="414" height="49"/>
+                        <rect key="frame" x="0.0" y="1083" width="744" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </toolbar>
@@ -179,21 +180,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q3P-pn-GxR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1117.5999999999999" y="5.8470764617691158"/>
-        </scene>
-        <!--Crop View Controller-->
-        <scene sceneID="djG-LZ-hRH">
-            <objects>
-                <viewController id="xJq-Ev-XcJ" customClass="CropViewController" customModule="Mantis" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="nLp-HP-0xC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="769"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="0JZ-7h-zil"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TRU-F3-FYg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1042" y="819"/>
         </scene>
     </scenes>
     <resources>

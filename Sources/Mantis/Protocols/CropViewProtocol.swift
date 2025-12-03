@@ -29,7 +29,7 @@ protocol CropViewProtocol: UIView {
     func rotateBy90(withRotateType rotateType: RotateBy90DegreeType, completion: @escaping () -> Void)
     func handleAlterCropper90Degree()
     func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation)
-    
+    func applyCropState(with cropState: CropState)
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool)
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation
     func getTransformInfo(byNormalizedInfo normalizedInfo: CGRect) -> Transformation
@@ -48,6 +48,12 @@ protocol CropViewProtocol: UIView {
     
     func rotate(by angle: Angle)
     func makeTransformation() -> Transformation
+    func makeCropState() -> CropState
+    
+    func update(_ image: UIImage)
+    
+    func zoomIn()
+    func zoomOut()
 }
 
 extension CropViewProtocol {
@@ -57,4 +63,9 @@ extension CropViewProtocol {
     }
     
     func rotate(by angle: Angle) {}
+    
+    func update(_ image: UIImage) {}
+    
+    func zoomIn() {}    
+    func zoomOut() {}
 }

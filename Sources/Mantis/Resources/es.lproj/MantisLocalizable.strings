@@ -11,3 +11,5 @@
 "Mantis.Reset" = "Restablecer";
 "Mantis.Original" = "Original";
 "Mantis.Square" = "Cuadrada";
+"Mantis.ChangeCrop" = "Cambiar cultivo";
+"Mantis.ResetChanges" = "Restablecer cambios";

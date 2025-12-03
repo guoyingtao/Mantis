@@ -11,10 +11,21 @@ import Mantis
 
 class ViewController: UIViewController {
     var image = UIImage(named: "sunflower.jpg")
+    var transformation: Transformation?
     
     @IBOutlet weak var croppedImageView: UIImageView!
     var imagePicker: ImagePicker!
     @IBOutlet weak var cropShapesButton: UIButton!
+    
+    private func createConfigWithPresetTransformation() -> Config {
+        var config = Mantis.Config()
+        
+        if let transformation = transformation {
+            config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
+        }
+
+        return config
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +44,17 @@ class ViewController: UIViewController {
         guard let image = image else {
             return
         }        
-        var config = Mantis.Config()
+        var config = createConfigWithPresetTransformation()
         config.cropMode = .async
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
+        
+        if let transformation = transformation {
+            config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
+        }
+        
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
@@ -83,6 +99,7 @@ class ViewController: UIViewController {
                                                                 height: 704.9696330065433),
                                        horizontallyFlipped: true,
                                        verticallyFlipped: false)
+        
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         config.cropViewConfig.presetTransformationType = .presetInfo(info: transform)
         config.cropViewConfig.builtInRotationControlViewType = .slideDial()
@@ -298,6 +315,7 @@ class ViewController: UIViewController {
         print("transformation is \(transformation)")
         print("cropInfo is \(cropInfo)")
         croppedImageView.image = cropped
+        self.transformation = transformation
         dismiss(animated: true)
     }
 }
@@ -305,10 +323,6 @@ class ViewController: UIViewController {
 extension ViewController: CropViewControllerDelegate {
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
         dismiss(animated: true)
-    }
-    
-    func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {
-        print("image is transformed. transformation is \(transformation)")
     }
     
     func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {

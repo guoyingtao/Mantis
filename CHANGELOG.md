@@ -2,6 +2,137 @@
 
 -----
 
+## [2.28.0](https://www.github.com/guoyingtao/Mantis/compare/v2.27.0...v2.28.0) (2025-10-18)
+
+
+### Features
+
+* support more actions for CropAction ([#480](https://www.github.com/guoyingtao/Mantis/issues/480)) ([3b3f45b](https://www.github.com/guoyingtao/Mantis/commit/3b3f45bbbeb0469c6b3acd90840dd8cd6428584d))
+
+## [2.27.0](https://www.github.com/guoyingtao/Mantis/compare/v2.26.0...v2.27.0) (2025-08-22)
+
+
+### Features
+
+* support callback when crop is done ([#471](https://www.github.com/guoyingtao/Mantis/issues/471)) ([dcf5728](https://www.github.com/guoyingtao/Mantis/commit/dcf5728c58e9d8e058d2e69fc61b21e3141b2288))
+
+
+### Bug Fixes
+
+* avoid SwiftUI warning by scheduling binding updates async in cropViewControllerDidCrop ([#475](https://www.github.com/guoyingtao/Mantis/issues/475)) ([d1069ce](https://www.github.com/guoyingtao/Mantis/commit/d1069ce75468e7a301b4e74e57c03d103f4626e9))
+* fix crop view displaying issue on iOS 26 ([#466](https://www.github.com/guoyingtao/Mantis/issues/466)) ([7462405](https://www.github.com/guoyingtao/Mantis/commit/74624054cdef2d8bee1ac3daf55ca1589bc42167))
+* fix crop view displaying issue on iOS 26 ([#476](https://www.github.com/guoyingtao/Mantis/issues/476)) ([c19db4a](https://www.github.com/guoyingtao/Mantis/commit/c19db4a0613e829a5274f19b3910f73b415f645d))
+* publishing changes from not main thread ([#474](https://www.github.com/guoyingtao/Mantis/issues/474)) ([4ddb8ff](https://www.github.com/guoyingtao/Mantis/commit/4ddb8ff72a8cfb05a84cc3f32cc930f53dd2e45b))
+
+## [2.26.0](https://www.github.com/guoyingtao/Mantis/compare/v2.25.3...v2.26.0) (2025-06-20)
+
+
+### Features
+
+* add headless crop support ([#463](https://www.github.com/guoyingtao/Mantis/issues/463)) ([22994b8](https://www.github.com/guoyingtao/Mantis/commit/22994b8a642c2b10752f27a91c4bdb5ba394f6bf))
+
+### [2.25.3](https://www.github.com/guoyingtao/Mantis/compare/v2.25.2...v2.25.3) (2025-05-30)
+
+
+### Bug Fixes
+
+* Add macCatalyst as a supported platform in Package.swift ([941d4c4](https://www.github.com/guoyingtao/Mantis/commit/941d4c45fa393a2e937e69f5d365d46743d5583c))
+
+### [2.25.2](https://www.github.com/guoyingtao/Mantis/compare/v2.25.1...v2.25.2) (2025-05-25)
+
+
+### Bug Fixes
+
+* drop macOS support and update min support version to v12 for iOS ([#452](https://www.github.com/guoyingtao/Mantis/issues/452)) ([a977c8c](https://www.github.com/guoyingtao/Mantis/commit/a977c8c67ee4934eabc22d4a44a11dcc81a215eb))
+
+### [2.25.1](https://www.github.com/guoyingtao/Mantis/compare/v2.25.0...v2.25.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* fix the wrong parameter issue for createBackupCGContext ([#447](https://www.github.com/guoyingtao/Mantis/issues/447)) ([d7c7c3b](https://www.github.com/guoyingtao/Mantis/commit/d7c7c3b50c614d01ae6e1d61b058fc0d50820e6c))
+
+## [2.25.0](https://www.github.com/guoyingtao/Mantis/compare/v2.24.0...v2.25.0) (2025-04-06)
+
+
+### Features
+
+* add ImageCropperView wrapped for SwiftUI users ([fd33295](https://www.github.com/guoyingtao/Mantis/commit/fd332959193801990f7e32ef8c00ca4c0db0fe91))
+
+## [2.24.0](https://www.github.com/guoyingtao/Mantis/compare/v2.23.2...v2.24.0) (2025-03-26)
+
+
+### Features
+
+* make Transformation and CropRegion completely public ([#437](https://www.github.com/guoyingtao/Mantis/issues/437)) ([0ffcbd7](https://www.github.com/guoyingtao/Mantis/commit/0ffcbd7764c2b662479785c1cefeae78f246b36c))
+
+### [2.23.2](https://www.github.com/guoyingtao/Mantis/compare/v2.23.1...v2.23.2) (2025-02-10)
+
+
+### Bug Fixes
+
+* fix the issue that rotation control jumps during orientation change ([#433](https://www.github.com/guoyingtao/Mantis/issues/433)) ([2b08f10](https://www.github.com/guoyingtao/Mantis/commit/2b08f10dd9d171a61eadcb72440e17b19555a63c))
+
+### [2.23.1](https://www.github.com/guoyingtao/Mantis/compare/v2.23.0...v2.23.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* fix a crash for 48 bits bitmap ([#423](https://www.github.com/guoyingtao/Mantis/issues/423)) ([c2ea51a](https://www.github.com/guoyingtao/Mantis/commit/c2ea51aff165dea0712e4ec8ef1e89f52ef1986f))
+
+## [2.23.0](https://www.github.com/guoyingtao/Mantis/compare/v2.22.0...v2.23.0) (2024-10-14)
+
+
+### Features
+
+* support keyboard zoom in/out for Mac Catalyst ([#416](https://www.github.com/guoyingtao/Mantis/issues/416)) ([291e5a7](https://www.github.com/guoyingtao/Mantis/commit/291e5a70d5b8146025e85ee9889b77e09f34f745))
+
+
+### Bug Fixes
+
+* use createBackupCGContext in cgImageWithFixedOrientation ([#414](https://www.github.com/guoyingtao/Mantis/issues/414)) ([3430aaf](https://www.github.com/guoyingtao/Mantis/commit/3430aaf1d72db718c6a6be7bde4dd6ca391b6a74))
+
+## [2.22.0](https://www.github.com/guoyingtao/Mantis/compare/v2.21.0...v2.22.0) (2024-07-20)
+
+
+### Features
+
+* add CropAuxiliaryIndicatorConfig to allow custom CropAuxiliaryIndicator colors ([#405](https://www.github.com/guoyingtao/Mantis/issues/405)) ([bc50ce7](https://www.github.com/guoyingtao/Mantis/commit/bc50ce7e99195328255ba541bc02dd9ab38e47a2))
+
+
+### Bug Fixes
+
+* fix the rotation issue when undo/redo for a flipped image ([#393](https://www.github.com/guoyingtao/Mantis/issues/393)) ([#394](https://www.github.com/guoyingtao/Mantis/issues/394)) ([2ad6323](https://www.github.com/guoyingtao/Mantis/commit/2ad632377a099824990e15303c5caf736f73bf91))
+* fix undo redo rotation issues when flipped ([#396](https://www.github.com/guoyingtao/Mantis/issues/396)) ([29b6fec](https://www.github.com/guoyingtao/Mantis/commit/29b6fec55cfe2d7c5bb59324d0cfb75bd7426c7a))
+
+## [2.21.0](https://www.github.com/guoyingtao/Mantis/compare/v2.20.0...v2.21.0) (2024-04-10)
+
+
+### Features
+
+* support updating image while cropping ([#387](https://www.github.com/guoyingtao/Mantis/issues/387)) ([e08e341](https://www.github.com/guoyingtao/Mantis/commit/e08e3419a65a26bc09194684f8d7ccfbcf39e5b4))
+
+
+### Bug Fixes
+
+* fix image zoom center issue ([#390](https://www.github.com/guoyingtao/Mantis/issues/390)) ([c0f892c](https://www.github.com/guoyingtao/Mantis/commit/c0f892c4756eeccbf3544739bfa210b88de1d1eb))
+
+## [2.20.0](https://www.github.com/guoyingtao/Mantis/compare/v2.19.0...v2.20.0) (2024-03-25)
+
+
+### Features
+
+* Undo/Redo Feature for Mantis ([#379](https://www.github.com/guoyingtao/Mantis/issues/379)) ([9a1e67a](https://www.github.com/guoyingtao/Mantis/commit/9a1e67af3e7d078d4629d43997d4248d2c4cf7a1))
+
+## [2.19.0](https://www.github.com/guoyingtao/Mantis/compare/v2.18.0...v2.19.0) (2024-03-04)
+
+
+### Features
+
+* Add cropAuxiliaryIndicatorStyle in CropViewConfig for the issue [#366](https://www.github.com/guoyingtao/Mantis/issues/366) ([#367](https://www.github.com/guoyingtao/Mantis/issues/367)) ([4f7e842](https://www.github.com/guoyingtao/Mantis/commit/4f7e842becc54f5fa704e780ff3d2297a6577990))
+
+* Add turkish localizable [(#375)](https://github.com/guoyingtao/Mantis/pull/375) ([f625d81](https://github.com/guoyingtao/Mantis/commit/f625d81723ca8a25c1d7324bc2839a80ac9f9b78))
+
 ## [2.18.0](https://www.github.com/guoyingtao/Mantis/compare/v2.17.1...v2.18.0) (2023-12-05)
 
 

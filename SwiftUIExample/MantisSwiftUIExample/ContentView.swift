@@ -8,19 +8,27 @@
 import SwiftUI
 import Mantis
 
+public enum CropperType {
+    case normal
+    case noRotationDial
+    case noAttachedToolbar
+}
+
 struct ContentView: View {
     @State private var image: UIImage? = UIImage(named: "sunflower")!
     @State private var showingCropper = false
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
-    @State private var cropperType: ImageCropperType = .normal
+    @State private var cropperType: CropperType = .normal
     @State private var contentHeight: CGFloat = 0
     
     @State private var showImagePicker = false
     @State private var showCamera = false
     @State private var showSourceTypeSelection = false
     @State private var sourceType: UIImagePickerController.SourceType?
+    
+    @State private var transformation: Transformation?
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -30,10 +38,10 @@ struct ContentView: View {
             createFeatureDemoList()
         }
         .fullScreenCover(isPresented: $showingCropper, content: {
-            ImageCropper(image: $image,
-                         cropShapeType: $cropShapeType,
-                         presetFixedRatioType: $presetFixedRatioType,
-                         type: $cropperType)
+            ImageCropperWrapper(image: $image,
+                                cropShapeType: $cropShapeType,
+                                presetFixedRatioType: $presetFixedRatioType,
+                                type: $cropperType, transformation: $transformation)
             .onDisappear(perform: reset)
             .ignoresSafeArea()
         })
@@ -103,7 +111,7 @@ struct ContentView: View {
                 showingCropper = true
             }.font(.title)
             Button("Hide Rotation Dial") {
-                cropperType = .noRotaionDial
+                cropperType = .noRotationDial
                 showingCropper = true
             }.font(.title)
             Button("Hide Attached Toolbar") {

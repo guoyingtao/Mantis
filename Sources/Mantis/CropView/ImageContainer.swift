@@ -65,4 +65,8 @@ extension ImageContainer: ImageContainerProtocol {
                           bottomLeft: bottomLeft,
                           bottomRight: bottomRight)
     }
+    
+    func update(_ image: UIImage) {
+        imageView.image = image
+    }
 }

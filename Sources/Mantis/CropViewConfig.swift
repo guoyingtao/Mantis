@@ -4,11 +4,37 @@ public struct CropViewConfig {
     /**
         This value is for how easy to drag crop box. The bigger, the easier.
      */
-    public var cropBoxHotAreaUnit: CGFloat = 32 {
-        didSet {
-            assert(cropBoxHotAreaUnit > 0)
+    @available(*, deprecated, message: "Use cropAuxiliaryIndicatorStyle.cropBoxHotAreaUnit instead")
+    public var cropBoxHotAreaUnit: CGFloat {
+        get {
+            cropAuxiliaryIndicatorConfig.cropBoxHotAreaUnit
+        }
+        set {
+            cropAuxiliaryIndicatorConfig.cropBoxHotAreaUnit = newValue
         }
     }
+    
+    @available(*, deprecated, message: "Use cropAuxiliaryIndicatorStyle.disableCropBoxDeformation instead")
+    public var disableCropBoxDeformation: Bool {
+        get {
+            cropAuxiliaryIndicatorConfig.disableCropBoxDeformation
+        }
+        set {
+            cropAuxiliaryIndicatorConfig.disableCropBoxDeformation = newValue
+        }
+    }
+    
+    @available(*, deprecated, message: "Use cropAuxiliaryIndicatorConfig.style instead")
+    public var cropAuxiliaryIndicatorStyle: CropAuxiliaryIndicatorStyleType {
+        get {
+            cropAuxiliaryIndicatorConfig.style
+        }
+        set {
+            cropAuxiliaryIndicatorConfig.style = newValue
+        }
+    }
+    
+    public var cropAuxiliaryIndicatorConfig = CropAuxiliaryIndicatorConfig()
     
     public var cropShapeType: CropShapeType = .rect
     
@@ -30,8 +56,6 @@ public struct CropViewConfig {
     }
     
     public var cropMaskVisualEffectType: CropMaskVisualEffectType = .blurDark
-    
-    public var cropAuxiliaryIndicatorStyle: CropAuxiliaryIndicatorStyleType = .normal
     
     public var presetTransformationType: PresetTransformationType = .none
     
@@ -66,9 +90,11 @@ public struct CropViewConfig {
     
     public var rotateCropBoxFor90DegreeRotation = true
     
-    var minimumCropBoxSize: CGFloat = 42
-
-    public var disableCropBoxDeformation = false
+    public var minimumCropBoxSize: CGFloat = 42 {
+        didSet {
+            assert(minimumCropBoxSize >= 4)
+        }
+    }
     
     public enum BuiltInRotationControlViewType {
         case rotationDial(config: RotationDialConfig = .init())
@@ -76,6 +102,8 @@ public struct CropViewConfig {
     }
     
     public var builtInRotationControlViewType: BuiltInRotationControlViewType = .rotationDial()
+    
+    public var keyboardZoomScaleFactor: CGFloat = 1.1
     
     public init() {}
 }

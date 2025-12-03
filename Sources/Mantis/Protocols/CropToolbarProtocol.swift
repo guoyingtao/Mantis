@@ -23,6 +23,11 @@ public protocol CropToolbarDelegate: AnyObject {
     func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol?)
     func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol?)
     func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?, isActive: Bool)
+    func didSelectUndo(_ cropToolbar: CropToolbarProtocol?)
+    func didSelectRedo(_ cropToolbar: CropToolbarProtocol?)
+    func isUndoSupported(_ cropToolbar: CropToolbarProtocol?) -> Bool
+    func undoActionName(_ cropToolbar: CropToolbarProtocol?) -> String
+    func redoActionName(_ cropToolbar: CropToolbarProtocol?) -> String
 }
 
 public extension CropToolbarDelegate {
@@ -36,6 +41,13 @@ public extension CropToolbarDelegate {
     func didSelectHorizontallyFlip(_ cropToolbar: CropToolbarProtocol?) {}
     func didSelectVerticallyFlip(_ cropToolbar: CropToolbarProtocol?) {}
     func didSelectAutoAdjust(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectUndo(_ cropToolbar: CropToolbarProtocol?) {}
+    func didSelectRedo(_ cropToolbar: CropToolbarProtocol?) {}
+    func isUndoSupported(_ cropToolbar: CropToolbarProtocol?) -> Bool { return false }
+    func undoActionName(_ cropToolbar: CropToolbarProtocol?) -> String { return "undo" }
+    func redoActionName(_ cropToolbar: CropToolbarProtocol?) -> String {
+        return "redo"
+    }
 }
 
 public protocol CropToolbarIconProvider: AnyObject {

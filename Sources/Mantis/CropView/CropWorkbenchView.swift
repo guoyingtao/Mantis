@@ -144,4 +144,14 @@ extension CropWorkbenchView: CropWorkbenchViewProtocol {
         contentOffset = CGPoint(x: (imageContainer.frame.width - frame.width) / 2,
                                 y: (imageContainer.frame.height - frame.height) / 2)
     }
+    
+    func zoomIn(by zoomScaleFactor: CGFloat) {
+        let newZoomScale = min(zoomScale * zoomScaleFactor, maximumZoomScale)
+        setZoomScale(newZoomScale, animated: true)
+    }
+    
+    func zoomOut(by zoomScaleFactor: CGFloat) {
+        let newZoomScale = max(zoomScale / zoomScaleFactor, minimumZoomScale)
+        setZoomScale(newZoomScale, animated: true)
+    }
 }
