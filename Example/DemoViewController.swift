@@ -145,7 +145,6 @@ class DemoViewController: UIViewController {
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         
-//        config.cropViewConfig.rotateCropBoxFor90DegreeRotation = false
         if let transformation = transformation {
             config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
         }
