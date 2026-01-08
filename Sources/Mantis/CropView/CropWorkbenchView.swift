@@ -43,6 +43,13 @@ final class CropWorkbenchView: UIScrollView {
         addSubview(self.imageContainer!)
         
         isAccessibilityElement = false
+        
+        if #available(iOS 26.0, *) {
+            topEdgeEffect.isHidden = true
+            bottomEdgeEffect.isHidden = true
+            leftEdgeEffect.isHidden = true
+            rightEdgeEffect.isHidden = true
+        }
     }
     
     required init?(coder: NSCoder) {
