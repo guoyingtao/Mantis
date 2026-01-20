@@ -2,6 +2,13 @@
 
 -----
 
+### [2.28.1](https://www.github.com/guoyingtao/Mantis/compare/v2.28.0...v2.28.1) (2026-01-20)
+
+
+### Bug Fixes
+
+* fix the issue of shadow appearing over image on iOS 26.0+ ([#488](https://www.github.com/guoyingtao/Mantis/issues/488)) ([9ca9b0a](https://www.github.com/guoyingtao/Mantis/commit/9ca9b0a2e6988e8046c689c00b24525583b8c3c9))
+
 ## [2.28.0](https://www.github.com/guoyingtao/Mantis/compare/v2.27.0...v2.28.0) (2025-10-18)
 
 
