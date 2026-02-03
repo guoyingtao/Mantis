@@ -44,12 +44,14 @@ final class CropWorkbenchView: UIScrollView {
         
         isAccessibilityElement = false
         
+        #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             topEdgeEffect.isHidden = true
             bottomEdgeEffect.isHidden = true
             leftEdgeEffect.isHidden = true
             rightEdgeEffect.isHidden = true
         }
+        #endif
     }
     
     required init?(coder: NSCoder) {
