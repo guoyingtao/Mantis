@@ -2,6 +2,13 @@
 
 -----
 
+### [2.28.2](https://www.github.com/guoyingtao/Mantis/compare/v2.28.1...v2.28.2) (2026-02-03)
+
+
+### Bug Fixes
+
+* Wrap iOS 26 API usage with #if compiler(>=6.2) for Xcode 16 compatibility ([#493](https://www.github.com/guoyingtao/Mantis/issues/493)) ([681c7a1](https://www.github.com/guoyingtao/Mantis/commit/681c7a176d5b88ed67da24605da473629fcc8241))
+
 ### [2.28.1](https://www.github.com/guoyingtao/Mantis/compare/v2.28.0...v2.28.1) (2026-01-20)
 
 
