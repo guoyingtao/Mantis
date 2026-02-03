@@ -340,12 +340,7 @@ final class CropView: UIView {
     
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
         let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)
-        let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
-                                y: cropWorkbenchView.frame.origin.y - cropWorkbenchView.contentOffset.y,
-                                width: imageContainerRect.size.width,
-                                height: imageContainerRect.size.height)
-        
-        let touchPoint = confineTouchPoint(touchPoint, in: imageFrame)
+        let touchPoint = confineTouchPoint(touchPoint, in: imageContainerRect)
         let contentBounds = getContentBounds()
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,
@@ -599,9 +594,9 @@ extension CropView {
         isManuallyZoomed = true
     }
     
-    func makeSureImageContainsCropOverlay() {
+    func makeSureImageContainsCropOverlay(animated: Bool = true) {
         if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
-            cropWorkbenchView.zoomScaleToBound(animated: true)
+            cropWorkbenchView.zoomScaleToBound(animated: animated)
         }
     }
     
@@ -934,6 +929,7 @@ extension CropView: CropViewProtocol {
                 updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
             } else {
                 adjustWorkbenchView(by: rotateAngle + viewModel.radians)
+                makeSureImageContainsCropOverlay(animated: false)
             }
         }
         
