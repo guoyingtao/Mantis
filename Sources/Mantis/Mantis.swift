@@ -150,7 +150,20 @@ private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropVie
         }
     } else {
         if cropViewConfig.showAttachedRotationControlView {
-            switch cropViewConfig.builtInRotationControlViewType {
+            // When rotation type selector is enabled, default to slideDial for Apple Photos-like UX
+            let controlViewType: CropViewConfig.BuiltInRotationControlViewType
+            if cropViewConfig.showRotationTypeSelector {
+                switch cropViewConfig.builtInRotationControlViewType {
+                case .rotationDial:
+                    controlViewType = .slideDial()
+                case .slideDial:
+                    controlViewType = cropViewConfig.builtInRotationControlViewType
+                }
+            } else {
+                controlViewType = cropViewConfig.builtInRotationControlViewType
+            }
+            
+            switch controlViewType {
             case .rotationDial(let config):
                 let viewModel = RotationDialViewModel()
                 let dialPlate = RotationDialPlate(frame: .zero, config: config)

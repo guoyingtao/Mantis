@@ -186,6 +186,11 @@ final class CropView: UIView {
             adaptRotationControlViewToCropBoxIfNeeded()
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
+            // Keep rotation type selector visible and on top
+            if cropViewConfig.showRotationTypeSelector {
+                layoutRotationTypeSelector()
+                rotationTypeSelector.bringSelfToFront()
+            }
         }
     }
     
@@ -281,11 +286,19 @@ final class CropView: UIView {
             case .horizontalSkew:
                 let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
                                   min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
-                self.setHorizontalSkew(degrees: clamped)
+                self.viewModel.horizontalSkewDegrees = clamped
+                self.applySkewTransformIfNeeded()
+                self.checkImageStatusChanged()
+                // Trigger rotating status to refresh grid display
+                self.viewModel.viewStatus = .rotating
             case .verticalSkew:
                 let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
                                   min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
-                self.setVerticalSkew(degrees: clamped)
+                self.viewModel.verticalSkewDegrees = clamped
+                self.applySkewTransformIfNeeded()
+                self.checkImageStatusChanged()
+                // Trigger rotating status to refresh grid display
+                self.viewModel.viewStatus = .rotating
             }
         }
         
@@ -1344,10 +1357,23 @@ extension UIActivityIndicatorView: ActivityIndicatorProtocol {
 extension CropView: RotationTypeSelectorDelegate {
     func rotationTypeSelector(_ selector: RotationTypeSelector,
                               didSelectType type: RotationAdjustmentType) {
+        // Save the current dial value for the previous mode before switching
         let previousType = currentRotationAdjustmentType
+        if let currentDialValue = rotationControlView?.getTotalRotationValue() {
+            switch previousType {
+            case .straighten:
+                viewModel.degrees = currentDialValue
+            case .horizontalSkew:
+                viewModel.horizontalSkewDegrees = currentDialValue
+            case .verticalSkew:
+                viewModel.verticalSkewDegrees = currentDialValue
+            }
+        }
+        
         currentRotationAdjustmentType = type
         
-        // When switching modes, update the rotation dial to show the corresponding value
+        // Reset the dial and set it to the stored value for the new mode
+        rotationControlView?.reset()
         switch type {
         case .straighten:
             rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.degrees))
@@ -1355,11 +1381,6 @@ extension CropView: RotationTypeSelectorDelegate {
             rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.horizontalSkewDegrees))
         case .verticalSkew:
             rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.verticalSkewDegrees))
-        }
-        
-        // If switching away from straighten, save the current dial position
-        if previousType == .straighten {
-            // degrees are already saved in viewModel.degrees
         }
     }
     
@@ -1371,8 +1392,10 @@ extension CropView: RotationTypeSelectorDelegate {
             addSubview(rotationTypeSelector)
         }
         
+        rotationTypeSelector.isUserInteractionEnabled = true
         rotationTypeSelector.isHidden = false
         layoutRotationTypeSelector()
+        rotationTypeSelector.bringSelfToFront()
     }
     
     func layoutRotationTypeSelector() {

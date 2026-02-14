@@ -12,6 +12,12 @@ extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let newPoint = convert(point, to: self)
         
+        // Check rotation type selector first (it's on top)
+        if cropViewConfig.showRotationTypeSelector && rotationTypeSelector.frame.contains(newPoint) {
+            let pointInSelector = rotationTypeSelector.convert(newPoint, from: self)
+            return rotationTypeSelector.hitTest(pointInSelector, with: event)
+        }
+        
         if let rotationControlView = rotationControlView, rotationControlView.frame.contains(newPoint) {
             let pointInRotationControlView = rotationControlView.convert(newPoint, from: self)
             return rotationControlView.getTouchTarget(with: pointInRotationControlView)
