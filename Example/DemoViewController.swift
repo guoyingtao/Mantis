@@ -142,6 +142,8 @@ class DemoViewController: UIViewController {
         config.cropMode = .async
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
+        config.cropViewConfig.showRotationTypeSelector = true
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial()
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         
@@ -231,7 +233,9 @@ class DemoViewController: UIViewController {
                 topRight: CGPoint(x: 0.19743660955585537, y: 0.22015024333838856),
                 bottomLeft: CGPoint(x: 0.8378815525035231, y: 0.5654728356505114),
                 bottomRight: CGPoint(x: 0.5300725023151807, y: 0.6672525190931441)
-            )
+            ),
+            horizontalSkewDegrees: 0,
+            verticalSkewDegrees: 0
         )
         
         cropViewController?.crop(by: savedCropInfo)
