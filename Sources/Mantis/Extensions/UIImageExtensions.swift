@@ -105,6 +105,17 @@ extension UIImage {
                 return nil
             }
             
+            // Apply perspective correction if skew values are non-zero
+            if cropInfo.horizontalSkewDegrees != 0 || cropInfo.verticalSkewDegrees != 0 {
+                if let perspectiveCorrected = PerspectiveTransformHelper.applyPerspectiveTransform(
+                    to: transformedCGImage,
+                    horizontalDegrees: cropInfo.horizontalSkewDegrees,
+                    verticalDegrees: cropInfo.verticalSkewDegrees
+                ) {
+                    return UIImage(cgImage: perspectiveCorrected)
+                }
+            }
+            
             return UIImage(cgImage: transformedCGImage)
         } catch {
             print("*** Failed to get transfromed image ***")

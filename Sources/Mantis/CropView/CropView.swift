@@ -66,6 +66,16 @@ final class CropView: UIView {
     
     private var flipOddTimes = false
     
+    /// The current rotation adjustment mode (straighten, horizontal skew, vertical skew)
+    var currentRotationAdjustmentType: RotationAdjustmentType = .straighten
+    
+    /// Rotation type selector UI (Straighten | Horizontal | Vertical)
+    lazy var rotationTypeSelector: RotationTypeSelector = {
+        let selector = RotationTypeSelector()
+        selector.delegate = self
+        return selector
+    }()
+    
     lazy private var activityIndicator: ActivityIndicatorProtocol = {
         let activityIndicator: ActivityIndicatorProtocol
         if let indicator = cropViewConfig.cropActivityIndicator {
@@ -190,6 +200,10 @@ final class CropView: UIView {
             return true
         }
         
+        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+            return true
+        }
+        
         if forceFixedRatio {
             if checkForForceFixedRatioFlag {
                 checkForForceFixedRatioFlag = false
@@ -260,7 +274,19 @@ final class CropView: UIView {
         
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             self.viewModel.setTouchRotationBoardStatus()
-            self.viewModel.setRotatingStatus(by: clampAngle(angle))
+            
+            switch self.currentRotationAdjustmentType {
+            case .straighten:
+                self.viewModel.setRotatingStatus(by: clampAngle(angle))
+            case .horizontalSkew:
+                let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
+                                  min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
+                self.setHorizontalSkew(degrees: clamped)
+            case .verticalSkew:
+                let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
+                                  min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
+                self.setVerticalSkew(degrees: clamped)
+            }
         }
         
         rotationControlView.didFinishRotation = { [unowned self] in
@@ -289,6 +315,9 @@ final class CropView: UIView {
         
         adaptRotationControlViewToCropBoxIfNeeded()
         rotationControlView.bringSelfToFront()
+        
+        // Set up rotation type selector if enabled
+        setupRotationTypeSelector()
     }
     
     private func adaptRotationControlViewToCropBoxIfNeeded() {
@@ -432,7 +461,42 @@ extension CropView {
         let totalRadians = viewModel.getTotalRadians()
         cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
         flipCropWorkbenchViewIfNeeded()
+        applySkewTransformIfNeeded()
         adjustWorkbenchView(by: totalRadians)
+    }
+    
+    /// Applies the perspective (3D) skew transform to the crop workbench view's layer
+    private func applySkewTransformIfNeeded() {
+        let hDeg = viewModel.horizontalSkewDegrees
+        let vDeg = viewModel.verticalSkewDegrees
+        
+        if hDeg == 0 && vDeg == 0 {
+            cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
+        } else {
+            cropWorkbenchView.layer.sublayerTransform =
+                PerspectiveTransformHelper.combinedSkewTransform3D(
+                    horizontalDegrees: hDeg,
+                    verticalDegrees: vDeg
+                )
+        }
+    }
+    
+    /// Sets the horizontal skew degrees and refreshes the view
+    func setHorizontalSkew(degrees: CGFloat) {
+        let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
+                          min(PerspectiveTransformHelper.maxSkewDegrees, degrees))
+        viewModel.horizontalSkewDegrees = clamped
+        applySkewTransformIfNeeded()
+        checkImageStatusChanged()
+    }
+    
+    /// Sets the vertical skew degrees and refreshes the view
+    func setVerticalSkew(degrees: CGFloat) {
+        let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
+                          min(PerspectiveTransformHelper.maxSkewDegrees, degrees))
+        viewModel.verticalSkewDegrees = clamped
+        applySkewTransformIfNeeded()
+        checkImageStatusChanged()
     }
     
     private func getInitialCropBoxRect() -> CGRect {
@@ -472,14 +536,20 @@ extension CropView {
             rotationControlViewHeight = cropViewConfig.rotationControlViewHeight
         }
         
+        // Add space for rotation type selector if enabled
+        var rotationTypeSelectorHeight: CGFloat = 0
+        if cropViewConfig.showRotationTypeSelector {
+            rotationTypeSelectorHeight = 32
+        }
+        
         if Orientation.treatAsPortrait {
             contentRect.origin.x = rect.origin.x + cropViewPadding
             contentRect.origin.y = rect.origin.y + cropViewPadding
             
             contentRect.size.width = rect.width - 2 * cropViewPadding
-            contentRect.size.height = rect.height - 2 * cropViewPadding - rotationControlViewHeight
+            contentRect.size.height = rect.height - 2 * cropViewPadding - rotationControlViewHeight - rotationTypeSelectorHeight
         } else if Orientation.isLandscape {
-            contentRect.size.width = rect.width - 2 * cropViewPadding - rotationControlViewHeight
+            contentRect.size.width = rect.width - 2 * cropViewPadding - rotationControlViewHeight - rotationTypeSelectorHeight
             contentRect.size.height = rect.height - 2 * cropViewPadding
             
             contentRect.origin.y = rect.origin.y + cropViewPadding
@@ -671,7 +741,9 @@ extension CropView {
             aspectRatioLockEnabled: aspectRatioLockEnabled,
             aspectRato: viewModel.fixedImageRatio,
             flipOddTimes: flipOddTimes,
-            transformation: makeTransformation()
+            transformation: makeTransformation(),
+            horizontalSkewDegrees: viewModel.horizontalSkewDegrees,
+            verticalSkewDegrees: viewModel.verticalSkewDegrees
         )
     }
     
@@ -685,7 +757,9 @@ extension CropView {
             maskFrame: cropAuxiliaryIndicatorView.frame,
             cropWorkbenchViewBounds: cropWorkbenchView.bounds,
             horizontallyFlipped: viewModel.horizontallyFlip,
-            verticallyFlipped: viewModel.verticallyFlip
+            verticallyFlipped: viewModel.verticallyFlip,
+            horizontalSkewDegrees: viewModel.horizontalSkewDegrees,
+            verticalSkewDegrees: viewModel.verticalSkewDegrees
         )
     }
     
@@ -940,6 +1014,14 @@ extension CropView: CropViewProtocol {
         func handleRotateCompletion() {
             cropWorkbenchView.updateMinZoomScale()
             viewModel.rotateBy90(withRotateType: newRotateType)
+            
+            // Swap horizontal and vertical skew when rotating 90°
+            let hSkew = viewModel.horizontalSkewDegrees
+            let vSkew = viewModel.verticalSkewDegrees
+            viewModel.horizontalSkewDegrees = vSkew
+            viewModel.verticalSkewDegrees = hSkew
+            applySkewTransformIfNeeded()
+            
             viewModel.setBetweenOperationStatus()
             completion()
         }
@@ -982,6 +1064,8 @@ extension CropView: CropViewProtocol {
         viewModel.horizontallyFlip = cropState.transformation.horizontallyFlipped
         viewModel.verticallyFlip = cropState.transformation.verticallyFlipped
         viewModel.fixedImageRatio = cropState.aspectRato
+        viewModel.horizontalSkewDegrees = cropState.horizontalSkewDegrees
+        viewModel.verticalSkewDegrees = cropState.verticalSkewDegrees
         flipOddTimes = cropState.flipOddTimes
         
         var newTransform = getTransformInfo(byTransformInfo: cropState.transformation)
@@ -1001,6 +1085,9 @@ extension CropView: CropViewProtocol {
         viewModel.degrees = cropState.degrees
         viewModel.rotationType = cropState.rotationType
         aspectRatioLockEnabled = cropState.aspectRatioLockEnabled
+        
+        // Restore skew transforms
+        applySkewTransformIfNeeded()
     }
     
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {
@@ -1137,13 +1224,19 @@ extension CropView: CropViewProtocol {
     
     func horizontallyFlip() {
         viewModel.horizontallyFlip.toggle()
+        // Invert horizontal skew when flipping horizontally
+        viewModel.horizontalSkewDegrees = -viewModel.horizontalSkewDegrees
         flip(isHorizontal: true)
+        applySkewTransformIfNeeded()
         checkImageStatusChanged()
     }
     
     func verticallyFlip() {
         viewModel.verticallyFlip.toggle()
+        // Invert vertical skew when flipping vertically
+        viewModel.verticalSkewDegrees = -viewModel.verticalSkewDegrees
         flip(isHorizontal: false)
+        applySkewTransformIfNeeded()
         checkImageStatusChanged()
     }
     
@@ -1151,6 +1244,11 @@ extension CropView: CropViewProtocol {
         flipOddTimes = false
         aspectRatioLockEnabled = forceFixedRatio
         viewModel.reset(forceFixedRatio: forceFixedRatio)
+        
+        // Reset skew state
+        currentRotationAdjustmentType = .straighten
+        rotationTypeSelector.reset()
+        cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
         
         resetComponents()
         
@@ -1217,7 +1315,9 @@ extension CropView: CropViewProtocol {
             scaleY: scaleY,
             cropSize: cropAuxiliaryIndicatorView.frame.size,
             imageViewSize: imageContainer.bounds.size,
-            cropRegion: cropRegion
+            cropRegion: cropRegion,
+            horizontalSkewDegrees: viewModel.horizontalSkewDegrees,
+            verticalSkewDegrees: viewModel.verticalSkewDegrees
         )
     }
     
@@ -1238,4 +1338,74 @@ extension CropView: CropViewProtocol {
 
 extension UIActivityIndicatorView: ActivityIndicatorProtocol {
     
+}
+
+// MARK: - RotationTypeSelectorDelegate
+extension CropView: RotationTypeSelectorDelegate {
+    func rotationTypeSelector(_ selector: RotationTypeSelector,
+                              didSelectType type: RotationAdjustmentType) {
+        let previousType = currentRotationAdjustmentType
+        currentRotationAdjustmentType = type
+        
+        // When switching modes, update the rotation dial to show the corresponding value
+        switch type {
+        case .straighten:
+            rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.degrees))
+        case .horizontalSkew:
+            rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.horizontalSkewDegrees))
+        case .verticalSkew:
+            rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.verticalSkewDegrees))
+        }
+        
+        // If switching away from straighten, save the current dial position
+        if previousType == .straighten {
+            // degrees are already saved in viewModel.degrees
+        }
+    }
+    
+    /// Sets up the rotation type selector below the rotation dial
+    func setupRotationTypeSelector() {
+        guard cropViewConfig.showRotationTypeSelector else { return }
+        
+        if rotationTypeSelector.superview == nil {
+            addSubview(rotationTypeSelector)
+        }
+        
+        rotationTypeSelector.isHidden = false
+        layoutRotationTypeSelector()
+    }
+    
+    func layoutRotationTypeSelector() {
+        guard cropViewConfig.showRotationTypeSelector,
+              rotationTypeSelector.superview != nil else { return }
+        
+        let selectorWidth: CGFloat = 220
+        let selectorHeight: CGFloat = 28
+        
+        if Orientation.treatAsPortrait {
+            if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
+                rotationTypeSelector.frame = CGRect(
+                    x: rotationView.frame.midX - selectorWidth / 2,
+                    y: rotationView.frame.maxY + 4,
+                    width: selectorWidth,
+                    height: selectorHeight
+                )
+            } else {
+                rotationTypeSelector.frame = CGRect(
+                    x: cropAuxiliaryIndicatorView.frame.midX - selectorWidth / 2,
+                    y: cropAuxiliaryIndicatorView.frame.maxY + cropViewConfig.rotationControlViewHeight + 4,
+                    width: selectorWidth,
+                    height: selectorHeight
+                )
+            }
+        } else {
+            // Landscape: position beside the crop area
+            rotationTypeSelector.frame = CGRect(
+                x: cropAuxiliaryIndicatorView.frame.midX - selectorWidth / 2,
+                y: cropAuxiliaryIndicatorView.frame.maxY + cropViewConfig.rotationControlViewHeight + 4,
+                width: selectorWidth,
+                height: selectorHeight
+            )
+        }
+    }
 }

@@ -31,6 +31,8 @@ struct CropState: Equatable {
     var aspectRato: CGFloat
     var flipOddTimes: Bool
     var transformation: Transformation
+    var horizontalSkewDegrees: CGFloat
+    var verticalSkewDegrees: CGFloat
     
     static func == (lhs: CropState, rhs: CropState) -> Bool {
         return lhs.rotationType == rhs.rotationType
@@ -39,6 +41,8 @@ struct CropState: Equatable {
         && lhs.aspectRato == rhs.aspectRato
         && lhs.flipOddTimes == rhs.flipOddTimes
         && lhs.transformation == rhs.transformation
+        && lhs.horizontalSkewDegrees == rhs.horizontalSkewDegrees
+        && lhs.verticalSkewDegrees == rhs.verticalSkewDegrees
     }
 }
 
@@ -52,6 +56,8 @@ public struct Transformation: Equatable {
     public var cropWorkbenchViewBounds: CGRect
     public var horizontallyFlipped: Bool
     public var verticallyFlipped: Bool
+    public var horizontalSkewDegrees: CGFloat
+    public var verticalSkewDegrees: CGFloat
     
     public init(offset: CGPoint,
                 rotation: CGFloat,
@@ -61,7 +67,9 @@ public struct Transformation: Equatable {
                 maskFrame: CGRect,
                 cropWorkbenchViewBounds: CGRect,
                 horizontallyFlipped: Bool,
-                verticallyFlipped: Bool) {
+                verticallyFlipped: Bool,
+                horizontalSkewDegrees: CGFloat = 0,
+                verticalSkewDegrees: CGFloat = 0) {
         self.offset = offset
         self.rotation = rotation
         self.scale = scale
@@ -71,6 +79,8 @@ public struct Transformation: Equatable {
         self.cropWorkbenchViewBounds = cropWorkbenchViewBounds
         self.horizontallyFlipped = horizontallyFlipped
         self.verticallyFlipped = verticallyFlipped
+        self.horizontalSkewDegrees = horizontalSkewDegrees
+        self.verticalSkewDegrees = verticalSkewDegrees
     }
     
     public static func == (lhs: Transformation, rhs: Transformation) -> Bool {
@@ -83,6 +93,8 @@ public struct Transformation: Equatable {
         && lhs.cropWorkbenchViewBounds == rhs.cropWorkbenchViewBounds
         && lhs.horizontallyFlipped == rhs.horizontallyFlipped
         && lhs.verticallyFlipped == rhs.verticallyFlipped
+        && lhs.horizontalSkewDegrees == rhs.horizontalSkewDegrees
+        && lhs.verticalSkewDegrees == rhs.verticalSkewDegrees
     }
 }
 
@@ -117,7 +129,9 @@ public typealias CropInfo = (
     scaleY: CGFloat,
     cropSize: CGSize,
     imageViewSize: CGSize,
-    cropRegion: CropRegion
+    cropRegion: CropRegion,
+    horizontalSkewDegrees: CGFloat,
+    verticalSkewDegrees: CGFloat
 )
 
 typealias CropOutput = (

@@ -105,5 +105,9 @@ public struct CropViewConfig {
     
     public var keyboardZoomScaleFactor: CGFloat = 1.1
     
+    /// When true, shows the Straighten/Horizontal/Vertical selector below the rotation dial,
+    /// enabling perspective skew adjustments similar to Apple Photos app.
+    public var showRotationTypeSelector: Bool = false
+    
     public init() {}
 }
