@@ -194,6 +194,8 @@ struct PerspectiveTransformHelper {
     
     /// Applies perspective correction to a CGImage.
     /// Returns nil if no skew is applied or if the filter fails.
+    /// The output is automatically cropped to the largest inscribed rectangle
+    /// to eliminate blank/transparent areas.
     static func applyPerspectiveTransform(
         to cgImage: CGImage,
         horizontalDegrees: CGFloat,
@@ -223,7 +225,135 @@ struct PerspectiveTransformHelper {
             return nil
         }
         
+        // Compute inscribed rectangle to crop out blank areas
+        let tl = CGPoint(x: corners.topLeft.x, y: corners.topLeft.y)
+        let tr = CGPoint(x: corners.topRight.x, y: corners.topRight.y)
+        let bl = CGPoint(x: corners.bottomLeft.x, y: corners.bottomLeft.y)
+        let br = CGPoint(x: corners.bottomRight.x, y: corners.bottomRight.y)
+        let cropRect = inscribedRectInQuadrilateral(topLeft: tl, topRight: tr,
+                                                     bottomLeft: bl, bottomRight: br)
+        
         let context = CIContext()
+        if cropRect.width > 0 && cropRect.height > 0 {
+            return context.createCGImage(outputImage, from: cropRect)
+        }
         return context.createCGImage(outputImage, from: outputImage.extent)
+    }
+    
+    // MARK: - Perspective projection utilities for auto-zoom computation
+    
+    /// Projects a 2D displacement (relative to sublayerTransform center) through a CATransform3D.
+    /// Assumes the input point lies on z = 0 (flat layer).
+    ///
+    /// Uses Core Animation's row-vector convention: `[x, y, 0, 1] * M`.
+    static func projectDisplacement(_ d: CGPoint, through t: CATransform3D) -> CGPoint {
+        let px = d.x * t.m11 + d.y * t.m21 + t.m41
+        let py = d.x * t.m12 + d.y * t.m22 + t.m42
+        let w  = d.x * t.m14 + d.y * t.m24 + t.m44
+        guard abs(w) > 1e-10 else { return d }
+        return CGPoint(x: px / w, y: py / w)
+    }
+    
+    /// Tests whether all `testPoints` lie inside a convex polygon.
+    ///
+    /// The polygon vertices must be in clockwise order (screen coordinates, Y downward).
+    /// Uses the cross-product sign test: for CW winding, interior points
+    /// produce a positive cross product for every edge.
+    static func allPointsInsideConvexPolygon(
+        _ testPoints: [CGPoint],
+        polygon: [CGPoint]
+    ) -> Bool {
+        let n = polygon.count
+        guard n >= 3 else { return false }
+        
+        for point in testPoints {
+            for i in 0..<n {
+                let a = polygon[i]
+                let b = polygon[(i + 1) % n]
+                let cross = (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)
+                if cross < -1e-6 {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    /// Computes the minimum scale factor for the sublayerTransform so that the
+    /// projected image quadrilateral fully covers the visible rectangle.
+    ///
+    /// `CATransform3DScale(t, s, s, 1)` uniformly scales the projected positions by `s`
+    /// (because `CATransform3DScale` post-multiplies the scale matrix, meaning
+    /// `p * t * Scale` — the scale applies *after* projection).
+    ///
+    /// Therefore we only need one projection pass: we project the image corners at
+    /// scale 1, then binary-search for the minimum `s` where
+    /// `(visibleCorner / s)` lies inside the unscaled projected quad.
+    ///
+    /// - Parameters:
+    ///   - imageCornerDisplacements: 4 image corner displacements from the sublayerTransform
+    ///     center, in CW order (TL, TR, BR, BL).
+    ///   - visibleHalfSize: Half the visible area dimensions.
+    ///   - perspectiveTransform: The CATransform3D perspective rotation (without compensating scale).
+    /// - Returns: Scale factor ≥ 1.0.
+    static func computeCompensatingScale(
+        imageCornerDisplacements: [CGPoint],
+        visibleHalfSize: CGSize,
+        perspectiveTransform: CATransform3D
+    ) -> CGFloat {
+        // Project image corners once (at unit scale)
+        let projectedCorners = imageCornerDisplacements.map {
+            projectDisplacement($0, through: perspectiveTransform)
+        }
+        
+        // Visible area corners (relative to center)
+        let visibleCorners = [
+            CGPoint(x: -visibleHalfSize.width, y: -visibleHalfSize.height),
+            CGPoint(x:  visibleHalfSize.width, y: -visibleHalfSize.height),
+            CGPoint(x:  visibleHalfSize.width, y:  visibleHalfSize.height),
+            CGPoint(x: -visibleHalfSize.width, y:  visibleHalfSize.height)
+        ]
+        
+        // Quick check: no scale needed?
+        if allPointsInsideConvexPolygon(visibleCorners, polygon: projectedCorners) {
+            return 1.0
+        }
+        
+        // Binary search: find minimum s where (visibleCorners / s) ⊂ projectedCorners
+        var lo: CGFloat = 1.0
+        var hi: CGFloat = 5.0
+        
+        for _ in 0..<30 {
+            let mid = (lo + hi) / 2
+            let shrunk = visibleCorners.map { CGPoint(x: $0.x / mid, y: $0.y / mid) }
+            if allPointsInsideConvexPolygon(shrunk, polygon: projectedCorners) {
+                hi = mid
+            } else {
+                lo = mid
+            }
+        }
+        
+        // Tiny margin for sub-pixel safety
+        return hi * 1.002
+    }
+    
+    /// Computes a conservative axis-aligned inscribed rectangle within the
+    /// quadrilateral defined by four perspective-transformed corners.
+    ///
+    /// The corners are in CI coordinate space (origin at bottom-left, Y upward).
+    private static func inscribedRectInQuadrilateral(
+        topLeft tl: CGPoint,
+        topRight tr: CGPoint,
+        bottomLeft bl: CGPoint,
+        bottomRight br: CGPoint
+    ) -> CGRect {
+        // In CIImage coords: Y goes up, so "top" = high Y, "bottom" = low Y.
+        let minX = max(tl.x, bl.x)
+        let maxX = min(tr.x, br.x)
+        let minY = max(bl.y, br.y)   // bottom inner edge (low Y)
+        let maxY = min(tl.y, tr.y)   // top inner edge (high Y)
+        
+        guard maxX > minX && maxY > minY else { return .zero }
+        return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
 }
