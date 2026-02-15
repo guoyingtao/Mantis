@@ -75,6 +75,8 @@
 		F24DCFE829AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */; };
 		F24DCFEC29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFEB29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift */; };
 		F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */; };
+		F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */; };
+		F25821642F4180880091CA49 /* RotationTypeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821632F4180880091CA49 /* RotationTypeSelector.swift */; };
 		F28FF64A2C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */; };
 		F2AD53412A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */; };
 		F2B4FDA42A3B661B00667F22 /* SlideDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B4FDA32A3B661B00667F22 /* SlideDial.swift */; };
@@ -213,6 +215,8 @@
 		F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorViewTests.swift; sourceTree = "<group>"; };
 		F24DCFEB29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CropAuxiliaryIndicatorView+Accessibility.swift"; sourceTree = "<group>"; };
 		F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchViewTests.swift; sourceTree = "<group>"; };
+		F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelper.swift; sourceTree = "<group>"; };
+		F25821632F4180880091CA49 /* RotationTypeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationTypeSelector.swift; sourceTree = "<group>"; };
 		F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorConfig.swift; sourceTree = "<group>"; };
 		F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAutoAdjustHelper.swift; sourceTree = "<group>"; };
 		F2B4FDA32A3B661B00667F22 /* SlideDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDial.swift; sourceTree = "<group>"; };
@@ -417,6 +421,7 @@
 		OBJ_33 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */,
 				97D3A0182BAD491A00DEB1D6 /* TransformRecord.swift */,
 				97D3A0172BAD491A00DEB1D6 /* TransformStack.swift */,
 				F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */,
@@ -440,6 +445,7 @@
 		OBJ_42 /* RotationDial */ = {
 			isa = PBXGroup;
 			children = (
+				F25821632F4180880091CA49 /* RotationTypeSelector.swift */,
 				F2058F232A400494008DEBAA /* SlideDial */,
 				F2058F222A3FFE26008DEBAA /* RotationDial */,
 			);
@@ -762,6 +768,7 @@
 				66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */,
 				F2D700392DA1B8630063EE6C /* ImageCropper.swift in Sources */,
 				OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */,
+				F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */,
 				OBJ_73 /* CropWorkbenchView.swift in Sources */,
 				66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */,
 				OBJ_74 /* CropView+Touches.swift in Sources */,
@@ -802,6 +809,7 @@
 				5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */,
 				F2B4FDA42A3B661B00667F22 /* SlideDial.swift in Sources */,
 				F2058F272A400508008DEBAA /* SlideDialViewModel.swift in Sources */,
+				F25821642F4180880091CA49 /* RotationTypeSelector.swift in Sources */,
 				F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */,
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,

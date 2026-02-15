@@ -9,6 +9,7 @@
 import UIKit
 import CoreImage
 
+// swiftlint:disable all
 /// Represents the type of rotation/skew adjustment the user is performing
 public enum RotationAdjustmentType: Int, CaseIterable {
     case straighten = 0
