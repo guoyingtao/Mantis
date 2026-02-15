@@ -105,7 +105,9 @@ extension UIImage {
                 return nil
             }
             
-            // Apply perspective correction if skew values are non-zero
+            // Apply perspective transform if skew values are non-zero
+            // The perspective is applied after cropping to match the visual effect
+            // seen in the preview where the crop box selects from the transformed view
             if cropInfo.horizontalSkewDegrees != 0 || cropInfo.verticalSkewDegrees != 0 {
                 if let perspectiveCorrected = PerspectiveTransformHelper.applyPerspectiveTransform(
                     to: transformedCGImage,

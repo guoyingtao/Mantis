@@ -121,12 +121,16 @@ struct PerspectiveTransformHelper {
     
     /// Computes the four corner points for a CIPerspectiveTransform based on skew values.
     ///
-    /// The corner adjustments simulate the same visual effect as the CATransform3D preview.
+    /// CIPerspectiveTransform maps the original image corners to new positions.
+    /// To match the CATransform3D preview effect, we need to understand:
+    /// - In preview: positive vertical skew tilts top toward viewer (top appears wider)
+    /// - For CIPerspectiveTransform: we specify where each corner should go
+    ///
     /// - Parameters:
     ///   - imageSize: The size of the source image
-    ///   - horizontalDegrees: Horizontal skew angle
-    ///   - verticalDegrees: Vertical skew angle
-    /// - Returns: Tuple of 4 CIVector corner positions (topLeft, topRight, bottomLeft, bottomRight)
+    ///   - horizontalDegrees: Horizontal skew angle (-30 to +30)
+    ///   - verticalDegrees: Vertical skew angle (-30 to +30)
+    /// - Returns: Tuple of 4 CIVector corner positions in CIImage coordinate system
     static func perspectiveCorners(
         for imageSize: CGSize,
         horizontalDegrees: CGFloat,
@@ -135,53 +139,66 @@ struct PerspectiveTransformHelper {
         let w = imageSize.width
         let h = imageSize.height
         
-        // Start with original corners (CIImage coordinate system: origin at bottom-left)
-        var tl = CGPoint(x: 0, y: h)     // top-left in UIKit = top-left in CI (y is flipped in CI)
-        var tr = CGPoint(x: w, y: h)     // top-right
-        var bl = CGPoint(x: 0, y: 0)     // bottom-left
-        var br = CGPoint(x: w, y: 0)     // bottom-right
+        // CIImage coordinate system: origin at bottom-left, Y goes up
+        // So "top" has high Y value, "bottom" has low Y value
+        // Start with original corners
+        var tl = CGPoint(x: 0, y: h)      // top-left (high Y)
+        var tr = CGPoint(x: w, y: h)      // top-right (high Y)
+        var bl = CGPoint(x: 0, y: 0)      // bottom-left (low Y)
+        var br = CGPoint(x: w, y: 0)      // bottom-right (low Y)
         
-        // Apply horizontal skew: rotate around vertical center axis
-        // Positive = right side comes forward (appears larger)
-        // Negative = left side comes forward (appears larger)
+        // Calculate the perspective effect intensity based on angle
+        let hRadians = horizontalDegrees * .pi / 180.0
+        let vRadians = verticalDegrees * .pi / 180.0
+        
+        // Horizontal skew: rotation around vertical axis
+        // Positive = right side recedes, left side forward
+        // Negative = left side recedes, right side forward
         if horizontalDegrees != 0 {
-            let factor = abs(horizontalDegrees) / maxSkewDegrees
-            let xShift = w * factor * 0.15  // How much the edges move inward
-            let yShift = h * factor * 0.10  // How much height changes on the receding side
+            let intensity = sin(abs(hRadians))
+            let verticalShrink = h * intensity * 0.25
+            let horizontalShift = w * intensity * 0.12
             
             if horizontalDegrees > 0 {
-                // Right side recedes: right corners move inward
-                tr.x -= xShift
-                br.x -= xShift
-                tr.y -= yShift
-                br.y += yShift
+                // Right side recedes: right corners move inward and closer together
+                tr.x -= horizontalShift
+                br.x -= horizontalShift
+                // In CI coords: top-right Y decreases, bottom-right Y increases (shrinking the right edge)
+                tr.y -= verticalShrink / 2
+                br.y += verticalShrink / 2
             } else {
-                // Left side recedes: left corners move inward
-                tl.x += xShift
-                bl.x += xShift
-                tl.y -= yShift
-                bl.y += yShift
+                // Left side recedes
+                tl.x += horizontalShift
+                bl.x += horizontalShift
+                tl.y -= verticalShrink / 2
+                bl.y += verticalShrink / 2
             }
         }
         
-        // Apply vertical skew: rotate around horizontal center axis
+        // Vertical skew: rotation around horizontal axis
+        // In preview with positive degrees: top tilts toward viewer (appears wider)
+        // So for output: positive = bottom edge shrinks (moves inward horizontally)
         if verticalDegrees != 0 {
-            let factor = abs(verticalDegrees) / maxSkewDegrees
-            let yShift = h * factor * 0.15
-            let xShift = w * factor * 0.10
+            let intensity = sin(abs(vRadians))
+            let horizontalShrink = w * intensity * 0.25
+            let verticalShift = h * intensity * 0.12
             
             if verticalDegrees > 0 {
-                // Bottom recedes
-                bl.y += yShift
-                br.y += yShift
-                bl.x += xShift
-                br.x -= xShift
+                // Positive: bottom recedes (narrower), top stays wide
+                // Bottom corners move inward horizontally
+                bl.x += horizontalShrink / 2
+                br.x -= horizontalShrink / 2
+                // Bottom edge also moves up slightly (in CI coords, Y increases)
+                bl.y += verticalShift
+                br.y += verticalShift
             } else {
-                // Top recedes
-                tl.y -= yShift
-                tr.y -= yShift
-                tl.x += xShift
-                tr.x -= xShift
+                // Negative: top recedes (narrower), bottom stays wide
+                // Top corners move inward horizontally
+                tl.x += horizontalShrink / 2
+                tr.x -= horizontalShrink / 2
+                // Top edge moves down (in CI coords, Y decreases)
+                tl.y -= verticalShift
+                tr.y -= verticalShift
             }
         }
         
@@ -193,10 +210,13 @@ struct PerspectiveTransformHelper {
         )
     }
     
-    /// Applies perspective correction to a CGImage.
-    /// Returns nil if no skew is applied or if the filter fails.
-    /// The output is automatically cropped to the largest inscribed rectangle
-    /// to eliminate blank/transparent areas.
+    /// Applies perspective transform to a CGImage to match the preview appearance.
+    ///
+    /// The preview uses CATransform3D with m34 = -1/500 applied via sublayerTransform.
+    /// This method renders the image using the same CATransform3D approach to ensure
+    /// the output matches the preview exactly.
+    ///
+    /// Returns nil if no skew is applied or if rendering fails.
     static func applyPerspectiveTransform(
         to cgImage: CGImage,
         horizontalDegrees: CGFloat,
@@ -206,38 +226,134 @@ struct PerspectiveTransformHelper {
             return nil
         }
         
+        let w = CGFloat(cgImage.width)
+        let h = CGFloat(cgImage.height)
+        
+        // Get the exact CATransform3D used in preview
+        let transform = combinedSkewTransform3D(
+            horizontalDegrees: horizontalDegrees,
+            verticalDegrees: verticalDegrees
+        )
+        
+        // Use a virtual size to calculate perspective ratios
+        let virtualSize: CGFloat = 350.0
+        let halfVirtual = virtualSize / 2.0
+        
+        // Define corners centered at origin (UIKit coordinates: Y down)
+        let cornersUIKit = [
+            CGPoint(x: -halfVirtual, y: -halfVirtual),  // top-left
+            CGPoint(x: halfVirtual, y: -halfVirtual),   // top-right
+            CGPoint(x: halfVirtual, y: halfVirtual),    // bottom-right
+            CGPoint(x: -halfVirtual, y: halfVirtual)    // bottom-left
+        ]
+        
+        // Project through CATransform3D
+        let projectedUIKit = cornersUIKit.map { projectDisplacement($0, through: transform) }
+        
+        // Calculate displacement ratios
+        var displacementRatios: [CGPoint] = []
+        for i in 0..<4 {
+            let dx = (projectedUIKit[i].x - cornersUIKit[i].x) / halfVirtual
+            let dy = (projectedUIKit[i].y - cornersUIKit[i].y) / halfVirtual
+            displacementRatios.append(CGPoint(x: dx, y: dy))
+        }
+        
+        let halfW = w / 2.0
+        let halfH = h / 2.0
+        let scaleFactor: CGFloat = 1.5
+        
+        // Calculate projected corners in UIKit coordinates (origin top-left, Y down)
+        // Original corners: TL(0,0), TR(w,0), BR(w,h), BL(0,h)
+        // Displacements are relative to center, so we apply them from each corner's position
+        let projTL = CGPoint(
+            x: 0 + displacementRatios[0].x * halfW * scaleFactor,
+            y: 0 + displacementRatios[0].y * halfH * scaleFactor
+        )
+        let projTR = CGPoint(
+            x: w + displacementRatios[1].x * halfW * scaleFactor,
+            y: 0 + displacementRatios[1].y * halfH * scaleFactor
+        )
+        let projBR = CGPoint(
+            x: w + displacementRatios[2].x * halfW * scaleFactor,
+            y: h + displacementRatios[2].y * halfH * scaleFactor
+        )
+        let projBL = CGPoint(
+            x: 0 + displacementRatios[3].x * halfW * scaleFactor,
+            y: h + displacementRatios[3].y * halfH * scaleFactor
+        )
+        
+        // Find the bounding box of projected corners
+        let allX = [projTL.x, projTR.x, projBR.x, projBL.x]
+        let allY = [projTL.y, projTR.y, projBR.y, projBL.y]
+        let minProjX = allX.min()!
+        let maxProjX = allX.max()!
+        let minProjY = allY.min()!
+        let maxProjY = allY.max()!
+        
+        // Calculate the inscribed rectangle (no black areas)
+        let insideLeft = max(projTL.x, projBL.x)
+        let insideRight = min(projTR.x, projBR.x)
+        let insideTop = max(projTL.y, projTR.y)
+        let insideBottom = min(projBL.y, projBR.y)
+        
+        // Output size is the inscribed rectangle
+        let outputWidth = insideRight - insideLeft
+        let outputHeight = insideBottom - insideTop
+        
+        guard outputWidth > 10 && outputHeight > 10 else {
+            return nil
+        }
+        
+        // Now use CIPerspectiveTransform with corners adjusted so the inscribed
+        // rectangle maps to the full output
+        
+        // Convert to CIImage coordinates (origin bottom-left, Y up)
+        // and shift so inscribed rect starts at origin
+        let ciTL = CGPoint(
+            x: projTL.x - insideLeft,
+            y: outputHeight - (projTL.y - insideTop)
+        )
+        let ciTR = CGPoint(
+            x: projTR.x - insideLeft,
+            y: outputHeight - (projTR.y - insideTop)
+        )
+        let ciBR = CGPoint(
+            x: projBR.x - insideLeft,
+            y: outputHeight - (projBR.y - insideTop)
+        )
+        let ciBL = CGPoint(
+            x: projBL.x - insideLeft,
+            y: outputHeight - (projBL.y - insideTop)
+        )
+        
         let ciImage = CIImage(cgImage: cgImage)
-        let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
-        let corners = perspectiveCorners(for: imageSize,
-                                         horizontalDegrees: horizontalDegrees,
-                                         verticalDegrees: verticalDegrees)
         
         guard let filter = CIFilter(name: "CIPerspectiveTransform") else {
             return nil
         }
         
         filter.setValue(ciImage, forKey: kCIInputImageKey)
-        filter.setValue(corners.topLeft, forKey: "inputTopLeft")
-        filter.setValue(corners.topRight, forKey: "inputTopRight")
-        filter.setValue(corners.bottomLeft, forKey: "inputBottomLeft")
-        filter.setValue(corners.bottomRight, forKey: "inputBottomRight")
+        filter.setValue(CIVector(x: ciTL.x, y: ciTL.y), forKey: "inputTopLeft")
+        filter.setValue(CIVector(x: ciTR.x, y: ciTR.y), forKey: "inputTopRight")
+        filter.setValue(CIVector(x: ciBL.x, y: ciBL.y), forKey: "inputBottomLeft")
+        filter.setValue(CIVector(x: ciBR.x, y: ciBR.y), forKey: "inputBottomRight")
         
         guard let outputImage = filter.outputImage else {
             return nil
         }
         
-        // Compute inscribed rectangle to crop out blank areas
-        let tl = CGPoint(x: corners.topLeft.x, y: corners.topLeft.y)
-        let tr = CGPoint(x: corners.topRight.x, y: corners.topRight.y)
-        let bl = CGPoint(x: corners.bottomLeft.x, y: corners.bottomLeft.y)
-        let br = CGPoint(x: corners.bottomRight.x, y: corners.bottomRight.y)
-        let cropRect = inscribedRectInQuadrilateral(topLeft: tl, topRight: tr,
-                                                     bottomLeft: bl, bottomRight: br)
-        
         let context = CIContext()
-        if cropRect.width > 0 && cropRect.height > 0 {
-            return context.createCGImage(outputImage, from: cropRect)
+        
+        // Crop to exactly the inscribed rectangle area
+        // The output extent should now be positioned such that (0,0) to (outputWidth, outputHeight)
+        // contains the valid image content
+        let cropRect = CGRect(x: 0, y: 0, width: outputWidth, height: outputHeight)
+        let finalRect = cropRect.intersection(outputImage.extent)
+        
+        if !finalRect.isNull && finalRect.width > 10 && finalRect.height > 10 {
+            return context.createCGImage(outputImage, from: finalRect)
         }
+        
         return context.createCGImage(outputImage, from: outputImage.extent)
     }
     
