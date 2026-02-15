@@ -488,52 +488,82 @@ extension CropView {
         if hDeg == 0 && vDeg == 0 {
             cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
         } else {
-            let perspectiveTransform =
+            var perspectiveTransform =
                 PerspectiveTransformHelper.combinedSkewTransform3D(
                     horizontalDegrees: hDeg,
                     verticalDegrees: vDeg
                 )
             
+            let threshold = PerspectiveTransformHelper.translateThresholdDegrees
+            let maxDeg = max(abs(hDeg), abs(vDeg))
+            let rawFactor = (maxDeg - threshold) / (PerspectiveTransformHelper.maxSkewDegrees - threshold)
+            let factor = max(0, min(1, rawFactor))
+            let safetyInset = 2 + (12 * factor)
+            let (cornerDisplacements, visibleCornerDisplacements, visibleCenter, visibleTopLeft) =
+                computeSkewProjectionInputs(safetyInset: safetyInset)
+            if maxDeg > 0 {
+                perspectiveTransform = PerspectiveTransformHelper.centeredTransform(
+                    perspectiveTransform,
+                    imageCornerDisplacements: cornerDisplacements,
+                    targetCenter: visibleCenter,
+                    factor: factor
+                )
+            }
+            
             // Compute compensating scale to prevent blank areas
-            let scale = computeSkewCompensatingScale(for: perspectiveTransform)
+            let scale = PerspectiveTransformHelper.computeCompensatingScale(
+                imageCornerDisplacements: cornerDisplacements,
+                visibleCornerDisplacements: visibleCornerDisplacements,
+                perspectiveTransform: perspectiveTransform
+            )
+            let topLeftAdjust = max(0, -visibleTopLeft.y / max(cropAuxiliaryIndicatorView.bounds.height, 1))
+            let topLeftScale = 1 + min(0.03, topLeftAdjust * 0.08)
+            let safetyScale = 1 + (0.06 * factor)
+            let finalScale = scale * safetyScale * topLeftScale
             
             // CATransform3DScale(t, s, s, 1) = t * Scale  (post-multiply)
             // This uniformly scales the projected positions by s, ensuring
             // the perspective-warped image fully covers the visible area.
-            let scaledTransform = CATransform3DScale(perspectiveTransform, scale, scale, 1)
+            let scaledTransform = CATransform3DScale(perspectiveTransform, finalScale, finalScale, 1)
             cropWorkbenchView.layer.sublayerTransform = scaledTransform
         }
     }
     
-    /// Computes the minimum scale factor so that the perspective-projected image
-    /// quadrilateral fully covers the visible (crop box) area.
-    private func computeSkewCompensatingScale(for perspectiveTransform: CATransform3D) -> CGFloat {
+    private func computeSkewProjectionInputs(safetyInset: CGFloat) -> ([CGPoint], [CGPoint], CGPoint, CGPoint) {
         // The sublayerTransform's anchor in content coordinates
         let anchor = CGPoint(
             x: cropWorkbenchView.contentOffset.x + cropWorkbenchView.bounds.width / 2,
             y: cropWorkbenchView.contentOffset.y + cropWorkbenchView.bounds.height / 2
         )
-        
+
         // Image container corners as displacements from the anchor (CW: TL, TR, BR, BL)
         let fr = imageContainer.frame
-        let corners = [
+        let imageCornerDisplacements = [
             CGPoint(x: fr.minX - anchor.x, y: fr.minY - anchor.y),
             CGPoint(x: fr.maxX - anchor.x, y: fr.minY - anchor.y),
             CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
             CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
         ]
-        
-        // Visible area half-extents (conservative: use scroll view bounds)
-        let visibleHalfSize = CGSize(
-            width: cropWorkbenchView.bounds.width / 2,
-            height: cropWorkbenchView.bounds.height / 2
+
+        let cropBoxRectInImage = cropAuxiliaryIndicatorView.convert(
+            cropAuxiliaryIndicatorView.bounds,
+            to: imageContainer
         )
-        
-        return PerspectiveTransformHelper.computeCompensatingScale(
-            imageCornerDisplacements: corners,
-            visibleHalfSize: visibleHalfSize,
-            perspectiveTransform: perspectiveTransform
+        let safetyRect = cropBoxRectInImage.insetBy(dx: -safetyInset, dy: -safetyInset)
+        let visibleCornerDisplacements = [
+            CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.minY - anchor.y),
+            CGPoint(x: safetyRect.maxX - anchor.x, y: safetyRect.minY - anchor.y),
+            CGPoint(x: safetyRect.maxX - anchor.x, y: safetyRect.maxY - anchor.y),
+            CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.maxY - anchor.y)
+        ]
+
+        let visibleCenter = CGPoint(
+            x: (safetyRect.minX + safetyRect.maxX) / 2 - anchor.x,
+            y: (safetyRect.minY + safetyRect.maxY) / 2 - anchor.y
         )
+
+        let visibleTopLeft = CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.minY - anchor.y)
+        return (imageCornerDisplacements, visibleCornerDisplacements, visibleCenter, visibleTopLeft)
     }
     
     /// Sets the horizontal skew degrees and refreshes the view

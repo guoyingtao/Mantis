@@ -30,7 +30,7 @@ public enum RotationAdjustmentType: Int, CaseIterable {
 
 struct PerspectiveTransformHelper {
     /// Maximum skew angle in degrees
-    static let maxSkewDegrees: CGFloat = 20.0
+    static let maxSkewDegrees: CGFloat = 30.0
     
     /// The perspective depth factor (m34). Smaller absolute values = more dramatic perspective.
     static let perspectiveDepth: CGFloat = -1.0 / 500.0
@@ -255,6 +255,43 @@ struct PerspectiveTransformHelper {
         return CGPoint(x: px / w, y: py / w)
     }
     
+    /// Recenters the projected quad so it stays aligned to the view center.
+    static func centeredTransform(
+        _ transform: CATransform3D,
+        imageCornerDisplacements: [CGPoint],
+        targetCenter: CGPoint,
+        factor: CGFloat
+    ) -> CATransform3D {
+        guard imageCornerDisplacements.count == 4 else {
+            return transform
+        }
+
+        let clampedFactor = max(0, min(1, factor))
+        guard clampedFactor > 0 else {
+            return transform
+        }
+
+        let projectedCorners = imageCornerDisplacements.map { projectDisplacement($0, through: transform) }
+        guard let minX = projectedCorners.map({ $0.x }).min(),
+              let maxX = projectedCorners.map({ $0.x }).max(),
+              let minY = projectedCorners.map({ $0.y }).min(),
+              let maxY = projectedCorners.map({ $0.y }).max() else {
+            return transform
+        }
+
+        let projectedCenter = CGPoint(x: (minX + maxX) / 2, y: (minY + maxY) / 2)
+        let delta = CGPoint(
+            x: projectedCenter.x - targetCenter.x,
+            y: projectedCenter.y - targetCenter.y
+        )
+        return CATransform3DTranslate(
+            transform,
+            -delta.x * clampedFactor,
+            -delta.y * clampedFactor,
+            0
+        )
+    }
+    
     /// Tests whether all `testPoints` lie inside a convex polygon.
     ///
     /// The polygon vertices must be in clockwise order (screen coordinates, Y downward).
@@ -299,7 +336,7 @@ struct PerspectiveTransformHelper {
     /// - Returns: Scale factor ≥ 1.0.
     static func computeCompensatingScale(
         imageCornerDisplacements: [CGPoint],
-        visibleHalfSize: CGSize,
+        visibleCornerDisplacements: [CGPoint],
         perspectiveTransform: CATransform3D
     ) -> CGFloat {
         // Project image corners once (at unit scale)
@@ -307,16 +344,8 @@ struct PerspectiveTransformHelper {
             projectDisplacement($0, through: perspectiveTransform)
         }
         
-        // Visible area corners (relative to center)
-        let visibleCorners = [
-            CGPoint(x: -visibleHalfSize.width, y: -visibleHalfSize.height),
-            CGPoint(x:  visibleHalfSize.width, y: -visibleHalfSize.height),
-            CGPoint(x:  visibleHalfSize.width, y:  visibleHalfSize.height),
-            CGPoint(x: -visibleHalfSize.width, y:  visibleHalfSize.height)
-        ]
-        
         // Quick check: no scale needed?
-        if allPointsInsideConvexPolygon(visibleCorners, polygon: projectedCorners) {
+        if allPointsInsideConvexPolygon(visibleCornerDisplacements, polygon: projectedCorners) {
             return 1.0
         }
         
@@ -326,7 +355,7 @@ struct PerspectiveTransformHelper {
         
         for _ in 0..<30 {
             let mid = (lo + hi) / 2
-            let shrunk = visibleCorners.map { CGPoint(x: $0.x / mid, y: $0.y / mid) }
+            let shrunk = visibleCornerDisplacements.map { CGPoint(x: $0.x / mid, y: $0.y / mid) }
             if allPointsInsideConvexPolygon(shrunk, polygon: projectedCorners) {
                 hi = mid
             } else {
