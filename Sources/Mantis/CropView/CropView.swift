@@ -515,11 +515,12 @@ extension CropView {
                     verticalDegrees: vDeg
                 )
             
-            let threshold = PerspectiveTransformHelper.translateThresholdDegrees
             let maxDeg = max(abs(hDeg), abs(vDeg))
+            let normalizedAngle = min(maxDeg / PerspectiveTransformHelper.maxSkewDegrees, 1)
+            let threshold = PerspectiveTransformHelper.translateThresholdDegrees
             let rawFactor = (maxDeg - threshold) / (PerspectiveTransformHelper.maxSkewDegrees - threshold)
             let factor = max(0, min(1, rawFactor))
-            let safetyInset = 2 + (18 * factor) + (8 * factor * factor)
+            let safetyInset = (20 * factor) + (8 * factor * factor)
             let (cornerDisplacements, visibleCornerDisplacements, visibleCenter, visibleTopLeft) =
                 computeSkewProjectionInputs(safetyInset: safetyInset)
             // Compute compensating scale to prevent blank areas
@@ -529,7 +530,7 @@ extension CropView {
                 perspectiveTransform: perspectiveTransform
             )
             let topLeftAdjust = max(0, -visibleTopLeft.y / max(cropAuxiliaryIndicatorView.bounds.height, 1))
-            let topLeftScale = 1 + min(0.04, topLeftAdjust * 0.09)
+            let topLeftScale = 1 + min(0.04, topLeftAdjust * 0.09) * normalizedAngle
             let safetyScale = 1 + (0.08 * factor) + (0.06 * factor * factor)
             let finalScale = scale * safetyScale * topLeftScale
             

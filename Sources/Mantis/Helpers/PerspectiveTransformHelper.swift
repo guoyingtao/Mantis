@@ -238,8 +238,7 @@ struct PerspectiveTransformHelper {
             }
         }
         
-        // Tiny margin for sub-pixel safety
-        return hi * 1.002
+        return hi
     }
     
 }
