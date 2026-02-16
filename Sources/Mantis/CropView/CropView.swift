@@ -298,16 +298,12 @@ final class CropView: UIView {
                 self.viewModel.horizontalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
                 self.checkImageStatusChanged()
-                // Trigger rotating status to refresh grid display
-                self.viewModel.viewStatus = .rotating
             case .verticalSkew:
                 let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
                                   min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
                 self.viewModel.verticalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
                 self.checkImageStatusChanged()
-                // Trigger rotating status to refresh grid display
-                self.viewModel.viewStatus = .rotating
             }
         }
         
@@ -526,15 +522,6 @@ extension CropView {
             let safetyInset = 2 + (12 * factor)
             let (cornerDisplacements, visibleCornerDisplacements, visibleCenter, visibleTopLeft) =
                 computeSkewProjectionInputs(safetyInset: safetyInset)
-            if maxDeg > 0 {
-                perspectiveTransform = PerspectiveTransformHelper.centeredTransform(
-                    perspectiveTransform,
-                    imageCornerDisplacements: cornerDisplacements,
-                    targetCenter: visibleCenter,
-                    factor: factor
-                )
-            }
-            
             // Compute compensating scale to prevent blank areas
             let scale = PerspectiveTransformHelper.computeCompensatingScale(
                 imageCornerDisplacements: cornerDisplacements,
@@ -546,12 +533,19 @@ extension CropView {
             let safetyScale = 1 + (0.06 * factor)
             let finalScale = scale * safetyScale * topLeftScale
             
-            // CATransform3DScale(t, s, s, 1) = t * Scale  (post-multiply)
-            // This uniformly scales the projected positions by s, ensuring
-            // the perspective-warped image fully covers the visible area.
             let scaledTransform = CATransform3DScale(perspectiveTransform, finalScale, finalScale, 1)
             cropWorkbenchView.layer.sublayerTransform = scaledTransform
         }
+    }
+    
+    /// Synchronizes the SlideDial's internal stored angles and button values
+    /// with the CropView's viewModel skew degrees (e.g. after a 90° rotation swap).
+    private func syncSlideDialSkewValues() {
+        guard let slideDial = rotationControlView as? SlideDial else { return }
+        slideDial.syncSkewValues(
+            horizontal: viewModel.horizontalSkewDegrees,
+            vertical: viewModel.verticalSkewDegrees
+        )
     }
     
     private func computeSkewProjectionInputs(safetyInset: CGFloat) -> ([CGPoint], [CGPoint], CGPoint, CGPoint) {
@@ -570,11 +564,19 @@ extension CropView {
             CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
         ]
 
-        let cropBoxRectInImage = cropAuxiliaryIndicatorView.convert(
-            cropAuxiliaryIndicatorView.bounds,
-            to: imageContainer
+        // Visible crop rect in scroll view content coordinates.
+        // anchor and imageCornerDisplacements are in content coordinates (where
+        // imageContainer.frame lives), so the crop rect must be in the same space.
+        // The scroll view's visible rect in content coords is simply
+        // (contentOffset, bounds.size) — no zoom division needed.
+        let cOffset = cropWorkbenchView.contentOffset
+        let cropBoxRectInContent = CGRect(
+            x: cOffset.x,
+            y: cOffset.y,
+            width: cropWorkbenchView.bounds.width,
+            height: cropWorkbenchView.bounds.height
         )
-        let safetyRect = cropBoxRectInImage.insetBy(dx: -safetyInset, dy: -safetyInset)
+        let safetyRect = cropBoxRectInContent.insetBy(dx: -safetyInset, dy: -safetyInset)
         let visibleCornerDisplacements = [
             CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.minY - anchor.y),
             CGPoint(x: safetyRect.maxX - anchor.x, y: safetyRect.minY - anchor.y),
@@ -1105,6 +1107,19 @@ extension CropView: CropViewProtocol {
             newRotateType.toggle()
         }
         
+        // Save skew state and reset to identity before rotation
+        let savedHSkew = viewModel.horizontalSkewDegrees
+        let savedVSkew = viewModel.verticalSkewDegrees
+        let hadSkew = savedHSkew != 0 || savedVSkew != 0
+        
+        // Temporarily zero out skew so the rotation animation and geometry
+        // calculations work purely in 2D, without 3D perspective interference.
+        if hadSkew {
+            viewModel.horizontalSkewDegrees = 0
+            viewModel.verticalSkewDegrees = 0
+            cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
+        }
+        
         func handleRotateAnimation() {
             if cropViewConfig.rotateCropBoxFor90DegreeRotation {
                 var rect = cropAuxiliaryIndicatorView.frame
@@ -1129,12 +1144,17 @@ extension CropView: CropViewProtocol {
             cropWorkbenchView.updateMinZoomScale()
             viewModel.rotateBy90(withRotateType: newRotateType)
             
-            // Swap horizontal and vertical skew when rotating 90°
-            let hSkew = viewModel.horizontalSkewDegrees
-            let vSkew = viewModel.verticalSkewDegrees
-            viewModel.horizontalSkewDegrees = vSkew
-            viewModel.verticalSkewDegrees = hSkew
-            applySkewTransformIfNeeded()
+            // Swap and restore skew values.
+            // After a 90° view rotation the content axes swap.
+            viewModel.horizontalSkewDegrees = savedVSkew
+            viewModel.verticalSkewDegrees = savedHSkew
+            
+            if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+                applySkewTransformIfNeeded()
+            }
+            
+            // Sync the SlideDial's internal stored angles with the swapped values
+            syncSlideDialSkewValues()
             
             viewModel.setBetweenOperationStatus()
             completion()

@@ -326,6 +326,39 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         viewModel.currentAdjustmentType
     }
     
+    /// Called by CropView after a 90° rotation to sync the SlideDial's stored skew values
+    /// with the swapped values in CropView's viewModel.
+    func syncSkewValues(horizontal: CGFloat, vertical: CGFloat) {
+        guard case .withTypeSelector = config.mode else { return }
+        
+        // Update stored angles
+        viewModel.storeAngle(horizontal, for: .horizontalSkew)
+        viewModel.storeAngle(vertical, for: .verticalSkew)
+        
+        // Update button displays
+        typeButtons[.horizontalSkew]?.setValue(horizontal)
+        typeButtons[.verticalSkew]?.setValue(vertical)
+        
+        // If the currently active type is a skew type, update ruler position
+        let currentType = viewModel.currentAdjustmentType
+        if currentType == .horizontalSkew || currentType == .verticalSkew {
+            let newAngle = currentType == .horizontalSkew ? horizontal : vertical
+            let limit = config.limitation(for: currentType)
+            
+            // Update viewModel angle without triggering external callback
+            viewModel.didSetRotationAngle = { _ in }
+            viewModel.rotationAngle = Angle(degrees: newAngle)
+            viewModel.didSetRotationAngle = { [weak self] angle in
+                self?.handleRotation(by: angle)
+            }
+            
+            slideRuler?.reset()
+            if abs(newAngle) > 0.5 {
+                slideRuler?.setOffsetRatio(newAngle / limit)
+            }
+        }
+    }
+    
     // MARK: - Slide ruler setup
     
     func setupSlideRuler() {
