@@ -702,8 +702,23 @@ extension CropView {
     }
     
     private func saveAnchorPoints() {
+        // Temporarily remove the 3D perspective skew so that coordinate
+        // conversions between the crop overlay and the image container
+        // are purely 2D-affine.  The sublayerTransform includes a
+        // compensating scale that distorts convert(_:to:) results,
+        // causing progressive zoom drift on every device rotation.
+        let savedSublayerTransform = cropWorkbenchView.layer.sublayerTransform
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        if hasSkew {
+            cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
+        }
+        
         viewModel.cropLeftTopOnImage = getImageLeftTopAnchorPoint()
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
+        
+        if hasSkew {
+            cropWorkbenchView.layer.sublayerTransform = savedSublayerTransform
+        }
     }
     
     func adjustUIForNewCrop(contentRect: CGRect,
@@ -1051,6 +1066,20 @@ extension CropView: CropViewProtocol {
         cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)
         cropWorkbenchView.reset(by: viewModel.cropBoxFrame)
         
+        // Temporarily zero out the skew so that all geometry calculations
+        // (rotateCropWorkbenchView, adjustWorkbenchView, zoomScaleToBound,
+        // convert(_:to:), adjustUIForNewCrop) operate in pure 2D space.
+        // The sublayerTransform's compensating scale distorts every
+        // coordinate conversion that crosses the scroll-view layer boundary,
+        // causing progressive zoom drift on repeated device rotations.
+        let savedHSkew = viewModel.horizontalSkewDegrees
+        let savedVSkew = viewModel.verticalSkewDegrees
+        let hasSkew = savedHSkew != 0 || savedVSkew != 0
+        if hasSkew {
+            viewModel.horizontalSkewDegrees = 0
+            viewModel.verticalSkewDegrees = 0
+        }
+        
         rotateCropWorkbenchView()
         
         if viewModel.cropRightBottomOnImage != .zero {
@@ -1070,7 +1099,21 @@ extension CropView: CropViewProtocol {
             let contentRect = getContentBounds()
             
             adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
-                self?.viewModel.setBetweenOperationStatus()
+                guard let self = self else { return }
+                // Restore skew after all geometry is settled.
+                if hasSkew {
+                    self.viewModel.horizontalSkewDegrees = savedHSkew
+                    self.viewModel.verticalSkewDegrees = savedVSkew
+                    self.applySkewTransformIfNeeded()
+                }
+                self.viewModel.setBetweenOperationStatus()
+            }
+        } else {
+            // No anchor points to restore — just re-apply skew.
+            if hasSkew {
+                viewModel.horizontalSkewDegrees = savedHSkew
+                viewModel.verticalSkewDegrees = savedVSkew
+                applySkewTransformIfNeeded()
             }
         }
     }
