@@ -69,6 +69,15 @@ final class CropView: UIView {
     /// The current rotation adjustment mode (straighten, horizontal skew, vertical skew)
     var currentRotationAdjustmentType: RotationAdjustmentType = .straighten
     
+    /// Whether the SlideDial is in withTypeSelector mode and handles type selection internally
+    var slideDialHandlesTypeSelection: Bool {
+        if let slideDial = rotationControlView as? SlideDial,
+           case .withTypeSelector = slideDial.config.mode {
+            return true
+        }
+        return false
+    }
+    
     /// Rotation type selector UI (Straighten | Horizontal | Vertical)
     lazy var rotationTypeSelector: RotationTypeSelector = {
         let selector = RotationTypeSelector()
@@ -186,8 +195,8 @@ final class CropView: UIView {
             adaptRotationControlViewToCropBoxIfNeeded()
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
-            // Keep rotation type selector visible and on top
-            if cropViewConfig.showRotationTypeSelector {
+            // Keep rotation type selector visible and on top (only for external selector)
+            if cropViewConfig.showRotationTypeSelector && !slideDialHandlesTypeSelection {
                 layoutRotationTypeSelector()
                 rotationTypeSelector.bringSelfToFront()
             }
@@ -309,12 +318,28 @@ final class CropView: UIView {
             self.viewModel.setBetweenOperationStatus()
         }
         
+        // Hook up the type switch callback for SlideDial in withTypeSelector mode
+        if let slideDial = rotationControlView as? SlideDial {
+            slideDial.didSwitchAdjustmentType = { [unowned self] newType in
+                self.currentRotationAdjustmentType = newType
+                // Notify that rotation finished so CropView settles layout
+                if !self.viewModel.needCrop() {
+                    self.delegate?.cropViewDidEndResize(self)
+                }
+                self.viewModel.setBetweenOperationStatus()
+            }
+        }
+        
         if rotationControlView.isAttachedToCropView {
             let boardLength = min(bounds.width, bounds.height) * rotationControlView.getLengthRatio()
+            // withTypeSelector mode needs more height for the circular buttons above the ruler
+            let controlHeight: CGFloat = slideDialHandlesTypeSelection
+                ? max(cropViewConfig.rotationControlViewHeight, 100)
+                : cropViewConfig.rotationControlViewHeight
             let dialFrame = CGRect(x: 0,
                                    y: 0,
                                    width: boardLength,
-                                   height: cropViewConfig.rotationControlViewHeight)
+                                   height: controlHeight)
             
             rotationControlView.setupUI(withAllowableFrame: dialFrame)
         }
@@ -618,12 +643,16 @@ extension CropView {
         var rotationControlViewHeight: CGFloat = 0
         
         if cropViewConfig.showAttachedRotationControlView && rotationControlView?.isAttachedToCropView == true {
-            rotationControlViewHeight = cropViewConfig.rotationControlViewHeight
+            rotationControlViewHeight = slideDialHandlesTypeSelection
+                ? max(cropViewConfig.rotationControlViewHeight, 100)
+                : cropViewConfig.rotationControlViewHeight
         }
         
         // Add space for rotation type selector if enabled
+        // (Only needed for the external text-based selector; SlideDial withTypeSelector
+        // embeds its buttons within the rotationControlViewHeight area)
         var rotationTypeSelectorHeight: CGFloat = 0
-        if cropViewConfig.showRotationTypeSelector {
+        if cropViewConfig.showRotationTypeSelector && !slideDialHandlesTypeSelection {
             rotationTypeSelectorHeight = 32
         }
         
@@ -1332,7 +1361,11 @@ extension CropView: CropViewProtocol {
         
         // Reset skew state
         currentRotationAdjustmentType = .straighten
-        rotationTypeSelector.reset()
+        if slideDialHandlesTypeSelection {
+            // SlideDial handles its own type button reset via its reset() method
+        } else {
+            rotationTypeSelector.reset()
+        }
         cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
         
         resetComponents()
@@ -1460,9 +1493,18 @@ extension CropView: RotationTypeSelectorDelegate {
         }
     }
     
-    /// Sets up the rotation type selector below the rotation dial
+    /// Sets up the rotation type selector below the rotation dial.
+    /// When SlideDial is in withTypeSelector mode, the selector is built-in, so skip the external one.
     func setupRotationTypeSelector() {
         guard cropViewConfig.showRotationTypeSelector else { return }
+        
+        // If SlideDial handles type selection internally, hide the old external selector
+        if let slideDial = rotationControlView as? SlideDial,
+           case .withTypeSelector = slideDial.config.mode {
+            rotationTypeSelector.isHidden = true
+            rotationTypeSelector.removeFromSuperview()
+            return
+        }
         
         if rotationTypeSelector.superview == nil {
             addSubview(rotationTypeSelector)

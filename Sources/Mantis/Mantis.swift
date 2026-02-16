@@ -171,13 +171,18 @@ private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropVie
                                                             config: config,
                                                             viewModel: viewModel,
                                                             dialPlate: dialPlate)
-            case .slideDial(let config):
+            case .slideDial(var config):
+                // When rotation type selector is enabled, use the withTypeSelector mode
+                if cropViewConfig.showRotationTypeSelector {
+                    config.mode = .withTypeSelector
+                }
                 let viewModel = SlideDialViewModel()
                 let slideRuler = SlideRuler(frame: .zero, config: config)
-                cropView.rotationControlView = SlideDial(frame: .zero,
-                                                         config: config,
-                                                         viewModel: viewModel,
-                                                         slideRuler: slideRuler)
+                let slideDial = SlideDial(frame: .zero,
+                                          config: config,
+                                          viewModel: viewModel,
+                                          slideRuler: slideRuler)
+                cropView.rotationControlView = slideDial
             }
         }
     }

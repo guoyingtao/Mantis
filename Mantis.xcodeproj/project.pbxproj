@@ -78,6 +78,7 @@
 		F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */; };
 		F25821642F4180880091CA49 /* RotationTypeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821632F4180880091CA49 /* RotationTypeSelector.swift */; };
 		F28FF64A2C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */; };
+		F29C75762F42C4B600D80AB1 /* SlideDialTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */; };
 		F2AD53412A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */; };
 		F2B4FDA42A3B661B00667F22 /* SlideDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B4FDA32A3B661B00667F22 /* SlideDial.swift */; };
 		F2B4FDA72A3B69B600667F22 /* SlideRulerPositionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B4FDA52A3B69B600667F22 /* SlideRulerPositionHelper.swift */; };
@@ -218,6 +219,7 @@
 		F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelper.swift; sourceTree = "<group>"; };
 		F25821632F4180880091CA49 /* RotationTypeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationTypeSelector.swift; sourceTree = "<group>"; };
 		F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorConfig.swift; sourceTree = "<group>"; };
+		F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialTypeButton.swift; sourceTree = "<group>"; };
 		F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAutoAdjustHelper.swift; sourceTree = "<group>"; };
 		F2B4FDA32A3B661B00667F22 /* SlideDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDial.swift; sourceTree = "<group>"; };
 		F2B4FDA52A3B69B600667F22 /* SlideRulerPositionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideRulerPositionHelper.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				F2B4FDA62A3B69B600667F22 /* SlideRuler.swift */,
 				F2058F262A400508008DEBAA /* SlideDialViewModel.swift */,
 				F2B4FDA52A3B69B600667F22 /* SlideRulerPositionHelper.swift */,
+				F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */,
 			);
 			path = SlideDial;
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 				OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */,
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
+				F29C75762F42C4B600D80AB1 /* SlideDialTypeButton.swift in Sources */,
 				OBJ_86 /* CoreGraphicsExtensions.swift in Sources */,
 				5F69CC5E26C0629400568B75 /* Definition.swift in Sources */,
 				OBJ_87 /* UIImageExtensions.swift in Sources */,
