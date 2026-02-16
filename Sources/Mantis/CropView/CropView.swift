@@ -196,7 +196,7 @@ final class CropView: UIView {
             cropMaskViewManager.showVisualEffectBackground(animated: true)
             checkImageStatusChanged()
             // Keep rotation type selector visible and on top (only for external selector)
-            if cropViewConfig.showRotationTypeSelector && !slideDialHandlesTypeSelection {
+            if cropViewConfig.enablePerspectiveCorrection && !slideDialHandlesTypeSelection {
                 layoutRotationTypeSelector()
                 rotationTypeSelector.bringSelfToFront()
             }
@@ -652,7 +652,7 @@ extension CropView {
         // (Only needed for the external text-based selector; SlideDial withTypeSelector
         // embeds its buttons within the rotationControlViewHeight area)
         var rotationTypeSelectorHeight: CGFloat = 0
-        if cropViewConfig.showRotationTypeSelector && !slideDialHandlesTypeSelection {
+        if cropViewConfig.enablePerspectiveCorrection && !slideDialHandlesTypeSelection {
             rotationTypeSelectorHeight = 32
         }
         
@@ -1496,7 +1496,7 @@ extension CropView: RotationTypeSelectorDelegate {
     /// Sets up the rotation type selector below the rotation dial.
     /// When SlideDial is in withTypeSelector mode, the selector is built-in, so skip the external one.
     func setupRotationTypeSelector() {
-        guard cropViewConfig.showRotationTypeSelector else { return }
+        guard cropViewConfig.enablePerspectiveCorrection else { return }
         
         // If SlideDial handles type selection internally, hide the old external selector
         if let slideDial = rotationControlView as? SlideDial,
@@ -1517,7 +1517,7 @@ extension CropView: RotationTypeSelectorDelegate {
     }
     
     func layoutRotationTypeSelector() {
-        guard cropViewConfig.showRotationTypeSelector,
+        guard cropViewConfig.enablePerspectiveCorrection,
               rotationTypeSelector.superview != nil else { return }
         
         let selectorWidth: CGFloat = 220

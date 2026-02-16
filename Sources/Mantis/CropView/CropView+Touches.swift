@@ -13,7 +13,7 @@ extension CropView {
         let newPoint = convert(point, to: self)
         
         // Check rotation type selector first (it's on top)
-        if cropViewConfig.showRotationTypeSelector && rotationTypeSelector.frame.contains(newPoint) {
+        if cropViewConfig.enablePerspectiveCorrection && rotationTypeSelector.frame.contains(newPoint) {
             let pointInSelector = rotationTypeSelector.convert(newPoint, from: self)
             return rotationTypeSelector.hitTest(pointInSelector, with: event)
         }
