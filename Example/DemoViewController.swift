@@ -235,7 +235,11 @@ class DemoViewController: UIViewController {
                 bottomRight: CGPoint(x: 0.5300725023151807, y: 0.6672525190931441)
             ),
             horizontalSkewDegrees: 0,
-            verticalSkewDegrees: 0
+            verticalSkewDegrees: 0,
+            skewSublayerTransform: CATransform3DIdentity,
+            scrollContentOffset: .zero,
+            scrollBoundsSize: .zero,
+            imageContainerFrame: .zero
         )
         
         cropViewController?.crop(by: savedCropInfo)
