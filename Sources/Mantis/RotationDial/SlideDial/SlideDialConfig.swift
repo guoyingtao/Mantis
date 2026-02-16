@@ -49,7 +49,11 @@ public struct SlideDialConfig {
     
     public var activeColor = UIColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 1.0) // golden yellow
     public var inactiveColor = UIColor.white
-    public var ringColor = UIColor(white: 0.75, alpha: 1.0) // light gray ring
+    public var ringColor = UIColor(white: 0.45, alpha: 1.0) // medium gray ring
+    public var buttonFillColor = UIColor(white: 0.2, alpha: 1.0) // dark button background
+    public var iconColor = UIColor.white
+    
+    public var pointerColor = UIColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 1.0) // golden yellow center pointer
     
     public var indicatorSize = CGSize(width: 40, height: 40)
     public var typeButtonSize: CGFloat = 48

@@ -29,7 +29,6 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     // MARK: - Type selector mode properties
     
     private var typeButtons: [RotationAdjustmentType: SlideDialTypeButton] = [:]
-    private var typeButtonContainer: UIView?
     
     /// The current limitation based on the active adjustment type
     private var currentLimitation: CGFloat {
@@ -110,11 +109,9 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         let newPoint = convert(point, to: self)
         
         // Check type buttons in withTypeSelector mode
-        if case .withTypeSelector = config.mode,
-           let container = typeButtonContainer {
-            let containerPoint = convert(newPoint, to: container)
+        if case .withTypeSelector = config.mode {
             for (_, button) in typeButtons {
-                if button.frame.contains(containerPoint) {
+                if button.frame.contains(newPoint) {
                     return button
                 }
             }
@@ -188,46 +185,70 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     // MARK: - Type selector mode buttons
     
+    /// The fixed order of all adjustment types
+    private let allTypes: [RotationAdjustmentType] = [.straighten, .verticalSkew, .horizontalSkew]
+    
     private func createTypeButtons() {
-        // Remove old container if re-laying out
-        typeButtonContainer?.removeFromSuperview()
+        // Remove old buttons if re-laying out
+        typeButtons.values.forEach { $0.removeFromSuperview() }
         typeButtons.removeAll()
         
-        let container = UIView()
-        container.backgroundColor = .clear
-        addSubview(container)
-        typeButtonContainer = container
-        
-        let buttonSize = config.typeButtonSize
-        let spacing = config.typeButtonSpacing
-        let types: [RotationAdjustmentType] = [.straighten, .verticalSkew, .horizontalSkew]
-        let totalWidth = CGFloat(types.count) * buttonSize + CGFloat(types.count - 1) * spacing
-        
-        // Position container: centered horizontally, at top of SlideDial
-        let containerHeight = buttonSize
-        let containerY: CGFloat = (frame.height - config.slideRulerHeight - containerHeight) / 2
-        container.frame = CGRect(
-            x: (frame.width - totalWidth) / 2,
-            y: max(0, containerY),
-            width: totalWidth,
-            height: containerHeight
-        )
-        
-        for (index, type) in types.enumerated() {
+        for type in allTypes {
             let button = SlideDialTypeButton(type: type, config: config)
-            let originX = CGFloat(index) * (buttonSize + spacing)
-            button.frame = CGRect(x: originX, y: 0, width: buttonSize, height: buttonSize)
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(typeButtonTapped(_:)))
             button.addGestureRecognizer(tap)
             button.isUserInteractionEnabled = true
             
-            container.addSubview(button)
+            addSubview(button)
             typeButtons[type] = button
         }
         
-        // Set initial selection
+        // Set initial selection and layout
         typeButtons[.straighten]?.setSelected(true)
+        layoutTypeButtons(animated: false)
+    }
+    
+    /// Positions buttons in a fixed row, sliding the group horizontally so the
+    /// selected button is centered above the ruler pointer (matching Apple Photos).
+    private func layoutTypeButtons(animated: Bool) {
+        let buttonSize = config.typeButtonSize
+        let spacing = config.typeButtonSpacing
+        let topPadding: CGFloat = 20
+        let buttonY: CGFloat = topPadding
+        let centerX = frame.width / 2
+        
+        // Index of the selected type in the fixed order
+        let selectedIndex = allTypes.firstIndex(of: viewModel.currentAdjustmentType) ?? 0
+        
+        // The group's total width
+        let totalWidth = CGFloat(allTypes.count) * buttonSize + CGFloat(allTypes.count - 1) * spacing
+        
+        // Position of the selected button's center within the group (relative to group leading edge)
+        let selectedCenterInGroup = CGFloat(selectedIndex) * (buttonSize + spacing) + buttonSize / 2
+        
+        // Offset so that the selected button's center aligns with the view's centerX
+        let groupOriginX = centerX - selectedCenterInGroup
+        
+        let applyLayout = {
+            for (idx, type) in self.allTypes.enumerated() {
+                let originX = groupOriginX + CGFloat(idx) * (buttonSize + spacing)
+                self.typeButtons[type]?.frame = CGRect(
+                    x: originX,
+                    y: buttonY,
+                    width: buttonSize,
+                    height: buttonSize
+                )
+            }
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+                applyLayout()
+            }
+        } else {
+            applyLayout()
+        }
     }
     
     @objc private func typeButtonTapped(_ gesture: UITapGestureRecognizer) {
@@ -253,6 +274,9 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         
         // Switch type in viewModel
         viewModel.currentAdjustmentType = newType
+        
+        // Animate the selected button to center
+        layoutTypeButtons(animated: true)
         
         // Restore the stored angle for the new type
         let storedAngle = viewModel.storedAngle(for: newType)
@@ -287,6 +311,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             button.setSelected(false)
         }
         typeButtons[.straighten]?.setSelected(true)
+        layoutTypeButtons(animated: false)
     }
     
     /// Update type button values from external source (e.g. when CropView restores state)

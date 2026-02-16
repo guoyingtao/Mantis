@@ -334,7 +334,7 @@ final class CropView: UIView {
             let boardLength = min(bounds.width, bounds.height) * rotationControlView.getLengthRatio()
             // withTypeSelector mode needs more height for the circular buttons above the ruler
             let controlHeight: CGFloat = slideDialHandlesTypeSelection
-                ? max(cropViewConfig.rotationControlViewHeight, 100)
+                ? max(cropViewConfig.rotationControlViewHeight, 120)
                 : cropViewConfig.rotationControlViewHeight
             let dialFrame = CGRect(x: 0,
                                    y: 0,
@@ -644,7 +644,7 @@ extension CropView {
         
         if cropViewConfig.showAttachedRotationControlView && rotationControlView?.isAttachedToCropView == true {
             rotationControlViewHeight = slideDialHandlesTypeSelection
-                ? max(cropViewConfig.rotationControlViewHeight, 100)
+                ? max(cropViewConfig.rotationControlViewHeight, 120)
                 : cropViewConfig.rotationControlViewHeight
         }
         

@@ -126,7 +126,7 @@ final class SlideRuler: UIView {
     }
     
     private func makePointer() {
-        pointer.backgroundColor = UIColor.white.cgColor
+        pointer.backgroundColor = config.pointerColor.cgColor
         layer.addSublayer(pointer)
     }
     

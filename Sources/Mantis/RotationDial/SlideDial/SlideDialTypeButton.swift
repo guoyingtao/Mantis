@@ -12,134 +12,198 @@ import UIKit
 // MARK: - Icon Drawing
 
 /// Draws icons that mimic the Apple Photos straighten/skew icons.
+///
+/// The approach for each icon:
+/// 1. Draw the shape (circle/trapezoid) in `color` (white)
+/// 2. Erase a line through the shape using `backgroundColor` (dark), creating a cutout
+///    that stops exactly at the shape's edge
+/// 3. Draw the external line segments (outside the shape) in `color` (white)
 enum SlideDialIconDrawer {
     
-    /// Draws the "Straighten" icon: a half-circle (horizon) with a horizontal line through it.
-    static func drawStraightenIcon(in rect: CGRect, color: UIColor) {
+    private static let lineWidth: CGFloat = 1.5
+    
+    /// Draws the "Straighten" icon: a full circle with a horizontal line.
+    /// Inside the circle: line is background-colored (cutout). Outside: white.
+    static func drawStraightenIcon(in rect: CGRect, color: UIColor, backgroundColor: UIColor) {
         let ctx = UIGraphicsGetCurrentContext()!
         ctx.saveGState()
         
-        let inset = rect.insetBy(dx: rect.width * 0.15, dy: rect.height * 0.15)
+        let inset = rect.insetBy(dx: rect.width * 0.12, dy: rect.height * 0.12)
         let centerX = inset.midX
-        let centerY = inset.midY + inset.height * 0.05
-        let radius = inset.width * 0.38
+        let centerY = inset.midY
+        let radius = inset.width * 0.40
         
-        // Half circle (bottom half)
-        let halfCircle = UIBezierPath()
-        halfCircle.move(to: CGPoint(x: centerX - radius, y: centerY))
-        halfCircle.addArc(withCenter: CGPoint(x: centerX, y: centerY),
-                          radius: radius,
-                          startAngle: .pi,
-                          endAngle: 0,
-                          clockwise: false)
-        halfCircle.close()
-        
+        // 1. Draw full circle
+        let circle = UIBezierPath(arcCenter: CGPoint(x: centerX, y: centerY),
+                                  radius: radius,
+                                  startAngle: 0,
+                                  endAngle: .pi * 2,
+                                  clockwise: true)
         color.setFill()
-        halfCircle.fill()
+        circle.fill()
         
-        // Horizontal line through center
-        let lineY = centerY
-        let lineLeft = centerX - radius * 1.4
-        let lineRight = centerX + radius * 1.4
+        // 2. Cut a horizontal line through the circle using background color
+        let halfLW = lineWidth / 2
+        backgroundColor.setFill()
+        let cutRect = CGRect(x: centerX - radius,
+                             y: centerY - halfLW,
+                             width: radius * 2,
+                             height: lineWidth)
+        ctx.fill(cutRect)
         
-        let line = UIBezierPath()
-        line.move(to: CGPoint(x: lineLeft, y: lineY))
-        line.addLine(to: CGPoint(x: lineRight, y: lineY))
-        line.lineWidth = 1.5
+        // 3. Draw external line segments in white (outside the circle)
+        let lineExtend: CGFloat = radius * 0.45
         color.setStroke()
-        line.stroke()
+        
+        let leftLine = UIBezierPath()
+        leftLine.move(to: CGPoint(x: centerX - radius - lineExtend, y: centerY))
+        leftLine.addLine(to: CGPoint(x: centerX - radius, y: centerY))
+        leftLine.lineWidth = lineWidth
+        leftLine.stroke()
+        
+        let rightLine = UIBezierPath()
+        rightLine.move(to: CGPoint(x: centerX + radius, y: centerY))
+        rightLine.addLine(to: CGPoint(x: centerX + radius + lineExtend, y: centerY))
+        rightLine.lineWidth = lineWidth
+        rightLine.stroke()
         
         ctx.restoreGState()
     }
     
-    /// Draws the "Vertical Skew" icon: a trapezoid shape narrowing at top with a vertical center line.
-    static func drawVerticalSkewIcon(in rect: CGRect, color: UIColor) {
+    /// Draws the "Vertical Skew" icon: a trapezoid narrowing at top, with a vertical center line + crossbar.
+    /// Inside the trapezoid: line is background-colored (cutout). Outside: white.
+    static func drawVerticalSkewIcon(in rect: CGRect, color: UIColor, backgroundColor: UIColor) {
         let ctx = UIGraphicsGetCurrentContext()!
         ctx.saveGState()
         
-        let inset = rect.insetBy(dx: rect.width * 0.2, dy: rect.height * 0.2)
+        let inset = rect.insetBy(dx: rect.width * 0.21, dy: rect.height * 0.21)
         let centerX = inset.midX
+        let centerY = inset.midY
         
-        // Trapezoid: wider at bottom, narrower at top
-        let topInset: CGFloat = inset.width * 0.15
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: inset.minX + topInset, y: inset.minY))
-        path.addLine(to: CGPoint(x: inset.maxX - topInset, y: inset.minY))
-        path.addLine(to: CGPoint(x: inset.maxX, y: inset.maxY))
-        path.addLine(to: CGPoint(x: inset.minX, y: inset.maxY))
-        path.close()
+        let topInset: CGFloat = inset.width * 0.18
+        
+        // 1. Draw trapezoid
+        let trapezoid = UIBezierPath()
+        trapezoid.move(to: CGPoint(x: inset.minX + topInset, y: inset.minY))
+        trapezoid.addLine(to: CGPoint(x: inset.maxX - topInset, y: inset.minY))
+        trapezoid.addLine(to: CGPoint(x: inset.maxX, y: inset.maxY))
+        trapezoid.addLine(to: CGPoint(x: inset.minX, y: inset.maxY))
+        trapezoid.close()
         
         color.setFill()
-        path.fill()
+        trapezoid.fill()
         
-        // Vertical center line with small horizontal crossbar
-        let vLine = UIBezierPath()
-        vLine.move(to: CGPoint(x: centerX, y: inset.minY - 3))
-        vLine.addLine(to: CGPoint(x: centerX, y: inset.maxY + 3))
-        vLine.lineWidth = 1.5
+        // 2. Cut a vertical line through the trapezoid using background color
+        let halfLW = lineWidth / 2
+        backgroundColor.setFill()
+        let cutRect = CGRect(x: centerX - halfLW,
+                             y: inset.minY,
+                             width: lineWidth,
+                             height: inset.height)
+        ctx.fill(cutRect)
+        
+        // 3. Draw external line segments in white (outside the trapezoid)
+        let lineExtend: CGFloat = 3.5
         color.setStroke()
-        vLine.stroke()
         
+        let topLine = UIBezierPath()
+        topLine.move(to: CGPoint(x: centerX, y: inset.minY - lineExtend))
+        topLine.addLine(to: CGPoint(x: centerX, y: inset.minY))
+        topLine.lineWidth = lineWidth
+        topLine.stroke()
+        
+        let botLine = UIBezierPath()
+        botLine.move(to: CGPoint(x: centerX, y: inset.maxY))
+        botLine.addLine(to: CGPoint(x: centerX, y: inset.maxY + lineExtend))
+        botLine.lineWidth = lineWidth
+        botLine.stroke()
+        
+        // Small horizontal crossbar at center (white, inside the trapezoid)
         let hBar = UIBezierPath()
-        let barY = inset.midY
-        hBar.move(to: CGPoint(x: centerX - 4, y: barY))
-        hBar.addLine(to: CGPoint(x: centerX + 4, y: barY))
-        hBar.lineWidth = 1.5
+        hBar.move(to: CGPoint(x: centerX - 3.5, y: centerY))
+        hBar.addLine(to: CGPoint(x: centerX + 3.5, y: centerY))
+        hBar.lineWidth = lineWidth
+        color.setStroke()
         hBar.stroke()
         
         ctx.restoreGState()
     }
     
-    /// Draws the "Horizontal Skew" icon: a sideways trapezoid with a horizontal center line.
-    static func drawHorizontalSkewIcon(in rect: CGRect, color: UIColor) {
+    /// Draws the "Horizontal Skew" icon: a sideways trapezoid (narrower on left),
+    /// with a horizontal center line + crossbar.
+    /// Inside the trapezoid: line is background-colored (cutout). Outside: white.
+    static func drawHorizontalSkewIcon(in rect: CGRect, color: UIColor, backgroundColor: UIColor) {
         let ctx = UIGraphicsGetCurrentContext()!
         ctx.saveGState()
         
-        let inset = rect.insetBy(dx: rect.width * 0.2, dy: rect.height * 0.2)
+        let inset = rect.insetBy(dx: rect.width * 0.21, dy: rect.height * 0.21)
+        let centerX = inset.midX
         let centerY = inset.midY
         
-        // Trapezoid: wider on right, narrower on left
-        let leftInset: CGFloat = inset.height * 0.15
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: inset.minX, y: inset.minY + leftInset))
-        path.addLine(to: CGPoint(x: inset.maxX, y: inset.minY))
-        path.addLine(to: CGPoint(x: inset.maxX, y: inset.maxY))
-        path.addLine(to: CGPoint(x: inset.minX, y: inset.maxY - leftInset))
-        path.close()
+        let leftInset: CGFloat = inset.height * 0.18
+        
+        // 1. Draw trapezoid
+        let trapezoid = UIBezierPath()
+        trapezoid.move(to: CGPoint(x: inset.minX, y: inset.minY + leftInset))
+        trapezoid.addLine(to: CGPoint(x: inset.maxX, y: inset.minY))
+        trapezoid.addLine(to: CGPoint(x: inset.maxX, y: inset.maxY))
+        trapezoid.addLine(to: CGPoint(x: inset.minX, y: inset.maxY - leftInset))
+        trapezoid.close()
         
         color.setFill()
-        path.fill()
+        trapezoid.fill()
         
-        // Horizontal center line with small vertical crossbar
-        let hLine = UIBezierPath()
-        hLine.move(to: CGPoint(x: inset.minX - 3, y: centerY))
-        hLine.addLine(to: CGPoint(x: inset.maxX + 3, y: centerY))
-        hLine.lineWidth = 1.5
+        // 2. Cut a horizontal line through the trapezoid using background color
+        let halfLW = lineWidth / 2
+        backgroundColor.setFill()
+        let cutRect = CGRect(x: inset.minX,
+                             y: centerY - halfLW,
+                             width: inset.width,
+                             height: lineWidth)
+        ctx.fill(cutRect)
+        
+        // 3. Draw external line segments in white (outside the trapezoid)
+        let lineExtend: CGFloat = 3.5
         color.setStroke()
-        hLine.stroke()
         
+        let leftLine = UIBezierPath()
+        leftLine.move(to: CGPoint(x: inset.minX - lineExtend, y: centerY))
+        leftLine.addLine(to: CGPoint(x: inset.minX, y: centerY))
+        leftLine.lineWidth = lineWidth
+        leftLine.stroke()
+        
+        let rightLine = UIBezierPath()
+        rightLine.move(to: CGPoint(x: inset.maxX, y: centerY))
+        rightLine.addLine(to: CGPoint(x: inset.maxX + lineExtend, y: centerY))
+        rightLine.lineWidth = lineWidth
+        rightLine.stroke()
+        
+        // Small vertical crossbar at center (white, inside the trapezoid)
         let vBar = UIBezierPath()
-        let barX = inset.midX
-        vBar.move(to: CGPoint(x: barX, y: centerY - 4))
-        vBar.addLine(to: CGPoint(x: barX, y: centerY + 4))
-        vBar.lineWidth = 1.5
+        vBar.move(to: CGPoint(x: centerX, y: centerY - 3.5))
+        vBar.addLine(to: CGPoint(x: centerX, y: centerY + 3.5))
+        vBar.lineWidth = lineWidth
+        color.setStroke()
         vBar.stroke()
         
         ctx.restoreGState()
     }
     
     /// Creates a UIImage for the given adjustment type icon.
-    static func iconImage(for type: RotationAdjustmentType, size: CGSize, color: UIColor) -> UIImage {
+    static func iconImage(for type: RotationAdjustmentType,
+                          size: CGSize,
+                          color: UIColor,
+                          backgroundColor: UIColor) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
+        return renderer.image { _ in
             let rect = CGRect(origin: .zero, size: size)
             switch type {
             case .straighten:
-                drawStraightenIcon(in: rect, color: color)
+                drawStraightenIcon(in: rect, color: color, backgroundColor: backgroundColor)
             case .verticalSkew:
-                drawVerticalSkewIcon(in: rect, color: color)
+                drawVerticalSkewIcon(in: rect, color: color, backgroundColor: backgroundColor)
             case .horizontalSkew:
-                drawHorizontalSkewIcon(in: rect, color: color)
+                drawHorizontalSkewIcon(in: rect, color: color, backgroundColor: backgroundColor)
             }
         }
     }
@@ -200,8 +264,8 @@ final class SlideDialTypeButton: UIView {
     }
     
     private func setupLayers() {
-        // Background ring
-        ringLayer.fillColor = UIColor(white: 0.92, alpha: 1.0).cgColor
+        // Background ring with dark fill
+        ringLayer.fillColor = config.buttonFillColor.cgColor
         ringLayer.strokeColor = config.ringColor.cgColor
         ringLayer.lineWidth = 2.5
         layer.addSublayer(ringLayer)
@@ -220,7 +284,8 @@ final class SlideDialTypeButton: UIView {
         let iconSize = CGSize(width: 24, height: 24)
         let icon = SlideDialIconDrawer.iconImage(for: adjustmentType,
                                                   size: iconSize,
-                                                  color: .black)
+                                                  color: config.iconColor,
+                                                  backgroundColor: config.buttonFillColor)
         iconView.image = icon
         iconView.contentMode = .scaleAspectFit
         addSubview(iconView)
@@ -283,15 +348,15 @@ final class SlideDialTypeButton: UIView {
             valueLabel.isHidden = true
             progressLayer.isHidden = true
             ringLayer.strokeColor = config.ringColor.cgColor
-            refreshIcon(color: .black)
+            refreshIcon(color: config.iconColor)
             
         } else {
-            // Not selected: smaller appearance, show icon
+            // Not selected: show icon, gray ring
             iconView.isHidden = false
             valueLabel.isHidden = true
             progressLayer.isHidden = true
             ringLayer.strokeColor = config.ringColor.cgColor
-            refreshIcon(color: .black)
+            refreshIcon(color: config.iconColor)
         }
     }
     
@@ -299,6 +364,7 @@ final class SlideDialTypeButton: UIView {
         let iconSize = CGSize(width: 24, height: 24)
         iconView.image = SlideDialIconDrawer.iconImage(for: adjustmentType,
                                                         size: iconSize,
-                                                        color: color)
+                                                        color: color,
+                                                        backgroundColor: config.buttonFillColor)
     }
 }
