@@ -1144,16 +1144,16 @@ extension CropView: CropViewProtocol {
             cropWorkbenchView.updateMinZoomScale()
             viewModel.rotateBy90(withRotateType: newRotateType)
             
-            // Swap and restore skew values.
-            // After a 90° view rotation the content axes swap.
-            viewModel.horizontalSkewDegrees = savedVSkew
-            viewModel.verticalSkewDegrees = savedHSkew
+            // Restore the original skew values so the same corrected region
+            // remains visible after a 90° rotation.
+            viewModel.horizontalSkewDegrees = savedHSkew
+            viewModel.verticalSkewDegrees = savedVSkew
             
             if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
                 applySkewTransformIfNeeded()
             }
             
-            // Sync the SlideDial's internal stored angles with the swapped values
+            // Keep the SlideDial's stored angles in sync.
             syncSlideDialSkewValues()
             
             viewModel.setBetweenOperationStatus()
