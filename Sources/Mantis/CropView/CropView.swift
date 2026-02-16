@@ -1138,14 +1138,22 @@ extension CropView: CropViewProtocol {
             } else {
                 adjustWorkbenchView(by: rotateAngle + viewModel.radians)
             }
+            
+            // Restore skew inside the animation block so it transitions smoothly
+            // instead of jumping back abruptly in the completion handler.
+            if hadSkew {
+                viewModel.horizontalSkewDegrees = savedHSkew
+                viewModel.verticalSkewDegrees = savedVSkew
+                applySkewTransformIfNeeded()
+            }
         }
         
         func handleRotateCompletion() {
             cropWorkbenchView.updateMinZoomScale()
             viewModel.rotateBy90(withRotateType: newRotateType)
             
-            // Restore the original skew values so the same corrected region
-            // remains visible after a 90° rotation.
+            // Ensure skew values are set (they were restored during animation,
+            // but rotateBy90 above may affect geometry, so re-apply).
             viewModel.horizontalSkewDegrees = savedHSkew
             viewModel.verticalSkewDegrees = savedVSkew
             
