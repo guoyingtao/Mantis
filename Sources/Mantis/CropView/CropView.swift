@@ -1274,6 +1274,7 @@ extension CropView: CropViewProtocol {
         
         // Restore skew transforms
         applySkewTransformIfNeeded()
+        syncSlideDialSkewValues()
     }
     
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {
@@ -1402,11 +1403,13 @@ extension CropView: CropViewProtocol {
             / (transformInfo.maskFrame.width / transformInfo.initialMaskFrame.width)
             newTransform.scale *= adjustScale
             transform(byTransformInfo: newTransform)
+            syncSlideDialSkewValues()
             completion(transformInfo)
         case .presetNormalizedInfo(let normalizedInfo):
             let transformInfo = getTransformInfo(byNormalizedInfo: normalizedInfo)
             transform(byTransformInfo: transformInfo)
             cropWorkbenchView.frame = transformInfo.maskFrame
+            syncSlideDialSkewValues()
             completion(transformInfo)
         case .none:
             break
