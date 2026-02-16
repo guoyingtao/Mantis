@@ -131,7 +131,17 @@ public typealias CropInfo = (
     imageViewSize: CGSize,
     cropRegion: CropRegion,
     horizontalSkewDegrees: CGFloat,
-    verticalSkewDegrees: CGFloat
+    verticalSkewDegrees: CGFloat,
+    /// The actual CATransform3D sublayerTransform used in the preview for perspective skew.
+    /// Includes perspective rotation, centering, and compensating scale.
+    /// Set to CATransform3DIdentity when no skew is applied.
+    skewSublayerTransform: CATransform3D,
+    /// The scroll view's content offset during crop (for reconstructing the view hierarchy)
+    scrollContentOffset: CGPoint,
+    /// The scroll view's visible bounds size during crop
+    scrollBoundsSize: CGSize,
+    /// The image container's frame in scroll content coordinates during crop
+    imageContainerFrame: CGRect
 )
 
 typealias CropOutput = (

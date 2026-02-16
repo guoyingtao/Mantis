@@ -1402,7 +1402,11 @@ extension CropView: CropViewProtocol {
             imageViewSize: imageContainer.bounds.size,
             cropRegion: cropRegion,
             horizontalSkewDegrees: viewModel.horizontalSkewDegrees,
-            verticalSkewDegrees: viewModel.verticalSkewDegrees
+            verticalSkewDegrees: viewModel.verticalSkewDegrees,
+            skewSublayerTransform: cropWorkbenchView.layer.sublayerTransform,
+            scrollContentOffset: cropWorkbenchView.contentOffset,
+            scrollBoundsSize: cropWorkbenchView.bounds.size,
+            imageContainerFrame: imageContainer.frame
         )
     }
     
