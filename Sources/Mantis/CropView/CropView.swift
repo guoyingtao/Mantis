@@ -1242,6 +1242,11 @@ extension CropView: CropViewProtocol {
             viewModel.cropBoxFrame = transformation.maskFrame
         }
         
+        // Restore skew values
+        viewModel.horizontalSkewDegrees = transformation.horizontalSkewDegrees
+        viewModel.verticalSkewDegrees = transformation.verticalSkewDegrees
+        applySkewTransformIfNeeded()
+        
         if isUpdateRotationControlView {
             rotationControlView?.updateRotationValue(by: Angle(radians: viewModel.radians))
             adaptRotationControlViewToCropBoxIfNeeded()
