@@ -167,12 +167,15 @@ struct PerspectiveTransformHelper {
         )
     }
     
-    /// Tests whether all `testPoints` lie inside a convex polygon.
+    /// Tests whether all `testPoints` lie inside a polygon using ray casting.
     ///
-    /// Automatically detects the winding order of the polygon (CW or CCW)
-    /// using the signed area, then uses the cross-product sign test with the
-    /// appropriate sign convention. This makes the test robust when perspective
-    /// projection reverses the vertex winding.
+    /// Works correctly for any simple polygon (convex or non-convex).
+    /// For each test point, casts a horizontal ray to the right and counts
+    /// edge crossings — an odd count means the point is inside.
+    ///
+    /// This replaces the previous cross-product convex polygon test, which
+    /// failed when combined perspective rotations produced a slightly
+    /// non-convex projected quad.
     static func allPointsInsideConvexPolygon(
         _ testPoints: [CGPoint],
         polygon: [CGPoint]
@@ -180,29 +183,23 @@ struct PerspectiveTransformHelper {
         let n = polygon.count
         guard n >= 3 else { return false }
         
-        // Compute signed area to determine winding direction.
-        // Positive = CCW (math convention), negative = CW (screen coords).
-        var signedArea2: CGFloat = 0
-        for i in 0..<n {
-            let a = polygon[i]
-            let b = polygon[(i + 1) % n]
-            signedArea2 += (b.x - a.x) * (b.y + a.y)
-        }
-        // CW winding (negative signedArea2) → cross products should be positive.
-        // CCW winding (positive signedArea2) → cross products should be negative.
-        let expectPositive = signedArea2 < 0
-        
         for point in testPoints {
+            var inside = false
+            var j = n - 1
             for i in 0..<n {
-                let a = polygon[i]
-                let b = polygon[(i + 1) % n]
-                let cross = (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)
-                if expectPositive {
-                    if cross < -1e-6 { return false }
-                } else {
-                    if cross > 1e-6 { return false }
+                let vi = polygon[i]
+                let vj = polygon[j]
+                // Check if the edge from vj to vi crosses the horizontal ray
+                // cast to the right from the test point.
+                if (vi.y > point.y) != (vj.y > point.y) {
+                    let intersectX = vj.x + (point.y - vj.y) / (vi.y - vj.y) * (vi.x - vj.x)
+                    if point.x < intersectX {
+                        inside.toggle()
+                    }
                 }
+                j = i
             }
+            if !inside { return false }
         }
         return true
     }

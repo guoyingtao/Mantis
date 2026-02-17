@@ -73,6 +73,11 @@ final class CropView: UIView {
     /// when switching between skew axes (e.g. vertical → horizontal).
     private var previousSkewScale: CGFloat = 1.0
     
+    /// Tracks the previous contentInset for skew to rate-limit decreases.
+    /// When certain combined angles cause the polygon test to fail transiently,
+    /// this prevents insets from collapsing to zero in a single frame.
+    private var previousSkewInset: UIEdgeInsets = .zero
+    
     /// Whether the SlideDial is in withTypeSelector mode and handles type selection internally
     var slideDialHandlesTypeSelection: Bool {
         if let slideDial = rotationControlView as? SlideDial,
@@ -520,6 +525,7 @@ extension CropView {
             cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
             cropWorkbenchView.contentInset = .zero
             previousSkewScale = 1.0
+            previousSkewInset = .zero
         } else {
             let perspectiveTransform =
                 PerspectiveTransformHelper.combinedSkewTransform3D(
@@ -555,6 +561,7 @@ extension CropView {
                 let upper = previousSkewScale * (1 + maxChangeRatio)
                 finalScale = max(lower, min(upper, finalScale))
             }
+            
             previousSkewScale = finalScale
             
             let scaledTransform = CATransform3DScale(perspectiveTransform, finalScale, finalScale, 1)
@@ -571,12 +578,14 @@ extension CropView {
         
         guard hDeg != 0 || vDeg != 0 else {
             cropWorkbenchView.contentInset = .zero
+            previousSkewInset = .zero
             return
         }
         
         let transform = cropWorkbenchView.layer.sublayerTransform
         guard !CATransform3DIsIdentity(transform) else {
             cropWorkbenchView.contentInset = .zero
+            previousSkewInset = .zero
             return
         }
         
@@ -592,7 +601,7 @@ extension CropView {
             CGPoint(x: -halfW, y:  halfH)
         ]
         
-        // Use the CENTER of the image as the base anchor, consistent with
+        // Use the CENTER of the image as the anchor, consistent with
         // computeSkewProjectionInputs. This makes insets independent of the
         // current pan position, preventing abrupt inset redistribution when
         // the perspective axis changes.
@@ -633,14 +642,24 @@ extension CropView {
             return lo
         }
         
-        let insetLeft   = maxShift(dirX: -1, dirY: 0)
-        let insetRight  = maxShift(dirX:  1, dirY: 0)
-        let insetTop    = maxShift(dirX: 0, dirY: -1)
-        let insetBottom = maxShift(dirX: 0, dirY:  1)
+        let newInset: UIEdgeInsets
         
-        let newInset = UIEdgeInsets(
-            top: insetTop, left: insetLeft, bottom: insetBottom, right: insetRight
-        )
+        if isValidShift(0, 0) {
+            // Center-based test succeeds — compute fresh insets.
+            newInset = UIEdgeInsets(
+                top:    maxShift(dirX: 0, dirY: -1),
+                left:   maxShift(dirX: -1, dirY: 0),
+                bottom: maxShift(dirX: 0, dirY: 1),
+                right:  maxShift(dirX: 1, dirY: 0)
+            )
+            previousSkewInset = newInset
+        } else {
+            // Center-based test fails transiently at certain combined angles
+            // (the compensating scale hasn't caught up due to rate-limiting).
+            // Keep the previous insets to avoid collapsing to zero or
+            // redistributing asymmetrically, which would cause a visible pan.
+            newInset = previousSkewInset
+        }
         
         // Pre-clamp contentOffset to fit within the new inset bounds BEFORE
         // setting the inset. This prevents UIScrollView from auto-clamping
@@ -650,6 +669,7 @@ extension CropView {
         let maxOffsetY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
         let clampedX = max(-newInset.left, min(maxOffsetX, curOffset.x))
         let clampedY = max(-newInset.top, min(maxOffsetY, curOffset.y))
+        
         if clampedX != curOffset.x || clampedY != curOffset.y {
             cropWorkbenchView.contentOffset = CGPoint(x: clampedX, y: clampedY)
         }
@@ -1319,6 +1339,7 @@ extension CropView: CropViewProtocol {
                     self.viewModel.horizontalSkewDegrees = savedHSkew
                     self.viewModel.verticalSkewDegrees = savedVSkew
                     self.previousSkewScale = 1.0
+                    self.previousSkewInset = .zero
                     self.applySkewTransformIfNeeded()
                     self.updateContentInsetForSkew()
                 }
@@ -1330,6 +1351,7 @@ extension CropView: CropViewProtocol {
                 viewModel.horizontalSkewDegrees = savedHSkew
                 viewModel.verticalSkewDegrees = savedVSkew
                 previousSkewScale = 1.0
+                previousSkewInset = .zero
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
@@ -1406,6 +1428,7 @@ extension CropView: CropViewProtocol {
                 viewModel.horizontalSkewDegrees = savedHSkew
                 viewModel.verticalSkewDegrees = savedVSkew
                 previousSkewScale = 1.0
+                previousSkewInset = .zero
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
@@ -1422,6 +1445,7 @@ extension CropView: CropViewProtocol {
             
             if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
                 previousSkewScale = 1.0
+                previousSkewInset = .zero
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
@@ -1495,6 +1519,7 @@ extension CropView: CropViewProtocol {
         
         // Restore skew transforms
         previousSkewScale = 1.0
+        previousSkewInset = .zero
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         syncSlideDialSkewValues()
@@ -1522,6 +1547,7 @@ extension CropView: CropViewProtocol {
         viewModel.horizontalSkewDegrees = transformation.horizontalSkewDegrees
         viewModel.verticalSkewDegrees = transformation.verticalSkewDegrees
         previousSkewScale = 1.0
+        previousSkewInset = .zero
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         
@@ -1647,6 +1673,7 @@ extension CropView: CropViewProtocol {
         viewModel.horizontalSkewDegrees = -viewModel.horizontalSkewDegrees
         flip(isHorizontal: true)
         previousSkewScale = 1.0
+        previousSkewInset = .zero
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()
@@ -1658,6 +1685,7 @@ extension CropView: CropViewProtocol {
         viewModel.verticalSkewDegrees = -viewModel.verticalSkewDegrees
         flip(isHorizontal: false)
         previousSkewScale = 1.0
+        previousSkewInset = .zero
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()
