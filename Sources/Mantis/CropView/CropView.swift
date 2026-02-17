@@ -297,12 +297,14 @@ final class CropView: UIView {
                                   min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
                 self.viewModel.horizontalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
+                self.updateContentInsetForSkew()
                 self.checkImageStatusChanged()
             case .verticalSkew:
                 let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
                                   min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
                 self.viewModel.verticalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
+                self.updateContentInsetForSkew()
                 self.checkImageStatusChanged()
             }
         }
@@ -536,94 +538,135 @@ extension CropView {
             let finalScale = scale * safetyScale * topLeftScale
             
             let scaledTransform = CATransform3DScale(perspectiveTransform, finalScale, finalScale, 1)
-            cropWorkbenchView.layer.sublayerTransform = scaledTransform
             
-            // Compute tight content inset by binary-searching each direction
-            // for the maximum content-offset shift that keeps the crop box
-            // inside the projected image quad.
-            let fr = imageContainer.frame
-            let curOffset = cropWorkbenchView.contentOffset
-            let boundsW = cropWorkbenchView.bounds.width
-            let boundsH = cropWorkbenchView.bounds.height
-            let halfW = boundsW / 2
-            let halfH = boundsH / 2
-            let cropCorners = [
-                CGPoint(x: -halfW, y: -halfH),
-                CGPoint(x:  halfW, y: -halfH),
-                CGPoint(x:  halfW, y:  halfH),
-                CGPoint(x: -halfW, y:  halfH)
-            ]
-            
-            // Test whether shifting contentOffset by (dx, dy) keeps crop inside image
-            func isValidShift(_ shiftX: CGFloat, _ shiftY: CGFloat) -> Bool {
-                let testAnchor = CGPoint(
-                    x: curOffset.x + shiftX + boundsW / 2,
-                    y: curOffset.y + shiftY + boundsH / 2
+            // Compensate contentOffset for the change in visual projection.
+            // The sublayerTransform is anchored at the bounds center. When the
+            // user has panned, the image center is offset from the bounds center.
+            // Changing the transform projects that offset differently, causing a
+            // visible jump. We compute the projected position of the image center
+            // under the old and new transforms and adjust contentOffset to cancel
+            // the visual shift.
+            let oldTransform = cropWorkbenchView.layer.sublayerTransform
+            if !CATransform3DIsIdentity(oldTransform) {
+                let boundsCenter = CGPoint(
+                    x: cropWorkbenchView.contentOffset.x + cropWorkbenchView.bounds.width / 2,
+                    y: cropWorkbenchView.contentOffset.y + cropWorkbenchView.bounds.height / 2
                 )
-                let testCorners = [
-                    CGPoint(x: fr.minX - testAnchor.x, y: fr.minY - testAnchor.y),
-                    CGPoint(x: fr.maxX - testAnchor.x, y: fr.minY - testAnchor.y),
-                    CGPoint(x: fr.maxX - testAnchor.x, y: fr.maxY - testAnchor.y),
-                    CGPoint(x: fr.minX - testAnchor.x, y: fr.maxY - testAnchor.y)
-                ]
-                let proj = testCorners.map {
-                    PerspectiveTransformHelper.projectDisplacement($0, through: scaledTransform)
+                let imgCenter = CGPoint(
+                    x: imageContainer.frame.midX - boundsCenter.x,
+                    y: imageContainer.frame.midY - boundsCenter.y
+                )
+                let oldProj = PerspectiveTransformHelper.projectDisplacement(imgCenter, through: oldTransform)
+                let newProj = PerspectiveTransformHelper.projectDisplacement(imgCenter, through: scaledTransform)
+                // The visual shift is newProj - oldProj. To keep the image visually
+                // in the same place, shift contentOffset by the opposite amount.
+                let dx = newProj.x - oldProj.x
+                let dy = newProj.y - oldProj.y
+                if abs(dx) > 0.5 || abs(dy) > 0.5 {
+                    cropWorkbenchView.contentOffset = CGPoint(
+                        x: cropWorkbenchView.contentOffset.x + dx,
+                        y: cropWorkbenchView.contentOffset.y + dy
+                    )
                 }
-                return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
             }
             
-            // Binary search for max valid shift in one direction
-            func maxShift(dirX: CGFloat, dirY: CGFloat) -> CGFloat {
-                let maxDist = max(boundsW, boundsH)
-                var lo: CGFloat = 0
-                var hi: CGFloat = maxDist
-                for _ in 0..<16 {
-                    let mid = (lo + hi) / 2
-                    if isValidShift(dirX * mid, dirY * mid) {
-                        lo = mid
-                    } else {
-                        hi = mid
-                    }
-                }
-                return lo
-            }
-            
-            let insetLeft   = maxShift(dirX: -1, dirY: 0)
-            let insetRight  = maxShift(dirX:  1, dirY: 0)
-            let insetTop    = maxShift(dirX: 0, dirY: -1)
-            let insetBottom = maxShift(dirX: 0, dirY:  1)
-            
-            cropWorkbenchView.contentInset = UIEdgeInsets(
-                top: insetTop, left: insetLeft, bottom: insetBottom, right: insetRight
-            )
+            cropWorkbenchView.layer.sublayerTransform = scaledTransform
         }
     }
     
-    /// After the user finishes dragging, verify that the crop box still lies
-    /// inside the projected (skewed) image quad. If it doesn't, animate the
-    /// contentOffset back to the nearest valid position.
-    func clampContentOffsetForSkewIfNeeded() {
+    /// Recomputes contentInset for the current skew transform so the user
+    /// can pan within the projected image area. Call this only when skew
+    /// degrees actually change, NOT during every rotation frame.
+    private func updateContentInsetForSkew() {
         let hDeg = viewModel.horizontalSkewDegrees
         let vDeg = viewModel.verticalSkewDegrees
-        guard hDeg != 0 || vDeg != 0 else { return }
+        
+        guard hDeg != 0 || vDeg != 0 else {
+            cropWorkbenchView.contentInset = .zero
+            return
+        }
         
         let transform = cropWorkbenchView.layer.sublayerTransform
-        guard !CATransform3DIsIdentity(transform) else { return }
+        guard !CATransform3DIsIdentity(transform) else {
+            cropWorkbenchView.contentInset = .zero
+            return
+        }
         
-        // Current anchor (sublayerTransform centre) in content coords
+        let fr = imageContainer.frame
+        let curOffset = cropWorkbenchView.contentOffset
+        let boundsW = cropWorkbenchView.bounds.width
+        let boundsH = cropWorkbenchView.bounds.height
+        let halfW = boundsW / 2
+        let halfH = boundsH / 2
+        let cropCorners = [
+            CGPoint(x: -halfW, y: -halfH),
+            CGPoint(x:  halfW, y: -halfH),
+            CGPoint(x:  halfW, y:  halfH),
+            CGPoint(x: -halfW, y:  halfH)
+        ]
+        
+        func isValidShift(_ shiftX: CGFloat, _ shiftY: CGFloat) -> Bool {
+            let testAnchor = CGPoint(
+                x: curOffset.x + shiftX + boundsW / 2,
+                y: curOffset.y + shiftY + boundsH / 2
+            )
+            let testCorners = [
+                CGPoint(x: fr.minX - testAnchor.x, y: fr.minY - testAnchor.y),
+                CGPoint(x: fr.maxX - testAnchor.x, y: fr.minY - testAnchor.y),
+                CGPoint(x: fr.maxX - testAnchor.x, y: fr.maxY - testAnchor.y),
+                CGPoint(x: fr.minX - testAnchor.x, y: fr.maxY - testAnchor.y)
+            ]
+            let proj = testCorners.map {
+                PerspectiveTransformHelper.projectDisplacement($0, through: transform)
+            }
+            return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
+        }
+        
+        func maxShift(dirX: CGFloat, dirY: CGFloat) -> CGFloat {
+            let maxDist = max(boundsW, boundsH)
+            var lo: CGFloat = 0
+            var hi: CGFloat = maxDist
+            for _ in 0..<16 {
+                let mid = (lo + hi) / 2
+                if isValidShift(dirX * mid, dirY * mid) {
+                    lo = mid
+                } else {
+                    hi = mid
+                }
+            }
+            return lo
+        }
+        
+        let insetLeft   = maxShift(dirX: -1, dirY: 0)
+        let insetRight  = maxShift(dirX:  1, dirY: 0)
+        let insetTop    = maxShift(dirX: 0, dirY: -1)
+        let insetBottom = maxShift(dirX: 0, dirY:  1)
+        
+        let newInset = UIEdgeInsets(
+            top: insetTop, left: insetLeft, bottom: insetBottom, right: insetRight
+        )
+        
+        // Compute the nearest valid offset BEFORE changing the inset, so we
+        // can move the offset first and prevent UIScrollView from auto-clamping
+        // to a wrong position when the inset shrinks.
+        if let validOffset = computeValidContentOffset() {
+            cropWorkbenchView.contentOffset = validOffset
+        }
+        
+        cropWorkbenchView.contentInset = newInset
+    }
+    
+    /// Returns a valid contentOffset if the current one is outside the projected
+    /// image quad, or nil if the current offset is already valid.
+    private func computeValidContentOffset() -> CGPoint? {
+        let transform = cropWorkbenchView.layer.sublayerTransform
+        guard !CATransform3DIsIdentity(transform) else { return nil }
+        
+        let fr = imageContainer.frame
         let anchor = CGPoint(
             x: cropWorkbenchView.contentOffset.x + cropWorkbenchView.bounds.width / 2,
             y: cropWorkbenchView.contentOffset.y + cropWorkbenchView.bounds.height / 2
         )
-        
-        let fr = imageContainer.frame
-        let imgCorners = [
-            CGPoint(x: fr.minX - anchor.x, y: fr.minY - anchor.y),
-            CGPoint(x: fr.maxX - anchor.x, y: fr.minY - anchor.y),
-            CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
-            CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
-        ]
-        
         let halfW = cropWorkbenchView.bounds.width / 2
         let halfH = cropWorkbenchView.bounds.height / 2
         let cropCorners = [
@@ -632,37 +675,38 @@ extension CropView {
             CGPoint(x:  halfW, y:  halfH),
             CGPoint(x: -halfW, y:  halfH)
         ]
-        
-        let projectedImg = imgCorners.map {
+        let imgCorners = [
+            CGPoint(x: fr.minX - anchor.x, y: fr.minY - anchor.y),
+            CGPoint(x: fr.maxX - anchor.x, y: fr.minY - anchor.y),
+            CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
+            CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
+        ]
+        let proj = imgCorners.map {
             PerspectiveTransformHelper.projectDisplacement($0, through: transform)
         }
         
-        // Already valid — nothing to do
-        if PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: projectedImg) {
-            return
+        if PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj) {
+            return nil  // Already valid
         }
         
-        // Binary-search for the maximum fraction of the current offset-from-center
-        // that keeps the crop box inside the projected quad.
-        // The "center" offset is where the image was before the user dragged.
+        // Binary-search for the maximum fraction of offset-from-center that's valid
         let defaultOffset = CGPoint(
-            x: imageContainer.frame.midX - cropWorkbenchView.bounds.width / 2,
-            y: imageContainer.frame.midY - cropWorkbenchView.bounds.height / 2
+            x: fr.midX - halfW,
+            y: fr.midY - halfH
         )
         let curOffset = cropWorkbenchView.contentOffset
         let dx = curOffset.x - defaultOffset.x
         let dy = curOffset.y - defaultOffset.y
         
-        var lo: CGFloat = 0   // fraction 0 = back to center (always valid)
-        var hi: CGFloat = 1   // fraction 1 = current position (invalid)
-        
+        var lo: CGFloat = 0
+        var hi: CGFloat = 1
         for _ in 0..<20 {
             let mid = (lo + hi) / 2
             let testOffset = CGPoint(x: defaultOffset.x + dx * mid,
                                      y: defaultOffset.y + dy * mid)
             let testAnchor = CGPoint(
-                x: testOffset.x + cropWorkbenchView.bounds.width / 2,
-                y: testOffset.y + cropWorkbenchView.bounds.height / 2
+                x: testOffset.x + halfW,
+                y: testOffset.y + halfH
             )
             let testImgCorners = [
                 CGPoint(x: fr.minX - testAnchor.x, y: fr.minY - testAnchor.y),
@@ -680,8 +724,19 @@ extension CropView {
             }
         }
         
-        let validOffset = CGPoint(x: defaultOffset.x + dx * lo,
-                                  y: defaultOffset.y + dy * lo)
+        return CGPoint(x: defaultOffset.x + dx * lo,
+                        y: defaultOffset.y + dy * lo)
+    }
+    
+    /// After the user finishes dragging, verify that the crop box still lies
+    /// inside the projected (skewed) image quad. If it doesn't, animate the
+    /// contentOffset back to the nearest valid position.
+    func clampContentOffsetForSkewIfNeeded() {
+        let hDeg = viewModel.horizontalSkewDegrees
+        let vDeg = viewModel.verticalSkewDegrees
+        guard hDeg != 0 || vDeg != 0 else { return }
+        
+        guard let validOffset = computeValidContentOffset() else { return }
         
         UIView.animate(withDuration: 0.12, delay: 0, options: .curveEaseOut) {
             self.cropWorkbenchView.contentOffset = validOffset
@@ -749,6 +804,7 @@ extension CropView {
                           min(PerspectiveTransformHelper.maxSkewDegrees, degrees))
         viewModel.horizontalSkewDegrees = clamped
         applySkewTransformIfNeeded()
+        updateContentInsetForSkew()
         checkImageStatusChanged()
     }
     
@@ -758,6 +814,7 @@ extension CropView {
                           min(PerspectiveTransformHelper.maxSkewDegrees, degrees))
         viewModel.verticalSkewDegrees = clamped
         applySkewTransformIfNeeded()
+        updateContentInsetForSkew()
         checkImageStatusChanged()
     }
     
@@ -951,6 +1008,12 @@ extension CropView {
     }
     
     func makeSureImageContainsCropOverlay() {
+        // When skew is active, the sublayerTransform visually enlarges the image
+        // beyond the content coordinate bounds. Skip the content-based check to
+        // avoid an incorrect zoom reset that causes a visible jump.
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        if hasSkew { return }
+        
         if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
             cropWorkbenchView.zoomScaleToBound(animated: true)
         }
@@ -962,9 +1025,17 @@ extension CropView {
         
         cropWorkbenchView.updateLayout(byNewSize: CGSize(width: width, height: height))
         
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        
         if !isManuallyZoomed || cropWorkbenchView.shouldScale() {
-            cropWorkbenchView.zoomScaleToBound(animated: false)
-            isManuallyZoomed = false
+            // When skew is active and the user has panned, preserve the current
+            // zoom/offset so the view doesn't jump back to center.
+            if hasSkew && cropWorkbenchView.contentInset != .zero {
+                cropWorkbenchView.updateMinZoomScale()
+            } else {
+                cropWorkbenchView.zoomScaleToBound(animated: false)
+                isManuallyZoomed = false
+            }
         } else {
             cropWorkbenchView.updateMinZoomScale()
         }
@@ -1255,6 +1326,7 @@ extension CropView: CropViewProtocol {
                     self.viewModel.horizontalSkewDegrees = savedHSkew
                     self.viewModel.verticalSkewDegrees = savedVSkew
                     self.applySkewTransformIfNeeded()
+                    self.updateContentInsetForSkew()
                 }
                 self.viewModel.setBetweenOperationStatus()
             }
@@ -1264,6 +1336,7 @@ extension CropView: CropViewProtocol {
                 viewModel.horizontalSkewDegrees = savedHSkew
                 viewModel.verticalSkewDegrees = savedVSkew
                 applySkewTransformIfNeeded()
+                updateContentInsetForSkew()
             }
         }
     }
@@ -1338,6 +1411,7 @@ extension CropView: CropViewProtocol {
                 viewModel.horizontalSkewDegrees = savedHSkew
                 viewModel.verticalSkewDegrees = savedVSkew
                 applySkewTransformIfNeeded()
+                updateContentInsetForSkew()
             }
         }
         
@@ -1352,6 +1426,7 @@ extension CropView: CropViewProtocol {
             
             if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
                 applySkewTransformIfNeeded()
+                updateContentInsetForSkew()
             }
             
             // Keep the SlideDial's stored angles in sync.
@@ -1423,6 +1498,7 @@ extension CropView: CropViewProtocol {
         
         // Restore skew transforms
         applySkewTransformIfNeeded()
+        updateContentInsetForSkew()
         syncSlideDialSkewValues()
     }
     
@@ -1448,6 +1524,7 @@ extension CropView: CropViewProtocol {
         viewModel.horizontalSkewDegrees = transformation.horizontalSkewDegrees
         viewModel.verticalSkewDegrees = transformation.verticalSkewDegrees
         applySkewTransformIfNeeded()
+        updateContentInsetForSkew()
         
         if isUpdateRotationControlView {
             rotationControlView?.updateRotationValue(by: Angle(radians: viewModel.radians))
@@ -1571,6 +1648,7 @@ extension CropView: CropViewProtocol {
         viewModel.horizontalSkewDegrees = -viewModel.horizontalSkewDegrees
         flip(isHorizontal: true)
         applySkewTransformIfNeeded()
+        updateContentInsetForSkew()
         checkImageStatusChanged()
     }
     
@@ -1580,6 +1658,7 @@ extension CropView: CropViewProtocol {
         viewModel.verticalSkewDegrees = -viewModel.verticalSkewDegrees
         flip(isHorizontal: false)
         applySkewTransformIfNeeded()
+        updateContentInsetForSkew()
         checkImageStatusChanged()
     }
     
