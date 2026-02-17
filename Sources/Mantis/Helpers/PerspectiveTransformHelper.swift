@@ -169,9 +169,10 @@ struct PerspectiveTransformHelper {
     
     /// Tests whether all `testPoints` lie inside a convex polygon.
     ///
-    /// The polygon vertices must be in clockwise order (screen coordinates, Y downward).
-    /// Uses the cross-product sign test: for CW winding, interior points
-    /// produce a positive cross product for every edge.
+    /// Automatically detects the winding order of the polygon (CW or CCW)
+    /// using the signed area, then uses the cross-product sign test with the
+    /// appropriate sign convention. This makes the test robust when perspective
+    /// projection reverses the vertex winding.
     static func allPointsInsideConvexPolygon(
         _ testPoints: [CGPoint],
         polygon: [CGPoint]
@@ -179,13 +180,27 @@ struct PerspectiveTransformHelper {
         let n = polygon.count
         guard n >= 3 else { return false }
         
+        // Compute signed area to determine winding direction.
+        // Positive = CCW (math convention), negative = CW (screen coords).
+        var signedArea2: CGFloat = 0
+        for i in 0..<n {
+            let a = polygon[i]
+            let b = polygon[(i + 1) % n]
+            signedArea2 += (b.x - a.x) * (b.y + a.y)
+        }
+        // CW winding (negative signedArea2) → cross products should be positive.
+        // CCW winding (positive signedArea2) → cross products should be negative.
+        let expectPositive = signedArea2 < 0
+        
         for point in testPoints {
             for i in 0..<n {
                 let a = polygon[i]
                 let b = polygon[(i + 1) % n]
                 let cross = (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)
-                if cross < -1e-6 {
-                    return false
+                if expectPositive {
+                    if cross < -1e-6 { return false }
+                } else {
+                    if cross > 1e-6 { return false }
                 }
             }
         }
