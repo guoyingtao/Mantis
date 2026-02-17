@@ -325,6 +325,7 @@ final class CropView: UIView {
             // After rotation ends, recalculate contentInset for the new geometry
             // so panning still works correctly when skew is active.
             self.updateContentInsetForSkew()
+            self.makeSureImageContainsCropOverlay()
             self.viewModel.setBetweenOperationStatus()
         }
         
@@ -512,6 +513,12 @@ extension CropView {
         flipCropWorkbenchViewIfNeeded()
         applySkewTransformIfNeeded()
         adjustWorkbenchView(by: totalRadians)
+        
+        // Keep content insets in sync with the changing geometry during rotation
+        // so the crop overlay stays within the projected image area.
+        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+            updateContentInsetForSkew()
+        }
     }
     
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
@@ -1029,14 +1036,28 @@ extension CropView {
     }
     
     func makeSureImageContainsCropOverlay() {
-        // When skew is active, the sublayerTransform visually enlarges the image
-        // beyond the content coordinate bounds. Skip the content-based check to
-        // avoid an incorrect zoom reset that causes a visible jump.
         let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
-        if hasSkew { return }
         
-        if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
-            cropWorkbenchView.zoomScaleToBound(animated: true)
+        if hasSkew {
+            // When skew is active, the sublayerTransform visually enlarges the
+            // image beyond its content coordinate bounds by the compensating
+            // scale factor. Use that factor as tolerance so the containment
+            // check still catches genuinely out-of-bounds situations while
+            // ignoring the visual enlargement.
+            let scale = previousSkewScale
+            let cropFrame = cropAuxiliaryIndicatorView.frame
+            let toleranceX = cropFrame.width * (scale - 1) / 2
+            let toleranceY = cropFrame.height * (scale - 1) / 2
+            let tolerance = max(toleranceX, toleranceY, 0.5)
+            
+            if !imageContainer.contains(rect: cropFrame, fromView: self, tolerance: tolerance) {
+                cropWorkbenchView.zoomScaleToBound(animated: true)
+                updateContentInsetForSkew()
+            }
+        } else {
+            if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
+                cropWorkbenchView.zoomScaleToBound(animated: true)
+            }
         }
     }
     
