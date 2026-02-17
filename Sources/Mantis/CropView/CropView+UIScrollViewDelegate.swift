@@ -38,19 +38,21 @@ extension CropView: UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        clampContentOffsetForSkewIfNeeded()
         viewModel.setBetweenOperationStatus()
     }
-    
+
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
 	        delegate?.cropViewDidEndResize(self)
         makeSureImageContainsCropOverlay()
-        
+
         isManuallyZoomed = true
         viewModel.setBetweenOperationStatus()
     }
-    
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
+            clampContentOffsetForSkewIfNeeded()
             viewModel.setBetweenOperationStatus()
         }
     }
