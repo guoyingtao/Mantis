@@ -91,15 +91,21 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
         return button
     }()
 
-    private lazy var cropButton: UIButton = {
+    private lazy var cropButton: DebounceButton = {
         if let icon = iconProvider?.getCropIcon() {
-            let button = createOptionButton(withTitle: nil, andAction: #selector(crop))
+            let button: DebounceButton = createOptionButton(withTitle: nil)
             button.setImage(icon, for: .normal)
+            button.setCropOperation { [weak self] in
+                self?.crop(button)
+            }
             return button
         }
         
         let doneText = LocalizedHelper.getString("Mantis.Done", value: "Done")
-        let button = createOptionButton(withTitle: doneText, andAction: #selector(crop))
+        let button: DebounceButton = createOptionButton(withTitle: doneText)
+        button.setCropOperation { [weak self] in
+            self?.crop(button)
+        }
         button.accessibilityIdentifier = "DoneButton"
         button.accessibilityLabel = doneText
         return button
@@ -282,13 +288,13 @@ extension CropToolbar {
 
 // private functions
 extension CropToolbar {
-    private func createOptionButton(withTitle title: String?, andAction action: Selector) -> UIButton {
+    private func createOptionButton<T: UIButton>(withTitle title: String?, andAction action: Selector? = nil) -> T {
         let buttonColor = config.foregroundColor
         let buttonFont: UIFont = .preferredFont(forTextStyle: .body)
         let fontMetrics = UIFontMetrics(forTextStyle: .body)
         let maxSize = UIFont.systemFontSize * 1.5
         
-        let button = UIButton(type: .system)
+        let button = T(type: .system)
         button.tintColor = config.foregroundColor
         button.titleLabel?.font = fontMetrics.scaledFont(for: buttonFont, maximumPointSize: maxSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -320,7 +326,10 @@ extension CropToolbar {
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .horizontal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .vertical)
 
-        button.addTarget(self, action: action, for: .touchUpInside)
+        if let action = action {
+            button.addTarget(self, action: action, for: .touchUpInside)
+        }
+        
         button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
         
         button.isAccessibilityElement = true
