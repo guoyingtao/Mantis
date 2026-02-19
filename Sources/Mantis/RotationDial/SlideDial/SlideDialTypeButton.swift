@@ -25,7 +25,7 @@ enum SlideDialIconDrawer {
     /// Draws the "Straighten" icon: a full circle with a horizontal line.
     /// Inside the circle: line is background-colored (cutout). Outside: white.
     static func drawStraightenIcon(in rect: CGRect, color: UIColor, backgroundColor: UIColor) {
-        let ctx = UIGraphicsGetCurrentContext()!
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
         ctx.saveGState()
         
         let inset = rect.insetBy(dx: rect.width * 0.12, dy: rect.height * 0.12)
@@ -73,7 +73,7 @@ enum SlideDialIconDrawer {
     /// Draws the "Vertical Skew" icon: a trapezoid narrowing at top, with a vertical center line + crossbar.
     /// Inside the trapezoid: line is background-colored (cutout). Outside: white.
     static func drawVerticalSkewIcon(in rect: CGRect, color: UIColor, backgroundColor: UIColor) {
-        let ctx = UIGraphicsGetCurrentContext()!
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
         ctx.saveGState()
         
         let inset = rect.insetBy(dx: rect.width * 0.21, dy: rect.height * 0.21)
@@ -133,7 +133,7 @@ enum SlideDialIconDrawer {
     /// with a horizontal center line + crossbar.
     /// Inside the trapezoid: line is background-colored (cutout). Outside: white.
     static func drawHorizontalSkewIcon(in rect: CGRect, color: UIColor, backgroundColor: UIColor) {
-        let ctx = UIGraphicsGetCurrentContext()!
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
         ctx.saveGState()
         
         let inset = rect.insetBy(dx: rect.width * 0.21, dy: rect.height * 0.21)
