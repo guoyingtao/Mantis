@@ -296,6 +296,11 @@ final class CropView: UIView {
         rotationControlView.isUserInteractionEnabled = true
         
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
+            // Notify delegate on the first frame of each rotation gesture
+            // so that previousCropState is captured for undo/redo.
+            if self.viewModel.viewStatus != .touchRotationBoard {
+                self.delegate?.cropViewDidBeginResize(self)
+            }
             self.viewModel.setTouchRotationBoardStatus()
             
             switch self.currentRotationAdjustmentType {
@@ -307,14 +312,12 @@ final class CropView: UIView {
                 self.viewModel.horizontalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
                 self.updateContentInsetForSkew()
-                self.checkImageStatusChanged()
             case .verticalSkew:
                 let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
                                   min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
                 self.viewModel.verticalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
                 self.updateContentInsetForSkew()
-                self.checkImageStatusChanged()
             }
         }
         
