@@ -524,12 +524,28 @@ extension CropView {
         }
     }
     
+    /// Returns the effective skew degrees after accounting for flip state.
+    /// The viewModel stores the user-facing (SlideDial-displayed) value;
+    /// flipping mirrors the perspective, so the sign must be inverted for
+    /// the axis that matches the flip direction.
+    private var effectiveHorizontalSkewDegrees: CGFloat {
+        var deg = viewModel.horizontalSkewDegrees
+        if viewModel.horizontallyFlip { deg = -deg }
+        return deg
+    }
+    
+    private var effectiveVerticalSkewDegrees: CGFloat {
+        var deg = viewModel.verticalSkewDegrees
+        if viewModel.verticallyFlip { deg = -deg }
+        return deg
+    }
+    
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
     /// Includes an auto-computed compensating scale so the projected image
     /// always fully covers the visible area (no blank edges).
     private func applySkewTransformIfNeeded() {
-        let hDeg = viewModel.horizontalSkewDegrees
-        let vDeg = viewModel.verticalSkewDegrees
+        let hDeg = effectiveHorizontalSkewDegrees
+        let vDeg = effectiveVerticalSkewDegrees
         
         if hDeg == 0 && vDeg == 0 {
             cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
@@ -583,8 +599,8 @@ extension CropView {
     /// can pan within the projected image area. Call this only when skew
     /// degrees actually change, NOT during every rotation frame.
     private func updateContentInsetForSkew() {
-        let hDeg = viewModel.horizontalSkewDegrees
-        let vDeg = viewModel.verticalSkewDegrees
+        let hDeg = effectiveHorizontalSkewDegrees
+        let vDeg = effectiveVerticalSkewDegrees
         
         guard hDeg != 0 || vDeg != 0 else {
             cropWorkbenchView.contentInset = .zero
@@ -763,8 +779,8 @@ extension CropView {
     /// inside the projected (skewed) image quad. If it doesn't, animate the
     /// contentOffset back to the nearest valid position.
     func clampContentOffsetForSkewIfNeeded() {
-        let hDeg = viewModel.horizontalSkewDegrees
-        let vDeg = viewModel.verticalSkewDegrees
+        let hDeg = effectiveHorizontalSkewDegrees
+        let vDeg = effectiveVerticalSkewDegrees
         guard hDeg != 0 || vDeg != 0 else { return }
         
         guard let validOffset = computeValidContentOffset() else { return }
@@ -1272,7 +1288,19 @@ extension CropView {
             cropWorkbenchView.transform = flipTransform.rotated(by: coff*viewModel.radians)
             
             viewModel.degrees *= -1
-            rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.degrees))
+            // For SlideDial: update the ruler when showing straighten,
+            // or silently sync the stored straighten value when on a skew tab.
+            // Skew values are kept unchanged on the dial after flip (the
+            // effective negation is applied at transform time).
+            if let slideDial = rotationControlView as? SlideDial {
+                if currentRotationAdjustmentType == .straighten {
+                    slideDial.updateRotationValue(by: Angle(degrees: viewModel.degrees))
+                } else {
+                    slideDial.syncStraightenValue(viewModel.degrees)
+                }
+            } else {
+                rotationControlView?.updateRotationValue(by: Angle(degrees: viewModel.degrees))
+            }
         }
         
         if animated {
@@ -1693,8 +1721,6 @@ extension CropView: CropViewProtocol {
     
     func horizontallyFlip() {
         viewModel.horizontallyFlip.toggle()
-        // Invert horizontal skew when flipping horizontally
-        viewModel.horizontalSkewDegrees = -viewModel.horizontalSkewDegrees
         flip(isHorizontal: true)
         previousSkewScale = 1.0
         previousSkewInset = .zero
@@ -1705,8 +1731,6 @@ extension CropView: CropViewProtocol {
     
     func verticallyFlip() {
         viewModel.verticallyFlip.toggle()
-        // Invert vertical skew when flipping vertically
-        viewModel.verticalSkewDegrees = -viewModel.verticalSkewDegrees
         flip(isHorizontal: false)
         previousSkewScale = 1.0
         previousSkewInset = .zero

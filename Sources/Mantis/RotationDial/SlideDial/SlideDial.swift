@@ -326,6 +326,30 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         viewModel.currentAdjustmentType
     }
     
+    /// Called by CropView after a flip to sync the SlideDial's stored straighten value
+    /// without disturbing the ruler when a skew tab is active.
+    func syncStraightenValue(_ degrees: CGFloat) {
+        guard case .withTypeSelector = config.mode else { return }
+        
+        viewModel.storeAngle(degrees, for: .straighten)
+        typeButtons[.straighten]?.setValue(degrees)
+        
+        if viewModel.currentAdjustmentType == .straighten {
+            let limit = config.limitation(for: .straighten)
+            
+            viewModel.didSetRotationAngle = { _ in }
+            viewModel.rotationAngle = Angle(degrees: degrees)
+            viewModel.didSetRotationAngle = { [weak self] angle in
+                self?.handleRotation(by: angle)
+            }
+            
+            slideRuler?.reset()
+            if abs(degrees) > 0.5 {
+                slideRuler?.setOffsetRatio(degrees / limit)
+            }
+        }
+    }
+    
     /// Called by CropView after a 90° rotation to sync the SlideDial's stored skew values
     /// with the swapped values in CropView's viewModel.
     func syncSkewValues(horizontal: CGFloat, vertical: CGFloat) {
