@@ -341,6 +341,11 @@ final class CropView: UIView {
                 if !self.viewModel.needCrop() {
                     self.delegate?.cropViewDidEndResize(self)
                 }
+                // When switching between skew axes (e.g. H→V), the current
+                // pan position may be invalid for the combined geometry that
+                // the next axis adjustment will produce. Clamp now to prevent
+                // the overlay from starting outside the image.
+                self.clampContentOffsetForSkewIfNeeded()
                 self.viewModel.setBetweenOperationStatus()
             }
         }
@@ -564,7 +569,15 @@ extension CropView {
             let threshold = PerspectiveTransformHelper.translateThresholdDegrees
             let rawFactor = (maxDeg - threshold) / (PerspectiveTransformHelper.maxSkewDegrees - threshold)
             let factor = max(0, min(1, rawFactor))
-            let safetyInset = (20 * factor) + (8 * factor * factor)
+            // Additional safety for combined H+V skew: when both axes are
+            // active, the perspective distortion is stronger than either
+            // axis alone. The combinedFactor is 0 when one axis is zero,
+            // and 1 when both are at max.
+            let hFactor = min(abs(hDeg) / PerspectiveTransformHelper.maxSkewDegrees, 1)
+            let vFactor = min(abs(vDeg) / PerspectiveTransformHelper.maxSkewDegrees, 1)
+            let combinedFactor = hFactor * vFactor
+            
+            let safetyInset = (20 * factor) + (12 * factor * factor) + (16 * combinedFactor)
             let (cornerDisplacements, visibleCornerDisplacements, _, visibleTopLeft) =
                 computeSkewProjectionInputs(safetyInset: safetyInset)
             // Compute compensating scale to prevent blank areas
@@ -575,17 +588,28 @@ extension CropView {
             )
             let topLeftAdjust = max(0, -visibleTopLeft.y / max(cropAuxiliaryIndicatorView.bounds.height, 1))
             let topLeftScale = 1 + min(0.04, topLeftAdjust * 0.09) * normalizedAngle
-            let safetyScale = 1 + (0.08 * factor) + (0.06 * factor * factor)
-            var finalScale = rawScale * safetyScale * topLeftScale
+            let safetyScale = 1 + (0.08 * factor) + (0.06 * factor * factor) + (0.04 * factor * factor * factor) + (0.10 * combinedFactor)
+            let idealScale = rawScale * safetyScale * topLeftScale
             
-            // Rate-limit scale changes to prevent single-frame spikes.
-            // When switching skew axes, the binary search can produce an
-            // anomalous value for one frame. Clamping prevents the jump.
-            let maxChangeRatio: CGFloat = 0.03
-            if previousSkewScale > 1.0 {
-                let lower = previousSkewScale * (1 - maxChangeRatio)
-                let upper = previousSkewScale * (1 + maxChangeRatio)
-                finalScale = max(lower, min(upper, finalScale))
+            // Scale increases are applied immediately so the projected image
+            // always covers the crop box (prevents overlay escaping).
+            // Scale decreases use exponential smoothing to avoid jarring
+            // shrink when the user reduces skew.
+            var finalScale = idealScale
+            if previousSkewScale > 1.0 && idealScale.isFinite {
+                if idealScale >= previousSkewScale {
+                    // Upward: apply immediately for containment safety
+                    finalScale = idealScale
+                } else {
+                    // Downward: smooth to avoid visual jump
+                    let alpha: CGFloat = 0.10
+                    finalScale = previousSkewScale + alpha * (idealScale - previousSkewScale)
+                }
+            }
+            
+            // Guard against degenerate values
+            if !finalScale.isFinite || finalScale < 1.0 {
+                finalScale = max(previousSkewScale, 1.0)
             }
             
             previousSkewScale = finalScale
@@ -709,7 +733,6 @@ extension CropView {
             let right  = axisRight  * min(topRightT, bottomRightT)
 
             newInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
-            previousSkewInset = newInset
         } else {
             // Center-based test fails transiently at certain combined angles
             // (the compensating scale hasn't caught up due to rate-limiting).
@@ -717,6 +740,8 @@ extension CropView {
             // redistributing asymmetrically, which would cause a visible pan.
             newInset = previousSkewInset
         }
+        
+        previousSkewInset = newInset
         
         // Pre-clamp contentOffset to fit within the new inset bounds BEFORE
         // setting the inset. This prevents UIScrollView from auto-clamping
@@ -727,93 +752,17 @@ extension CropView {
         let clampedX = max(-newInset.left, min(maxOffsetX, curOffset.x))
         let clampedY = max(-newInset.top, min(maxOffsetY, curOffset.y))
         
-        if clampedX != curOffset.x || clampedY != curOffset.y {
+        if clampedX.isFinite && clampedY.isFinite
+            && (clampedX != curOffset.x || clampedY != curOffset.y) {
             cropWorkbenchView.contentOffset = CGPoint(x: clampedX, y: clampedY)
         }
         
         cropWorkbenchView.contentInset = newInset
     }
     
-    /// Returns a valid contentOffset if the current one is outside the projected
-    /// image quad, or nil if the current offset is already valid.
-    private func computeValidContentOffset() -> CGPoint? {
-        let transform = cropWorkbenchView.layer.sublayerTransform
-        guard !CATransform3DIsIdentity(transform) else { return nil }
-        
-        let fr = imageContainer.frame
-        let anchor = CGPoint(
-            x: cropWorkbenchView.contentOffset.x + cropWorkbenchView.bounds.width / 2,
-            y: cropWorkbenchView.contentOffset.y + cropWorkbenchView.bounds.height / 2
-        )
-        let halfW = cropWorkbenchView.bounds.width / 2
-        let halfH = cropWorkbenchView.bounds.height / 2
-        let cropCorners = [
-            CGPoint(x: -halfW, y: -halfH),
-            CGPoint(x:  halfW, y: -halfH),
-            CGPoint(x:  halfW, y:  halfH),
-            CGPoint(x: -halfW, y:  halfH)
-        ]
-        let imgCorners = [
-            CGPoint(x: fr.minX - anchor.x, y: fr.minY - anchor.y),
-            CGPoint(x: fr.maxX - anchor.x, y: fr.minY - anchor.y),
-            CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
-            CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
-        ]
-        let proj = imgCorners.map {
-            PerspectiveTransformHelper.projectDisplacement($0, through: transform)
-        }
-        
-        if PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj) {
-            return nil  // Already valid
-        }
-        
-        // Binary-search for the maximum fraction of offset-from-center that's valid
-        let defaultOffset = CGPoint(
-            x: fr.midX - halfW,
-            y: fr.midY - halfH
-        )
-        let curOffset = cropWorkbenchView.contentOffset
-        let dx = curOffset.x - defaultOffset.x
-        let dy = curOffset.y - defaultOffset.y
-        
-        var lo: CGFloat = 0
-        var hi: CGFloat = 1
-        for _ in 0..<20 {
-            let mid = (lo + hi) / 2
-            let testOffset = CGPoint(x: defaultOffset.x + dx * mid,
-                                     y: defaultOffset.y + dy * mid)
-            let testAnchor = CGPoint(
-                x: testOffset.x + halfW,
-                y: testOffset.y + halfH
-            )
-            let testImgCorners = [
-                CGPoint(x: fr.minX - testAnchor.x, y: fr.minY - testAnchor.y),
-                CGPoint(x: fr.maxX - testAnchor.x, y: fr.minY - testAnchor.y),
-                CGPoint(x: fr.maxX - testAnchor.x, y: fr.maxY - testAnchor.y),
-                CGPoint(x: fr.minX - testAnchor.x, y: fr.maxY - testAnchor.y)
-            ]
-            let testProj = testImgCorners.map {
-                PerspectiveTransformHelper.projectDisplacement($0, through: transform)
-            }
-            if PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: testProj) {
-                lo = mid
-            } else {
-                hi = mid
-            }
-        }
-        
-        return CGPoint(x: defaultOffset.x + dx * lo,
-                        y: defaultOffset.y + dy * lo)
-    }
-    
     /// After the user finishes dragging, verify that the crop box still lies
     /// inside the projected (skewed) image quad. If it doesn't, animate the
     /// contentOffset back to the nearest valid position.
-    ///
-    /// Uses two strategies in order:
-    /// 1. Clamp to the current contentInset bounds (cheap, no projection).
-    /// 2. If still invalid, fall back to the projection-based binary search
-    ///    toward center.
     func clampContentOffsetForSkewIfNeeded() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
@@ -829,21 +778,11 @@ extension CropView {
         let clampedY = max(-inset.top, min(maxOffsetY, curOffset.y))
         let insetClamped = CGPoint(x: clampedX, y: clampedY)
 
-        if insetClamped != curOffset {
-            // Inset-based clamp is sufficient in most cases.
-            UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
-                self.cropWorkbenchView.contentOffset = insetClamped
-            }
-            return
-        }
-
-        // Inset-based clamp didn't move the offset, but the projection test
-        // may still fail (e.g. after a zoom changed the geometry). Fall back
-        // to the projection-based search toward center.
-        guard let validOffset = computeValidContentOffset() else { return }
+        guard insetClamped.x.isFinite && insetClamped.y.isFinite,
+              insetClamped != curOffset else { return }
 
         UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
-            self.cropWorkbenchView.contentOffset = validOffset
+            self.cropWorkbenchView.contentOffset = insetClamped
         }
     }
     
