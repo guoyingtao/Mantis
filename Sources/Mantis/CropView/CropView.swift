@@ -653,6 +653,7 @@ extension CropView {
             return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
         }
         
+        // Binary-search for the max valid distance along a given direction.
         func maxShift(dirX: CGFloat, dirY: CGFloat) -> CGFloat {
             let maxDist = max(boundsW, boundsH)
             var lo: CGFloat = 0
@@ -667,17 +668,47 @@ extension CropView {
             }
             return lo
         }
-        
+
         let newInset: UIEdgeInsets
-        
+
         if isValidShift(0, 0) {
-            // Center-based test succeeds — compute fresh insets.
-            newInset = UIEdgeInsets(
-                top:    maxShift(dirX: 0, dirY: -1),
-                left:   maxShift(dirX: -1, dirY: 0),
-                bottom: maxShift(dirX: 0, dirY: 1),
-                right:  maxShift(dirX: 1, dirY: 0)
-            )
+            // First, get single-axis max shifts as upper bounds.
+            let axisTop    = maxShift(dirX: 0, dirY: -1)
+            let axisLeft   = maxShift(dirX: -1, dirY: 0)
+            let axisBottom = maxShift(dirX: 0, dirY: 1)
+            let axisRight  = maxShift(dirX: 1, dirY: 0)
+
+            // Search along each diagonal to find the farthest valid corner.
+            // Each diagonal is parameterised by t in [0, 1], scaling the
+            // axis-based corner position.  This guarantees every corner of
+            // the resulting inset rectangle is itself a valid shift.
+            func diagonalMax(sx: CGFloat, sy: CGFloat) -> CGFloat {
+                if isValidShift(sx, sy) { return 1.0 }
+                var lo: CGFloat = 0
+                var hi: CGFloat = 1.0
+                for _ in 0..<14 {
+                    let mid = (lo + hi) / 2
+                    if isValidShift(sx * mid, sy * mid) {
+                        lo = mid
+                    } else {
+                        hi = mid
+                    }
+                }
+                return lo
+            }
+
+            let topLeftT     = diagonalMax(sx: -axisLeft,  sy: -axisTop)
+            let topRightT    = diagonalMax(sx:  axisRight, sy: -axisTop)
+            let bottomRightT = diagonalMax(sx:  axisRight, sy:  axisBottom)
+            let bottomLeftT  = diagonalMax(sx: -axisLeft,  sy:  axisBottom)
+
+            // Each inset is constrained by its two adjacent diagonals.
+            let top    = axisTop    * min(topLeftT, topRightT)
+            let left   = axisLeft   * min(topLeftT, bottomLeftT)
+            let bottom = axisBottom * min(bottomRightT, bottomLeftT)
+            let right  = axisRight  * min(topRightT, bottomRightT)
+
+            newInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
             previousSkewInset = newInset
         } else {
             // Center-based test fails transiently at certain combined angles
@@ -778,14 +809,40 @@ extension CropView {
     /// After the user finishes dragging, verify that the crop box still lies
     /// inside the projected (skewed) image quad. If it doesn't, animate the
     /// contentOffset back to the nearest valid position.
+    ///
+    /// Uses two strategies in order:
+    /// 1. Clamp to the current contentInset bounds (cheap, no projection).
+    /// 2. If still invalid, fall back to the projection-based binary search
+    ///    toward center.
     func clampContentOffsetForSkewIfNeeded() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
         guard hDeg != 0 || vDeg != 0 else { return }
-        
+
+        let inset = cropWorkbenchView.contentInset
+        let boundsW = cropWorkbenchView.bounds.width
+        let boundsH = cropWorkbenchView.bounds.height
+        let curOffset = cropWorkbenchView.contentOffset
+        let maxOffsetX = cropWorkbenchView.contentSize.width - boundsW + inset.right
+        let maxOffsetY = cropWorkbenchView.contentSize.height - boundsH + inset.bottom
+        let clampedX = max(-inset.left, min(maxOffsetX, curOffset.x))
+        let clampedY = max(-inset.top, min(maxOffsetY, curOffset.y))
+        let insetClamped = CGPoint(x: clampedX, y: clampedY)
+
+        if insetClamped != curOffset {
+            // Inset-based clamp is sufficient in most cases.
+            UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
+                self.cropWorkbenchView.contentOffset = insetClamped
+            }
+            return
+        }
+
+        // Inset-based clamp didn't move the offset, but the projection test
+        // may still fail (e.g. after a zoom changed the geometry). Fall back
+        // to the projection-based search toward center.
         guard let validOffset = computeValidContentOffset() else { return }
-        
-        UIView.animate(withDuration: 0.12, delay: 0, options: .curveEaseOut) {
+
+        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
             self.cropWorkbenchView.contentOffset = validOffset
         }
     }
