@@ -37,14 +37,7 @@ final class SlideDialViewModel {
     func storeAngle(_ degrees: CGFloat, for type: RotationAdjustmentType) {
         storedAngles[type] = degrees
     }
-    
-    func switchToType(_ type: RotationAdjustmentType) {
-        // Save the current angle
-        storedAngles[currentAdjustmentType] = rotationAngle.degrees
-        currentAdjustmentType = type
-        didChangeAdjustmentType?(type)
-    }
-    
+        
     func reset() {
         rotationAngle = Angle(degrees: 0)
     }

@@ -165,9 +165,9 @@ extension UIImage {
         let halfCropH = cropSize.height / 2
         let screenCorners = [
             CGPoint(x: -halfCropW, y: -halfCropH), // TL
-            CGPoint(x:  halfCropW, y: -halfCropH), // TR
-            CGPoint(x:  halfCropW, y:  halfCropH), // BR
-            CGPoint(x: -halfCropW, y:  halfCropH)  // BL
+            CGPoint(x: halfCropW, y: -halfCropH), // TR
+            CGPoint(x: halfCropW, y: halfCropH), // BR
+            CGPoint(x: -halfCropW, y: halfCropH)  // BL
         ]
 
         // Step 2: Apply inverse 2D transform (rotation + flip) to go from screen space
@@ -176,8 +176,9 @@ extension UIImage {
         let flipX: CGFloat = cropInfo.scaleX < 0 ? -1 : 1
         let flipY: CGFloat = cropInfo.scaleY < 0 ? -1 : 1
 
-        // The scroll view's 2D transform is: T = rotation * flip
-        // Inverse: T_inv = flip_inv * rotation_inv = flip * rotation(-angle)
+        // The scroll view's 2D transform is: T = flip * rotation
+        // (rotation is applied to the point first, then flip)
+        // Inverse: T_inv = rotation(-angle) * flip
         // (flip is self-inverse since flip^2 = identity)
         let cosR = cos(-rotation)
         let sinR = sin(-rotation)

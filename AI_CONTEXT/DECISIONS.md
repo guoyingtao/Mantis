@@ -28,9 +28,9 @@
 
 **Decision**: `Angle` is a `final class` inheriting from `NSObject`, not a struct.
 
-**Rationale**: Required for Objective-C interoperability with UIKit APIs that expect `NSObject`-based types. Supports `Comparable` conformance and arithmetic operators.
+**Rationale**: `Angle` is a `final class` inheriting from `NSObject` rather than a struct. The `NSObject` base class provides a free `description` override (used for debug output like `"12.50°"`) and `Equatable`/`Hashable` via `isEqual`/`hash`, though neither KVO nor `UndoManager` registration operates on `Angle` instances directly in this codebase. The class also conforms to `Comparable` and defines arithmetic operators (`+`, `-`, `*`, `/`, unary `-`). In practice, instances are treated as lightweight immutable values — operators return new `Angle` objects rather than mutating existing ones — so the reference-type choice is a historical convention rather than a strict requirement. A struct with `CustomStringConvertible` and `Comparable` would serve the same purpose.
 
-**Consequences**: Reference semantics — mutations to an `Angle` instance are visible to all holders. Copy-on-assign does not apply.
+**Consequences**: Reference semantics apply — passing an `Angle` shares the same instance, not a copy. However, the codebase does not rely on shared-mutation; operators always produce fresh instances. The `NSObject` base adds a small heap-allocation cost per instance compared to a value-type alternative.
 
 ## AD-005: Singleton Undo/Redo Stack
 

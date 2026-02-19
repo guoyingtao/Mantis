@@ -303,7 +303,7 @@ final class SlideDialTypeButton: UIView {
         updateAppearance()
     }
     
-    func setValue(_ value: CGFloat, animated: Bool = false) {
+    func setValue(_ value: CGFloat) {
         currentValue = value
         updateAppearance()
     }

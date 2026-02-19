@@ -112,8 +112,9 @@ Mantis.swift (factory)
     │   ├── CropMaskViewManager
     │   │   ├── CropDimmingView
     │   │   └── CropVisualEffectView
-    │   └── RotationControlView? (optional)
-    │       ├── RotationDial (circular)
+    │   ├── RotationTypeSelector (straighten/h-skew/v-skew segmented control)
+    │   └── RotationControlView (one of, via RotationControlViewProtocol)
+    │       ├── RotationDial (circular knob)
     │       └── SlideDial (linear ruler)
     │           └── SlideRuler
     ├── CropToolbar (default, or custom via CropToolbarProtocol)
@@ -129,7 +130,7 @@ Mantis.swift (factory)
 Host App ← CropViewControllerDelegate ← CropViewController
 CropViewController ← CropViewDelegate ← CropView
 CropViewController ← CropToolbarDelegate ← CropToolbar
-CropView ← closure ← RotationControlView.didUpdateRotationValue
+CropView ← closure ← RotationControlViewProtocol.didUpdateRotationValue (RotationDial or SlideDial)
 CropView ← RotationTypeSelectorDelegate ← RotationTypeSelector
 SlideDial ← SlideRulerDelegate ← SlideRuler
 CropViewController ← TransformDelegate → TransformStack → UndoManager
