@@ -1836,6 +1836,8 @@ extension CropView: CropViewProtocol {
         
         // Reset skew state
         currentRotationAdjustmentType = .straighten
+        previousSkewScale = 1.0
+        previousSkewInset = .zero
         if slideDialHandlesTypeSelection {
             // SlideDial handles its own type button reset via its reset() method
         } else {

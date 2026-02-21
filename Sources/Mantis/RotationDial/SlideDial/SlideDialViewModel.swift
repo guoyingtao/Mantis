@@ -39,6 +39,11 @@ final class SlideDialViewModel {
     }
         
     func reset() {
+        storedAngles = [
+            .straighten: 0,
+            .horizontalSkew: 0,
+            .verticalSkew: 0
+        ]
         rotationAngle = Angle(degrees: 0)
     }
     
