@@ -25,6 +25,9 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     var viewModel = SlideDialViewModel()
     
     var config = SlideDialConfig()
+
+    private let hapticGenerator = UISelectionFeedbackGenerator()
+    private var lastHapticStep: Int?
     
     // MARK: - Type selector mode properties
     
@@ -73,6 +76,23 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         setIndicator(with: angle)
         didUpdateRotationValue(angle)
     }
+
+    private func handleScrollHaptics(for angle: Angle) {
+        let currentStep = Int(angle.degrees.rounded(.towardZero))
+        if lastHapticStep == nil {
+            lastHapticStep = currentStep
+            hapticGenerator.prepare()
+            return
+        }
+
+        guard currentStep != lastHapticStep else {
+            return
+        }
+
+        lastHapticStep = currentStep
+        hapticGenerator.selectionChanged()
+        hapticGenerator.prepare()
+    }
     
     // MARK: - RotationControlViewProtocol
     
@@ -91,6 +111,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     func reset() {
         transform = .identity
+        lastHapticStep = nil
         
         switch config.mode {
         case .simple:
@@ -422,6 +443,7 @@ extension SlideDial: SlideRulerDelegate {
     
     func didGetOffsetRatio(from slideRuler: SlideRuler, offsetRatio: CGFloat) {
         let angle = Angle(degrees: currentLimitation * offsetRatio)
+        handleScrollHaptics(for: angle)
         viewModel.rotationAngle = angle
     }
 }
