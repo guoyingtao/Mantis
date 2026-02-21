@@ -228,6 +228,15 @@ final class SlideRuler: UIView {
         return (frame.width - scaleWidth) / CGFloat(config.scaleBarNumber - 1)
     }
 
+    private func getMajorTickStep() -> Int? {
+        guard config.scaleBarNumber > 1, config.majorScaleBarNumber > 1 else {
+            return nil
+        }
+
+        let step = (config.scaleBarNumber - 1) / (config.majorScaleBarNumber - 1)
+        return step > 0 ? step : nil
+    }
+
     private func animateTick(at index: Int) {
         guard index >= 0, index < scaleBars.count else {
             return
@@ -250,6 +259,28 @@ final class SlideRuler: UIView {
         bar.add(heightAnimation, forKey: "tickBounce")
     }
 
+    private func animateMajorTick(at index: Int) {
+        guard index >= 0, index < majorScaleBars.count else {
+            return
+        }
+
+        let bar = majorScaleBars[index]
+        let barHeight = majorScaleBarLayer.frame.height
+        let expandedHeight = pointer.frame.height
+
+        let heightAnimation = CAKeyframeAnimation(keyPath: "bounds.size.height")
+        heightAnimation.values = [barHeight, expandedHeight, barHeight]
+        heightAnimation.keyTimes = [0, 0.35, 1]
+        heightAnimation.timingFunctions = [
+            CAMediaTimingFunction(name: .easeOut),
+            CAMediaTimingFunction(name: .easeIn)
+        ]
+        heightAnimation.duration = 0.18
+        heightAnimation.isRemovedOnCompletion = true
+
+        bar.add(heightAnimation, forKey: "majorTickBounce")
+    }
+
     private func handleTickAnimationIfNeeded() {
         guard scrollRulerView.isDragging || scrollRulerView.isDecelerating else {
             return
@@ -269,6 +300,10 @@ final class SlideRuler: UIView {
         }
 
         animateTick(at: previousIndex)
+        if let step = getMajorTickStep(), previousIndex % step == 0 {
+            let majorIndex = previousIndex / step
+            animateMajorTick(at: majorIndex)
+        }
         lastTickIndex = currentIndex
     }
 }
