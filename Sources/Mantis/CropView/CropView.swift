@@ -519,12 +519,18 @@ extension CropView {
         let totalRadians = viewModel.getTotalRadians()
         cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
         flipCropWorkbenchViewIfNeeded()
-        applySkewTransformIfNeeded()
+
+        // adjustWorkbenchView MUST run before applySkewTransformIfNeeded so that
+        // cropWorkbenchView.bounds (which grows with rotation) is up-to-date when
+        // computeSkewProjectionInputs reads it for the compensating scale.
+        // Previously the reverse order caused the scale to be computed for stale
+        // bounds, making updateContentInsetForSkew fall back to stale insets that
+        // were too generous at combined skew + rotation angles.
         adjustWorkbenchView(by: totalRadians)
-        
-        // Keep content insets in sync with the changing geometry during rotation
-        // so the crop overlay stays within the projected image area.
-        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        if hasSkew {
+            applySkewTransformIfNeeded()
             updateContentInsetForSkew()
         }
     }
@@ -544,11 +550,38 @@ extension CropView {
         if viewModel.verticallyFlip { deg = -deg }
         return deg
     }
-    
+
+    /// Returns the crop box corners in the scroll view's LOCAL coordinate system,
+    /// expressed as displacements from the scroll view center.
+    ///
+    /// The crop box is an axis-aligned rectangle in screen space. The scroll view
+    /// is rotated by `totalRadians`, so in local space the visible rectangle is
+    /// the crop box rotated by `-totalRadians`. Using these corners instead of the
+    /// axis-aligned bounding box (bounds) avoids over-conservative containment
+    /// tests — the AABB at 45° is ~41% larger than the actual visible rectangle.
+    private var visibleCropCornersInScrollViewSpace: [CGPoint] {
+        let cropW = cropAuxiliaryIndicatorView.frame.width
+        let cropH = cropAuxiliaryIndicatorView.frame.height
+        let totalRadians = viewModel.getTotalRadians()
+        let cosR = cos(totalRadians)
+        let sinR = sin(totalRadians)
+
+        // Crop box corners (±halfWidth, ±halfHeight) rotated by -r into scroll view space.
+        // Rotation by -r: x' = cx*cos(r) + cy*sin(r), y' = -cx*sin(r) + cy*cos(r)
+        let halfWidth = cropW / 2
+        let halfHeight = cropH / 2
+        return [
+            CGPoint(x: -halfWidth * cosR - halfHeight * sinR, y: halfWidth * sinR - halfHeight * cosR),
+            CGPoint(x: halfWidth * cosR - halfHeight * sinR, y: -halfWidth * sinR - halfHeight * cosR),
+            CGPoint(x: halfWidth * cosR + halfHeight * sinR, y: -halfWidth * sinR + halfHeight * cosR),
+            CGPoint(x: -halfWidth * cosR + halfHeight * sinR, y: halfWidth * sinR + halfHeight * cosR)
+        ]
+    }
+
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
     /// Includes an auto-computed compensating scale so the projected image
     /// always fully covers the visible area (no blank edges).
-    private func applySkewTransformIfNeeded() {
+    func applySkewTransformIfNeeded() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
         
@@ -622,35 +655,32 @@ extension CropView {
     /// Recomputes contentInset for the current skew transform so the user
     /// can pan within the projected image area. Call this only when skew
     /// degrees actually change, NOT during every rotation frame.
-    private func updateContentInsetForSkew() {
+    func updateContentInsetForSkew() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
-        
+
         guard hDeg != 0 || vDeg != 0 else {
             cropWorkbenchView.contentInset = .zero
             previousSkewInset = .zero
             return
         }
-        
+
         let transform = cropWorkbenchView.layer.sublayerTransform
         guard !CATransform3DIsIdentity(transform) else {
             cropWorkbenchView.contentInset = .zero
             previousSkewInset = .zero
             return
         }
-        
+
         let fr = imageContainer.frame
         let boundsW = cropWorkbenchView.bounds.width
         let boundsH = cropWorkbenchView.bounds.height
-        let halfW = boundsW / 2
-        let halfH = boundsH / 2
-        let cropCorners = [
-            CGPoint(x: -halfW, y: -halfH),
-            CGPoint(x:  halfW, y: -halfH),
-            CGPoint(x:  halfW, y:  halfH),
-            CGPoint(x: -halfW, y:  halfH)
-        ]
-        
+        // Use the actual visible crop box corners (rotated into scroll view
+        // local space) instead of the scroll view's axis-aligned bounding box.
+        // The AABB grows with rotation (up to ~41% larger at 45°), making
+        // containment tests over-conservative and rejecting valid pan positions.
+        let cropCorners = visibleCropCornersInScrollViewSpace
+
         // Use the CENTER of the image as the anchor, consistent with
         // computeSkewProjectionInputs. This makes insets independent of the
         // current pan position, preventing abrupt inset redistribution when
@@ -659,7 +689,7 @@ extension CropView {
             x: fr.midX - boundsW / 2,
             y: fr.midY - boundsH / 2
         )
-        
+
         func isValidShift(_ shiftX: CGFloat, _ shiftY: CGFloat) -> Bool {
             let testAnchor = CGPoint(
                 x: centerOffset.x + shiftX + boundsW / 2,
@@ -676,7 +706,7 @@ extension CropView {
             }
             return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
         }
-        
+
         // Binary-search for the max valid distance along a given direction.
         func maxShift(dirX: CGFloat, dirY: CGFloat) -> CGFloat {
             let maxDist = max(boundsW, boundsH)
@@ -696,53 +726,55 @@ extension CropView {
         let newInset: UIEdgeInsets
 
         if isValidShift(0, 0) {
-            // First, get single-axis max shifts as upper bounds.
-            let axisTop    = maxShift(dirX: 0, dirY: -1)
-            let axisLeft   = maxShift(dirX: -1, dirY: 0)
-            let axisBottom = maxShift(dirX: 0, dirY: 1)
-            let axisRight  = maxShift(dirX: 1, dirY: 0)
+            // Get the maximum valid shift distance along each axis.
+            let shiftTop    = maxShift(dirX: 0, dirY: -1)
+            let shiftLeft   = maxShift(dirX: -1, dirY: 0)
+            let shiftBottom = maxShift(dirX: 0, dirY: 1)
+            let shiftRight  = maxShift(dirX: 1, dirY: 0)
 
-            // Search along each diagonal to find the farthest valid corner.
-            // Each diagonal is parameterised by t in [0, 1], scaling the
-            // axis-based corner position.  This guarantees every corner of
-            // the resulting inset rectangle is itself a valid shift.
-            func diagonalMax(sx: CGFloat, sy: CGFloat) -> CGFloat {
-                if isValidShift(sx, sy) { return 1.0 }
-                var lo: CGFloat = 0
-                var hi: CGFloat = 1.0
-                for _ in 0..<14 {
-                    let mid = (lo + hi) / 2
-                    if isValidShift(sx * mid, sy * mid) {
-                        lo = mid
-                    } else {
-                        hi = mid
-                    }
-                }
-                return lo
-            }
+            // Convert shifts (relative to image center) into UIScrollView
+            // contentInset values.
+            //
+            // The shift represents displacement of contentOffset from
+            // centerOffset (the offset that centers the image in the viewport).
+            //
+            //   desired min contentOffset = centerOffset - shiftLeft
+            //   desired max contentOffset = centerOffset + shiftRight
+            //
+            // UIScrollView's offset range with insets:
+            //   min = -inset.left
+            //   max = contentSize - bounds + inset.right
+            //
+            // Solving:
+            //   inset.left  = shiftLeft  - centerOffset.x
+            //   inset.right = (centerOffset.x + shiftRight) - (contentSize.w - boundsW)
+            //   inset.top   = shiftTop   - centerOffset.y
+            //   inset.bottom= (centerOffset.y + shiftBottom) - (contentSize.h - boundsH)
+            //
+            // These can be NEGATIVE when skew + rotation restricts the pan
+            // range below the scroll view's default.
+            let csW = cropWorkbenchView.contentSize.width
+            let csH = cropWorkbenchView.contentSize.height
 
-            let topLeftT     = diagonalMax(sx: -axisLeft,  sy: -axisTop)
-            let topRightT    = diagonalMax(sx:  axisRight, sy: -axisTop)
-            let bottomRightT = diagonalMax(sx:  axisRight, sy:  axisBottom)
-            let bottomLeftT  = diagonalMax(sx: -axisLeft,  sy:  axisBottom)
-
-            // Each inset is constrained by its two adjacent diagonals.
-            let top    = axisTop    * min(topLeftT, topRightT)
-            let left   = axisLeft   * min(topLeftT, bottomLeftT)
-            let bottom = axisBottom * min(bottomRightT, bottomLeftT)
-            let right  = axisRight  * min(topRightT, bottomRightT)
-
-            newInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+            newInset = UIEdgeInsets(
+                top:    shiftTop    - centerOffset.y,
+                left:   shiftLeft   - centerOffset.x,
+                bottom: (centerOffset.y + shiftBottom) - (csH - boundsH),
+                right:  (centerOffset.x + shiftRight)  - (csW - boundsW)
+            )
         } else {
-            // Center-based test fails transiently at certain combined angles
-            // (the compensating scale hasn't caught up due to rate-limiting).
-            // Keep the previous insets to avoid collapsing to zero or
-            // redistributing asymmetrically, which would cause a visible pan.
-            newInset = previousSkewInset
+            // Center-based test fails — the projected image at the center
+            // anchor is too small to cover the crop box. Lock to center.
+            newInset = UIEdgeInsets(
+                top:    -centerOffset.y,
+                left:   -centerOffset.x,
+                bottom: centerOffset.y - (cropWorkbenchView.contentSize.height - boundsH),
+                right:  centerOffset.x - (cropWorkbenchView.contentSize.width  - boundsW)
+            )
         }
-        
+
         previousSkewInset = newInset
-        
+
         // Pre-clamp contentOffset to fit within the new inset bounds BEFORE
         // setting the inset. This prevents UIScrollView from auto-clamping
         // (which causes a visible snap).
@@ -751,38 +783,93 @@ extension CropView {
         let maxOffsetY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
         let clampedX = max(-newInset.left, min(maxOffsetX, curOffset.x))
         let clampedY = max(-newInset.top, min(maxOffsetY, curOffset.y))
-        
+
         if clampedX.isFinite && clampedY.isFinite
             && (clampedX != curOffset.x || clampedY != curOffset.y) {
             cropWorkbenchView.contentOffset = CGPoint(x: clampedX, y: clampedY)
         }
-        
+
         cropWorkbenchView.contentInset = newInset
     }
     
     /// After the user finishes dragging, verify that the crop box still lies
     /// inside the projected (skewed) image quad. If it doesn't, animate the
     /// contentOffset back to the nearest valid position.
+    ///
+    /// Because the single-axis insets form a rectangle that over-approximates
+    /// the true (non-rectangular) valid region, the user can reach corners of
+    /// the inset rectangle that are outside the valid region. This function
+    /// performs a precise per-point perspective test and pulls back if needed.
     func clampContentOffsetForSkewIfNeeded() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
         guard hDeg != 0 || vDeg != 0 else { return }
 
-        let inset = cropWorkbenchView.contentInset
+        let transform = cropWorkbenchView.layer.sublayerTransform
+        guard !CATransform3DIsIdentity(transform) else { return }
+
+        let fr = imageContainer.frame
         let boundsW = cropWorkbenchView.bounds.width
         let boundsH = cropWorkbenchView.bounds.height
+        // Use actual visible crop corners instead of AABB (see updateContentInsetForSkew).
+        let cropCorners = visibleCropCornersInScrollViewSpace
+
         let curOffset = cropWorkbenchView.contentOffset
+
+        // First, clamp to inset bounds (standard scroll view range).
+        let inset = cropWorkbenchView.contentInset
         let maxOffsetX = cropWorkbenchView.contentSize.width - boundsW + inset.right
         let maxOffsetY = cropWorkbenchView.contentSize.height - boundsH + inset.bottom
-        let clampedX = max(-inset.left, min(maxOffsetX, curOffset.x))
-        let clampedY = max(-inset.top, min(maxOffsetY, curOffset.y))
-        let insetClamped = CGPoint(x: clampedX, y: clampedY)
+        var targetX = max(-inset.left, min(maxOffsetX, curOffset.x))
+        var targetY = max(-inset.top, min(maxOffsetY, curOffset.y))
 
-        guard insetClamped.x.isFinite && insetClamped.y.isFinite,
-              insetClamped != curOffset else { return }
+        // Then, do a perspective containment test at the clamped position.
+        // If the position is invalid (corner of the inset rect outside the
+        // projected image), pull back toward the image center.
+        let centerOffset = CGPoint(
+            x: fr.midX - boundsW / 2,
+            y: fr.midY - boundsH / 2
+        )
+
+        func isValidOffset(_ ox: CGFloat, _ oy: CGFloat) -> Bool {
+            let anchor = CGPoint(x: ox + boundsW / 2, y: oy + boundsH / 2)
+            let testCorners = [
+                CGPoint(x: fr.minX - anchor.x, y: fr.minY - anchor.y),
+                CGPoint(x: fr.maxX - anchor.x, y: fr.minY - anchor.y),
+                CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
+                CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
+            ]
+            let proj = testCorners.map {
+                PerspectiveTransformHelper.projectDisplacement($0, through: transform)
+            }
+            return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
+        }
+
+        if !isValidOffset(targetX, targetY) {
+            // Binary-search along the line from current position toward center
+            // to find the nearest valid point.
+            var lo: CGFloat = 0  // center
+            var hi: CGFloat = 1  // current position
+            for _ in 0..<16 {
+                let mid = (lo + hi) / 2
+                let testX = centerOffset.x + (targetX - centerOffset.x) * mid
+                let testY = centerOffset.y + (targetY - centerOffset.y) * mid
+                if isValidOffset(testX, testY) {
+                    lo = mid
+                } else {
+                    hi = mid
+                }
+            }
+            targetX = centerOffset.x + (targetX - centerOffset.x) * lo
+            targetY = centerOffset.y + (targetY - centerOffset.y) * lo
+        }
+
+        let target = CGPoint(x: targetX, y: targetY)
+        guard target.x.isFinite && target.y.isFinite,
+              target != curOffset else { return }
 
         UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
-            self.cropWorkbenchView.contentOffset = insetClamped
+            self.cropWorkbenchView.contentOffset = target
         }
     }
     
@@ -813,31 +900,26 @@ extension CropView {
             CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
         ]
 
-        // Visible crop rect centered at the same anchor.
-        // Since the scale must cover the crop area regardless of pan position,
-        // we use the centered (default) view position.
-        let boundsW = cropWorkbenchView.bounds.width
-        let boundsH = cropWorkbenchView.bounds.height
-        let cropBoxRectInContent = CGRect(
-            x: anchor.x - boundsW / 2,
-            y: anchor.y - boundsH / 2,
-            width: boundsW,
-            height: boundsH
-        )
-        let safetyRect = cropBoxRectInContent.insetBy(dx: -safetyInset, dy: -safetyInset)
-        let visibleCornerDisplacements = [
-            CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.minY - anchor.y),
-            CGPoint(x: safetyRect.maxX - anchor.x, y: safetyRect.minY - anchor.y),
-            CGPoint(x: safetyRect.maxX - anchor.x, y: safetyRect.maxY - anchor.y),
-            CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.maxY - anchor.y)
-        ]
+        // Use the actual visible crop box corners (rotated into scroll view
+        // local space) instead of the AABB. When the scroll view is rotated,
+        // the AABB is larger than the actual visible area, which causes the
+        // compensating scale to be unnecessarily large.
+        let baseCropCorners = visibleCropCornersInScrollViewSpace
+        // Apply safety inset: expand each corner outward from center by safetyInset.
+        let visibleCornerDisplacements: [CGPoint]
+        if safetyInset > 0 {
+            visibleCornerDisplacements = baseCropCorners.map { corner in
+                let len = sqrt(corner.x * corner.x + corner.y * corner.y)
+                guard len > 1e-6 else { return corner }
+                let scale = (len + safetyInset) / len
+                return CGPoint(x: corner.x * scale, y: corner.y * scale)
+            }
+        } else {
+            visibleCornerDisplacements = baseCropCorners
+        }
 
-        let visibleCenter = CGPoint(
-            x: (safetyRect.minX + safetyRect.maxX) / 2 - anchor.x,
-            y: (safetyRect.minY + safetyRect.maxY) / 2 - anchor.y
-        )
-
-        let visibleTopLeft = CGPoint(x: safetyRect.minX - anchor.x, y: safetyRect.minY - anchor.y)
+        let visibleCenter = CGPoint(x: 0, y: 0)
+        let visibleTopLeft = visibleCornerDisplacements.first ?? .zero
         return (imageCornerDisplacements, visibleCornerDisplacements, visibleCenter, visibleTopLeft)
     }
     
@@ -1052,23 +1134,16 @@ extension CropView {
     
     func makeSureImageContainsCropOverlay() {
         let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
-        
+
         if hasSkew {
-            // When skew is active, the sublayerTransform visually enlarges the
-            // image beyond its content coordinate bounds by the compensating
-            // scale factor. Use that factor as tolerance so the containment
-            // check still catches genuinely out-of-bounds situations while
-            // ignoring the visual enlargement.
-            let scale = previousSkewScale
-            let cropFrame = cropAuxiliaryIndicatorView.frame
-            let toleranceX = cropFrame.width * (scale - 1) / 2
-            let toleranceY = cropFrame.height * (scale - 1) / 2
-            let tolerance = max(toleranceX, toleranceY, 0.5)
-            
-            if !imageContainer.contains(rect: cropFrame, fromView: self, tolerance: tolerance) {
-                cropWorkbenchView.zoomScaleToBound(animated: true)
-                updateContentInsetForSkew()
-            }
+            // When skew is active, UIView.convert does NOT account for the 3D
+            // sublayerTransform, so the 2D containment check is unreliable.
+            // The perspective compensating scale visually enlarges the image well
+            // beyond its 2D frame, meaning the standard check produces false
+            // "out of bounds" results that trigger zoomScaleToBound and cause
+            // visible jitter. Instead, rely on the content inset constraints
+            // (updateContentInsetForSkew / clampContentOffsetForSkewIfNeeded)
+            // to keep the overlay inside the projected image.
         } else {
             if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
                 cropWorkbenchView.zoomScaleToBound(animated: true)
