@@ -25,21 +25,16 @@ final class SlideRuler: UIView {
     var sliderOffsetRatio: CGFloat = 0.5
     var positionInfoHelper: SlideRulerPositionHelper = BilateralTypeSlideRulerPositionHelper()
         
-    lazy var scaleBarLayer: CAReplicatorLayer = {
-        var layer = CAReplicatorLayer()
-        layer.instanceCount = config.scaleBarNumber
-        return layer
-    }()
-    
-    lazy var majorScaleBarLayer: CAReplicatorLayer = {
-        var layer = CAReplicatorLayer()
-        layer.instanceCount = config.majorScaleBarNumber
-        return layer
-    }()
+    let scaleBarLayer = CALayer()
+    let majorScaleBarLayer = CALayer()
+    private var scaleBars: [CALayer] = []
+    private var majorScaleBars: [CALayer] = []
     
     weak var delegate: SlideRulerDelegate?
     var isReset = false
     var offsetValue: CGFloat = 0
+    
+    private var lastTickIndex: Int?
     
     override var bounds: CGRect {
         didSet {
@@ -73,6 +68,7 @@ final class SlideRuler: UIView {
         makePointer()
         
         setUIFrames()
+        updateLastTickIndex()
     }
     
     @objc func setSliderDelegate() {
@@ -89,6 +85,7 @@ final class SlideRuler: UIView {
         scrollRulerView.contentOffset = CGPoint(x: offsetValue, y: 0)
         
         perform(#selector(setSliderDelegate), with: nil, afterDelay: 0.1)
+        updateLastTickIndex()
 
         pointer.frame = CGRect(x: (frame.width / 2 - pointerWidth / 2),
                                y: bounds.origin.y + frame.height * 0.4,
@@ -101,18 +98,25 @@ final class SlideRuler: UIView {
         centralDot.path = UIBezierPath(ovalIn: centralDot.bounds).cgPath
         
         scaleBarLayer.frame = CGRect(x: frame.width / 2, y: 0.6 * frame.height, width: frame.width, height: 0.4 * frame.height)
-        scaleBarLayer.instanceTransform = CATransform3DMakeTranslation((frame.width - scaleWidth) / CGFloat((config.scaleBarNumber - 1)), 0, 0)
-
-        scaleBarLayer.sublayers?.forEach {
-            $0.frame = CGRect(x: 0, y: 0, width: 1, height: scaleBarLayer.frame.height)
+        let scaleSpacing = config.scaleBarNumber > 1
+            ? (frame.width - scaleWidth) / CGFloat(config.scaleBarNumber - 1)
+            : 0
+        for (index, bar) in scaleBars.enumerated() {
+            let xPosition = CGFloat(index) * scaleSpacing
+            bar.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+            bar.bounds = CGRect(x: 0, y: 0, width: scaleWidth, height: scaleBarLayer.frame.height)
+            bar.position = CGPoint(x: xPosition, y: scaleBarLayer.frame.height)
         }
         
         majorScaleBarLayer.frame = scaleBarLayer.frame
-        let transationX = (frame.width - scaleWidth) / CGFloat((config.majorScaleBarNumber - 1))
-        majorScaleBarLayer.instanceTransform = CATransform3DMakeTranslation(transationX, 0, 0)
-        
-        majorScaleBarLayer.sublayers?.forEach {
-            $0.frame = CGRect(x: 0, y: 0, width: 1, height: majorScaleBarLayer.frame.height)
+        let majorSpacing = config.majorScaleBarNumber > 1
+            ? (frame.width - scaleWidth) / CGFloat(config.majorScaleBarNumber - 1)
+            : 0
+        for (index, bar) in majorScaleBars.enumerated() {
+            let xPosition = CGFloat(index) * majorSpacing
+            bar.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+            bar.bounds = CGRect(x: 0, y: 0, width: scaleWidth, height: majorScaleBarLayer.frame.height)
+            bar.position = CGPoint(x: xPosition, y: majorScaleBarLayer.frame.height)
         }
     }
     
@@ -136,19 +140,31 @@ final class SlideRuler: UIView {
     }
     
     private func makeRuler() {
-        scaleBarLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        scaleBars.forEach { $0.removeFromSuperlayer() }
+        scaleBars.removeAll()
         
-        let scaleBar = makeBarScaleMark(byColor: scaleColor)
-        scaleBarLayer.addSublayer(scaleBar)
+        for _ in 0..<config.scaleBarNumber {
+            let scaleBar = makeBarScaleMark(byColor: scaleColor)
+            scaleBars.append(scaleBar)
+            scaleBarLayer.addSublayer(scaleBar)
+        }
         
-        scrollRulerView.layer.addSublayer(scaleBarLayer)
+        if scaleBarLayer.superlayer == nil {
+            scrollRulerView.layer.addSublayer(scaleBarLayer)
+        }
         
-        majorScaleBarLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        majorScaleBars.forEach { $0.removeFromSuperlayer() }
+        majorScaleBars.removeAll()
 
-        let majorScaleBar = makeBarScaleMark(byColor: majorScaleColor)
-        majorScaleBarLayer.addSublayer(majorScaleBar)
+        for _ in 0..<config.majorScaleBarNumber {
+            let majorScaleBar = makeBarScaleMark(byColor: majorScaleColor)
+            majorScaleBars.append(majorScaleBar)
+            majorScaleBarLayer.addSublayer(majorScaleBar)
+        }
         
-        scrollRulerView.layer.addSublayer(majorScaleBarLayer)
+        if majorScaleBarLayer.superlayer == nil {
+            scrollRulerView.layer.addSublayer(majorScaleBarLayer)
+        }
     }
     
     private func makeBarScaleMark(byColor color: CGColor) -> CALayer {
@@ -163,10 +179,11 @@ final class SlideRuler: UIView {
         scrollRulerView.delegate = nil
         scrollRulerView.setContentOffset(offset, animated: false)
         scrollRulerView.delegate = self
+        updateLastTickIndex()
         
         centralDot.isHidden = true
-        scaleBarLayer.sublayers?.forEach { $0.backgroundColor = scaleColor}
-        majorScaleBarLayer.sublayers?.forEach { $0.backgroundColor = majorScaleColor}
+        scaleBars.forEach { $0.backgroundColor = scaleColor }
+        majorScaleBars.forEach { $0.backgroundColor = majorScaleColor }
     }
         
     func checkCentralDotHiddenStatus() {
@@ -181,6 +198,78 @@ final class SlideRuler: UIView {
         scrollRulerView.delegate = nil
         positionInfoHelper.setOffset(offsetRatio: offsetRatio)
         scrollRulerView.delegate = self
+        updateLastTickIndex()
+    }
+
+    private func updateLastTickIndex() {
+        lastTickIndex = currentTickIndex()
+    }
+
+    private func currentTickIndex() -> Int? {
+        guard !scaleBars.isEmpty else {
+            return nil
+        }
+
+        let spacing = getTickSpacing()
+        guard spacing > 0 else {
+            return nil
+        }
+
+        let rawIndex = scrollRulerView.contentOffset.x / spacing
+        let index = Int(rawIndex.rounded())
+        return min(max(index, 0), scaleBars.count - 1)
+    }
+
+    private func getTickSpacing() -> CGFloat {
+        guard config.scaleBarNumber > 1 else {
+            return 0
+        }
+
+        return (frame.width - scaleWidth) / CGFloat(config.scaleBarNumber - 1)
+    }
+
+    private func animateTick(at index: Int) {
+        guard index >= 0, index < scaleBars.count else {
+            return
+        }
+
+        let bar = scaleBars[index]
+        let barHeight = scaleBarLayer.frame.height
+        let expandedHeight = pointer.frame.height
+
+        let heightAnimation = CAKeyframeAnimation(keyPath: "bounds.size.height")
+        heightAnimation.values = [barHeight, expandedHeight, barHeight]
+        heightAnimation.keyTimes = [0, 0.35, 1]
+        heightAnimation.timingFunctions = [
+            CAMediaTimingFunction(name: .easeOut),
+            CAMediaTimingFunction(name: .easeIn)
+        ]
+        heightAnimation.duration = 0.18
+        heightAnimation.isRemovedOnCompletion = true
+
+        bar.add(heightAnimation, forKey: "tickBounce")
+    }
+
+    private func handleTickAnimationIfNeeded() {
+        guard scrollRulerView.isDragging || scrollRulerView.isDecelerating else {
+            return
+        }
+
+        guard let currentIndex = currentTickIndex() else {
+            return
+        }
+
+        guard let previousIndex = lastTickIndex else {
+            lastTickIndex = currentIndex
+            return
+        }
+
+        guard currentIndex != previousIndex else {
+            return
+        }
+
+        animateTick(at: previousIndex)
+        lastTickIndex = currentIndex
     }
 }
 
@@ -196,6 +285,7 @@ extension SlideRuler: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         centralDot.isHidden = false
+        handleTickAnimationIfNeeded()
         
         let speed = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
         
