@@ -701,6 +701,13 @@ extension CropView {
                 CGPoint(x: fr.maxX - testAnchor.x, y: fr.maxY - testAnchor.y),
                 CGPoint(x: fr.minX - testAnchor.x, y: fr.maxY - testAnchor.y)
             ]
+            // Reject positions where any image corner is behind the camera
+            // (w ≤ 0). At extreme skew angles a large shift can push corners
+            // past the vanishing plane, flipping the projected polygon and
+            // making the ray-casting containment test unreliable.
+            guard PerspectiveTransformHelper.allProjectionsInFrontOfCamera(testCorners, through: transform) else {
+                return false
+            }
             let proj = testCorners.map {
                 PerspectiveTransformHelper.projectDisplacement($0, through: transform)
             }
@@ -839,6 +846,9 @@ extension CropView {
                 CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
                 CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
             ]
+            guard PerspectiveTransformHelper.allProjectionsInFrontOfCamera(testCorners, through: transform) else {
+                return false
+            }
             let proj = testCorners.map {
                 PerspectiveTransformHelper.projectDisplacement($0, through: transform)
             }
@@ -846,22 +856,31 @@ extension CropView {
         }
 
         if !isValidOffset(targetX, targetY) {
-            // Binary-search along the line from current position toward center
-            // to find the nearest valid point.
-            var lo: CGFloat = 0  // center
-            var hi: CGFloat = 1  // current position
-            for _ in 0..<16 {
-                let mid = (lo + hi) / 2
-                let testX = centerOffset.x + (targetX - centerOffset.x) * mid
-                let testY = centerOffset.y + (targetY - centerOffset.y) * mid
-                if isValidOffset(testX, testY) {
-                    lo = mid
-                } else {
-                    hi = mid
+            if isValidOffset(centerOffset.x, centerOffset.y) {
+                // Binary-search along the line from current position toward center
+                // to find the nearest valid point.
+                var lo: CGFloat = 0  // center
+                var hi: CGFloat = 1  // current position
+                for _ in 0..<16 {
+                    let mid = (lo + hi) / 2
+                    let testX = centerOffset.x + (targetX - centerOffset.x) * mid
+                    let testY = centerOffset.y + (targetY - centerOffset.y) * mid
+                    if isValidOffset(testX, testY) {
+                        lo = mid
+                    } else {
+                        hi = mid
+                    }
                 }
+                targetX = centerOffset.x + (targetX - centerOffset.x) * lo
+                targetY = centerOffset.y + (targetY - centerOffset.y) * lo
+            } else {
+                // At extreme skew angles the polygon containment test can
+                // reject even the image center due to floating-point limits.
+                // Fall back to the center — it is geometrically the safest
+                // position and keeps the crop box within the image.
+                targetX = centerOffset.x
+                targetY = centerOffset.y
             }
-            targetX = centerOffset.x + (targetX - centerOffset.x) * lo
-            targetY = centerOffset.y + (targetY - centerOffset.y) * lo
         }
 
         let target = CGPoint(x: targetX, y: targetY)

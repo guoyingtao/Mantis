@@ -129,6 +129,22 @@ struct PerspectiveTransformHelper {
         guard abs(w) > 1e-10 else { return d }
         return CGPoint(x: px / w, y: py / w)
     }
+
+    /// Returns `true` when every displacement in `corners` projects with a
+    /// **positive** homogeneous `w` value through the given transform.
+    ///
+    /// When `w ≤ 0` a point is "behind the camera" and the perspective
+    /// division flips the projected coordinates, making the resulting polygon
+    /// degenerate.  Any containment test on such a polygon is meaningless,
+    /// so callers should treat a `false` result as "invalid position".
+    static func allProjectionsInFrontOfCamera(_ corners: [CGPoint], through t: CATransform3D) -> Bool {
+        let minW: CGFloat = 1e-4
+        for d in corners {
+            let w = d.x * t.m14 + d.y * t.m24 + t.m44
+            if w < minW { return false }
+        }
+        return true
+    }
     
     /// Recenters the projected quad so it stays aligned to the view center.
     static func centeredTransform(
@@ -182,7 +198,7 @@ struct PerspectiveTransformHelper {
     ) -> Bool {
         let n = polygon.count
         guard n >= 3 else { return false }
-        
+
         for point in testPoints {
             var inside = false
             var j = n - 1
