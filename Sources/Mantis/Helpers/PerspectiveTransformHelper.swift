@@ -95,7 +95,21 @@ struct PerspectiveTransformHelper {
             return CATransform3DIdentity
         }
         
-        let effectiveZoom = max(zoomScale, 1)
+        var effectiveZoom = max(zoomScale, 1)
+        
+        // When both axes have significant skew, the combined rotation
+        // compounds perspective distortion far more than either axis alone.
+        // This pushes image corners closer to the camera plane (w → 0),
+        // shrinking the projected quad and severely restricting panning.
+        // Reduce the perspective intensity proportionally to the combined
+        // skew magnitude — the same effect as the user zooming in slightly.
+        let hFraction = min(abs(horizontalDegrees) / maxSkewDegrees, 1)
+        let vFraction = min(abs(verticalDegrees) / maxSkewDegrees, 1)
+        let combinedIntensity = hFraction * vFraction
+        if combinedIntensity > 0 {
+            // At max combined skew (both 30°), boost effective zoom by ~30%
+            effectiveZoom *= (1 + 0.3 * combinedIntensity)
+        }
         
         var transform = CATransform3DIdentity
         transform.m34 = perspectiveDepth / effectiveZoom
