@@ -722,7 +722,11 @@ extension CropView {
 
         // Binary-search for the max valid distance along a given direction.
         func maxShift(dirX: CGFloat, dirY: CGFloat) -> CGFloat {
-            let maxDist = max(boundsW, boundsH)
+            // Use the image frame size so the search range covers the full
+            // pannable area at any zoom level. Using only bounds would cap
+            // the shift at the viewport size, rejecting valid positions when
+            // zoomed in.
+            let maxDist = max(fr.width, fr.height)
             var lo: CGFloat = 0
             var hi: CGFloat = maxDist
             for _ in 0..<16 {

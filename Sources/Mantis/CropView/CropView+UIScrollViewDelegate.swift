@@ -41,9 +41,13 @@ extension CropView: UIScrollViewDelegate {
         // When skew is active, recompute the sublayerTransform so the
         // perspective depth scales with zoom and image corners never cross
         // behind the camera plane (w ≤ 0 → NaN layer position).
+        // Also update the content insets so the pan range matches the new
+        // zoom level; stale insets from a smaller zoom would restrict panning
+        // to a subset of the valid area.
         let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
         if hasSkew {
             applySkewTransformIfNeeded()
+            updateContentInsetForSkew()
         }
     }
     
@@ -55,6 +59,13 @@ extension CropView: UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         delegate?.cropViewDidEndResize(self)
         makeSureImageContainsCropOverlay()
+
+        // Recompute content insets for the new zoom level before clamping.
+        // The sublayerTransform was already updated during zoom (scrollViewDidZoom),
+        // but the insets still reflect the old zoom level, restricting pan range.
+        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+            updateContentInsetForSkew()
+        }
         clampContentOffsetForSkewIfNeeded()
 
         isManuallyZoomed = true
