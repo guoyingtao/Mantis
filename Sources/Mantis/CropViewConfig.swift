@@ -109,5 +109,7 @@ public struct CropViewConfig {
     /// adjustments similar to Apple Photos app.
     public var enablePerspectiveCorrection: Bool = false
     
+    var appearanceMode: AppearanceMode = .forceDark
+    
     public init() {}
 }

@@ -16,6 +16,12 @@ protocol RotationTypeSelectorDelegate: AnyObject {
 
 final class RotationTypeSelector: UIView {
     weak var delegate: RotationTypeSelectorDelegate?
+    var appearanceMode: AppearanceMode = .forceDark {
+        didSet {
+            updateButtonAppearance()
+            indicatorView.backgroundColor = AppearanceColorPreset.typeSelectorIndicatorColor(for: appearanceMode)
+        }
+    }
     
     private(set) var selectedType: RotationAdjustmentType = .straighten
     
@@ -65,7 +71,7 @@ final class RotationTypeSelector: UIView {
         
         // Add indicator dot below selected item
         addSubview(indicatorView)
-        indicatorView.backgroundColor = .white
+        indicatorView.backgroundColor = AppearanceColorPreset.typeSelectorIndicatorColor(for: appearanceMode)
         indicatorView.layer.cornerRadius = 2
         
         updateButtonAppearance()
@@ -99,7 +105,11 @@ final class RotationTypeSelector: UIView {
     private func updateButtonAppearance() {
         for button in buttons {
             let isSelected = button.tag == selectedType.rawValue
-            button.setTitleColor(isSelected ? .white : .gray, for: .normal)
+            button.setTitleColor(
+                isSelected
+                    ? AppearanceColorPreset.typeSelectorSelectedColor(for: appearanceMode)
+                    : AppearanceColorPreset.typeSelectorUnselectedColor(for: appearanceMode),
+                for: .normal)
             button.titleLabel?.font = UIFont.systemFont(
                 ofSize: 12,
                 weight: isSelected ? .semibold : .regular

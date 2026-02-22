@@ -40,6 +40,12 @@ public struct Config {
         
     public var cropMode: CropMode = .sync
     
+    /// Controls the appearance style of the crop UI.
+    /// - `.forceDark`: Always dark (default, backward compatible)
+    /// - `.forceLight`: Always light (similar to Apple Photos light mode)
+    /// - `.system`: Follows system light/dark mode setting
+    public var appearanceMode: AppearanceMode = .forceDark
+    
     public var cropViewConfig = CropViewConfig()    
     public var cropToolbarConfig = CropToolbarConfig()
     

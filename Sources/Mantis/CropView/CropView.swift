@@ -91,6 +91,7 @@ final class CropView: UIView {
     lazy var rotationTypeSelector: RotationTypeSelector = {
         let selector = RotationTypeSelector()
         selector.delegate = self
+        selector.appearanceMode = cropViewConfig.appearanceMode
         return selector
     }()
     
@@ -100,7 +101,7 @@ final class CropView: UIView {
             activityIndicator = indicator
         } else {
             let indicator = UIActivityIndicatorView(frame: .zero)
-            indicator.color = .white
+            indicator.color = AppearanceColorPreset.activityIndicatorColor(for: cropViewConfig.appearanceMode)
             indicator.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
             activityIndicator = indicator
         }

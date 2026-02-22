@@ -83,6 +83,7 @@
 		F26247212F4B59B500DD5BCE /* CropView+Flip.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247202F4B59B500DD5BCE /* CropView+Flip.swift */; };
 		F26247232F4B59D400DD5BCE /* CropView+Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247222F4B59D400DD5BCE /* CropView+Transform.swift */; };
 		F26247252F4B5A0500DD5BCE /* CropView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247242F4B5A0500DD5BCE /* CropView+Layout.swift */; };
+		F26247272F4B675300DD5BCE /* AppearanceColorPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247262F4B675300DD5BCE /* AppearanceColorPreset.swift */; };
 		F28FF64A2C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */; };
 		F29C75762F42C4B600D80AB1 /* SlideDialTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */; };
 		F2AD53412A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */; };
@@ -230,6 +231,7 @@
 		F26247202F4B59B500DD5BCE /* CropView+Flip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Flip.swift"; sourceTree = "<group>"; };
 		F26247222F4B59D400DD5BCE /* CropView+Transform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Transform.swift"; sourceTree = "<group>"; };
 		F26247242F4B5A0500DD5BCE /* CropView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Layout.swift"; sourceTree = "<group>"; };
+		F26247262F4B675300DD5BCE /* AppearanceColorPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceColorPreset.swift; sourceTree = "<group>"; };
 		F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorConfig.swift; sourceTree = "<group>"; };
 		F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialTypeButton.swift; sourceTree = "<group>"; };
 		F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAutoAdjustHelper.swift; sourceTree = "<group>"; };
@@ -564,6 +566,7 @@
 				OBJ_33 /* Helpers */,
 				OBJ_37 /* MaskBackground */,
 				OBJ_42 /* RotationDial */,
+				F26247262F4B675300DD5BCE /* AppearanceColorPreset.swift */,
 			);
 			name = Mantis;
 			path = Sources/Mantis;
@@ -822,6 +825,7 @@
 				OBJ_84 /* ToolBarButtonImageBuilder.swift in Sources */,
 				5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */,
 				OBJ_85 /* CGImageExtensions.swift in Sources */,
+				F26247272F4B675300DD5BCE /* AppearanceColorPreset.swift in Sources */,
 				F29C75762F42C4B600D80AB1 /* SlideDialTypeButton.swift in Sources */,
 				OBJ_86 /* CoreGraphicsExtensions.swift in Sources */,
 				5F69CC5E26C0629400568B75 /* Definition.swift in Sources */,

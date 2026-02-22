@@ -29,9 +29,11 @@ public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
                                rotationControlView: RotationControlViewProtocol? = nil) -> Mantis.CropViewController {
-    let cropViewController = CropViewController(config: config)
+    var resolvedConfig = config
+    applyAppearanceDefaults(to: &resolvedConfig)
+    let cropViewController = CropViewController(config: resolvedConfig)
     cropViewController.cropView = buildCropView(withImage: image,
-                                                config: config.cropViewConfig,
+                                                config: resolvedConfig.cropViewConfig,
                                                 rotationControlView: rotationControlView)
     cropViewController.cropToolbar = cropToolbar
     return cropViewController
@@ -41,9 +43,11 @@ public func cropViewController<T: CropViewController>(image: UIImage,
                                                       config: Mantis.Config = Mantis.Config(),
                                                       cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
                                                       rotationControlView: RotationControlViewProtocol? = nil) -> T {
-    let cropViewController = T(config: config)
+    var resolvedConfig = config
+    applyAppearanceDefaults(to: &resolvedConfig)
+    let cropViewController = T(config: resolvedConfig)
     cropViewController.cropView = buildCropView(withImage: image,
-                                                config: config.cropViewConfig,
+                                                config: resolvedConfig.cropViewConfig,
                                                 rotationControlView: rotationControlView)
     cropViewController.cropToolbar = cropToolbar
     return cropViewController
@@ -54,9 +58,11 @@ public func setupCropViewController(_ cropViewController: Mantis.CropViewControl
                                     and config: Mantis.Config = Mantis.Config(),
                                     cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
                                     rotationControlView: RotationControlViewProtocol? = nil) {
-    cropViewController.config = config
+    var resolvedConfig = config
+    applyAppearanceDefaults(to: &resolvedConfig)
+    cropViewController.config = resolvedConfig
     cropViewController.cropView = buildCropView(withImage: image,
-                                                config: config.cropViewConfig,
+                                                config: resolvedConfig.cropViewConfig,
                                                 rotationControlView: rotationControlView)
     cropViewController.cropToolbar = cropToolbar
 }
@@ -92,6 +98,45 @@ var localizationConfig = LocalizationConfig()
 private(set) var bundle: Bundle? = {
     return Mantis.Config.bundle
 }()
+
+private func applyAppearanceDefaults(to config: inout Mantis.Config) {
+    let mode = config.appearanceMode
+    
+    // Propagate appearance mode to internal configs
+    config.cropViewConfig.appearanceMode = mode
+    
+    // For forceDark, all defaults already match — no changes needed
+    guard mode != .forceDark else { return }
+    
+    // CropToolbarConfig
+    config.cropToolbarConfig.backgroundColor = AppearanceColorPreset.toolbarBackground(for: mode)
+    config.cropToolbarConfig.foregroundColor = AppearanceColorPreset.toolbarForeground(for: mode)
+    
+    // CropMaskVisualEffectType (only if user hasn't set a custom backgroundColor)
+    if config.cropViewConfig.backgroundColor == nil {
+        config.cropViewConfig.cropMaskVisualEffectType = AppearanceColorPreset.maskVisualEffectType(for: mode)
+    }
+    
+    // SlideDialConfig / RotationDialConfig
+    switch config.cropViewConfig.builtInRotationControlViewType {
+    case .slideDial(var slideConfig):
+        applySlideDialAppearance(to: &slideConfig, for: mode)
+        config.cropViewConfig.builtInRotationControlViewType = .slideDial(config: slideConfig)
+    case .rotationDial(var dialConfig):
+        dialConfig.theme = AppearanceColorPreset.rotationDialTheme(for: mode)
+        config.cropViewConfig.builtInRotationControlViewType = .rotationDial(config: dialConfig)
+    }
+}
+
+private func applySlideDialAppearance(to config: inout SlideDialConfig, for mode: AppearanceMode) {
+    config.scaleColor = AppearanceColorPreset.slideDialScaleColor(for: mode)
+    config.majorScaleColor = AppearanceColorPreset.slideDialMajorScaleColor(for: mode)
+    config.inactiveColor = AppearanceColorPreset.slideDialInactiveColor(for: mode)
+    config.ringColor = AppearanceColorPreset.slideDialRingColor(for: mode)
+    config.buttonFillColor = AppearanceColorPreset.slideDialButtonFillColor(for: mode)
+    config.iconColor = AppearanceColorPreset.slideDialIconColor(for: mode)
+    config.centralDotColor = AppearanceColorPreset.slideDialCentralDotColor(for: mode)
+}
 
 private func buildCropView(withImage image: UIImage,
                            config cropViewConfig: CropViewConfig,
@@ -133,8 +178,12 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
                                                     effectType: cropViewConfig.cropMaskVisualEffectType)
     
     if let color = cropViewConfig.backgroundColor {
-        dimmingView.overLayerFillColor = color.cgColor
-        visualEffectView.overLayerFillColor = color.cgColor
+        dimmingView.overLayerFillColor = color
+        visualEffectView.overLayerFillColor = color
+    } else {
+        let overlayColor = AppearanceColorPreset.dimmingOverlayColor(for: cropViewConfig.appearanceMode)
+        dimmingView.overLayerFillColor = overlayColor
+        visualEffectView.overLayerFillColor = overlayColor
     }
     
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
@@ -175,6 +224,12 @@ private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropVie
                 // When rotation type selector is enabled, use the withTypeSelector mode
                 if cropViewConfig.enablePerspectiveCorrection {
                     config.mode = .withTypeSelector
+                }
+                // Apply appearance colors if not already applied
+                // (e.g. when auto-switching from rotationDial to slideDial)
+                let mode = cropViewConfig.appearanceMode
+                if mode != .forceDark {
+                    applySlideDialAppearance(to: &config, for: mode)
                 }
                 let viewModel = SlideDialViewModel()
                 let slideRuler = SlideRuler(frame: .zero, config: config)

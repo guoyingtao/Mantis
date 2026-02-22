@@ -54,6 +54,7 @@ public struct SlideDialConfig {
     public var iconColor = UIColor.white
     
     public var pointerColor = UIColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 1.0) // golden yellow center pointer
+    public var centralDotColor = UIColor.white
     
     public var indicatorSize = CGSize(width: 40, height: 40)
     public var typeButtonSize: CGFloat = 48

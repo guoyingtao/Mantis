@@ -8,8 +8,8 @@
 
 import UIKit
 
-private let scaleWidth: CGFloat = 1
-private let pointerWidth: CGFloat = 1
+private let scaleWidth: CGFloat = 2
+private let pointerWidth: CGFloat = 2
 
 protocol SlideRulerDelegate: AnyObject {
     func didGetOffsetRatio(from slideRuler: SlideRuler, offsetRatio: CGFloat)
@@ -88,18 +88,18 @@ final class SlideRuler: UIView {
         updateLastTickIndex()
 
         pointer.frame = CGRect(x: (frame.width / 2 - pointerWidth / 2),
-                               y: bounds.origin.y + frame.height * 0.4,
+                               y: bounds.origin.y + frame.height * 0.45,
                                width: pointerWidth,
-                               height: frame.height * 0.6)
+                               height: frame.height * 0.55)
         
         let centralDotOriginX = positionInfoHelper.getCentralDotOriginX()
         centralDot.frame = CGRect(x: centralDotOriginX, y: frame.height * 0.35, width: dotWidth, height: dotWidth)
         
         centralDot.path = UIBezierPath(ovalIn: centralDot.bounds).cgPath
         
-        scaleBarLayer.frame = CGRect(x: frame.width / 2, y: 0.6 * frame.height, width: frame.width, height: 0.4 * frame.height)
+        scaleBarLayer.frame = CGRect(x: frame.width / 2, y: 0.65 * frame.height, width: frame.width, height: 0.35 * frame.height)
         let scaleSpacing = config.scaleBarNumber > 1
-            ? (frame.width - scaleWidth) / CGFloat(config.scaleBarNumber - 1)
+            ? frame.width / CGFloat(config.scaleBarNumber - 1)
             : 0
         for (index, bar) in scaleBars.enumerated() {
             let xPosition = CGFloat(index) * scaleSpacing
@@ -110,7 +110,7 @@ final class SlideRuler: UIView {
         
         majorScaleBarLayer.frame = scaleBarLayer.frame
         let majorSpacing = config.majorScaleBarNumber > 1
-            ? (frame.width - scaleWidth) / CGFloat(config.majorScaleBarNumber - 1)
+            ? frame.width / CGFloat(config.majorScaleBarNumber - 1)
             : 0
         for (index, bar) in majorScaleBars.enumerated() {
             let xPosition = CGFloat(index) * majorSpacing
@@ -135,7 +135,7 @@ final class SlideRuler: UIView {
     }
     
     private func makeCentralDot() {
-        centralDot.fillColor = UIColor.white.cgColor
+        centralDot.fillColor = config.centralDotColor.cgColor
         scrollRulerView.layer.addSublayer(centralDot)
     }
     
@@ -225,7 +225,7 @@ final class SlideRuler: UIView {
             return 0
         }
 
-        return (frame.width - scaleWidth) / CGFloat(config.scaleBarNumber - 1)
+        return frame.width / CGFloat(config.scaleBarNumber - 1)
     }
 
     private func getMajorTickStep() -> Int? {

@@ -105,6 +105,7 @@ open class CropViewController: UIViewController {
         ratioSelector = RatioSelector(type: fixedRatioManager.type,
                                       originalRatioH: fixedRatioManager.originalRatioH,
                                       ratios: fixedRatioManager.ratios)
+        ratioSelector?.appearanceMode = config.appearanceMode
         ratioSelector?.didGetRatio = { [weak self] ratio in
             self?.setFixedRatio(ratio)
         }
@@ -112,6 +113,10 @@ open class CropViewController: UIViewController {
     
     private func createCropToolbar() {
         cropToolbar.delegate = self
+        
+        if let toolbar = cropToolbar as? CropToolbar {
+            toolbar.appearanceMode = config.appearanceMode
+        }
         
         switch config.presetFixedRatioType {
         case .alwaysUsingOnePresetFixedRatio(let ratio):
@@ -163,7 +168,18 @@ open class CropViewController: UIViewController {
         modalPresentationStyle = .fullScreen
         navigationController?.modalPresentationStyle = .fullScreen
 #endif
-        view.backgroundColor = .black
+        if #available(iOS 13.0, *) {
+            switch config.appearanceMode {
+            case .forceDark:
+                overrideUserInterfaceStyle = .dark
+            case .forceLight:
+                overrideUserInterfaceStyle = .light
+            case .system:
+                overrideUserInterfaceStyle = .unspecified
+            }
+        }
+        
+        view.backgroundColor = AppearanceColorPreset.mainBackground(for: config.appearanceMode)
         
         cropView.initialSetup(delegate: self, presetFixedRatioType: config.presetFixedRatioType)
         createCropToolbar()

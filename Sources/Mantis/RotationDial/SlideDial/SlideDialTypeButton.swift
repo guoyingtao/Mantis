@@ -118,13 +118,21 @@ enum SlideDialIconDrawer {
         botLine.lineWidth = lineWidth
         botLine.stroke()
         
-        // Small horizontal crossbar at center (white, inside the trapezoid)
-        let hBar = UIBezierPath()
-        hBar.move(to: CGPoint(x: centerX - 3.5, y: centerY))
-        hBar.addLine(to: CGPoint(x: centerX + 3.5, y: centerY))
-        hBar.lineWidth = lineWidth
+        // Small horizontal crossbar at center, split to avoid cutout zone
+        let gap = halfLW + 0.5
         color.setStroke()
-        hBar.stroke()
+        
+        let hBarLeft = UIBezierPath()
+        hBarLeft.move(to: CGPoint(x: centerX - 3.5, y: centerY))
+        hBarLeft.addLine(to: CGPoint(x: centerX - gap, y: centerY))
+        hBarLeft.lineWidth = lineWidth
+        hBarLeft.stroke()
+        
+        let hBarRight = UIBezierPath()
+        hBarRight.move(to: CGPoint(x: centerX + gap, y: centerY))
+        hBarRight.addLine(to: CGPoint(x: centerX + 3.5, y: centerY))
+        hBarRight.lineWidth = lineWidth
+        hBarRight.stroke()
         
         ctx.restoreGState()
     }
@@ -178,13 +186,21 @@ enum SlideDialIconDrawer {
         rightLine.lineWidth = lineWidth
         rightLine.stroke()
         
-        // Small vertical crossbar at center (white, inside the trapezoid)
-        let vBar = UIBezierPath()
-        vBar.move(to: CGPoint(x: centerX, y: centerY - 3.5))
-        vBar.addLine(to: CGPoint(x: centerX, y: centerY + 3.5))
-        vBar.lineWidth = lineWidth
+        // Small vertical crossbar at center, split to avoid cutout zone
+        let gap = halfLW + 0.5
         color.setStroke()
-        vBar.stroke()
+        
+        let vBarTop = UIBezierPath()
+        vBarTop.move(to: CGPoint(x: centerX, y: centerY - 3.5))
+        vBarTop.addLine(to: CGPoint(x: centerX, y: centerY - gap))
+        vBarTop.lineWidth = lineWidth
+        vBarTop.stroke()
+        
+        let vBarBottom = UIBezierPath()
+        vBarBottom.move(to: CGPoint(x: centerX, y: centerY + gap))
+        vBarBottom.addLine(to: CGPoint(x: centerX, y: centerY + 3.5))
+        vBarBottom.lineWidth = lineWidth
+        vBarBottom.stroke()
         
         ctx.restoreGState()
     }

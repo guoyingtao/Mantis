@@ -9,7 +9,7 @@
 import UIKit
 
 final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
-    var overLayerFillColor = UIColor.black.cgColor
+    var overLayerFillColor: UIColor = .black
     var maskLayer: CALayer?
     var cropShapeType: CropShapeType = .rect
     var imageRatio: CGFloat = 1.0
@@ -48,6 +48,12 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
             return (nil, UIColor.black.withAlphaComponent(0.35))
         case .custom(let color):
             return(nil, color)
+        case .blurSystem:
+            if #available(iOS 13.0, *) {
+                return (UIBlurEffect(style: .systemThinMaterial), .clear)
+            } else {
+                return (UIBlurEffect(style: .dark), .clear)
+            }
         case .default:
             return (nil, .black)
         }

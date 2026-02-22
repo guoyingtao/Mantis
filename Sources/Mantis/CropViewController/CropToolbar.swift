@@ -16,6 +16,7 @@ public enum CropToolbarMode {
 public final class CropToolbar: UIView, CropToolbarProtocol {
     public var config = CropToolbarConfig()
     public var iconProvider: CropToolbarIconProvider?
+    var appearanceMode: AppearanceMode = .forceDark
     
     public weak var delegate: CropToolbarDelegate?
         
@@ -113,7 +114,7 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
             if autoAdjustButtonActive {
                 autoAdjustButton.tintColor = .yellow
             } else {
-                autoAdjustButton.tintColor = .gray
+                autoAdjustButton.tintColor = AppearanceColorPreset.autoAdjustInactiveColor(for: appearanceMode)
             }
         }
     }
@@ -125,7 +126,7 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
                 
         if #available(macCatalyst 14.0, iOS 14.0, *) {
             if UIDevice.current.userInterfaceIdiom == .mac {
-                backgroundColor = .white
+                backgroundColor = AppearanceColorPreset.toolbarBackground(for: appearanceMode)
             }
         }
 
