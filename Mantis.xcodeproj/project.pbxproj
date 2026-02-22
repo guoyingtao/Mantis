@@ -77,6 +77,12 @@
 		F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */; };
 		F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */; };
 		F25821642F4180880091CA49 /* RotationTypeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821632F4180880091CA49 /* RotationTypeSelector.swift */; };
+		F262471B2F4B594300DD5BCE /* CropView+Skew.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262471A2F4B594300DD5BCE /* CropView+Skew.swift */; };
+		F262471D2F4B596C00DD5BCE /* CropView+Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262471C2F4B596C00DD5BCE /* CropView+Crop.swift */; };
+		F262471F2F4B59A600DD5BCE /* CropView+Rotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262471E2F4B59A600DD5BCE /* CropView+Rotation.swift */; };
+		F26247212F4B59B500DD5BCE /* CropView+Flip.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247202F4B59B500DD5BCE /* CropView+Flip.swift */; };
+		F26247232F4B59D400DD5BCE /* CropView+Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247222F4B59D400DD5BCE /* CropView+Transform.swift */; };
+		F26247252F4B5A0500DD5BCE /* CropView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26247242F4B5A0500DD5BCE /* CropView+Layout.swift */; };
 		F28FF64A2C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */; };
 		F29C75762F42C4B600D80AB1 /* SlideDialTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */; };
 		F2AD53412A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */; };
@@ -218,6 +224,12 @@
 		F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchViewTests.swift; sourceTree = "<group>"; };
 		F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelper.swift; sourceTree = "<group>"; };
 		F25821632F4180880091CA49 /* RotationTypeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationTypeSelector.swift; sourceTree = "<group>"; };
+		F262471A2F4B594300DD5BCE /* CropView+Skew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Skew.swift"; sourceTree = "<group>"; };
+		F262471C2F4B596C00DD5BCE /* CropView+Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Crop.swift"; sourceTree = "<group>"; };
+		F262471E2F4B59A600DD5BCE /* CropView+Rotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Rotation.swift"; sourceTree = "<group>"; };
+		F26247202F4B59B500DD5BCE /* CropView+Flip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Flip.swift"; sourceTree = "<group>"; };
+		F26247222F4B59D400DD5BCE /* CropView+Transform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Transform.swift"; sourceTree = "<group>"; };
+		F26247242F4B5A0500DD5BCE /* CropView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Layout.swift"; sourceTree = "<group>"; };
 		F28FF6492C4A492A002F5F06 /* CropAuxiliaryIndicatorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorConfig.swift; sourceTree = "<group>"; };
 		F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialTypeButton.swift; sourceTree = "<group>"; };
 		F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAutoAdjustHelper.swift; sourceTree = "<group>"; };
@@ -390,6 +402,12 @@
 				OBJ_20 /* CropViewModel.swift */,
 				OBJ_21 /* CropViewStatus.swift */,
 				OBJ_22 /* ImageContainer.swift */,
+				F262471A2F4B594300DD5BCE /* CropView+Skew.swift */,
+				F262471C2F4B596C00DD5BCE /* CropView+Crop.swift */,
+				F262471E2F4B59A600DD5BCE /* CropView+Rotation.swift */,
+				F26247202F4B59B500DD5BCE /* CropView+Flip.swift */,
+				F26247222F4B59D400DD5BCE /* CropView+Transform.swift */,
+				F26247242F4B5A0500DD5BCE /* CropView+Layout.swift */,
 			);
 			path = CropView;
 			sourceTree = "<group>";
@@ -784,12 +802,15 @@
 				OBJ_77 /* CropViewModel.swift in Sources */,
 				6659429F2877DC8A0096A5DB /* Enum.swift in Sources */,
 				66100E13294BAEC4001C8593 /* CropMaskViewManagerProtocol.swift in Sources */,
+				F262471D2F4B596C00DD5BCE /* CropView+Crop.swift in Sources */,
 				OBJ_78 /* CropViewStatus.swift in Sources */,
 				97D3A0192BAD491A00DEB1D6 /* TransformStack.swift in Sources */,
 				97D3A01A2BAD491A00DEB1D6 /* TransformRecord.swift in Sources */,
 				OBJ_79 /* ImageContainer.swift in Sources */,
+				F26247232F4B59D400DD5BCE /* CropView+Transform.swift in Sources */,
 				66100E07294B7059001C8593 /* CropViewProtocol.swift in Sources */,
 				66100E0F294BAEA5001C8593 /* RotationDialProtocol.swift in Sources */,
+				F26247252F4B5A0500DD5BCE /* CropView+Layout.swift in Sources */,
 				66100E09294BAE46001C8593 /* ImageContainerProtocol.swift in Sources */,
 				5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */,
 				OBJ_80 /* CropToolbar.swift in Sources */,
@@ -804,6 +825,7 @@
 				F29C75762F42C4B600D80AB1 /* SlideDialTypeButton.swift in Sources */,
 				OBJ_86 /* CoreGraphicsExtensions.swift in Sources */,
 				5F69CC5E26C0629400568B75 /* Definition.swift in Sources */,
+				F262471B2F4B594300DD5BCE /* CropView+Skew.swift in Sources */,
 				OBJ_87 /* UIImageExtensions.swift in Sources */,
 				OBJ_88 /* GeometryHelper.swift in Sources */,
 				66EDABDC297E6D3200EAD5DC /* CGAffineTransformExtensions.swift in Sources */,
@@ -817,7 +839,9 @@
 				F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */,
 				OBJ_91 /* CropDimmingView.swift in Sources */,
 				OBJ_92 /* CropMaskProtocal.swift in Sources */,
+				F26247212F4B59B500DD5BCE /* CropView+Flip.swift in Sources */,
 				FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */,
+				F262471F2F4B59A600DD5BCE /* CropView+Rotation.swift in Sources */,
 				665942A12877DD1C0096A5DB /* CropData.swift in Sources */,
 				FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */,
 				OBJ_93 /* CropVisualEffectView.swift in Sources */,
