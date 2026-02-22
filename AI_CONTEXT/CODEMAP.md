@@ -31,7 +31,13 @@ Sources/Mantis/
 │   └── TransformDelegate.swift           # Internal — undo/redo bridge
 │
 ├── CropView/
-│   ├── CropView.swift                    # CORE — main crop canvas (UIView)
+│   ├── CropView.swift                    # CORE — class definition, properties, init, render(), CropViewProtocol
+│   ├── CropView+Skew.swift              # Perspective skew transform, content inset, offset clamping
+│   ├── CropView+Crop.swift              # Crop output, image masking, crop info generation
+│   ├── CropView+Rotation.swift          # Rotation dial setup, 90° rotation, type selector delegate
+│   ├── CropView+Flip.swift              # Horizontal/vertical flip logic
+│   ├── CropView+Transform.swift         # Transform restoration, preset transforms, state application
+│   ├── CropView+Layout.swift            # Content bounds, anchor points, crop box adjustment, zoom
 │   ├── CropView+Touches.swift            # Touch handling for crop gestures
 │   ├── CropView+UIScrollViewDelegate.swift # Scroll view delegate methods
 │   ├── CropViewModel.swift               # Crop state management (MVVM ViewModel)
@@ -152,9 +158,12 @@ CropViewController ← TransformDelegate → TransformStack → UndoManager
 
 ## Hot Paths (most-edited files for common tasks)
 
-- **Adding a crop feature**: `CropView.swift`, `CropViewModel.swift`, `CropViewProtocol.swift`
+- **Adding a crop feature**: `CropView.swift`, `CropView+Crop.swift`, `CropViewModel.swift`, `CropViewProtocol.swift`
 - **Changing toolbar**: `CropToolbar.swift`, `CropToolbarConfig.swift`, `ToolbarButtonOptions.swift`
-- **Modifying crop output**: `UIImageExtensions.swift`, `CGImageExtensions.swift`, `CropData.swift`
-- **Rotation/skew behavior**: `PerspectiveTransformHelper.swift`, `SlideDial.swift`, `SlideDialViewModel.swift`
+- **Modifying crop output**: `CropView+Crop.swift`, `UIImageExtensions.swift`, `CGImageExtensions.swift`, `CropData.swift`
+- **Rotation/skew behavior**: `CropView+Rotation.swift`, `CropView+Skew.swift`, `PerspectiveTransformHelper.swift`, `SlideDial.swift`, `SlideDialViewModel.swift`
+- **Flip behavior**: `CropView+Flip.swift`
+- **Layout/content bounds**: `CropView+Layout.swift`
+- **Transform restoration/presets**: `CropView+Transform.swift`
 - **Configuration changes**: `Config.swift`, `CropViewConfig.swift`, `Enum.swift`
 - **Undo/redo**: `TransformStack.swift`, `TransformRecord.swift`, `CropViewController.swift`
