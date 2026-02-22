@@ -80,14 +80,25 @@ struct PerspectiveTransformHelper {
         return transform
     }
     
-    /// Combines horizontal and vertical skew into a single CATransform3D
-    static func combinedSkewTransform3D(horizontalDegrees: CGFloat, verticalDegrees: CGFloat) -> CATransform3D {
+    /// Combines horizontal and vertical skew into a single CATransform3D.
+    /// - Parameters:
+    ///   - horizontalDegrees: Horizontal skew angle
+    ///   - verticalDegrees: Vertical skew angle
+    ///   - zoomScale: The current scroll view zoom scale. The perspective depth
+    ///     is divided by this value so that the vanishing-plane distance grows
+    ///     with zoom, preventing image corners from crossing behind the camera
+    ///     at high zoom levels (which would produce NaN layer positions).
+    static func combinedSkewTransform3D(horizontalDegrees: CGFloat,
+                                        verticalDegrees: CGFloat,
+                                        zoomScale: CGFloat = 1) -> CATransform3D {
         if horizontalDegrees == 0 && verticalDegrees == 0 {
             return CATransform3DIdentity
         }
         
+        let effectiveZoom = max(zoomScale, 1)
+        
         var transform = CATransform3DIdentity
-        transform.m34 = perspectiveDepth
+        transform.m34 = perspectiveDepth / effectiveZoom
         
         // Apply vertical (X-axis rotation) first
         if verticalDegrees != 0 {
@@ -97,7 +108,7 @@ struct PerspectiveTransformHelper {
             if abs(verticalDegrees) > translateThresholdDegrees {
                 let excess = abs(verticalDegrees) - translateThresholdDegrees
                 let dir: CGFloat = verticalDegrees > 0 ? -1 : 1
-                transform = CATransform3DTranslate(transform, 0, dir * excess * 2.0, 0)
+                transform = CATransform3DTranslate(transform, 0, dir * excess * 2.0 * effectiveZoom, 0)
             }
         }
         
@@ -109,7 +120,7 @@ struct PerspectiveTransformHelper {
             if abs(horizontalDegrees) > translateThresholdDegrees {
                 let excess = abs(horizontalDegrees) - translateThresholdDegrees
                 let dir: CGFloat = horizontalDegrees > 0 ? -1 : 1
-                transform = CATransform3DTranslate(transform, dir * excess * 2.0, 0, 0)
+                transform = CATransform3DTranslate(transform, dir * excess * 2.0 * effectiveZoom, 0, 0)
             }
         }
         

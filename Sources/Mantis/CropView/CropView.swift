@@ -591,10 +591,16 @@ extension CropView {
             previousSkewScale = 1.0
             previousSkewInset = .zero
         } else {
+            // Scale the perspective depth by the current zoom so that the
+            // vanishing-plane distance grows with zoom. Without this,
+            // image corners at high zoom cross behind the camera (w ≤ 0),
+            // producing NaN layer positions and a CALayerInvalidGeometry crash.
+            let zoomScale = max(cropWorkbenchView.zoomScale, 1)
             let perspectiveTransform =
                 PerspectiveTransformHelper.combinedSkewTransform3D(
                     horizontalDegrees: hDeg,
-                    verticalDegrees: vDeg
+                    verticalDegrees: vDeg,
+                    zoomScale: zoomScale
                 )
             
             let maxDeg = max(abs(hDeg), abs(vDeg))
@@ -778,6 +784,13 @@ extension CropView {
                 bottom: centerOffset.y - (cropWorkbenchView.contentSize.height - boundsH),
                 right:  centerOffset.x - (cropWorkbenchView.contentSize.width  - boundsW)
             )
+        }
+
+        // Guard against non-finite inset values that can arise from
+        // degenerate perspective projections at extreme zoom levels.
+        guard newInset.top.isFinite && newInset.left.isFinite
+                && newInset.bottom.isFinite && newInset.right.isFinite else {
+            return
         }
 
         previousSkewInset = newInset

@@ -37,6 +37,14 @@ extension CropView: UIScrollViewDelegate {
         let newCenter = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
         guard newCenter.x.isFinite && newCenter.y.isFinite else { return }
         subView.center = newCenter
+        
+        // When skew is active, recompute the sublayerTransform so the
+        // perspective depth scales with zoom and image corners never cross
+        // behind the camera plane (w ≤ 0 → NaN layer position).
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        if hasSkew {
+            applySkewTransformIfNeeded()
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
