@@ -220,7 +220,7 @@ class DemoViewController: UIViewController {
                                                            config: config)
         cropViewController?.delegate = self
         
-        let savedCropInfo: CropInfo = (
+        let savedCropInfo = CropInfo(
             translation: CGPoint(x: 84.85873805664153, y: 132.4420855462625),
             rotation: -0.46043267846107483,
             scaleX: -2.3603495751069907,
@@ -232,13 +232,7 @@ class DemoViewController: UIViewController {
                 topRight: CGPoint(x: 0.19743660955585537, y: 0.22015024333838856),
                 bottomLeft: CGPoint(x: 0.8378815525035231, y: 0.5654728356505114),
                 bottomRight: CGPoint(x: 0.5300725023151807, y: 0.6672525190931441)
-            ),
-            horizontalSkewDegrees: 0,
-            verticalSkewDegrees: 0,
-            skewSublayerTransform: CATransform3DIdentity,
-            scrollContentOffset: .zero,
-            scrollBoundsSize: .zero,
-            imageContainerFrame: .zero
+            )
         )
         
         cropViewController?.crop(by: savedCropInfo)

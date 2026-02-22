@@ -1934,7 +1934,8 @@ extension CropView: CropViewProtocol {
             skewSublayerTransform: cropWorkbenchView.layer.sublayerTransform,
             scrollContentOffset: cropWorkbenchView.contentOffset,
             scrollBoundsSize: cropWorkbenchView.bounds.size,
-            imageContainerFrame: imageContainer.frame
+            imageContainerFrame: imageContainer.frame,
+            scrollViewTransform: cropWorkbenchView.transform
         )
     }
     

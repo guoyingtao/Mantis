@@ -122,27 +122,63 @@ public struct CropRegion: Equatable {
     }
 }
 
-public typealias CropInfo = (
-    translation: CGPoint,
-    rotation: CGFloat,
-    scaleX: CGFloat,
-    scaleY: CGFloat,
-    cropSize: CGSize,
-    imageViewSize: CGSize,
-    cropRegion: CropRegion,
-    horizontalSkewDegrees: CGFloat,
-    verticalSkewDegrees: CGFloat,
+public struct CropInfo {
+    public var translation: CGPoint
+    public var rotation: CGFloat
+    public var scaleX: CGFloat
+    public var scaleY: CGFloat
+    public var cropSize: CGSize
+    public var imageViewSize: CGSize
+    public var cropRegion: CropRegion
+    public var horizontalSkewDegrees: CGFloat
+    public var verticalSkewDegrees: CGFloat
     /// The actual CATransform3D sublayerTransform used in the preview for perspective skew.
     /// Includes perspective rotation, centering, and compensating scale.
     /// Set to CATransform3DIdentity when no skew is applied.
-    skewSublayerTransform: CATransform3D,
+    public var skewSublayerTransform: CATransform3D
     /// The scroll view's content offset during crop (for reconstructing the view hierarchy)
-    scrollContentOffset: CGPoint,
+    public var scrollContentOffset: CGPoint
     /// The scroll view's visible bounds size during crop
-    scrollBoundsSize: CGSize,
+    public var scrollBoundsSize: CGSize
     /// The image container's frame in scroll content coordinates during crop
-    imageContainerFrame: CGRect
-)
+    public var imageContainerFrame: CGRect
+    /// The actual 2D transform of the scroll view (rotation + flip), used by the
+    /// perspective crop path so it can invert the exact transform without
+    /// reconstructing it from decomposed rotation / scale values.
+    public var scrollViewTransform: CGAffineTransform
+
+    public init(
+        translation: CGPoint,
+        rotation: CGFloat,
+        scaleX: CGFloat,
+        scaleY: CGFloat,
+        cropSize: CGSize,
+        imageViewSize: CGSize,
+        cropRegion: CropRegion,
+        horizontalSkewDegrees: CGFloat = 0,
+        verticalSkewDegrees: CGFloat = 0,
+        skewSublayerTransform: CATransform3D = CATransform3DIdentity,
+        scrollContentOffset: CGPoint = .zero,
+        scrollBoundsSize: CGSize = .zero,
+        imageContainerFrame: CGRect = .zero,
+        scrollViewTransform: CGAffineTransform = .identity
+    ) {
+        self.translation = translation
+        self.rotation = rotation
+        self.scaleX = scaleX
+        self.scaleY = scaleY
+        self.cropSize = cropSize
+        self.imageViewSize = imageViewSize
+        self.cropRegion = cropRegion
+        self.horizontalSkewDegrees = horizontalSkewDegrees
+        self.verticalSkewDegrees = verticalSkewDegrees
+        self.skewSublayerTransform = skewSublayerTransform
+        self.scrollContentOffset = scrollContentOffset
+        self.scrollBoundsSize = scrollBoundsSize
+        self.imageContainerFrame = imageContainerFrame
+        self.scrollViewTransform = scrollViewTransform
+    }
+}
 
 typealias CropOutput = (
     croppedImage: UIImage?,

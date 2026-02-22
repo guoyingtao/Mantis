@@ -160,7 +160,6 @@ extension UIImage {
         let anchorY = scrollContentOffset.y + scrollBoundsSize.height / 2
 
         // Step 1: Crop box corners in screen space, relative to scroll view center.
-        // The crop box is centered on the scroll view's visual center.
         let halfCropW = cropSize.width / 2
         let halfCropH = cropSize.height / 2
         let screenCorners = [
@@ -170,27 +169,17 @@ extension UIImage {
             CGPoint(x: -halfCropW, y: halfCropH)  // BL
         ]
 
-        // Step 2: Apply inverse 2D transform (rotation + flip) to go from screen space
-        // to content space (relative to anchor).
-        let rotation = cropInfo.rotation
-        let flipX: CGFloat = cropInfo.scaleX < 0 ? -1 : 1
-        let flipY: CGFloat = cropInfo.scaleY < 0 ? -1 : 1
-
-        // The scroll view's 2D transform is: T = flip * rotation
-        // (rotation is applied to the point first, then flip)
-        // Inverse: T_inv = rotation(-angle) * flip
-        // (flip is self-inverse since flip^2 = identity)
-        let cosR = cos(-rotation)
-        let sinR = sin(-rotation)
+        // Step 2: Apply inverse 2D transform to go from screen space to content space.
+        //
+        // The scroll view's actual CGAffineTransform (rotation + flip) is used
+        // directly instead of reconstructing from decomposed rotation / scale
+        // values. The flip() method builds the transform via
+        //   R(rot) · S(flip) · R(extra)
+        // which does not decompose cleanly into a single rotation + scale pair.
+        let inverseTransform = cropInfo.scrollViewTransform.inverted()
 
         let contentCorners = screenCorners.map { point -> CGPoint in
-            // First undo flip, then undo rotation
-            let flipped = CGPoint(x: point.x * flipX, y: point.y * flipY)
-            let rotated = CGPoint(
-                x: flipped.x * cosR - flipped.y * sinR,
-                y: flipped.x * sinR + flipped.y * cosR
-            )
-            return rotated
+            point.applying(inverseTransform)
         }
 
         // Step 3: Inverse-project through sublayerTransform to find un-warped content positions
@@ -220,28 +209,26 @@ extension UIImage {
         }
 
         // Step 5: Use CIPerspectiveCorrection to extract the quadrilateral.
-        // CIImage uses bottom-left origin, so flip Y.
+        // CIPerspectiveCorrection uses Core Image coordinates (origin at bottom-left),
+        // so flip Y from pixel coordinates (origin at top-left).
         let imgHeight = CGFloat(cgImage.height)
-        let ciTL = CIVector(x: sourcePixelPoints[0].x, y: imgHeight - sourcePixelPoints[0].y)
-        let ciTR = CIVector(x: sourcePixelPoints[1].x, y: imgHeight - sourcePixelPoints[1].y)
-        let ciBR = CIVector(x: sourcePixelPoints[2].x, y: imgHeight - sourcePixelPoints[2].y)
-        let ciBL = CIVector(x: sourcePixelPoints[3].x, y: imgHeight - sourcePixelPoints[3].y)
+        let pts = sourcePixelPoints.map { CGPoint(x: $0.x, y: imgHeight - $0.y) }
 
         let ciImage = CIImage(cgImage: cgImage)
 
         guard let filter = CIFilter(name: "CIPerspectiveCorrection") else { return nil }
         filter.setValue(ciImage, forKey: kCIInputImageKey)
-        filter.setValue(ciTL, forKey: "inputTopLeft")
-        filter.setValue(ciTR, forKey: "inputTopRight")
-        filter.setValue(ciBR, forKey: "inputBottomRight")
-        filter.setValue(ciBL, forKey: "inputBottomLeft")
+        filter.setValue(CIVector(x: pts[0].x, y: pts[0].y), forKey: "inputTopLeft")
+        filter.setValue(CIVector(x: pts[1].x, y: pts[1].y), forKey: "inputTopRight")
+        filter.setValue(CIVector(x: pts[2].x, y: pts[2].y), forKey: "inputBottomRight")
+        filter.setValue(CIVector(x: pts[3].x, y: pts[3].y), forKey: "inputBottomLeft")
 
-        guard let outputImage = filter.outputImage else { return nil }
+        guard let correctedOutput = filter.outputImage else { return nil }
 
         // Render at desired output size
-        let scaleX = outputWidth / outputImage.extent.width
-        let scaleY = outputHeight / outputImage.extent.height
-        let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
+        let renderScaleX = outputWidth / correctedOutput.extent.width
+        let renderScaleY = outputHeight / correctedOutput.extent.height
+        let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
         let context = CIContext(options: [.useSoftwareRenderer: false])
         guard let resultCG = context.createCGImage(scaledImage, from: scaledImage.extent) else {
