@@ -29,6 +29,9 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     private let hapticGenerator = UISelectionFeedbackGenerator()
     private var lastHapticStep: Int?
     
+    private var hideInactiveButtonsTimer: Timer?
+    private var inactiveButtonsHidden = false
+    
     // MARK: - Type selector mode properties
     
     private var typeButtons: [RotationAdjustmentType: SlideDialTypeButton] = [:]
@@ -112,6 +115,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     func reset() {
         transform = .identity
         lastHapticStep = nil
+        showInactiveButtons()
         
         switch config.mode {
         case .simple:
@@ -404,6 +408,42 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         }
     }
     
+    // MARK: - Auto-hide inactive buttons during continuous operation
+    
+    private func startHideTimerIfNeeded() {
+        guard case .withTypeSelector = config.mode else { return }
+        guard hideInactiveButtonsTimer == nil else { return }
+        
+        let timer = Timer(timeInterval: 1.0, repeats: false) { [weak self] _ in
+            self?.hideInactiveButtons()
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        hideInactiveButtonsTimer = timer
+    }
+    
+    private func hideInactiveButtons() {
+        guard !inactiveButtonsHidden else { return }
+        inactiveButtonsHidden = true
+        let activeType = viewModel.currentAdjustmentType
+        UIView.animate(withDuration: 0.25) {
+            for (type, button) in self.typeButtons where type != activeType {
+                button.alpha = 0
+            }
+        }
+    }
+    
+    private func showInactiveButtons() {
+        hideInactiveButtonsTimer?.invalidate()
+        hideInactiveButtonsTimer = nil
+        guard inactiveButtonsHidden else { return }
+        inactiveButtonsHidden = false
+        UIView.animate(withDuration: 0.25) {
+            for (_, button) in self.typeButtons {
+                button.alpha = 1
+            }
+        }
+    }
+    
     // MARK: - Slide ruler setup
     
     func setupSlideRuler() {
@@ -438,6 +478,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
 
 extension SlideDial: SlideRulerDelegate {
     func didFinishScroll() {
+        showInactiveButtons()
         didFinishRotation()
     }
     
@@ -445,5 +486,6 @@ extension SlideDial: SlideRulerDelegate {
         let angle = Angle(degrees: currentLimitation * offsetRatio)
         handleScrollHaptics(for: angle)
         viewModel.rotationAngle = angle
+        startHideTimerIfNeeded()
     }
 }
