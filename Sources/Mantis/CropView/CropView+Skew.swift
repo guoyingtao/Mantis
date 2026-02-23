@@ -68,6 +68,7 @@ extension CropView {
             cropWorkbenchView.contentInset = .zero
             previousSkewScale = 1.0
             previousSkewInset = .zero
+            previousSkewOptimalOffset = nil
         } else {
             let zoomScale = max(cropWorkbenchView.zoomScale, 1)
             let perspectiveTransform =
@@ -137,6 +138,7 @@ extension CropView {
         guard hDeg != 0 || vDeg != 0 else {
             cropWorkbenchView.contentInset = .zero
             previousSkewInset = .zero
+            previousSkewOptimalOffset = nil
             return
         }
 
@@ -144,6 +146,7 @@ extension CropView {
         guard !CATransform3DIsIdentity(transform) else {
             cropWorkbenchView.contentInset = .zero
             previousSkewInset = .zero
+            previousSkewOptimalOffset = nil
             return
         }
 
@@ -316,8 +319,42 @@ extension CropView {
             let optimalShiftX = edgeAlignedShiftX + (centeredShiftX - edgeAlignedShiftX) * blendH
             let optimalX = centerOffset.x + optimalShiftX
             let optimalY = centerOffset.y + optimalShiftY
+            
             if optimalX.isFinite && optimalY.isFinite {
-                cropWorkbenchView.contentOffset = CGPoint(x: optimalX, y: optimalY)
+                let newOptimal = CGPoint(x: optimalX, y: optimalY)
+                
+                // Valid content offset range defined by the new insets.
+                let minX = -newInset.left
+                let maxX = cropWorkbenchView.contentSize.width - boundsW + newInset.right
+                let minY = -newInset.top
+                let maxY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
+                
+                if let prevOptimal = previousSkewOptimalOffset {
+                    // Delta-based update: shift the current position by how
+                    // much the optimal position moved, preserving the user's
+                    // zoom/pan offset instead of jumping to the absolute optimal.
+                    let deltaX = newOptimal.x - prevOptimal.x
+                    let deltaY = newOptimal.y - prevOptimal.y
+                    let current = cropWorkbenchView.contentOffset
+                    let targetX = current.x + deltaX
+                    let targetY = current.y + deltaY
+                    
+                    cropWorkbenchView.contentOffset = CGPoint(
+                        x: min(max(targetX, minX), maxX),
+                        y: min(max(targetY, minY), maxY)
+                    )
+                } else {
+                    // First skew change from zero — don't jump to the optimal
+                    // position; just clamp the current offset to the valid range.
+                    // This preserves the user's zoom/pan position.
+                    let current = cropWorkbenchView.contentOffset
+                    cropWorkbenchView.contentOffset = CGPoint(
+                        x: min(max(current.x, minX), maxX),
+                        y: min(max(current.y, minY), maxY)
+                    )
+                }
+                
+                previousSkewOptimalOffset = newOptimal
             }
         } else {
             // Center-based test fails — the projected image at the center
