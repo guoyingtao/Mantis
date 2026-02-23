@@ -36,20 +36,32 @@ extension CropView {
     var visibleCropCornersInScrollViewSpace: [CGPoint] {
         let cropW = cropAuxiliaryIndicatorView.frame.width
         let cropH = cropAuxiliaryIndicatorView.frame.height
-        let totalRadians = viewModel.getTotalRadians()
-        let cosR = cos(totalRadians)
-        let sinR = sin(totalRadians)
-
-        // Crop box corners (±halfWidth, ±halfHeight) rotated by -r into scroll view space.
-        // Rotation by -r: x' = cx*cos(r) + cy*sin(r), y' = -cx*sin(r) + cy*cos(r)
         let halfWidth = cropW / 2
         let halfHeight = cropH / 2
-        return [
-            CGPoint(x: -halfWidth * cosR - halfHeight * sinR, y: halfWidth * sinR - halfHeight * cosR),
-            CGPoint(x: halfWidth * cosR - halfHeight * sinR, y: -halfWidth * sinR - halfHeight * cosR),
-            CGPoint(x: halfWidth * cosR + halfHeight * sinR, y: -halfWidth * sinR + halfHeight * cosR),
-            CGPoint(x: -halfWidth * cosR + halfHeight * sinR, y: halfWidth * sinR + halfHeight * cosR)
+        
+        // The crop box is axis-aligned in screen space. The scroll view's
+        // transform includes both rotation and (when flipped) a mirror.
+        // To get the crop corners in scroll view local space we need to
+        // apply the INVERSE of the scroll view's transform.
+        //
+        // Using the actual inverse guarantees correctness regardless of
+        // flip state, rotation amount, or combination thereof.
+        let inv = cropWorkbenchView.transform.inverted()
+        
+        // Screen-space corners relative to center, transformed to local space.
+        let corners: [(CGFloat, CGFloat)] = [
+            (-halfWidth, -halfHeight),  // TL
+            ( halfWidth, -halfHeight),  // TR
+            ( halfWidth,  halfHeight),  // BR
+            (-halfWidth,  halfHeight)   // BL
         ]
+        
+        return corners.map { (cx, cy) in
+            CGPoint(
+                x: cx * inv.a + cy * inv.c,
+                y: cx * inv.b + cy * inv.d
+            )
+        }
     }
 
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
