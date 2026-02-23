@@ -219,27 +219,40 @@ extension CropView {
                 right:  (centerOffset.x + shiftRight)  - (csW - boundsW)
             )
             
-            // --- Two-phase content offset positioning for vertical skew ---
-            // Phase 1 (|vDeg| ≤ ~10°): edge-to-edge — align the crop box
-            // edge toward the vanishing point flush with the skewed image edge.
-            // Phase 2 (|vDeg| > ~10°): vertex-to-edge inscribed — center
-            // the crop box in the valid range so vertices touch opposite edges.
+            // --- Two-phase content offset positioning for skew ---
+            // Phase 1 (|deg| ≤ ~10°, single-axis only): edge-to-edge — align
+            // the crop box edge toward the vanishing point flush with the
+            // skewed image edge.
+            // Phase 2 (|deg| > ~10° or both axes active): vertex-to-edge
+            // inscribed — center the crop box in the valid range so vertices
+            // touch opposite edges.
             // A smooth blend between 8°–12° avoids visual jumps at the threshold.
             //
-            // When the image is also rotated (straighten), the axis-aligned
-            // shifts no longer correspond to the image's visual top/bottom,
-            // so we blend toward centered as rotation increases to avoid jumps.
+            // Dampening factors:
+            // - Rotation: edge-to-edge is axis-aligned; when the scroll view
+            //   is rotated the axes no longer match the visual edges.
+            // - Cross-axis: when one axis already has skew, the other axis's
+            //   edge-to-edge shift can change abruptly as the combined
+            //   transform changes. Dampen each axis by the other's activity.
             let centeredShiftX = (shiftRight - shiftLeft) / 2
             let centeredShiftY = (shiftBottom - shiftTop) / 2
             
-            let vDeg = effectiveVerticalSkewDegrees
             let totalRadians = viewModel.getTotalRadians()
             
-            // Rotation dampening: edge-to-edge only makes sense when the
-            // image is roughly upright. As rotation grows, blend toward centered.
-            // Full dampening at ±10° of rotation.
+            // Rotation dampening: full dampening at ±10° of rotation.
             let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
             
+            // Cross-axis dampening: when the other axis has skew, the
+            // combined perspective makes single-axis shift extremes unstable.
+            // Dampen each axis's edge-to-edge by how much the other axis is active.
+            let hActivity = min(abs(hDeg) / 3.0, 1.0)  // ramp up quickly
+            let vActivity = min(abs(vDeg) / 3.0, 1.0)
+            
+            let transitionStart: CGFloat = 8.0
+            let transitionEnd: CGFloat = 12.0
+            
+            // Vertical skew: edge-to-edge on Y axis
+            let vDampen = rotationDampen * (1 - hActivity)
             let rawEdgeAlignedShiftY: CGFloat
             if vDeg > 0 {
                 // Top narrows → push crop box toward top edge
@@ -250,16 +263,27 @@ extension CropView {
             } else {
                 rawEdgeAlignedShiftY = centeredShiftY
             }
-            // Apply rotation dampening: blend edge-aligned toward centered
-            let edgeAlignedShiftY = centeredShiftY + (rawEdgeAlignedShiftY - centeredShiftY) * rotationDampen
-            
-            let transitionStart: CGFloat = 8.0
-            let transitionEnd: CGFloat = 12.0
+            let edgeAlignedShiftY = centeredShiftY + (rawEdgeAlignedShiftY - centeredShiftY) * vDampen
             let absV = abs(vDeg)
-            let blendFactor = min(max((absV - transitionStart) / (transitionEnd - transitionStart), 0), 1)
-            let optimalShiftY = edgeAlignedShiftY + (centeredShiftY - edgeAlignedShiftY) * blendFactor
+            let blendV = min(max((absV - transitionStart) / (transitionEnd - transitionStart), 0), 1)
+            let optimalShiftY = edgeAlignedShiftY + (centeredShiftY - edgeAlignedShiftY) * blendV
             
-            let optimalShiftX = centeredShiftX
+            // Horizontal skew: edge-to-edge on X axis
+            let hDampen = rotationDampen * (1 - vActivity)
+            let rawEdgeAlignedShiftX: CGFloat
+            if hDeg > 0 {
+                // Left narrows → push crop box toward left edge
+                rawEdgeAlignedShiftX = -shiftLeft
+            } else if hDeg < 0 {
+                // Right narrows → push crop box toward right edge
+                rawEdgeAlignedShiftX = shiftRight
+            } else {
+                rawEdgeAlignedShiftX = centeredShiftX
+            }
+            let edgeAlignedShiftX = centeredShiftX + (rawEdgeAlignedShiftX - centeredShiftX) * hDampen
+            let absH = abs(hDeg)
+            let blendH = min(max((absH - transitionStart) / (transitionEnd - transitionStart), 0), 1)
+            let optimalShiftX = edgeAlignedShiftX + (centeredShiftX - edgeAlignedShiftX) * blendH
             let optimalX = centerOffset.x + optimalShiftX
             let optimalY = centerOffset.y + optimalShiftY
             if optimalX.isFinite && optimalY.isFinite {
