@@ -438,8 +438,10 @@ extension CropView {
     /// with the CropView's viewModel skew degrees (e.g. after a 90° rotation swap).
     func syncSlideDialSkewValues() {
         guard let slideDial = rotationControlView as? SlideDial else { return }
+        // The horizontal skew sign is inverted when reading from the slider
+        // (see CropView+Rotation), so invert it back for display.
         slideDial.syncSkewValues(
-            horizontal: viewModel.horizontalSkewDegrees,
+            horizontal: -viewModel.horizontalSkewDegrees,
             vertical: viewModel.verticalSkewDegrees
         )
     }

@@ -30,7 +30,7 @@ extension CropView {
                 self.viewModel.setRotatingStatus(by: clampAngle(angle))
             case .horizontalSkew:
                 let clamped = max(-PerspectiveTransformHelper.maxSkewDegrees,
-                                  min(PerspectiveTransformHelper.maxSkewDegrees, angle.degrees))
+                                  min(PerspectiveTransformHelper.maxSkewDegrees, -angle.degrees))
                 self.viewModel.horizontalSkewDegrees = clamped
                 self.applySkewTransformIfNeeded()
                 self.updateContentInsetForSkew()
