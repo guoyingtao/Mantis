@@ -88,13 +88,13 @@ final class SlideRuler: UIView {
         updateLastTickIndex()
 
         pointer.frame = CGRect(x: (frame.width / 2 - pointerWidth / 2),
-                               y: bounds.origin.y + frame.height * 0.45,
+                               y: bounds.origin.y + frame.height * 0.25,
                                width: pointerWidth,
-                               height: frame.height * 0.55)
+                               height: frame.height * 0.75)
         
-        let centralDotOriginX = positionInfoHelper.getCentralDotOriginX()
-        centralDot.frame = CGRect(x: centralDotOriginX, y: frame.height * 0.35, width: dotWidth, height: dotWidth)
-        
+        let centralDotCenterX = positionInfoHelper.getCentralDotCenterX()
+        centralDot.bounds = CGRect(x: 0, y: 0, width: dotWidth, height: dotWidth)
+        centralDot.position = CGPoint(x: centralDotCenterX, y: frame.height * 0.38 + dotWidth / 2)
         centralDot.path = UIBezierPath(ovalIn: centralDot.bounds).cgPath
         
         scaleBarLayer.frame = CGRect(x: frame.width / 2, y: 0.65 * frame.height, width: frame.width, height: 0.35 * frame.height)
@@ -187,7 +187,9 @@ final class SlideRuler: UIView {
     }
         
     func checkCentralDotHiddenStatus() {
-        centralDot.isHidden = (scrollRulerView.contentOffset.x == frame.width / 2)
+        let tolerance = frame.width / CGFloat((config.scaleBarNumber - 1) * 2)
+        let isAtCenter = abs(scrollRulerView.contentOffset.x - frame.width / 2) < tolerance
+        centralDot.isHidden = isAtCenter
     }
     
     func getTouchTarget() -> UIView {
@@ -319,7 +321,7 @@ extension SlideRuler: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        centralDot.isHidden = false
+        checkCentralDotHiddenStatus()
         handleTickAnimationIfNeeded()
         
         let speed = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)

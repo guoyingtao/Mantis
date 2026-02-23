@@ -239,7 +239,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     private func layoutTypeButtons(animated: Bool) {
         let buttonSize = config.typeButtonSize
         let spacing = config.typeButtonSpacing
-        let topPadding: CGFloat = 20
+        let topPadding: CGFloat = 16
         let buttonY: CGFloat = topPadding
         let centerX = frame.width / 2
         

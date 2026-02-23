@@ -57,7 +57,7 @@ public struct SlideDialConfig {
     public var centralDotColor = UIColor.white
     
     public var indicatorSize = CGSize(width: 40, height: 40)
-    public var typeButtonSize: CGFloat = 48
+    public var typeButtonSize: CGFloat = 56
     public var typeButtonSpacing: CGFloat = 16
     public var slideRulerHeight: CGFloat = 45
 }

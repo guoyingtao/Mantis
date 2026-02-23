@@ -275,7 +275,7 @@ final class SlideDialTypeButton: UIView {
         progressLayer.path = ringPath.cgPath
         progressLayer.frame = bounds
         
-        iconView.frame = bounds.insetBy(dx: bounds.width * 0.22, dy: bounds.height * 0.22)
+        iconView.frame = bounds.insetBy(dx: bounds.width * 0.28, dy: bounds.height * 0.28)
         valueLabel.frame = bounds
     }
     
