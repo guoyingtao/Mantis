@@ -17,13 +17,29 @@
     <img src="Images/SlideDial.png" height="400" alt="Mantis SlideDial" />
 </p>
 
-### Perspective Correction (Skew)
+### 🆕 What's New
+
+#### Perspective Correction (Skew)
 
 Mantis now supports **Apple Photos–style perspective correction**, allowing users to adjust horizontal and vertical skew in addition to straightening. When enabled, the slide dial displays three circular icon buttons — **Straighten**, **Vertical**, and **Horizontal** — letting users switch between adjustment modes with a single tap.
 
 - Real-time 3D perspective preview powered by `CATransform3D`
 - Accurate image export using `CIPerspectiveCorrection`
 - Full integration with existing features: undo/redo, flip, 90° rotation, and preset transformations
+
+#### Appearance Mode
+
+Mantis now supports **light, dark, and system appearance modes**. By default Mantis uses a dark appearance (backward compatible). You can switch to a light theme or let it follow the system setting.
+
+- `.forceDark` — Always dark (default)
+- `.forceLight` — Always light, similar to Apple Photos in light mode
+- `.system` — Follows the system light/dark mode setting
+
+```swift
+var config = Mantis.Config()
+config.appearanceMode = .forceLight   // or .system
+let cropViewController = Mantis.cropViewController(image: <Your Image>, config: config)
+```
 
 ### Demos
 
@@ -247,7 +263,7 @@ Please use the transformation information obtained previously from delegate meth
 </details>
 
 <details>
-<summary><strong>Perspective Correction (Skew)</strong></summary>
+<summary><strong>Perspective Correction (Skew) 🆕</strong></summary>
 
 * Enable perspective correction to let users adjust horizontal and vertical skew, similar to the Apple Photos app.
 
@@ -268,6 +284,36 @@ When `enablePerspectiveCorrection` is `true`, the slide dial is used by default 
   - `inactiveColor` — color for unselected buttons
   - `pointerColor` — color of the center pointer on the ruler
   - `skewLimitation` — maximum skew angle in degrees (default: 30)
+
+</details>
+
+<details>
+<summary><strong>Appearance Mode 🆕</strong></summary>
+
+* Set the appearance mode to control the overall look of the crop UI.
+
+```swift
+var config = Mantis.Config()
+config.appearanceMode = .forceLight   // or .forceDark (default), .system
+let cropViewController = Mantis.cropViewController(image: <Your Image>, config: config)
+```
+
+```swift
+public enum AppearanceMode {
+    /// Always use dark appearance (default, backward compatible)
+    case forceDark
+    /// Always use light appearance
+    case forceLight
+    /// Follow system light/dark mode setting
+    case system
+}
+```
+
+* `.forceDark` is the default, keeping the existing dark-themed behavior.
+* `.forceLight` uses a light color scheme similar to Apple Photos in light mode.
+* `.system` dynamically adapts to the user's system-wide light/dark mode setting.
+
+The appearance mode affects all UI components including the toolbar, dimming overlay, rotation dial, type selector, and ratio item views.
 
 </details>
 
