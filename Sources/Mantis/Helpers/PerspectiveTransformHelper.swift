@@ -246,20 +246,17 @@ struct PerspectiveTransformHelper {
     }
     
     /// Computes the minimum scale factor for the sublayerTransform so that the
-    /// projected image quadrilateral fully covers the visible rectangle.
+    /// projected image quadrilateral fully covers the visible crop box.
     ///
-    /// `CATransform3DScale(t, s, s, 1)` uniformly scales the projected positions by `s`
-    /// (because `CATransform3DScale` post-multiplies the scale matrix, meaning
-    /// `p * t * Scale` — the scale applies *after* projection).
-    ///
-    /// Therefore we only need one projection pass: we project the image corners at
-    /// scale 1, then binary-search for the minimum `s` where
-    /// `(visibleCorner / s)` lies inside the unscaled projected quad.
+    /// For each candidate scale `s`, builds the actual combined transform
+    /// `CATransform3DScale(perspectiveTransform, s, s, 1)`, projects all image
+    /// corners through it, and checks whether the resulting quad contains the
+    /// crop box corners.
     ///
     /// - Parameters:
     ///   - imageCornerDisplacements: 4 image corner displacements from the sublayerTransform
     ///     center, in CW order (TL, TR, BR, BL).
-    ///   - visibleHalfSize: Half the visible area dimensions.
+    ///   - visibleCornerDisplacements: Crop box corners as displacements from the same center.
     ///   - perspectiveTransform: The CATransform3D perspective rotation (without compensating scale).
     /// - Returns: Scale factor ≥ 1.0.
     static func computeCompensatingScale(
@@ -267,24 +264,31 @@ struct PerspectiveTransformHelper {
         visibleCornerDisplacements: [CGPoint],
         perspectiveTransform: CATransform3D
     ) -> CGFloat {
-        // Project image corners once (at unit scale)
-        let projectedCorners = imageCornerDisplacements.map {
-            projectDisplacement($0, through: perspectiveTransform)
+        func coversAtScale(_ s: CGFloat) -> Bool {
+            let combined = CATransform3DScale(perspectiveTransform, s, s, 1)
+            let projected = imageCornerDisplacements.map {
+                projectDisplacement($0, through: combined)
+            }
+            return allPointsInsideConvexPolygon(visibleCornerDisplacements, polygon: projected)
         }
         
         // Quick check: no scale needed?
-        if allPointsInsideConvexPolygon(visibleCornerDisplacements, polygon: projectedCorners) {
+        if coversAtScale(1.0) {
             return 1.0
         }
         
-        // Binary search: find minimum s where (visibleCorners / s) ⊂ projectedCorners
+        // Find an upper bound that actually achieves coverage.
         var lo: CGFloat = 1.0
-        var hi: CGFloat = 5.0
+        var hi: CGFloat = 3.0
+        let maxHi: CGFloat = 50.0
+        while hi < maxHi && !coversAtScale(hi) {
+            hi *= 2
+        }
+        hi = min(hi, maxHi)
         
         for _ in 0..<30 {
             let mid = (lo + hi) / 2
-            let shrunk = visibleCornerDisplacements.map { CGPoint(x: $0.x / mid, y: $0.y / mid) }
-            if allPointsInsideConvexPolygon(shrunk, polygon: projectedCorners) {
+            if coversAtScale(mid) {
                 hi = mid
             } else {
                 lo = mid

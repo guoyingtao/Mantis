@@ -53,8 +53,8 @@ extension CropView {
     }
 
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
-    /// Includes an auto-computed compensating scale so the projected image
-    /// always fully covers the visible area (no blank edges).
+    /// The compensating scale is the exact minimum so the projected image just
+    /// covers the crop box, producing an inscribed fit that matches Apple Photos.
     func applySkewTransformIfNeeded() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
@@ -65,10 +65,6 @@ extension CropView {
             previousSkewScale = 1.0
             previousSkewInset = .zero
         } else {
-            // Scale the perspective depth by the current zoom so that the
-            // vanishing-plane distance grows with zoom. Without this,
-            // image corners at high zoom cross behind the camera (w ≤ 0),
-            // producing NaN layer positions and a CALayerInvalidGeometry crash.
             let zoomScale = max(cropWorkbenchView.zoomScale, 1)
             let perspectiveTransform =
                 PerspectiveTransformHelper.combinedSkewTransform3D(
@@ -77,48 +73,17 @@ extension CropView {
                     zoomScale: zoomScale
                 )
             
-            let maxDeg = max(abs(hDeg), abs(vDeg))
-            let normalizedAngle = min(maxDeg / PerspectiveTransformHelper.maxSkewDegrees, 1)
-            let threshold = PerspectiveTransformHelper.translateThresholdDegrees
-            let rawFactor = (maxDeg - threshold) / (PerspectiveTransformHelper.maxSkewDegrees - threshold)
-            let factor = max(0, min(1, rawFactor))
-            // Additional safety for combined H+V skew: when both axes are
-            // active, the perspective distortion is stronger than either
-            // axis alone. The combinedFactor is 0 when one axis is zero,
-            // and 1 when both are at max.
-            let hFactor = min(abs(hDeg) / PerspectiveTransformHelper.maxSkewDegrees, 1)
-            let vFactor = min(abs(vDeg) / PerspectiveTransformHelper.maxSkewDegrees, 1)
-            let combinedFactor = hFactor * vFactor
-            
-            let safetyInset = (20 * factor) + (12 * factor * factor) + (16 * combinedFactor)
-            let (cornerDisplacements, visibleCornerDisplacements, _, visibleTopLeft) =
-                computeSkewProjectionInputs(safetyInset: safetyInset)
-            // Compute compensating scale to prevent blank areas
+            // A small safety inset (2pt) guards against sub-pixel rounding
+            // that could leave a hairline gap at the crop box edge.
+            let (cornerDisplacements, visibleCornerDisplacements, _, _) =
+                computeSkewProjectionInputs(safetyInset: 2)
             let rawScale = PerspectiveTransformHelper.computeCompensatingScale(
                 imageCornerDisplacements: cornerDisplacements,
                 visibleCornerDisplacements: visibleCornerDisplacements,
                 perspectiveTransform: perspectiveTransform
             )
-            let topLeftAdjust = max(0, -visibleTopLeft.y / max(cropAuxiliaryIndicatorView.bounds.height, 1))
-            let topLeftScale = 1 + min(0.04, topLeftAdjust * 0.09) * normalizedAngle
-            let safetyScale = 1 + (0.08 * factor) + (0.06 * factor * factor) + (0.04 * factor * factor * factor) + (0.10 * combinedFactor)
-            let idealScale = rawScale * safetyScale * topLeftScale
             
-            // Scale increases are applied immediately so the projected image
-            // always covers the crop box (prevents overlay escaping).
-            // Scale decreases use exponential smoothing to avoid jarring
-            // shrink when the user reduces skew.
-            var finalScale = idealScale
-            if previousSkewScale > 1.0 && idealScale.isFinite {
-                if idealScale >= previousSkewScale {
-                    // Upward: apply immediately for containment safety
-                    finalScale = idealScale
-                } else {
-                    // Downward: smooth to avoid visual jump
-                    let alpha: CGFloat = 0.10
-                    finalScale = previousSkewScale + alpha * (idealScale - previousSkewScale)
-                }
-            }
+            var finalScale = rawScale
             
             // Guard against degenerate values
             if !finalScale.isFinite || finalScale < 1.0 {
@@ -253,6 +218,53 @@ extension CropView {
                 bottom: (centerOffset.y + shiftBottom) - (csH - boundsH),
                 right:  (centerOffset.x + shiftRight)  - (csW - boundsW)
             )
+            
+            // --- Two-phase content offset positioning for vertical skew ---
+            // Phase 1 (|vDeg| ≤ ~10°): edge-to-edge — align the crop box
+            // edge toward the vanishing point flush with the skewed image edge.
+            // Phase 2 (|vDeg| > ~10°): vertex-to-edge inscribed — center
+            // the crop box in the valid range so vertices touch opposite edges.
+            // A smooth blend between 8°–12° avoids visual jumps at the threshold.
+            //
+            // When the image is also rotated (straighten), the axis-aligned
+            // shifts no longer correspond to the image's visual top/bottom,
+            // so we blend toward centered as rotation increases to avoid jumps.
+            let centeredShiftX = (shiftRight - shiftLeft) / 2
+            let centeredShiftY = (shiftBottom - shiftTop) / 2
+            
+            let vDeg = effectiveVerticalSkewDegrees
+            let totalRadians = viewModel.getTotalRadians()
+            
+            // Rotation dampening: edge-to-edge only makes sense when the
+            // image is roughly upright. As rotation grows, blend toward centered.
+            // Full dampening at ±10° of rotation.
+            let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
+            
+            let rawEdgeAlignedShiftY: CGFloat
+            if vDeg > 0 {
+                // Top narrows → push crop box toward top edge
+                rawEdgeAlignedShiftY = -shiftTop
+            } else if vDeg < 0 {
+                // Bottom narrows → push crop box toward bottom edge
+                rawEdgeAlignedShiftY = shiftBottom
+            } else {
+                rawEdgeAlignedShiftY = centeredShiftY
+            }
+            // Apply rotation dampening: blend edge-aligned toward centered
+            let edgeAlignedShiftY = centeredShiftY + (rawEdgeAlignedShiftY - centeredShiftY) * rotationDampen
+            
+            let transitionStart: CGFloat = 8.0
+            let transitionEnd: CGFloat = 12.0
+            let absV = abs(vDeg)
+            let blendFactor = min(max((absV - transitionStart) / (transitionEnd - transitionStart), 0), 1)
+            let optimalShiftY = edgeAlignedShiftY + (centeredShiftY - edgeAlignedShiftY) * blendFactor
+            
+            let optimalShiftX = centeredShiftX
+            let optimalX = centerOffset.x + optimalShiftX
+            let optimalY = centerOffset.y + optimalShiftY
+            if optimalX.isFinite && optimalY.isFinite {
+                cropWorkbenchView.contentOffset = CGPoint(x: optimalX, y: optimalY)
+            }
         } else {
             // Center-based test fails — the projected image at the center
             // anchor is too small to cover the crop box. Lock to center.
@@ -272,21 +284,6 @@ extension CropView {
         }
 
         previousSkewInset = newInset
-
-        // Pre-clamp contentOffset to fit within the new inset bounds BEFORE
-        // setting the inset. This prevents UIScrollView from auto-clamping
-        // (which causes a visible snap).
-        let curOffset = cropWorkbenchView.contentOffset
-        let maxOffsetX = cropWorkbenchView.contentSize.width - boundsW + newInset.right
-        let maxOffsetY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
-        let clampedX = max(-newInset.left, min(maxOffsetX, curOffset.x))
-        let clampedY = max(-newInset.top, min(maxOffsetY, curOffset.y))
-
-        if clampedX.isFinite && clampedY.isFinite
-            && (clampedX != curOffset.x || clampedY != curOffset.y) {
-            cropWorkbenchView.contentOffset = CGPoint(x: clampedX, y: clampedY)
-        }
-
         cropWorkbenchView.contentInset = newInset
     }
     
