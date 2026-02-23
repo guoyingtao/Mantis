@@ -329,13 +329,15 @@ extension CropView {
                 let minY = -newInset.top
                 let maxY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
                 
-                if let prevOptimal = previousSkewOptimalOffset {
-                    // Delta-based update: shift the current position by how
-                    // much the optimal position moved, preserving the user's
-                    // zoom/pan offset instead of jumping to the absolute optimal.
+                let current = cropWorkbenchView.contentOffset
+                let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + 0.01
+                
+                if !isZoomedIn, let prevOptimal = previousSkewOptimalOffset {
+                    // At minimum zoom: delta-based update shifts the view by
+                    // how much the optimal position moved, producing the
+                    // edge-to-edge alignment effect.
                     let deltaX = newOptimal.x - prevOptimal.x
                     let deltaY = newOptimal.y - prevOptimal.y
-                    let current = cropWorkbenchView.contentOffset
                     let targetX = current.x + deltaX
                     let targetY = current.y + deltaY
                     
@@ -344,10 +346,9 @@ extension CropView {
                         y: min(max(targetY, minY), maxY)
                     )
                 } else {
-                    // First skew change from zero — don't jump to the optimal
-                    // position; just clamp the current offset to the valid range.
-                    // This preserves the user's zoom/pan position.
-                    let current = cropWorkbenchView.contentOffset
+                    // Zoomed in or first skew change: just clamp the current
+                    // offset to the valid range. Don't reposition — the user's
+                    // pan position should stay stable.
                     cropWorkbenchView.contentOffset = CGPoint(
                         x: min(max(current.x, minX), maxX),
                         y: min(max(current.y, minY), maxY)
