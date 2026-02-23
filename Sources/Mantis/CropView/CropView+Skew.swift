@@ -55,6 +55,10 @@ extension CropView {
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
     /// The compensating scale is the exact minimum so the projected image just
     /// covers the crop box, producing an inscribed fit that matches Apple Photos.
+    ///
+    /// For small skew angles (≤ ~10°), a small extra scale boost is applied so
+    /// the projected image has enough headroom for the edge-to-edge content
+    /// offset positioning in `updateContentInsetForSkew`.
     func applySkewTransformIfNeeded() {
         let hDeg = effectiveHorizontalSkewDegrees
         let vDeg = effectiveVerticalSkewDegrees
@@ -83,7 +87,33 @@ extension CropView {
                 perspectiveTransform: perspectiveTransform
             )
             
-            var finalScale = rawScale
+            // Edge-to-edge scale boost: at small angles, the inscribed-fit
+            // scale leaves no room for content offset shifting. Add a small
+            // extra factor so the projected image is slightly larger than the
+            // minimum, giving updateContentInsetForSkew headroom to position
+            // the crop box flush against the vanishing-point edge.
+            //
+            // The boost ramps up linearly with |deg| (more skew = more offset
+            // needed), peaks around 8-10°, then fades to 0 at 12° where the
+            // vertex-to-edge inscribed behavior takes over.
+            let transitionEnd: CGFloat = 12.0
+            let absH = abs(hDeg)
+            let absV = abs(vDeg)
+            let hActivity = min(absH / 3.0, 1.0)
+            let vActivity = min(absV / 3.0, 1.0)
+            
+            // Each axis's boost is dampened by the other axis's activity
+            // (same logic as in updateContentInsetForSkew).
+            let hEdgeFade = max(1 - absH / transitionEnd, 0) * (1 - vActivity)
+            let vEdgeFade = max(1 - absV / transitionEnd, 0) * (1 - hActivity)
+            
+            // Scale the boost by how much skew there is (normalized to 0-1
+            // within the edge-to-edge range).
+            let hBoostIntensity = min(absH / 10.0, 1.0) * hEdgeFade
+            let vBoostIntensity = min(absV / 10.0, 1.0) * vEdgeFade
+            let edgeBoost = 1.0 + 0.04 * max(hBoostIntensity, vBoostIntensity)
+            
+            var finalScale = rawScale * edgeBoost
             
             // Guard against degenerate values
             if !finalScale.isFinite || finalScale < 1.0 {
@@ -272,11 +302,11 @@ extension CropView {
             let hDampen = rotationDampen * (1 - vActivity)
             let rawEdgeAlignedShiftX: CGFloat
             if hDeg > 0 {
-                // Left narrows → push crop box toward left edge
-                rawEdgeAlignedShiftX = -shiftLeft
-            } else if hDeg < 0 {
-                // Right narrows → push crop box toward right edge
+                // Right recedes → push crop box toward right edge
                 rawEdgeAlignedShiftX = shiftRight
+            } else if hDeg < 0 {
+                // Left recedes → push crop box toward left edge
+                rawEdgeAlignedShiftX = -shiftLeft
             } else {
                 rawEdgeAlignedShiftX = centeredShiftX
             }
