@@ -245,10 +245,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         
         // Index of the selected type in the fixed order
         let selectedIndex = allTypes.firstIndex(of: viewModel.currentAdjustmentType) ?? 0
-        
-        // The group's total width
-        let totalWidth = CGFloat(allTypes.count) * buttonSize + CGFloat(allTypes.count - 1) * spacing
-        
+                
         // Position of the selected button's center within the group (relative to group leading edge)
         let selectedCenterInGroup = CGFloat(selectedIndex) * (buttonSize + spacing) + buttonSize / 2
         
