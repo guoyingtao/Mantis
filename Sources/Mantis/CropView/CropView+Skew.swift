@@ -641,9 +641,21 @@ extension CropView {
                     y: min(max(current.y, minY), maxY)
                 )
             }
+        } else if isZoomedIn {
+            // First skew change from zero while zoomed in: keep the
+            // user's current pan position, only clamping to the valid
+            // range. Jumping to the optimal offset would cause a
+            // visible snap because the zoomed-in viewport center is
+            // far from the computed "optimal" (which targets the
+            // un-zoomed edge-to-edge alignment).
+            let current = cropWorkbenchView.contentOffset
+            cropWorkbenchView.contentOffset = CGPoint(
+                x: min(max(current.x, minX), maxX),
+                y: min(max(current.y, minY), maxY)
+            )
         } else {
-            // First skew change from zero: jump directly to optimal
-            // for strict edge-to-edge alignment.
+            // First skew change from zero at default zoom: jump
+            // directly to optimal for strict edge-to-edge alignment.
             cropWorkbenchView.contentOffset = optimalOffset
         }
         
