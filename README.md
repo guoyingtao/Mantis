@@ -46,7 +46,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
 
 <div align="center">
   <video 
-    src="https://github.com/user-attachments/assets/154daf3f-3bae-4a18-bac5-14f756c3dc9f"
+    src="https://github.com/user-attachments/assets/732f0aab-21ab-4980-890f-4640432dec27"
     controls
     width="720">
   </video>
