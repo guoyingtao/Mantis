@@ -44,6 +44,14 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
 
 ### Demos
 
+<div align="center">
+  <video 
+    src="https://github.com/user-attachments/assets/154daf3f-3bae-4a18-bac5-14f756c3dc9f"
+    controls
+    width="720">
+  </video>
+</div>
+
 <p align="center">
     <img src="Images/Normal demos.gif" width="200" alt="Mantis Normal Demos" /> 
     <img src="Images/Rotation dial demos.gif" width="200" alt="Mantis RotaionDial Demos" /> 
