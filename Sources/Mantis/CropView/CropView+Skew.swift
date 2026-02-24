@@ -7,6 +7,31 @@
 
 import UIKit
 
+/// Groups the mutable state used to smooth and stabilize skew transforms
+/// across consecutive frames. Replacing three loose properties on CropView
+/// with a single value type makes reset sites explicit and concise.
+struct SkewState {
+    /// Previous compensating scale — prevents single-frame spikes when
+    /// switching between skew axes (e.g. vertical → horizontal).
+    var previousScale: CGFloat = 1.0
+    
+    /// Previous contentInset — rate-limits decreases when certain combined
+    /// angles cause the polygon test to fail transiently.
+    var previousInset: UIEdgeInsets = .zero
+    
+    /// Previous "optimal" content offset — subsequent skew changes apply a
+    /// delta to the user's current position rather than snapping back.
+    /// Nil when skew is zero (first change will set the offset directly).
+    var previousOptimalOffset: CGPoint?
+    
+    /// Resets all tracked state back to defaults.
+    mutating func reset() {
+        previousScale = 1.0
+        previousInset = .zero
+        previousOptimalOffset = nil
+    }
+}
+
 // MARK: - Skew / Perspective Transform
 extension CropView {
     /// Returns the effective skew degrees after accounting for flip state.
@@ -95,9 +120,7 @@ extension CropView {
         if hDeg == 0 && vDeg == 0 {
             cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
             cropWorkbenchView.contentInset = .zero
-            previousSkewScale = 1.0
-            previousSkewInset = .zero
-            previousSkewOptimalOffset = nil
+            skewState.reset()
         } else {
             let zoomScale = max(cropWorkbenchView.zoomScale, 1)
             let perspectiveTransform =
@@ -123,10 +146,10 @@ extension CropView {
             
             // Guard against degenerate values
             if !finalScale.isFinite || finalScale < 1.0 {
-                finalScale = max(previousSkewScale, 1.0)
+                finalScale = max(skewState.previousScale, 1.0)
             }
             
-            previousSkewScale = finalScale
+            skewState.previousScale = finalScale
             
             let scaledTransform = CATransform3DScale(perspectiveTransform, finalScale, finalScale, 1)
             cropWorkbenchView.layer.sublayerTransform = scaledTransform
@@ -182,7 +205,7 @@ extension CropView {
             return
         }
 
-        previousSkewInset = newInset
+        skewState.previousInset = newInset
         cropWorkbenchView.contentInset = newInset
     }
     
@@ -598,7 +621,7 @@ extension CropView {
         
         let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + 0.01
         
-        if let prevOptimal = previousSkewOptimalOffset {
+        if let prevOptimal = skewState.previousOptimalOffset {
             // Subsequent skew change: apply the delta between the new
             // and previous optimal positions to the user's current
             // offset. This preserves any manual panning the user did
@@ -624,7 +647,7 @@ extension CropView {
             cropWorkbenchView.contentOffset = optimalOffset
         }
         
-        previousSkewOptimalOffset = optimalOffset
+        skewState.previousOptimalOffset = optimalOffset
     }
     
     // MARK: Scale Boost
@@ -662,7 +685,7 @@ extension CropView {
     
     private func resetSkewInsetState() {
         cropWorkbenchView.contentInset = .zero
-        previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
+        skewState.previousInset = .zero
+        skewState.previousOptimalOffset = nil
     }
 }

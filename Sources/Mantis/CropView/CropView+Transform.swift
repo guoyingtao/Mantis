@@ -53,9 +53,7 @@ extension CropView {
         aspectRatioLockEnabled = cropState.aspectRatioLockEnabled
         
         // Restore skew transforms
-        previousSkewScale = 1.0
-        previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
+        skewState.reset()
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         syncSlideDialSkewValues()
@@ -82,9 +80,7 @@ extension CropView {
         // Restore skew values
         viewModel.horizontalSkewDegrees = transformation.horizontalSkewDegrees
         viewModel.verticalSkewDegrees = transformation.verticalSkewDegrees
-        previousSkewScale = 1.0
-        previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
+        skewState.reset()
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         

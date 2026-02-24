@@ -74,9 +74,7 @@ extension CropView {
     func horizontallyFlip() {
         viewModel.horizontallyFlip.toggle()
         flip(isHorizontal: true)
-        previousSkewScale = 1.0
-        previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
+        skewState.reset()
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()
@@ -85,9 +83,7 @@ extension CropView {
     func verticallyFlip() {
         viewModel.verticallyFlip.toggle()
         flip(isHorizontal: false)
-        previousSkewScale = 1.0
-        previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
+        skewState.reset()
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()

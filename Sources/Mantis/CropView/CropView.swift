@@ -69,20 +69,8 @@ final class CropView: UIView {
     /// The current rotation adjustment mode (straighten, horizontal skew, vertical skew)
     var currentRotationAdjustmentType: RotationAdjustmentType = .straighten
     
-    /// Tracks the previous compensating scale to prevent single-frame spikes
-    /// when switching between skew axes (e.g. vertical → horizontal).
-    var previousSkewScale: CGFloat = 1.0
-    
-    /// Tracks the previous contentInset for skew to rate-limit decreases.
-    /// When certain combined angles cause the polygon test to fail transiently,
-    /// this prevents insets from collapsing to zero in a single frame.
-    var previousSkewInset: UIEdgeInsets = .zero
-    
-    /// Tracks the previous "optimal" content offset so that subsequent skew
-    /// changes apply a delta to the user's current position rather than
-    /// snapping back to the optimal. Nil when skew is zero (first change
-    /// will set the offset directly).
-    var previousSkewOptimalOffset: CGPoint?
+    /// Mutable state used to smooth and stabilize skew transforms.
+    var skewState = SkewState()
     
     /// Whether the SlideDial is in withTypeSelector mode and handles type selection internally
     var slideDialHandlesTypeSelection: Bool {
@@ -519,9 +507,7 @@ extension CropView: CropViewProtocol {
                 if hasSkew {
                     self.viewModel.horizontalSkewDegrees = savedHSkew
                     self.viewModel.verticalSkewDegrees = savedVSkew
-                    self.previousSkewScale = 1.0
-                    self.previousSkewInset = .zero
-                    self.previousSkewOptimalOffset = nil
+                    self.skewState.reset()
                     self.applySkewTransformIfNeeded()
                     self.updateContentInsetForSkew()
                 }
@@ -532,9 +518,7 @@ extension CropView: CropViewProtocol {
             if hasSkew {
                 viewModel.horizontalSkewDegrees = savedHSkew
                 viewModel.verticalSkewDegrees = savedVSkew
-                previousSkewScale = 1.0
-                previousSkewInset = .zero
-                previousSkewOptimalOffset = nil
+                skewState.reset()
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
@@ -567,9 +551,7 @@ extension CropView: CropViewProtocol {
         
         // Reset skew state
         currentRotationAdjustmentType = .straighten
-        previousSkewScale = 1.0
-        previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
+        skewState.reset()
         if slideDialHandlesTypeSelection {
             // SlideDial handles its own type button reset via its reset() method
         } else {
