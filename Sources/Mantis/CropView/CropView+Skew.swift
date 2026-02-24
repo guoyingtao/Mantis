@@ -117,38 +117,7 @@ extension CropView {
                 perspectiveTransform: perspectiveTransform
             )
             
-            // Edge-to-edge scale boost: at small angles, the inscribed-fit
-            // scale leaves no room for content offset shifting. Add a small
-            // extra factor so the projected image is slightly larger than the
-            // minimum, giving updateContentInsetForSkew headroom to position
-            // the crop box flush against the vanishing-point edge.
-            //
-            // The boost ramps up linearly with |deg| (more skew = more offset
-            // needed), peaks around 8-10°, then fades to 0 at 12° where the
-            // vertex-to-edge inscribed behavior takes over.
-            //
-            // Skip the boost when the crop box has a different aspect ratio
-            // from the image (e.g. 1:1 on a landscape image) — in that case
-            // edge-to-edge is not applicable.
-            var edgeBoost: CGFloat = 1.0
-            if cropBoxMatchesImageAspectRatio {
-                let transitionEnd: CGFloat = 12.0
-                let absH = abs(hDeg)
-                let absV = abs(vDeg)
-                let hActivity = min(absH / 3.0, 1.0)
-                let vActivity = min(absV / 3.0, 1.0)
-                
-                // Each axis's boost is dampened by the other axis's activity
-                // (same logic as in updateContentInsetForSkew).
-                let hEdgeFade = max(1 - absH / transitionEnd, 0) * (1 - vActivity)
-                let vEdgeFade = max(1 - absV / transitionEnd, 0) * (1 - hActivity)
-                
-                // Scale the boost by how much skew there is (normalized to 0-1
-                // within the edge-to-edge range).
-                let hBoostIntensity = min(absH / 10.0, 1.0) * hEdgeFade
-                let vBoostIntensity = min(absV / 10.0, 1.0) * vEdgeFade
-                edgeBoost = 1.0 + 0.04 * max(hBoostIntensity, vBoostIntensity)
-            }
+            let edgeBoost = computeEdgeToEdgeScaleBoost(hDeg: hDeg, vDeg: vDeg)
             
             var finalScale = rawScale * edgeBoost
             
@@ -172,250 +141,38 @@ extension CropView {
         let vDeg = effectiveVerticalSkewDegrees
 
         guard hDeg != 0 || vDeg != 0 else {
-            cropWorkbenchView.contentInset = .zero
-            previousSkewInset = .zero
-            previousSkewOptimalOffset = nil
+            resetSkewInsetState()
             return
         }
 
         let transform = cropWorkbenchView.layer.sublayerTransform
         guard !CATransform3DIsIdentity(transform) else {
-            cropWorkbenchView.contentInset = .zero
-            previousSkewInset = .zero
-            previousSkewOptimalOffset = nil
+            resetSkewInsetState()
             return
         }
 
-        let fr = imageContainer.frame
-        let boundsW = cropWorkbenchView.bounds.width
-        let boundsH = cropWorkbenchView.bounds.height
-        // Use the actual visible crop box corners (rotated into scroll view
-        // local space) instead of the scroll view's axis-aligned bounding box.
-        // The AABB grows with rotation (up to ~41% larger at 45°), making
-        // containment tests over-conservative and rejecting valid pan positions.
-        let cropCorners = visibleCropCornersInScrollViewSpace
-
-        // Use the CENTER of the image as the anchor, consistent with
-        // computeSkewProjectionInputs. This makes insets independent of the
-        // current pan position, preventing abrupt inset redistribution when
-        // the perspective axis changes.
-        let centerOffset = CGPoint(
-            x: fr.midX - boundsW / 2,
-            y: fr.midY - boundsH / 2
+        let context = SkewInsetContext(
+            imageFrame: imageContainer.frame,
+            boundsSize: cropWorkbenchView.bounds.size,
+            contentSize: cropWorkbenchView.contentSize,
+            cropCorners: visibleCropCornersInScrollViewSpace,
+            transform: transform
         )
-
-        func isValidShift(_ shiftX: CGFloat, _ shiftY: CGFloat) -> Bool {
-            let testAnchor = CGPoint(
-                x: centerOffset.x + shiftX + boundsW / 2,
-                y: centerOffset.y + shiftY + boundsH / 2
-            )
-            let testCorners = [
-                CGPoint(x: fr.minX - testAnchor.x, y: fr.minY - testAnchor.y),
-                CGPoint(x: fr.maxX - testAnchor.x, y: fr.minY - testAnchor.y),
-                CGPoint(x: fr.maxX - testAnchor.x, y: fr.maxY - testAnchor.y),
-                CGPoint(x: fr.minX - testAnchor.x, y: fr.maxY - testAnchor.y)
-            ]
-            // Reject positions where any image corner is behind the camera
-            // (w ≤ 0). At extreme skew angles a large shift can push corners
-            // past the vanishing plane, flipping the projected polygon and
-            // making the ray-casting containment test unreliable.
-            guard PerspectiveTransformHelper.allProjectionsInFrontOfCamera(testCorners, through: transform) else {
-                return false
-            }
-            let proj = testCorners.map {
-                PerspectiveTransformHelper.projectDisplacement($0, through: transform)
-            }
-            return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
-        }
-
-        // Binary-search for the max valid distance along a given direction.
-        func maxShift(dirX: CGFloat, dirY: CGFloat) -> CGFloat {
-            // Use the image frame size so the search range covers the full
-            // pannable area at any zoom level. Using only bounds would cap
-            // the shift at the viewport size, rejecting valid positions when
-            // zoomed in.
-            let maxDist = max(fr.width, fr.height)
-            var lo: CGFloat = 0
-            var hi: CGFloat = maxDist
-            for _ in 0..<16 {
-                let mid = (lo + hi) / 2
-                if isValidShift(dirX * mid, dirY * mid) {
-                    lo = mid
-                } else {
-                    hi = mid
-                }
-            }
-            return lo
-        }
 
         let newInset: UIEdgeInsets
 
-        if isValidShift(0, 0) {
-            // Get the maximum valid shift distance along each axis.
-            let shiftTop    = maxShift(dirX: 0, dirY: -1)
-            let shiftLeft   = maxShift(dirX: -1, dirY: 0)
-            let shiftBottom = maxShift(dirX: 0, dirY: 1)
-            let shiftRight  = maxShift(dirX: 1, dirY: 0)
+        if isValidSkewPosition(shiftX: 0, shiftY: 0, context: context) {
+            let shifts = computeMaxShifts(context: context)
+            newInset = computeSkewContentInset(shifts: shifts, context: context)
 
-            // Convert shifts (relative to image center) into UIScrollView
-            // contentInset values.
-            //
-            // The shift represents displacement of contentOffset from
-            // centerOffset (the offset that centers the image in the viewport).
-            //
-            //   desired min contentOffset = centerOffset - shiftLeft
-            //   desired max contentOffset = centerOffset + shiftRight
-            //
-            // UIScrollView's offset range with insets:
-            //   min = -inset.left
-            //   max = contentSize - bounds + inset.right
-            //
-            // Solving:
-            //   inset.left  = shiftLeft  - centerOffset.x
-            //   inset.right = (centerOffset.x + shiftRight) - (contentSize.w - boundsW)
-            //   inset.top   = shiftTop   - centerOffset.y
-            //   inset.bottom= (centerOffset.y + shiftBottom) - (contentSize.h - boundsH)
-            //
-            // These can be NEGATIVE when skew + rotation restricts the pan
-            // range below the scroll view's default.
-            let csW = cropWorkbenchView.contentSize.width
-            let csH = cropWorkbenchView.contentSize.height
-
-            newInset = UIEdgeInsets(
-                top:    shiftTop    - centerOffset.y,
-                left:   shiftLeft   - centerOffset.x,
-                bottom: (centerOffset.y + shiftBottom) - (csH - boundsH),
-                right:  (centerOffset.x + shiftRight)  - (csW - boundsW)
+            let optimalOffset = computeOptimalSkewOffset(
+                hDeg: hDeg, vDeg: vDeg, shifts: shifts, context: context
             )
-            
-            // --- Two-phase content offset positioning for skew ---
-            // Phase 1 (|deg| ≤ ~10°, single-axis only): edge-to-edge — align
-            // the crop box edge toward the vanishing point flush with the
-            // skewed image edge.
-            // Phase 2 (|deg| > ~10° or both axes active): vertex-to-edge
-            // inscribed — center the crop box in the valid range so vertices
-            // touch opposite edges.
-            // A smooth blend between 8°–12° avoids visual jumps at the threshold.
-            //
-            // Edge-to-edge is skipped entirely when the crop box has a
-            // different aspect ratio from the image (e.g. 1:1 on a landscape
-            // image) — in that case the crop box vertices already touch two
-            // opposite image edges from the start.
-            //
-            // Dampening factors:
-            // - Rotation: edge-to-edge is axis-aligned; when the scroll view
-            //   is rotated the axes no longer match the visual edges.
-            // - Cross-axis: when one axis already has skew, the other axis's
-            //   edge-to-edge shift can change abruptly as the combined
-            //   transform changes. Dampen each axis by the other's activity.
-            let centeredShiftX = (shiftRight - shiftLeft) / 2
-            let centeredShiftY = (shiftBottom - shiftTop) / 2
-            
-            let optimalShiftX: CGFloat
-            let optimalShiftY: CGFloat
-            
-            if cropBoxMatchesImageAspectRatio {
-                let totalRadians = viewModel.getTotalRadians()
-                
-                // Rotation dampening: full dampening at ±10° of rotation.
-                let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
-                
-                // Cross-axis dampening: when the other axis has skew, the
-                // combined perspective makes single-axis shift extremes unstable.
-                // Dampen each axis's edge-to-edge by how much the other axis is active.
-                let hActivity = min(abs(hDeg) / 3.0, 1.0)  // ramp up quickly
-                let vActivity = min(abs(vDeg) / 3.0, 1.0)
-                
-                let transitionStart: CGFloat = 8.0
-                let transitionEnd: CGFloat = 12.0
-                
-                // Vertical skew: edge-to-edge on Y axis
-                let vDampen = rotationDampen * (1 - hActivity)
-                let rawEdgeAlignedShiftY: CGFloat
-                if vDeg > 0 {
-                    // Top narrows → push crop box toward top edge
-                    rawEdgeAlignedShiftY = -shiftTop
-                } else if vDeg < 0 {
-                    // Bottom narrows → push crop box toward bottom edge
-                    rawEdgeAlignedShiftY = shiftBottom
-                } else {
-                    rawEdgeAlignedShiftY = centeredShiftY
-                }
-                let edgeAlignedShiftY = centeredShiftY + (rawEdgeAlignedShiftY - centeredShiftY) * vDampen
-                let absV = abs(vDeg)
-                let blendV = min(max((absV - transitionStart) / (transitionEnd - transitionStart), 0), 1)
-                optimalShiftY = edgeAlignedShiftY + (centeredShiftY - edgeAlignedShiftY) * blendV
-                
-                // Horizontal skew: edge-to-edge on X axis
-                let hDampen = rotationDampen * (1 - vActivity)
-                let rawEdgeAlignedShiftX: CGFloat
-                if hDeg > 0 {
-                    // Right recedes → push crop box toward right edge
-                    rawEdgeAlignedShiftX = shiftRight
-                } else if hDeg < 0 {
-                    // Left recedes → push crop box toward left edge
-                    rawEdgeAlignedShiftX = -shiftLeft
-                } else {
-                    rawEdgeAlignedShiftX = centeredShiftX
-                }
-                let edgeAlignedShiftX = centeredShiftX + (rawEdgeAlignedShiftX - centeredShiftX) * hDampen
-                let absH = abs(hDeg)
-                let blendH = min(max((absH - transitionStart) / (transitionEnd - transitionStart), 0), 1)
-                optimalShiftX = edgeAlignedShiftX + (centeredShiftX - edgeAlignedShiftX) * blendH
-            } else {
-                // Non-original aspect ratio: skip edge-to-edge, use centered.
-                optimalShiftX = centeredShiftX
-                optimalShiftY = centeredShiftY
-            }
-            let optimalX = centerOffset.x + optimalShiftX
-            let optimalY = centerOffset.y + optimalShiftY
-            
-            if optimalX.isFinite && optimalY.isFinite {
-                let newOptimal = CGPoint(x: optimalX, y: optimalY)
-                let minX = -newInset.left
-                let maxX = cropWorkbenchView.contentSize.width - boundsW + newInset.right
-                let minY = -newInset.top
-                let maxY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
-                
-                let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + 0.01
-                
-                if let prevOptimal = previousSkewOptimalOffset {
-                    // Subsequent skew change: apply the delta between the new
-                    // and previous optimal positions to the user's current
-                    // offset. This preserves any manual panning the user did
-                    // between skew adjustments. When zoomed in the delta is
-                    // suppressed to keep the view stable.
-                    let current = cropWorkbenchView.contentOffset
-                    if !isZoomedIn {
-                        let deltaX = newOptimal.x - prevOptimal.x
-                        let deltaY = newOptimal.y - prevOptimal.y
-                        cropWorkbenchView.contentOffset = CGPoint(
-                            x: min(max(current.x + deltaX, minX), maxX),
-                            y: min(max(current.y + deltaY, minY), maxY)
-                        )
-                    } else {
-                        cropWorkbenchView.contentOffset = CGPoint(
-                            x: min(max(current.x, minX), maxX),
-                            y: min(max(current.y, minY), maxY)
-                        )
-                    }
-                } else {
-                    // First skew change from zero: jump directly to optimal
-                    // for strict edge-to-edge alignment.
-                    cropWorkbenchView.contentOffset = newOptimal
-                }
-                
-                previousSkewOptimalOffset = newOptimal
-            }
+            applySkewContentOffset(optimalOffset: optimalOffset, inset: newInset, context: context)
         } else {
             // Center-based test fails — the projected image at the center
             // anchor is too small to cover the crop box. Lock to center.
-            newInset = UIEdgeInsets(
-                top:    -centerOffset.y,
-                left:   -centerOffset.x,
-                bottom: centerOffset.y - (cropWorkbenchView.contentSize.height - boundsH),
-                right:  centerOffset.x - (cropWorkbenchView.contentSize.width  - boundsW)
-            )
+            newInset = computeLockedCenterInset(context: context)
         }
 
         // Guard against non-finite inset values that can arise from
@@ -445,71 +202,51 @@ extension CropView {
         let transform = cropWorkbenchView.layer.sublayerTransform
         guard !CATransform3DIsIdentity(transform) else { return }
 
-        let fr = imageContainer.frame
-        let boundsW = cropWorkbenchView.bounds.width
-        let boundsH = cropWorkbenchView.bounds.height
-        // Use actual visible crop corners instead of AABB (see updateContentInsetForSkew).
-        let cropCorners = visibleCropCornersInScrollViewSpace
+        let context = SkewInsetContext(
+            imageFrame: imageContainer.frame,
+            boundsSize: cropWorkbenchView.bounds.size,
+            contentSize: cropWorkbenchView.contentSize,
+            cropCorners: visibleCropCornersInScrollViewSpace,
+            transform: transform
+        )
 
         let curOffset = cropWorkbenchView.contentOffset
 
         // First, clamp to inset bounds (standard scroll view range).
         let inset = cropWorkbenchView.contentInset
-        let maxOffsetX = cropWorkbenchView.contentSize.width - boundsW + inset.right
-        let maxOffsetY = cropWorkbenchView.contentSize.height - boundsH + inset.bottom
+        let maxOffsetX = context.contentSize.width - context.boundsSize.width + inset.right
+        let maxOffsetY = context.contentSize.height - context.boundsSize.height + inset.bottom
         var targetX = max(-inset.left, min(maxOffsetX, curOffset.x))
         var targetY = max(-inset.top, min(maxOffsetY, curOffset.y))
 
-        // Then, do a perspective containment test at the clamped position.
-        // If the position is invalid (corner of the inset rect outside the
-        // projected image), pull back toward the image center.
-        let centerOffset = CGPoint(
-            x: fr.midX - boundsW / 2,
-            y: fr.midY - boundsH / 2
-        )
+        if !isValidSkewOffset(ox: targetX, oy: targetY, context: context) {
+            let cx = context.centerOffset.x
+            let cy = context.centerOffset.y
 
-        func isValidOffset(_ ox: CGFloat, _ oy: CGFloat) -> Bool {
-            let anchor = CGPoint(x: ox + boundsW / 2, y: oy + boundsH / 2)
-            let testCorners = [
-                CGPoint(x: fr.minX - anchor.x, y: fr.minY - anchor.y),
-                CGPoint(x: fr.maxX - anchor.x, y: fr.minY - anchor.y),
-                CGPoint(x: fr.maxX - anchor.x, y: fr.maxY - anchor.y),
-                CGPoint(x: fr.minX - anchor.x, y: fr.maxY - anchor.y)
-            ]
-            guard PerspectiveTransformHelper.allProjectionsInFrontOfCamera(testCorners, through: transform) else {
-                return false
-            }
-            let proj = testCorners.map {
-                PerspectiveTransformHelper.projectDisplacement($0, through: transform)
-            }
-            return PerspectiveTransformHelper.allPointsInsideConvexPolygon(cropCorners, polygon: proj)
-        }
-
-        if !isValidOffset(targetX, targetY) {
-            if isValidOffset(centerOffset.x, centerOffset.y) {
+            if isValidSkewOffset(ox: cx, oy: cy, context: context) {
                 // Binary-search along the line from current position toward center
                 // to find the nearest valid point.
                 var lo: CGFloat = 0  // center
                 var hi: CGFloat = 1  // current position
                 for _ in 0..<16 {
                     let mid = (lo + hi) / 2
-                    let testX = centerOffset.x + (targetX - centerOffset.x) * mid
-                    let testY = centerOffset.y + (targetY - centerOffset.y) * mid
-                    if isValidOffset(testX, testY) {
+                    let testX = cx + (targetX - cx) * mid
+                    let testY = cy + (targetY - cy) * mid
+                    if isValidSkewOffset(ox: testX, oy: testY, context: context) {
                         lo = mid
                     } else {
                         hi = mid
                     }
                 }
-                targetX = centerOffset.x + (targetX - centerOffset.x) * lo
-                targetY = centerOffset.y + (targetY - centerOffset.y) * lo
+                targetX = cx + (targetX - cx) * lo
+                targetY = cy + (targetY - cy) * lo
             } else {
                 // At extreme skew angles the polygon containment test can
                 // reject even the image center due to floating-point limits.
                 // Fall back to the center — it is geometrically the safest
                 // position and keeps the crop box within the image.
-                targetX = centerOffset.x
-                targetY = centerOffset.y
+                targetX = cx
+                targetY = cy
             }
         }
 
@@ -592,5 +329,340 @@ extension CropView {
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()
+    }
+}
+
+// MARK: - Skew Inset Context & Helpers
+
+extension CropView {
+    /// Groups the shared geometric state needed by skew inset/offset calculations,
+    /// avoiding repeated property lookups and keeping helper signatures clean.
+    struct SkewInsetContext {
+        let imageFrame: CGRect
+        let boundsSize: CGSize
+        let contentSize: CGSize
+        let cropCorners: [CGPoint]
+        let transform: CATransform3D
+        
+        var centerOffset: CGPoint {
+            CGPoint(
+                x: imageFrame.midX - boundsSize.width / 2,
+                y: imageFrame.midY - boundsSize.height / 2
+            )
+        }
+        
+        /// Image corner displacements from a given anchor point.
+        func imageCornerDisplacements(from anchor: CGPoint) -> [CGPoint] {
+            [
+                CGPoint(x: imageFrame.minX - anchor.x, y: imageFrame.minY - anchor.y),
+                CGPoint(x: imageFrame.maxX - anchor.x, y: imageFrame.minY - anchor.y),
+                CGPoint(x: imageFrame.maxX - anchor.x, y: imageFrame.maxY - anchor.y),
+                CGPoint(x: imageFrame.minX - anchor.x, y: imageFrame.maxY - anchor.y)
+            ]
+        }
+    }
+    
+    /// Directional shift distances used to compute insets and optimal offsets.
+    struct SkewShifts {
+        let top: CGFloat
+        let left: CGFloat
+        let bottom: CGFloat
+        let right: CGFloat
+        
+        var centeredShiftX: CGFloat { (right - left) / 2 }
+        var centeredShiftY: CGFloat { (bottom - top) / 2 }
+    }
+    
+    // MARK: Validation
+    
+    /// Tests whether shifting the viewport by (shiftX, shiftY) from the image center
+    /// keeps the crop box fully inside the projected (skewed) image quad.
+    func isValidSkewPosition(shiftX: CGFloat, shiftY: CGFloat, context: SkewInsetContext) -> Bool {
+        let anchor = CGPoint(
+            x: context.centerOffset.x + shiftX + context.boundsSize.width / 2,
+            y: context.centerOffset.y + shiftY + context.boundsSize.height / 2
+        )
+        let corners = context.imageCornerDisplacements(from: anchor)
+        // Reject positions where any image corner is behind the camera
+        // (w ≤ 0). At extreme skew angles a large shift can push corners
+        // past the vanishing plane, flipping the projected polygon and
+        // making the ray-casting containment test unreliable.
+        guard PerspectiveTransformHelper.allProjectionsInFrontOfCamera(corners, through: context.transform) else {
+            return false
+        }
+        let proj = corners.map {
+            PerspectiveTransformHelper.projectDisplacement($0, through: context.transform)
+        }
+        return PerspectiveTransformHelper.allPointsInsideConvexPolygon(context.cropCorners, polygon: proj)
+    }
+    
+    /// Tests whether a given contentOffset keeps the crop box inside the projected image quad.
+    /// Used by `clampContentOffsetForSkewIfNeeded` for post-pan validation.
+    func isValidSkewOffset(ox: CGFloat, oy: CGFloat, context: SkewInsetContext) -> Bool {
+        let anchor = CGPoint(x: ox + context.boundsSize.width / 2,
+                             y: oy + context.boundsSize.height / 2)
+        let corners = context.imageCornerDisplacements(from: anchor)
+        guard PerspectiveTransformHelper.allProjectionsInFrontOfCamera(corners, through: context.transform) else {
+            return false
+        }
+        let proj = corners.map {
+            PerspectiveTransformHelper.projectDisplacement($0, through: context.transform)
+        }
+        return PerspectiveTransformHelper.allPointsInsideConvexPolygon(context.cropCorners, polygon: proj)
+    }
+    
+    // MARK: Shift Computation
+    
+    /// Binary-searches for the maximum valid shift distance along each cardinal direction.
+    func computeMaxShifts(context: SkewInsetContext) -> SkewShifts {
+        SkewShifts(
+            top:    maxShiftInDirection(dirX: 0, dirY: -1, context: context),
+            left:   maxShiftInDirection(dirX: -1, dirY: 0, context: context),
+            bottom: maxShiftInDirection(dirX: 0, dirY: 1, context: context),
+            right:  maxShiftInDirection(dirX: 1, dirY: 0, context: context)
+        )
+    }
+    
+    /// Binary-search for the max valid distance along a single direction.
+    private func maxShiftInDirection(dirX: CGFloat, dirY: CGFloat, context: SkewInsetContext) -> CGFloat {
+        // Use the image frame size so the search range covers the full
+        // pannable area at any zoom level. Using only bounds would cap
+        // the shift at the viewport size, rejecting valid positions when
+        // zoomed in.
+        let maxDist = max(context.imageFrame.width, context.imageFrame.height)
+        var lo: CGFloat = 0
+        var hi: CGFloat = maxDist
+        for _ in 0..<16 {
+            let mid = (lo + hi) / 2
+            if isValidSkewPosition(shiftX: dirX * mid, shiftY: dirY * mid, context: context) {
+                lo = mid
+            } else {
+                hi = mid
+            }
+        }
+        return lo
+    }
+    
+    // MARK: Inset Computation
+    
+    /// Converts shift distances into UIScrollView contentInset values.
+    ///
+    /// The shift represents displacement of contentOffset from centerOffset
+    /// (the offset that centers the image in the viewport).
+    /// These can be NEGATIVE when skew + rotation restricts the pan range
+    /// below the scroll view's default.
+    func computeSkewContentInset(shifts: SkewShifts, context: SkewInsetContext) -> UIEdgeInsets {
+        let center = context.centerOffset
+        let csW = context.contentSize.width
+        let csH = context.contentSize.height
+        let bW = context.boundsSize.width
+        let bH = context.boundsSize.height
+        
+        return UIEdgeInsets(
+            top:    shifts.top    - center.y,
+            left:   shifts.left   - center.x,
+            bottom: (center.y + shifts.bottom) - (csH - bH),
+            right:  (center.x + shifts.right)  - (csW - bW)
+        )
+    }
+    
+    /// Fallback inset that locks the viewport to the image center.
+    private func computeLockedCenterInset(context: SkewInsetContext) -> UIEdgeInsets {
+        let center = context.centerOffset
+        let bW = context.boundsSize.width
+        let bH = context.boundsSize.height
+        return UIEdgeInsets(
+            top:    -center.y,
+            left:   -center.x,
+            bottom: center.y - (context.contentSize.height - bH),
+            right:  center.x - (context.contentSize.width  - bW)
+        )
+    }
+    
+    // MARK: Optimal Offset (Two-Phase Positioning)
+    
+    /// Computes the optimal content offset for the current skew angle.
+    ///
+    /// **Phase 1** (|deg| ≤ ~10°, single-axis only): edge-to-edge — align the crop
+    /// box edge toward the vanishing point flush with the skewed image edge.
+    ///
+    /// **Phase 2** (|deg| > ~10° or both axes active): vertex-to-edge inscribed —
+    /// center the crop box in the valid range so vertices touch opposite edges.
+    ///
+    /// A smooth blend between 8°–12° avoids visual jumps at the threshold.
+    func computeOptimalSkewOffset(
+        hDeg: CGFloat,
+        vDeg: CGFloat,
+        shifts: SkewShifts,
+        context: SkewInsetContext
+    ) -> CGPoint {
+        let centeredX = shifts.centeredShiftX
+        let centeredY = shifts.centeredShiftY
+        
+        let optimalShiftX: CGFloat
+        let optimalShiftY: CGFloat
+        
+        if cropBoxMatchesImageAspectRatio {
+            let totalRadians = viewModel.getTotalRadians()
+            
+            // Rotation dampening: full dampening at ±10° of rotation.
+            let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
+            
+            // Cross-axis dampening: when the other axis has skew, the
+            // combined perspective makes single-axis shift extremes unstable.
+            let hActivity = min(abs(hDeg) / 3.0, 1.0)
+            let vActivity = min(abs(vDeg) / 3.0, 1.0)
+            
+            optimalShiftY = computeEdgeToEdgeShift(
+                deg: vDeg,
+                positiveEdgeShift: -shifts.top,
+                negativeEdgeShift: shifts.bottom,
+                centeredShift: centeredY,
+                rotationDampen: rotationDampen,
+                crossAxisActivity: hActivity
+            )
+            
+            optimalShiftX = computeEdgeToEdgeShift(
+                deg: hDeg,
+                positiveEdgeShift: shifts.right,
+                negativeEdgeShift: -shifts.left,
+                centeredShift: centeredX,
+                rotationDampen: rotationDampen,
+                crossAxisActivity: vActivity
+            )
+        } else {
+            // Non-original aspect ratio: skip edge-to-edge, use centered.
+            optimalShiftX = centeredX
+            optimalShiftY = centeredY
+        }
+        
+        let center = context.centerOffset
+        return CGPoint(x: center.x + optimalShiftX, y: center.y + optimalShiftY)
+    }
+    
+    /// Computes the blended shift for a single axis, transitioning from
+    /// edge-to-edge alignment (small angles) to centered/inscribed (large angles).
+    ///
+    /// - Parameters:
+    ///   - deg: Skew degrees on this axis (sign determines direction).
+    ///   - positiveEdgeShift: Shift value when deg > 0 (toward vanishing edge).
+    ///   - negativeEdgeShift: Shift value when deg < 0 (toward vanishing edge).
+    ///   - centeredShift: Centered (inscribed) shift for this axis.
+    ///   - rotationDampen: Dampening factor from scroll view rotation [0..1].
+    ///   - crossAxisActivity: How active the other axis is [0..1], used for dampening.
+    private func computeEdgeToEdgeShift(
+        deg: CGFloat,
+        positiveEdgeShift: CGFloat,
+        negativeEdgeShift: CGFloat,
+        centeredShift: CGFloat,
+        rotationDampen: CGFloat,
+        crossAxisActivity: CGFloat
+    ) -> CGFloat {
+        let transitionStart: CGFloat = 8.0
+        let transitionEnd: CGFloat = 12.0
+        
+        let dampen = rotationDampen * (1 - crossAxisActivity)
+        
+        let rawEdgeAligned: CGFloat
+        if deg > 0 {
+            rawEdgeAligned = positiveEdgeShift
+        } else if deg < 0 {
+            rawEdgeAligned = negativeEdgeShift
+        } else {
+            rawEdgeAligned = centeredShift
+        }
+        
+        let edgeAligned = centeredShift + (rawEdgeAligned - centeredShift) * dampen
+        let absDeg = abs(deg)
+        let blend = min(max((absDeg - transitionStart) / (transitionEnd - transitionStart), 0), 1)
+        return edgeAligned + (centeredShift - edgeAligned) * blend
+    }
+    
+    // MARK: Offset Application
+    
+    /// Applies the computed optimal offset to the scroll view, preserving the
+    /// user's manual panning by applying only the delta from the previous optimal.
+    private func applySkewContentOffset(
+        optimalOffset: CGPoint,
+        inset: UIEdgeInsets,
+        context: SkewInsetContext
+    ) {
+        guard optimalOffset.x.isFinite && optimalOffset.y.isFinite else { return }
+        
+        let bW = context.boundsSize.width
+        let bH = context.boundsSize.height
+        let minX = -inset.left
+        let maxX = context.contentSize.width - bW + inset.right
+        let minY = -inset.top
+        let maxY = context.contentSize.height - bH + inset.bottom
+        
+        let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + 0.01
+        
+        if let prevOptimal = previousSkewOptimalOffset {
+            // Subsequent skew change: apply the delta between the new
+            // and previous optimal positions to the user's current
+            // offset. This preserves any manual panning the user did
+            // between skew adjustments. When zoomed in the delta is
+            // suppressed to keep the view stable.
+            let current = cropWorkbenchView.contentOffset
+            if !isZoomedIn {
+                let deltaX = optimalOffset.x - prevOptimal.x
+                let deltaY = optimalOffset.y - prevOptimal.y
+                cropWorkbenchView.contentOffset = CGPoint(
+                    x: min(max(current.x + deltaX, minX), maxX),
+                    y: min(max(current.y + deltaY, minY), maxY)
+                )
+            } else {
+                cropWorkbenchView.contentOffset = CGPoint(
+                    x: min(max(current.x, minX), maxX),
+                    y: min(max(current.y, minY), maxY)
+                )
+            }
+        } else {
+            // First skew change from zero: jump directly to optimal
+            // for strict edge-to-edge alignment.
+            cropWorkbenchView.contentOffset = optimalOffset
+        }
+        
+        previousSkewOptimalOffset = optimalOffset
+    }
+    
+    // MARK: Scale Boost
+    
+    /// Edge-to-edge scale boost: at small angles, the inscribed-fit scale leaves
+    /// no room for content offset shifting. This adds a small extra factor so
+    /// the projected image is slightly larger than the minimum, giving
+    /// `updateContentInsetForSkew` headroom to position the crop box flush
+    /// against the vanishing-point edge.
+    ///
+    /// The boost ramps up linearly with |deg|, peaks around 8-10°, then fades
+    /// to 0 at 12° where the vertex-to-edge inscribed behavior takes over.
+    /// Skipped when the crop box has a different aspect ratio from the image.
+    private func computeEdgeToEdgeScaleBoost(hDeg: CGFloat, vDeg: CGFloat) -> CGFloat {
+        guard cropBoxMatchesImageAspectRatio else { return 1.0 }
+        
+        let transitionEnd: CGFloat = 12.0
+        let absH = abs(hDeg)
+        let absV = abs(vDeg)
+        let hActivity = min(absH / 3.0, 1.0)
+        let vActivity = min(absV / 3.0, 1.0)
+        
+        // Each axis's boost is dampened by the other axis's activity.
+        let hEdgeFade = max(1 - absH / transitionEnd, 0) * (1 - vActivity)
+        let vEdgeFade = max(1 - absV / transitionEnd, 0) * (1 - hActivity)
+        
+        // Scale the boost by how much skew there is (normalized to 0-1
+        // within the edge-to-edge range).
+        let hBoostIntensity = min(absH / 10.0, 1.0) * hEdgeFade
+        let vBoostIntensity = min(absV / 10.0, 1.0) * vEdgeFade
+        return 1.0 + 0.04 * max(hBoostIntensity, vBoostIntensity)
+    }
+    
+    // MARK: State Reset
+    
+    private func resetSkewInsetState() {
+        cropWorkbenchView.contentInset = .zero
+        previousSkewInset = .zero
+        previousSkewOptimalOffset = nil
     }
 }
