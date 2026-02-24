@@ -64,6 +64,23 @@ extension CropView {
         }
     }
 
+    /// Whether the crop box currently matches the image's aspect ratio closely
+    /// enough for edge-to-edge alignment to be meaningful. When the user has
+    /// chosen a different ratio (e.g. 1:1 on a landscape image), the crop box
+    /// vertices naturally touch two opposite image edges from the start, so the
+    /// edge-to-edge phase should be skipped entirely.
+    var cropBoxMatchesImageAspectRatio: Bool {
+        let cropW = cropAuxiliaryIndicatorView.frame.width
+        let cropH = cropAuxiliaryIndicatorView.frame.height
+        let imgW = imageContainer.frame.width
+        let imgH = imageContainer.frame.height
+        guard cropH > 0 && imgH > 0 else { return true }
+        let cropRatio = cropW / cropH
+        let imgRatio = imgW / imgH
+        // Allow ~5% tolerance for rounding
+        return abs(cropRatio - imgRatio) / max(cropRatio, imgRatio) < 0.05
+    }
+    
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
     /// The compensating scale is the exact minimum so the projected image just
     /// covers the crop box, producing an inscribed fit that matches Apple Photos.
@@ -109,22 +126,29 @@ extension CropView {
             // The boost ramps up linearly with |deg| (more skew = more offset
             // needed), peaks around 8-10°, then fades to 0 at 12° where the
             // vertex-to-edge inscribed behavior takes over.
-            let transitionEnd: CGFloat = 12.0
-            let absH = abs(hDeg)
-            let absV = abs(vDeg)
-            let hActivity = min(absH / 3.0, 1.0)
-            let vActivity = min(absV / 3.0, 1.0)
-            
-            // Each axis's boost is dampened by the other axis's activity
-            // (same logic as in updateContentInsetForSkew).
-            let hEdgeFade = max(1 - absH / transitionEnd, 0) * (1 - vActivity)
-            let vEdgeFade = max(1 - absV / transitionEnd, 0) * (1 - hActivity)
-            
-            // Scale the boost by how much skew there is (normalized to 0-1
-            // within the edge-to-edge range).
-            let hBoostIntensity = min(absH / 10.0, 1.0) * hEdgeFade
-            let vBoostIntensity = min(absV / 10.0, 1.0) * vEdgeFade
-            let edgeBoost = 1.0 + 0.04 * max(hBoostIntensity, vBoostIntensity)
+            //
+            // Skip the boost when the crop box has a different aspect ratio
+            // from the image (e.g. 1:1 on a landscape image) — in that case
+            // edge-to-edge is not applicable.
+            var edgeBoost: CGFloat = 1.0
+            if cropBoxMatchesImageAspectRatio {
+                let transitionEnd: CGFloat = 12.0
+                let absH = abs(hDeg)
+                let absV = abs(vDeg)
+                let hActivity = min(absH / 3.0, 1.0)
+                let vActivity = min(absV / 3.0, 1.0)
+                
+                // Each axis's boost is dampened by the other axis's activity
+                // (same logic as in updateContentInsetForSkew).
+                let hEdgeFade = max(1 - absH / transitionEnd, 0) * (1 - vActivity)
+                let vEdgeFade = max(1 - absV / transitionEnd, 0) * (1 - hActivity)
+                
+                // Scale the boost by how much skew there is (normalized to 0-1
+                // within the edge-to-edge range).
+                let hBoostIntensity = min(absH / 10.0, 1.0) * hEdgeFade
+                let vBoostIntensity = min(absV / 10.0, 1.0) * vEdgeFade
+                edgeBoost = 1.0 + 0.04 * max(hBoostIntensity, vBoostIntensity)
+            }
             
             var finalScale = rawScale * edgeBoost
             
@@ -273,6 +297,11 @@ extension CropView {
             // touch opposite edges.
             // A smooth blend between 8°–12° avoids visual jumps at the threshold.
             //
+            // Edge-to-edge is skipped entirely when the crop box has a
+            // different aspect ratio from the image (e.g. 1:1 on a landscape
+            // image) — in that case the crop box vertices already touch two
+            // opposite image edges from the start.
+            //
             // Dampening factors:
             // - Rotation: edge-to-edge is axis-aligned; when the scroll view
             //   is rotated the axes no longer match the visual edges.
@@ -282,53 +311,62 @@ extension CropView {
             let centeredShiftX = (shiftRight - shiftLeft) / 2
             let centeredShiftY = (shiftBottom - shiftTop) / 2
             
-            let totalRadians = viewModel.getTotalRadians()
+            let optimalShiftX: CGFloat
+            let optimalShiftY: CGFloat
             
-            // Rotation dampening: full dampening at ±10° of rotation.
-            let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
-            
-            // Cross-axis dampening: when the other axis has skew, the
-            // combined perspective makes single-axis shift extremes unstable.
-            // Dampen each axis's edge-to-edge by how much the other axis is active.
-            let hActivity = min(abs(hDeg) / 3.0, 1.0)  // ramp up quickly
-            let vActivity = min(abs(vDeg) / 3.0, 1.0)
-            
-            let transitionStart: CGFloat = 8.0
-            let transitionEnd: CGFloat = 12.0
-            
-            // Vertical skew: edge-to-edge on Y axis
-            let vDampen = rotationDampen * (1 - hActivity)
-            let rawEdgeAlignedShiftY: CGFloat
-            if vDeg > 0 {
-                // Top narrows → push crop box toward top edge
-                rawEdgeAlignedShiftY = -shiftTop
-            } else if vDeg < 0 {
-                // Bottom narrows → push crop box toward bottom edge
-                rawEdgeAlignedShiftY = shiftBottom
+            if cropBoxMatchesImageAspectRatio {
+                let totalRadians = viewModel.getTotalRadians()
+                
+                // Rotation dampening: full dampening at ±10° of rotation.
+                let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
+                
+                // Cross-axis dampening: when the other axis has skew, the
+                // combined perspective makes single-axis shift extremes unstable.
+                // Dampen each axis's edge-to-edge by how much the other axis is active.
+                let hActivity = min(abs(hDeg) / 3.0, 1.0)  // ramp up quickly
+                let vActivity = min(abs(vDeg) / 3.0, 1.0)
+                
+                let transitionStart: CGFloat = 8.0
+                let transitionEnd: CGFloat = 12.0
+                
+                // Vertical skew: edge-to-edge on Y axis
+                let vDampen = rotationDampen * (1 - hActivity)
+                let rawEdgeAlignedShiftY: CGFloat
+                if vDeg > 0 {
+                    // Top narrows → push crop box toward top edge
+                    rawEdgeAlignedShiftY = -shiftTop
+                } else if vDeg < 0 {
+                    // Bottom narrows → push crop box toward bottom edge
+                    rawEdgeAlignedShiftY = shiftBottom
+                } else {
+                    rawEdgeAlignedShiftY = centeredShiftY
+                }
+                let edgeAlignedShiftY = centeredShiftY + (rawEdgeAlignedShiftY - centeredShiftY) * vDampen
+                let absV = abs(vDeg)
+                let blendV = min(max((absV - transitionStart) / (transitionEnd - transitionStart), 0), 1)
+                optimalShiftY = edgeAlignedShiftY + (centeredShiftY - edgeAlignedShiftY) * blendV
+                
+                // Horizontal skew: edge-to-edge on X axis
+                let hDampen = rotationDampen * (1 - vActivity)
+                let rawEdgeAlignedShiftX: CGFloat
+                if hDeg > 0 {
+                    // Right recedes → push crop box toward right edge
+                    rawEdgeAlignedShiftX = shiftRight
+                } else if hDeg < 0 {
+                    // Left recedes → push crop box toward left edge
+                    rawEdgeAlignedShiftX = -shiftLeft
+                } else {
+                    rawEdgeAlignedShiftX = centeredShiftX
+                }
+                let edgeAlignedShiftX = centeredShiftX + (rawEdgeAlignedShiftX - centeredShiftX) * hDampen
+                let absH = abs(hDeg)
+                let blendH = min(max((absH - transitionStart) / (transitionEnd - transitionStart), 0), 1)
+                optimalShiftX = edgeAlignedShiftX + (centeredShiftX - edgeAlignedShiftX) * blendH
             } else {
-                rawEdgeAlignedShiftY = centeredShiftY
+                // Non-original aspect ratio: skip edge-to-edge, use centered.
+                optimalShiftX = centeredShiftX
+                optimalShiftY = centeredShiftY
             }
-            let edgeAlignedShiftY = centeredShiftY + (rawEdgeAlignedShiftY - centeredShiftY) * vDampen
-            let absV = abs(vDeg)
-            let blendV = min(max((absV - transitionStart) / (transitionEnd - transitionStart), 0), 1)
-            let optimalShiftY = edgeAlignedShiftY + (centeredShiftY - edgeAlignedShiftY) * blendV
-            
-            // Horizontal skew: edge-to-edge on X axis
-            let hDampen = rotationDampen * (1 - vActivity)
-            let rawEdgeAlignedShiftX: CGFloat
-            if hDeg > 0 {
-                // Right recedes → push crop box toward right edge
-                rawEdgeAlignedShiftX = shiftRight
-            } else if hDeg < 0 {
-                // Left recedes → push crop box toward left edge
-                rawEdgeAlignedShiftX = -shiftLeft
-            } else {
-                rawEdgeAlignedShiftX = centeredShiftX
-            }
-            let edgeAlignedShiftX = centeredShiftX + (rawEdgeAlignedShiftX - centeredShiftX) * hDampen
-            let absH = abs(hDeg)
-            let blendH = min(max((absH - transitionStart) / (transitionEnd - transitionStart), 0), 1)
-            let optimalShiftX = edgeAlignedShiftX + (centeredShiftX - edgeAlignedShiftX) * blendH
             let optimalX = centerOffset.x + optimalShiftX
             let optimalY = centerOffset.y + optimalShiftY
             
