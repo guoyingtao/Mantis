@@ -76,7 +76,6 @@ extension CropView {
         flip(isHorizontal: true)
         previousSkewScale = 1.0
         previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()
@@ -87,7 +86,6 @@ extension CropView {
         flip(isHorizontal: false)
         previousSkewScale = 1.0
         previousSkewInset = .zero
-        previousSkewOptimalOffset = nil
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         checkImageStatusChanged()

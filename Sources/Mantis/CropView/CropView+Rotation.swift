@@ -179,7 +179,6 @@ extension CropView {
                 viewModel.verticalSkewDegrees = savedVSkew
                 previousSkewScale = 1.0
                 previousSkewInset = .zero
-                previousSkewOptimalOffset = nil
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
@@ -197,7 +196,6 @@ extension CropView {
             if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
                 previousSkewScale = 1.0
                 previousSkewInset = .zero
-                previousSkewOptimalOffset = nil
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
