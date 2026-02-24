@@ -76,6 +76,7 @@
 		F209F8842F4D6A9000E15AEA /* CropViewController+ToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209F8832F4D6A9000E15AEA /* CropViewController+ToolbarDelegate.swift */; };
 		F209F8862F4D6A9C00E15AEA /* CropViewController+UndoRedo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209F8852F4D6A9C00E15AEA /* CropViewController+UndoRedo.swift */; };
 		F209F8882F4D6AA900E15AEA /* CropViewController+CropAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209F8872F4D6AA900E15AEA /* CropViewController+CropAPI.swift */; };
+		F209F88A2F4D73A800E15AEA /* SlideDial+TypeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F209F8892F4D73A800E15AEA /* SlideDial+TypeSelector.swift */; };
 		F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4398D2978F6E400728B52 /* UIViewExtensions.swift */; };
 		F24DCFE829AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */; };
 		F24DCFEC29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFEB29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift */; };
@@ -230,6 +231,7 @@
 		F209F8832F4D6A9000E15AEA /* CropViewController+ToolbarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropViewController+ToolbarDelegate.swift"; sourceTree = "<group>"; };
 		F209F8852F4D6A9C00E15AEA /* CropViewController+UndoRedo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropViewController+UndoRedo.swift"; sourceTree = "<group>"; };
 		F209F8872F4D6AA900E15AEA /* CropViewController+CropAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropViewController+CropAPI.swift"; sourceTree = "<group>"; };
+		F209F8892F4D73A800E15AEA /* SlideDial+TypeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SlideDial+TypeSelector.swift"; sourceTree = "<group>"; };
 		F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorViewTests.swift; sourceTree = "<group>"; };
 		F24DCFEB29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CropAuxiliaryIndicatorView+Accessibility.swift"; sourceTree = "<group>"; };
 		F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchViewTests.swift; sourceTree = "<group>"; };
@@ -387,6 +389,7 @@
 				F2058F262A400508008DEBAA /* SlideDialViewModel.swift */,
 				F2B4FDA52A3B69B600667F22 /* SlideRulerPositionHelper.swift */,
 				F29C75752F42C4B600D80AB1 /* SlideDialTypeButton.swift */,
+				F209F8892F4D73A800E15AEA /* SlideDial+TypeSelector.swift */,
 			);
 			path = SlideDial;
 			sourceTree = "<group>";
@@ -884,6 +887,7 @@
 				OBJ_100 /* RotationDialPlate.swift in Sources */,
 				OBJ_101 /* RotationDialViewModel.swift in Sources */,
 				F2B4FDA82A3B69B600667F22 /* SlideRuler.swift in Sources */,
+				F209F88A2F4D73A800E15AEA /* SlideDial+TypeSelector.swift in Sources */,
 				663FCF3A28866DDA003D3B9E /* CropToolbarConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
