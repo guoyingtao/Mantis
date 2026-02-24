@@ -55,6 +55,7 @@ extension CropView {
         // Restore skew transforms
         previousSkewScale = 1.0
         previousSkewInset = .zero
+        previousSkewOptimalOffset = nil
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         syncSlideDialSkewValues()
@@ -83,6 +84,7 @@ extension CropView {
         viewModel.verticalSkewDegrees = transformation.verticalSkewDegrees
         previousSkewScale = 1.0
         previousSkewInset = .zero
+        previousSkewOptimalOffset = nil
         applySkewTransformIfNeeded()
         updateContentInsetForSkew()
         

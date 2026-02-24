@@ -78,6 +78,12 @@ final class CropView: UIView {
     /// this prevents insets from collapsing to zero in a single frame.
     var previousSkewInset: UIEdgeInsets = .zero
     
+    /// Tracks the previous "optimal" content offset so that subsequent skew
+    /// changes apply a delta to the user's current position rather than
+    /// snapping back to the optimal. Nil when skew is zero (first change
+    /// will set the offset directly).
+    var previousSkewOptimalOffset: CGPoint?
+    
     /// Whether the SlideDial is in withTypeSelector mode and handles type selection internally
     var slideDialHandlesTypeSelection: Bool {
         if let slideDial = rotationControlView as? SlideDial,
@@ -515,6 +521,7 @@ extension CropView: CropViewProtocol {
                     self.viewModel.verticalSkewDegrees = savedVSkew
                     self.previousSkewScale = 1.0
                     self.previousSkewInset = .zero
+                    self.previousSkewOptimalOffset = nil
                     self.applySkewTransformIfNeeded()
                     self.updateContentInsetForSkew()
                 }
@@ -527,6 +534,7 @@ extension CropView: CropViewProtocol {
                 viewModel.verticalSkewDegrees = savedVSkew
                 previousSkewScale = 1.0
                 previousSkewInset = .zero
+                previousSkewOptimalOffset = nil
                 applySkewTransformIfNeeded()
                 updateContentInsetForSkew()
             }
@@ -561,6 +569,7 @@ extension CropView: CropViewProtocol {
         currentRotationAdjustmentType = .straighten
         previousSkewScale = 1.0
         previousSkewInset = .zero
+        previousSkewOptimalOffset = nil
         if slideDialHandlesTypeSelection {
             // SlideDial handles its own type button reset via its reset() method
         } else {

@@ -97,6 +97,7 @@ extension CropView {
             cropWorkbenchView.contentInset = .zero
             previousSkewScale = 1.0
             previousSkewInset = .zero
+            previousSkewOptimalOffset = nil
         } else {
             let zoomScale = max(cropWorkbenchView.zoomScale, 1)
             let perspectiveTransform =
@@ -173,6 +174,7 @@ extension CropView {
         guard hDeg != 0 || vDeg != 0 else {
             cropWorkbenchView.contentInset = .zero
             previousSkewInset = .zero
+            previousSkewOptimalOffset = nil
             return
         }
 
@@ -180,6 +182,7 @@ extension CropView {
         guard !CATransform3DIsIdentity(transform) else {
             cropWorkbenchView.contentInset = .zero
             previousSkewInset = .zero
+            previousSkewOptimalOffset = nil
             return
         }
 
@@ -368,27 +371,41 @@ extension CropView {
             let optimalY = centerOffset.y + optimalShiftY
             
             if optimalX.isFinite && optimalY.isFinite {
+                let newOptimal = CGPoint(x: optimalX, y: optimalY)
+                let minX = -newInset.left
+                let maxX = cropWorkbenchView.contentSize.width - boundsW + newInset.right
+                let minY = -newInset.top
+                let maxY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
+                
                 let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + 0.01
                 
-                if !isZoomedIn {
-                    // At minimum zoom: set the offset directly to the computed
-                    // optimal position. This produces strict edge-to-edge at
-                    // small angles and a smooth transition to centered.
-                    cropWorkbenchView.contentOffset = CGPoint(x: optimalX, y: optimalY)
-                } else {
-                    // Zoomed in: just clamp the current offset to the valid
-                    // range. Don't reposition — the user's pan position should
-                    // stay stable.
-                    let minX = -newInset.left
-                    let maxX = cropWorkbenchView.contentSize.width - boundsW + newInset.right
-                    let minY = -newInset.top
-                    let maxY = cropWorkbenchView.contentSize.height - boundsH + newInset.bottom
+                if let prevOptimal = previousSkewOptimalOffset {
+                    // Subsequent skew change: apply the delta between the new
+                    // and previous optimal positions to the user's current
+                    // offset. This preserves any manual panning the user did
+                    // between skew adjustments. When zoomed in the delta is
+                    // suppressed to keep the view stable.
                     let current = cropWorkbenchView.contentOffset
-                    cropWorkbenchView.contentOffset = CGPoint(
-                        x: min(max(current.x, minX), maxX),
-                        y: min(max(current.y, minY), maxY)
-                    )
+                    if !isZoomedIn {
+                        let deltaX = newOptimal.x - prevOptimal.x
+                        let deltaY = newOptimal.y - prevOptimal.y
+                        cropWorkbenchView.contentOffset = CGPoint(
+                            x: min(max(current.x + deltaX, minX), maxX),
+                            y: min(max(current.y + deltaY, minY), maxY)
+                        )
+                    } else {
+                        cropWorkbenchView.contentOffset = CGPoint(
+                            x: min(max(current.x, minX), maxX),
+                            y: min(max(current.y, minY), maxY)
+                        )
+                    }
+                } else {
+                    // First skew change from zero: jump directly to optimal
+                    // for strict edge-to-edge alignment.
+                    cropWorkbenchView.contentOffset = newOptimal
                 }
+                
+                previousSkewOptimalOffset = newOptimal
             }
         } else {
             // Center-based test fails — the projected image at the center
