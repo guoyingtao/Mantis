@@ -11,8 +11,14 @@ import UIKit
 extension CropView {
     func asyncCrop(_ image: UIImage, completion: @escaping (CropOutput) -> Void) {
         let cropInfo = getCropInfo()
-        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
-        
+        let croppedImage: UIImage?
+        if isLargeImageMode {
+            croppedImage = image.cropWithCIImage(by: cropInfo)
+        } else {
+            croppedImage = image.crop(by: cropInfo)
+        }
+        let cropOutput = (croppedImage, makeTransformation(), cropInfo)
+
         DispatchQueue.global(qos: .userInteractive).async {
             let maskedCropOutput = self.addImageMask(to: cropOutput)
             DispatchQueue.main.async {

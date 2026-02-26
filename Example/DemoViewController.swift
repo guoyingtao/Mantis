@@ -10,10 +10,19 @@ import UIKit
 import Mantis
 
 class DemoViewController: UIViewController {
-    var image = UIImage(named: "sunflower.jpg")
+    private let maxImagePixelCount = 4096 * 4096
+    private var useLargeImage = false
+    var image = UIImage(named: "sunflower.jpg") {
+        didSet {
+            cachedDisplayImage = image?.downsampledIfNeeded(maxPixelCount: maxImagePixelCount)
+        }
+    }
     var transformation: Transformation?
     var imagePicker: ImagePicker!
     var cropViewController: CropViewController?
+
+    /// Cached downsampled image for display. Updated automatically when `image` changes.
+    private lazy var cachedDisplayImage: UIImage? = image?.downsampledIfNeeded(maxPixelCount: maxImagePixelCount)
     
     private func createConfigWithPresetTransformation() -> Config {
         var config = Mantis.Config()
@@ -37,7 +46,7 @@ class DemoViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = image
+        imageView.image = cachedDisplayImage
         return imageView
     }()
     
@@ -76,6 +85,16 @@ class DemoViewController: UIViewController {
         setupConstraints()
         setupTableView()
         loadSunflowerImage()
+        
+        let largeImageSwitch = UISwitch()
+        largeImageSwitch.isOn = useLargeImage
+        largeImageSwitch.addTarget(self, action: #selector(largeImageSwitchChanged(_:)), for: .valueChanged)
+        let switchLabel = UILabel()
+        switchLabel.text = "Large Image"
+        switchLabel.font = UIFont.systemFont(ofSize: 14)
+        let stackView = UIStackView(arrangedSubviews: [switchLabel, largeImageSwitch])
+        stackView.spacing = 4
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: stackView)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Select Album",
@@ -126,10 +145,17 @@ class DemoViewController: UIViewController {
     }
     
     private func loadSunflowerImage() {
-        croppedImageView.image = image
+        croppedImageView.image = cachedDisplayImage
     }
     
     // MARK: - Action Methods
+    @objc private func largeImageSwitchChanged(_ sender: UISwitch) {
+        useLargeImage = sender.isOn
+        image = UIImage(named: useLargeImage ? "large.jpg" : "sunflower.jpg")
+        transformation = nil
+        croppedImageView.image = cachedDisplayImage
+    }
+    
     @objc private func selectFromAlbumAction() {
         imagePicker.present(from: view)
     }
@@ -140,6 +166,7 @@ class DemoViewController: UIViewController {
         }
         var config = createConfigWithPresetTransformation()
         config.cropMode = .async
+        config.cropViewConfig.maxImagePixelCount = maxImagePixelCount
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.appearanceMode = .system
@@ -530,6 +557,6 @@ extension DemoViewController: ImagePickerDelegate {
     func didSelect(image: UIImage?) {
         guard let image = image else { return }
         self.image = image
-        croppedImageView.image = image
+        croppedImageView.image = cachedDisplayImage
     }
 }
