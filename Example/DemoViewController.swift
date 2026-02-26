@@ -10,10 +10,16 @@ import UIKit
 import Mantis
 
 class DemoViewController: UIViewController {
-    var image = UIImage(named: "sunflower.jpg")
+    private let maxImagePixelCount = 4096 * 4096
+    var image = UIImage(named: "large.jpg")
     var transformation: Transformation?
     var imagePicker: ImagePicker!
     var cropViewController: CropViewController?
+    
+    /// Returns a downsampled image for display when the original exceeds the pixel threshold.
+    private var displayImage: UIImage? {
+        image?.downsampledIfNeeded(maxPixelCount: maxImagePixelCount)
+    }
     
     private func createConfigWithPresetTransformation() -> Config {
         var config = Mantis.Config()
@@ -37,7 +43,7 @@ class DemoViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = image
+        imageView.image = displayImage
         return imageView
     }()
     
@@ -126,7 +132,7 @@ class DemoViewController: UIViewController {
     }
     
     private func loadSunflowerImage() {
-        croppedImageView.image = image
+        croppedImageView.image = displayImage
     }
     
     // MARK: - Action Methods
@@ -140,6 +146,7 @@ class DemoViewController: UIViewController {
         }
         var config = createConfigWithPresetTransformation()
         config.cropMode = .async
+        config.cropViewConfig.maxImagePixelCount = maxImagePixelCount
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.appearanceMode = .system
@@ -530,6 +537,6 @@ extension DemoViewController: ImagePickerDelegate {
     func didSelect(image: UIImage?) {
         guard let image = image else { return }
         self.image = image
-        croppedImageView.image = image
+        croppedImageView.image = displayImage
     }
 }

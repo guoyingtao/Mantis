@@ -109,7 +109,15 @@ public struct CropViewConfig {
     /// adjustments similar to Apple Photos app.
     public var enablePerspectiveCorrection: Bool = false
     
+    /// Maximum pixel count (width × height) for input images before enabling large image mode.
+    /// When set to a value > 0 and the input image exceeds this limit, Mantis will:
+    /// - Use a downsampled version for display (to prevent UIImageView black screen)
+    /// - Use a memory-efficient CIImage pipeline for cropping (to avoid CGContext memory issues)
+    /// - Preserve full original resolution in the crop output
+    /// Set to 0 to disable (default). Recommended value when enabled: 4096 * 4096.
+    public var maxImagePixelCount: Int = 0
+
     var appearanceMode: AppearanceMode = .forceDark
-    
+
     public init() {}
 }

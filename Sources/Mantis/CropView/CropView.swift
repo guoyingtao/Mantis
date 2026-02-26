@@ -59,6 +59,12 @@ final class CropView: UIView {
         }
     }
     
+    var isLargeImageMode: Bool {
+        let maxPixels = cropViewConfig.maxImagePixelCount
+        guard maxPixels > 0 else { return false }
+        return Int(image.size.width * image.scale) * Int(image.size.height * image.scale) > maxPixels
+    }
+
     var isManuallyZoomed = false
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
@@ -572,7 +578,13 @@ extension CropView: CropViewProtocol {
     
     func crop(_ image: UIImage) -> CropOutput {
         let cropInfo = getCropInfo()
-        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
+        let croppedImage: UIImage?
+        if isLargeImageMode {
+            croppedImage = image.cropWithCIImage(by: cropInfo)
+        } else {
+            croppedImage = image.crop(by: cropInfo)
+        }
+        let cropOutput = (croppedImage, makeTransformation(), cropInfo)
         return addImageMask(to: cropOutput)
     }
     
@@ -589,7 +601,8 @@ extension CropView: CropViewProtocol {
     
     func update(_ image: UIImage) {
         self.image = image
-        imageContainer.update(image)
+        let displayImage = image.downsampledIfNeeded(maxPixelCount: cropViewConfig.maxImagePixelCount)
+        imageContainer.update(displayImage)
     }
 }
 

@@ -21,6 +21,7 @@
 		85DDBACD298E5A54004FBFE7 /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DDBACC298E5A54004FBFE7 /* CustomViewController.swift */; };
 		CCBF2F602525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */; };
 		D38FDBDF8FE14BEE4ECFCCBA /* libPods-MantisExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C12649D57221BADDF13056F /* libPods-MantisExampleTests.a */; };
+		F209F88E2F50106F00E15AEA /* large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F209F88D2F50106F00E15AEA /* large.jpg */; };
 		F24DCFE529A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */; };
 		F2C58BD82E03AD08006F92CF /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C58BD72E03AD08006F92CF /* DemoViewController.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		89C5370690AB91AB238B90E9 /* Pods-MantisExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.release.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.release.xcconfig"; sourceTree = "<group>"; };
 		9326C1CDF121300C5CAAE2BE /* Pods-MantisExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisExample.debug.xcconfig"; path = "Target Support Files/Pods-MantisExample/Pods-MantisExample.debug.xcconfig"; sourceTree = "<group>"; };
 		CCBF2F5F2525B3050081B8FE /* CustomizedCropToolbarWithoutList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizedCropToolbarWithoutList.swift; sourceTree = "<group>"; };
+		F209F88D2F50106F00E15AEA /* large.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = large.jpg; sourceTree = "<group>"; };
 		F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWaitingIndicator.swift; sourceTree = "<group>"; };
 		F2C58BD72E03AD08006F92CF /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +99,7 @@
 		5FC10B08217A9EDF00582874 = {
 			isa = PBXGroup;
 			children = (
+				F209F88D2F50106F00E15AEA /* large.jpg */,
 				F2C58BD72E03AD08006F92CF /* DemoViewController.swift */,
 				F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */,
 				66F909BC287B601A007E2FC6 /* MyNavigationCropToolbar.swift */,
@@ -238,6 +241,7 @@
 				5FC10B1F217A9EE100582874 /* LaunchScreen.storyboard in Resources */,
 				5FC10B1C217A9EE100582874 /* Assets.xcassets in Resources */,
 				5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */,
+				F209F88E2F50106F00E15AEA /* large.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
