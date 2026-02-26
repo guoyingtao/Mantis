@@ -326,25 +326,10 @@ extension UIImage {
         let scaleFactor = sqrt(ratio)
         let maxDimension = max(CGFloat(pixelWidth), CGFloat(pixelHeight)) * scaleFactor
 
-        // Try to get image data without triggering a full decode:
-        // 1. Use caller-provided sourceData (best — original compressed data)
-        // 2. Use CGImage.dataProvider (zero-copy for file-backed images)
-        // 3. Fall back to re-encoding (last resort)
-        let imageSource: CGImageSource?
-        if let sourceData = sourceData {
-            imageSource = CGImageSourceCreateWithData(sourceData as CFData, nil)
-        } else if let cgImg = cgImage,
-                  let dataProvider = cgImg.dataProvider,
-                  let providerData = dataProvider.data {
-            imageSource = CGImageSourceCreateWithData(providerData, nil)
-        } else if let fallbackData = jpegData(compressionQuality: 1.0) ?? pngData() {
-            imageSource = CGImageSourceCreateWithData(fallbackData as CFData, nil)
-        } else {
-            imageSource = nil
-        }
-
-        guard let source = imageSource else { return self }
-
+        // Try to create a thumbnail without triggering a full decode.
+        // Each approach is attempted independently so that if dataProvider
+        // yields decoded pixel data (not an encoded image format),
+        // we still fall through to the re-encode path.
         let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceThumbnailMaxPixelSize: Int(ceil(maxDimension)),
@@ -352,11 +337,30 @@ extension UIImage {
             kCGImageSourceShouldCacheImmediately: true
         ]
 
-        guard let thumbnailCGImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else {
-            return self
+        // 1. Use caller-provided sourceData (best — original compressed data)
+        if let sourceData = sourceData,
+           let source = CGImageSourceCreateWithData(sourceData as CFData, nil),
+           let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
+            return UIImage(cgImage: thumbnail)
         }
 
-        return UIImage(cgImage: thumbnailCGImage)
+        // 2. Use CGImage.dataProvider (zero-copy for file-backed images)
+        if let cgImg = cgImage,
+           let dataProvider = cgImg.dataProvider,
+           let providerData = dataProvider.data,
+           let source = CGImageSourceCreateWithData(providerData, nil),
+           let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
+            return UIImage(cgImage: thumbnail)
+        }
+
+        // 3. Fall back to re-encoding (last resort)
+        if let fallbackData = jpegData(compressionQuality: 1.0) ?? pngData(),
+           let source = CGImageSourceCreateWithData(fallbackData as CFData, nil),
+           let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
+            return UIImage(cgImage: thumbnail)
+        }
+
+        return self
     }
 
     /// Memory-efficient crop using CIImage lazy pipeline.
