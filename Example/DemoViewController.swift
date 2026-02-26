@@ -11,7 +11,8 @@ import Mantis
 
 class DemoViewController: UIViewController {
     private let maxImagePixelCount = 4096 * 4096
-    var image = UIImage(named: "large.jpg")
+    private var useLargeImage = false
+    var image = UIImage(named: "sunflower.jpg")
     var transformation: Transformation?
     var imagePicker: ImagePicker!
     var cropViewController: CropViewController?
@@ -83,6 +84,16 @@ class DemoViewController: UIViewController {
         setupTableView()
         loadSunflowerImage()
         
+        let largeImageSwitch = UISwitch()
+        largeImageSwitch.isOn = useLargeImage
+        largeImageSwitch.addTarget(self, action: #selector(largeImageSwitchChanged(_:)), for: .valueChanged)
+        let switchLabel = UILabel()
+        switchLabel.text = "Large Image"
+        switchLabel.font = UIFont.systemFont(ofSize: 14)
+        let stackView = UIStackView(arrangedSubviews: [switchLabel, largeImageSwitch])
+        stackView.spacing = 4
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: stackView)
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Select Album",
             style: .plain,
@@ -136,6 +147,13 @@ class DemoViewController: UIViewController {
     }
     
     // MARK: - Action Methods
+    @objc private func largeImageSwitchChanged(_ sender: UISwitch) {
+        useLargeImage = sender.isOn
+        image = UIImage(named: useLargeImage ? "large.jpg" : "sunflower.jpg")
+        transformation = nil
+        croppedImageView.image = displayImage
+    }
+    
     @objc private func selectFromAlbumAction() {
         imagePicker.present(from: view)
     }
