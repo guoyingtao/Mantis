@@ -354,7 +354,8 @@ extension UIImage {
         }
 
         // 3. Fall back to re-encoding (last resort)
-        if let fallbackData = jpegData(compressionQuality: 1.0) ?? pngData(),
+        // Prefer PNG to preserve alpha channel; JPEG as final fallback.
+        if let fallbackData = pngData() ?? jpegData(compressionQuality: 1.0),
            let source = CGImageSourceCreateWithData(fallbackData as CFData, nil),
            let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
             return UIImage(cgImage: thumbnail)
