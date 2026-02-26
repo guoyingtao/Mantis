@@ -308,9 +308,12 @@ extension UIImage {
     }
 
     /// Returns a downsampled version of this image if its total pixel count exceeds `maxPixelCount`.
-    /// Uses ImageIO for memory-efficient thumbnail generation without fully decoding the source.
+    /// Uses ImageIO for memory-efficient thumbnail generation.
+    /// When `sourceData` is provided, uses it directly to avoid re-encoding the image.
+    /// Otherwise falls back to `CGImage.dataProvider` (zero-copy for file-backed images),
+    /// and only re-encodes via `jpegData()`/`pngData()` as a last resort.
     /// Returns `self` unchanged if `maxPixelCount <= 0` or the image is within limits.
-    public func downsampledIfNeeded(maxPixelCount: Int) -> UIImage {
+    public func downsampledIfNeeded(maxPixelCount: Int, sourceData: Data? = nil) -> UIImage {
         guard maxPixelCount > 0 else { return self }
 
         let pixelWidth = Int(size.width * scale)
@@ -323,10 +326,24 @@ extension UIImage {
         let scaleFactor = sqrt(ratio)
         let maxDimension = max(CGFloat(pixelWidth), CGFloat(pixelHeight)) * scaleFactor
 
-        guard let imageData = jpegData(compressionQuality: 1.0) ?? pngData(),
-              let source = CGImageSourceCreateWithData(imageData as CFData, nil) else {
-            return self
+        // Try to get image data without triggering a full decode:
+        // 1. Use caller-provided sourceData (best — original compressed data)
+        // 2. Use CGImage.dataProvider (zero-copy for file-backed images)
+        // 3. Fall back to re-encoding (last resort)
+        let imageSource: CGImageSource?
+        if let sourceData = sourceData {
+            imageSource = CGImageSourceCreateWithData(sourceData as CFData, nil)
+        } else if let cgImg = cgImage,
+                  let dataProvider = cgImg.dataProvider,
+                  let providerData = dataProvider.data {
+            imageSource = CGImageSourceCreateWithData(providerData, nil)
+        } else if let fallbackData = jpegData(compressionQuality: 1.0) ?? pngData() {
+            imageSource = CGImageSourceCreateWithData(fallbackData as CFData, nil)
+        } else {
+            imageSource = nil
         }
+
+        guard let source = imageSource else { return self }
 
         let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
