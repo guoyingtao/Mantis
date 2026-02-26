@@ -74,7 +74,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 2.28.2'
+pod 'Mantis', '~> 2.29.0'
 ```
 </details>
 
@@ -90,7 +90,7 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Repository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 2.28.2
+* Rules: Version - Exact - 2.29.0
 
 </details>
 
