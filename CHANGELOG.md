@@ -2,6 +2,13 @@
 
 -----
 
+## [2.29.0](https://www.github.com/guoyingtao/Mantis/compare/v2.28.2...v2.29.0) (2026-02-26)
+
+
+### Features
+
+* Add perspective skew correction support ([#495](https://www.github.com/guoyingtao/Mantis/issues/495)) ([c31c219](https://www.github.com/guoyingtao/Mantis/commit/c31c21948de48e24aa9af5dcb8c01950393847b6)), closes [#44](https://www.github.com/guoyingtao/Mantis/issues/44)
+
 ### [2.28.2](https://www.github.com/guoyingtao/Mantis/compare/v2.28.1...v2.28.2) (2026-02-03)
 
 
