@@ -9,6 +9,7 @@ import UIKit
 
 public final class RatioSelector: UIView {    
     var didGetRatio: ((Double) -> Void) = { _ in }
+    var appearanceMode: AppearanceMode = .forceDark
     private var type: RatioType = .vertical
     private var originalRatioH: Double = 0.0
     private var ratios: [RatioItemType] = []
@@ -75,6 +76,7 @@ public final class RatioSelector: UIView {
     private func addRatioItems() {
         for (index, item) in ratios.enumerated() {
             let itemView = RatioItemView(type: type, item: item)
+            itemView.appearanceMode = appearanceMode
             itemView.selected = index == 0            
             stackView.addArrangedSubview(itemView)
 

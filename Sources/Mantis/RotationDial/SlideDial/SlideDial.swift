@@ -14,6 +14,10 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     var didFinishRotation: () -> Void = {}
     
+    /// Called when the user taps a different type button (only in withTypeSelector mode).
+    /// The CropView should handle saving/restoring angles and applying the correct transform.
+    var didSwitchAdjustmentType: ((RotationAdjustmentType) -> Void)?
+    
     var indicator: UILabel!
     
     var slideRuler: SlideRuler!
@@ -21,6 +25,21 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     var viewModel = SlideDialViewModel()
     
     var config = SlideDialConfig()
+
+    private let hapticGenerator = UISelectionFeedbackGenerator()
+    private var lastHapticStep: Int?
+    
+    var hideInactiveButtonsTimer: Timer?
+    var inactiveButtonsHidden = false
+    
+    // MARK: - Type selector mode properties
+    
+    var typeButtons: [RotationAdjustmentType: SlideDialTypeButton] = [:]
+    
+    /// The current limitation based on the active adjustment type
+    var currentLimitation: CGFloat {
+        config.limitation(for: viewModel.currentAdjustmentType)
+    }
     
     init(frame: CGRect,
          config: SlideDialConfig,
@@ -44,23 +63,50 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Indicator
+    
     private func setIndicator(with angle: Angle) {
-        indicator?.text = "\(Int(round(angle.degrees)))"
-        indicator?.textColor = angle.degrees > 0 ? config.positiveIndicatorColor : config.notPositiveIndicatorColor
+        switch config.mode {
+        case .simple:
+            indicator?.text = "\(Int(round(angle.degrees)))"
+            indicator?.textColor = angle.degrees > 0 ? config.activeColor : config.inactiveColor
+        case .withTypeSelector:
+            updateSelectedTypeButton(with: angle.degrees)
+        }
     }
     
-    private func handleRotation(by angle: Angle) {
+    func handleRotation(by angle: Angle) {
         setIndicator(with: angle)
         didUpdateRotationValue(angle)
     }
+
+    private func handleScrollHaptics(for angle: Angle) {
+        let currentStep = Int(angle.degrees.rounded(.towardZero))
+        if lastHapticStep == nil {
+            lastHapticStep = currentStep
+            hapticGenerator.prepare()
+            return
+        }
+
+        guard currentStep != lastHapticStep else {
+            return
+        }
+
+        lastHapticStep = currentStep
+        hapticGenerator.selectionChanged()
+        hapticGenerator.prepare()
+    }
+    
+    // MARK: - RotationControlViewProtocol
     
     @discardableResult
     func updateRotationValue(by angle: Angle) -> Bool {
-        guard abs(angle.degrees) < config.limitation else {
+        let limit = currentLimitation
+        guard abs(angle.degrees) < limit else {
             return false
         }
         
-        slideRuler?.setOffsetRatio(angle.degrees / config.limitation)
+        slideRuler?.setOffsetRatio(angle.degrees / limit)
         setIndicator(with: angle)
 
         return true
@@ -68,7 +114,17 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     func reset() {
         transform = .identity
-        viewModel.reset()
+        lastHapticStep = nil
+        showInactiveButtons()
+        
+        switch config.mode {
+        case .simple:
+            viewModel.reset()
+        case .withTypeSelector:
+            viewModel.resetAll()
+            resetAllTypeButtons()
+        }
+        
         if let slideRuler = slideRuler {
             slideRuler.reset()
         }
@@ -77,7 +133,16 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     func getTouchTarget(with point: CGPoint) -> UIView {
         let newPoint = convert(point, to: self)
         
-        if indicator.frame.contains(newPoint) {
+        // Check type buttons in withTypeSelector mode
+        if case .withTypeSelector = config.mode {
+            for (_, button) in typeButtons {
+                if button.frame.contains(newPoint) {
+                    return button
+                }
+            }
+        }
+        
+        if let indicator = indicator, indicator.frame.contains(newPoint) {
             return indicator
         }
         
@@ -89,24 +154,35 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
     
     func handleDeviceRotation() {
-        guard let indicator = indicator else {
-            return
-        }
-        
-        if Orientation.treatAsPortrait {
-            indicator.transform = CGAffineTransform(rotationAngle: 0)
-        } else if Orientation.isLandscapeRight {
-            indicator.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-        } else if Orientation.isLandscapeLeft {
-            indicator.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+        if case .simple = config.mode {
+            guard let indicator = indicator else {
+                return
+            }
+            
+            if Orientation.treatAsPortrait {
+                indicator.transform = CGAffineTransform(rotationAngle: 0)
+            } else if Orientation.isLandscapeRight {
+                indicator.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            } else if Orientation.isLandscapeLeft {
+                indicator.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+            }
         }
     }
             
     func setupUI(withAllowableFrame allowableFrame: CGRect) {
         frame = allowableFrame
-        createIndicator()
+        
+        switch config.mode {
+        case .simple:
+            createIndicator()
+        case .withTypeSelector:
+            createTypeButtons()
+        }
+        
         setupSlideRuler()
     }
+    
+    // MARK: - Simple mode indicator
     
     func createIndicator() {
         let indicatorSize = config.indicatorSize
@@ -116,7 +192,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
             indicator.frame = indicatorFrame
         } else {
             indicator = UILabel(frame: indicatorFrame)
-            indicator.textColor = config.notPositiveIndicatorColor
+            indicator.textColor = config.inactiveColor
             indicator.textAlignment = .center
             addSubview(indicator)
             
@@ -132,6 +208,8 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         didFinishRotation()
     }
     
+    // MARK: - Slide ruler setup
+    
     func setupSlideRuler() {
         let sliderFrame = CGRect(x: 0,
                                  y: frame.height - config.slideRulerHeight,
@@ -142,6 +220,8 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         slideRuler.forceAlignCenterFeedback = true
         slideRuler.setupUI()
     }
+    
+    // MARK: - Accessibility
     
     override func accessibilityIncrement() {
         viewModel.rotationAngle += Angle(degrees: 1)
@@ -158,13 +238,18 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
 }
 
+// MARK: - SlideRulerDelegate
+
 extension SlideDial: SlideRulerDelegate {
     func didFinishScroll() {
+        showInactiveButtons()
         didFinishRotation()
     }
     
     func didGetOffsetRatio(from slideRuler: SlideRuler, offsetRatio: CGFloat) {
-        let angle = Angle(degrees: config.limitation * offsetRatio)
+        let angle = Angle(degrees: currentLimitation * offsetRatio)
+        handleScrollHaptics(for: angle)
         viewModel.rotationAngle = angle
+        startHideTimerIfNeeded()
     }
 }

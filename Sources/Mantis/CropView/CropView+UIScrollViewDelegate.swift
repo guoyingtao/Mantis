@@ -34,23 +34,47 @@ extension CropView: UIScrollViewDelegate {
         let offsetX: CGFloat = max((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0)
         let offsetY: CGFloat = max((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0)
         
-        subView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
+        let newCenter = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
+        guard newCenter.x.isFinite && newCenter.y.isFinite else { return }
+        subView.center = newCenter
+        
+        // When skew is active, recompute the sublayerTransform so the
+        // perspective depth scales with zoom and image corners never cross
+        // behind the camera plane (w ≤ 0 → NaN layer position).
+        // Also update the content insets so the pan range matches the new
+        // zoom level; stale insets from a smaller zoom would restrict panning
+        // to a subset of the valid area.
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        if hasSkew {
+            applySkewTransformIfNeeded()
+            updateContentInsetForSkew()
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        clampContentOffsetForSkewIfNeeded()
         viewModel.setBetweenOperationStatus()
     }
-    
+
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-	        delegate?.cropViewDidEndResize(self)
+        delegate?.cropViewDidEndResize(self)
         makeSureImageContainsCropOverlay()
-        
+
+        // Recompute content insets for the new zoom level before clamping.
+        // The sublayerTransform was already updated during zoom (scrollViewDidZoom),
+        // but the insets still reflect the old zoom level, restricting pan range.
+        if viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0 {
+            updateContentInsetForSkew()
+        }
+        clampContentOffsetForSkewIfNeeded()
+
         isManuallyZoomed = true
         viewModel.setBetweenOperationStatus()
     }
-    
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
+            clampContentOffsetForSkewIfNeeded()
             viewModel.setBetweenOperationStatus()
         }
     }

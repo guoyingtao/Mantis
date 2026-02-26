@@ -105,5 +105,11 @@ public struct CropViewConfig {
     
     public var keyboardZoomScaleFactor: CGFloat = 1.1
     
+    /// When true, enables perspective correction with straighten / horizontal skew / vertical skew
+    /// adjustments similar to Apple Photos app.
+    public var enablePerspectiveCorrection: Bool = false
+    
+    var appearanceMode: AppearanceMode = .forceDark
+    
     public init() {}
 }

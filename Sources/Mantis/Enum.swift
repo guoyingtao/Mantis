@@ -43,6 +43,17 @@ public enum CropMaskVisualEffectType {
     case light
     case custom(color: UIColor)
     case `default`
+    /// Uses system adaptive blur that follows light/dark mode
+    case blurSystem
+}
+
+public enum AppearanceMode {
+    /// Always use dark appearance (default, backward compatible)
+    case forceDark
+    /// Always use light appearance
+    case forceLight
+    /// Follow system light/dark mode setting
+    case system
 }
 
 public enum CropShapeType: Hashable {

@@ -142,6 +142,8 @@ class DemoViewController: UIViewController {
         config.cropMode = .async
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
+        config.appearanceMode = .system
+        config.cropViewConfig.enablePerspectiveCorrection = true
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         
@@ -219,7 +221,7 @@ class DemoViewController: UIViewController {
                                                            config: config)
         cropViewController?.delegate = self
         
-        let savedCropInfo: CropInfo = (
+        let savedCropInfo = CropInfo(
             translation: CGPoint(x: 84.85873805664153, y: 132.4420855462625),
             rotation: -0.46043267846107483,
             scaleX: -2.3603495751069907,

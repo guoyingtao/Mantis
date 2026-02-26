@@ -65,12 +65,12 @@ final class CropWorkbenchView: UIScrollView {
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesCancelled()
-        super.touchesBegan(touches, with: event)
+        super.touchesCancelled(touches, with: event)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesEnded()
-        super.touchesBegan(touches, with: event)
+        super.touchesEnded(touches, with: event)
     }
         
     private func getBoundZoomScale() -> CGFloat {
@@ -88,10 +88,10 @@ final class CropWorkbenchView: UIScrollView {
 
 extension CropWorkbenchView: CropWorkbenchViewProtocol {
     func updateContentOffset() {
-        contentOffset.x = max(contentOffset.x, 0)
-        contentOffset.y = max(contentOffset.y, 0)        
-        contentOffset.x = min(contentOffset.x, contentSize.width - bounds.size.width)
-        contentOffset.y = min(contentOffset.y, contentSize.height - bounds.size.height)
+        contentOffset.x = max(contentOffset.x, -contentInset.left)
+        contentOffset.y = max(contentOffset.y, -contentInset.top)
+        contentOffset.x = min(contentOffset.x, contentSize.width - bounds.size.width + contentInset.right)
+        contentOffset.y = min(contentOffset.y, contentSize.height - bounds.size.height + contentInset.bottom)
     }
     
     func updateMinZoomScale() {

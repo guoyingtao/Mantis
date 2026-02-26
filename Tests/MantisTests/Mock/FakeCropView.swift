@@ -20,7 +20,9 @@ class FakeCropView: UIView, CropViewProtocol {
             aspectRatioLockEnabled: false,
             aspectRato: 0.0,
             flipOddTimes: false,
-            transformation: makeTransformation()
+            transformation: makeTransformation(),
+            horizontalSkewDegrees: 0,
+            verticalSkewDegrees: 0
         )
     }
     
@@ -144,7 +146,8 @@ class FakeCropView: UIView, CropViewProtocol {
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
                                        bottomLeft: .zero,
-                                       bottomRight: .zero)))
+                                       bottomRight: .zero),
+                            .zero, .zero))
     }
     
     func crop(_ image: UIImage) -> CropOutput {
@@ -162,7 +165,8 @@ class FakeCropView: UIView, CropViewProtocol {
                             CropRegion(topLeft: .zero,
                                        topRight: .zero,
                                        bottomLeft: .zero,
-                                       bottomRight: .zero)))
+                                       bottomRight: .zero),
+                            .zero, .zero))
     }
     
     func asyncCrop(completion: @escaping (CropOutput) -> Void) {
@@ -170,7 +174,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getCropInfo() -> CropInfo {
-        CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero))
+        CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero), .zero, .zero)
     }
     
     func getExpectedCropImageSize() -> CGSize {

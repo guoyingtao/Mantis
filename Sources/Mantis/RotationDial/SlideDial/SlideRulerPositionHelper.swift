@@ -10,7 +10,7 @@ import UIKit
 protocol SlideRulerPositionHelper {
     var slideRuler: SlideRuler! { get set }
     func getInitialOffsetRatio() -> CGFloat
-    func getCentralDotOriginX() -> CGFloat
+    func getCentralDotCenterX() -> CGFloat
     func getRulerOffsetX(with progress: CGFloat) -> CGFloat
     func checkIsCenterPosition(with limit: CGFloat) -> Bool
     func getForceAlignCenterX() -> CGFloat
@@ -30,8 +30,8 @@ final class UnilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
         return 0
     }
     
-    func getCentralDotOriginX() -> CGFloat {
-        return slideRuler.pointer.frame.origin.x - slideRuler.dotWidth / 2
+    func getCentralDotCenterX() -> CGFloat {
+        return slideRuler.pointer.frame.midX
     }
     
     func getRulerOffsetX(with progress: CGFloat) -> CGFloat {
@@ -64,8 +64,8 @@ final class BilateralTypeSlideRulerPositionHelper: SlideRulerPositionHelper {
         return 0.5
     }
     
-    func getCentralDotOriginX() -> CGFloat {
-        return slideRuler.frame.width - slideRuler.dotWidth / 2
+    func getCentralDotCenterX() -> CGFloat {
+        return slideRuler.frame.width
     }
     
     func getRulerOffsetX(with progress: CGFloat) -> CGFloat {
