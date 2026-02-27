@@ -60,6 +60,19 @@ final class SlideRuler: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13.0, *),
+           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            pointer.backgroundColor = config.pointerColor.cgColor
+            centralDot.fillColor = config.centralDotColor.cgColor
+            let newScaleColor = config.scaleColor.cgColor
+            let newMajorScaleColor = config.majorScaleColor.cgColor
+            scaleBars.forEach { $0.backgroundColor = newScaleColor }
+            majorScaleBars.forEach { $0.backgroundColor = newMajorScaleColor }
+        }
+    }
         
     func setupUI() {
         setupSlider()

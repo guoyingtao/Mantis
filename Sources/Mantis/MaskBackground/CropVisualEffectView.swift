@@ -15,6 +15,7 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
     var imageRatio: CGFloat = 1.0
     
     private var translucencyEffect: UIVisualEffect?
+    private var effectType: CropMaskVisualEffectType = .blurDark
     
     convenience init(cropShapeType: CropShapeType = .rect,
                      effectType: CropMaskVisualEffectType = .blurDark) {
@@ -23,6 +24,7 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         
         self.init(effect: translucencyEffect)
         self.cropShapeType = cropShapeType
+        self.effectType = effectType
         self.translucencyEffect = translucencyEffect
         self.backgroundColor = backgroundColor
     }
@@ -38,6 +40,30 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         self.mask = maskView
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if case .blurSystem = effectType {
+            if #available(iOS 13.0, *),
+               traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                applyBlurSystemEffect()
+            }
+        }
+    }
+    
+    private func applyBlurSystemEffect() {
+        if #available(iOS 13.0, *) {
+            let isDark = traitCollection.userInterfaceStyle == .dark
+            if isDark {
+                self.effect = UIBlurEffect(style: .dark)
+                self.backgroundColor = .clear
+            } else {
+                self.effect = UIBlurEffect(style: .extraLight)
+                self.backgroundColor = .clear
+            }
+        }
+    }
+    
     static func getEffect(byType type: CropMaskVisualEffectType) -> (UIVisualEffect?, UIColor) {
         switch type {
         case .blurDark:
@@ -49,13 +75,18 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         case .custom(let color):
             return(nil, color)
         case .blurSystem:
-            if #available(iOS 13.0, *) {
-                return (UIBlurEffect(style: .systemThinMaterial), .clear)
-            } else {
-                return (UIBlurEffect(style: .dark), .clear)
-            }
+            // Initial value; will be corrected by applyBlurSystemEffect() once
+            // the view is in the hierarchy and traitCollection is available.
+            return (UIBlurEffect(style: .dark), .clear)
         case .default:
             return (nil, .black)
+        }
+    }
+    
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if case .blurSystem = effectType, window != nil {
+            applyBlurSystemEffect()
         }
     }
 }
