@@ -58,8 +58,11 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
                 self.effect = UIBlurEffect(style: .dark)
                 self.backgroundColor = .clear
             } else {
-                self.effect = UIBlurEffect(style: .extraLight)
-                self.backgroundColor = .clear
+                // Blur effects sample underlying content, so they can appear
+                // dark over colorful images. Use a solid light background
+                // instead to guarantee a light appearance in light mode.
+                self.effect = nil
+                self.backgroundColor = UIColor(white: 0.95, alpha: 0.98)
             }
         }
     }
