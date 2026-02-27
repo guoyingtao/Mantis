@@ -109,6 +109,11 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
     private var resetButton: UIButton?
     private var optionButtonStackView: UIStackView?
     
+    // MARK: - Liquid Glass (iOS 26+)
+    private var glassStackView: UIStackView?
+    private var toolGroupContainerView: UIVisualEffectView?
+    private var glassWrapperMap: [ObjectIdentifier: UIVisualEffectView] = [:]
+    
     private var autoAdjustButtonActive = false {
         didSet {
             if autoAdjustButtonActive {
@@ -185,15 +190,26 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
         if config.mode == .normal {
             addButtonsToContainer(button: cropButton)
         }
+        
+        if #available(iOS 26.0, *) {
+            applyLiquidGlassEffect()
+        }
     }
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
+        
+        let glassExtraPadding: CGFloat
+        if #available(iOS 26.0, *) {
+            glassExtraPadding = 16
+        } else {
+            glassExtraPadding = 0
+        }
 
         if Orientation.treatAsPortrait {
-            return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
+            return CGSize(width: superSize.width, height: config.heightForVerticalOrientation + glassExtraPadding)
         } else {
-            return CGSize(width: config.widthForHorizontalOrientation, height: superSize.height)
+            return CGSize(width: config.widthForHorizontalOrientation + glassExtraPadding, height: superSize.height)
         }
     }
 
@@ -209,6 +225,10 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
             optionButtonStackView?.axis = .vertical
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         }
+        
+        if #available(iOS 26.0, *) {
+            adjustGlassLayoutForOrientation()
+        }
     }
 
     public func handleFixedRatioSetted(ratio: Double) {
@@ -221,18 +241,22 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
 
     public func handleCropViewDidBecomeResettable() {
         resetButton?.isHidden = false
+        glassWrapper(for: resetButton)?.isHidden = false
     }
 
     public func handleCropViewDidBecomeUnResettable() {
         resetButton?.isHidden = true
+        glassWrapper(for: resetButton)?.isHidden = true
     }
     
     public func handleImageAutoAdjustable() {
         autoAdjustButton.isHidden = false
+        glassWrapper(for: autoAdjustButton)?.isHidden = false
     }
     
     public func handleImageNotAutoAdjustable() {
         autoAdjustButton.isHidden = true
+        glassWrapper(for: autoAdjustButton)?.isHidden = true
         autoAdjustButtonActive = false
     }
 }
@@ -381,6 +405,163 @@ extension CropToolbar {
             if let button = $0 {
                 optionButtonStackView?.addArrangedSubview(button)
             }
+        }
+    }
+    
+    private func glassWrapper(for button: UIButton?) -> UIVisualEffectView? {
+        guard let button = button else { return nil }
+        return glassWrapperMap[ObjectIdentifier(button)]
+    }
+}
+
+// MARK: - Liquid Glass (iOS 26+)
+@available(iOS 26.0, *)
+extension CropToolbar {
+    /// Wraps a single button in its own glass capsule
+    private func wrapButtonInGlass(_ button: UIButton) -> UIVisualEffectView {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        let wrapper = UIVisualEffectView(effect: glassEffect)
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.cornerConfiguration = .capsule()
+        
+        button.removeFromSuperview()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.contentView.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: wrapper.contentView.topAnchor),
+            button.bottomAnchor.constraint(equalTo: wrapper.contentView.bottomAnchor),
+            button.leadingAnchor.constraint(equalTo: wrapper.contentView.leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: wrapper.contentView.trailingAnchor)
+        ])
+        
+        glassWrapperMap[ObjectIdentifier(button)] = wrapper
+        return wrapper
+    }
+    
+    /// Wraps multiple buttons in a single shared glass capsule
+    private func wrapButtonsInGlass(_ buttons: [UIButton]) -> UIVisualEffectView {
+        let glassEffect = UIGlassEffect()
+        let wrapper = UIVisualEffectView(effect: glassEffect)
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.cornerConfiguration = .capsule()
+        
+        let stack = UIStackView()
+        stack.axis = Orientation.treatAsPortrait ? .horizontal : .vertical
+        stack.distribution = .fillEqually
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.contentView.addSubview(stack)
+        
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: wrapper.contentView.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: wrapper.contentView.bottomAnchor),
+            stack.leadingAnchor.constraint(equalTo: wrapper.contentView.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: wrapper.contentView.trailingAnchor)
+        ])
+        
+        for button in buttons {
+            button.removeFromSuperview()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            stack.addArrangedSubview(button)
+        }
+        
+        return wrapper
+    }
+    
+    func applyLiquidGlassEffect() {
+        guard let stackView = optionButtonStackView else { return }
+        
+        backgroundColor = .clear
+        
+        // Main layout stack
+        let mainStack = UIStackView()
+        mainStack.axis = Orientation.treatAsPortrait ? .horizontal : .vertical
+        mainStack.distribution = .equalCentering
+        mainStack.alignment = .center
+        mainStack.isLayoutMarginsRelativeArrangement = true
+        mainStack.layoutMargins = Orientation.treatAsPortrait
+            ? UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            : UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        glassStackView = mainStack
+        
+        // Collect buttons from original stack view
+        let arrangedViews = stackView.arrangedSubviews
+        var cancelBtn: UIButton?
+        var cropBtn: UIButton?
+        var toolButtons: [UIButton] = []
+        
+        for view in arrangedViews {
+            guard let button = view as? UIButton else { continue }
+            if button === cancelButton {
+                cancelBtn = button
+            } else if button === cropButton {
+                cropBtn = button
+            } else {
+                toolButtons.append(button)
+            }
+        }
+        
+        // Remove all from original stack
+        for view in arrangedViews {
+            stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        
+        // Add Cancel button (individual glass capsule)
+        if let cancel = cancelBtn {
+            cancel.tintColor = .label
+            cancel.setTitleColor(.label, for: .normal)
+            let wrapped = wrapButtonInGlass(cancel)
+            mainStack.addArrangedSubview(wrapped)
+        }
+        
+        // Add tool buttons into one shared glass capsule
+        if !toolButtons.isEmpty {
+            for button in toolButtons {
+                button.tintColor = .label
+                button.setTitleColor(.label, for: .normal)
+            }
+            let toolGlass = wrapButtonsInGlass(toolButtons)
+            toolGroupContainerView = toolGlass
+            mainStack.addArrangedSubview(toolGlass)
+        }
+        
+        // Add Done/Crop button (individual glass capsule)
+        if let crop = cropBtn {
+            crop.tintColor = .label
+            crop.setTitleColor(.label, for: .normal)
+            let wrapped = wrapButtonInGlass(crop)
+            mainStack.addArrangedSubview(wrapped)
+        }
+        
+        addSubview(mainStack)
+        
+        NSLayoutConstraint.activate([
+            mainStack.topAnchor.constraint(equalTo: topAnchor),
+            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+        
+        // Hide original stack view
+        stackView.isHidden = true
+    }
+    
+    func adjustGlassLayoutForOrientation() {
+        let axis: NSLayoutConstraint.Axis = Orientation.treatAsPortrait ? .horizontal : .vertical
+        let margins = Orientation.treatAsPortrait
+            ? UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            : UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        
+        glassStackView?.axis = axis
+        glassStackView?.layoutMargins = margins
+        
+        // Update tool group stack axis
+        if let toolGroup = toolGroupContainerView,
+           let toolStack = toolGroup.contentView.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
+            toolStack.axis = axis
         }
     }
 }
