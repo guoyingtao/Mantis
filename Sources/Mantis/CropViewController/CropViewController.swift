@@ -149,6 +149,8 @@ open class CropViewController: UIViewController {
             
             initialLayout = true
             view.layoutIfNeeded()
+            stackView?.layoutIfNeeded()
+            cropStackView.layoutIfNeeded()
             cropView.resetComponents()
             
             cropView.processPresetTransformation { [weak self] transformation in
