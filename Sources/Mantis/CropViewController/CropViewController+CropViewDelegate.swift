@@ -36,6 +36,24 @@ extension CropViewController: CropViewDelegate {
     func cropViewDidBecomeUnResettable(_ cropView: CropViewProtocol) {
         cropToolbar.handleCropViewDidBecomeUnResettable()
         delegate?.cropViewController(self, didBecomeResettable: false)
+
+        if config.enableUndoRedo {
+            guard let previous = previousCropState else { return }
+            let userGenerated = isCropStateUserGenerated
+            currentCropState = cropView.makeCropState()
+
+            if previous != currentCropState {
+                TransformStack
+                    .shared
+                    .pushTransformRecordOntoStack(transformType: .transform,
+                                                  previous: previous, current:
+                                                    currentCropState,
+                                                  userGenerated: userGenerated)
+            }
+
+            previousCropState = nil
+            currentCropState = nil
+        }
     }
     
     func cropViewDidBeginResize(_ cropView: CropViewProtocol) {
