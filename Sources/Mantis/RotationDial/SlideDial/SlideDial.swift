@@ -154,7 +154,8 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     }
     
     func handleDeviceRotation() {
-        if case .simple = config.mode {
+        switch config.mode {
+        case .simple:
             guard let indicator = indicator else {
                 return
             }
@@ -165,6 +166,21 @@ final class SlideDial: UIView, RotationControlViewProtocol {
                 indicator.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
             } else if Orientation.isLandscapeLeft {
                 indicator.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+            }
+        case .withTypeSelector:
+            layoutTypeButtons(animated: false)
+            
+            let buttonTransform: CGAffineTransform
+            if Orientation.treatAsPortrait {
+                buttonTransform = .identity
+            } else if Orientation.isLandscapeRight {
+                buttonTransform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            } else {
+                buttonTransform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+            }
+            
+            for (_, button) in typeButtons {
+                button.transform = buttonTransform
             }
         }
     }
