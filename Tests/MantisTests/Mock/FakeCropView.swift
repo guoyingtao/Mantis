@@ -142,12 +142,11 @@ class FakeCropView: UIView, CropViewProtocol {
                                   cropWorkbenchViewBounds: .zero,
                                   horizontallyFlipped: false,
                                   verticallyFlipped: false),
-                   CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
-                            CropRegion(topLeft: .zero,
+                   CropInfo(translation: .zero, rotation: .zero, scaleX: .zero, scaleY: .zero, cropSize: .zero, imageViewSize: .zero,
+                            cropRegion: CropRegion(topLeft: .zero,
                                        topRight: .zero,
                                        bottomLeft: .zero,
-                                       bottomRight: .zero),
-                            .zero, .zero))
+                                       bottomRight: .zero)))
     }
     
     func crop(_ image: UIImage) -> CropOutput {
@@ -161,12 +160,11 @@ class FakeCropView: UIView, CropViewProtocol {
                                   cropWorkbenchViewBounds: .zero,
                                   horizontallyFlipped: false,
                                   verticallyFlipped: false),
-                   CropInfo(.zero, .zero, .zero, .zero, .zero, .zero,
-                            CropRegion(topLeft: .zero,
+                   CropInfo(translation: .zero, rotation: .zero, scaleX: .zero, scaleY: .zero, cropSize: .zero, imageViewSize: .zero,
+                            cropRegion: CropRegion(topLeft: .zero,
                                        topRight: .zero,
                                        bottomLeft: .zero,
-                                       bottomRight: .zero),
-                            .zero, .zero))
+                                       bottomRight: .zero)))
     }
     
     func asyncCrop(completion: @escaping (CropOutput) -> Void) {
@@ -174,7 +172,10 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getCropInfo() -> CropInfo {
-        CropInfo(.zero, .zero, .zero, .zero, .zero, .zero, CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero), .zero, .zero)
+        CropInfo(translation: .zero, rotation: .zero, scaleX: .zero, scaleY: .zero,
+                 cropSize: .zero, imageViewSize: .zero,
+                 cropRegion: CropRegion(topLeft: .zero, topRight: .zero,
+                                        bottomLeft: .zero, bottomRight: .zero))
     }
     
     func getExpectedCropImageSize() -> CGSize {
