@@ -2,6 +2,15 @@
 
 -----
 
+### [2.29.1](https://www.github.com/guoyingtao/Mantis/compare/v2.29.0...v2.29.1) (2026-02-28)
+
+
+### Bug Fixes
+
+* ensure stack view layout is fully resolved before initial crop box positioning ([#502](https://www.github.com/guoyingtao/Mantis/issues/502)) ([#503](https://www.github.com/guoyingtao/Mantis/issues/503)) ([96ae774](https://www.github.com/guoyingtao/Mantis/commit/96ae77440fc612816da4cd836af63564d1247b03))
+* fix the mask issues during the operations ([#504](https://www.github.com/guoyingtao/Mantis/issues/504)) ([a86001e](https://www.github.com/guoyingtao/Mantis/commit/a86001e036941e251fe5eccf03fe4005678d152f))
+* update CropInfo initializer calls to use named argument labels ([#506](https://www.github.com/guoyingtao/Mantis/issues/506)) ([a12c1b8](https://www.github.com/guoyingtao/Mantis/commit/a12c1b804889bbf8942422b444c052d1965a292d))
+
 ## [2.29.0](https://www.github.com/guoyingtao/Mantis/compare/v2.28.2...v2.29.0) (2026-02-26)
 
 
