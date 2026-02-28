@@ -61,6 +61,12 @@ final class CropView: UIView {
     }
     
     var isManuallyZoomed = false
+    /// Tracks whether the user has physically resized the crop box (by dragging
+    /// its edges) or manually zoomed into the image. Used by the device rotation
+    /// handler to decide whether to take the clean reset path (no manual crop)
+    /// or the anchor-point restoration path (user has customized the crop region).
+    /// Skew-only changes do NOT set this flag.
+    var hasManuallyAdjustedCropBox = false
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
@@ -472,20 +478,16 @@ extension CropView: CropViewProtocol {
         }
         
         let savedIsManuallyZoomed = isManuallyZoomed
-        
-        // Check if the user has actually modified the crop region.
-        // When anchor points are at their defaults ((0,0) and (1,1)),
-        // the image is in its initial state and we can do a simple
-        // full reset instead of the complex anchor-point restoration
-        // which suffers from coordinate conversion drift.
-        let anchorTolerance: CGFloat = 1e-3
-        let isDefaultCropRegion =
-            abs(viewModel.cropLeftTopOnImage.x) < anchorTolerance
-            && abs(viewModel.cropLeftTopOnImage.y) < anchorTolerance
-            && abs(viewModel.cropRightBottomOnImage.x - 1) < anchorTolerance
-            && abs(viewModel.cropRightBottomOnImage.y - 1) < anchorTolerance
-        
-        if isDefaultCropRegion || viewModel.cropRightBottomOnImage == .zero {
+
+        // Use the explicit flag to decide the path. When skew is active,
+        // anchor-point based detection is unreliable because the skew system
+        // changes contentOffset, contentInset, and sublayerTransform in ways
+        // that make convert(_:to:) produce drifted coordinates even when the
+        // user hasn't manually changed the crop region. The flag is only set
+        // by user-initiated crop box edge dragging or manual pinch-zoom.
+        let shouldReset = !hasManuallyAdjustedCropBox || viewModel.cropRightBottomOnImage == .zero
+
+        if shouldReset {
             // Unmodified image — do a clean reset for the new orientation.
             viewModel.resetCropFrame(by: getInitialCropBoxRect())
             cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
@@ -576,6 +578,7 @@ extension CropView: CropViewProtocol {
     
     func reset() {
         flipOddTimes = false
+        hasManuallyAdjustedCropBox = false
         aspectRatioLockEnabled = forceFixedRatio
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         

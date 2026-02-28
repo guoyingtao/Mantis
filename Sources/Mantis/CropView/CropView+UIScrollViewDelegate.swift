@@ -70,6 +70,7 @@ extension CropView: UIScrollViewDelegate {
         clampContentOffsetForSkewIfNeeded()
 
         isManuallyZoomed = true
+        hasManuallyAdjustedCropBox = true
         viewModel.setBetweenOperationStatus()
     }
 

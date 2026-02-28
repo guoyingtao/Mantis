@@ -68,6 +68,7 @@ extension CropView {
         }
         
         isManuallyZoomed = transformation.isManuallyZoomed
+        hasManuallyAdjustedCropBox = transformation.isManuallyZoomed
         cropWorkbenchView.zoomScale = transformation.scale
         cropWorkbenchView.contentOffset = transformation.offset
         
