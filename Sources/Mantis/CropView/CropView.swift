@@ -30,6 +30,7 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidBeginResize(_ cropView: CropViewProtocol)
     func cropViewDidEndResize(_ cropView: CropViewProtocol)
     func cropViewDidBeginCrop(_ cropView: CropViewProtocol)
+    func cropViewDidEndCrop(_ cropView: CropViewProtocol)
 }
 
 final class CropView: UIView {
