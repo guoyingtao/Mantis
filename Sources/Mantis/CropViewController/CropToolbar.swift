@@ -440,8 +440,34 @@ extension CropToolbar {
         return wrapper
     }
     
+    /// Wraps a single button in a circular glass background
+    private func wrapButtonInCircularGlass(_ button: UIButton, size: CGFloat = 44) -> UIVisualEffectView {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        let wrapper = UIVisualEffectView(effect: glassEffect)
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.cornerConfiguration = .capsule()
+        
+        button.removeFromSuperview()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentEdgeInsets = .zero
+        wrapper.contentView.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            wrapper.widthAnchor.constraint(equalToConstant: size),
+            wrapper.heightAnchor.constraint(equalToConstant: size),
+            button.centerXAnchor.constraint(equalTo: wrapper.contentView.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: wrapper.contentView.centerYAnchor),
+            button.widthAnchor.constraint(equalTo: wrapper.contentView.widthAnchor),
+            button.heightAnchor.constraint(equalTo: wrapper.contentView.heightAnchor)
+        ])
+        
+        glassWrapperMap[ObjectIdentifier(button)] = wrapper
+        return wrapper
+    }
+    
     /// Wraps multiple buttons in a single shared glass capsule
-    private func wrapButtonsInGlass(_ buttons: [UIButton]) -> UIVisualEffectView {
+    private func wrapButtonsInGlass(_ buttons: [UIButton], height: CGFloat = 44) -> UIVisualEffectView {
         let glassEffect = UIGlassEffect()
         let wrapper = UIVisualEffectView(effect: glassEffect)
         wrapper.translatesAutoresizingMaskIntoConstraints = false
@@ -454,6 +480,7 @@ extension CropToolbar {
         wrapper.contentView.addSubview(stack)
         
         NSLayoutConstraint.activate([
+            wrapper.heightAnchor.constraint(equalToConstant: height),
             stack.topAnchor.constraint(equalTo: wrapper.contentView.topAnchor),
             stack.bottomAnchor.constraint(equalTo: wrapper.contentView.bottomAnchor),
             stack.leadingAnchor.constraint(equalTo: wrapper.contentView.leadingAnchor),
@@ -509,11 +536,14 @@ extension CropToolbar {
             view.removeFromSuperview()
         }
         
-        // Add Cancel button (individual glass capsule)
+        // Add Cancel button (circular glass with xmark icon)
         if let cancel = cancelBtn {
+            cancel.setTitle(nil, for: .normal)
+            let xmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+            let xmarkImage = UIImage(systemName: "xmark", withConfiguration: xmarkConfig)
+            cancel.setImage(xmarkImage, for: .normal)
             cancel.tintColor = .label
-            cancel.setTitleColor(.label, for: .normal)
-            let wrapped = wrapButtonInGlass(cancel)
+            let wrapped = wrapButtonInCircularGlass(cancel)
             mainStack.addArrangedSubview(wrapped)
         }
         
@@ -528,11 +558,14 @@ extension CropToolbar {
             mainStack.addArrangedSubview(toolGlass)
         }
         
-        // Add Done/Crop button (individual glass capsule)
+        // Add Done/Crop button (circular glass with checkmark icon)
         if let crop = cropBtn {
+            crop.setTitle(nil, for: .normal)
+            let checkmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+            let checkmarkImage = UIImage(systemName: "checkmark", withConfiguration: checkmarkConfig)
+            crop.setImage(checkmarkImage, for: .normal)
             crop.tintColor = .label
-            crop.setTitleColor(.label, for: .normal)
-            let wrapped = wrapButtonInGlass(crop)
+            let wrapped = wrapButtonInCircularGlass(crop)
             mainStack.addArrangedSubview(wrapped)
         }
         
