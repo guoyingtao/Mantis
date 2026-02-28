@@ -42,8 +42,13 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
         didBeginCrop = true
     }
     
+    var endCropOriginal: UIImage?
+    var endCropInfo: CropInfo?
+    
     func cropViewControllerDidEndCrop(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {
         didEndCrop = true
+        endCropOriginal = original
+        endCropInfo = cropInfo
     }
     
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {

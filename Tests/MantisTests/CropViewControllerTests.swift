@@ -73,5 +73,7 @@ final class CropViewControllerTests: XCTestCase {
         cropVC.cropViewDidEndCrop(cropVC.cropView)
         
         XCTAssertTrue(fakeCropVCDelegate.didEndCrop)
+        XCTAssertIdentical(fakeCropVCDelegate.endCropOriginal, fakeCropView.image)
+        XCTAssertEqual(fakeCropVCDelegate.endCropInfo?.translation, fakeCropView.getCropInfo().translation)
     }
 }
