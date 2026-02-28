@@ -50,6 +50,13 @@ extension CropViewController: CropViewDelegate {
         if config.enableUndoRedo {
             previousCropState = cropView.makeCropState()
         }
+        delegate?.cropViewControllerDidBeginCrop(self)
+    }
+    
+    func cropViewDidEndCrop(_ cropView: CropViewProtocol) {
+        delegate?.cropViewControllerDidEndCrop(self,
+                                               original: cropView.image,
+                                               cropInfo: cropView.getCropInfo())
     }
     
     func cropViewDidEndResize(_ cropView: CropViewProtocol) {

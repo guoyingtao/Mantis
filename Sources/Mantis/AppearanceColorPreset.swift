@@ -59,14 +59,13 @@ enum AppearanceColorPreset {
     
     // MARK: - Dimming & Mask
     static func dimmingOverlayColor(for mode: AppearanceMode) -> UIColor {
-        let lightOverlay = UIColor(white: 0.92, alpha: 1.0)
         switch mode {
         case .forceDark:
             return .black
         case .forceLight:
-            return lightOverlay
+            return lightBackground
         case .system:
-            return dynamicColor(dark: .black, light: lightOverlay)
+            return dynamicColor(dark: .black, light: lightBackground)
         }
     }
     

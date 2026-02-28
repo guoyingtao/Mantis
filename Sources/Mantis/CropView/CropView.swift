@@ -30,6 +30,7 @@ protocol CropViewDelegate: AnyObject {
     func cropViewDidBeginResize(_ cropView: CropViewProtocol)
     func cropViewDidEndResize(_ cropView: CropViewProtocol)
     func cropViewDidBeginCrop(_ cropView: CropViewProtocol)
+    func cropViewDidEndCrop(_ cropView: CropViewProtocol)
 }
 
 final class CropView: UIView {
@@ -182,13 +183,11 @@ final class CropView: UIView {
             cropAuxiliaryIndicatorView.isHidden = true
             toggleRotationControlViewIsNeeded(isHidden: true)
         case .touchImage:
-            cropMaskViewManager.showDimmingBackground(animated: true)
             cropAuxiliaryIndicatorView.gridLineNumberType = .crop
             cropAuxiliaryIndicatorView.gridHidden = false
         case .touchCropboxHandle(let tappedEdge):
             cropAuxiliaryIndicatorView.handleIndicatorHandleTouched(with: tappedEdge)
             toggleRotationControlViewIsNeeded(isHidden: true)
-            cropMaskViewManager.showDimmingBackground(animated: true)
         case .touchRotationBoard:
             cropAuxiliaryIndicatorView.gridLineNumberType = .rotate
             cropAuxiliaryIndicatorView.gridHidden = false
