@@ -29,6 +29,12 @@ extension CropViewController {
         stackView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         stackView?.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        
+        if #available(iOS 26.0, *), config.showAttachedCropToolbar {
+            // Allow the crop view's mask to extend visually behind the toolbar
+            cropView.clipsToBounds = false
+            cropStackView?.clipsToBounds = false
+        }
     }
     
     func setStackViewAxis() {
@@ -56,6 +62,11 @@ extension CropViewController {
         } else if Orientation.isLandscapeLeft {
             stackView?.addArrangedSubview(cropToolbar)
             stackView?.addArrangedSubview(cropStackView)
+        }
+        
+        if #available(iOS 26.0, *), config.showAttachedCropToolbar {
+            // Ensure the toolbar renders above the crop view's mask overflow
+            stackView?.bringSubviewToFront(cropToolbar)
         }
     }
             

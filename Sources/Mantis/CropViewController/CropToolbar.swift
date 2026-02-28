@@ -113,6 +113,8 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
     private var glassStackView: UIStackView?
     private var toolGroupContainerView: UIVisualEffectView?
     private var glassWrapperMap: [ObjectIdentifier: UIVisualEffectView] = [:]
+    private var toolGroupHeightConstraint: NSLayoutConstraint?
+    private var toolGroupWidthConstraint: NSLayoutConstraint?
     
     private var autoAdjustButtonActive = false {
         didSet {
@@ -467,20 +469,31 @@ extension CropToolbar {
     }
     
     /// Wraps multiple buttons in a single shared glass capsule
-    private func wrapButtonsInGlass(_ buttons: [UIButton], height: CGFloat = 44) -> UIVisualEffectView {
+    private func wrapButtonsInGlass(_ buttons: [UIButton], size: CGFloat = 44) -> UIVisualEffectView {
         let glassEffect = UIGlassEffect()
         let wrapper = UIVisualEffectView(effect: glassEffect)
         wrapper.translatesAutoresizingMaskIntoConstraints = false
         wrapper.cornerConfiguration = .capsule()
         
+        let isPortrait = Orientation.treatAsPortrait
+        
         let stack = UIStackView()
-        stack.axis = Orientation.treatAsPortrait ? .horizontal : .vertical
+        stack.axis = isPortrait ? .horizontal : .vertical
         stack.distribution = .fillEqually
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         wrapper.contentView.addSubview(stack)
         
+        let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: size)
+        let widthConstraint = wrapper.widthAnchor.constraint(equalToConstant: size)
+        
+        heightConstraint.isActive = isPortrait
+        widthConstraint.isActive = !isPortrait
+        
+        toolGroupHeightConstraint = heightConstraint
+        toolGroupWidthConstraint = widthConstraint
+        
         NSLayoutConstraint.activate([
-            wrapper.heightAnchor.constraint(equalToConstant: height),
             stack.topAnchor.constraint(equalTo: wrapper.contentView.topAnchor),
             stack.bottomAnchor.constraint(equalTo: wrapper.contentView.bottomAnchor),
             stack.leadingAnchor.constraint(equalTo: wrapper.contentView.leadingAnchor),
@@ -583,13 +596,18 @@ extension CropToolbar {
     }
     
     func adjustGlassLayoutForOrientation() {
-        let axis: NSLayoutConstraint.Axis = Orientation.treatAsPortrait ? .horizontal : .vertical
-        let margins = Orientation.treatAsPortrait
+        let isPortrait = Orientation.treatAsPortrait
+        let axis: NSLayoutConstraint.Axis = isPortrait ? .horizontal : .vertical
+        let margins = isPortrait
             ? UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             : UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         
         glassStackView?.axis = axis
         glassStackView?.layoutMargins = margins
+        
+        // Swap dimension constraints for the tool group capsule
+        toolGroupHeightConstraint?.isActive = isPortrait
+        toolGroupWidthConstraint?.isActive = !isPortrait
         
         // Update tool group stack axis
         if let toolGroup = toolGroupContainerView,
