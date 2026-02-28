@@ -58,4 +58,20 @@ final class CropViewControllerTests: XCTestCase {
         
         XCTAssertTrue(fakeCropVCDelegate.didEndResize)
     }
+    
+    func testCropViewDidBeginCrop() {
+        XCTAssertFalse(fakeCropVCDelegate.didBeginCrop)
+        
+        cropVC.cropViewDidBeginCrop(cropVC.cropView)
+        
+        XCTAssertTrue(fakeCropVCDelegate.didBeginCrop)
+    }
+    
+    func testCropViewDidEndCrop() {
+        XCTAssertFalse(fakeCropVCDelegate.didEndCrop)
+        
+        cropVC.cropViewDidEndCrop(cropVC.cropView)
+        
+        XCTAssertTrue(fakeCropVCDelegate.didEndCrop)
+    }
 }
