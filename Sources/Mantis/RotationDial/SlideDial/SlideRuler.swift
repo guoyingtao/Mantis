@@ -43,13 +43,11 @@ final class SlideRuler: UIView {
     }
     
     let config: SlideDialConfig!
-    let scaleColor: CGColor!
-    let majorScaleColor: CGColor!
+    var scaleColor: CGColor { config.scaleColor.cgColor }
+    var majorScaleColor: CGColor { config.majorScaleColor.cgColor }
     
     init(frame: CGRect, config: SlideDialConfig) {
         self.config = config
-        scaleColor = config.scaleColor.cgColor
-        majorScaleColor = config.majorScaleColor.cgColor
 
         super.init(frame: frame)
         
