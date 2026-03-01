@@ -13,31 +13,15 @@ extension CropViewController: CropViewDelegate {
         cropToolbar.handleCropViewDidBecomeResettable()
         delegate?.cropViewControllerDidImageTransformed(self, transformation: cropView.makeTransformation())
         delegate?.cropViewController(self, didBecomeResettable: true)
-        
-        if config.enableUndoRedo {
-            guard let previous = previousCropState else { return }
-            let userGenerated = isCropStateUserGenerated
-            currentCropState = cropView.makeCropState()
-            
-            if previous != currentCropState {
-                TransformStack
-                    .shared
-                    .pushTransformRecordOntoStack(transformType: .transform,
-                                                  previous: previous, current:
-                                                    currentCropState,
-                                                  userGenerated: userGenerated)
-            }
-            
-            previousCropState = nil
-            currentCropState = nil
-        }
+        registerUndoIfNeeded(for: cropView)
     }
     
     func cropViewDidBecomeUnResettable(_ cropView: CropViewProtocol) {
         cropToolbar.handleCropViewDidBecomeUnResettable()
         delegate?.cropViewController(self, didBecomeResettable: false)
+        registerUndoIfNeeded(for: cropView)
     }
-    
+
     func cropViewDidBeginResize(_ cropView: CropViewProtocol) {
         if config.enableUndoRedo {
             previousCropState = cropView.makeCropState()
@@ -63,5 +47,24 @@ extension CropViewController: CropViewDelegate {
         delegate?.cropViewControllerDidEndResize(self,
                                                  original: cropView.image,
                                                  cropInfo: cropView.getCropInfo())
+    }
+
+    private func registerUndoIfNeeded(for cropView: CropViewProtocol) {
+        guard config.enableUndoRedo, let previous = previousCropState else { return }
+
+        let userGenerated = isCropStateUserGenerated
+        currentCropState = cropView.makeCropState()
+
+        if previous != currentCropState {
+            TransformStack
+                .shared
+                .pushTransformRecordOntoStack(transformType: .transform,
+                                              previous: previous, current:
+                                                currentCropState,
+                                              userGenerated: userGenerated)
+        }
+
+        previousCropState = nil
+        currentCropState = nil
     }
 }
