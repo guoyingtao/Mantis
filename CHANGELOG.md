@@ -2,6 +2,13 @@
 
 -----
 
+### [2.30.1](https://www.github.com/guoyingtao/Mantis/compare/v2.30.0...v2.30.1) (2026-03-01)
+
+
+### Bug Fixes
+
+* push undo when crop view becomes unresettable ([#501](https://www.github.com/guoyingtao/Mantis/issues/501)) ([ec7d7b9](https://www.github.com/guoyingtao/Mantis/commit/ec7d7b9349fa198bb0218375ba983ca745145ab4))
+
 ## [2.30.0](https://www.github.com/guoyingtao/Mantis/compare/v2.29.0...v2.30.0) (2026-02-28)
 
 
