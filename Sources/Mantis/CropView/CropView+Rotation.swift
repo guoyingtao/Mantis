@@ -20,7 +20,7 @@ extension CropView {
         rotationControlView.didUpdateRotationValue = { [unowned self] angle in
             // Notify delegate on the first frame of each rotation gesture
             // so that previousCropState is captured for undo/redo.
-            if self.viewModel.viewStatus != .touchRotationBoard {
+            if self.viewModel.viewStatus != .touchRotationBoard && self.viewModel.viewStatus != .rotating {
                 self.delegate?.cropViewDidBeginResize(self)
             }
             self.viewModel.setTouchRotationBoardStatus()
