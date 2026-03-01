@@ -68,3 +68,6 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 /Example/Podfile.lock
 .DS_Store
+
+# AI agent context
+AI_CONTEXT/
