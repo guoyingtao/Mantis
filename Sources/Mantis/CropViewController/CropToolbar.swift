@@ -628,12 +628,19 @@ extension CropToolbar {
         
         addSubview(mainStack)
         
-        NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: topAnchor),
-            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+        let topConstraint = mainStack.topAnchor.constraint(equalTo: topAnchor)
+        let bottomConstraint = mainStack.bottomAnchor.constraint(equalTo: bottomAnchor)
+        let leadingConstraint = mainStack.leadingAnchor.constraint(equalTo: leadingAnchor)
+        let trailingConstraint = mainStack.trailingAnchor.constraint(equalTo: trailingAnchor)
+        
+        // Use high priority so these yield to the toolbar's intrinsic content size
+        // during orientation transitions (e.g. height == 60 in portrait vs
+        // vertical layout with 20+20 margins in landscape).
+        for constraint in [topConstraint, bottomConstraint, leadingConstraint, trailingConstraint] {
+            constraint.priority = .defaultHigh
+        }
+        
+        NSLayoutConstraint.activate([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
         
         // Hide original stack view
         stackView.isHidden = true
