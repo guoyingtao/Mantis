@@ -154,10 +154,9 @@ class DemoViewController: UIViewController {
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
+        cropViewController.modalPresentationStyle = .fullScreen
         
-        let navigationController = UINavigationController(rootViewController: cropViewController)
-        cropViewController.title = "Demo"
-        present(navigationController, animated: true)
+        present(cropViewController, animated: true)
     }
     
     @objc private func embeddedAction() {
