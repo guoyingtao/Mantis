@@ -244,22 +244,26 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
     public func handleCropViewDidBecomeResettable() {
         resetButton?.isHidden = false
         glassWrapper(for: resetButton)?.isHidden = false
+        updateToolGroupVisibilityIfNeeded()
     }
 
     public func handleCropViewDidBecomeUnResettable() {
         resetButton?.isHidden = true
         glassWrapper(for: resetButton)?.isHidden = true
+        updateToolGroupVisibilityIfNeeded()
     }
     
     public func handleImageAutoAdjustable() {
         autoAdjustButton.isHidden = false
         glassWrapper(for: autoAdjustButton)?.isHidden = false
+        updateToolGroupVisibilityIfNeeded()
     }
     
     public func handleImageNotAutoAdjustable() {
         autoAdjustButton.isHidden = true
         glassWrapper(for: autoAdjustButton)?.isHidden = true
         autoAdjustButtonActive = false
+        updateToolGroupVisibilityIfNeeded()
     }
 }
 
@@ -413,6 +417,20 @@ extension CropToolbar {
     private func glassWrapper(for button: UIButton?) -> UIVisualEffectView? {
         guard let button = button else { return nil }
         return glassWrapperMap[ObjectIdentifier(button)]
+    }
+    
+    /// Hides/shows the tool group capsule based on whether any of its
+    /// arranged subviews are visible.  Called after changing individual
+    /// button visibility so an empty glass pill is never left on screen.
+    private func updateToolGroupVisibilityIfNeeded() {
+        guard let toolGroup = toolGroupContainerView,
+              let toolStack = toolGroup.contentView.subviews
+                  .first(where: { $0 is UIStackView }) as? UIStackView else {
+            return
+        }
+        
+        let hasVisibleButton = toolStack.arrangedSubviews.contains { !$0.isHidden }
+        toolGroup.isHidden = !hasVisibleButton
     }
 }
 
