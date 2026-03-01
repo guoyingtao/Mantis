@@ -453,11 +453,28 @@ extension CropToolbar {
         button.removeFromSuperview()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentEdgeInsets = .zero
+        
+        // Remove any pre-existing width/height constraints on the button
+        // (e.g. the greaterThanOrEqual width constraint added in createOptionButton)
+        // so they don't conflict with the fixed circular sizing below.
+        for constraint in button.constraints where
+            constraint.firstAttribute == .width || constraint.firstAttribute == .height {
+            button.removeConstraint(constraint)
+        }
+        
+        button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        
         wrapper.contentView.addSubview(button)
         
+        let widthConstraint = wrapper.widthAnchor.constraint(equalToConstant: size)
+        let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: size)
+        widthConstraint.priority = .defaultHigh
+        heightConstraint.priority = .defaultHigh
+        
         NSLayoutConstraint.activate([
-            wrapper.widthAnchor.constraint(equalToConstant: size),
-            wrapper.heightAnchor.constraint(equalToConstant: size),
+            widthConstraint,
+            heightConstraint,
             button.centerXAnchor.constraint(equalTo: wrapper.contentView.centerXAnchor),
             button.centerYAnchor.constraint(equalTo: wrapper.contentView.centerYAnchor),
             button.widthAnchor.constraint(equalTo: wrapper.contentView.widthAnchor),
@@ -477,15 +494,23 @@ extension CropToolbar {
         
         let isPortrait = Orientation.treatAsPortrait
         
+        let capsulePadding: CGFloat = 12
+        
         let stack = UIStackView()
         stack.axis = isPortrait ? .horizontal : .vertical
         stack.distribution = .fillEqually
-        stack.spacing = 8
+        stack.spacing = 12
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = isPortrait
+            ? UIEdgeInsets(top: 0, left: capsulePadding, bottom: 0, right: capsulePadding)
+            : UIEdgeInsets(top: capsulePadding, left: 0, bottom: capsulePadding, right: 0)
         stack.translatesAutoresizingMaskIntoConstraints = false
         wrapper.contentView.addSubview(stack)
         
         let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: size)
         let widthConstraint = wrapper.widthAnchor.constraint(equalToConstant: size)
+        heightConstraint.priority = .defaultHigh
+        widthConstraint.priority = .defaultHigh
         
         heightConstraint.isActive = isPortrait
         widthConstraint.isActive = !isPortrait
@@ -503,6 +528,19 @@ extension CropToolbar {
         for button in buttons {
             button.removeFromSuperview()
             button.translatesAutoresizingMaskIntoConstraints = false
+            
+            // Remove pre-existing width/height constraints on the button
+            // (e.g. the greaterThanOrEqual width constraint from createOptionButton)
+            // so they don't conflict with the fillEqually distribution.
+            for constraint in button.constraints where
+                constraint.firstAttribute == .width || constraint.firstAttribute == .height {
+                button.removeConstraint(constraint)
+            }
+            
+            button.contentEdgeInsets = .zero
+            button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+            
             stack.addArrangedSubview(button)
         }
         
@@ -552,9 +590,12 @@ extension CropToolbar {
         // Add Cancel button (circular glass with xmark icon)
         if let cancel = cancelBtn {
             cancel.setTitle(nil, for: .normal)
-            let xmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
-            let xmarkImage = UIImage(systemName: "xmark", withConfiguration: xmarkConfig)
-            cancel.setImage(xmarkImage, for: .normal)
+            // Only use SF Symbol fallback when no custom icon was provided
+            if iconProvider?.getCancelIcon() == nil {
+                let xmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+                let xmarkImage = UIImage(systemName: "xmark", withConfiguration: xmarkConfig)
+                cancel.setImage(xmarkImage, for: .normal)
+            }
             cancel.tintColor = .label
             let wrapped = wrapButtonInCircularGlass(cancel)
             mainStack.addArrangedSubview(wrapped)
@@ -574,9 +615,12 @@ extension CropToolbar {
         // Add Done/Crop button (circular glass with checkmark icon)
         if let crop = cropBtn {
             crop.setTitle(nil, for: .normal)
-            let checkmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
-            let checkmarkImage = UIImage(systemName: "checkmark", withConfiguration: checkmarkConfig)
-            crop.setImage(checkmarkImage, for: .normal)
+            // Only use SF Symbol fallback when no custom icon was provided
+            if iconProvider?.getCropIcon() == nil {
+                let checkmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+                let checkmarkImage = UIImage(systemName: "checkmark", withConfiguration: checkmarkConfig)
+                crop.setImage(checkmarkImage, for: .normal)
+            }
             crop.tintColor = .label
             let wrapped = wrapButtonInCircularGlass(crop)
             mainStack.addArrangedSubview(wrapped)
@@ -609,10 +653,14 @@ extension CropToolbar {
         toolGroupHeightConstraint?.isActive = isPortrait
         toolGroupWidthConstraint?.isActive = !isPortrait
         
-        // Update tool group stack axis
+        // Update tool group stack axis and capsule padding direction
         if let toolGroup = toolGroupContainerView,
            let toolStack = toolGroup.contentView.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
             toolStack.axis = axis
+            let capsulePadding: CGFloat = 12
+            toolStack.layoutMargins = isPortrait
+                ? UIEdgeInsets(top: 0, left: capsulePadding, bottom: 0, right: capsulePadding)
+                : UIEdgeInsets(top: capsulePadding, left: 0, bottom: capsulePadding, right: 0)
         }
     }
 }
