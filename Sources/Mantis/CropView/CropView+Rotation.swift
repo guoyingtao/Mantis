@@ -115,7 +115,14 @@ extension CropView {
             rotationControlView.transform = CGAffineTransform(rotationAngle: 0)
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
             (cropAuxiliaryIndicatorView.frame.width - rotationControlView.frame.width) / 2
-            rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
+            // Pin rotation control to the bottom edge of CropView (adjacent to toolbar)
+            // instead of attaching it to the crop box bottom edge
+            let cropViewPadding = cropViewConfig.padding
+            var rotationTypeSelectorHeight: CGFloat = 0
+            if cropViewConfig.enablePerspectiveCorrection && !slideDialHandlesTypeSelection {
+                rotationTypeSelectorHeight = 32
+            }
+            rotationControlView.frame.origin.y = bounds.height - cropViewPadding - rotationControlView.frame.height - rotationTypeSelectorHeight
         } else if Orientation.isLandscapeRight {
             rotationControlView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
             // Pin rotation control to the right edge of CropView (adjacent to toolbar)
@@ -303,6 +310,8 @@ extension CropView: RotationTypeSelectorDelegate {
         let selectorHeight: CGFloat = 28
         
         if Orientation.treatAsPortrait {
+            rotationTypeSelector.transform = .identity
+            let cropViewPadding = cropViewConfig.padding
             if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
                 rotationTypeSelector.frame = CGRect(
                     x: rotationView.frame.midX - selectorWidth / 2,
@@ -312,8 +321,8 @@ extension CropView: RotationTypeSelectorDelegate {
                 )
             } else {
                 rotationTypeSelector.frame = CGRect(
-                    x: cropAuxiliaryIndicatorView.frame.midX - selectorWidth / 2,
-                    y: cropAuxiliaryIndicatorView.frame.maxY + cropViewConfig.rotationControlViewHeight + 4,
+                    x: bounds.midX - selectorWidth / 2,
+                    y: bounds.height - cropViewPadding - selectorHeight,
                     width: selectorWidth,
                     height: selectorHeight
                 )
