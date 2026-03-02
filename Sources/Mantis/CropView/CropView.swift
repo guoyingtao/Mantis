@@ -490,13 +490,29 @@ extension CropView: CropViewProtocol {
         if shouldReset {
             // Unmodified image — do a clean reset for the new orientation.
             viewModel.resetCropFrame(by: getInitialCropBoxRect())
-            cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
+            
+            // resetImageContent sizes the imageContainer to match the given rect.
+            // The imageView inside uses scaleAspectFit, so the imageContainer must
+            // match the ORIGINAL image's aspect ratio for the image to fill it
+            // completely. When a 90° step rotation is active, the crop box has the
+            // rotated aspect ratio, which differs from the original image. Using
+            // the crop box directly would leave empty bands inside the imageContainer
+            // that become visible at combined rotation angles.
+            // Compute a rect with the original image's aspect ratio inscribed in
+            // the same content bounds, so the image fills the imageContainer.
+            let originalImageRect: CGRect = {
+                let outsideRect = getContentBounds()
+                let insideRect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+                return GeometryHelper.getInscribeRect(fromOutsideRect: outsideRect, andInsideRect: insideRect)
+            }()
+            cropWorkbenchView.resetImageContent(by: originalImageRect)
             
             let totalRadians = viewModel.getTotalRadians()
             if totalRadians != 0 {
                 cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
                 flipCropWorkbenchViewIfNeeded()
                 adjustWorkbenchView(by: totalRadians)
+                makeSureImageContainsCropOverlay()
             }
             
             isManuallyZoomed = savedIsManuallyZoomed

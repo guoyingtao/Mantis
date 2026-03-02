@@ -39,14 +39,17 @@ final class ImageContainer: UIView {
 
 extension ImageContainer: ImageContainerProtocol {
     func contains(rect: CGRect, fromView view: UIView, tolerance: CGFloat = 0.5) -> Bool {
-        let newRect = view.convert(rect, to: self)
-        
-        let point1 = newRect.origin
-        let point2 = CGPoint(x: newRect.maxX, y: newRect.maxY)
+        let topLeft = view.convert(CGPoint(x: rect.minX, y: rect.minY), to: self)
+        let topRight = view.convert(CGPoint(x: rect.maxX, y: rect.minY), to: self)
+        let bottomLeft = view.convert(CGPoint(x: rect.minX, y: rect.maxY), to: self)
+        let bottomRight = view.convert(CGPoint(x: rect.maxX, y: rect.maxY), to: self)
         
         let refBounds = bounds.insetBy(dx: -tolerance, dy: -tolerance)
         
-        return refBounds.contains(point1) && refBounds.contains(point2)
+        return refBounds.contains(topLeft)
+            && refBounds.contains(topRight)
+            && refBounds.contains(bottomLeft)
+            && refBounds.contains(bottomRight)
     }
     
     func getCropRegion(withCropBoxFrame cropBoxFrame: CGRect, cropView: UIView) -> CropRegion {

@@ -111,19 +111,49 @@ extension CropView {
         guard let rotationControlView = rotationControlView,
               rotationControlView.isAttachedToCropView else { return }
         
+        let isSlideDial = rotationControlView is SlideDial
+        
         if Orientation.treatAsPortrait {
             rotationControlView.transform = CGAffineTransform(rotationAngle: 0)
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
             (cropAuxiliaryIndicatorView.frame.width - rotationControlView.frame.width) / 2
-            rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
+            
+            if isSlideDial {
+                // Pin SlideDial to the bottom edge of CropView (adjacent to toolbar)
+                let cropViewPadding = cropViewConfig.padding
+                var rotationTypeSelectorHeight: CGFloat = 0
+                if cropViewConfig.enablePerspectiveCorrection && !slideDialHandlesTypeSelection {
+                    rotationTypeSelectorHeight = 32
+                }
+                rotationControlView.frame.origin.y = bounds.height - cropViewPadding - rotationControlView.frame.height - rotationTypeSelectorHeight
+            } else {
+                // RotationDial stays attached to the crop box bottom edge
+                rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
+            }
         } else if Orientation.isLandscapeRight {
             rotationControlView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
+            
+            if isSlideDial {
+                // Pin SlideDial to the right edge of CropView (adjacent to toolbar)
+                let cropViewPadding = cropViewConfig.padding
+                rotationControlView.frame.origin.x = bounds.width - cropViewPadding - rotationControlView.frame.width
+            } else {
+                // RotationDial stays attached to the crop box right edge
+                rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
+            }
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         } else if Orientation.isLandscapeLeft {
             rotationControlView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationControlView.frame.width
+            
+            if isSlideDial {
+                // Pin SlideDial to the left edge of CropView (adjacent to toolbar)
+                let cropViewPadding = cropViewConfig.padding
+                rotationControlView.frame.origin.x = cropViewPadding
+            } else {
+                // RotationDial stays attached to the crop box left edge
+                rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationControlView.frame.width
+            }
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         }
@@ -297,6 +327,8 @@ extension CropView: RotationTypeSelectorDelegate {
         let selectorHeight: CGFloat = 28
         
         if Orientation.treatAsPortrait {
+            rotationTypeSelector.transform = .identity
+            let cropViewPadding = cropViewConfig.padding
             if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
                 rotationTypeSelector.frame = CGRect(
                     x: rotationView.frame.midX - selectorWidth / 2,
@@ -306,20 +338,38 @@ extension CropView: RotationTypeSelectorDelegate {
                 )
             } else {
                 rotationTypeSelector.frame = CGRect(
-                    x: cropAuxiliaryIndicatorView.frame.midX - selectorWidth / 2,
-                    y: cropAuxiliaryIndicatorView.frame.maxY + cropViewConfig.rotationControlViewHeight + 4,
+                    x: bounds.midX - selectorWidth / 2,
+                    y: bounds.height - cropViewPadding - selectorHeight,
                     width: selectorWidth,
                     height: selectorHeight
                 )
             }
-        } else {
-            // Landscape: position beside the crop area
-            rotationTypeSelector.frame = CGRect(
-                x: cropAuxiliaryIndicatorView.frame.midX - selectorWidth / 2,
-                y: cropAuxiliaryIndicatorView.frame.maxY + cropViewConfig.rotationControlViewHeight + 4,
-                width: selectorWidth,
-                height: selectorHeight
-            )
+        } else if Orientation.isLandscapeRight {
+            // Landscape right: position selector between crop box and rotation dial (right side)
+            if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
+                rotationTypeSelector.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+                let centerX = rotationView.frame.minX - selectorHeight / 2 - 4
+                let centerY = rotationView.frame.midY
+                rotationTypeSelector.frame = CGRect(
+                    x: centerX - selectorHeight / 2,
+                    y: centerY - selectorWidth / 2,
+                    width: selectorHeight,
+                    height: selectorWidth
+                )
+            }
+        } else if Orientation.isLandscapeLeft {
+            // Landscape left: position selector between rotation dial and crop box (left side)
+            if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
+                rotationTypeSelector.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+                let centerX = rotationView.frame.maxX + selectorHeight / 2 + 4
+                let centerY = rotationView.frame.midY
+                rotationTypeSelector.frame = CGRect(
+                    x: centerX - selectorHeight / 2,
+                    y: centerY - selectorWidth / 2,
+                    width: selectorHeight,
+                    height: selectorWidth
+                )
+            }
         }
     }
 }

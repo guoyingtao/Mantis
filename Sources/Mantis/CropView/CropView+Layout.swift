@@ -263,12 +263,25 @@ extension CropView {
         let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: getImageHorizontalToVerticalRatio())
         viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in
             guard let self = self else { return }
             if self.forceFixedRatio {
                 self.checkForForceFixedRatioFlag = true
             }
+            
+            // When skew is active, the compensating scale and content insets
+            // were computed for the previous crop box geometry. After the crop
+            // box changed shape (e.g. Original → Square), recompute so the
+            // projected image covers the new crop box and panning stays valid.
+            if hasSkew {
+                self.skewState.reset()
+                self.applySkewTransformIfNeeded()
+                self.updateContentInsetForSkew()
+            }
+            
             self.viewModel.setBetweenOperationStatus()
         }
         
