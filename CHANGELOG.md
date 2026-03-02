@@ -2,6 +2,19 @@
 
 -----
 
+## [2.31.0](https://www.github.com/guoyingtao/Mantis/compare/v2.30.0...v2.31.0) (2026-03-02)
+
+
+### Features
+
+* add Liquid Glass support for crop toolbar ([#509](https://www.github.com/guoyingtao/Mantis/issues/509)) ([6345b29](https://www.github.com/guoyingtao/Mantis/commit/6345b2961168d560178fa996933510c5c617ce38))
+
+
+### Bug Fixes
+
+* fix several bugs for device rotations ([#512](https://www.github.com/guoyingtao/Mantis/issues/512)) ([864b5de](https://www.github.com/guoyingtao/Mantis/commit/864b5def45a9537ede973cf4fb430199dc72c41d))
+* push undo when crop view becomes unresettable ([#501](https://www.github.com/guoyingtao/Mantis/issues/501)) ([ec7d7b9](https://www.github.com/guoyingtao/Mantis/commit/ec7d7b9349fa198bb0218375ba983ca745145ab4))
+
 ## [2.30.0](https://www.github.com/guoyingtao/Mantis/compare/v2.29.0...v2.30.0) (2026-02-28)
 
 
