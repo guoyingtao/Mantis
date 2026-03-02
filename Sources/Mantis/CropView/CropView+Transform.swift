@@ -61,7 +61,12 @@ extension CropView {
     
     func transform(byTransformInfo transformation: Transformation, isUpdateRotationControlView: Bool = true) {
         
-        viewModel.setRotatingStatus(by: Angle(radians: transformation.rotation))
+        // Decompose the total rotation into 90° step (rotationType) and free rotation.
+        // transformation.rotation stores the combined total radians, but the rotation
+        // dial only understands the free rotation part (within ±45°).
+        let (rotationType, freeRadians) = decomposeRotation(totalRadians: transformation.rotation)
+        viewModel.rotationType = rotationType
+        viewModel.setRotatingStatus(by: Angle(radians: freeRadians))
         
         if transformation.cropWorkbenchViewBounds != .zero {
             cropWorkbenchView.bounds = transformation.cropWorkbenchViewBounds
@@ -89,6 +94,39 @@ extension CropView {
             rotationControlView?.updateRotationValue(by: Angle(radians: viewModel.radians))
             adaptRotationControlViewToCropBoxIfNeeded()
         }
+    }
+    
+    /// Decompose a total rotation (in radians) into the nearest 90° step
+    /// (`ImageRotationType`) and the remaining free rotation.
+    private func decomposeRotation(totalRadians: CGFloat) -> (ImageRotationType, CGFloat) {
+        let totalDegrees = totalRadians * 180 / .pi
+        
+        // Find the nearest multiple of 90° to the total degrees
+        let nearest90 = round(totalDegrees / 90) * 90
+        
+        // The free rotation is the remainder after removing the 90° step component
+        let freeDegrees = totalDegrees - nearest90
+        
+        // Normalise the 90° step to one of {0, -90, -180, -270}
+        // ImageRotationType uses counterclockwise negative values
+        let stepMod = Int(nearest90) % 360
+        let normalised = stepMod < 0 ? stepMod + 360 : stepMod
+        
+        let rotationType: ImageRotationType
+        switch normalised {
+        case 0:
+            rotationType = .none
+        case 90:
+            rotationType = .counterclockwise270  // 90° CW = -270° CCW
+        case 180:
+            rotationType = .counterclockwise180
+        case 270:
+            rotationType = .counterclockwise90   // 270° CW = -90° CCW
+        default:
+            rotationType = .none
+        }
+        
+        return (rotationType, freeDegrees * .pi / 180)
     }
     
     func getTransformInfo(byTransformInfo transformInfo: Transformation) -> Transformation {
