@@ -111,32 +111,49 @@ extension CropView {
         guard let rotationControlView = rotationControlView,
               rotationControlView.isAttachedToCropView else { return }
         
+        let isSlideDial = rotationControlView is SlideDial
+        
         if Orientation.treatAsPortrait {
             rotationControlView.transform = CGAffineTransform(rotationAngle: 0)
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
             (cropAuxiliaryIndicatorView.frame.width - rotationControlView.frame.width) / 2
-            // Pin rotation control to the bottom edge of CropView (adjacent to toolbar)
-            // instead of attaching it to the crop box bottom edge
-            let cropViewPadding = cropViewConfig.padding
-            var rotationTypeSelectorHeight: CGFloat = 0
-            if cropViewConfig.enablePerspectiveCorrection && !slideDialHandlesTypeSelection {
-                rotationTypeSelectorHeight = 32
+            
+            if isSlideDial {
+                // Pin SlideDial to the bottom edge of CropView (adjacent to toolbar)
+                let cropViewPadding = cropViewConfig.padding
+                var rotationTypeSelectorHeight: CGFloat = 0
+                if cropViewConfig.enablePerspectiveCorrection && !slideDialHandlesTypeSelection {
+                    rotationTypeSelectorHeight = 32
+                }
+                rotationControlView.frame.origin.y = bounds.height - cropViewPadding - rotationControlView.frame.height - rotationTypeSelectorHeight
+            } else {
+                // RotationDial stays attached to the crop box bottom edge
+                rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
             }
-            rotationControlView.frame.origin.y = bounds.height - cropViewPadding - rotationControlView.frame.height - rotationTypeSelectorHeight
         } else if Orientation.isLandscapeRight {
             rotationControlView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-            // Pin rotation control to the right edge of CropView (adjacent to toolbar)
-            // instead of attaching it to the crop box edge
-            let cropViewPadding = cropViewConfig.padding
-            rotationControlView.frame.origin.x = bounds.width - cropViewPadding - rotationControlView.frame.width
+            
+            if isSlideDial {
+                // Pin SlideDial to the right edge of CropView (adjacent to toolbar)
+                let cropViewPadding = cropViewConfig.padding
+                rotationControlView.frame.origin.x = bounds.width - cropViewPadding - rotationControlView.frame.width
+            } else {
+                // RotationDial stays attached to the crop box right edge
+                rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
+            }
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         } else if Orientation.isLandscapeLeft {
             rotationControlView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            // Pin rotation control to the left edge of CropView (adjacent to toolbar)
-            // instead of attaching it to the crop box edge
-            let cropViewPadding = cropViewConfig.padding
-            rotationControlView.frame.origin.x = cropViewPadding
+            
+            if isSlideDial {
+                // Pin SlideDial to the left edge of CropView (adjacent to toolbar)
+                let cropViewPadding = cropViewConfig.padding
+                rotationControlView.frame.origin.x = cropViewPadding
+            } else {
+                // RotationDial stays attached to the crop box left edge
+                rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationControlView.frame.width
+            }
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         }
