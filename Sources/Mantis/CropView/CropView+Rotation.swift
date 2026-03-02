@@ -93,6 +93,13 @@ extension CropView {
         rotationControlView.updateRotationValue(by: Angle(radians: viewModel.radians))
         viewModel.setBetweenOperationStatus()
         
+        // Prevent cropWorkbenchView's pan gesture from stealing touches intended
+        // for the slide ruler. Without this, both UIScrollViews compete for the
+        // same swipe gesture, especially in landscape where they are adjacent.
+        if let slideDial = rotationControlView as? SlideDial {
+            cropWorkbenchView.panGestureRecognizer.require(toFail: slideDial.slideRuler.scrollRulerView.panGestureRecognizer)
+        }
+        
         adaptRotationControlViewToCropBoxIfNeeded()
         rotationControlView.bringSelfToFront()
         

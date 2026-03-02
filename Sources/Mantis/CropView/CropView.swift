@@ -61,6 +61,12 @@ final class CropView: UIView {
     }
     
     var isManuallyZoomed = false
+    /// Tracks whether the user has physically resized the crop box (by dragging
+    /// its edges) or manually zoomed into the image. Used by the device rotation
+    /// handler to decide whether to take the clean reset path (no manual crop)
+    /// or the anchor-point restoration path (user has customized the crop region).
+    /// Skew-only changes do NOT set this flag.
+    var hasManuallyAdjustedCropBox = false
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
@@ -463,17 +469,6 @@ extension CropView: CropViewProtocol {
     }
     
     func handleViewWillTransition() {
-        viewModel.resetCropFrame(by: getInitialCropBoxRect())
-        
-        cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)
-        cropWorkbenchView.reset(by: viewModel.cropBoxFrame)
-        
-        // Temporarily zero out the skew so that all geometry calculations
-        // (rotateCropWorkbenchView, adjustWorkbenchView, zoomScaleToBound,
-        // convert(_:to:), adjustUIForNewCrop) operate in pure 2D space.
-        // The sublayerTransform's compensating scale distorts every
-        // coordinate conversion that crosses the scroll-view layer boundary,
-        // causing progressive zoom drift on repeated device rotations.
         let savedHSkew = viewModel.horizontalSkewDegrees
         let savedVSkew = viewModel.verticalSkewDegrees
         let hasSkew = savedHSkew != 0 || savedVSkew != 0
@@ -482,13 +477,60 @@ extension CropView: CropViewProtocol {
             viewModel.verticalSkewDegrees = 0
         }
         
-        rotateCropWorkbenchView()
-        
-        if viewModel.cropRightBottomOnImage != .zero {
+        let savedIsManuallyZoomed = isManuallyZoomed
+
+        // Use the explicit flag to decide the path. When skew is active,
+        // anchor-point based detection is unreliable because the skew system
+        // changes contentOffset, contentInset, and sublayerTransform in ways
+        // that make convert(_:to:) produce drifted coordinates even when the
+        // user hasn't manually changed the crop region. The flag is only set
+        // by user-initiated crop box edge dragging or manual pinch-zoom.
+        let shouldReset = !hasManuallyAdjustedCropBox || viewModel.cropRightBottomOnImage == .zero
+
+        if shouldReset {
+            // Unmodified image — do a clean reset for the new orientation.
+            viewModel.resetCropFrame(by: getInitialCropBoxRect())
+            cropWorkbenchView.resetImageContent(by: viewModel.cropBoxFrame)
+            
+            let totalRadians = viewModel.getTotalRadians()
+            if totalRadians != 0 {
+                cropWorkbenchView.transform = CGAffineTransform(rotationAngle: totalRadians)
+                flipCropWorkbenchViewIfNeeded()
+                adjustWorkbenchView(by: totalRadians)
+            }
+            
+            isManuallyZoomed = savedIsManuallyZoomed
+            if hasSkew {
+                viewModel.horizontalSkewDegrees = savedHSkew
+                viewModel.verticalSkewDegrees = savedVSkew
+                skewState.reset()
+                applySkewTransformIfNeeded()
+                updateContentInsetForSkew()
+            }
+            
+            if aspectRatioLockEnabled {
+                setFixedRatioCropBox()
+            }
+            
+            viewModel.setBetweenOperationStatus()
+        } else {
+            // User has modified the crop — restore via anchor points.
+            viewModel.resetCropFrame(by: getInitialCropBoxRect())
+            
+            cropWorkbenchView.transform = CGAffineTransform(scaleX: 1, y: 1)
+            cropWorkbenchView.reset(by: viewModel.cropBoxFrame)
+            
+            rotateCropWorkbenchView()
+            
             var leftTopPoint = CGPoint(x: viewModel.cropLeftTopOnImage.x * imageContainer.bounds.width,
                                        y: viewModel.cropLeftTopOnImage.y * imageContainer.bounds.height)
             var rightBottomPoint = CGPoint(x: viewModel.cropRightBottomOnImage.x * imageContainer.bounds.width,
                                            y: viewModel.cropRightBottomOnImage.y * imageContainer.bounds.height)
+            
+            // Position cropWorkbenchView's center at the new crop box center
+            // so that imageContainer.convert produces correct coordinates.
+            cropWorkbenchView.center = CGPoint(x: viewModel.cropBoxFrame.midX,
+                                               y: viewModel.cropBoxFrame.midY)
             
             leftTopPoint = imageContainer.convert(leftTopPoint, to: self)
             rightBottomPoint = imageContainer.convert(rightBottomPoint, to: self)
@@ -502,7 +544,7 @@ extension CropView: CropViewProtocol {
             
             adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
                 guard let self = self else { return }
-                // Restore skew after all geometry is settled.
+                self.isManuallyZoomed = savedIsManuallyZoomed
                 if hasSkew {
                     self.viewModel.horizontalSkewDegrees = savedHSkew
                     self.viewModel.verticalSkewDegrees = savedVSkew
@@ -511,15 +553,6 @@ extension CropView: CropViewProtocol {
                     self.updateContentInsetForSkew()
                 }
                 self.viewModel.setBetweenOperationStatus()
-            }
-        } else {
-            // No anchor points to restore — just re-apply skew.
-            if hasSkew {
-                viewModel.horizontalSkewDegrees = savedHSkew
-                viewModel.verticalSkewDegrees = savedVSkew
-                skewState.reset()
-                applySkewTransformIfNeeded()
-                updateContentInsetForSkew()
             }
         }
     }
@@ -545,6 +578,7 @@ extension CropView: CropViewProtocol {
     
     func reset() {
         flipOddTimes = false
+        hasManuallyAdjustedCropBox = false
         aspectRatioLockEnabled = forceFixedRatio
         viewModel.reset(forceFixedRatio: forceFixedRatio)
         

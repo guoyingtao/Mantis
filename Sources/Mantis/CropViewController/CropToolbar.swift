@@ -109,6 +109,13 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
     private var resetButton: UIButton?
     private var optionButtonStackView: UIStackView?
     
+    // MARK: - Liquid Glass (iOS 26+)
+    private var glassStackView: UIStackView?
+    private var toolGroupContainerView: UIVisualEffectView?
+    private var glassWrapperMap: [ObjectIdentifier: UIVisualEffectView] = [:]
+    private var toolGroupHeightConstraint: NSLayoutConstraint?
+    private var toolGroupWidthConstraint: NSLayoutConstraint?
+    
     private var autoAdjustButtonActive = false {
         didSet {
             if autoAdjustButtonActive {
@@ -185,15 +192,26 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
         if config.mode == .normal {
             addButtonsToContainer(button: cropButton)
         }
+        
+        if #available(iOS 26.0, *) {
+            applyLiquidGlassEffect()
+        }
     }
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
+        
+        let glassExtraPadding: CGFloat
+        if #available(iOS 26.0, *) {
+            glassExtraPadding = 16
+        } else {
+            glassExtraPadding = 0
+        }
 
         if Orientation.treatAsPortrait {
-            return CGSize(width: superSize.width, height: config.heightForVerticalOrientation)
+            return CGSize(width: superSize.width, height: config.heightForVerticalOrientation + glassExtraPadding)
         } else {
-            return CGSize(width: config.widthForHorizontalOrientation, height: superSize.height)
+            return CGSize(width: config.widthForHorizontalOrientation + glassExtraPadding, height: superSize.height)
         }
     }
 
@@ -209,6 +227,10 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
             optionButtonStackView?.axis = .vertical
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         }
+        
+        if #available(iOS 26.0, *) {
+            adjustGlassLayoutForOrientation()
+        }
     }
 
     public func handleFixedRatioSetted(ratio: Double) {
@@ -221,19 +243,27 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
 
     public func handleCropViewDidBecomeResettable() {
         resetButton?.isHidden = false
+        glassWrapper(for: resetButton)?.isHidden = false
+        updateToolGroupVisibilityIfNeeded()
     }
 
     public func handleCropViewDidBecomeUnResettable() {
         resetButton?.isHidden = true
+        glassWrapper(for: resetButton)?.isHidden = true
+        updateToolGroupVisibilityIfNeeded()
     }
     
     public func handleImageAutoAdjustable() {
         autoAdjustButton.isHidden = false
+        glassWrapper(for: autoAdjustButton)?.isHidden = false
+        updateToolGroupVisibilityIfNeeded()
     }
     
     public func handleImageNotAutoAdjustable() {
         autoAdjustButton.isHidden = true
+        glassWrapper(for: autoAdjustButton)?.isHidden = true
         autoAdjustButtonActive = false
+        updateToolGroupVisibilityIfNeeded()
     }
 }
 
@@ -381,6 +411,281 @@ extension CropToolbar {
             if let button = $0 {
                 optionButtonStackView?.addArrangedSubview(button)
             }
+        }
+    }
+    
+    private func glassWrapper(for button: UIButton?) -> UIVisualEffectView? {
+        guard let button = button else { return nil }
+        return glassWrapperMap[ObjectIdentifier(button)]
+    }
+    
+    /// Hides/shows the tool group capsule based on whether any of its
+    /// arranged subviews are visible.  Called after changing individual
+    /// button visibility so an empty glass pill is never left on screen.
+    private func updateToolGroupVisibilityIfNeeded() {
+        guard let toolGroup = toolGroupContainerView,
+              let toolStack = toolGroup.contentView.subviews
+                  .first(where: { $0 is UIStackView }) as? UIStackView else {
+            return
+        }
+        
+        let hasVisibleButton = toolStack.arrangedSubviews.contains { !$0.isHidden }
+        toolGroup.isHidden = !hasVisibleButton
+    }
+}
+
+// MARK: - Liquid Glass (iOS 26+)
+@available(iOS 26.0, *)
+extension CropToolbar {
+    /// Wraps a single button in its own glass capsule
+    private func wrapButtonInGlass(_ button: UIButton) -> UIVisualEffectView {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        let wrapper = UIVisualEffectView(effect: glassEffect)
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.cornerConfiguration = .capsule()
+        
+        button.removeFromSuperview()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.contentView.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: wrapper.contentView.topAnchor),
+            button.bottomAnchor.constraint(equalTo: wrapper.contentView.bottomAnchor),
+            button.leadingAnchor.constraint(equalTo: wrapper.contentView.leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: wrapper.contentView.trailingAnchor)
+        ])
+        
+        glassWrapperMap[ObjectIdentifier(button)] = wrapper
+        return wrapper
+    }
+    
+    /// Wraps a single button in a circular glass background
+    private func wrapButtonInCircularGlass(_ button: UIButton, size: CGFloat = 44) -> UIVisualEffectView {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        let wrapper = UIVisualEffectView(effect: glassEffect)
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.cornerConfiguration = .capsule()
+        
+        button.removeFromSuperview()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentEdgeInsets = .zero
+        
+        // Remove any pre-existing width/height constraints on the button
+        // (e.g. the greaterThanOrEqual width constraint added in createOptionButton)
+        // so they don't conflict with the fixed circular sizing below.
+        for constraint in button.constraints where
+            constraint.firstAttribute == .width || constraint.firstAttribute == .height {
+            button.removeConstraint(constraint)
+        }
+        
+        button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        
+        wrapper.contentView.addSubview(button)
+        
+        let widthConstraint = wrapper.widthAnchor.constraint(equalToConstant: size)
+        let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: size)
+        widthConstraint.priority = .defaultHigh
+        heightConstraint.priority = .defaultHigh
+        
+        NSLayoutConstraint.activate([
+            widthConstraint,
+            heightConstraint,
+            button.centerXAnchor.constraint(equalTo: wrapper.contentView.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: wrapper.contentView.centerYAnchor),
+            button.widthAnchor.constraint(equalTo: wrapper.contentView.widthAnchor),
+            button.heightAnchor.constraint(equalTo: wrapper.contentView.heightAnchor)
+        ])
+        
+        glassWrapperMap[ObjectIdentifier(button)] = wrapper
+        return wrapper
+    }
+    
+    /// Wraps multiple buttons in a single shared glass capsule
+    private func wrapButtonsInGlass(_ buttons: [UIButton], size: CGFloat = 44) -> UIVisualEffectView {
+        let glassEffect = UIGlassEffect()
+        let wrapper = UIVisualEffectView(effect: glassEffect)
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.cornerConfiguration = .capsule()
+        
+        let isPortrait = Orientation.treatAsPortrait
+        
+        let capsulePadding: CGFloat = 12
+        
+        let stack = UIStackView()
+        stack.axis = isPortrait ? .horizontal : .vertical
+        stack.distribution = .fillEqually
+        stack.spacing = 12
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = isPortrait
+            ? UIEdgeInsets(top: 0, left: capsulePadding, bottom: 0, right: capsulePadding)
+            : UIEdgeInsets(top: capsulePadding, left: 0, bottom: capsulePadding, right: 0)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.contentView.addSubview(stack)
+        
+        let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: size)
+        let widthConstraint = wrapper.widthAnchor.constraint(equalToConstant: size)
+        heightConstraint.priority = .defaultHigh
+        widthConstraint.priority = .defaultHigh
+        
+        heightConstraint.isActive = isPortrait
+        widthConstraint.isActive = !isPortrait
+        
+        toolGroupHeightConstraint = heightConstraint
+        toolGroupWidthConstraint = widthConstraint
+        
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: wrapper.contentView.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: wrapper.contentView.bottomAnchor),
+            stack.leadingAnchor.constraint(equalTo: wrapper.contentView.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: wrapper.contentView.trailingAnchor)
+        ])
+        
+        for button in buttons {
+            button.removeFromSuperview()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            
+            // Remove pre-existing width/height constraints on the button
+            // (e.g. the greaterThanOrEqual width constraint from createOptionButton)
+            // so they don't conflict with the fillEqually distribution.
+            for constraint in button.constraints where
+                constraint.firstAttribute == .width || constraint.firstAttribute == .height {
+                button.removeConstraint(constraint)
+            }
+            
+            button.contentEdgeInsets = .zero
+            button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+            
+            stack.addArrangedSubview(button)
+        }
+        
+        return wrapper
+    }
+    
+    func applyLiquidGlassEffect() {
+        guard let stackView = optionButtonStackView else { return }
+        
+        backgroundColor = .clear
+        
+        // Main layout stack
+        let mainStack = UIStackView()
+        mainStack.axis = Orientation.treatAsPortrait ? .horizontal : .vertical
+        mainStack.distribution = .equalCentering
+        mainStack.alignment = .center
+        mainStack.isLayoutMarginsRelativeArrangement = true
+        mainStack.layoutMargins = Orientation.treatAsPortrait
+            ? UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            : UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        glassStackView = mainStack
+        
+        // Collect buttons from original stack view
+        let arrangedViews = stackView.arrangedSubviews
+        var cancelBtn: UIButton?
+        var cropBtn: UIButton?
+        var toolButtons: [UIButton] = []
+        
+        for view in arrangedViews {
+            guard let button = view as? UIButton else { continue }
+            if button === cancelButton {
+                cancelBtn = button
+            } else if button === cropButton {
+                cropBtn = button
+            } else {
+                toolButtons.append(button)
+            }
+        }
+        
+        // Remove all from original stack
+        for view in arrangedViews {
+            stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        
+        // Add Cancel button (circular glass with xmark icon)
+        if let cancel = cancelBtn {
+            cancel.setTitle(nil, for: .normal)
+            // Only use SF Symbol fallback when no custom icon was provided
+            if iconProvider?.getCancelIcon() == nil {
+                let xmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+                let xmarkImage = UIImage(systemName: "xmark", withConfiguration: xmarkConfig)
+                cancel.setImage(xmarkImage, for: .normal)
+            }
+            cancel.tintColor = .label
+            let wrapped = wrapButtonInCircularGlass(cancel)
+            mainStack.addArrangedSubview(wrapped)
+        }
+        
+        // Add tool buttons into one shared glass capsule
+        if !toolButtons.isEmpty {
+            for button in toolButtons {
+                button.tintColor = .label
+                button.setTitleColor(.label, for: .normal)
+            }
+            let toolGlass = wrapButtonsInGlass(toolButtons)
+            toolGroupContainerView = toolGlass
+            mainStack.addArrangedSubview(toolGlass)
+        }
+        
+        // Add Done/Crop button (circular glass with checkmark icon)
+        if let crop = cropBtn {
+            crop.setTitle(nil, for: .normal)
+            // Only use SF Symbol fallback when no custom icon was provided
+            if iconProvider?.getCropIcon() == nil {
+                let checkmarkConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+                let checkmarkImage = UIImage(systemName: "checkmark", withConfiguration: checkmarkConfig)
+                crop.setImage(checkmarkImage, for: .normal)
+            }
+            crop.tintColor = .label
+            let wrapped = wrapButtonInCircularGlass(crop)
+            mainStack.addArrangedSubview(wrapped)
+        }
+        
+        addSubview(mainStack)
+        
+        let topConstraint = mainStack.topAnchor.constraint(equalTo: topAnchor)
+        let bottomConstraint = mainStack.bottomAnchor.constraint(equalTo: bottomAnchor)
+        let leadingConstraint = mainStack.leadingAnchor.constraint(equalTo: leadingAnchor)
+        let trailingConstraint = mainStack.trailingAnchor.constraint(equalTo: trailingAnchor)
+        
+        // Use high priority so these yield to the toolbar's intrinsic content size
+        // during orientation transitions (e.g. height == 60 in portrait vs
+        // vertical layout with 20+20 margins in landscape).
+        for constraint in [topConstraint, bottomConstraint, leadingConstraint, trailingConstraint] {
+            constraint.priority = .defaultHigh
+        }
+        
+        NSLayoutConstraint.activate([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+        
+        // Hide original stack view
+        stackView.isHidden = true
+    }
+    
+    func adjustGlassLayoutForOrientation() {
+        let isPortrait = Orientation.treatAsPortrait
+        let axis: NSLayoutConstraint.Axis = isPortrait ? .horizontal : .vertical
+        let margins = isPortrait
+            ? UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            : UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        
+        glassStackView?.axis = axis
+        glassStackView?.layoutMargins = margins
+        
+        // Swap dimension constraints for the tool group capsule
+        toolGroupHeightConstraint?.isActive = isPortrait
+        toolGroupWidthConstraint?.isActive = !isPortrait
+        
+        // Update tool group stack axis and capsule padding direction
+        if let toolGroup = toolGroupContainerView,
+           let toolStack = toolGroup.contentView.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
+            toolStack.axis = axis
+            let capsulePadding: CGFloat = 12
+            toolStack.layoutMargins = isPortrait
+                ? UIEdgeInsets(top: 0, left: capsulePadding, bottom: 0, right: capsulePadding)
+                : UIEdgeInsets(top: capsulePadding, left: 0, bottom: capsulePadding, right: 0)
         }
     }
 }

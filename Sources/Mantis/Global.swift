@@ -22,7 +22,10 @@ func print(_ object: Any) {
 }
 
 func isTheSamePoint(point1: CGPoint, point2: CGPoint) -> Bool {
-    let tolerance = CGFloat.ulpOfOne * 10
+    // Use a tolerance large enough to absorb floating-point drift introduced
+    // by coordinate conversions during device rotation, while still small
+    // enough to detect intentional user edits to the crop region.
+    let tolerance: CGFloat = 1e-4
     if abs(point1.x - point2.x) > tolerance { return false }
     if abs(point1.y - point2.y) > tolerance { return false }
     
