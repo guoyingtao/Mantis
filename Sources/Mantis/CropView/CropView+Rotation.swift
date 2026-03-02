@@ -118,12 +118,18 @@ extension CropView {
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.maxY
         } else if Orientation.isLandscapeRight {
             rotationControlView.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.maxX
+            // Pin rotation control to the right edge of CropView (adjacent to toolbar)
+            // instead of attaching it to the crop box edge
+            let cropViewPadding = cropViewConfig.padding
+            rotationControlView.frame.origin.x = bounds.width - cropViewPadding - rotationControlView.frame.width
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         } else if Orientation.isLandscapeLeft {
             rotationControlView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.minX - rotationControlView.frame.width
+            // Pin rotation control to the left edge of CropView (adjacent to toolbar)
+            // instead of attaching it to the crop box edge
+            let cropViewPadding = cropViewConfig.padding
+            rotationControlView.frame.origin.x = cropViewPadding
             rotationControlView.frame.origin.y = cropAuxiliaryIndicatorView.frame.origin.y +
             (cropAuxiliaryIndicatorView.frame.height - rotationControlView.frame.height) / 2
         }
@@ -312,14 +318,32 @@ extension CropView: RotationTypeSelectorDelegate {
                     height: selectorHeight
                 )
             }
-        } else {
-            // Landscape: position beside the crop area
-            rotationTypeSelector.frame = CGRect(
-                x: cropAuxiliaryIndicatorView.frame.midX - selectorWidth / 2,
-                y: cropAuxiliaryIndicatorView.frame.maxY + cropViewConfig.rotationControlViewHeight + 4,
-                width: selectorWidth,
-                height: selectorHeight
-            )
+        } else if Orientation.isLandscapeRight {
+            // Landscape right: position selector between crop box and rotation dial (right side)
+            if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
+                rotationTypeSelector.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+                let centerX = rotationView.frame.minX - selectorHeight / 2 - 4
+                let centerY = rotationView.frame.midY
+                rotationTypeSelector.frame = CGRect(
+                    x: centerX - selectorHeight / 2,
+                    y: centerY - selectorWidth / 2,
+                    width: selectorHeight,
+                    height: selectorWidth
+                )
+            }
+        } else if Orientation.isLandscapeLeft {
+            // Landscape left: position selector between rotation dial and crop box (left side)
+            if let rotationView = rotationControlView, rotationView.isAttachedToCropView {
+                rotationTypeSelector.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+                let centerX = rotationView.frame.maxX + selectorHeight / 2 + 4
+                let centerY = rotationView.frame.midY
+                rotationTypeSelector.frame = CGRect(
+                    x: centerX - selectorHeight / 2,
+                    y: centerY - selectorWidth / 2,
+                    width: selectorHeight,
+                    height: selectorWidth
+                )
+            }
         }
     }
 }
