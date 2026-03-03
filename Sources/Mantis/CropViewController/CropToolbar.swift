@@ -110,12 +110,14 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
     private var optionButtonStackView: UIStackView?
     
     // MARK: - Liquid Glass (iOS 26+)
+    #if compiler(>=6.2)
     private var glassStackView: UIStackView?
     private var toolGroupContainerView: UIVisualEffectView?
     private var glassWrapperMap: [ObjectIdentifier: UIVisualEffectView] = [:]
     private var toolGroupHeightConstraint: NSLayoutConstraint?
     private var toolGroupWidthConstraint: NSLayoutConstraint?
-    
+    #endif
+
     private var autoAdjustButtonActive = false {
         didSet {
             if autoAdjustButtonActive {
@@ -193,20 +195,26 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
             addButtonsToContainer(button: cropButton)
         }
         
+        #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             applyLiquidGlassEffect()
         }
+        #endif
     }
     
     public override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
         
         let glassExtraPadding: CGFloat
+        #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             glassExtraPadding = 16
         } else {
             glassExtraPadding = 0
         }
+        #else
+        glassExtraPadding = 0
+        #endif
 
         if Orientation.treatAsPortrait {
             return CGSize(width: superSize.width, height: config.heightForVerticalOrientation + glassExtraPadding)
@@ -228,9 +236,11 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
             optionButtonStackView?.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         }
         
+        #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             adjustGlassLayoutForOrientation()
         }
+        #endif
     }
 
     public func handleFixedRatioSetted(ratio: Double) {
@@ -243,27 +253,37 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
 
     public func handleCropViewDidBecomeResettable() {
         resetButton?.isHidden = false
+        #if compiler(>=6.2)
         glassWrapper(for: resetButton)?.isHidden = false
         updateToolGroupVisibilityIfNeeded()
+        #endif
     }
 
     public func handleCropViewDidBecomeUnResettable() {
         resetButton?.isHidden = true
+        #if compiler(>=6.2)
         glassWrapper(for: resetButton)?.isHidden = true
         updateToolGroupVisibilityIfNeeded()
+        #endif
     }
-    
+
     public func handleImageAutoAdjustable() {
         autoAdjustButton.isHidden = false
+        #if compiler(>=6.2)
         glassWrapper(for: autoAdjustButton)?.isHidden = false
         updateToolGroupVisibilityIfNeeded()
+        #endif
     }
-    
+
     public func handleImageNotAutoAdjustable() {
         autoAdjustButton.isHidden = true
+        #if compiler(>=6.2)
         glassWrapper(for: autoAdjustButton)?.isHidden = true
+        #endif
         autoAdjustButtonActive = false
+        #if compiler(>=6.2)
         updateToolGroupVisibilityIfNeeded()
+        #endif
     }
 }
 
@@ -414,11 +434,12 @@ extension CropToolbar {
         }
     }
     
+    #if compiler(>=6.2)
     private func glassWrapper(for button: UIButton?) -> UIVisualEffectView? {
         guard let button = button else { return nil }
         return glassWrapperMap[ObjectIdentifier(button)]
     }
-    
+
     /// Hides/shows the tool group capsule based on whether any of its
     /// arranged subviews are visible.  Called after changing individual
     /// button visibility so an empty glass pill is never left on screen.
@@ -428,12 +449,14 @@ extension CropToolbar {
                   .first(where: { $0 is UIStackView }) as? UIStackView else {
             return
         }
-        
+
         let hasVisibleButton = toolStack.arrangedSubviews.contains { !$0.isHidden }
         toolGroup.isHidden = !hasVisibleButton
     }
+    #endif
 }
 
+#if compiler(>=6.2)
 // MARK: - Liquid Glass (iOS 26+)
 @available(iOS 26.0, *)
 extension CropToolbar {
@@ -670,14 +693,14 @@ extension CropToolbar {
         let margins = isPortrait
             ? UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             : UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        
+
         glassStackView?.axis = axis
         glassStackView?.layoutMargins = margins
-        
+
         // Swap dimension constraints for the tool group capsule
         toolGroupHeightConstraint?.isActive = isPortrait
         toolGroupWidthConstraint?.isActive = !isPortrait
-        
+
         // Update tool group stack axis and capsule padding direction
         if let toolGroup = toolGroupContainerView,
            let toolStack = toolGroup.contentView.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
@@ -689,3 +712,4 @@ extension CropToolbar {
         }
     }
 }
+#endif
