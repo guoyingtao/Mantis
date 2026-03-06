@@ -17,7 +17,8 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
     var didBeginCrop = false
     var didEndCrop = false
     var didImageTransformed = false
-    
+    var didFailFaceValidation = false
+
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
         didCrop = true
     }
@@ -48,5 +49,9 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
     
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {
         didImageTransformed = true
+    }
+
+    func cropViewControllerDidFailFaceValidation(_ cropViewController: CropViewController, cropped: UIImage) {
+        didFailFaceValidation = true
     }
 }

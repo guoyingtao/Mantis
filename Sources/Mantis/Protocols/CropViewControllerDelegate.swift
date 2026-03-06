@@ -14,7 +14,9 @@ public protocol CropViewControllerDelegate: AnyObject {
                                    cropInfo: CropInfo)
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage)
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage)
-    
+
+    func cropViewControllerDidFailFaceValidation(_ cropViewController: CropViewController, cropped: UIImage)
+
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController)
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo)
     
@@ -34,7 +36,9 @@ public protocol CropViewControllerDelegate: AnyObject {
 
 public extension CropViewControllerDelegate {
     func cropViewControllerDidFailToCrop(_ cropViewController: CropViewController, original: UIImage) {}
-    
+
+    func cropViewControllerDidFailFaceValidation(_ cropViewController: CropViewController, cropped: UIImage) {}
+
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {}
     
     func cropViewControllerDidEndResize(_ cropViewController: CropViewController, original: UIImage, cropInfo: CropInfo) {}
