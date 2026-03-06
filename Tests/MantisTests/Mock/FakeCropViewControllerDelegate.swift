@@ -51,7 +51,10 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
         didImageTransformed = true
     }
 
+    var onFaceValidationFailure: (() -> Void)?
+
     func cropViewControllerDidFailFaceValidation(_ cropViewController: CropViewController, cropped: UIImage) {
         didFailFaceValidation = true
+        onFaceValidationFailure?()
     }
 }

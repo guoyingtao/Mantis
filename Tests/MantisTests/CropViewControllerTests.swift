@@ -102,14 +102,13 @@ final class CropViewControllerTests: XCTestCase {
         }
         let transformation = fakeCropView.makeTransformation()
         let cropInfo = fakeCropView.makeCropInfo()
+        let expectation = expectation(description: "Face validation completes")
+        fakeCropVCDelegate.onFaceValidationFailure = {
+            expectation.fulfill()
+        }
         cropVC.deliverCropResult(image: image,
                                  transformation: transformation,
                                  cropInfo: cropInfo)
-
-        let expectation = expectation(description: "Face validation completes")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            expectation.fulfill()
-        }
         waitForExpectations(timeout: 3.0)
 
         XCTAssertTrue(fakeCropVCDelegate.didFailFaceValidation)
