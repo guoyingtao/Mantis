@@ -22,7 +22,21 @@
 //  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 //  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import CoreImage
 import UIKit
+
+// MARK: - Face Validation
+public struct FaceValidationConfig {
+    /// When enabled, the cropped image is checked for faces before
+    /// calling the crop-success delegate. If no face is found,
+    /// `cropViewControllerDidFailFaceValidation(_:cropped:)` is called instead.
+    public var enabled: Bool = false
+
+    /// The accuracy used by `CIDetector`. Defaults to `CIDetectorAccuracyHigh`.
+    public var detectorAccuracy: String = CIDetectorAccuracyHigh
+
+    public init() {}
+}
 
 // MARK: - Localization
 public final class LocalizationConfig {
@@ -73,6 +87,8 @@ public struct Config {
         return Bundle(url: url)
     }()
     
+    public var faceValidationConfig = FaceValidationConfig()
+
     public var enableUndoRedo: Bool = false
     
     static var language: Language?
