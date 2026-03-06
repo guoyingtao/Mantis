@@ -75,7 +75,7 @@ extension CropViewController {
             return
         }
 
-        let accuracy = config.faceValidationConfig.detectorAccuracy
+        let accuracy = config.faceValidationConfig.detectorAccuracy.ciAccuracy
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let hasFace = Self.detectFace(in: image, accuracy: accuracy)
@@ -102,7 +102,26 @@ extension CropViewController {
         ) else {
             return true
         }
-        let features = detector.features(in: ciImage)
+        let orientation = image.imageOrientation.exifOrientation
+        let features = detector.features(in: ciImage,
+                                         options: [CIDetectorImageOrientation: orientation])
         return !features.isEmpty
+    }
+}
+
+// MARK: - EXIF Orientation
+private extension UIImage.Orientation {
+    var exifOrientation: Int {
+        switch self {
+        case .up: return 1
+        case .upMirrored: return 2
+        case .down: return 3
+        case .downMirrored: return 4
+        case .leftMirrored: return 5
+        case .right: return 6
+        case .rightMirrored: return 7
+        case .left: return 8
+        @unknown default: return 1
+        }
     }
 }

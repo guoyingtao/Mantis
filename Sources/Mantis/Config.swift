@@ -27,13 +27,25 @@ import UIKit
 
 // MARK: - Face Validation
 public struct FaceValidationConfig {
+    public enum DetectorAccuracy {
+        case low
+        case high
+
+        var ciAccuracy: String {
+            switch self {
+            case .low: return CIDetectorAccuracyLow
+            case .high: return CIDetectorAccuracyHigh
+            }
+        }
+    }
+
     /// When enabled, the cropped image is checked for faces before
     /// calling the crop-success delegate. If no face is found,
     /// `cropViewControllerDidFailFaceValidation(_:cropped:)` is called instead.
     public var enabled: Bool = false
 
-    /// The accuracy used by `CIDetector`. Defaults to `CIDetectorAccuracyHigh`.
-    public var detectorAccuracy: String = CIDetectorAccuracyHigh
+    /// The accuracy used by `CIDetector`. Defaults to `.high`.
+    public var detectorAccuracy: DetectorAccuracy = .high
 
     public init() {}
 }

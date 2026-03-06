@@ -69,9 +69,50 @@ final class CropViewControllerTests: XCTestCase {
     
     func testCropViewDidEndCrop() {
         XCTAssertFalse(fakeCropVCDelegate.didEndCrop)
-        
+
         cropVC.cropViewDidEndCrop(cropVC.cropView)
-        
+
         XCTAssertTrue(fakeCropVCDelegate.didEndCrop)
+    }
+
+    func testDeliverCropResultWithFaceValidationDisabled() {
+        cropVC.config.faceValidationConfig.enabled = false
+        XCTAssertFalse(fakeCropVCDelegate.didCrop)
+
+        let image = UIImage()
+        let transformation = fakeCropView.makeTransformation()
+        let cropInfo = fakeCropView.makeCropInfo()
+        cropVC.deliverCropResult(image: image,
+                                 transformation: transformation,
+                                 cropInfo: cropInfo)
+
+        XCTAssertTrue(fakeCropVCDelegate.didCrop)
+        XCTAssertFalse(fakeCropVCDelegate.didFailFaceValidation)
+    }
+
+    func testDeliverCropResultWithFaceValidationEnabled() {
+        cropVC.config.faceValidationConfig.enabled = true
+        XCTAssertFalse(fakeCropVCDelegate.didFailFaceValidation)
+
+        // Create a solid-color image (no face) that CIImage can process
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 10, height: 10))
+        let image = renderer.image { context in
+            UIColor.red.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 10, height: 10))
+        }
+        let transformation = fakeCropView.makeTransformation()
+        let cropInfo = fakeCropView.makeCropInfo()
+        cropVC.deliverCropResult(image: image,
+                                 transformation: transformation,
+                                 cropInfo: cropInfo)
+
+        let expectation = expectation(description: "Face validation completes")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 3.0)
+
+        XCTAssertTrue(fakeCropVCDelegate.didFailFaceValidation)
+        XCTAssertFalse(fakeCropVCDelegate.didCrop)
     }
 }
