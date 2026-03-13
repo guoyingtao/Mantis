@@ -11,7 +11,17 @@ import UIKit
 extension CropViewController {
     @available(iOS 13.0, *)
     public func crop(by cropInfo: CropInfo) {
-        guard let image = cropView.image.crop(by: cropInfo) else {
+        let croppedImage: UIImage?
+        let maxPixels = config.cropViewConfig.maxImagePixelCount
+        let pixelW = Int(cropView.image.size.width * cropView.image.scale)
+        let pixelH = Int(cropView.image.size.height * cropView.image.scale)
+        if maxPixels > 0 && pixelW * pixelH > maxPixels {
+            croppedImage = cropView.image.cropWithCIImage(by: cropInfo)
+        } else {
+            croppedImage = cropView.image.crop(by: cropInfo)
+        }
+
+        guard let image = croppedImage else {
             Task { @MainActor [weak self] in
                 guard let self = self else { return }
                 self.delegate?.cropViewControllerDidFailToCrop(self, original: cropView.image)
