@@ -160,6 +160,12 @@ final class CropView: UIView {
     }
     
     private func handleCropBoxFrameChange(_ cropBoxFrame: CGRect) {
+        guard cropBoxFrame.width.isFinite, cropBoxFrame.height.isFinite,
+              cropBoxFrame.origin.x.isFinite, cropBoxFrame.origin.y.isFinite,
+              cropBoxFrame.width >= 0, cropBoxFrame.height >= 0 else {
+            return
+        }
+        
         cropAuxiliaryIndicatorView.frame = cropBoxFrame
         
         var cropRatio: CGFloat = 1.0

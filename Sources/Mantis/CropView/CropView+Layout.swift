@@ -220,6 +220,10 @@ extension CropView {
         let width = abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.height
         let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
         
+        guard width.isFinite, height.isFinite, width > 0, height > 0 else {
+            return
+        }
+        
         cropWorkbenchView.updateLayout(byNewSize: CGSize(width: width, height: height))
         
         if !isManuallyZoomed || cropWorkbenchView.shouldScale() {
@@ -233,9 +237,13 @@ extension CropView {
     }
     
     func updatePositionFor90Rotation(by radians: CGFloat) {
-        func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat {
+        func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat? {
             let width = abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.height
             let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
+            
+            guard width.isFinite, height.isFinite, width > 0, height > 0 else {
+                return nil
+            }
             
             let newSize: CGSize
             if viewModel.rotationType.isRotatedByMultiple180 {
@@ -244,12 +252,16 @@ extension CropView {
                 newSize = CGSize(width: height, height: width)
             }
             
+            guard cropWorkbenchView.bounds.width > 0 else { return nil }
             let scale = newSize.width / cropWorkbenchView.bounds.width
+            guard scale.isFinite, scale > 0 else { return nil }
             cropWorkbenchView.updateLayout(byNewSize: newSize)
             return scale
         }
         
-        let scale = adjustScrollViewForNormalRatio(by: radians)
+        guard let scale = adjustScrollViewForNormalRatio(by: radians) else {
+            return
+        }
         
         let newZoomScale = cropWorkbenchView.zoomScale * scale
         cropWorkbenchView.minimumZoomScale = newZoomScale

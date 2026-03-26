@@ -146,9 +146,13 @@ extension UIImage {
         let zoomScaleX = abs(cropInfo.scaleX)
         let zoomScaleY = abs(cropInfo.scaleY)
 
+        guard imageViewSize.width > 0, imageViewSize.height > 0,
+              zoomScaleX > 0, zoomScaleY > 0 else { return nil }
+
         let outputWidth = round((size.width / imageViewSize.width * cropSize.width) / zoomScaleX)
         let outputHeight = round((size.height / imageViewSize.height * cropSize.height) / zoomScaleY)
-        guard outputWidth > 0 && outputHeight > 0 else { return nil }
+        guard outputWidth > 0 && outputHeight > 0,
+              outputWidth.isFinite && outputHeight.isFinite else { return nil }
 
         let scrollBoundsSize = cropInfo.scrollBoundsSize
         let scrollContentOffset = cropInfo.scrollContentOffset
@@ -223,11 +227,15 @@ extension UIImage {
         filter.setValue(CIVector(x: pts[2].x, y: pts[2].y), forKey: "inputBottomRight")
         filter.setValue(CIVector(x: pts[3].x, y: pts[3].y), forKey: "inputBottomLeft")
 
-        guard let correctedOutput = filter.outputImage else { return nil }
+        guard let correctedOutput = filter.outputImage,
+              correctedOutput.extent.width > 0,
+              correctedOutput.extent.height > 0 else { return nil }
 
         // Render at desired output size
         let renderScaleX = outputWidth / correctedOutput.extent.width
         let renderScaleY = outputHeight / correctedOutput.extent.height
+        guard renderScaleX.isFinite, renderScaleY.isFinite,
+              renderScaleX > 0, renderScaleY > 0 else { return nil }
         let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
         let context = CIContext(options: [.useSoftwareRenderer: false])
@@ -282,8 +290,18 @@ extension UIImage {
         let cropSize = cropInfo.cropSize
         let imageViewSize = cropInfo.imageViewSize
         
+        guard imageViewSize.width > 0, imageViewSize.height > 0,
+              zoomScaleX > 0, zoomScaleY > 0 else {
+            return .zero
+        }
+        
         let expectedWidth = round((size.width / imageViewSize.width * cropSize.width) / zoomScaleX)
         let expectedHeight = round((size.height / imageViewSize.height * cropSize.height) / zoomScaleY)
+        
+        guard expectedWidth.isFinite, expectedHeight.isFinite,
+              expectedWidth > 0, expectedHeight > 0 else {
+            return .zero
+        }
         
         return CGSize(width: expectedWidth, height: expectedHeight)
     }

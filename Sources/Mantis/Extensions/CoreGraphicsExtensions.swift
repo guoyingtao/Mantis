@@ -30,8 +30,9 @@ typealias RadiansAngle = CGFloat
 extension FloatingPoint {
     var isBad: Bool { return isNaN || isInfinite }
     var checked: Self {
-        guard !isBad && !isInfinite else {
-            fatalError("bad number!")
+        guard !isBad else {
+            assertionFailure("bad number!")
+            return 0
         }
         return self
     }
@@ -41,28 +42,37 @@ extension CGSize {
     var hasNaN: Bool {return width.isBad || height.isBad }
     var checked: CGSize {
         guard !hasNaN else {
-            fatalError("bad number!")
+            assertionFailure("bad number!")
+            return .zero
         }
         return self
     }
 }
 
 extension CGRect {
-    var center: CGPoint { return CGPoint(x: midX, y: midY).checked }
+    var center: CGPoint {
+        guard !hasNaN else { return .zero }
+        return CGPoint(x: midX, y: midY)
+    }
     var hasNaN: Bool {return size.hasNaN || origin.hasNaN}
     var checked: CGRect {
         guard !hasNaN else {
-            fatalError("bad number!")
+            assertionFailure("bad number!")
+            return .zero
         }
         return self
     }
 }
 
 extension CGPoint {
-    var vector: CGVector { return CGVector(dx: x, dy: y).checked }
+    var vector: CGVector {
+        guard !hasNaN else { return .zero }
+        return CGVector(dx: x, dy: y)
+    }
     var checked: CGPoint {
         guard !hasNaN else {
-            fatalError("bad number!")
+            assertionFailure("bad number!")
+            return .zero
         }
         return self
     }
@@ -73,7 +83,8 @@ extension CGVector {
     var hasNaN: Bool { return dx.isBad || dy.isBad }
     var checked: CGVector {
         guard !hasNaN else {
-            fatalError("bad number!")
+            assertionFailure("bad number!")
+            return .zero
         }
         return self
     }
@@ -90,13 +101,15 @@ extension CGVector {
     func scale(_ scale: CGFloat) -> CGVector { return CGVector(dx: dx * scale, dy: dy * scale).checked}
     
     init(fromPoint: CGPoint, toPoint: CGPoint) {
-        guard !fromPoint.hasNaN && !toPoint.hasNaN  else {
-            fatalError("Nan point!")
-        }
         self.init()
+        guard !fromPoint.hasNaN && !toPoint.hasNaN else {
+            assertionFailure("NaN point!")
+            dx = 0
+            dy = 0
+            return
+        }
         dx = toPoint.x - fromPoint.x
         dy = toPoint.y - fromPoint.y
-        _ = self.checked
     }
     
     init(angle: RadiansAngle) {

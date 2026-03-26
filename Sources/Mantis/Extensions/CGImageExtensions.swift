@@ -23,6 +23,13 @@ extension CGImage {
                           outputSize: CGSize,
                           cropSize: CGSize,
                           imageViewSize: CGSize) throws -> CGImage? {
+        guard outputSize.width > 0, outputSize.height > 0,
+              outputSize.width.isFinite, outputSize.height.isFinite,
+              cropSize.width > 0, cropSize.height > 0,
+              imageViewSize.width > 0, imageViewSize.height > 0 else {
+            return nil
+        }
+        
         guard var colorSpaceRef = self.colorSpace else {
             throw ImageProcessError.noColorSpace
         }
