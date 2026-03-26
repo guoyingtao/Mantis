@@ -159,6 +159,9 @@ extension UIImage {
         let imgContainerFrame = cropInfo.imageContainerFrame
         let sublayerTransform = cropInfo.skewSublayerTransform
 
+        guard imgContainerFrame.size.width > 0, imgContainerFrame.size.height > 0,
+              imgContainerFrame.origin.x.isFinite, imgContainerFrame.origin.y.isFinite else { return nil }
+
         // sublayerTransform anchor in content coordinates
         let anchorX = scrollContentOffset.x + scrollBoundsSize.width / 2
         let anchorY = scrollContentOffset.y + scrollBoundsSize.height / 2

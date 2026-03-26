@@ -51,7 +51,10 @@ extension CGSize {
 
 extension CGRect {
     var center: CGPoint {
-        guard !hasNaN else { return .zero }
+        guard !hasNaN else {
+            assertionFailure("bad number!")
+            return .zero
+        }
         return CGPoint(x: midX, y: midY)
     }
     var hasNaN: Bool {return size.hasNaN || origin.hasNaN}
@@ -66,7 +69,10 @@ extension CGRect {
 
 extension CGPoint {
     var vector: CGVector {
-        guard !hasNaN else { return .zero }
+        guard !hasNaN else {
+            assertionFailure("bad number!")
+            return .zero
+        }
         return CGVector(dx: x, dy: y)
     }
     var checked: CGPoint {

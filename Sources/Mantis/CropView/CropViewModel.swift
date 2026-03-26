@@ -59,16 +59,19 @@ final class CropViewModel: CropViewModelProtocol {
     
     var cropBoxFrameChanged: (_ frame: CGRect) -> Void = { _ in }
     
-    var cropBoxFrame = CGRect.zero {
-        didSet {
-            guard cropBoxFrame.origin.x.isFinite, cropBoxFrame.origin.y.isFinite,
-                  cropBoxFrame.width.isFinite, cropBoxFrame.height.isFinite,
-                  cropBoxFrame.width >= 0, cropBoxFrame.height >= 0 else {
-                cropBoxFrame = oldValue
+    private var _cropBoxFrame = CGRect.zero
+    var cropBoxFrame: CGRect {
+        get { _cropBoxFrame }
+        set {
+            guard newValue.origin.x.isFinite, newValue.origin.y.isFinite,
+                  newValue.size.width.isFinite, newValue.size.height.isFinite,
+                  newValue.size.width >= 0, newValue.size.height >= 0 else {
                 return
             }
-            if oldValue != cropBoxFrame {
-                cropBoxFrameChanged(cropBoxFrame)
+            let oldValue = _cropBoxFrame
+            _cropBoxFrame = newValue
+            if oldValue != newValue {
+                cropBoxFrameChanged(newValue)
             }
         }
     }
