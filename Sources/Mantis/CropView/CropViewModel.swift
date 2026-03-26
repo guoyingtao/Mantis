@@ -62,7 +62,8 @@ final class CropViewModel: CropViewModelProtocol {
     var cropBoxFrame = CGRect.zero {
         didSet {
             guard cropBoxFrame.origin.x.isFinite, cropBoxFrame.origin.y.isFinite,
-                  cropBoxFrame.width.isFinite, cropBoxFrame.height.isFinite else {
+                  cropBoxFrame.width.isFinite, cropBoxFrame.height.isFinite,
+                  cropBoxFrame.width >= 0, cropBoxFrame.height >= 0 else {
                 cropBoxFrame = oldValue
                 return
             }
