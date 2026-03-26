@@ -160,6 +160,7 @@ extension UIImage {
         let sublayerTransform = cropInfo.skewSublayerTransform
 
         guard imgContainerFrame.size.width > 0, imgContainerFrame.size.height > 0,
+              imgContainerFrame.size.width.isFinite, imgContainerFrame.size.height.isFinite,
               imgContainerFrame.origin.x.isFinite, imgContainerFrame.origin.y.isFinite else { return nil }
 
         // sublayerTransform anchor in content coordinates

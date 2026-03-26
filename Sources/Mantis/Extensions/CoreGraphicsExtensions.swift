@@ -114,8 +114,8 @@ extension CGVector {
             dy = 0
             return
         }
-        dx = toPoint.x - fromPoint.x
-        dy = toPoint.y - fromPoint.y
+        dx = (toPoint.x - fromPoint.x).checked
+        dy = (toPoint.y - fromPoint.y).checked
     }
     
     init(angle: RadiansAngle) {
