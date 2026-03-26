@@ -79,10 +79,20 @@ final class CropWorkbenchView: UIScrollView {
             return 1.0
         }
         
+        guard imageContainer.bounds.width > 0, imageContainer.bounds.height > 0,
+              bounds.width > 0, bounds.height > 0 else {
+            return max(1.0, initialMinimumZoomScale)
+        }
+        
         let scaleW = bounds.width / imageContainer.bounds.width
         let scaleH = bounds.height / imageContainer.bounds.height
+        let result = max(scaleW, scaleH) * initialMinimumZoomScale
         
-        return max(scaleW, scaleH) * initialMinimumZoomScale
+        guard result.isFinite, result > 0 else {
+            return max(1.0, initialMinimumZoomScale)
+        }
+        
+        return result
     }
 }
 
