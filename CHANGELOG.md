@@ -2,6 +2,14 @@
 
 -----
 
+### [2.31.1](https://www.github.com/guoyingtao/Mantis/compare/v2.31.0...v2.31.1) (2026-03-26)
+
+
+### Bug Fixes
+
+* guard against NaN/Infinite values to prevent crashes during crop and rotation ([#518](https://www.github.com/guoyingtao/Mantis/issues/518)) ([294e44b](https://www.github.com/guoyingtao/Mantis/commit/294e44b5fb3095f0b0aa00ef5525541c9cbf1835))
+* wrap iOS 26 Liquid Glass API usage with #if compiler(>=6.2) for Xcode 16 compatibility ([#513](https://www.github.com/guoyingtao/Mantis/issues/513)) ([662383e](https://www.github.com/guoyingtao/Mantis/commit/662383e04f051eca0f1d7f1c52cd31a29397c582))
+
 ## [2.31.0](https://www.github.com/guoyingtao/Mantis/compare/v2.30.0...v2.31.0) (2026-03-02)
 
 
