@@ -275,6 +275,19 @@ enum AppearanceColorPreset {
         }
     }
     
+    // MARK: - CropAuxiliaryIndicator (border + corner/edge handles)
+    static func auxiliaryIndicatorColor(for mode: AppearanceMode) -> UIColor {
+        let lightColor = UIColor(white: 0.3, alpha: 1.0)
+        switch mode {
+        case .forceDark:
+            return .white
+        case .forceLight:
+            return lightColor
+        case .system:
+            return dynamicColor(dark: .white, light: lightColor)
+        }
+    }
+
     // MARK: - Activity Indicator
     static func activityIndicatorColor(for mode: AppearanceMode) -> UIColor {
         switch mode {

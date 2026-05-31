@@ -111,6 +111,13 @@ private func applyAppearanceDefaults(to config: inout Mantis.Config) {
     // CropToolbarConfig
     config.cropToolbarConfig.backgroundColor = AppearanceColorPreset.toolbarBackground(for: mode)
     config.cropToolbarConfig.foregroundColor = AppearanceColorPreset.toolbarForeground(for: mode)
+
+    // CropAuxiliaryIndicatorConfig (border + corner/edge handles only; grid colors untouched)
+    let auxiliaryColor = AppearanceColorPreset.auxiliaryIndicatorColor(for: mode)
+    config.cropViewConfig.cropAuxiliaryIndicatorConfig.borderNormalColor = auxiliaryColor
+    config.cropViewConfig.cropAuxiliaryIndicatorConfig.borderHintColor = auxiliaryColor
+    config.cropViewConfig.cropAuxiliaryIndicatorConfig.cornerHandleColor = auxiliaryColor
+    config.cropViewConfig.cropAuxiliaryIndicatorConfig.edgeLineHandleColor = auxiliaryColor
     
     // CropMaskVisualEffectType (only if user hasn't set a custom backgroundColor)
     if config.cropViewConfig.backgroundColor == nil {
