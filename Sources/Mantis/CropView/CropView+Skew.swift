@@ -654,9 +654,22 @@ extension CropView {
                 y: min(max(current.y, minY), maxY)
             )
         } else {
-            // First skew change from zero at default zoom: jump
-            // directly to optimal for strict edge-to-edge alignment.
-            cropWorkbenchView.contentOffset = optimalOffset
+            // First skew change from zero at default zoom: apply only the
+            // skew-related shift (optimalOffset relative to centerOffset)
+            // as a delta on the user's current contentOffset. When nothing
+            // has displaced the view from center, current == centerOffset
+            // and this still lands on optimalOffset (preserving edge-to-edge
+            // alignment). After a straighten rotation or a manual crop
+            // resize, current can differ from centerOffset; snapping to the
+            // absolute optimal would jump visibly, so apply the shift only.
+            let current = cropWorkbenchView.contentOffset
+            let center = context.centerOffset
+            let shiftX = optimalOffset.x - center.x
+            let shiftY = optimalOffset.y - center.y
+            cropWorkbenchView.contentOffset = CGPoint(
+                x: min(max(current.x + shiftX, minX), maxX),
+                y: min(max(current.y + shiftY, minY), maxY)
+            )
         }
         
         skewState.previousOptimalOffset = optimalOffset
