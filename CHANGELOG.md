@@ -2,6 +2,13 @@
 
 -----
 
+### [2.31.2](https://www.github.com/guoyingtao/Mantis/compare/v2.31.1...v2.31.2) (2026-05-31)
+
+
+### Bug Fixes
+
+* avoid contentOffset snap on first skew frame after rotation/resize ([#519](https://www.github.com/guoyingtao/Mantis/issues/519)) ([ced9c75](https://www.github.com/guoyingtao/Mantis/commit/ced9c75e09a27b390e52364a9396e1adac1209de))
+
 ### [2.31.1](https://www.github.com/guoyingtao/Mantis/compare/v2.31.0...v2.31.1) (2026-03-26)
 
 
