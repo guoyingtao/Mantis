@@ -153,7 +153,8 @@ private func buildCropView(withImage image: UIImage,
                            rotationControlView: RotationControlViewProtocol?) -> CropViewProtocol {
     let cropAuxiliaryIndicatorView = CropAuxiliaryIndicatorView(frame: .zero,
                                                                 config: cropViewConfig.cropAuxiliaryIndicatorConfig)
-    let imageContainer = ImageContainer(image: image)
+    let displayImage = image.downsampledIfNeeded(maxPixelCount: cropViewConfig.maxImagePixelCount)
+    let imageContainer = ImageContainer(image: displayImage)
     let cropView = CropView(image: image,
                             cropViewConfig: cropViewConfig,
                             viewModel: buildCropViewModel(with: cropViewConfig),
