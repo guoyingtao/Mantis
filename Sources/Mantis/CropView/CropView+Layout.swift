@@ -75,21 +75,45 @@ extension CropView {
     }
     
     func saveAnchorPoints() {
-        // Temporarily remove the 3D perspective skew so that coordinate
+        // Temporarily remove ALL skew-related state so that coordinate
         // conversions between the crop overlay and the image container
-        // are purely 2D-affine.  The sublayerTransform includes a
-        // compensating scale that distorts convert(_:to:) results,
-        // causing progressive zoom drift on every device rotation.
-        let savedSublayerTransform = cropWorkbenchView.layer.sublayerTransform
+        // are purely 2D-affine. Three things must be undone:
+        //   1. sublayerTransform — its compensating scale distorts convert(_:to:)
+        //   2. contentInset — set by updateContentInsetForSkew, shifts the valid
+        //      scroll range
+        //   3. contentOffset — shifted by updateContentInsetForSkew to align the
+        //      skewed image edge with the crop box. We subtract the skew-caused
+        //      shift so the offset reflects only the user's manual pan position.
         let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        let savedSublayerTransform = cropWorkbenchView.layer.sublayerTransform
+        let savedContentInset = cropWorkbenchView.contentInset
+        let savedContentOffset = cropWorkbenchView.contentOffset
+
         if hasSkew {
             cropWorkbenchView.layer.sublayerTransform = CATransform3DIdentity
+            cropWorkbenchView.contentInset = .zero
+
+            // The skew system shifts contentOffset from the centered position
+            // by an "optimal" amount. Remove that shift so the anchor points
+            // reflect the user's actual crop position, not the skew alignment.
+            let centeredOffsetX = imageContainer.frame.midX - cropWorkbenchView.bounds.width / 2
+            let centeredOffsetY = imageContainer.frame.midY - cropWorkbenchView.bounds.height / 2
+            if let skewOptimal = skewState.previousOptimalOffset {
+                // User's offset without skew = current - (skewOptimal - centered)
+                let adjustedX = savedContentOffset.x - (skewOptimal.x - centeredOffsetX)
+                let adjustedY = savedContentOffset.y - (skewOptimal.y - centeredOffsetY)
+                cropWorkbenchView.contentOffset = CGPoint(x: adjustedX, y: adjustedY)
+            } else {
+                cropWorkbenchView.contentOffset = CGPoint(x: centeredOffsetX, y: centeredOffsetY)
+            }
         }
-        
+
         viewModel.cropLeftTopOnImage = getImageLeftTopAnchorPoint()
         viewModel.cropRightBottomOnImage = getImageRightBottomAnchorPoint()
-        
+
         if hasSkew {
+            cropWorkbenchView.contentOffset = savedContentOffset
+            cropWorkbenchView.contentInset = savedContentInset
             cropWorkbenchView.layer.sublayerTransform = savedSublayerTransform
         }
     }
@@ -196,6 +220,10 @@ extension CropView {
         let width = abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.height
         let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
         
+        guard width.isFinite, height.isFinite, width > 0, height > 0 else {
+            return
+        }
+        
         cropWorkbenchView.updateLayout(byNewSize: CGSize(width: width, height: height))
         
         if !isManuallyZoomed || cropWorkbenchView.shouldScale() {
@@ -209,9 +237,13 @@ extension CropView {
     }
     
     func updatePositionFor90Rotation(by radians: CGFloat) {
-        func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat {
+        func adjustScrollViewForNormalRatio(by radians: CGFloat) -> CGFloat? {
             let width = abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.height
             let height = abs(sin(radians)) * cropAuxiliaryIndicatorView.frame.width + abs(cos(radians)) * cropAuxiliaryIndicatorView.frame.height
+            
+            guard width.isFinite, height.isFinite, width > 0, height > 0 else {
+                return nil
+            }
             
             let newSize: CGSize
             if viewModel.rotationType.isRotatedByMultiple180 {
@@ -220,12 +252,16 @@ extension CropView {
                 newSize = CGSize(width: height, height: width)
             }
             
+            guard cropWorkbenchView.bounds.width > 0 else { return nil }
             let scale = newSize.width / cropWorkbenchView.bounds.width
+            guard scale.isFinite, scale > 0 else { return nil }
             cropWorkbenchView.updateLayout(byNewSize: newSize)
             return scale
         }
         
-        let scale = adjustScrollViewForNormalRatio(by: radians)
+        guard let scale = adjustScrollViewForNormalRatio(by: radians) else {
+            return
+        }
         
         let newZoomScale = cropWorkbenchView.zoomScale * scale
         cropWorkbenchView.minimumZoomScale = newZoomScale
@@ -239,12 +275,25 @@ extension CropView {
         let imageHorizontalToVerticalRatio = ImageHorizontalToVerticalRatio(ratio: getImageHorizontalToVerticalRatio())
         viewModel.setCropBoxFrame(by: refCropBox, for: imageHorizontalToVerticalRatio)
         
+        let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
+        
         let contentRect = getContentBounds()
         adjustUIForNewCrop(contentRect: contentRect, animation: false, zoom: zoom) { [weak self] in
             guard let self = self else { return }
             if self.forceFixedRatio {
                 self.checkForForceFixedRatioFlag = true
             }
+            
+            // When skew is active, the compensating scale and content insets
+            // were computed for the previous crop box geometry. After the crop
+            // box changed shape (e.g. Original → Square), recompute so the
+            // projected image covers the new crop box and panning stays valid.
+            if hasSkew {
+                self.skewState.reset()
+                self.applySkewTransformIfNeeded()
+                self.updateContentInsetForSkew()
+            }
+            
             self.viewModel.setBetweenOperationStatus()
         }
         

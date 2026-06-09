@@ -71,10 +71,7 @@ class DemoViewController: UIViewController {
         "Custom Toolbar (Buttons)",
         "Clockwise rotation with slide dial",
         "Crop Shapes",
-        "Hide Rotation Dial",
-        "Dark Background",
-        "Light Background",
-        "Color Background"
+        "Hide Rotation Dial"
     ]
     
     // MARK: - Lifecycle
@@ -181,10 +178,9 @@ class DemoViewController: UIViewController {
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
+        cropViewController.modalPresentationStyle = .fullScreen
         
-        let navigationController = UINavigationController(rootViewController: cropViewController)
-        cropViewController.title = "Demo"
-        present(navigationController, animated: true)
+        present(cropViewController, animated: true)
     }
     
     @objc private func embeddedAction() {
@@ -379,28 +375,6 @@ class DemoViewController: UIViewController {
         present(navigationController, animated: true)
     }
     
-    @objc private func darkBackgroundAction() {
-        presentWith(backgroundEffect: .dark)
-    }
-    
-    @objc private func lightBackgroundAction() {
-        presentWith(backgroundEffect: .light)
-    }
-    
-    @objc private func colorBackgroundAction() {
-        guard let image = image else {
-            return
-        }
-        
-        var config = Mantis.Config()
-        config.cropViewConfig.backgroundColor = .yellow
-        let cropViewController = Mantis.cropViewController(image: image,
-                                                           config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
-        cropViewController.delegate = self
-        present(cropViewController, animated: true)
-    }
-    
     // MARK: - Helper Methods
     
     typealias CropShapeItem = (type: Mantis.CropShapeType, title: String)
@@ -460,20 +434,6 @@ class DemoViewController: UIViewController {
         present(actionSheet, animated: true)
     }
     
-    private func presentWith(backgroundEffect effect: CropMaskVisualEffectType) {
-        guard let image = image else {
-            return
-        }
-        
-        var config = Mantis.Config()
-        config.cropViewConfig.cropMaskVisualEffectType = effect
-        let cropViewController = Mantis.cropViewController(image: image,
-                                                           config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
-        cropViewController.delegate = self
-        present(cropViewController, animated: true)
-    }
-    
     private func getActionForIndex(_ index: Int) -> Selector? {
         switch index {
         case 0: return #selector(normalAction)
@@ -487,9 +447,6 @@ class DemoViewController: UIViewController {
         case 8: return #selector(clockwiseRotationAction)
         case 9: return #selector(cropShapesAction)
         case 10: return #selector(hideRotationDialAction)
-        case 11: return #selector(darkBackgroundAction)
-        case 12: return #selector(lightBackgroundAction)
-        case 13: return #selector(colorBackgroundAction)
         default: return nil
         }
     }

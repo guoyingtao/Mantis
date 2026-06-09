@@ -40,7 +40,7 @@ extension SlideDial {
         let spacing = config.typeButtonSpacing
         let topPadding: CGFloat = 16
         let buttonY: CGFloat = topPadding
-        let centerX = frame.width / 2
+        let centerX = bounds.width / 2
         
         // Index of the selected type in the fixed order
         let selectedIndex = Self.allAdjustmentTypes.firstIndex(of: viewModel.currentAdjustmentType) ?? 0

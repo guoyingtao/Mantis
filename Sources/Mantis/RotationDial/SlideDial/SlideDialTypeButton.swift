@@ -48,6 +48,15 @@ final class SlideDialTypeButton: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13.0, *),
+           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            ringLayer.fillColor = config.buttonFillColor.cgColor
+            updateAppearance()
+        }
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         

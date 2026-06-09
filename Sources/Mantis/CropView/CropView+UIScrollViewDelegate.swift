@@ -53,6 +53,7 @@ extension CropView: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         clampContentOffsetForSkewIfNeeded()
+        delegate?.cropViewDidEndCrop(self)
         viewModel.setBetweenOperationStatus()
     }
 
@@ -69,12 +70,14 @@ extension CropView: UIScrollViewDelegate {
         clampContentOffsetForSkewIfNeeded()
 
         isManuallyZoomed = true
+        hasManuallyAdjustedCropBox = true
         viewModel.setBetweenOperationStatus()
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             clampContentOffsetForSkewIfNeeded()
+            delegate?.cropViewDidEndCrop(self)
             viewModel.setBetweenOperationStatus()
         }
     }

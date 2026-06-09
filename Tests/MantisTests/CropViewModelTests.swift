@@ -241,4 +241,33 @@ final class CropViewModelTests: XCTestCase {
         viewModel.setBetweenOperationStatus()
         XCTAssertEqual(viewModel.viewStatus, .betweenOperation)
     }
+    
+    func testCropBoxFrameRejectsNaN() {
+        let validFrame = CGRect(x: 10, y: 10, width: 100, height: 100)
+        viewModel.cropBoxFrame = validFrame
+        
+        var callbackCount = 0
+        viewModel.cropBoxFrameChanged = { _ in callbackCount += 1 }
+        
+        // NaN origin should be rejected
+        viewModel.cropBoxFrame = CGRect(x: CGFloat.nan, y: 10, width: 100, height: 100)
+        XCTAssertEqual(viewModel.cropBoxFrame, validFrame)
+        
+        // Infinite width should be rejected
+        viewModel.cropBoxFrame = CGRect(x: 10, y: 10, width: CGFloat.infinity, height: 100)
+        XCTAssertEqual(viewModel.cropBoxFrame, validFrame)
+        
+        // Negative size should be rejected
+        viewModel.cropBoxFrame = CGRect(x: 10, y: 10, width: -5, height: 100)
+        XCTAssertEqual(viewModel.cropBoxFrame, validFrame)
+        
+        // None of the invalid assignments should have triggered the callback
+        XCTAssertEqual(callbackCount, 0)
+        
+        // A valid assignment should still work
+        let newFrame = CGRect(x: 20, y: 20, width: 200, height: 200)
+        viewModel.cropBoxFrame = newFrame
+        XCTAssertEqual(viewModel.cropBoxFrame, newFrame)
+        XCTAssertEqual(callbackCount, 1)
+    }
 }
