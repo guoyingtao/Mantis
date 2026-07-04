@@ -14,7 +14,7 @@ class DemoViewController: UIViewController {
     private var useLargeImage = false
     var image = UIImage(named: "sunflower.jpg") {
         didSet {
-            cachedDisplayImage = image?.downsampledIfNeeded(maxPixelCount: maxImagePixelCount)
+            cachedDisplayImage = image.map { Mantis.downsample(image: $0, maxPixelCount: maxImagePixelCount) }
         }
     }
     var transformation: Transformation?
@@ -22,7 +22,7 @@ class DemoViewController: UIViewController {
     var cropViewController: CropViewController?
 
     /// Cached downsampled image for display. Updated automatically when `image` changes.
-    private lazy var cachedDisplayImage: UIImage? = image?.downsampledIfNeeded(maxPixelCount: maxImagePixelCount)
+    private lazy var cachedDisplayImage: UIImage? = image.map { Mantis.downsample(image: $0, maxPixelCount: maxImagePixelCount) }
     
     private func createConfigWithPresetTransformation() -> Config {
         var config = Mantis.Config()

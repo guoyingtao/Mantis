@@ -342,7 +342,10 @@ extension UIImage {
     /// and no second decode. Note that `CGImage.dataProvider` returns decoded bitmap
     /// bytes (not the original encoded data), so it cannot feed ImageIO and is not used.
     /// Returns `self` unchanged if `maxPixelCount <= 0` or the image is within limits.
-    public func downsampledIfNeeded(maxPixelCount: Int, sourceData: Data? = nil) -> UIImage {
+    ///
+    /// This is the internal implementation; the public entry point is the
+    /// `Mantis.downsample(image:maxPixelCount:sourceData:)` free function.
+    func downsampledIfNeeded(maxPixelCount: Int, sourceData: Data? = nil) -> UIImage {
         guard exceedsPixelCount(maxPixelCount) else { return self }
 
         let pixelWidth = CGFloat(Int(size.width * scale))
@@ -397,6 +400,11 @@ extension UIImage {
         guard imageViewSize.width > 0, imageViewSize.height > 0,
               zoomScaleX > 0, zoomScaleY > 0 else { return nil }
 
+        // Output size is derived from `orientedWidth/Height`, which are the source's
+        // pixel dimensions (CIImage extent). The legacy `crop(by:)` path derives it
+        // from `size` in points. For large images (essentially always scale == 1) the
+        // two are identical; when scale > 1 this path deliberately preserves the full
+        // pixel resolution, which is the point of large-image mode.
         let outputWidth = round((orientedWidth / imageViewSize.width * cropSize.width) / zoomScaleX)
         let outputHeight = round((orientedHeight / imageViewSize.height * cropSize.height) / zoomScaleY)
         guard outputWidth > 0 && outputHeight > 0,

@@ -71,8 +71,30 @@ public func locateResourceBundle(by hostClass: AnyClass) {
     LocalizedHelper.setBundle(Bundle(for: hostClass))
 }
 
-public func crop(image: UIImage, by cropInfo: CropInfo) -> UIImage? {
+/// Crops an image offline (without a crop view controller) using a previously
+/// obtained `CropInfo`.
+///
+/// - Parameter maxImagePixelCount: when greater than 0 and the image's pixel
+///   count exceeds it, the memory-efficient CIImage pipeline is used instead of
+///   the CGContext pipeline. Pass the same value used in
+///   `CropViewConfig.maxImagePixelCount`. Defaults to 0 (disabled).
+public func crop(image: UIImage, by cropInfo: CropInfo, maxImagePixelCount: Int = 0) -> UIImage? {
+    if image.exceedsPixelCount(maxImagePixelCount) {
+        return image.cropWithCIImage(by: cropInfo)
+    }
     return image.crop(by: cropInfo)
+}
+
+/// Returns a downsampled copy of `image` when its pixel count exceeds
+/// `maxPixelCount`, otherwise returns it unchanged. Useful for displaying a large
+/// image in your own `UIImageView` without the black-screen / memory issues that
+/// oversized images cause. Mantis applies this internally for its crop view;
+/// call it only for image views you manage yourself.
+///
+/// - Parameter sourceData: the original encoded image data, when available. Using
+///   it enables ImageIO subsampled decoding for the lowest peak memory.
+public func downsample(image: UIImage, maxPixelCount: Int, sourceData: Data? = nil) -> UIImage {
+    return image.downsampledIfNeeded(maxPixelCount: maxPixelCount, sourceData: sourceData)
 }
 
 public struct Language {

@@ -191,4 +191,40 @@ final class CICropEquivalenceTests: XCTestCase {
                                     contentOffset: CGPoint(x: 120, y: 150))
         assertSameCrop(image, cropInfo)
     }
+
+    // MARK: - Public free functions
+
+    func testMantisCropFreeFunctionRoutesByPixelCount() {
+        let image = makePatternImage(width: 1000, height: 800)
+        let cropInfo = makeCropInfo(imageSize: image.size,
+                                    viewSize: CGSize(width: 500, height: 400),
+                                    cropSize: CGSize(width: 200, height: 160),
+                                    contentOffset: CGPoint(x: 150, y: 120))
+
+        // Default (disabled) uses the legacy pipeline.
+        guard let legacy = Mantis.crop(image: image, by: cropInfo) else {
+            XCTFail("legacy crop returned nil"); return
+        }
+        // Above threshold routes through the CIImage pipeline with the same result.
+        guard let large = Mantis.crop(image: image, by: cropInfo, maxImagePixelCount: 1000) else {
+            XCTFail("large-image crop returned nil"); return
+        }
+        XCTAssertEqual(legacy.size.width, large.size.width, accuracy: 2.0)
+        XCTAssertEqual(legacy.size.height, large.size.height, accuracy: 2.0)
+        for point in [CGPoint(x: 0.25, y: 0.25), CGPoint(x: 0.75, y: 0.75)] {
+            let legacyPixel = pixel(of: legacy, atNormalized: point)!
+            let largePixel = pixel(of: large, atNormalized: point)!
+            for channel in 0..<3 {
+                XCTAssertEqual(legacyPixel[channel], largePixel[channel], accuracy: 0.1)
+            }
+        }
+    }
+
+    func testMantisDownsampleFreeFunction() {
+        let image = makePatternImage(width: 400, height: 200)
+        XCTAssertEqual(Mantis.downsample(image: image, maxPixelCount: 0), image)
+        let down = Mantis.downsample(image: image, maxPixelCount: 20000)
+        let pixelCount = Int(down.size.width * down.scale) * Int(down.size.height * down.scale)
+        XCTAssertLessThanOrEqual(pixelCount, 20000)
+    }
 }
