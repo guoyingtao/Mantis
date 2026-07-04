@@ -627,7 +627,13 @@ extension CropView: CropViewProtocol {
     
     func crop(_ image: UIImage) -> CropOutput {
         let cropInfo = getCropInfo()
-        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
+        let croppedImage: UIImage?
+        if image.exceedsPixelCount(cropViewConfig.maxImagePixelCount) {
+            croppedImage = image.cropWithCIImage(by: cropInfo)
+        } else {
+            croppedImage = image.crop(by: cropInfo)
+        }
+        let cropOutput = (croppedImage, makeTransformation(), cropInfo)
         return addImageMask(to: cropOutput)
     }
     
@@ -644,7 +650,8 @@ extension CropView: CropViewProtocol {
     
     func update(_ image: UIImage) {
         self.image = image
-        imageContainer.update(image)
+        let displayImage = image.downsampledIfNeeded(maxPixelCount: cropViewConfig.maxImagePixelCount)
+        imageContainer.update(displayImage)
     }
 }
 

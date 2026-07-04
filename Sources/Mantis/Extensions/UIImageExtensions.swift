@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreImage
+import ImageIO
 
 extension UIImage {
     func cgImageWithFixedOrientation() -> CGImage? {
@@ -306,8 +307,178 @@ extension UIImage {
               expectedWidth > 0, expectedHeight > 0 else {
             return .zero
         }
-        
         return CGSize(width: expectedWidth, height: expectedHeight)
+    }
+
+    // MARK: - Large Image Support
+
+    /// Maps UIImage.imageOrientation to the EXIF orientation integer
+    /// used by CIImage.oriented(forExifOrientation:).
+    var exifOrientation: Int32 {
+        switch imageOrientation {
+        case .up:            return 1
+        case .upMirrored:    return 2
+        case .down:          return 3
+        case .downMirrored:  return 4
+        case .leftMirrored:  return 5
+        case .right:         return 6
+        case .rightMirrored: return 7
+        case .left:          return 8
+        @unknown default:    return 1
+        }
+    }
+
+    /// Returns true when the image's total pixel count exceeds `maxPixelCount`.
+    /// A `maxPixelCount` of 0 (or less) disables the check.
+    func exceedsPixelCount(_ maxPixelCount: Int) -> Bool {
+        guard maxPixelCount > 0 else { return false }
+        return Int(size.width * scale) * Int(size.height * scale) > maxPixelCount
+    }
+
+    /// Returns a downsampled version of this image if its total pixel count exceeds `maxPixelCount`.
+    /// When `sourceData` (the original encoded image data) is provided, uses an ImageIO
+    /// thumbnail, which can decode subsampled and keeps peak memory low.
+    /// Otherwise draws into a target-size context: one full decode, but no re-encode
+    /// and no second decode. Note that `CGImage.dataProvider` returns decoded bitmap
+    /// bytes (not the original encoded data), so it cannot feed ImageIO and is not used.
+    /// Returns `self` unchanged if `maxPixelCount <= 0` or the image is within limits.
+    ///
+    /// This is the internal implementation; the public entry point is the
+    /// `Mantis.downsample(image:maxPixelCount:sourceData:)` free function.
+    func downsampledIfNeeded(maxPixelCount: Int, sourceData: Data? = nil) -> UIImage {
+        guard exceedsPixelCount(maxPixelCount) else { return self }
+
+        let pixelWidth = CGFloat(Int(size.width * scale))
+        let pixelHeight = CGFloat(Int(size.height * scale))
+        let ratio = CGFloat(maxPixelCount) / (pixelWidth * pixelHeight)
+        let scaleFactor = sqrt(ratio)
+
+        // 1. ImageIO thumbnail from the original encoded data (most memory-efficient path)
+        if let sourceData = sourceData {
+            let maxDimension = max(pixelWidth, pixelHeight) * scaleFactor
+            let options: [CFString: Any] = [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceThumbnailMaxPixelSize: Int(ceil(maxDimension)),
+                kCGImageSourceCreateThumbnailWithTransform: true,
+                kCGImageSourceShouldCacheImmediately: true
+            ]
+            if let source = CGImageSourceCreateWithData(sourceData as CFData, nil),
+               let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
+                return UIImage(cgImage: thumbnail)
+            }
+        }
+
+        // 2. Draw into a target-size context. draw(in:) bakes in the EXIF orientation,
+        // matching the kCGImageSourceCreateThumbnailWithTransform behavior above.
+        let targetSize = CGSize(width: max(1, floor(pixelWidth * scaleFactor)),
+                                height: max(1, floor(pixelHeight * scaleFactor)))
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: targetSize, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: targetSize))
+        }
+    }
+
+    /// Memory-efficient crop using CIImage lazy pipeline.
+    /// Uses CIImage.oriented() for lazy EXIF fix and CIPerspectiveCorrection for extraction.
+    /// Handles both standard (translate/rotate/scale/flip) and perspective (skew) crops uniformly.
+    /// CIImage only decodes the source pixels needed for the output region via GPU tiling.
+    func cropWithCIImage(by cropInfo: CropInfo) -> UIImage? {
+        guard let cgImg = cgImage else { return nil }
+
+        // Lazy orientation fix — no full-size CGContext allocation
+        let ciImage = CIImage(cgImage: cgImg).oriented(forExifOrientation: exifOrientation)
+
+        let orientedWidth = ciImage.extent.width
+        let orientedHeight = ciImage.extent.height
+
+        let imageViewSize = cropInfo.imageViewSize
+        let cropSize = cropInfo.cropSize
+        let zoomScaleX = abs(cropInfo.scaleX)
+        let zoomScaleY = abs(cropInfo.scaleY)
+
+        guard imageViewSize.width > 0, imageViewSize.height > 0,
+              zoomScaleX > 0, zoomScaleY > 0 else { return nil }
+
+        // Output size is derived from `orientedWidth/Height`, which are the source's
+        // pixel dimensions (CIImage extent). The legacy `crop(by:)` path derives it
+        // from `size` in points. For large images (essentially always scale == 1) the
+        // two are identical; when scale > 1 this path deliberately preserves the full
+        // pixel resolution, which is the point of large-image mode.
+        let outputWidth = round((orientedWidth / imageViewSize.width * cropSize.width) / zoomScaleX)
+        let outputHeight = round((orientedHeight / imageViewSize.height * cropSize.height) / zoomScaleY)
+        guard outputWidth > 0 && outputHeight > 0,
+              outputWidth.isFinite && outputHeight.isFinite else { return nil }
+
+        // Compute source pixel quad from crop box corners + transforms
+        // (same coordinate math as cropWithPerspective)
+        let scrollBoundsSize = cropInfo.scrollBoundsSize
+        let scrollContentOffset = cropInfo.scrollContentOffset
+        let imgContainerFrame = cropInfo.imageContainerFrame
+        let sublayerTransform = cropInfo.skewSublayerTransform
+
+        guard imgContainerFrame.size.width > 0, imgContainerFrame.size.height > 0,
+              imgContainerFrame.size.width.isFinite, imgContainerFrame.size.height.isFinite,
+              imgContainerFrame.origin.x.isFinite, imgContainerFrame.origin.y.isFinite else { return nil }
+
+        let anchorX = scrollContentOffset.x + scrollBoundsSize.width / 2
+        let anchorY = scrollContentOffset.y + scrollBoundsSize.height / 2
+
+        let halfCropW = cropSize.width / 2
+        let halfCropH = cropSize.height / 2
+        let screenCorners = [
+            CGPoint(x: -halfCropW, y: -halfCropH),
+            CGPoint(x:  halfCropW, y: -halfCropH),
+            CGPoint(x:  halfCropW, y:  halfCropH),
+            CGPoint(x: -halfCropW, y:  halfCropH)
+        ]
+
+        let inverseTransform = cropInfo.scrollViewTransform.inverted()
+        let contentCorners = screenCorners.map { $0.applying(inverseTransform) }
+        let sourceContentDisplacements = contentCorners.map {
+            inverseProjectDisplacement($0, through: sublayerTransform)
+        }
+
+        let pixelScaleX = orientedWidth / imageViewSize.width
+        let pixelScaleY = orientedHeight / imageViewSize.height
+
+        let sourcePixelPoints = sourceContentDisplacements.map { disp -> CGPoint in
+            let contentX = disp.x + anchorX
+            let contentY = disp.y + anchorY
+            let localX = contentX - imgContainerFrame.origin.x
+            let localY = contentY - imgContainerFrame.origin.y
+            let boundsX = localX / imgContainerFrame.width * imageViewSize.width
+            let boundsY = localY / imgContainerFrame.height * imageViewSize.height
+            return CGPoint(x: boundsX * pixelScaleX, y: boundsY * pixelScaleY)
+        }
+
+        // CIImage coordinates: origin at bottom-left, flip Y
+        let imgHeight = orientedHeight
+        let pts = sourcePixelPoints.map { CGPoint(x: $0.x, y: imgHeight - $0.y) }
+
+        guard let filter = CIFilter(name: "CIPerspectiveCorrection") else { return nil }
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(CIVector(x: pts[0].x, y: pts[0].y), forKey: "inputTopLeft")
+        filter.setValue(CIVector(x: pts[1].x, y: pts[1].y), forKey: "inputTopRight")
+        filter.setValue(CIVector(x: pts[2].x, y: pts[2].y), forKey: "inputBottomRight")
+        filter.setValue(CIVector(x: pts[3].x, y: pts[3].y), forKey: "inputBottomLeft")
+
+        guard let correctedOutput = filter.outputImage,
+              correctedOutput.extent.width > 0,
+              correctedOutput.extent.height > 0 else { return nil }
+
+        let renderScaleX = outputWidth / correctedOutput.extent.width
+        let renderScaleY = outputHeight / correctedOutput.extent.height
+        guard renderScaleX.isFinite, renderScaleY.isFinite,
+              renderScaleX > 0, renderScaleY > 0 else { return nil }
+        let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
+
+        let context = CIContext(options: [.useSoftwareRenderer: false])
+        guard let resultCG = context.createCGImage(scaledImage, from: scaledImage.extent) else {
+            return nil
+        }
+
+        return UIImage(cgImage: resultCG)
     }
 }
 

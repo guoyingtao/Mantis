@@ -10,10 +10,20 @@ import UIKit
 // MARK: - Crop Output
 extension CropView {
     func asyncCrop(_ image: UIImage, completion: @escaping (CropOutput) -> Void) {
+        // Read view state on the main thread, then run the actual crop off the
+        // main thread so cropping (especially large images) does not block the UI.
         let cropInfo = getCropInfo()
-        let cropOutput = (image.crop(by: cropInfo), makeTransformation(), cropInfo)
-        
+        let transformation = makeTransformation()
+        let maxPixelCount = cropViewConfig.maxImagePixelCount
+
         DispatchQueue.global(qos: .userInteractive).async {
+            let croppedImage: UIImage?
+            if image.exceedsPixelCount(maxPixelCount) {
+                croppedImage = image.cropWithCIImage(by: cropInfo)
+            } else {
+                croppedImage = image.crop(by: cropInfo)
+            }
+            let cropOutput = (croppedImage, transformation, cropInfo)
             let maskedCropOutput = self.addImageMask(to: cropOutput)
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
