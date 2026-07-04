@@ -180,7 +180,11 @@ extension CropView {
                 cropWorkbenchView.zoom(to: zoomRect, animated: false)
             }
             cropWorkbenchView.updateContentOffset()
-            makeSureImageContainsCropOverlay()
+            // Mirror the caller's animation intent for the containment correction.
+            // When the crop adjustment itself is non-animated (e.g. the fixed-ratio
+            // path during the initial resetComponents()), an animated zoomScaleToBound
+            // here produces a visible zoom-in/zoom-out flicker on first display.
+            makeSureImageContainsCropOverlay(animated: animation)
         }
         
         if animation {
@@ -197,7 +201,7 @@ extension CropView {
         isManuallyZoomed = true
     }
     
-    func makeSureImageContainsCropOverlay() {
+    func makeSureImageContainsCropOverlay(animated: Bool = true) {
         let hasSkew = viewModel.horizontalSkewDegrees != 0 || viewModel.verticalSkewDegrees != 0
 
         if hasSkew {
@@ -211,7 +215,7 @@ extension CropView {
             // to keep the overlay inside the projected image.
         } else {
             if !imageContainer.contains(rect: cropAuxiliaryIndicatorView.frame, fromView: self, tolerance: 0.25) {
-                cropWorkbenchView.zoomScaleToBound(animated: true)
+                cropWorkbenchView.zoomScaleToBound(animated: animated)
             }
         }
     }
