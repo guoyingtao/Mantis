@@ -9,12 +9,17 @@ import UIKit
 
 final class RatioItemView: UIView {
     var didGetRatio: ((RatioItemType) -> Void) = { _ in }
+    var appearanceMode: AppearanceMode = .forceDark
     
     var selected = false {
         didSet {
             UIView.animate(withDuration: 0.2) {
-                self.backgroundColor = self.selected ? UIColor.lightGray.withAlphaComponent(0.7) : .black
-                self.titleLabel.textColor = self.selected ? .white : .gray
+                self.backgroundColor = self.selected
+                    ? AppearanceColorPreset.ratioItemSelectedBackground(for: self.appearanceMode)
+                    : AppearanceColorPreset.ratioItemUnselectedBackground(for: self.appearanceMode)
+                self.titleLabel.textColor = self.selected
+                    ? AppearanceColorPreset.ratioItemSelectedText(for: self.appearanceMode)
+                    : AppearanceColorPreset.ratioItemUnselectedText(for: self.appearanceMode)
             }
         }
     }
@@ -24,7 +29,7 @@ final class RatioItemView: UIView {
         label.textAlignment = .center
         let titleSize: CGFloat = (UIDevice.current.userInterfaceIdiom == .pad) ? 20 : 14
         label.font = .systemFont(ofSize: titleSize, weight: .medium)
-        label.textColor = .white
+        label.textColor = AppearanceColorPreset.ratioItemUnselectedText(for: appearanceMode)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

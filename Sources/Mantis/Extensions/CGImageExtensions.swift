@@ -23,6 +23,15 @@ extension CGImage {
                           outputSize: CGSize,
                           cropSize: CGSize,
                           imageViewSize: CGSize) throws -> CGImage? {
+        guard outputSize.width > 0, outputSize.height > 0,
+              outputSize.width.isFinite, outputSize.height.isFinite,
+              cropSize.width > 0, cropSize.height > 0,
+              cropSize.width.isFinite, cropSize.height.isFinite,
+              imageViewSize.width > 0, imageViewSize.height > 0,
+              imageViewSize.width.isFinite, imageViewSize.height.isFinite else {
+            return nil
+        }
+        
         guard var colorSpaceRef = self.colorSpace else {
             throw ImageProcessError.noColorSpace
         }
@@ -52,7 +61,7 @@ extension CGImage {
                                 space: colorSpaceRef,
                                 bitmapInfo: bitmapInfoData)
         ??
-        createBackupCGContext(size: outputSize, bitmapBytesPerRow: bitsPerComponent, colorSpaceRef: colorSpaceRef)
+        createBackupCGContext(size: outputSize, bitmapBytesPerRow: bitmapBytesPerRow, colorSpaceRef: colorSpaceRef)
         
         guard let context = context else {
             throw ImageProcessError.failedToBuildContext(colorSpaceModel: colorSpaceRef.model,

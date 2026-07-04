@@ -31,6 +31,8 @@ struct CropState: Equatable {
     var aspectRato: CGFloat
     var flipOddTimes: Bool
     var transformation: Transformation
+    var horizontalSkewDegrees: CGFloat
+    var verticalSkewDegrees: CGFloat
     
     static func == (lhs: CropState, rhs: CropState) -> Bool {
         return lhs.rotationType == rhs.rotationType
@@ -39,21 +41,35 @@ struct CropState: Equatable {
         && lhs.aspectRato == rhs.aspectRato
         && lhs.flipOddTimes == rhs.flipOddTimes
         && lhs.transformation == rhs.transformation
+        && lhs.horizontalSkewDegrees == rhs.horizontalSkewDegrees
+        && lhs.verticalSkewDegrees == rhs.verticalSkewDegrees
     }
 }
 
 public struct Transformation: Equatable {
-    var offset: CGPoint
-    var rotation: CGFloat
-    var scale: CGFloat
-    var isManuallyZoomed: Bool
-    var initialMaskFrame: CGRect
-    var maskFrame: CGRect
-    var cropWorkbenchViewBounds: CGRect
-    var horizontallyFlipped: Bool
-    var verticallyFlipped: Bool
+    public var offset: CGPoint
+    public var rotation: CGFloat
+    public var scale: CGFloat
+    public var isManuallyZoomed: Bool
+    public var initialMaskFrame: CGRect
+    public var maskFrame: CGRect
+    public var cropWorkbenchViewBounds: CGRect
+    public var horizontallyFlipped: Bool
+    public var verticallyFlipped: Bool
+    public var horizontalSkewDegrees: CGFloat
+    public var verticalSkewDegrees: CGFloat
     
-    public init(offset: CGPoint, rotation: CGFloat, scale: CGFloat, isManuallyZoomed: Bool, initialMaskFrame: CGRect, maskFrame: CGRect, cropWorkbenchViewBounds: CGRect, horizontallyFlipped: Bool, verticallyFlipped: Bool) {
+    public init(offset: CGPoint,
+                rotation: CGFloat,
+                scale: CGFloat,
+                isManuallyZoomed: Bool,
+                initialMaskFrame: CGRect,
+                maskFrame: CGRect,
+                cropWorkbenchViewBounds: CGRect,
+                horizontallyFlipped: Bool,
+                verticallyFlipped: Bool,
+                horizontalSkewDegrees: CGFloat = 0,
+                verticalSkewDegrees: CGFloat = 0) {
         self.offset = offset
         self.rotation = rotation
         self.scale = scale
@@ -63,6 +79,8 @@ public struct Transformation: Equatable {
         self.cropWorkbenchViewBounds = cropWorkbenchViewBounds
         self.horizontallyFlipped = horizontallyFlipped
         self.verticallyFlipped = verticallyFlipped
+        self.horizontalSkewDegrees = horizontalSkewDegrees
+        self.verticalSkewDegrees = verticalSkewDegrees
     }
     
     public static func == (lhs: Transformation, rhs: Transformation) -> Bool {
@@ -75,6 +93,8 @@ public struct Transformation: Equatable {
         && lhs.cropWorkbenchViewBounds == rhs.cropWorkbenchViewBounds
         && lhs.horizontallyFlipped == rhs.horizontallyFlipped
         && lhs.verticallyFlipped == rhs.verticallyFlipped
+        && lhs.horizontalSkewDegrees == rhs.horizontalSkewDegrees
+        && lhs.verticalSkewDegrees == rhs.verticalSkewDegrees
     }
 }
 
@@ -83,17 +103,82 @@ public struct CropRegion: Equatable {
     public var topRight: CGPoint
     public var bottomLeft: CGPoint
     public var bottomRight: CGPoint
+    
+    public init(topLeft: CGPoint,
+                topRight: CGPoint,
+                bottomLeft: CGPoint,
+                bottomRight: CGPoint) {
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+    }
+    
+    public static func == (lhs: CropRegion, rhs: CropRegion) -> Bool {
+        return lhs.topLeft == rhs.topLeft
+        && lhs.topRight == rhs.topRight
+        && lhs.bottomLeft == rhs.bottomLeft
+        && lhs.bottomRight == rhs.bottomRight
+    }
 }
 
-public typealias CropInfo = (
-    translation: CGPoint,
-    rotation: CGFloat,
-    scaleX: CGFloat,
-    scaleY: CGFloat,
-    cropSize: CGSize,
-    imageViewSize: CGSize,
-    cropRegion: CropRegion
-)
+public struct CropInfo {
+    public var translation: CGPoint
+    public var rotation: CGFloat
+    public var scaleX: CGFloat
+    public var scaleY: CGFloat
+    public var cropSize: CGSize
+    public var imageViewSize: CGSize
+    public var cropRegion: CropRegion
+    public var horizontalSkewDegrees: CGFloat
+    public var verticalSkewDegrees: CGFloat
+    /// The actual CATransform3D sublayerTransform used in the preview for perspective skew.
+    /// Includes perspective rotation, centering, and compensating scale.
+    /// Set to CATransform3DIdentity when no skew is applied.
+    public var skewSublayerTransform: CATransform3D
+    /// The scroll view's content offset during crop (for reconstructing the view hierarchy)
+    public var scrollContentOffset: CGPoint
+    /// The scroll view's visible bounds size during crop
+    public var scrollBoundsSize: CGSize
+    /// The image container's frame in scroll content coordinates during crop
+    public var imageContainerFrame: CGRect
+    /// The actual 2D transform of the scroll view (rotation + flip), used by the
+    /// perspective crop path so it can invert the exact transform without
+    /// reconstructing it from decomposed rotation / scale values.
+    public var scrollViewTransform: CGAffineTransform
+
+    public init(
+        translation: CGPoint,
+        rotation: CGFloat,
+        scaleX: CGFloat,
+        scaleY: CGFloat,
+        cropSize: CGSize,
+        imageViewSize: CGSize,
+        cropRegion: CropRegion,
+        horizontalSkewDegrees: CGFloat = 0,
+        verticalSkewDegrees: CGFloat = 0,
+        skewSublayerTransform: CATransform3D = CATransform3DIdentity,
+        scrollContentOffset: CGPoint = .zero,
+        scrollBoundsSize: CGSize = .zero,
+        imageContainerFrame: CGRect = .zero,
+        scrollViewTransform: CGAffineTransform = .identity
+    ) {
+        self.translation = translation
+        self.rotation = rotation
+        self.scaleX = scaleX
+        self.scaleY = scaleY
+        self.cropSize = cropSize
+        self.imageViewSize = imageViewSize
+        self.cropRegion = cropRegion
+        self.horizontalSkewDegrees = horizontalSkewDegrees
+        self.verticalSkewDegrees = verticalSkewDegrees
+        self.skewSublayerTransform = skewSublayerTransform
+        self.scrollContentOffset = scrollContentOffset
+        self.scrollBoundsSize = scrollBoundsSize
+        self.imageContainerFrame = imageContainerFrame
+        self.scrollViewTransform = scrollViewTransform
+    }
+}
 
 typealias CropOutput = (
     croppedImage: UIImage?,

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,7 +12,7 @@
 		5F5266B5263B490400615369 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5266B4263B490400615369 /* ContentView.swift */; };
 		5F5266B7263B490500615369 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F5266B6263B490500615369 /* Assets.xcassets */; };
 		5F5266BA263B490500615369 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F5266B9263B490500615369 /* Preview Assets.xcassets */; };
-		F24836F5299DE6AD0008477C /* ImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F4299DE6AD0008477C /* ImageCropper.swift */; };
+		F24836F5299DE6AD0008477C /* ImageCropperWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F4299DE6AD0008477C /* ImageCropperWrapper.swift */; };
 		F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F6299DE7630008477C /* AdaptiveStack.swift */; };
 		F24836F9299E14B00008477C /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F8299E14B00008477C /* CustomViewController.swift */; };
 		F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836FA299E46C90008477C /* CropShapeListView.swift */; };
@@ -31,7 +31,7 @@
 		5F5266BB263B490500615369 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B97999EBC5EA043ADD0C5B3 /* Pods-MantisSwiftUIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisSwiftUIExample.release.xcconfig"; path = "Target Support Files/Pods-MantisSwiftUIExample/Pods-MantisSwiftUIExample.release.xcconfig"; sourceTree = "<group>"; };
 		D522526BBC7FB0BCB92F0553 /* Pods_MantisSwiftUIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisSwiftUIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F24836F4299DE6AD0008477C /* ImageCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropper.swift; sourceTree = "<group>"; };
+		F24836F4299DE6AD0008477C /* ImageCropperWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropperWrapper.swift; sourceTree = "<group>"; };
 		F24836F6299DE7630008477C /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		F24836F8299E14B00008477C /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 		F24836FA299E46C90008477C /* CropShapeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropShapeListView.swift; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 			children = (
 				5F5266B2263B490400615369 /* MantisSwiftUIExampleApp.swift */,
 				5F5266B4263B490400615369 /* ContentView.swift */,
-				F24836F4299DE6AD0008477C /* ImageCropper.swift */,
+				F24836F4299DE6AD0008477C /* ImageCropperWrapper.swift */,
 				F24836F6299DE7630008477C /* AdaptiveStack.swift */,
 				F24836F8299E14B00008477C /* CustomViewController.swift */,
 				F24836FA299E46C90008477C /* CropShapeListView.swift */,
@@ -235,7 +235,7 @@
 				F24DCFB729A3CB9F00D8E8C1 /* ImagePickerView.swift in Sources */,
 				F24836F9299E14B00008477C /* CustomViewController.swift in Sources */,
 				F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */,
-				F24836F5299DE6AD0008477C /* ImageCropper.swift in Sources */,
+				F24836F5299DE6AD0008477C /* ImageCropperWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
