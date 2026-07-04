@@ -33,6 +33,8 @@ protocol CropViewModelProtocol: AnyObject {
     var cropRightBottomOnImage: CGPoint { get set }
     var horizontallyFlip: Bool { get set }
     var verticallyFlip: Bool { get set }
+    var horizontalSkewDegrees: CGFloat { get set }
+    var verticalSkewDegrees: CGFloat { get set }
     
     func reset(forceFixedRatio: Bool)
     func rotateBy90(withRotateType type: RotateBy90DegreeType)

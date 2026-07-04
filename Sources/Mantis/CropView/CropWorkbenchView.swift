@@ -43,6 +43,15 @@ final class CropWorkbenchView: UIScrollView {
         addSubview(self.imageContainer!)
         
         isAccessibilityElement = false
+        
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            topEdgeEffect.isHidden = true
+            bottomEdgeEffect.isHidden = true
+            leftEdgeEffect.isHidden = true
+            rightEdgeEffect.isHidden = true
+        }
+        #endif
     }
     
     required init?(coder: NSCoder) {
@@ -56,12 +65,12 @@ final class CropWorkbenchView: UIScrollView {
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesCancelled()
-        super.touchesBegan(touches, with: event)
+        super.touchesCancelled(touches, with: event)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesEnded()
-        super.touchesBegan(touches, with: event)
+        super.touchesEnded(touches, with: event)
     }
         
     private func getBoundZoomScale() -> CGFloat {
@@ -70,19 +79,29 @@ final class CropWorkbenchView: UIScrollView {
             return 1.0
         }
         
+        guard imageContainer.bounds.width > 0, imageContainer.bounds.height > 0,
+              bounds.width > 0, bounds.height > 0 else {
+            return max(1.0, initialMinimumZoomScale)
+        }
+        
         let scaleW = bounds.width / imageContainer.bounds.width
         let scaleH = bounds.height / imageContainer.bounds.height
+        let result = max(scaleW, scaleH) * initialMinimumZoomScale
         
-        return max(scaleW, scaleH) * initialMinimumZoomScale
+        guard result.isFinite, result > 0 else {
+            return max(1.0, initialMinimumZoomScale)
+        }
+        
+        return result
     }
 }
 
 extension CropWorkbenchView: CropWorkbenchViewProtocol {
     func updateContentOffset() {
-        contentOffset.x = max(contentOffset.x, 0)
-        contentOffset.y = max(contentOffset.y, 0)        
-        contentOffset.x = min(contentOffset.x, contentSize.width - bounds.size.width)
-        contentOffset.y = min(contentOffset.y, contentSize.height - bounds.size.height)
+        contentOffset.x = max(contentOffset.x, -contentInset.left)
+        contentOffset.y = max(contentOffset.y, -contentInset.top)
+        contentOffset.x = min(contentOffset.x, contentSize.width - bounds.size.width + contentInset.right)
+        contentOffset.y = min(contentOffset.y, contentSize.height - bounds.size.height + contentInset.bottom)
     }
     
     func updateMinZoomScale() {

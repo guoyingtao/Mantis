@@ -81,6 +81,7 @@ class EmbeddedCropViewController: UIViewController {
         var config = Mantis.Config()
         config.cropToolbarConfig.mode = .embedded
         config.enableUndoRedo = true
+        config.cropViewConfig.enablePerspectiveCorrection = true
         
         config.cropToolbarConfig.toolbarButtonOptions = [.counterclockwiseRotate, .clockwiseRotate, .horizontallyFlip, .verticallyFlip]
         
