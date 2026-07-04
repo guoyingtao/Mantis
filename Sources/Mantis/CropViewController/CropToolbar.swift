@@ -97,7 +97,7 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
             let button: DebounceButton = createOptionButton(withTitle: nil)
             button.setImage(icon, for: .normal)
             button.setCropOperation { [weak self] in
-                self?.crop(button)
+                self?.crop(self as Any)
             }
             return button
         }
@@ -105,7 +105,7 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
         let doneText = LocalizedHelper.getString("Mantis.Done", value: "Done")
         let button: DebounceButton = createOptionButton(withTitle: doneText)
         button.setCropOperation { [weak self] in
-            self?.crop(button)
+            self?.crop(self as Any)
         }
         button.accessibilityIdentifier = "DoneButton"
         button.accessibilityLabel = doneText

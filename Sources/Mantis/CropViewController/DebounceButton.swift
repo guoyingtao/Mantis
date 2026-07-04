@@ -80,10 +80,10 @@ class DebounceButton: UIButton {
             return
         }
         
-        isEnabled = false        
+        isEnabled = false
         cropOperation()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + debounceInterval) { [weak self] in
             // Re-enable the button and reset processing state
             self?.isEnabled = true
             self?.isProcessing = false
