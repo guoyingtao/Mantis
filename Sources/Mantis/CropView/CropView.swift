@@ -318,12 +318,7 @@ final class CropView: UIView {
     
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
         let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)
-        let imageFrame = CGRect(x: cropWorkbenchView.frame.origin.x - cropWorkbenchView.contentOffset.x,
-                                y: cropWorkbenchView.frame.origin.y - cropWorkbenchView.contentOffset.y,
-                                width: imageContainerRect.size.width,
-                                height: imageContainerRect.size.height)
-        
-        let touchPoint = confineTouchPoint(touchPoint, in: imageFrame)
+        let touchPoint = confineTouchPoint(touchPoint, in: imageContainerRect)
         let contentBounds = getContentBounds()
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,

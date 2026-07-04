@@ -207,6 +207,7 @@ extension CropView {
                 updatePositionFor90Rotation(by: rotateAngle + viewModel.radians)
             } else {
                 adjustWorkbenchView(by: rotateAngle + viewModel.radians)
+                makeSureImageContainsCropOverlay(animated: false)
             }
             
             // Restore skew inside the animation block so it transitions smoothly
