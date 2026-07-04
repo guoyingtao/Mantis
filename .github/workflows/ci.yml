@@ -53,11 +53,13 @@ jobs:
 
    swiftlint:
       name: SwiftLint
-      runs-on: macos-14
+      # Run inside the official SwiftLint image on Linux: no install step and
+      # no macOS minutes. Linting only parses source, so it needs no Xcode SDK.
+      runs-on: ubuntu-latest
+      container: ghcr.io/realm/swiftlint:latest
       steps:
          - uses: actions/checkout@v4
 
-         # SwiftLint is preinstalled on the macOS runner image. Warnings are
-         # surfaced as PR annotations; only errors fail the job.
+         # Warnings surface as PR annotations; only errors fail the job.
          - name: Run SwiftLint
            run: swiftlint lint --reporter github-actions-logging
