@@ -25,10 +25,23 @@ extension CropViewController {
         stackView?.translatesAutoresizingMaskIntoConstraints = false
         cropToolbar.translatesAutoresizingMaskIntoConstraints = false
         
-        stackView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        stackView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        stackView?.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        if config.cropToolbarConfig.mode == .embedded {
+            // In embedded mode the crop view is added as a subview of a container
+            // that already manages its own safe area. Pinning to the safe area
+            // layout guide here would apply the inherited insets a second time,
+            // pushing the content down and clipping the bottom (notably on iOS 26,
+            // which changed how safe area insets propagate to child views).
+            // Pin directly to view edges and let the embedding parent own safe area.
+            stackView?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            stackView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            stackView?.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+            stackView?.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        } else {
+            stackView?.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            stackView?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            stackView?.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+            stackView?.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        }
         
         #if compiler(>=6.2)
         if #available(iOS 26.0, *), config.showAttachedCropToolbar {
