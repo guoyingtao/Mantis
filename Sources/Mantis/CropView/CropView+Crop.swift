@@ -12,7 +12,7 @@ extension CropView {
     func asyncCrop(_ image: UIImage, completion: @escaping (CropOutput) -> Void) {
         let cropInfo = getCropInfo()
         let croppedImage: UIImage?
-        if isLargeImageMode {
+        if image.exceedsPixelCount(cropViewConfig.maxImagePixelCount) {
             croppedImage = image.cropWithCIImage(by: cropInfo)
         } else {
             croppedImage = image.crop(by: cropInfo)

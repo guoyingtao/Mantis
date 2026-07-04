@@ -12,10 +12,7 @@ extension CropViewController {
     @available(iOS 13.0, *)
     public func crop(by cropInfo: CropInfo) {
         let croppedImage: UIImage?
-        let maxPixels = config.cropViewConfig.maxImagePixelCount
-        let pixelW = Int(cropView.image.size.width * cropView.image.scale)
-        let pixelH = Int(cropView.image.size.height * cropView.image.scale)
-        if maxPixels > 0 && pixelW * pixelH > maxPixels {
+        if cropView.image.exceedsPixelCount(config.cropViewConfig.maxImagePixelCount) {
             croppedImage = cropView.image.cropWithCIImage(by: cropInfo)
         } else {
             croppedImage = cropView.image.crop(by: cropInfo)

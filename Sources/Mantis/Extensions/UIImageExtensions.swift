@@ -328,61 +328,52 @@ extension UIImage {
         }
     }
 
+    /// Returns true when the image's total pixel count exceeds `maxPixelCount`.
+    /// A `maxPixelCount` of 0 (or less) disables the check.
+    func exceedsPixelCount(_ maxPixelCount: Int) -> Bool {
+        guard maxPixelCount > 0 else { return false }
+        return Int(size.width * scale) * Int(size.height * scale) > maxPixelCount
+    }
+
     /// Returns a downsampled version of this image if its total pixel count exceeds `maxPixelCount`.
-    /// Uses ImageIO for memory-efficient thumbnail generation.
-    /// When `sourceData` is provided, uses it directly to avoid re-encoding the image.
-    /// Otherwise falls back to `CGImage.dataProvider` (zero-copy for file-backed images),
-    /// and only re-encodes via `jpegData()`/`pngData()` as a last resort.
+    /// When `sourceData` (the original encoded image data) is provided, uses an ImageIO
+    /// thumbnail, which can decode subsampled and keeps peak memory low.
+    /// Otherwise draws into a target-size context: one full decode, but no re-encode
+    /// and no second decode. Note that `CGImage.dataProvider` returns decoded bitmap
+    /// bytes (not the original encoded data), so it cannot feed ImageIO and is not used.
     /// Returns `self` unchanged if `maxPixelCount <= 0` or the image is within limits.
     public func downsampledIfNeeded(maxPixelCount: Int, sourceData: Data? = nil) -> UIImage {
-        guard maxPixelCount > 0 else { return self }
+        guard exceedsPixelCount(maxPixelCount) else { return self }
 
-        let pixelWidth = Int(size.width * scale)
-        let pixelHeight = Int(size.height * scale)
-        let totalPixels = pixelWidth * pixelHeight
-
-        guard totalPixels > maxPixelCount else { return self }
-
-        let ratio = CGFloat(maxPixelCount) / CGFloat(totalPixels)
+        let pixelWidth = CGFloat(Int(size.width * scale))
+        let pixelHeight = CGFloat(Int(size.height * scale))
+        let ratio = CGFloat(maxPixelCount) / (pixelWidth * pixelHeight)
         let scaleFactor = sqrt(ratio)
-        let maxDimension = max(CGFloat(pixelWidth), CGFloat(pixelHeight)) * scaleFactor
 
-        // Try to create a thumbnail without triggering a full decode.
-        // Each approach is attempted independently so that if dataProvider
-        // yields decoded pixel data (not an encoded image format),
-        // we still fall through to the re-encode path.
-        let options: [CFString: Any] = [
-            kCGImageSourceCreateThumbnailFromImageAlways: true,
-            kCGImageSourceThumbnailMaxPixelSize: Int(ceil(maxDimension)),
-            kCGImageSourceCreateThumbnailWithTransform: true,
-            kCGImageSourceShouldCacheImmediately: true
-        ]
-
-        // 1. Use caller-provided sourceData (best — original compressed data)
-        if let sourceData = sourceData,
-           let source = CGImageSourceCreateWithData(sourceData as CFData, nil),
-           let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
-            return UIImage(cgImage: thumbnail)
+        // 1. ImageIO thumbnail from the original encoded data (most memory-efficient path)
+        if let sourceData = sourceData {
+            let maxDimension = max(pixelWidth, pixelHeight) * scaleFactor
+            let options: [CFString: Any] = [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceThumbnailMaxPixelSize: Int(ceil(maxDimension)),
+                kCGImageSourceCreateThumbnailWithTransform: true,
+                kCGImageSourceShouldCacheImmediately: true
+            ]
+            if let source = CGImageSourceCreateWithData(sourceData as CFData, nil),
+               let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
+                return UIImage(cgImage: thumbnail)
+            }
         }
 
-        // 2. Use CGImage.dataProvider (zero-copy for file-backed images)
-        if let cgImg = cgImage,
-           let dataProvider = cgImg.dataProvider,
-           let providerData = dataProvider.data,
-           let source = CGImageSourceCreateWithData(providerData, nil),
-           let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
-            return UIImage(cgImage: thumbnail)
+        // 2. Draw into a target-size context. draw(in:) bakes in the EXIF orientation,
+        // matching the kCGImageSourceCreateThumbnailWithTransform behavior above.
+        let targetSize = CGSize(width: max(1, floor(pixelWidth * scaleFactor)),
+                                height: max(1, floor(pixelHeight * scaleFactor)))
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: targetSize, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: targetSize))
         }
-
-        // 3. Fall back to re-encoding (last resort)
-        // Prefer PNG to preserve alpha channel; JPEG as final fallback.
-        if let fallbackData = pngData() ?? jpegData(compressionQuality: 1.0),
-           let source = CGImageSourceCreateWithData(fallbackData as CFData, nil),
-           let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
-            return UIImage(cgImage: thumbnail)
-        }
-
-        return self
     }
 
     /// Memory-efficient crop using CIImage lazy pipeline.
@@ -403,9 +394,13 @@ extension UIImage {
         let zoomScaleX = abs(cropInfo.scaleX)
         let zoomScaleY = abs(cropInfo.scaleY)
 
+        guard imageViewSize.width > 0, imageViewSize.height > 0,
+              zoomScaleX > 0, zoomScaleY > 0 else { return nil }
+
         let outputWidth = round((orientedWidth / imageViewSize.width * cropSize.width) / zoomScaleX)
         let outputHeight = round((orientedHeight / imageViewSize.height * cropSize.height) / zoomScaleY)
-        guard outputWidth > 0 && outputHeight > 0 else { return nil }
+        guard outputWidth > 0 && outputHeight > 0,
+              outputWidth.isFinite && outputHeight.isFinite else { return nil }
 
         // Compute source pixel quad from crop box corners + transforms
         // (same coordinate math as cropWithPerspective)
@@ -413,6 +408,10 @@ extension UIImage {
         let scrollContentOffset = cropInfo.scrollContentOffset
         let imgContainerFrame = cropInfo.imageContainerFrame
         let sublayerTransform = cropInfo.skewSublayerTransform
+
+        guard imgContainerFrame.size.width > 0, imgContainerFrame.size.height > 0,
+              imgContainerFrame.size.width.isFinite, imgContainerFrame.size.height.isFinite,
+              imgContainerFrame.origin.x.isFinite, imgContainerFrame.origin.y.isFinite else { return nil }
 
         let anchorX = scrollContentOffset.x + scrollBoundsSize.width / 2
         let anchorY = scrollContentOffset.y + scrollBoundsSize.height / 2
@@ -456,10 +455,14 @@ extension UIImage {
         filter.setValue(CIVector(x: pts[2].x, y: pts[2].y), forKey: "inputBottomRight")
         filter.setValue(CIVector(x: pts[3].x, y: pts[3].y), forKey: "inputBottomLeft")
 
-        guard let correctedOutput = filter.outputImage else { return nil }
+        guard let correctedOutput = filter.outputImage,
+              correctedOutput.extent.width > 0,
+              correctedOutput.extent.height > 0 else { return nil }
 
         let renderScaleX = outputWidth / correctedOutput.extent.width
         let renderScaleY = outputHeight / correctedOutput.extent.height
+        guard renderScaleX.isFinite, renderScaleY.isFinite,
+              renderScaleX > 0, renderScaleY > 0 else { return nil }
         let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
         let context = CIContext(options: [.useSoftwareRenderer: false])

@@ -60,12 +60,6 @@ final class CropView: UIView {
         }
     }
     
-    var isLargeImageMode: Bool {
-        let maxPixels = cropViewConfig.maxImagePixelCount
-        guard maxPixels > 0 else { return false }
-        return Int(image.size.width * image.scale) * Int(image.size.height * image.scale) > maxPixels
-    }
-
     var isManuallyZoomed = false
     /// Tracks whether the user has physically resized the crop box (by dragging
     /// its edges) or manually zoomed into the image. Used by the device rotation
@@ -634,7 +628,7 @@ extension CropView: CropViewProtocol {
     func crop(_ image: UIImage) -> CropOutput {
         let cropInfo = getCropInfo()
         let croppedImage: UIImage?
-        if isLargeImageMode {
+        if image.exceedsPixelCount(cropViewConfig.maxImagePixelCount) {
             croppedImage = image.cropWithCIImage(by: cropInfo)
         } else {
             croppedImage = image.crop(by: cropInfo)
