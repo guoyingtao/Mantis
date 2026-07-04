@@ -1,0 +1,63 @@
+name: CI
+
+on:
+   push:
+      branches:
+         - master
+   pull_request:
+      branches:
+         - master
+
+concurrency:
+   group: ci-${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
+
+jobs:
+   test:
+      name: Build & Test
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+
+         - name: Select Xcode
+           uses: maxim-lobanov/setup-xcode@v1
+           with:
+            xcode-version: latest-stable
+
+         - name: Show environment
+           run: |
+            xcodebuild -version
+            swift --version
+
+         # Pick an available iPhone simulator instead of pinning a device name,
+         # so CI keeps working as the runner's Xcode (and its simulators) change.
+         - name: Choose simulator
+           id: sim
+           run: |
+            UDID=$(xcrun simctl list devices available -j \
+               | python3 -c "import sys, json; ds=json.load(sys.stdin)['devices']; print(next(d['udid'] for rt in ds for d in ds[rt] if d['name'].startswith('iPhone')))")
+            echo "Using simulator $UDID"
+            echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+
+         - name: Build & test
+           run: |
+            set -o pipefail
+            xcodebuild test \
+               -scheme Mantis-Package \
+               -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
+               -skipPackagePluginValidation \
+               CODE_SIGNING_ALLOWED=NO \
+               | xcbeautify
+           env:
+            NSUnbufferedIO: YES
+
+   swiftlint:
+      name: SwiftLint
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+
+         # SwiftLint is preinstalled on the macOS runner image. Warnings are
+         # surfaced as PR annotations; only errors fail the job.
+         - name: Run SwiftLint
+           run: swiftlint lint --reporter github-actions-logging
