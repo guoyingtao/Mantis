@@ -9,6 +9,15 @@ import UIKit
 import CoreImage
 import ImageIO
 
+/// A shared `CIContext` for perspective cropping.
+///
+/// `CIContext` is an expensive object to create (it allocates GPU/Metal
+/// resources), so a fresh instance per crop wastes ~10-50ms. It is thread-safe,
+/// so a single shared instance can be reused across crops.
+enum SharedCIContext {
+    static let context = CIContext(options: [.useSoftwareRenderer: false])
+}
+
 extension UIImage {
     func cgImageWithFixedOrientation() -> CGImage? {
         if imageOrientation == .up {
@@ -243,7 +252,7 @@ extension UIImage {
               renderScaleX > 0, renderScaleY > 0 else { return nil }
         let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
-        let context = CIContext(options: [.useSoftwareRenderer: false])
+        let context = SharedCIContext.context
         guard let resultCG = context.createCGImage(scaledImage, from: scaledImage.extent) else {
             return nil
         }
@@ -473,7 +482,7 @@ extension UIImage {
               renderScaleX > 0, renderScaleY > 0 else { return nil }
         let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
-        let context = CIContext(options: [.useSoftwareRenderer: false])
+        let context = SharedCIContext.context
         guard let resultCG = context.createCGImage(scaledImage, from: scaledImage.extent) else {
             return nil
         }
