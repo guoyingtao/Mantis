@@ -10,10 +10,19 @@ import UIKit
 import Mantis
 
 class DemoViewController: UIViewController {
-    var image = UIImage(named: "sunflower.jpg")
+    private let maxImagePixelCount = 4096 * 4096
+    private var useLargeImage = false
+    var image = UIImage(named: "sunflower.jpg") {
+        didSet {
+            cachedDisplayImage = image.map { Mantis.downsample(image: $0, maxPixelCount: maxImagePixelCount) }
+        }
+    }
     var transformation: Transformation?
     var imagePicker: ImagePicker!
     var cropViewController: CropViewController?
+
+    /// Cached downsampled image for display. Updated automatically when `image` changes.
+    private lazy var cachedDisplayImage: UIImage? = image.map { Mantis.downsample(image: $0, maxPixelCount: maxImagePixelCount) }
     
     private func createConfigWithPresetTransformation() -> Config {
         var config = Mantis.Config()
@@ -37,7 +46,7 @@ class DemoViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = image
+        imageView.image = cachedDisplayImage
         return imageView
     }()
     
@@ -62,10 +71,7 @@ class DemoViewController: UIViewController {
         "Custom Toolbar (Buttons)",
         "Clockwise rotation with slide dial",
         "Crop Shapes",
-        "Hide Rotation Dial",
-        "Dark Background",
-        "Light Background",
-        "Color Background"
+        "Hide Rotation Dial"
     ]
     
     // MARK: - Lifecycle
@@ -76,6 +82,16 @@ class DemoViewController: UIViewController {
         setupConstraints()
         setupTableView()
         loadSunflowerImage()
+        
+        let largeImageSwitch = UISwitch()
+        largeImageSwitch.isOn = useLargeImage
+        largeImageSwitch.addTarget(self, action: #selector(largeImageSwitchChanged(_:)), for: .valueChanged)
+        let switchLabel = UILabel()
+        switchLabel.text = "Large Image"
+        switchLabel.font = UIFont.systemFont(ofSize: 14)
+        let stackView = UIStackView(arrangedSubviews: [switchLabel, largeImageSwitch])
+        stackView.spacing = 4
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: stackView)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Select Album",
@@ -126,10 +142,17 @@ class DemoViewController: UIViewController {
     }
     
     private func loadSunflowerImage() {
-        croppedImageView.image = image
+        croppedImageView.image = cachedDisplayImage
     }
     
     // MARK: - Action Methods
+    @objc private func largeImageSwitchChanged(_ sender: UISwitch) {
+        useLargeImage = sender.isOn
+        image = UIImage(named: useLargeImage ? "large.jpg" : "sunflower.jpg")
+        transformation = nil
+        croppedImageView.image = cachedDisplayImage
+    }
+    
     @objc private func selectFromAlbumAction() {
         imagePicker.present(from: view)
     }
@@ -140,8 +163,11 @@ class DemoViewController: UIViewController {
         }
         var config = createConfigWithPresetTransformation()
         config.cropMode = .async
+        config.cropViewConfig.maxImagePixelCount = maxImagePixelCount
         
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
+        config.appearanceMode = .system
+        config.cropViewConfig.enablePerspectiveCorrection = true
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
         
@@ -152,10 +178,9 @@ class DemoViewController: UIViewController {
         let cropViewController = Mantis.cropViewController(image: image,
                                                            config: config)
         cropViewController.delegate = self
+        cropViewController.modalPresentationStyle = .fullScreen
         
-        let navigationController = UINavigationController(rootViewController: cropViewController)
-        cropViewController.title = "Demo"
-        present(navigationController, animated: true)
+        present(cropViewController, animated: true)
     }
     
     @objc private func embeddedAction() {
@@ -219,7 +244,7 @@ class DemoViewController: UIViewController {
                                                            config: config)
         cropViewController?.delegate = self
         
-        let savedCropInfo: CropInfo = (
+        let savedCropInfo = CropInfo(
             translation: CGPoint(x: 84.85873805664153, y: 132.4420855462625),
             rotation: -0.46043267846107483,
             scaleX: -2.3603495751069907,
@@ -350,28 +375,6 @@ class DemoViewController: UIViewController {
         present(navigationController, animated: true)
     }
     
-    @objc private func darkBackgroundAction() {
-        presentWith(backgroundEffect: .dark)
-    }
-    
-    @objc private func lightBackgroundAction() {
-        presentWith(backgroundEffect: .light)
-    }
-    
-    @objc private func colorBackgroundAction() {
-        guard let image = image else {
-            return
-        }
-        
-        var config = Mantis.Config()
-        config.cropViewConfig.backgroundColor = .yellow
-        let cropViewController = Mantis.cropViewController(image: image,
-                                                           config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
-        cropViewController.delegate = self
-        present(cropViewController, animated: true)
-    }
-    
     // MARK: - Helper Methods
     
     typealias CropShapeItem = (type: Mantis.CropShapeType, title: String)
@@ -431,20 +434,6 @@ class DemoViewController: UIViewController {
         present(actionSheet, animated: true)
     }
     
-    private func presentWith(backgroundEffect effect: CropMaskVisualEffectType) {
-        guard let image = image else {
-            return
-        }
-        
-        var config = Mantis.Config()
-        config.cropViewConfig.cropMaskVisualEffectType = effect
-        let cropViewController = Mantis.cropViewController(image: image,
-                                                           config: config)
-        cropViewController.modalPresentationStyle = .fullScreen
-        cropViewController.delegate = self
-        present(cropViewController, animated: true)
-    }
-    
     private func getActionForIndex(_ index: Int) -> Selector? {
         switch index {
         case 0: return #selector(normalAction)
@@ -458,9 +447,6 @@ class DemoViewController: UIViewController {
         case 8: return #selector(clockwiseRotationAction)
         case 9: return #selector(cropShapesAction)
         case 10: return #selector(hideRotationDialAction)
-        case 11: return #selector(darkBackgroundAction)
-        case 12: return #selector(lightBackgroundAction)
-        case 13: return #selector(colorBackgroundAction)
         default: return nil
         }
     }
@@ -528,6 +514,6 @@ extension DemoViewController: ImagePickerDelegate {
     func didSelect(image: UIImage?) {
         guard let image = image else { return }
         self.image = image
-        croppedImageView.image = image
+        croppedImageView.image = cachedDisplayImage
     }
 }

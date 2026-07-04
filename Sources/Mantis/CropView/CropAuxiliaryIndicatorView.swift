@@ -60,10 +60,10 @@ final class CropAuxiliaryIndicatorView: UIView, CropAuxiliaryIndicatorViewProtoc
         disableCropBoxDeformation = config.disableCropBoxDeformation
         style = config.style
         
-        borderNormalColor = config.borderNormalColor
-        borderHintColor = config.borderHintColor
-        cornerHandleColor = config.cornerHandleColor
-        edgeLineHandleColor = config.edgeLineHandleColor
+        borderNormalColor = config.borderNormalColor ?? .white
+        borderHintColor = config.borderHintColor ?? .white
+        cornerHandleColor = config.cornerHandleColor ?? .white
+        edgeLineHandleColor = config.edgeLineHandleColor ?? .white
         gridMainColor = config.gridMainColor
         gridSecondaryColor = config.gridSecondaryColor
         
