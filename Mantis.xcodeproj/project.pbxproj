@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A1A1A1A1000000000000AA02 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */; };
 		269AF94227437EE400F7FAF6 /* RotationDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269AF94127437EE400F7FAF6 /* RotationDialConfig.swift */; };
 		5F17E40A253535F300A3EB7D /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E409253535F300A3EB7D /* Orientation.swift */; };
 		5F69CC5E26C0629400568B75 /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69CC5D26C0629400568B75 /* Definition.swift */; };
@@ -164,6 +165,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		269AF94127437EE400F7FAF6 /* RotationDialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationDialConfig.swift; sourceTree = "<group>"; };
 		5F17E409253535F300A3EB7D /* Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		5F69CC5D26C0629400568B75 /* Definition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definition.swift; sourceTree = "<group>"; };
@@ -570,6 +572,7 @@
 				F2D700372DA1B8490063EE6C /* SwiftUIView */,
 				66100E05294B7040001C8593 /* Protocols */,
 				OBJ_9 /* Mantis.h */,
+				A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */,
 				OBJ_36 /* Mantis.swift */,
 				6659429C2877DAE80096A5DB /* Config.swift */,
 				663FCF3728866DDA003D3B9E /* CropViewConfig.swift */,
@@ -724,6 +727,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8EFB6FB125D187A000C0DDB2 /* Resource.bundle in Resources */,
+				A1A1A1A1000000000000AA02 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
