@@ -164,10 +164,11 @@ extension UIImage {
         guard outputWidth > 0 && outputHeight > 0,
               outputWidth.isFinite && outputHeight.isFinite else { return nil }
 
-        let scrollBoundsSize = cropInfo.scrollBoundsSize
-        let scrollContentOffset = cropInfo.scrollContentOffset
-        let imgContainerFrame = cropInfo.imageContainerFrame
-        let sublayerTransform = cropInfo.skewSublayerTransform
+        guard let reconstruction = cropInfo.viewReconstruction else { return nil }
+        let scrollBoundsSize = reconstruction.scrollBoundsSize
+        let scrollContentOffset = reconstruction.scrollContentOffset
+        let imgContainerFrame = reconstruction.imageContainerFrame
+        let sublayerTransform = reconstruction.skewSublayerTransform
 
         guard imgContainerFrame.size.width > 0, imgContainerFrame.size.height > 0,
               imgContainerFrame.size.width.isFinite, imgContainerFrame.size.height.isFinite,
@@ -194,7 +195,7 @@ extension UIImage {
         // values. The flip() method builds the transform via
         //   R(rot) · S(flip) · R(extra)
         // which does not decompose cleanly into a single rotation + scale pair.
-        let inverseTransform = cropInfo.scrollViewTransform.inverted()
+        let inverseTransform = reconstruction.scrollViewTransform.inverted()
 
         let contentCorners = screenCorners.map { point -> CGPoint in
             point.applying(inverseTransform)
@@ -421,10 +422,11 @@ extension UIImage {
 
         // Compute source pixel quad from crop box corners + transforms
         // (same coordinate math as cropWithPerspective)
-        let scrollBoundsSize = cropInfo.scrollBoundsSize
-        let scrollContentOffset = cropInfo.scrollContentOffset
-        let imgContainerFrame = cropInfo.imageContainerFrame
-        let sublayerTransform = cropInfo.skewSublayerTransform
+        guard let reconstruction = cropInfo.viewReconstruction else { return nil }
+        let scrollBoundsSize = reconstruction.scrollBoundsSize
+        let scrollContentOffset = reconstruction.scrollContentOffset
+        let imgContainerFrame = reconstruction.imageContainerFrame
+        let sublayerTransform = reconstruction.skewSublayerTransform
 
         guard imgContainerFrame.size.width > 0, imgContainerFrame.size.height > 0,
               imgContainerFrame.size.width.isFinite, imgContainerFrame.size.height.isFinite,
@@ -442,7 +444,7 @@ extension UIImage {
             CGPoint(x: -halfCropW, y: halfCropH)
         ]
 
-        let inverseTransform = cropInfo.scrollViewTransform.inverted()
+        let inverseTransform = reconstruction.scrollViewTransform.inverted()
         let contentCorners = screenCorners.map { $0.applying(inverseTransform) }
         let sourceContentDisplacements = contentCorners.map {
             inverseProjectDisplacement($0, through: sublayerTransform)

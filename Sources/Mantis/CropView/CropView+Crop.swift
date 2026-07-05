@@ -169,7 +169,7 @@ extension CropView {
         let cropRegion = imageContainer.getCropRegion(withCropBoxFrame: viewModel.cropBoxFrame,
                                                       cropView: self)
         
-        return CropInfo(
+        var cropInfo = CropInfo(
             translation: translation,
             rotation: totalRadians,
             scaleX: scaleX,
@@ -178,13 +178,16 @@ extension CropView {
             imageViewSize: imageContainer.bounds.size,
             cropRegion: cropRegion,
             horizontalSkewDegrees: viewModel.horizontalSkewDegrees,
-            verticalSkewDegrees: viewModel.verticalSkewDegrees,
+            verticalSkewDegrees: viewModel.verticalSkewDegrees
+        )
+        cropInfo.viewReconstruction = CropInfo.ViewReconstruction(
             skewSublayerTransform: cropWorkbenchView.layer.sublayerTransform,
             scrollContentOffset: cropWorkbenchView.contentOffset,
             scrollBoundsSize: cropWorkbenchView.bounds.size,
             imageContainerFrame: imageContainer.frame,
             scrollViewTransform: cropWorkbenchView.transform
         )
+        return cropInfo
     }
     
     func getExpectedCropImageSize() -> CGSize {

@@ -132,20 +132,14 @@ public struct CropInfo: Sendable {
     public var cropRegion: CropRegion
     public var horizontalSkewDegrees: CGFloat
     public var verticalSkewDegrees: CGFloat
-    /// The actual CATransform3D sublayerTransform used in the preview for perspective skew.
-    /// Includes perspective rotation, centering, and compensating scale.
-    /// Set to CATransform3DIdentity when no skew is applied.
-    public var skewSublayerTransform: CATransform3D
-    /// The scroll view's content offset during crop (for reconstructing the view hierarchy)
-    public var scrollContentOffset: CGPoint
-    /// The scroll view's visible bounds size during crop
-    public var scrollBoundsSize: CGSize
-    /// The image container's frame in scroll content coordinates during crop
-    public var imageContainerFrame: CGRect
-    /// The actual 2D transform of the scroll view (rotation + flip), used by the
-    /// perspective crop path so it can invert the exact transform without
-    /// reconstructing it from decomposed rotation / scale values.
-    public var scrollViewTransform: CGAffineTransform
+
+    /// View-hierarchy state captured at crop time, needed only to reconstruct
+    /// and invert the exact on-screen transform in the perspective / CIImage
+    /// crop paths. Populated by `CropView.getCropInfo()`; `nil` for a `CropInfo`
+    /// a caller builds directly (those crop paths then return `nil` rather than
+    /// producing a wrong result). Kept out of the public API so the public
+    /// surface carries only semantic crop parameters.
+    var viewReconstruction: ViewReconstruction?
 
     public init(
         translation: CGPoint,
@@ -156,12 +150,7 @@ public struct CropInfo: Sendable {
         imageViewSize: CGSize,
         cropRegion: CropRegion,
         horizontalSkewDegrees: CGFloat = 0,
-        verticalSkewDegrees: CGFloat = 0,
-        skewSublayerTransform: CATransform3D = CATransform3DIdentity,
-        scrollContentOffset: CGPoint = .zero,
-        scrollBoundsSize: CGSize = .zero,
-        imageContainerFrame: CGRect = .zero,
-        scrollViewTransform: CGAffineTransform = .identity
+        verticalSkewDegrees: CGFloat = 0
     ) {
         self.translation = translation
         self.rotation = rotation
@@ -172,11 +161,29 @@ public struct CropInfo: Sendable {
         self.cropRegion = cropRegion
         self.horizontalSkewDegrees = horizontalSkewDegrees
         self.verticalSkewDegrees = verticalSkewDegrees
-        self.skewSublayerTransform = skewSublayerTransform
-        self.scrollContentOffset = scrollContentOffset
-        self.scrollBoundsSize = scrollBoundsSize
-        self.imageContainerFrame = imageContainerFrame
-        self.scrollViewTransform = scrollViewTransform
+        self.viewReconstruction = nil
+    }
+}
+
+extension CropInfo {
+    /// Captured scroll-view / layer state that lets the perspective and
+    /// large-image (CIImage) crop paths rebuild and invert the exact transform
+    /// used on screen. Internal — not part of the public crop API.
+    struct ViewReconstruction: Sendable {
+        /// The CATransform3D sublayerTransform used in the preview for perspective
+        /// skew (perspective rotation, centering, compensating scale). Identity
+        /// when no skew is applied.
+        var skewSublayerTransform: CATransform3D
+        /// The scroll view's content offset during crop.
+        var scrollContentOffset: CGPoint
+        /// The scroll view's visible bounds size during crop.
+        var scrollBoundsSize: CGSize
+        /// The image container's frame in scroll content coordinates during crop.
+        var imageContainerFrame: CGRect
+        /// The scroll view's actual 2D transform (rotation + flip), inverted by the
+        /// perspective crop path instead of reconstructing it from decomposed
+        /// rotation / scale values.
+        var scrollViewTransform: CGAffineTransform
     }
 }
 
