@@ -8,7 +8,6 @@
 import SwiftUI
 #endif
 
-@available(iOS 13.0, *)
 public enum CropAction {
     case reset
     case rotateLeft
@@ -19,12 +18,10 @@ public enum CropAction {
     //    case setAspectRatio(CGFloat)
 }
 
-@available(iOS 13.0, *)
 public enum CropStatus {
     case succeeded
     case failed
 }
-@available(iOS 13.0, *)
 /// A SwiftUI view that wraps the Mantis image cropping functionality.
 ///
 /// Use this view to present a cropping interface to the user. The cropped image,

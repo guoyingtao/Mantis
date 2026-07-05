@@ -44,26 +44,23 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         super.traitCollectionDidChange(previousTraitCollection)
         
         if case .blurSystem = effectType {
-            if #available(iOS 13.0, *),
-               traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
                 applyBlurSystemEffect()
             }
         }
     }
-    
+
     private func applyBlurSystemEffect() {
-        if #available(iOS 13.0, *) {
-            let isDark = traitCollection.userInterfaceStyle == .dark
-            if isDark {
-                self.effect = UIBlurEffect(style: .dark)
-                self.backgroundColor = .clear
-            } else {
-                // Blur effects sample underlying content, so they can appear
-                // dark over colorful images. Use a solid light background
-                // instead to guarantee a light appearance in light mode.
-                self.effect = nil
-                self.backgroundColor = UIColor(white: 0.95, alpha: 0.98)
-            }
+        let isDark = traitCollection.userInterfaceStyle == .dark
+        if isDark {
+            self.effect = UIBlurEffect(style: .dark)
+            self.backgroundColor = .clear
+        } else {
+            // Blur effects sample underlying content, so they can appear
+            // dark over colorful images. Use a solid light background
+            // instead to guarantee a light appearance in light mode.
+            self.effect = nil
+            self.backgroundColor = UIColor(white: 0.95, alpha: 0.98)
         }
     }
     
