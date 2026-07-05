@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Mantis",
     defaultLocalization: "en",
-    platforms: [.iOS(.v12), .macCatalyst(.v13)],
+    platforms: [.iOS(.v15), .macCatalyst(.v15)],
     products: [
         .library(
             name: "Mantis",
@@ -16,7 +16,7 @@ let package = Package(
         .target(
             name: "Mantis",
             exclude: ["Info.plist", "Resources/Info.plist"],
-            resources: [.process("Resources")],
+            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
             swiftSettings: [.define("MANTIS_SPM")]
         )
     ]
