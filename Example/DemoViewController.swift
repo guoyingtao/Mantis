@@ -9,6 +9,7 @@
 import UIKit
 import Mantis
 
+// swiftlint:disable type_body_length
 class DemoViewController: UIViewController {
     private let maxImagePixelCount = 4096 * 4096
     private var useLargeImage = false
@@ -508,6 +509,8 @@ extension DemoViewController: CropViewControllerDelegate {
         print("Is resettable: \(resettable)")
     }
 }
+
+// swiftlint:enable type_body_length
 
 // MARK: - ImagePickerDelegate
 extension DemoViewController: ImagePickerDelegate {

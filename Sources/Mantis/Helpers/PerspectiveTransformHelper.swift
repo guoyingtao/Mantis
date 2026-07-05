@@ -8,7 +8,7 @@
 
 import UIKit
 
-// swiftlint:disable all
+// swiftlint:disable identifier_name
 /// Represents the type of rotation/skew adjustment the user is performing
 public enum RotationAdjustmentType: Int, CaseIterable {
     case straighten = 0
@@ -299,3 +299,5 @@ struct PerspectiveTransformHelper {
     }
     
 }
+
+// swiftlint:enable identifier_name

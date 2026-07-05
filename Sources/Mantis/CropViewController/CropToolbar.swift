@@ -372,7 +372,7 @@ extension CropToolbar {
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: compressionPriority), for: .vertical)
 
         button.addTarget(self, action: action, for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10)
         
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
@@ -493,7 +493,7 @@ extension CropToolbar {
         
         button.removeFromSuperview()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentEdgeInsets = .zero
+        button.configuration?.contentInsets = .zero
         
         // Remove any pre-existing width/height constraints on the button
         // (e.g. the greaterThanOrEqual width constraint added in createOptionButton)
@@ -578,7 +578,7 @@ extension CropToolbar {
                 button.removeConstraint(constraint)
             }
             
-            button.contentEdgeInsets = .zero
+            button.configuration?.contentInsets = .zero
             button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
             

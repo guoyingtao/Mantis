@@ -437,9 +437,9 @@ extension UIImage {
         let halfCropH = cropSize.height / 2
         let screenCorners = [
             CGPoint(x: -halfCropW, y: -halfCropH),
-            CGPoint(x:  halfCropW, y: -halfCropH),
-            CGPoint(x:  halfCropW, y:  halfCropH),
-            CGPoint(x: -halfCropW, y:  halfCropH)
+            CGPoint(x: halfCropW, y: -halfCropH),
+            CGPoint(x: halfCropW, y: halfCropH),
+            CGPoint(x: -halfCropW, y: halfCropH)
         ]
 
         let inverseTransform = cropInfo.scrollViewTransform.inverted()

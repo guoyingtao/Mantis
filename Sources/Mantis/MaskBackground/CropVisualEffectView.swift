@@ -27,6 +27,12 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         self.effectType = effectType
         self.translucencyEffect = translucencyEffect
         self.backgroundColor = backgroundColor
+        registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previousTraitCollection: UITraitCollection) in
+            if case .blurSystem = self.effectType,
+               self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                self.applyBlurSystemEffect()
+            }
+        }
     }
         
     func setMask(cropRatio: CGFloat) {
@@ -40,16 +46,6 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         self.mask = maskView
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        if case .blurSystem = effectType {
-            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                applyBlurSystemEffect()
-            }
-        }
-    }
-
     private func applyBlurSystemEffect() {
         let isDark = traitCollection.userInterfaceStyle == .dark
         if isDark {
