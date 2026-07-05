@@ -71,6 +71,7 @@
 		A1A1A1A1000000000000AA02 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */; };
 		AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000A2 /* CICropEquivalenceTests.swift */; };
 		AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */; };
+		AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000F2 /* SkewPositioningTests.swift */; };
 		AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000C2 /* GeometryHelperTests.swift */; };
 		AA00000000000000000000D1 /* UIImageExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000D2 /* UIImageExtensionsTests.swift */; };
 		F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */; };
@@ -88,6 +89,7 @@
 		F24DCFEC29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFEB29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift */; };
 		F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */; };
 		F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */; };
+		AA00000000000000000000E1 /* SkewPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000E2 /* SkewPositioning.swift */; };
 		F25821642F4180880091CA49 /* RotationTypeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25821632F4180880091CA49 /* RotationTypeSelector.swift */; };
 		F262471B2F4B594300DD5BCE /* CropView+Skew.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262471A2F4B594300DD5BCE /* CropView+Skew.swift */; };
 		F262471D2F4B596C00DD5BCE /* CropView+Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F262471C2F4B596C00DD5BCE /* CropView+Crop.swift */; };
@@ -231,6 +233,7 @@
 		A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA00000000000000000000A2 /* CICropEquivalenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CICropEquivalenceTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelperTests.swift; sourceTree = "<group>"; };
+		AA00000000000000000000F2 /* SkewPositioningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkewPositioningTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000C2 /* GeometryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryHelperTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000D2 /* UIImageExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtensionsTests.swift; sourceTree = "<group>"; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
@@ -248,6 +251,7 @@
 		F24DCFEB29AF2A6000D8E8C1 /* CropAuxiliaryIndicatorView+Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CropAuxiliaryIndicatorView+Accessibility.swift"; sourceTree = "<group>"; };
 		F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropWorkbenchViewTests.swift; sourceTree = "<group>"; };
 		F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelper.swift; sourceTree = "<group>"; };
+		AA00000000000000000000E2 /* SkewPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkewPositioning.swift; sourceTree = "<group>"; };
 		F25821632F4180880091CA49 /* RotationTypeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationTypeSelector.swift; sourceTree = "<group>"; };
 		F262471A2F4B594300DD5BCE /* CropView+Skew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Skew.swift"; sourceTree = "<group>"; };
 		F262471C2F4B596C00DD5BCE /* CropView+Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CropView+Crop.swift"; sourceTree = "<group>"; };
@@ -476,6 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				F25821612F41800F0091CA49 /* PerspectiveTransformHelper.swift */,
+				AA00000000000000000000E2 /* SkewPositioning.swift */,
 				97D3A0182BAD491A00DEB1D6 /* TransformRecord.swift */,
 				97D3A0172BAD491A00DEB1D6 /* TransformStack.swift */,
 				F2AD53402A46DB8B00AE9C87 /* ImageAutoAdjustHelper.swift */,
@@ -550,6 +555,7 @@
 				97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */,
 				AA00000000000000000000A2 /* CICropEquivalenceTests.swift */,
 				AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */,
+				AA00000000000000000000F2 /* SkewPositioningTests.swift */,
 				AA00000000000000000000C2 /* GeometryHelperTests.swift */,
 				AA00000000000000000000D2 /* UIImageExtensionsTests.swift */,
 			);
@@ -795,6 +801,7 @@
 				97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */,
 				AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */,
 				AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */,
+				AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */,
 				AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */,
 				AA00000000000000000000D1 /* UIImageExtensionsTests.swift in Sources */,
 				F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */,
@@ -835,6 +842,7 @@
 				OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */,
 				F209F88C2F4D756D00E15AEA /* SlideDialIconDrawer.swift in Sources */,
 				F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */,
+				AA00000000000000000000E1 /* SkewPositioning.swift in Sources */,
 				OBJ_73 /* CropWorkbenchView.swift in Sources */,
 				66F909BF287D22E7007E2FC6 /* ToolBarButtonImageBuilder+DrawImage.swift in Sources */,
 				OBJ_74 /* CropView+Touches.swift in Sources */,
