@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+   contents: read
+
 on:
    push:
       branches:
@@ -36,10 +39,51 @@ jobs:
          - name: Choose simulator
            id: sim
            run: |
-            UDID=$(xcrun simctl list devices available -j \
-               | python3 -c "import sys, json; ds=json.load(sys.stdin)['devices']; print(next(d['udid'] for rt in ds for d in ds[rt] if d['name'].startswith('iPhone')))")
-            echo "Using simulator $UDID"
-            echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+            destinations="$RUNNER_TEMP/xcodebuild-destinations.txt"
+            xcodebuild -scheme Mantis-Package -showdestinations > "$destinations"
+            python3 - "$destinations" "$GITHUB_OUTPUT" <<'PY'
+            import re
+            import sys
+
+            destinations_path, output_path = sys.argv[1:]
+            destinations_text = open(destinations_path, encoding="utf-8").read()
+
+            candidates = []
+            for match in re.finditer(r"\{ ([^}]+) \}", destinations_text):
+               fields = {}
+               for part in match.group(1).split(", "):
+                  key, _, value = part.partition(":")
+                  fields[key.strip()] = value.strip()
+
+               if fields.get("platform") == "iOS Simulator" and fields.get("name", "").startswith("iPhone") and "id" in fields:
+                  candidates.append(fields)
+
+            if not candidates:
+               print("No iPhone simulator destination is available for Mantis-Package.", file=sys.stderr)
+               print(destinations_text, file=sys.stderr)
+               sys.exit(1)
+
+            preferred_names = [
+               "iPhone 16",
+               "iPhone 15",
+               "iPhone 14",
+               "iPhone SE (3rd generation)",
+            ]
+
+            def sort_key(destination):
+               name = destination["name"]
+               try:
+                  preferred_index = preferred_names.index(name)
+               except ValueError:
+                  preferred_index = len(preferred_names)
+               return (preferred_index, name, destination.get("OS", ""))
+
+            selected = sorted(candidates, key=sort_key)[0]
+            destination = f"platform=iOS Simulator,id={selected['id']}"
+            print(f"Using simulator {selected['name']} ({selected.get('OS', 'unknown OS')})")
+            with open(output_path, "a", encoding="utf-8") as output:
+               print(f"destination={destination}", file=output)
+            PY
 
          - name: Build & test
            run: |
@@ -53,12 +97,12 @@ jobs:
             fi
             xcodebuild test \
                -scheme Mantis-Package \
-               -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
+               -destination "$SIMULATOR_DESTINATION" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
            env:
-            SIMULATOR_UDID: ${{ steps.sim.outputs.udid }}
+            SIMULATOR_DESTINATION: ${{ steps.sim.outputs.destination }}
             NSUnbufferedIO: YES
 
    swiftlint:
@@ -66,7 +110,7 @@ jobs:
       # Run inside the official SwiftLint image on Linux: no install step and
       # no macOS minutes. Linting only parses source, so it needs no Xcode SDK.
       runs-on: ubuntu-latest
-      container: ghcr.io/realm/swiftlint:latest
+      container: ghcr.io/realm/swiftlint:0.63.3
       steps:
          - uses: actions/checkout@v4
            with:
