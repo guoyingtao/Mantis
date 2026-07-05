@@ -57,8 +57,8 @@ final class SlideRuler: UIView {
         // (the library supports iOS 15) fall back to `traitCollectionDidChange`
         // below, since `registerForTraitChanges` is unavailable before iOS 17.
         if #available(iOS 17.0, *) {
-            registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previousTraitCollection: UITraitCollection) in
-                if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previous: UITraitCollection) in
+                if self.traitCollection.hasDifferentColorAppearance(comparedTo: previous) {
                     self.applyColorsForCurrentTraitCollection()
                 }
             }

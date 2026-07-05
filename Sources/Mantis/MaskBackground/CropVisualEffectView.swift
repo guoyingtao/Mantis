@@ -30,9 +30,9 @@ final class CropMaskVisualEffectView: UIVisualEffectView, CropMaskProtocol {
         // iOS 17+ uses the modern trait-change registration; earlier versions
         // (the library supports iOS 15) fall back to `traitCollectionDidChange`.
         if #available(iOS 17.0, *) {
-            registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previousTraitCollection: UITraitCollection) in
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previous: UITraitCollection) in
                 if case .blurSystem = self.effectType,
-                   self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                   self.traitCollection.hasDifferentColorAppearance(comparedTo: previous) {
                     self.applyBlurSystemEffect()
                 }
             }
