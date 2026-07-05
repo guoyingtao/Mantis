@@ -34,57 +34,6 @@ jobs:
             xcodebuild -version
             swift --version
 
-         # Pick an available iPhone simulator instead of pinning a device name,
-         # so CI keeps working as the runner's Xcode (and its simulators) change.
-         - name: Choose simulator
-           id: sim
-           run: |
-            destinations="$RUNNER_TEMP/xcodebuild-destinations.txt"
-            xcodebuild -scheme Mantis-Package -showdestinations > "$destinations"
-            python3 - "$destinations" "$GITHUB_OUTPUT" <<'PY'
-            import re
-            import sys
-
-            destinations_path, output_path = sys.argv[1:]
-            destinations_text = open(destinations_path, encoding="utf-8").read()
-
-            candidates = []
-            for match in re.finditer(r"\{ ([^}]+) \}", destinations_text):
-               fields = {}
-               for part in match.group(1).split(", "):
-                  key, _, value = part.partition(":")
-                  fields[key.strip()] = value.strip()
-
-               if fields.get("platform") == "iOS Simulator" and fields.get("name", "").startswith("iPhone") and "id" in fields:
-                  candidates.append(fields)
-
-            if not candidates:
-               print("No iPhone simulator destination is available for Mantis-Package.", file=sys.stderr)
-               print(destinations_text, file=sys.stderr)
-               sys.exit(1)
-
-            preferred_names = [
-               "iPhone 16",
-               "iPhone 15",
-               "iPhone 14",
-               "iPhone SE (3rd generation)",
-            ]
-
-            def sort_key(destination):
-               name = destination["name"]
-               try:
-                  preferred_index = preferred_names.index(name)
-               except ValueError:
-                  preferred_index = len(preferred_names)
-               return (preferred_index, name, destination.get("OS", ""))
-
-            selected = sorted(candidates, key=sort_key)[0]
-            destination = f"platform=iOS Simulator,id={selected['id']}"
-            print(f"Using simulator {selected['name']} ({selected.get('OS', 'unknown OS')})")
-            with open(output_path, "a", encoding="utf-8") as output:
-               print(f"destination={destination}", file=output)
-            PY
-
          - name: Build & test
            run: |
             set -o pipefail
@@ -97,12 +46,11 @@ jobs:
             fi
             xcodebuild test \
                -scheme Mantis-Package \
-               -destination "$SIMULATOR_DESTINATION" \
+               -destination "platform=iOS Simulator,name=iPhone 16" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
            env:
-            SIMULATOR_DESTINATION: ${{ steps.sim.outputs.destination }}
             NSUnbufferedIO: YES
 
    swiftlint:
