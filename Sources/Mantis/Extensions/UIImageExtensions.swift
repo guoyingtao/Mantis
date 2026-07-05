@@ -14,7 +14,7 @@ import ImageIO
 /// `CIContext` is an expensive object to create (it allocates GPU/Metal
 /// resources), so a fresh instance per crop wastes ~10-50ms. It is thread-safe,
 /// so a single shared instance can be reused across crops.
-enum SharedCIContext {
+private enum SharedCIContext {
     static let context = CIContext(options: [.useSoftwareRenderer: false])
 }
 
