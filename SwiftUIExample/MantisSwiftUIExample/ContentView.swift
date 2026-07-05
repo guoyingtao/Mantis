@@ -17,6 +17,7 @@ public enum CropperType {
 struct ContentView: View {
     @State private var image: UIImage? = UIImage(named: "sunflower")!
     @State private var showingCropper = false
+    @State private var showingDeclarativeCropper = false
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
@@ -37,6 +38,10 @@ struct ContentView: View {
             createImageHolder()
             createFeatureDemoList()
         }
+        .fullScreenCover(isPresented: $showingDeclarativeCropper, content: {
+            DeclarativeCropperDemoView(image: $image)
+                .ignoresSafeArea()
+        })
         .fullScreenCover(isPresented: $showingCropper, content: {
             ImageCropperWrapper(image: $image,
                                 cropShapeType: $cropShapeType,
@@ -102,6 +107,9 @@ struct ContentView: View {
             Spacer()
             Button("Normal Crop") {
                 showingCropper = true
+            }.font(.title)
+            Button("Declarative API (3.0)") {
+                showingDeclarativeCropper = true
             }.font(.title)
             Button("Select crop shape") {
                 showingCropShapeList = true
