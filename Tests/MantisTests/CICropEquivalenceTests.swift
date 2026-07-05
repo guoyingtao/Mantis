@@ -44,7 +44,15 @@ final class CICropEquivalenceTests: XCTestCase {
                                       bitsPerComponent: 8, bytesPerRow: 4,
                                       space: colorSpace,
                                       bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
-        context.draw(cgImage, in: CGRect(x: -CGFloat(posX), y: CGFloat(posY) - CGFloat(cgImage.height) + 1, width: CGFloat(cgImage.width), height: CGFloat(cgImage.height)))
+        context.draw(
+            cgImage,
+            in: CGRect(
+                x: -CGFloat(posX),
+                y: CGFloat(posY) - CGFloat(cgImage.height) + 1,
+                width: CGFloat(cgImage.width),
+                height: CGFloat(cgImage.height)
+            )
+        )
         return data.map { CGFloat($0) / 255.0 }
     }
 

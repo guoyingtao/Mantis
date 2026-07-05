@@ -20,9 +20,9 @@ struct ImageCropperWrapper: View {
     @Binding var type: CropperType
     @Binding var transformation: Transformation?
     @State private var action: CropAction?
-    
+
     @Environment(\.presentationMode) var presentationMode
-    
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -36,69 +36,92 @@ struct ImageCropperWrapper: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .if(type == .noAttachedToolbar) { view in
+            .if(type == .noAttachedToolbar, transform: { view in
                 view.toolbar {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "xmark")
-                        }
+                        Button(
+                            action: {
+                                presentationMode.wrappedValue.dismiss()
+                            },
+                            label: {
+                                Image(systemName: "xmark")
+                            }
+                        )
                     }
-                    
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            action = .rotateLeft
-                        }) {
-                            Image(systemName: "rotate.left")
-                        }
-                        
-                        
-                        Button(action: {
-                            action = .reset
-                        }) {
-                            Image(systemName: "arrow.counterclockwise")
-                        }
-                        
-                        Menu {
-                            Button(action: {
-                                action = .rotateRight
-                            }) {
-                                HStack {
-                                    Image(systemName: "rotate.right")
-                                    Text("Rotate Right")
-                                }
-                            }
-                            
-                            Button(action: {
-                                action = .undo
-                            }) {
-                                HStack {
-                                    Image(systemName: "arrow.uturn.backward")
-                                    Text("Undo")
-                                }
-                            }
 
-                            Button(action: {
-                                action = .redo
-                            }) {
-                                HStack {
-                                    Image(systemName: "arrow.uturn.forward")
-                                    Text("Redo")
-                                }
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button(
+                            action: {
+                                action = .rotateLeft
+                            },
+                            label: {
+                                Image(systemName: "rotate.left")
                             }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
-                        }
-                        
-                        Button(action: {
-                            action = .crop
-                        }) {
-                            Image(systemName: "checkmark")
-                        }
+                        )
+
+                        Button(
+                            action: {
+                                action = .reset
+                            },
+                            label: {
+                                Image(systemName: "arrow.counterclockwise")
+                            }
+                        )
+
+                        Menu(
+                            content: {
+                                Button(
+                                    action: {
+                                        action = .rotateRight
+                                    },
+                                    label: {
+                                        HStack {
+                                            Image(systemName: "rotate.right")
+                                            Text("Rotate Right")
+                                        }
+                                    }
+                                )
+
+                                Button(
+                                    action: {
+                                        action = .undo
+                                    },
+                                    label: {
+                                        HStack {
+                                            Image(systemName: "arrow.uturn.backward")
+                                            Text("Undo")
+                                        }
+                                    }
+                                )
+
+                                Button(
+                                    action: {
+                                        action = .redo
+                                    },
+                                    label: {
+                                        HStack {
+                                            Image(systemName: "arrow.uturn.forward")
+                                            Text("Redo")
+                                        }
+                                    }
+                                )
+                            },
+                            label: {
+                                Image(systemName: "ellipsis.circle")
+                            }
+                        )
+
+                        Button(
+                            action: {
+                                action = .crop
+                            },
+                            label: {
+                                Image(systemName: "checkmark")
+                            }
+                        )
                     }
                 }
-            }
+            })
         }
     }
 }
@@ -108,36 +131,48 @@ extension ImageCropperWrapper {
         var config = Mantis.Config()
         config.cropViewConfig.cropShapeType = cropShapeType
         config.presetFixedRatioType = presetFixedRatioType
-        
-        return ImageCropperView(config: config,
-                                image: $image,
-                                transformation: $transformation,
-                                cropInfo: .constant(nil)) {
-            presentationMode.wrappedValue.dismiss()
-        }
+
+        return ImageCropperView(
+            config: config,
+            image: $image,
+            transformation: $transformation,
+            cropInfo: .constant(nil),
+            onDismiss: {
+                presentationMode.wrappedValue.dismiss()
+            }
+        )
     }
-    
+
     func makeImageCropperHidingRotationDial() -> some View {
         var config = Mantis.Config()
         config.cropViewConfig.showAttachedRotationControlView = false
-        
-        return ImageCropperView(config: config, image: $image, transformation: $transformation, cropInfo: .constant(nil)) {
-            presentationMode.wrappedValue.dismiss()
-        }
+
+        return ImageCropperView(
+            config: config,
+            image: $image,
+            transformation: $transformation,
+            cropInfo: .constant(nil),
+            onDismiss: {
+                presentationMode.wrappedValue.dismiss()
+            }
+        )
     }
-    
+
     func makeImageCropperWithoutAttachedToolbar() -> some View {
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
         config.enableUndoRedo = true
-        
-        return ImageCropperView(config: config,
-                                image: $image,
-                                transformation: $transformation,
-                                cropInfo: .constant(nil),
-                                action: $action) {
-            presentationMode.wrappedValue.dismiss()
-        }
+
+        return ImageCropperView(
+            config: config,
+            image: $image,
+            transformation: $transformation,
+            cropInfo: .constant(nil),
+            action: $action,
+            onDismiss: {
+                presentationMode.wrappedValue.dismiss()
+            }
+        )
     }
 }
 

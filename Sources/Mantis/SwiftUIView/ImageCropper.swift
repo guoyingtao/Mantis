@@ -75,7 +75,7 @@ public struct ImageCropperView: UIViewControllerRepresentable {
                 cropInfo: Binding<CropInfo?>,
                 action: Binding<CropAction?> = .constant(nil),
                 onDismiss: @escaping () -> Void = {},
-                onCropCompleted: @escaping (_ status: CropStatus) -> Void = { _  in}) {
+                onCropCompleted: @escaping (_ status: CropStatus) -> Void = { _ in }) {
         self.config = config
         _image = image
         _transformation = transformation
@@ -99,7 +99,6 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             actionBinding = parent._action
         }
         
-        @MainActor
         public func cropViewControllerDidCrop(_ cropViewController: Mantis.CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
             parent.image = cropped
             parent.transformation = transformation
@@ -112,12 +111,10 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             parent.onCropCompleted(.succeeded)
         }
         
-        @MainActor
         public func cropViewControllerDidCancel(_ cropViewController: Mantis.CropViewController, original: UIImage) {
             parent.onDismiss()
         }
         
-        @MainActor
         public func cropViewControllerDidFailToCrop(_ cropViewController: Mantis.CropViewController, original: UIImage) {
             isProcessingAction = false
             lastProcessedAction = nil
@@ -125,7 +122,6 @@ public struct ImageCropperView: UIViewControllerRepresentable {
             parent.onCropCompleted(.failed)
         }
         
-        @MainActor
         func handleAction() {
             guard !isProcessingAction else { return }
             
@@ -214,4 +210,3 @@ public struct ImageCropperView: UIViewControllerRepresentable {
         context.coordinator.handleAction()
     }
 }
-

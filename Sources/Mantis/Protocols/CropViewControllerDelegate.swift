@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public protocol CropViewControllerDelegate: AnyObject {
     func cropViewControllerDidCrop(_ cropViewController: CropViewController,
                                    cropped: UIImage,

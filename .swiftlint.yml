@@ -8,6 +8,8 @@ excluded:
 - Carthage
 - Pods
 - SwiftLint/Common/3rdPartyLib
+- .build
+- .claude
 line_length:
     warning: 150
     error: 200

@@ -53,24 +53,22 @@ final class SlideRuler: UIView {
         
         positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
         positionInfoHelper.slideRuler = self
+        registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previousTraitCollection: UITraitCollection) in
+            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                self.pointer.backgroundColor = self.config.pointerColor.cgColor
+                self.centralDot.fillColor = self.config.centralDotColor.cgColor
+                let newScaleColor = self.config.scaleColor.cgColor
+                let newMajorScaleColor = self.config.majorScaleColor.cgColor
+                self.scaleBars.forEach { $0.backgroundColor = newScaleColor }
+                self.majorScaleBars.forEach { $0.backgroundColor = newMajorScaleColor }
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError()
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            pointer.backgroundColor = config.pointerColor.cgColor
-            centralDot.fillColor = config.centralDotColor.cgColor
-            let newScaleColor = config.scaleColor.cgColor
-            let newMajorScaleColor = config.majorScaleColor.cgColor
-            scaleBars.forEach { $0.backgroundColor = newScaleColor }
-            majorScaleBars.forEach { $0.backgroundColor = newMajorScaleColor }
-        }
-    }
-        
     func setupUI() {
         setupSlider()
         makeRuler()

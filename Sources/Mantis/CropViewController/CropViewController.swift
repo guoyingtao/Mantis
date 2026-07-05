@@ -206,7 +206,6 @@ open class CropViewController: UIViewController {
         }
     }
 }
-
 // MARK: - Action Handlers
 extension CropViewController {
     func savePreviousCropStateIfNeeded() {
@@ -412,4 +411,3 @@ extension CropViewController {
         ratioPresenter?.present(by: self, in: presentSourceView)
     }
 }
-

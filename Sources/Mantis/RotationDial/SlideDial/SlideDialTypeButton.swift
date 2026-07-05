@@ -42,18 +42,16 @@ final class SlideDialTypeButton: UIView {
         setupLayers()
         setupSubviews()
         updateAppearance()
+        registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previousTraitCollection: UITraitCollection) in
+            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                self.ringLayer.fillColor = self.config.buttonFillColor.cgColor
+                self.updateAppearance()
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            ringLayer.fillColor = config.buttonFillColor.cgColor
-            updateAppearance()
-        }
     }
     
     override func layoutSubviews() {
