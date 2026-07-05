@@ -48,6 +48,7 @@ jobs:
                -scheme Mantis-Package \
                -destination "platform=iOS Simulator,name=iPhone 16" \
                -skipPackagePluginValidation \
+               IPHONEOS_DEPLOYMENT_TARGET=17.0 \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
            env:
