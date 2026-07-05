@@ -11,9 +11,9 @@ import ImageIO
 
 /// A shared `CIContext` for perspective cropping.
 ///
-/// `CIContext` is an expensive object to create (it allocates GPU/Metal
-/// resources), so a fresh instance per crop wastes ~10-50ms. It is thread-safe,
-/// so a single shared instance can be reused across crops.
+/// `CIContext` is expensive to create (it can allocate GPU/Metal resources),
+/// so creating a new instance per crop adds noticeable overhead. `CIContext` is
+/// thread-safe, so a single shared instance can be reused across crops.
 private enum SharedCIContext {
     static let context = CIContext(options: [.useSoftwareRenderer: false])
 }
