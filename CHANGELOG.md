@@ -2,6 +2,26 @@
 
 -----
 
+## [2.32.0](https://www.github.com/guoyingtao/Mantis/compare/v2.31.2...v2.32.0) (2026-07-05)
+
+
+### Features
+
+* add PrivacyInfo.xcprivacy privacy manifest ([#525](https://www.github.com/guoyingtao/Mantis/issues/525)) ([b999649](https://www.github.com/guoyingtao/Mantis/commit/b9996494bdf5980a782161d6ea5331b88e8a109d))
+* Support large images ([#498](https://www.github.com/guoyingtao/Mantis/issues/498)) ([82dea03](https://www.github.com/guoyingtao/Mantis/commit/82dea0353ed33e13267668f193a36c1ecafa6630))
+
+
+### Bug Fixes
+
+* avoid double safe area inset offset in embedded mode ([#487](https://www.github.com/guoyingtao/Mantis/issues/487)) ([#521](https://www.github.com/guoyingtao/Mantis/issues/521)) ([f60bb84](https://www.github.com/guoyingtao/Mantis/commit/f60bb84441e0c057cfa4c8aef81bff8c203cf1f1))
+* avoid initial-display zoom flicker in fixed-ratio crop ([#487](https://www.github.com/guoyingtao/Mantis/issues/487)) ([#523](https://www.github.com/guoyingtao/Mantis/issues/523)) ([d613bdc](https://www.github.com/guoyingtao/Mantis/commit/d613bdc95a010e9fe790aa0436e0897a60226537))
+* fix the UI jumping issue when rotateCropBoxFor90DegreeRotation = false ([#490](https://www.github.com/guoyingtao/Mantis/issues/490)) ([3c0f520](https://www.github.com/guoyingtao/Mantis/commit/3c0f520e786629ff5c662a2265227aaa4671bd66))
+
+
+### Performance Improvements
+
+* reuse a shared CIContext for perspective cropping ([#524](https://www.github.com/guoyingtao/Mantis/issues/524)) ([cabefe3](https://www.github.com/guoyingtao/Mantis/commit/cabefe36792a5a298307b228c7943850f461c8d8))
+
 ### [2.31.2](https://www.github.com/guoyingtao/Mantis/compare/v2.31.1...v2.31.2) (2026-05-31)
 
 
