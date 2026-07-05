@@ -8,11 +8,13 @@ import UIKit
 
 public struct Orientation {
     static var interfaceOrientation: UIInterfaceOrientation {
-        if #available(iOS 13, *) {
-            return application.windows.first?.windowScene?.interfaceOrientation ?? .portrait
-        } else {
-            return application.statusBarOrientation
+        let windowScenes = application.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let activeScene = windowScenes.first { scene in
+            scene.windows.first(where: { $0.isKeyWindow }) != nil
         }
+            ?? windowScenes.first { $0.activationState == .foregroundActive }
+            ?? windowScenes.first
+        return activeScene?.interfaceOrientation ?? .portrait
     }
         
     private static var application: UIApplication { .shared }

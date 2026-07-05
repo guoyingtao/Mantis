@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
   s.social_media_url   = "https://x.com/guoyingtao"
   s.platform     = :ios
   s.swift_version = "5.0"
-  s.ios.deployment_target = "12.0"
+  s.ios.deployment_target = "15.0"
   s.source       = { :git => "https://github.com/guoyingtao/Mantis.git", :tag => "v#{s.version}" }
   s.source_files  = "Sources/**/*.{h,swift}"
   s.resource_bundles = {
-    "MantisResources" => ["Sources/**/*.lproj/*.strings"]
+    "MantisResources" => ["Sources/**/*.lproj/*.strings", "Sources/Mantis/PrivacyInfo.xcprivacy"]
   }
   
   s.pod_target_xcconfig = {

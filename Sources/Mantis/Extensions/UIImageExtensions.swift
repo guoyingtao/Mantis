@@ -9,6 +9,15 @@ import UIKit
 import CoreImage
 import ImageIO
 
+/// A shared `CIContext` for perspective cropping.
+///
+/// `CIContext` is expensive to create (it can allocate GPU/Metal resources),
+/// so creating a new instance per crop adds noticeable overhead. `CIContext` is
+/// thread-safe, so a single shared instance can be reused across crops.
+private enum SharedCIContext {
+    static let context = CIContext(options: [.useSoftwareRenderer: false])
+}
+
 extension UIImage {
     func cgImageWithFixedOrientation() -> CGImage? {
         if imageOrientation == .up {
@@ -243,7 +252,7 @@ extension UIImage {
               renderScaleX > 0, renderScaleY > 0 else { return nil }
         let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
-        let context = CIContext(options: [.useSoftwareRenderer: false])
+        let context = SharedCIContext.context
         guard let resultCG = context.createCGImage(scaledImage, from: scaledImage.extent) else {
             return nil
         }
@@ -428,9 +437,9 @@ extension UIImage {
         let halfCropH = cropSize.height / 2
         let screenCorners = [
             CGPoint(x: -halfCropW, y: -halfCropH),
-            CGPoint(x:  halfCropW, y: -halfCropH),
-            CGPoint(x:  halfCropW, y:  halfCropH),
-            CGPoint(x: -halfCropW, y:  halfCropH)
+            CGPoint(x: halfCropW, y: -halfCropH),
+            CGPoint(x: halfCropW, y: halfCropH),
+            CGPoint(x: -halfCropW, y: halfCropH)
         ]
 
         let inverseTransform = cropInfo.scrollViewTransform.inverted()
@@ -473,7 +482,7 @@ extension UIImage {
               renderScaleX > 0, renderScaleY > 0 else { return nil }
         let scaledImage = correctedOutput.transformed(by: CGAffineTransform(scaleX: renderScaleX, y: renderScaleY))
 
-        let context = CIContext(options: [.useSoftwareRenderer: false])
+        let context = SharedCIContext.context
         guard let resultCG = context.createCGImage(scaledImage, from: scaledImage.extent) else {
             return nil
         }

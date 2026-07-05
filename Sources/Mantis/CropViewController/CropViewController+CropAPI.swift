@@ -9,7 +9,6 @@ import UIKit
 
 // MARK: - Public Crop API
 extension CropViewController {
-    @available(iOS 13.0, *)
     public func crop(by cropInfo: CropInfo) {
         let croppedImage: UIImage?
         if cropView.image.exceedsPixelCount(config.cropViewConfig.maxImagePixelCount) {

@@ -68,7 +68,11 @@
 		97D3A01A2BAD491A00DEB1D6 /* TransformRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D3A0182BAD491A00DEB1D6 /* TransformRecord.swift */; };
 		97D3A01C2BAD494300DEB1D6 /* TransformDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D3A01B2BAD494300DEB1D6 /* TransformDelegate.swift */; };
 		97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */; };
+		A1A1A1A1000000000000AA02 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */; };
 		AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000A2 /* CICropEquivalenceTests.swift */; };
+		AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */; };
+		AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000C2 /* GeometryHelperTests.swift */; };
+		AA00000000000000000000D1 /* UIImageExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000D2 /* UIImageExtensionsTests.swift */; };
 		F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */; };
 		F2058F272A400508008DEBAA /* SlideDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F262A400508008DEBAA /* SlideDialViewModel.swift */; };
 		F2058F292A417D97008DEBAA /* SlideDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F282A417D97008DEBAA /* SlideDialTests.swift */; };
@@ -224,7 +228,11 @@
 		97D3A0182BAD491A00DEB1D6 /* TransformRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformRecord.swift; sourceTree = "<group>"; };
 		97D3A01B2BAD494300DEB1D6 /* TransformDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformDelegate.swift; sourceTree = "<group>"; };
 		97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformStackTests.swift; sourceTree = "<group>"; };
+		A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA00000000000000000000A2 /* CICropEquivalenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CICropEquivalenceTests.swift; sourceTree = "<group>"; };
+		AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelperTests.swift; sourceTree = "<group>"; };
+		AA00000000000000000000C2 /* GeometryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryHelperTests.swift; sourceTree = "<group>"; };
+		AA00000000000000000000D2 /* UIImageExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtensionsTests.swift; sourceTree = "<group>"; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialConfig.swift; sourceTree = "<group>"; };
 		F2058F262A400508008DEBAA /* SlideDialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialViewModel.swift; sourceTree = "<group>"; };
@@ -541,6 +549,9 @@
 				F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */,
 				97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */,
 				AA00000000000000000000A2 /* CICropEquivalenceTests.swift */,
+				AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */,
+				AA00000000000000000000C2 /* GeometryHelperTests.swift */,
+				AA00000000000000000000D2 /* UIImageExtensionsTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -570,6 +581,7 @@
 				F2D700372DA1B8490063EE6C /* SwiftUIView */,
 				66100E05294B7040001C8593 /* Protocols */,
 				OBJ_9 /* Mantis.h */,
+				A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */,
 				OBJ_36 /* Mantis.swift */,
 				6659429C2877DAE80096A5DB /* Config.swift */,
 				663FCF3728866DDA003D3B9E /* CropViewConfig.swift */,
@@ -674,7 +686,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftMigration = 9999;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					8EFB6F5325D16A9E00C0DDB2 = {
 						CreatedOnToolsVersion = 12.4;
@@ -724,6 +736,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8EFB6FB125D187A000C0DDB2 /* Resource.bundle in Resources */,
+				A1A1A1A1000000000000AA02 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -781,6 +794,9 @@
 				F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */,
 				97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */,
 				AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */,
+				AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */,
+				AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */,
+				AA00000000000000000000D1 /* UIImageExtensionsTests.swift in Sources */,
 				F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */,
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
@@ -973,8 +989,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Sources/Mantis/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
@@ -1010,8 +1026,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Sources/Mantis/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.echo.framework.Mantis;
@@ -1028,9 +1044,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = Z9GT6JU7N2;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD = /usr/bin/true;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -package-description-version 5.5";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
@@ -1043,9 +1060,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = Z9GT6JU7N2;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD = /usr/bin/true;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -package-description-version 5.5";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
@@ -1056,14 +1074,16 @@
 		OBJ_111 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 			};
 			name = Debug;
 		};
 		OBJ_112 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 			};
 			name = Release;
 		};
@@ -1079,21 +1099,21 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mantis.xcodeproj/MantisTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@loader_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
 				TARGET_NAME = MantisTests;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_TVOS_DEPLOYMENT_TARGET)";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
 			};
 			name = Debug;
 		};
@@ -1109,21 +1129,21 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mantis.xcodeproj/MantisTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@loader_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
 				TARGET_NAME = MantisTests;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_TVOS_DEPLOYMENT_TARGET)";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
 			};
 			name = Release;
 		};
@@ -1171,12 +1191,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1226,11 +1247,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1254,12 +1276,12 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mantis.xcodeproj/Mantis_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.22.0;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
@@ -1274,8 +1296,8 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TARGET_NAME = Mantis;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_TVOS_DEPLOYMENT_TARGET)";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
 			};
 			name = Debug;
 		};
@@ -1293,12 +1315,12 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Mantis.xcodeproj/Mantis_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.22.0;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
@@ -1313,8 +1335,8 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TARGET_NAME = Mantis;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_TVOS_DEPLOYMENT_TARGET)";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
 			};
 			name = Release;
 		};

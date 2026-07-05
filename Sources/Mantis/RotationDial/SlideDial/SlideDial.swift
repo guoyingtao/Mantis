@@ -135,10 +135,8 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         
         // Check type buttons in withTypeSelector mode
         if case .withTypeSelector = config.mode {
-            for (_, button) in typeButtons {
-                if button.frame.contains(newPoint) {
-                    return button
-                }
+            for (_, button) in typeButtons where button.frame.contains(newPoint) {
+                return button
             }
         }
         
