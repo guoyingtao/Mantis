@@ -14,6 +14,7 @@ public struct Orientation {
         }
             ?? windowScenes.first { $0.activationState == .foregroundActive }
             ?? windowScenes.first
+        return activeScene?.interfaceOrientation ?? .portrait
     }
         
     private static var application: UIApplication { .shared }
