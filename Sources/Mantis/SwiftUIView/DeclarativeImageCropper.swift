@@ -29,6 +29,13 @@ public struct CropResult {
 /// Pass a ``CropSession`` to drive the cropper from your own controls
 /// (`session.rotate()`, `session.crop()`, ...) and to observe `canUndo`,
 /// `canRedo`, `isResettable` and the live `transformation`.
+///
+/// - Important: The configuration produced by the modifiers is applied once,
+///   when the underlying crop view controller is created; changing modifier
+///   values on later view updates has no effect. Use
+///   ``CropSession/setAspectRatio(_:)`` to change the ratio at runtime.
+///   The `image` is the exception: passing a different image instance updates
+///   the running cropper in place.
 public struct ImageCropper: View {
     private let image: UIImage
     private let session: CropSession?
@@ -156,18 +163,24 @@ private struct ImageCropperBridge: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> CropViewController {
         let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.delegate = context.coordinator
+        context.coordinator.appliedImage = image
         session?.attach(to: cropViewController)
         return cropViewController
     }
 
     func updateUIViewController(_ uiViewController: CropViewController, context: Context) {
-        // The crop view controller is configured once in makeUIViewController;
-        // only the callbacks need to track the latest view value.
+        // The configuration is applied once in makeUIViewController; only the
+        // callbacks and the image track the latest view value.
         context.coordinator.parent = self
+        if context.coordinator.appliedImage !== image {
+            context.coordinator.appliedImage = image
+            uiViewController.update(image)
+        }
     }
 
     final class Coordinator: CropViewControllerDelegate {
         var parent: ImageCropperBridge
+        var appliedImage: UIImage?
 
         init(_ parent: ImageCropperBridge) {
             self.parent = parent
