@@ -1,0 +1,70 @@
+name: CI
+
+permissions:
+   contents: read
+
+on:
+   push:
+      branches:
+         - master
+   pull_request:
+      branches:
+         - master
+
+concurrency:
+   group: ci-${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
+
+jobs:
+   test:
+      name: Build & Test
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+           with:
+            persist-credentials: false
+
+         - name: Select Xcode
+           uses: maxim-lobanov/setup-xcode@v1
+           with:
+            xcode-version: latest-stable
+
+         - name: Show environment
+           run: |
+            xcodebuild -version
+            swift --version
+
+         - name: Build & test
+           run: |
+            set -o pipefail
+            # Pipe through xcbeautify when it's available, but fall back to raw
+            # xcodebuild output so CI keeps working if a runner image drops it.
+            if command -v xcbeautify >/dev/null 2>&1; then
+               FORMATTER="xcbeautify"
+            else
+               FORMATTER="cat"
+            fi
+            xcodebuild test \
+               -scheme Mantis-Package \
+               -destination "platform=iOS Simulator,name=iPhone 16" \
+               -skipPackagePluginValidation \
+               IPHONEOS_DEPLOYMENT_TARGET=17.0 \
+               CODE_SIGNING_ALLOWED=NO \
+               | "$FORMATTER"
+           env:
+            NSUnbufferedIO: YES
+
+   swiftlint:
+      name: SwiftLint
+      # Run inside the official SwiftLint image on Linux: no install step and
+      # no macOS minutes. Linting only parses source, so it needs no Xcode SDK.
+      runs-on: ubuntu-latest
+      container: ghcr.io/realm/swiftlint:0.63.3
+      steps:
+         - uses: actions/checkout@v4
+           with:
+            persist-credentials: false
+
+         # Warnings surface as PR annotations; only errors fail the job.
+         - name: Run SwiftLint
+           run: swiftlint lint --reporter github-actions-logging
