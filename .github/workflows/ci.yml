@@ -44,11 +44,13 @@ jobs:
             else
                FORMATTER="cat"
             fi
+            # Build at the package's declared minimum (iOS 15) so CI catches
+            # any use of newer APIs that lacks an availability guard. Do NOT
+            # override IPHONEOS_DEPLOYMENT_TARGET here — that masks such breaks.
             xcodebuild test \
                -scheme Mantis-Package \
                -destination "platform=iOS Simulator,name=iPhone 16" \
                -skipPackagePluginValidation \
-               IPHONEOS_DEPLOYMENT_TARGET=17.0 \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
            env:
