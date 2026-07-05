@@ -44,12 +44,19 @@ jobs:
          - name: Build & test
            run: |
             set -o pipefail
+            # Pipe through xcbeautify when it's available, but fall back to raw
+            # xcodebuild output so CI keeps working if a runner image drops it.
+            if command -v xcbeautify >/dev/null 2>&1; then
+               FORMATTER="xcbeautify"
+            else
+               FORMATTER="cat"
+            fi
             xcodebuild test \
                -scheme Mantis-Package \
                -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \
-               | xcbeautify
+               | "$FORMATTER"
            env:
             NSUnbufferedIO: YES
 
