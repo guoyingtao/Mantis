@@ -53,11 +53,12 @@ jobs:
             fi
             xcodebuild test \
                -scheme Mantis-Package \
-               -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
+               -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
            env:
+            SIMULATOR_UDID: ${{ steps.sim.outputs.udid }}
             NSUnbufferedIO: YES
 
    swiftlint:
