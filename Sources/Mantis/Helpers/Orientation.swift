@@ -9,7 +9,9 @@ import UIKit
 public struct Orientation {
     static var interfaceOrientation: UIInterfaceOrientation {
         let windowScenes = application.connectedScenes.compactMap { $0 as? UIWindowScene }
-        let activeScene = windowScenes.first { $0.activationState == .foregroundActive } ?? windowScenes.first
+        let activeScene = windowScenes.first { $0.keyWindow != nil }
+            ?? windowScenes.first { $0.activationState == .foregroundActive }
+            ?? windowScenes.first
         return activeScene?.interfaceOrientation ?? .portrait
     }
         
