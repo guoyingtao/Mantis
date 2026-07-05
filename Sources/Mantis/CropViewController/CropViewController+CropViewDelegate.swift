@@ -56,8 +56,7 @@ extension CropViewController: CropViewDelegate {
         currentCropState = cropView.makeCropState()
 
         if previous != currentCropState {
-            TransformStack
-                .shared
+            transformStack
                 .pushTransformRecordOntoStack(transformType: .transform,
                                               previous: previous, current:
                                                 currentCropState,
