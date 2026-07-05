@@ -46,7 +46,7 @@ struct CropState: Equatable {
     }
 }
 
-public struct Transformation: Equatable {
+public struct Transformation: Equatable, Sendable {
     public var offset: CGPoint
     public var rotation: CGFloat
     public var scale: CGFloat
@@ -98,7 +98,7 @@ public struct Transformation: Equatable {
     }
 }
 
-public struct CropRegion: Equatable {
+public struct CropRegion: Equatable, Sendable {
     public var topLeft: CGPoint
     public var topRight: CGPoint
     public var bottomLeft: CGPoint
@@ -122,7 +122,7 @@ public struct CropRegion: Equatable {
     }
 }
 
-public struct CropInfo {
+public struct CropInfo: Sendable {
     public var translation: CGPoint
     public var rotation: CGFloat
     public var scaleX: CGFloat

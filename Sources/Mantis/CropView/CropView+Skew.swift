@@ -7,6 +7,41 @@
 
 import UIKit
 
+/// Tuning constants for the perspective-skew positioning math. Collecting the
+/// transition angles, dampening ramps, and epsilons here — instead of scattering
+/// them as inline literals — makes each value named, documented, and adjustable
+/// in one place. Values are unchanged from the original inline constants.
+private enum SkewTuning {
+    /// Angle (°) at which edge-to-edge alignment starts blending toward the
+    /// vertex-to-edge inscribed fit.
+    static let transitionStartDegrees: CGFloat = 8.0
+    /// Angle (°) at which the blend to the inscribed fit completes.
+    static let transitionEndDegrees: CGFloat = 12.0
+    /// Skew degrees over which one axis ramps to "fully active"; used to dampen
+    /// the other axis's edge-to-edge shift and scale boost.
+    static let axisActivityRampDegrees: CGFloat = 3.0
+    /// Skew degrees over which the small-angle scale boost ramps to full intensity.
+    static let scaleBoostRampDegrees: CGFloat = 10.0
+    /// Peak extra scale added at small angles so the projected image has headroom
+    /// for edge-to-edge content-offset positioning.
+    static let maxScaleBoost: CGFloat = 0.04
+    /// Rotation (°) at which edge-to-edge dampening reaches full strength.
+    static let rotationDampenDegrees: CGFloat = 10.0
+    /// Relative tolerance for treating the crop box and image aspect ratios as equal.
+    static let aspectRatioMatchTolerance: CGFloat = 0.05
+    /// Safety inset (pt) guarding against sub-pixel gaps at the crop box edge.
+    static let cropBoxSafetyInset: CGFloat = 2
+    /// Iterations for the shift / offset binary searches.
+    static let binarySearchIterations = 16
+    /// Duration (s) of the pull-back animation after an invalid pan.
+    static let clampAnimationDuration: TimeInterval = 0.15
+    /// Zoom delta above the minimum scale that counts as "zoomed in".
+    static let zoomedInEpsilon: CGFloat = 0.01
+    /// Minimum corner distance (pt) below which safety-inset scaling is skipped,
+    /// avoiding division by a near-zero length.
+    static let minCornerLength: CGFloat = 1e-6
+}
+
 /// Groups the mutable state used to smooth and stabilize skew transforms
 /// across consecutive frames. Replacing three loose properties on CropView
 /// with a single value type makes reset sites explicit and concise.
@@ -103,7 +138,7 @@ extension CropView {
         let cropRatio = cropW / cropH
         let imgRatio = imgW / imgH
         // Allow ~5% tolerance for rounding
-        return abs(cropRatio - imgRatio) / max(cropRatio, imgRatio) < 0.05
+        return abs(cropRatio - imgRatio) / max(cropRatio, imgRatio) < SkewTuning.aspectRatioMatchTolerance
     }
     
     /// Applies the perspective (3D) skew transform to the crop workbench view's layer.
@@ -133,7 +168,7 @@ extension CropView {
             // A small safety inset (2pt) guards against sub-pixel rounding
             // that could leave a hairline gap at the crop box edge.
             let (cornerDisplacements, visibleCornerDisplacements, _, _) =
-                computeSkewProjectionInputs(safetyInset: 2)
+                computeSkewProjectionInputs(safetyInset: SkewTuning.cropBoxSafetyInset)
             let rawScale = PerspectiveTransformHelper.computeCompensatingScale(
                 imageCornerDisplacements: cornerDisplacements,
                 visibleCornerDisplacements: visibleCornerDisplacements,
@@ -251,7 +286,7 @@ extension CropView {
                 // to find the nearest valid point.
                 var lowerBound: CGFloat = 0  // center
                 var upperBound: CGFloat = 1  // current position
-                for _ in 0..<16 {
+                for _ in 0..<SkewTuning.binarySearchIterations {
                     let mid = (lowerBound + upperBound) / 2
                     let testX = centerX + (targetX - centerX) * mid
                     let testY = centerY + (targetY - centerY) * mid
@@ -277,7 +312,7 @@ extension CropView {
         guard target.x.isFinite && target.y.isFinite,
               target != curOffset else { return }
 
-        UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut) {
+        UIView.animate(withDuration: SkewTuning.clampAnimationDuration, delay: 0, options: .curveEaseOut) {
             self.cropWorkbenchView.contentOffset = target
         }
     }
@@ -321,7 +356,7 @@ extension CropView {
         if safetyInset > 0 {
             visibleCornerDisplacements = baseCropCorners.map { corner in
                 let len = sqrt(corner.x * corner.x + corner.y * corner.y)
-                guard len > 1e-6 else { return corner }
+                guard len > SkewTuning.minCornerLength else { return corner }
                 let scale = (len + safetyInset) / len
                 return CGPoint(x: corner.x * scale, y: corner.y * scale)
             }
@@ -455,7 +490,7 @@ extension CropView {
         let maxDist = max(context.imageFrame.width, context.imageFrame.height)
         var lowerBound: CGFloat = 0
         var upperBound: CGFloat = maxDist
-        for _ in 0..<16 {
+        for _ in 0..<SkewTuning.binarySearchIterations {
             let mid = (lowerBound + upperBound) / 2
             if isValidSkewPosition(shiftX: dirX * mid, shiftY: dirY * mid, context: context) {
                 lowerBound = mid
@@ -529,12 +564,12 @@ extension CropView {
             let totalRadians = viewModel.getTotalRadians()
             
             // Rotation dampening: full dampening at ±10° of rotation.
-            let rotationDampen = max(1 - abs(totalRadians) / (10 * .pi / 180), 0)
+            let rotationDampen = max(1 - abs(totalRadians) / (SkewTuning.rotationDampenDegrees * .pi / 180), 0)
             
             // Cross-axis dampening: when the other axis has skew, the
             // combined perspective makes single-axis shift extremes unstable.
-            let hActivity = min(abs(hDeg) / 3.0, 1.0)
-            let vActivity = min(abs(vDeg) / 3.0, 1.0)
+            let hActivity = min(abs(hDeg) / SkewTuning.axisActivityRampDegrees, 1.0)
+            let vActivity = min(abs(vDeg) / SkewTuning.axisActivityRampDegrees, 1.0)
             
             optimalShiftY = computeEdgeToEdgeShift(
                 deg: vDeg,
@@ -581,9 +616,9 @@ extension CropView {
         rotationDampen: CGFloat,
         crossAxisActivity: CGFloat
     ) -> CGFloat {
-        let transitionStart: CGFloat = 8.0
-        let transitionEnd: CGFloat = 12.0
-        
+        let transitionStart = SkewTuning.transitionStartDegrees
+        let transitionEnd = SkewTuning.transitionEndDegrees
+
         let dampen = rotationDampen * (1 - crossAxisActivity)
         
         let rawEdgeAligned: CGFloat
@@ -619,7 +654,7 @@ extension CropView {
         let minY = -inset.top
         let maxY = context.contentSize.height - boundsHeight + inset.bottom
         
-        let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + 0.01
+        let isZoomedIn = cropWorkbenchView.zoomScale > cropWorkbenchView.minimumZoomScale + SkewTuning.zoomedInEpsilon
         
         if let prevOptimal = skewState.previousOptimalOffset {
             // Subsequent skew change: apply the delta between the new
@@ -689,11 +724,11 @@ extension CropView {
     private func computeEdgeToEdgeScaleBoost(hDeg: CGFloat, vDeg: CGFloat) -> CGFloat {
         guard cropBoxMatchesImageAspectRatio else { return 1.0 }
         
-        let transitionEnd: CGFloat = 12.0
+        let transitionEnd = SkewTuning.transitionEndDegrees
         let absH = abs(hDeg)
         let absV = abs(vDeg)
-        let hActivity = min(absH / 3.0, 1.0)
-        let vActivity = min(absV / 3.0, 1.0)
+        let hActivity = min(absH / SkewTuning.axisActivityRampDegrees, 1.0)
+        let vActivity = min(absV / SkewTuning.axisActivityRampDegrees, 1.0)
         
         // Each axis's boost is dampened by the other axis's activity.
         let hEdgeFade = max(1 - absH / transitionEnd, 0) * (1 - vActivity)
@@ -701,9 +736,9 @@ extension CropView {
         
         // Scale the boost by how much skew there is (normalized to 0-1
         // within the edge-to-edge range).
-        let hBoostIntensity = min(absH / 10.0, 1.0) * hEdgeFade
-        let vBoostIntensity = min(absV / 10.0, 1.0) * vEdgeFade
-        return 1.0 + 0.04 * max(hBoostIntensity, vBoostIntensity)
+        let hBoostIntensity = min(absH / SkewTuning.scaleBoostRampDegrees, 1.0) * hEdgeFade
+        let vBoostIntensity = min(absV / SkewTuning.scaleBoostRampDegrees, 1.0) * vEdgeFade
+        return 1.0 + SkewTuning.maxScaleBoost * max(hBoostIntensity, vBoostIntensity)
     }
     
     // MARK: State Reset
