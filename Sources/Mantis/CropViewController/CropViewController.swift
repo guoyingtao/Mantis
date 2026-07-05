@@ -108,17 +108,15 @@ open class CropViewController: UIViewController {
         modalPresentationStyle = .fullScreen
         navigationController?.modalPresentationStyle = .fullScreen
 #endif
-        if #available(iOS 13.0, *) {
-            switch config.appearanceMode {
-            case .forceDark:
-                overrideUserInterfaceStyle = .dark
-            case .forceLight:
-                overrideUserInterfaceStyle = .light
-            case .system:
-                overrideUserInterfaceStyle = .unspecified
-            }
+        switch config.appearanceMode {
+        case .forceDark:
+            overrideUserInterfaceStyle = .dark
+        case .forceLight:
+            overrideUserInterfaceStyle = .light
+        case .system:
+            overrideUserInterfaceStyle = .unspecified
         }
-        
+
         view.backgroundColor = AppearanceColorPreset.mainBackground(for: config.appearanceMode)
         
         cropView.initialSetup(delegate: self, presetFixedRatioType: config.presetFixedRatioType)

@@ -12,13 +12,8 @@ enum AppearanceColorPreset {
     private static let lightBackground = UIColor(white: 0.95, alpha: 1.0)
     
     /// Creates a dynamic color that adapts to dark/light mode.
-    /// Falls back to the dark color on iOS 12.
     private static func dynamicColor(dark: UIColor, light: UIColor) -> UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor { $0.userInterfaceStyle == .dark ? dark : light }
-        } else {
-            return dark
-        }
+        return UIColor { $0.userInterfaceStyle == .dark ? dark : light }
     }
     
     // MARK: - Main Background (CropViewController / CropView)
