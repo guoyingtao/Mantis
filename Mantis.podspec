@@ -9,10 +9,12 @@
 Pod::Spec.new do |s|
   s.name         = "Mantis"
   s.version      = "3.0.0"
-  s.summary      = "An iOS Image cropping library, which mimics the Photo App written in Swift and provides rich cropping interactions."
+  s.summary      = "An iOS image cropping library with UIKit and SwiftUI APIs, mimicking the Photos app with rich cropping interactions."
 
   s.description  = <<-DESC
-        Mantis is an iOS Image cropping library, which mimics the Photo App written in Swift and provides rich cropping interactions for your iOS/Mac app (Catalyst only).
+        Mantis is an iOS image cropping library written in Swift, with both UIKit and SwiftUI APIs.
+        It mimics the Photos app: crop with rotation, flip, free or fixed aspect ratios, rich crop
+        shapes, perspective correction, and undo/redo - on iOS and Mac Catalyst.
                    DESC
 
   s.homepage     = "https://github.com/guoyingtao/Mantis"
