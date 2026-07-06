@@ -11,7 +11,7 @@
 
 # Mantis
 
-   Mantis is an iOS Image cropping library, which mimics the Photo App written in Swift and provides rich cropping interactions for your iOS/Mac app (Catalyst only).
+   Mantis is an iOS image cropping library written in Swift, with both **UIKit** and **SwiftUI** APIs. It mimics the Photos app: crop with rotation, flip, free or fixed aspect ratios, rich crop shapes (circle, polygon, arbitrary paths), Apple Photos–style perspective correction, and undo/redo — on iOS and Mac Catalyst.
 
 <p align="center">
     <img height="400" alt="Screenshot 2026-02-24 at 1 43 09 AM" src="https://github.com/user-attachments/assets/34932f3b-9174-4bf9-9807-38603f6edf05" />
