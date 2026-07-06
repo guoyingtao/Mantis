@@ -18,6 +18,8 @@ struct DeclarativeCropperView: View {
     let cropShapeType: Mantis.CropShapeType
     let aspectRatio: CropAspectRatio
     let showsRotationControl: Bool
+    var usesSlideDial = false
+    var enablesPerspectiveCorrection = false
 
     @Environment(\.presentationMode) var presentationMode
 
@@ -45,6 +47,62 @@ struct DeclarativeCropperView: View {
         if !showsRotationControl {
             cropper = cropper.configure { config in
                 config.cropViewConfig.showAttachedRotationControlView = false
+            }
+        }
+
+        if usesSlideDial {
+            cropper = cropper.configure { config in
+                config.cropViewConfig.builtInRotationControlViewType = .slideDial()
+            }
+        }
+
+        if enablesPerspectiveCorrection {
+            // Enables the horizontal/vertical skew correction modes; Mantis
+            // switches the rotation control to a slide dial with a type
+            // selector, matching the UIKit example's setup.
+            cropper = cropper.configure { config in
+                config.appearanceMode = .system
+                config.cropViewConfig.enablePerspectiveCorrection = true
+            }
+        }
+
+        return cropper
+    }
+}
+
+/// Demonstrates saving the crop parameters and restoring them later:
+/// the `Transformation` delivered by `onCrop` is kept and fed back through
+/// `presetTransformationType` the next time the cropper opens, so the user
+/// continues from exactly where the last crop left off.
+///
+/// The transformation is only meaningful for the image it was created from,
+/// so this demo always crops the same bundled original.
+struct RestorableCropperDemoView: View {
+    @Binding var image: UIImage?
+    @Binding var savedTransformation: Transformation?
+
+    let originalImage: UIImage
+
+    @Environment(\.presentationMode) var presentationMode
+
+    var body: some View {
+        makeCropper()
+    }
+
+    private func makeCropper() -> ImageCropper {
+        var cropper = ImageCropper(image: originalImage)
+            .onCrop { result in
+                savedTransformation = result.transformation
+                image = result.croppedImage
+                presentationMode.wrappedValue.dismiss()
+            }
+            .onCancel {
+                presentationMode.wrappedValue.dismiss()
+            }
+
+        if let transformation = savedTransformation {
+            cropper = cropper.configure { config in
+                config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
             }
         }
 

@@ -17,6 +17,10 @@ struct ContentView: View {
     @State private var cropShapeType: Mantis.CropShapeType = .rect
     @State private var cropAspectRatio: CropAspectRatio = .free
     @State private var showsRotationControl = true
+    @State private var usesSlideDial = false
+    @State private var enablesPerspectiveCorrection = false
+    @State private var showingRestorableCropper = false
+    @State private var savedTransformation: Transformation?
     @State private var contentHeight: CGFloat = 0
     
     @State private var showImagePicker = false
@@ -37,8 +41,16 @@ struct ContentView: View {
             DeclarativeCropperView(image: $image,
                                    cropShapeType: cropShapeType,
                                    aspectRatio: cropAspectRatio,
-                                   showsRotationControl: showsRotationControl)
+                                   showsRotationControl: showsRotationControl,
+                                   usesSlideDial: usesSlideDial,
+                                   enablesPerspectiveCorrection: enablesPerspectiveCorrection)
             .onDisappear(perform: reset)
+            .ignoresSafeArea()
+        })
+        .fullScreenCover(isPresented: $showingRestorableCropper, content: {
+            RestorableCropperDemoView(image: $image,
+                                      savedTransformation: $savedTransformation,
+                                      originalImage: UIImage(named: "sunflower")!)
             .ignoresSafeArea()
         })
         .fullScreenCover(isPresented: $showingCustomToolbarCropper, content: {
@@ -68,6 +80,8 @@ struct ContentView: View {
         cropShapeType = .rect
         cropAspectRatio = .free
         showsRotationControl = true
+        usesSlideDial = false
+        enablesPerspectiveCorrection = false
     }
     
     func createImageHolder() -> some View {
@@ -121,6 +135,17 @@ struct ContentView: View {
             Button("Hide Rotation Dial") {
                 showsRotationControl = false
                 showingCropper = true
+            }.font(.title)
+            Button("Slide Dial") {
+                usesSlideDial = true
+                showingCropper = true
+            }.font(.title)
+            Button("Perspective Correction") {
+                enablesPerspectiveCorrection = true
+                showingCropper = true
+            }.font(.title)
+            Button("Restore Last Crop") {
+                showingRestorableCropper = true
             }.font(.title)
             Button("Legacy Binding API") {
                 showingLegacyCropper = true
