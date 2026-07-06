@@ -1,39 +1,6 @@
 import UIKit
 
 public struct CropViewConfig {
-    /**
-        This value is for how easy to drag crop box. The bigger, the easier.
-     */
-    @available(*, deprecated, message: "Use cropAuxiliaryIndicatorStyle.cropBoxHotAreaUnit instead")
-    public var cropBoxHotAreaUnit: CGFloat {
-        get {
-            cropAuxiliaryIndicatorConfig.cropBoxHotAreaUnit
-        }
-        set {
-            cropAuxiliaryIndicatorConfig.cropBoxHotAreaUnit = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use cropAuxiliaryIndicatorStyle.disableCropBoxDeformation instead")
-    public var disableCropBoxDeformation: Bool {
-        get {
-            cropAuxiliaryIndicatorConfig.disableCropBoxDeformation
-        }
-        set {
-            cropAuxiliaryIndicatorConfig.disableCropBoxDeformation = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use cropAuxiliaryIndicatorConfig.style instead")
-    public var cropAuxiliaryIndicatorStyle: CropAuxiliaryIndicatorStyleType {
-        get {
-            cropAuxiliaryIndicatorConfig.style
-        }
-        set {
-            cropAuxiliaryIndicatorConfig.style = newValue
-        }
-    }
-    
     public var cropAuxiliaryIndicatorConfig = CropAuxiliaryIndicatorConfig()
     
     public var cropShapeType: CropShapeType = .rect
@@ -66,13 +33,6 @@ public struct CropViewConfig {
     }
     
     public var maximumZoomScale: CGFloat = 15
-    
-    @available(*, deprecated, message: "Use showAttachedRotationControlView instead")
-    public var showRotationDial = true {
-        didSet {
-            showAttachedRotationControlView = showRotationDial
-        }
-    }
     
     public var showAttachedRotationControlView = true
     

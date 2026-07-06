@@ -64,7 +64,7 @@ final class CICropEquivalenceTests: XCTestCase {
         // translation = image container center - crop box center (both in content coords)
         let containerCenter = CGPoint(x: viewSize.width * zoom / 2, y: viewSize.height * zoom / 2)
         let cropBoxCenter = CGPoint(x: contentOffset.x + cropSize.width / 2, y: contentOffset.y + cropSize.height / 2)
-        return CropInfo(
+        var info = CropInfo(
             translation: CGPoint(x: containerCenter.x - cropBoxCenter.x, y: containerCenter.y - cropBoxCenter.y),
             rotation: 0,
             scaleX: zoom,
@@ -73,13 +73,16 @@ final class CICropEquivalenceTests: XCTestCase {
             imageViewSize: viewSize,
             cropRegion: CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero),
             horizontalSkewDegrees: 0,
-            verticalSkewDegrees: 0,
+            verticalSkewDegrees: 0
+        )
+        info.viewReconstruction = CropInfo.ViewReconstruction(
             skewSublayerTransform: CATransform3DIdentity,
             scrollContentOffset: contentOffset,
             scrollBoundsSize: cropSize,
             imageContainerFrame: CGRect(origin: .zero, size: CGSize(width: viewSize.width * zoom, height: viewSize.height * zoom)),
             scrollViewTransform: .identity
         )
+        return info
     }
 
     private func assertSameCrop(_ image: UIImage, _ cropInfo: CropInfo,
@@ -158,7 +161,7 @@ final class CICropEquivalenceTests: XCTestCase {
         XCTAssertNil(image.cropWithCIImage(by: cropInfo), "zero zoom scale must not crash or return garbage")
 
         cropInfo.scaleX = 1
-        cropInfo.imageContainerFrame = CGRect(x: CGFloat.nan, y: 0, width: 50, height: 40)
+        cropInfo.viewReconstruction?.imageContainerFrame = CGRect(x: CGFloat.nan, y: 0, width: 50, height: 40)
         XCTAssertNil(image.cropWithCIImage(by: cropInfo), "NaN container frame must not crash or return garbage")
     }
 
