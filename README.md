@@ -113,6 +113,63 @@ github "guoyingtao/Mantis"
 
 ### SwiftUI
 
+#### Declarative API (Mantis 3.0+)
+
+`ImageCropper` is a declarative SwiftUI view configured with modifiers:
+
+```Swift
+struct MyView: View {
+    @State private var croppedImage: UIImage?
+
+    var body: some View {
+        ImageCropper(image: myImage)
+            .cropShape(.circle)
+            .aspectRatio(.fixed(16/9))
+            .onCrop { result in
+                croppedImage = result.croppedImage
+            }
+    }
+}
+```
+
+To build your own controls, attach a `CropSession`. It exposes `canUndo`, `canRedo`,
+`isResettable` and the live `transformation` as observable state (fine-grained
+`Observation` tracking on iOS 17+, `ObservableObject` on iOS 15/16), and drives the
+cropper with plain methods instead of enum bindings:
+
+```Swift
+struct MyCropperView: View {
+    @StateObject private var session = CropSession()
+    @State private var croppedImage: UIImage?
+
+    var body: some View {
+        VStack {
+            ImageCropper(image: myImage, session: session)
+                .builtInToolbarVisible(false)
+                .onCrop { result in croppedImage = result.croppedImage }
+
+            HStack {
+                Button("Undo") { session.undo() }
+                    .disabled(!session.canUndo)
+                Button("Redo") { session.redo() }
+                    .disabled(!session.canRedo)
+                Button("Reset") { session.reset() }
+                    .disabled(!session.isResettable)
+                Button("Rotate") { session.rotate(.clockwise) }
+                Button("Flip") { session.flip(.horizontal) }
+                Button("Done") { session.crop() }
+            }
+        }
+    }
+}
+```
+
+Available modifiers: `.cropShape(_:)`, `.aspectRatio(_:)`, `.builtInToolbarVisible(_:)`,
+`.appearance(_:)`, `.configure { $0... }` (escape hatch to the full `Mantis.Config`),
+`.onCrop(_:)`, `.onCancel(_:)`, `.onCropFailed(_:)`.
+
+#### Binding-based API
+
 * Create an ImageCropperView from Mantis with default config
 
 ```Swift

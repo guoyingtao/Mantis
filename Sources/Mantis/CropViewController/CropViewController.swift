@@ -29,10 +29,14 @@ open class CropViewController: UIViewController {
     public var config = Mantis.Config() {
         didSet {
             if config.enableUndoRedo {
-                TransformStack.shared.transformDelegate = self
+                transformStack.transformDelegate = self
             }
         }
     }
+
+    /// Undo/redo bookkeeping scoped to this crop session, so concurrent
+    /// sessions (e.g. multiple windows) keep independent undo histories.
+    let transformStack = TransformStack()
     
     var cropView: CropViewProtocol! {
         didSet {
@@ -118,7 +122,13 @@ open class CropViewController: UIViewController {
         }
 
         view.backgroundColor = AppearanceColorPreset.mainBackground(for: config.appearanceMode)
-        
+
+        // The config property observer doesn't fire when config is set in init,
+        // so wire up the undo stack here as well.
+        if config.enableUndoRedo {
+            transformStack.transformDelegate = self
+        }
+
         cropView.initialSetup(delegate: self, presetFixedRatioType: config.presetFixedRatioType)
         createCropToolbar()
         if config.cropToolbarConfig.ratioCandidatesShowType == .alwaysShowRatioList
@@ -251,8 +261,7 @@ extension CropViewController {
         
         if config.enableUndoRedo {
             let current = cropView.makeCropState()
-            TransformStack
-                .shared
+            transformStack
                 .pushTransformRecordOntoStack(transformType: .resetTransforms,
                                               previous: previous,
                                               current: current,

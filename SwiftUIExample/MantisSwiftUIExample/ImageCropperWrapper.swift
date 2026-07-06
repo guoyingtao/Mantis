@@ -9,15 +9,14 @@ import Mantis
 import SwiftUI
 
 /**
- * A SwiftUI wrapper that provides different configurations for the Mantis image cropper.
- * This view adapts to different cropper types and provides a convenient API for
- * integrating the Mantis image cropping functionality into SwiftUI views.
+ * Demonstrates the legacy binding-based API (`ImageCropperView` driven by a
+ * `CropAction` binding), kept as a migration reference for Mantis 2.x users.
+ *
+ * New code should prefer the declarative `ImageCropper` + `CropSession` API;
+ * see DeclarativeCropperDemoView for the equivalent of this screen.
  */
 struct ImageCropperWrapper: View {
     @Binding var image: UIImage?
-    @Binding var cropShapeType: Mantis.CropShapeType
-    @Binding var presetFixedRatioType: Mantis.PresetFixedRatioType
-    @Binding var type: CropperType
     @Binding var transformation: Transformation?
     @State private var action: CropAction?
 
@@ -25,19 +24,9 @@ struct ImageCropperWrapper: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                switch type {
-                case .normal:
-                    makeNormalImageCropper()
-                case .noRotationDial:
-                    makeImageCropperHidingRotationDial()
-                case .noAttachedToolbar:
-                    makeImageCropperWithoutAttachedToolbar()
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .if(type == .noAttachedToolbar, transform: { view in
-                view.toolbar {
+            makeImageCropperWithoutAttachedToolbar()
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button(
                             action: {
@@ -121,43 +110,11 @@ struct ImageCropperWrapper: View {
                         )
                     }
                 }
-            })
         }
     }
 }
 
 extension ImageCropperWrapper {
-    func makeNormalImageCropper() -> some View {
-        var config = Mantis.Config()
-        config.cropViewConfig.cropShapeType = cropShapeType
-        config.presetFixedRatioType = presetFixedRatioType
-
-        return ImageCropperView(
-            config: config,
-            image: $image,
-            transformation: $transformation,
-            cropInfo: .constant(nil),
-            onDismiss: {
-                presentationMode.wrappedValue.dismiss()
-            }
-        )
-    }
-
-    func makeImageCropperHidingRotationDial() -> some View {
-        var config = Mantis.Config()
-        config.cropViewConfig.showAttachedRotationControlView = false
-
-        return ImageCropperView(
-            config: config,
-            image: $image,
-            transformation: $transformation,
-            cropInfo: .constant(nil),
-            onDismiss: {
-                presentationMode.wrappedValue.dismiss()
-            }
-        )
-    }
-
     func makeImageCropperWithoutAttachedToolbar() -> some View {
         var config = Mantis.Config()
         config.showAttachedCropToolbar = false
@@ -173,17 +130,5 @@ extension ImageCropperWrapper {
                 presentationMode.wrappedValue.dismiss()
             }
         )
-    }
-}
-
-extension View {
-    @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool,
-                             transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
     }
 }

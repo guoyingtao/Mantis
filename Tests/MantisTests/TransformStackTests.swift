@@ -13,7 +13,7 @@ final class TransformStackTests: XCTestCase {
     var cropVC: CropViewController!
     var cropView: CropView!
     var cropViewModel: CropViewModelProtocol = CropViewModel(cropViewPadding: 0, hotAreaUnit: 0)
-    
+
     private func createCropView(with image: UIImage = UIImage(),
                                 cropViewConfig: CropViewConfig = CropViewConfig(),
                                 viewModel: CropViewModelProtocol) -> CropView {
@@ -25,64 +25,84 @@ final class TransformStackTests: XCTestCase {
                  cropWorkbenchView: FakeCropWorkbenchView(frame: .zero),
                  cropMaskViewManager: FakeCropMaskViewManager())
     }
-    
-    override func setUpWithError() throws {
-        
+
+    private func createCropViewController() -> CropViewController {
         var config = Config()
         config.enableUndoRedo = true
-        cropView = createCropView(cropViewConfig: config.cropViewConfig, viewModel: cropViewModel)
-        cropVC = CropViewController(config: config)
-        cropVC.cropView = cropView
-        
-        TransformStack.shared.transformDelegate = cropVC
-        TransformStack.shared.reset()
-        XCTAssertEqual(TransformStack.shared.top, 0)
+        let cropViewController = CropViewController(config: config)
+        cropViewController.cropView = createCropView(cropViewConfig: config.cropViewConfig, viewModel: cropViewModel)
+        cropViewController.transformStack.transformDelegate = cropViewController
+        return cropViewController
     }
-    
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+
+    override func setUpWithError() throws {
+        cropVC = createCropViewController()
+        cropView = (cropVC.cropView as? CropView)
+        XCTAssertEqual(cropVC.transformStack.top, 0)
     }
-    
+
     func testApplyRecords() {
+        let stack = cropVC.transformStack
+
         var previousState = cropView.makeCropState()
         var currentState = cropView.makeCropState()
-        
-        TransformStack.shared.pushTransformRecordOntoStack(transformType: .transform, 
-                                                           previous: previousState,
-                                                           current: currentState,
-                                                           userGenerated: true)
-        XCTAssertEqual(TransformStack.shared.top, 1)
-        
+
+        stack.pushTransformRecordOntoStack(transformType: .transform,
+                                           previous: previousState,
+                                           current: currentState,
+                                           userGenerated: true)
+        XCTAssertEqual(stack.top, 1)
+
         previousState = cropView.makeCropState()
         currentState = cropView.makeCropState()
-        
-        TransformStack.shared.pushTransformRecordOntoStack(transformType: .resetTransforms,
+
+        stack.pushTransformRecordOntoStack(transformType: .resetTransforms,
+                                           previous: previousState,
+                                           current: currentState,
+                                           userGenerated: true)
+
+        XCTAssertEqual(stack.top, 2)
+        stack.popTransformStack()
+        XCTAssertEqual(stack.top, 1)
+        stack.popTransformStack()
+        XCTAssertEqual(stack.top, 0)
+        stack.popTransformStack()
+        XCTAssertEqual(stack.top, 0)
+    }
+
+    func testStacksAreIndependentAcrossControllers() {
+        let otherCropVC = createCropViewController()
+
+        XCTAssertFalse(cropVC.transformStack === otherCropVC.transformStack)
+
+        let previousState = cropView.makeCropState()
+        let currentState = cropView.makeCropState()
+
+        cropVC.transformStack.pushTransformRecordOntoStack(transformType: .transform,
                                                            previous: previousState,
                                                            current: currentState,
                                                            userGenerated: true)
-        
-        XCTAssertEqual(TransformStack.shared.top, 2)
-        TransformStack.shared.popTransformStack()
-        XCTAssertEqual(TransformStack.shared.top, 1)
-        TransformStack.shared.popTransformStack()
-        XCTAssertEqual(TransformStack.shared.top, 0)
-        TransformStack.shared.popTransformStack()
-        XCTAssertEqual(TransformStack.shared.top, 0)
-    }
-    
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+
+        XCTAssertEqual(cropVC.transformStack.top, 1)
+        // A second concurrent crop session must not see the first session's records.
+        XCTAssertEqual(otherCropVC.transformStack.top, 0)
+
+        otherCropVC.transformStack.reset()
+        XCTAssertEqual(cropVC.transformStack.top, 1)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+    func testUndoManagersAreIndependentAcrossControllers() {
+        let otherCropVC = createCropViewController()
 
+        let previousState = cropView.makeCropState()
+        let currentState = cropView.makeCropState()
+
+        cropVC.transformStack.pushTransformRecordOntoStack(transformType: .transform,
+                                                           previous: previousState,
+                                                           current: currentState,
+                                                           userGenerated: true)
+
+        XCTAssertTrue(cropVC.getUndoManager().canUndo)
+        XCTAssertFalse(otherCropVC.getUndoManager().canUndo)
+    }
 }

@@ -337,6 +337,8 @@ extension ViewController: ImagePickerDelegate {
         }
         
         self.image = image
+        // A transformation is only valid for the image it was created from.
+        transformation = nil
         croppedImageView.image = image
     }
 }

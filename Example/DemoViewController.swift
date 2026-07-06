@@ -517,6 +517,8 @@ extension DemoViewController: ImagePickerDelegate {
     func didSelect(image: UIImage?) {
         guard let image = image else { return }
         self.image = image
+        // A transformation is only valid for the image it was created from.
+        transformation = nil
         croppedImageView.image = cachedDisplayImage
     }
 }

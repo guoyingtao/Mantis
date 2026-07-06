@@ -105,6 +105,9 @@
 		F2B4FDA72A3B69B600667F22 /* SlideRulerPositionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B4FDA52A3B69B600667F22 /* SlideRulerPositionHelper.swift */; };
 		F2B4FDA82A3B69B600667F22 /* SlideRuler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B4FDA62A3B69B600667F22 /* SlideRuler.swift */; };
 		F2D700392DA1B8630063EE6C /* ImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D700382DA1B8630063EE6C /* ImageCropper.swift */; };
+		3A0C501B2E1B00010063EE02 /* CropSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0C501A2E1B00010063EE01 /* CropSession.swift */; };
+		3A0C501D2E1B00010063EE04 /* DeclarativeImageCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0C501C2E1B00010063EE03 /* DeclarativeImageCropper.swift */; };
+		3A0C501F2E1B00010063EE06 /* CropSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0C501E2E1B00010063EE05 /* CropSessionTests.swift */; };
 		FEDAAD8625205CC300D95667 /* RatioSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8525205CC300D95667 /* RatioSelector.swift */; };
 		FEDAAD8C25205DE900D95667 /* RatioItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDAAD8B25205DE900D95667 /* RatioItemView.swift */; };
 		OBJ_100 /* RotationDialPlate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* RotationDialPlate.swift */; };
@@ -267,6 +270,9 @@
 		F2B4FDA52A3B69B600667F22 /* SlideRulerPositionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideRulerPositionHelper.swift; sourceTree = "<group>"; };
 		F2B4FDA62A3B69B600667F22 /* SlideRuler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideRuler.swift; sourceTree = "<group>"; };
 		F2D700382DA1B8630063EE6C /* ImageCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropper.swift; sourceTree = "<group>"; };
+		3A0C501A2E1B00010063EE01 /* CropSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropSession.swift; sourceTree = "<group>"; };
+		3A0C501C2E1B00010063EE03 /* DeclarativeImageCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclarativeImageCropper.swift; sourceTree = "<group>"; };
+		3A0C501E2E1B00010063EE05 /* CropSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropSessionTests.swift; sourceTree = "<group>"; };
 		FEDAAD8525205CC300D95667 /* RatioSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioSelector.swift; sourceTree = "<group>"; };
 		FEDAAD8B25205DE900D95667 /* RatioItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioItemView.swift; sourceTree = "<group>"; };
 		"Mantis::Mantis::Product" /* Mantis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -415,6 +421,8 @@
 			isa = PBXGroup;
 			children = (
 				F2D700382DA1B8630063EE6C /* ImageCropper.swift */,
+				3A0C501A2E1B00010063EE01 /* CropSession.swift */,
+				3A0C501C2E1B00010063EE03 /* DeclarativeImageCropper.swift */,
 			);
 			path = SwiftUIView;
 			sourceTree = "<group>";
@@ -553,6 +561,7 @@
 				F251B36D299B9A52006325B0 /* CropWorkbenchViewTests.swift */,
 				F24DCFE729AB0A7000D8E8C1 /* CropAuxiliaryIndicatorViewTests.swift */,
 				97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */,
+				3A0C501E2E1B00010063EE05 /* CropSessionTests.swift */,
 				AA00000000000000000000A2 /* CICropEquivalenceTests.swift */,
 				AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */,
 				AA00000000000000000000F2 /* SkewPositioningTests.swift */,
@@ -799,6 +808,7 @@
 			files = (
 				F251B36E299B9A52006325B0 /* CropWorkbenchViewTests.swift in Sources */,
 				97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */,
+				3A0C501F2E1B00010063EE06 /* CropSessionTests.swift in Sources */,
 				AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */,
 				AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */,
 				AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */,
@@ -839,6 +849,8 @@
 				OBJ_71 /* CropMaskViewManager.swift in Sources */,
 				66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */,
 				F2D700392DA1B8630063EE6C /* ImageCropper.swift in Sources */,
+				3A0C501B2E1B00010063EE02 /* CropSession.swift in Sources */,
+				3A0C501D2E1B00010063EE04 /* DeclarativeImageCropper.swift in Sources */,
 				OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */,
 				F209F88C2F4D756D00E15AEA /* SlideDialIconDrawer.swift in Sources */,
 				F25821622F41800F0091CA49 /* PerspectiveTransformHelper.swift in Sources */,
