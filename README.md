@@ -19,7 +19,7 @@
     <img src="Images/SlideDial.png" height="400" alt="Mantis SlideDial" />
 </p>
 
-### 🆕 What's New in Mantis 3.0
+## 🆕 What's New in Mantis 3.0
 
 Mantis 3.0 introduces a modern, declarative SwiftUI API:
 
@@ -38,7 +38,7 @@ ImageCropper(image: myImage)
 
 See the [SwiftUI usage section](#usage) for the full API, and the MantisSwiftUIExample project for working demos. The binding-based `ImageCropperView` API remains fully supported.
 
-#### Perspective Correction (Skew)
+### Perspective Correction (Skew)
 
 Mantis now supports **Apple Photos–style perspective correction**, allowing users to adjust horizontal and vertical skew in addition to straightening. When enabled, the slide dial displays three circular icon buttons — **Straighten**, **Vertical**, and **Horizontal** — letting users switch between adjustment modes with a single tap.
 
@@ -46,7 +46,7 @@ Mantis now supports **Apple Photos–style perspective correction**, allowing us
 - Accurate image export using `CIPerspectiveCorrection`
 - Full integration with existing features: undo/redo, flip, 90° rotation, and preset transformations
 
-#### Appearance Mode
+### Appearance Mode
 
 Mantis now supports **light, dark, and system appearance modes**. By default Mantis uses a dark appearance (backward compatible). You can switch to a light theme or let it follow the system setting.
 
@@ -60,7 +60,7 @@ config.appearanceMode = .forceLight   // or .system
 let cropViewController = Mantis.cropViewController(image: <Your Image>, config: config)
 ```
 
-### Demos
+## Demos
 
 <div align="center">
   <video 
