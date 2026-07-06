@@ -8,20 +8,15 @@
 import SwiftUI
 import Mantis
 
-public enum CropperType {
-    case normal
-    case noRotationDial
-    case noAttachedToolbar
-}
-
 struct ContentView: View {
     @State private var image: UIImage? = UIImage(named: "sunflower")!
     @State private var showingCropper = false
-    @State private var showingDeclarativeCropper = false
+    @State private var showingCustomToolbarCropper = false
+    @State private var showingLegacyCropper = false
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
-    @State private var presetFixedRatioType: Mantis.PresetFixedRatioType = .canUseMultiplePresetFixedRatio()
-    @State private var cropperType: CropperType = .normal
+    @State private var cropAspectRatio: CropAspectRatio = .free
+    @State private var showsRotationControl = true
     @State private var contentHeight: CGFloat = 0
     
     @State private var showImagePicker = false
@@ -38,17 +33,22 @@ struct ContentView: View {
             createImageHolder()
             createFeatureDemoList()
         }
-        .fullScreenCover(isPresented: $showingDeclarativeCropper, content: {
+        .fullScreenCover(isPresented: $showingCropper, content: {
+            DeclarativeCropperView(image: $image,
+                                   cropShapeType: cropShapeType,
+                                   aspectRatio: cropAspectRatio,
+                                   showsRotationControl: showsRotationControl)
+            .onDisappear(perform: reset)
+            .ignoresSafeArea()
+        })
+        .fullScreenCover(isPresented: $showingCustomToolbarCropper, content: {
             DeclarativeCropperDemoView(image: $image)
                 .ignoresSafeArea()
         })
-        .fullScreenCover(isPresented: $showingCropper, content: {
-            ImageCropperWrapper(image: $image,
-                                cropShapeType: $cropShapeType,
-                                presetFixedRatioType: $presetFixedRatioType,
-                                type: $cropperType, transformation: $transformation)
-            .onDisappear(perform: reset)
-            .ignoresSafeArea()
+        .fullScreenCover(isPresented: $showingLegacyCropper, content: {
+            ImageCropperWrapper(image: $image, transformation: $transformation)
+                .onDisappear(perform: reset)
+                .ignoresSafeArea()
         })
         .sheet(isPresented: $showingCropShapeList) {
             CropShapeListView(cropShapeType: $cropShapeType, selectedType: $showingCropper)
@@ -66,8 +66,8 @@ struct ContentView: View {
     
     func reset() {
         cropShapeType = .rect
-        presetFixedRatioType = .canUseMultiplePresetFixedRatio()
-        cropperType = .normal
+        cropAspectRatio = .free
+        showsRotationControl = true
     }
     
     func createImageHolder() -> some View {
@@ -108,23 +108,22 @@ struct ContentView: View {
             Button("Normal Crop") {
                 showingCropper = true
             }.font(.title)
-            Button("Declarative API (3.0)") {
-                showingDeclarativeCropper = true
+            Button("Custom Toolbar (CropSession)") {
+                showingCustomToolbarCropper = true
             }.font(.title)
             Button("Select crop shape") {
                 showingCropShapeList = true
             }.font(.title)
             Button("Keep 1:1 ratio") {
-                presetFixedRatioType = .alwaysUsingOnePresetFixedRatio(ratio: 1)
+                cropAspectRatio = .fixed(1)
                 showingCropper = true
             }.font(.title)
             Button("Hide Rotation Dial") {
-                cropperType = .noRotationDial
+                showsRotationControl = false
                 showingCropper = true
             }.font(.title)
-            Button("Hide Attached Toolbar") {
-                cropperType = .noAttachedToolbar
-                showingCropper = true
+            Button("Legacy Binding API") {
+                showingLegacyCropper = true
             }.font(.title)
             Spacer()
         }

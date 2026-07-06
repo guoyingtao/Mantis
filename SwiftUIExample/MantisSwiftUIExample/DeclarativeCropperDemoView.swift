@@ -9,6 +9,49 @@
 import Mantis
 import SwiftUI
 
+/// The main-line cropper of the example app, built on the declarative API.
+/// Shows the built-in Mantis toolbar and maps the feature-list options
+/// (crop shape, aspect ratio, rotation control) onto ImageCropper modifiers.
+struct DeclarativeCropperView: View {
+    @Binding var image: UIImage?
+
+    let cropShapeType: Mantis.CropShapeType
+    let aspectRatio: CropAspectRatio
+    let showsRotationControl: Bool
+
+    @Environment(\.presentationMode) var presentationMode
+
+    var body: some View {
+        makeCropper()
+    }
+
+    private func makeCropper() -> ImageCropper {
+        var cropper = ImageCropper(image: image ?? UIImage())
+            .cropShape(cropShapeType)
+            .onCrop { result in
+                image = result.croppedImage
+                presentationMode.wrappedValue.dismiss()
+            }
+            .onCancel {
+                presentationMode.wrappedValue.dismiss()
+            }
+
+        // Only apply an explicit ratio when one was requested; shapes like
+        // circle already lock the ratio and a .free call would undo that.
+        if case .fixed(let ratio) = aspectRatio {
+            cropper = cropper.aspectRatio(.fixed(ratio))
+        }
+
+        if !showsRotationControl {
+            cropper = cropper.configure { config in
+                config.cropViewConfig.showAttachedRotationControlView = false
+            }
+        }
+
+        return cropper
+    }
+}
+
 struct DeclarativeCropperDemoView: View {
     @Binding var image: UIImage?
 
