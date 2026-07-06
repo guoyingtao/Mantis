@@ -9,6 +9,17 @@
 import Mantis
 import SwiftUI
 
+/// Shown when a cropper demo is presented without an image, instead of
+/// feeding a dummy zero-size UIImage() into ImageCropper.
+private func missingImagePlaceholder(presentationMode: Binding<PresentationMode>) -> some View {
+    VStack(spacing: 16) {
+        Text("No image to crop")
+        Button("Close") {
+            presentationMode.wrappedValue.dismiss()
+        }
+    }
+}
+
 /// Options for one presentation of the main-line cropper. Presented with
 /// `fullScreenCover(item:)` so the cover content is always built from this
 /// value — building it from separate @State vars risks the first presentation
@@ -34,11 +45,17 @@ struct DeclarativeCropperView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        makeCropper()
+        // The demo never presents without an image; keep the nil case explicit
+        // rather than feeding a dummy zero-size UIImage() into the cropper.
+        if let imageToCrop = image {
+            makeCropper(with: imageToCrop)
+        } else {
+            missingImagePlaceholder(presentationMode: presentationMode)
+        }
     }
 
-    private func makeCropper() -> ImageCropper {
-        var cropper = ImageCropper(image: image ?? UIImage())
+    private func makeCropper(with imageToCrop: UIImage) -> ImageCropper {
+        var cropper = ImageCropper(image: imageToCrop)
             .cropShape(options.cropShapeType)
             .onCrop { result in
                 image = result.croppedImage
@@ -131,7 +148,18 @@ struct DeclarativeCropperDemoView: View {
 
     var body: some View {
         NavigationView {
-            ImageCropper(image: image ?? UIImage(), session: session)
+            if let imageToCrop = image {
+                makeCropper(with: imageToCrop)
+            } else {
+                // Explicit nil handling: no cropper means no toolbar, so none
+                // of the session actions can be triggered without an image.
+                missingImagePlaceholder(presentationMode: presentationMode)
+            }
+        }
+    }
+
+    private func makeCropper(with imageToCrop: UIImage) -> some View {
+        ImageCropper(image: imageToCrop, session: session)
                 .aspectRatio(.free)
                 .builtInToolbarVisible(false)
                 .onCrop { result in
@@ -220,6 +248,5 @@ struct DeclarativeCropperDemoView: View {
                         }
                     }
                 }
-        }
     }
 }
