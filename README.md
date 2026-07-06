@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+    <img src="https://img.shields.io/github/v/release/guoyingtao/Mantis" alt="latest release badge" />
     <img src="https://img.shields.io/badge/swift-5.0-orange.svg" alt="swift 5.0 badge" />
     <img src="https://img.shields.io/badge/platform-iOS-lightgrey.svg" alt="platform iOS badge" />
     <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="license MIT badge" />   
@@ -18,7 +19,24 @@
     <img src="Images/SlideDial.png" height="400" alt="Mantis SlideDial" />
 </p>
 
-### 🆕 What's New
+### 🆕 What's New in Mantis 3.0
+
+Mantis 3.0 introduces a modern, declarative SwiftUI API:
+
+- **`ImageCropper`** — a SwiftUI view configured with modifiers:
+
+```swift
+ImageCropper(image: myImage)
+    .cropShape(.circle)
+    .aspectRatio(.fixed(16/9))
+    .onCrop { result in croppedImage = result.croppedImage }
+```
+
+- **`CropSession`** — an observable handle to a live crop session. It exposes `canUndo`, `canRedo`, `isResettable` and the live `transformation` as observable state, and drives the cropper with plain methods (`rotate()`, `flip()`, `crop()`, `undo()`, `redo()`, `reset()`, `setAspectRatio()`) instead of the old enum-binding action pattern. On iOS 17+ it participates in the Observation framework for fine-grained, per-property updates; on iOS 15/16 it behaves as a plain `ObservableObject`.
+- **Independent undo history per cropper** — the internal transform stack is no longer a global singleton, so two croppers shown at the same time (e.g. iPad multi-window) keep separate undo/redo histories.
+- **Cleanups** — 3.0 removes four long-deprecated `CropViewConfig` properties and slims the public `CropInfo`. Most apps are unaffected; see [Migrating from 2.x](#migrating-from-2x).
+
+See the [SwiftUI usage section](#usage) for the full API, and the MantisSwiftUIExample project for working demos. The binding-based `ImageCropperView` API remains fully supported.
 
 #### Perspective Correction (Skew)
 
@@ -66,7 +84,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
 ## Requirements
 * iOS 15.0+
 * macOS 12.0+ (Mac Catalyst)
-* Xcode 13.0+
+* Xcode 13.0+ (Xcode 15+ recommended — enables the iOS 17 Observation-based fine-grained tracking in `CropSession`)
 
 ## Install
 
@@ -90,7 +108,50 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Repository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Exact - 3.0.0
+* Rules: Version - Up to Next Major - 3.0.0
+
+Or in `Package.swift`:
+
+```swift
+.package(url: "https://github.com/guoyingtao/Mantis.git", from: "3.0.0")
+```
+
+</details>
+
+## Migrating from 2.x
+
+Mantis 3.0 contains a small set of breaking changes; most apps only need the renames below. Everything else — including the binding-based SwiftUI `ImageCropperView` — is source compatible.
+
+<details>
+<summary><strong>Removed deprecated <code>CropViewConfig</code> properties</strong></summary>
+
+These four properties had been deprecated forwarding shims; use the replacements:
+
+| Removed in 3.0 | Use instead |
+|---|---|
+| `cropViewConfig.cropBoxHotAreaUnit` | `cropViewConfig.cropAuxiliaryIndicatorConfig.cropBoxHotAreaUnit` |
+| `cropViewConfig.disableCropBoxDeformation` | `cropViewConfig.cropAuxiliaryIndicatorConfig.disableCropBoxDeformation` |
+| `cropViewConfig.cropAuxiliaryIndicatorStyle` | `cropViewConfig.cropAuxiliaryIndicatorConfig.style` |
+| `cropViewConfig.showRotationDial` | `cropViewConfig.showAttachedRotationControlView` |
+
+</details>
+
+<details>
+<summary><strong>Slimmed public <code>CropInfo</code></strong></summary>
+
+Five view-reconstruction fields (`skewSublayerTransform`, `scrollContentOffset`, `scrollBoundsSize`, `imageContainerFrame`, `scrollViewTransform`) moved out of the public struct and its `init`; they were pure view-hierarchy plumbing for the perspective and large-image crop paths.
+
+- **Passing a Mantis-provided `CropInfo` back** into `Mantis.crop(image:by:)` (from the delegate or `getCropInfo()`): no change, including across value copies.
+- **Rebuilding a `CropInfo`** from persisted semantic fields via the public `init` for offline re-cropping: no change for the standard path. The perspective-skew and `maxImagePixelCount` overflow paths return `nil` for a rebuilt `CropInfo` — the same outcome the previous zero-value guards produced. Cross-session restore of *perspective* crops therefore requires a Mantis-provided `CropInfo` from the same session; first-class `Codable` persistence is tracked in [#536](https://github.com/guoyingtao/Mantis/issues/536).
+- **Tip:** for save-and-restore flows, persist the `Transformation` and feed it back via `presetTransformationType = .presetInfo(info:)` — that path is unchanged.
+
+</details>
+
+<details>
+<summary><strong>Behavior changes (not source breaking)</strong></summary>
+
+- Undo/redo bookkeeping is now **per crop view controller** instead of shared globally. If your app shows two croppers at once, each keeps its own undo history (previously they polluted each other's).
+- The `Mantis.cropViewController(image:config:)` factory now correctly wires up undo/redo when `config.enableUndoRedo = true`; previously only the `setupCropViewController` path did.
 
 </details>
 
@@ -169,6 +230,8 @@ Available modifiers: `.cropShape(_:)`, `.aspectRatio(_:)`, `.builtInToolbarVisib
 `.onCrop(_:)`, `.onCancel(_:)`, `.onCropFailed(_:)`.
 
 #### Binding-based API
+
+Kept for backward compatibility and fully supported; new code should prefer the declarative `ImageCropper` above.
 
 * Create an ImageCropperView from Mantis with default config
 
@@ -292,14 +355,17 @@ cropToolbarDelegate?.didSelectRatio(ratio: 9 / 16)
 public enum CropShapeType {
     case rect
     case square
-    case ellipse
+    case ellipse(maskOnly: Bool = false)
     case circle(maskOnly: Bool = false)
+    case roundedRect(radiusToShortSide: CGFloat, maskOnly: Bool = false)
     case diamond(maskOnly: Bool = false)
     case heart(maskOnly: Bool = false)
     case polygon(sides: Int, offset: CGFloat = 0, maskOnly: Bool = false)
     case path(points: [CGPoint], maskOnly: Bool = false)
 }
 ```
+
+In the declarative SwiftUI API the same type is used: `.cropShape(.circle)` (the cases whose associated values all have defaults can be written without parentheses).
 </details>
 
 <details>
@@ -313,7 +379,7 @@ public enum PresetTransformationType {
     case presetNormalizedInfo(normalizedInfo: CGRect)
 }
 ```
-Please use the transformation information obtained previously from delegate method cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, , cropInfo: CropInfo).
+Please use the transformation information obtained previously from the delegate method `cropViewControllerDidCrop(_:cropped:transformation:cropInfo:)`, or — in the declarative SwiftUI API — from `CropResult.transformation` delivered by `.onCrop`.
 
 </details>
 
@@ -323,6 +389,10 @@ Please use the transformation information obtained previously from delegate meth
 * Mantis offers full support for Undo, Redo, Revert to Original in both iOS and Catalyst.
 
 * If you want to add support for this feature, set Mantis.Config.enableUndoRedo = true
+
+* In the declarative SwiftUI API, attaching a `CropSession` enables undo/redo automatically and exposes `canUndo` / `canRedo` / `isResettable` as observable state.
+
+* Each crop view controller keeps its own undo history, so multiple croppers can be shown at the same time (Mantis 3.0+).
 
 * Catalyst menus for this feature are localized.
 
@@ -457,11 +527,11 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 </details>
     
 ### Demo projects
-Mantis provide two demo projects
+Mantis provides two demo projects
 - MantisExample (using Storyboard)
 - MantisSwiftUIExample (using SwiftUI)
-  - Mantis provides an **out-of-the-box SwiftUI wrapper** named `ImageCropperView`,  
-making it easy to integrate the image cropping interface directly in SwiftUI apps.
+  - Demonstrates the **declarative `ImageCropper` + `CropSession` API** (Mantis 3.0+): normal crop with restore, crop shapes, fixed ratio, slide dial, perspective correction, and a custom toolbar driven by session state.
+  - Also includes a "Legacy Binding API" entry showing the binding-based `ImageCropperView`, kept as a 2.x migration reference.
 
 ### Showcases
 
