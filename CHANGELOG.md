@@ -2,6 +2,43 @@
 
 -----
 
+## [3.0.0](https://www.github.com/guoyingtao/Mantis/compare/v2.31.2...v3.0.0) (2026-07-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* targeted at the next major version.
+* * build!: raise minimum deployment target to iOS 15 / Mac Catalyst 15
+
+### Features
+
+* add PrivacyInfo.xcprivacy privacy manifest ([#525](https://www.github.com/guoyingtao/Mantis/issues/525)) ([b999649](https://www.github.com/guoyingtao/Mantis/commit/b9996494bdf5980a782161d6ea5331b88e8a109d))
+* observable CropSession + declarative ImageCropper; per-session TransformStack ([#535](https://www.github.com/guoyingtao/Mantis/issues/535)) ([1d51c1f](https://www.github.com/guoyingtao/Mantis/commit/1d51c1fbc4e9e366406b497d57a8ab4923e5d31a))
+* Support large images ([#498](https://www.github.com/guoyingtao/Mantis/issues/498)) ([82dea03](https://www.github.com/guoyingtao/Mantis/commit/82dea0353ed33e13267668f193a36c1ecafa6630))
+
+
+### Bug Fixes
+
+* avoid double safe area inset offset in embedded mode ([#487](https://www.github.com/guoyingtao/Mantis/issues/487)) ([#521](https://www.github.com/guoyingtao/Mantis/issues/521)) ([f60bb84](https://www.github.com/guoyingtao/Mantis/commit/f60bb84441e0c057cfa4c8aef81bff8c203cf1f1))
+* avoid initial-display zoom flicker in fixed-ratio crop ([#487](https://www.github.com/guoyingtao/Mantis/issues/487)) ([#523](https://www.github.com/guoyingtao/Mantis/issues/523)) ([d613bdc](https://www.github.com/guoyingtao/Mantis/commit/d613bdc95a010e9fe790aa0436e0897a60226537))
+* fix the UI jumping issue when rotateCropBoxFor90DegreeRotation = false ([#490](https://www.github.com/guoyingtao/Mantis/issues/490)) ([3c0f520](https://www.github.com/guoyingtao/Mantis/commit/3c0f520e786629ff5c662a2265227aaa4671bd66))
+* guard iOS 17 trait-change API for the declared iOS 15 minimum ([#533](https://www.github.com/guoyingtao/Mantis/issues/533)) ([ddda42e](https://www.github.com/guoyingtao/Mantis/commit/ddda42ea1f4f2fb913f115afa1115f8882c50db3))
+
+
+### Performance Improvements
+
+* reuse a shared CIContext for perspective cropping ([#524](https://www.github.com/guoyingtao/Mantis/issues/524)) ([cabefe3](https://www.github.com/guoyingtao/Mantis/commit/cabefe36792a5a298307b228c7943850f461c8d8))
+
+
+### Build System
+
+* raise minimum deployment target to iOS 15 ([#528](https://www.github.com/guoyingtao/Mantis/issues/528)) ([379382d](https://www.github.com/guoyingtao/Mantis/commit/379382d534ca2a2f3b0f1be269d7266753dd9077))
+
+
+### Code Refactoring
+
+* remove deprecated CropViewConfig props; slim public CropInfo ([#534](https://www.github.com/guoyingtao/Mantis/issues/534)) ([30b9e7a](https://www.github.com/guoyingtao/Mantis/commit/30b9e7a80459dc48c6b55340145e41d476c18155))
+
 ### [2.31.2](https://www.github.com/guoyingtao/Mantis/compare/v2.31.1...v2.31.2) (2026-05-31)
 
 
