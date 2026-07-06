@@ -9,17 +9,27 @@
 import Mantis
 import SwiftUI
 
+/// Options for one presentation of the main-line cropper. Presented with
+/// `fullScreenCover(item:)` so the cover content is always built from this
+/// value — building it from separate @State vars risks the first presentation
+/// seeing values from before the button's state writes were committed, and
+/// the cropper applies its configuration only once at creation.
+struct DeclarativeCropperOptions: Identifiable {
+    let id = UUID()
+    var cropShapeType: Mantis.CropShapeType = .rect
+    var aspectRatio: CropAspectRatio = .free
+    var showsRotationControl = true
+    var usesSlideDial = false
+    var enablesPerspectiveCorrection = false
+}
+
 /// The main-line cropper of the example app, built on the declarative API.
 /// Shows the built-in Mantis toolbar and maps the feature-list options
 /// (crop shape, aspect ratio, rotation control) onto ImageCropper modifiers.
 struct DeclarativeCropperView: View {
     @Binding var image: UIImage?
 
-    let cropShapeType: Mantis.CropShapeType
-    let aspectRatio: CropAspectRatio
-    let showsRotationControl: Bool
-    var usesSlideDial = false
-    var enablesPerspectiveCorrection = false
+    let options: DeclarativeCropperOptions
 
     @Environment(\.presentationMode) var presentationMode
 
@@ -29,7 +39,7 @@ struct DeclarativeCropperView: View {
 
     private func makeCropper() -> ImageCropper {
         var cropper = ImageCropper(image: image ?? UIImage())
-            .cropShape(cropShapeType)
+            .cropShape(options.cropShapeType)
             .onCrop { result in
                 image = result.croppedImage
                 presentationMode.wrappedValue.dismiss()
@@ -40,23 +50,23 @@ struct DeclarativeCropperView: View {
 
         // Only apply an explicit ratio when one was requested; shapes like
         // circle already lock the ratio and a .free call would undo that.
-        if case .fixed(let ratio) = aspectRatio {
+        if case .fixed(let ratio) = options.aspectRatio {
             cropper = cropper.aspectRatio(.fixed(ratio))
         }
 
-        if !showsRotationControl {
+        if !options.showsRotationControl {
             cropper = cropper.configure { config in
                 config.cropViewConfig.showAttachedRotationControlView = false
             }
         }
 
-        if usesSlideDial {
+        if options.usesSlideDial {
             cropper = cropper.configure { config in
                 config.cropViewConfig.builtInRotationControlViewType = .slideDial()
             }
         }
 
-        if enablesPerspectiveCorrection {
+        if options.enablesPerspectiveCorrection {
             // Enables the horizontal/vertical skew correction modes; Mantis
             // switches the rotation control to a slide dial with a type
             // selector, matching the UIKit example's setup.

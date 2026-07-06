@@ -10,15 +10,11 @@ import Mantis
 
 struct ContentView: View {
     @State private var image: UIImage? = UIImage(named: "sunflower")!
-    @State private var showingCropper = false
+    @State private var cropperOptions: DeclarativeCropperOptions?
     @State private var showingCustomToolbarCropper = false
     @State private var showingLegacyCropper = false
     @State private var showingCropShapeList = false
     @State private var cropShapeType: Mantis.CropShapeType = .rect
-    @State private var cropAspectRatio: CropAspectRatio = .free
-    @State private var showsRotationControl = true
-    @State private var usesSlideDial = false
-    @State private var enablesPerspectiveCorrection = false
     @State private var showingRestorableCropper = false
     @State private var savedTransformation: Transformation?
     @State private var contentHeight: CGFloat = 0
@@ -37,15 +33,9 @@ struct ContentView: View {
             createImageHolder()
             createFeatureDemoList()
         }
-        .fullScreenCover(isPresented: $showingCropper, content: {
-            DeclarativeCropperView(image: $image,
-                                   cropShapeType: cropShapeType,
-                                   aspectRatio: cropAspectRatio,
-                                   showsRotationControl: showsRotationControl,
-                                   usesSlideDial: usesSlideDial,
-                                   enablesPerspectiveCorrection: enablesPerspectiveCorrection)
-            .onDisappear(perform: reset)
-            .ignoresSafeArea()
+        .fullScreenCover(item: $cropperOptions, onDismiss: reset, content: { options in
+            DeclarativeCropperView(image: $image, options: options)
+                .ignoresSafeArea()
         })
         .fullScreenCover(isPresented: $showingRestorableCropper, content: {
             RestorableCropperDemoView(image: $image,
@@ -63,7 +53,16 @@ struct ContentView: View {
                 .ignoresSafeArea()
         })
         .sheet(isPresented: $showingCropShapeList) {
-            CropShapeListView(cropShapeType: $cropShapeType, selectedType: $showingCropper)
+            // CropShapeListView writes cropShapeType before flipping selectedType,
+            // so the setter below sees the freshly chosen shape.
+            CropShapeListView(cropShapeType: $cropShapeType, selectedType: Binding(
+                get: { cropperOptions != nil },
+                set: { isSelected in
+                    if isSelected {
+                        cropperOptions = DeclarativeCropperOptions(cropShapeType: cropShapeType)
+                    }
+                }
+            ))
         }
         .sheet(isPresented: $showSourceTypeSelection) {
             SourceTypeSelectionView(showSourceTypeSelection: $showSourceTypeSelection, showCamera: $showCamera, showImagePicker: $showImagePicker)
@@ -78,10 +77,6 @@ struct ContentView: View {
     
     func reset() {
         cropShapeType = .rect
-        cropAspectRatio = .free
-        showsRotationControl = true
-        usesSlideDial = false
-        enablesPerspectiveCorrection = false
     }
     
     func createImageHolder() -> some View {
@@ -120,7 +115,7 @@ struct ContentView: View {
         VStack(alignment: .leading) {
             Spacer()
             Button("Normal Crop") {
-                showingCropper = true
+                cropperOptions = DeclarativeCropperOptions()
             }.font(.title)
             Button("Custom Toolbar (CropSession)") {
                 showingCustomToolbarCropper = true
@@ -129,20 +124,16 @@ struct ContentView: View {
                 showingCropShapeList = true
             }.font(.title)
             Button("Keep 1:1 ratio") {
-                cropAspectRatio = .fixed(1)
-                showingCropper = true
+                cropperOptions = DeclarativeCropperOptions(aspectRatio: .fixed(1))
             }.font(.title)
             Button("Hide Rotation Dial") {
-                showsRotationControl = false
-                showingCropper = true
+                cropperOptions = DeclarativeCropperOptions(showsRotationControl: false)
             }.font(.title)
             Button("Slide Dial") {
-                usesSlideDial = true
-                showingCropper = true
+                cropperOptions = DeclarativeCropperOptions(usesSlideDial: true)
             }.font(.title)
             Button("Perspective Correction") {
-                enablesPerspectiveCorrection = true
-                showingCropper = true
+                cropperOptions = DeclarativeCropperOptions(enablesPerspectiveCorrection: true)
             }.font(.title)
             Button("Restore Last Crop") {
                 showingRestorableCropper = true
