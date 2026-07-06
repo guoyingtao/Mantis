@@ -32,13 +32,21 @@ struct DeclarativeCropperOptions: Identifiable {
     var showsRotationControl = true
     var usesSlideDial = false
     var enablesPerspectiveCorrection = false
+    /// Reopen restored to the last saved crop state, like the UIKit
+    /// example's normal entry.
+    var restoresLastTransformation = false
 }
 
 /// The main-line cropper of the example app, built on the declarative API.
 /// Shows the built-in Mantis toolbar and maps the feature-list options
 /// (crop shape, aspect ratio, rotation control) onto ImageCropper modifiers.
 struct DeclarativeCropperView: View {
+    /// The full original image; never overwritten by a crop.
     @Binding var image: UIImage?
+    /// Where the crop result goes, for display back in the feature list.
+    @Binding var croppedImage: UIImage?
+    /// Saved on every crop so "Normal Crop" can restore the previous state.
+    @Binding var savedTransformation: Transformation?
 
     let options: DeclarativeCropperOptions
 
@@ -58,12 +66,19 @@ struct DeclarativeCropperView: View {
         var cropper = ImageCropper(image: imageToCrop)
             .cropShape(options.cropShapeType)
             .onCrop { result in
-                image = result.croppedImage
+                croppedImage = result.croppedImage
+                savedTransformation = result.transformation
                 presentationMode.wrappedValue.dismiss()
             }
             .onCancel {
                 presentationMode.wrappedValue.dismiss()
             }
+
+        if options.restoresLastTransformation, let transformation = savedTransformation {
+            cropper = cropper.configure { config in
+                config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
+            }
+        }
 
         // Only apply an explicit ratio when one was requested; shapes like
         // circle already lock the ratio and a .free call would undo that.
@@ -97,48 +112,11 @@ struct DeclarativeCropperView: View {
     }
 }
 
-/// Demonstrates saving the crop parameters and restoring them later:
-/// the `Transformation` delivered by `onCrop` is kept and fed back through
-/// `presetTransformationType` the next time the cropper opens, so the user
-/// continues from exactly where the last crop left off.
-///
-/// The transformation is only meaningful for the image it was created from,
-/// so this demo always crops the same bundled original.
-struct RestorableCropperDemoView: View {
-    @Binding var image: UIImage?
-    @Binding var savedTransformation: Transformation?
-
-    let originalImage: UIImage
-
-    @Environment(\.presentationMode) var presentationMode
-
-    var body: some View {
-        makeCropper()
-    }
-
-    private func makeCropper() -> ImageCropper {
-        var cropper = ImageCropper(image: originalImage)
-            .onCrop { result in
-                savedTransformation = result.transformation
-                image = result.croppedImage
-                presentationMode.wrappedValue.dismiss()
-            }
-            .onCancel {
-                presentationMode.wrappedValue.dismiss()
-            }
-
-        if let transformation = savedTransformation {
-            cropper = cropper.configure { config in
-                config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
-            }
-        }
-
-        return cropper
-    }
-}
-
 struct DeclarativeCropperDemoView: View {
+    /// The full original image; never overwritten by a crop.
     @Binding var image: UIImage?
+    @Binding var croppedImage: UIImage?
+    @Binding var savedTransformation: Transformation?
 
     /// CropSession is an ObservableObject on iOS 15/16 and additionally
     /// supports fine-grained Observation tracking on iOS 17+.
@@ -163,7 +141,8 @@ struct DeclarativeCropperDemoView: View {
                 .aspectRatio(.free)
                 .builtInToolbarVisible(false)
                 .onCrop { result in
-                    image = result.croppedImage
+                    croppedImage = result.croppedImage
+                    savedTransformation = result.transformation
                     presentationMode.wrappedValue.dismiss()
                 }
                 .onCancel {
