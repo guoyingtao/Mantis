@@ -180,7 +180,7 @@ final class UIImageExtensionsTests: XCTestCase {
         let containerCenter = CGPoint(x: viewSize.width * zoom / 2, y: viewSize.height * zoom / 2)
         let cropBoxCenter = CGPoint(x: contentOffset.x + cropSize.width / 2,
                                     y: contentOffset.y + cropSize.height / 2)
-        return CropInfo(
+        var info = CropInfo(
             translation: CGPoint(x: containerCenter.x - cropBoxCenter.x, y: containerCenter.y - cropBoxCenter.y),
             rotation: 0,
             scaleX: zoom,
@@ -189,7 +189,9 @@ final class UIImageExtensionsTests: XCTestCase {
             imageViewSize: viewSize,
             cropRegion: CropRegion(topLeft: .zero, topRight: .zero, bottomLeft: .zero, bottomRight: .zero),
             horizontalSkewDegrees: horizontalSkewDegrees,
-            verticalSkewDegrees: 0,
+            verticalSkewDegrees: 0
+        )
+        info.viewReconstruction = CropInfo.ViewReconstruction(
             skewSublayerTransform: CATransform3DIdentity, // identity => no actual warp
             scrollContentOffset: contentOffset,
             scrollBoundsSize: cropSize,
@@ -197,6 +199,7 @@ final class UIImageExtensionsTests: XCTestCase {
                                         size: CGSize(width: viewSize.width * zoom, height: viewSize.height * zoom)),
             scrollViewTransform: .identity
         )
+        return info
     }
 
     func testCropWithPerspectiveIdentityWarpMatchesLegacyCrop() {
