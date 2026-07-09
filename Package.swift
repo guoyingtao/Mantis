@@ -18,6 +18,12 @@ let package = Package(
             exclude: ["Info.plist", "Resources/Info.plist"],
             resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
             swiftSettings: [.define("MANTIS_SPM")]
+        ),
+        .testTarget(
+            name: "MantisTests",
+            dependencies: ["Mantis"],
+            path: "Tests/MantisTests",
+            swiftSettings: [.define("MANTIS_SPM")]
         )
     ]
 )
