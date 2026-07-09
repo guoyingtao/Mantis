@@ -166,17 +166,14 @@ final class CropViewModelTests: XCTestCase {
         viewModel.cropBoxOriginFrame = contentFrame
         
         // Test streching out the crop box from bottom left
+        // The crop box is already as large as the content frame, so it stays confined to it
         var touchPoint = CGPoint(x: 10, y: 210)
         var newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: false)
-        XCTAssertTrue(newCropBoxFrame.width > contentFrame.width)
-        XCTAssertTrue(newCropBoxFrame.height > contentFrame.height)
-        XCTAssertNotEqual(newCropBoxFrame.width / newCropBoxFrame.height, contentFrame.width / contentFrame.height)
+        XCTAssertEqual(newCropBoxFrame, contentFrame)
 
         newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: true)
-        XCTAssertTrue(newCropBoxFrame.width > contentFrame.width)
-        XCTAssertTrue(newCropBoxFrame.height > contentFrame.height)
-        XCTAssertEqual(newCropBoxFrame.width / newCropBoxFrame.height, contentFrame.width / contentFrame.height, accuracy: 0.1)
-        
+        XCTAssertEqual(newCropBoxFrame, contentFrame)
+
         // Test squizzing in the crop box from bottom left
         touchPoint = CGPoint(x: 20, y: 190)
         newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: true)
@@ -185,6 +182,28 @@ final class CropViewModelTests: XCTestCase {
         XCTAssertEqual(newCropBoxFrame.width / newCropBoxFrame.height, contentFrame.width / contentFrame.height, accuracy: 0.1)
     }
     
+    func testGetNewCropBoxFrameIsConfinedToContentFrame() {
+        let contentFrame = CGRect(x: 20, y: 200, width: 100, height: 200)
+        let cropBox = CGRect(x: 40, y: 250, width: 60, height: 100)
+
+        viewModel.panOriginPoint = CGPoint(x: 70, y: 350)
+        viewModel.tappedEdge = .bottom
+        viewModel.cropBoxFrame = cropBox
+        viewModel.cropBoxOriginFrame = cropBox
+
+        // Drag the bottom edge far below the content frame (e.g. over the toolbar area)
+        let touchPoint = CGPoint(x: 70, y: 500)
+        var newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: false)
+        XCTAssertEqual(newCropBoxFrame.maxY, contentFrame.maxY)
+        XCTAssertEqual(newCropBoxFrame.minY, cropBox.minY)
+        XCTAssertEqual(newCropBoxFrame.minX, cropBox.minX)
+        XCTAssertEqual(newCropBoxFrame.width, cropBox.width)
+
+        // With a locked ratio the whole update is rejected once it would cross the content frame
+        newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint, andContentFrame: contentFrame, aspectRatioLockEnabled: true)
+        XCTAssertEqual(newCropBoxFrame, cropBox)
+    }
+
     func testSetCropBoxFrame() {
         let refCropBox = CGRect(x: 20, y: 20, width: 100, height: 200)
         viewModel.fixedImageRatio = 0.9

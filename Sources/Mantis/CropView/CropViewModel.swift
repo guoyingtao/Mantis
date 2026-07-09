@@ -182,13 +182,22 @@ final class CropViewModel: CropViewModelProtocol {
                                                                                   cropBoxFrame: cropBoxFrame)
             cropBoxLockedAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
             newCropBoxFrame = cropBoxLockedAspectFrameUpdater.cropBoxFrame
+
+            // A locked-ratio frame cannot be clamped edge by edge without
+            // breaking the ratio, so an update crossing the content frame
+            // (e.g. reaching under the toolbar) is rejected as a whole
+            guard contentFrame.insetBy(dx: -0.5, dy: -0.5).contains(newCropBoxFrame) else {
+                return cropBoxFrame
+            }
         } else {
             var cropBoxFreeAspectFrameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: tappedEdge,
                                                                               contentFrame: contentFrame,
                                                                               cropOriginFrame: cropBoxOriginFrame,
                                                                               cropBoxFrame: cropBoxFrame)
             cropBoxFreeAspectFrameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
-            newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame
+            // Confine the crop box within the content frame so it cannot
+            // extend under the toolbar or other surrounding controls
+            newCropBoxFrame = cropBoxFreeAspectFrameUpdater.cropBoxFrame.intersection(contentFrame)
         }
 
         return newCropBoxFrame
