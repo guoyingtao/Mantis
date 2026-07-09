@@ -318,6 +318,34 @@ Please use the transformation information obtained previously from delegate meth
 </details>
 
 <details>
+<summary><strong>Persisting and restoring crops (<code>Codable</code>) 🆕</strong></summary>
+
+As of **Mantis 3.1**, `CropInfo` conforms to `Codable`, so you can save a user's exact crop and reproduce it offline in a later session — including rotated, fixed-ratio, perspective-skewed, and large-image crops.
+
+```swift
+// Save the CropInfo delivered by the delegate (or CropResult.cropInfo in SwiftUI).
+func cropViewControllerDidCrop(_ cropViewController: CropViewController,
+                               cropped: UIImage,
+                               transformation: Transformation,
+                               cropInfo: CropInfo) {
+    let data = try? JSONEncoder().encode(cropInfo)
+    // ...persist `data` (UserDefaults, a file, a database, etc.)
+}
+
+// Later — even in a new app session — re-crop the original image offline, no UI:
+let cropInfo = try JSONDecoder().decode(CropInfo.self, from: data)
+let recropped = Mantis.crop(image: originalImage, by: cropInfo)
+```
+
+* A decoded `CropInfo` crops **identically** to the same-session value: the opaque view-reconstruction state needed by the perspective-skew and `maxImagePixelCount` (large-image) paths is encoded alongside the public fields.
+* **Persist a `CropInfo` that Mantis produced** (from the delegate or `getCropInfo()`). A `CropInfo` you build by hand via the public `init` carries no view-reconstruction state, so the perspective and large-image paths still return `nil` for it — exactly as before.
+* If you only need to reopen the editor at the previous state (rather than crop offline), persisting the `Transformation` and restoring it via `presetTransformationType = .presetInfo(info:)` remains the lighter option.
+
+> **Compatibility:** adding `Codable` is purely additive — existing code needs no changes. The one exception: if you previously wrote your own `extension CropInfo: Codable` as a workaround, remove it after upgrading to avoid a duplicate-conformance error. The encoded JSON mirrors `CropInfo`'s fields, so treat versioning of your own persisted data as your app's responsibility.
+
+</details>
+
+<details>
 <summary><strong>Undo/Redo Support</strong></summary>
 
 * Mantis offers full support for Undo, Redo, Revert to Original in both iOS and Catalyst.

@@ -2,6 +2,13 @@
 
 -----
 
+## [Unreleased]
+
+
+### Features
+
+* make `CropInfo` conform to `Codable` so a crop can be persisted and restored across app sessions — including rotated, fixed-ratio, perspective-skewed, and large-image crops. The opaque view-reconstruction state is encoded alongside the public fields, so a decoded `CropInfo` re-crops identically to the same-session value ([#536](https://www.github.com/guoyingtao/Mantis/issues/536)). This is additive and source compatible; if you previously added your own `extension CropInfo: Codable` as a workaround, remove it after upgrading to avoid a duplicate-conformance error.
+
 ## [3.0.0](https://www.github.com/guoyingtao/Mantis/compare/v2.31.2...v3.0.0) (2026-07-06)
 
 

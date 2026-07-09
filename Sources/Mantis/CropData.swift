@@ -98,7 +98,7 @@ public struct Transformation: Equatable, Sendable {
     }
 }
 
-public struct CropRegion: Equatable, Sendable {
+public struct CropRegion: Equatable, Sendable, Codable {
     public var topLeft: CGPoint
     public var topRight: CGPoint
     public var bottomLeft: CGPoint
@@ -122,7 +122,7 @@ public struct CropRegion: Equatable, Sendable {
     }
 }
 
-public struct CropInfo: Sendable {
+public struct CropInfo: Sendable, Codable {
     public var translation: CGPoint
     public var rotation: CGFloat
     public var scaleX: CGFloat
@@ -184,6 +184,87 @@ extension CropInfo {
         /// perspective crop path instead of reconstructing it from decomposed
         /// rotation / scale values.
         var scrollViewTransform: CGAffineTransform
+    }
+}
+
+/// `Codable` support so a `CropInfo` (including the internal view-reconstruction
+/// state needed for perspective / large-image crops) can be persisted and
+/// restored across app sessions. `CropInfo` and `CropRegion` get synthesized
+/// conformances; `ViewReconstruction` needs a manual one because `CATransform3D`
+/// and `CGAffineTransform` are not `Codable`. Their coefficients are boxed into
+/// private `Codable` structs rather than adding `Codable` conformances to the
+/// CoreGraphics/QuartzCore types themselves — a library-level retroactive
+/// conformance there would clash if the host app (or another dependency) added
+/// the same one.
+extension CropInfo.ViewReconstruction: Codable {
+    // swiftlint:disable identifier_name
+    /// The six coefficients of a `CGAffineTransform`.
+    private struct AffineTransformBox: Codable {
+        var a, b, c, d, tx, ty: CGFloat
+
+        init(_ transform: CGAffineTransform) {
+            a = transform.a
+            b = transform.b
+            c = transform.c
+            d = transform.d
+            tx = transform.tx
+            ty = transform.ty
+        }
+
+        var transform: CGAffineTransform {
+            CGAffineTransform(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
+        }
+    }
+
+    /// The sixteen coefficients of a `CATransform3D`.
+    private struct Transform3DBox: Codable {
+        var m11, m12, m13, m14: CGFloat
+        var m21, m22, m23, m24: CGFloat
+        var m31, m32, m33, m34: CGFloat
+        var m41, m42, m43, m44: CGFloat
+
+        init(_ transform: CATransform3D) {
+            m11 = transform.m11; m12 = transform.m12; m13 = transform.m13; m14 = transform.m14
+            m21 = transform.m21; m22 = transform.m22; m23 = transform.m23; m24 = transform.m24
+            m31 = transform.m31; m32 = transform.m32; m33 = transform.m33; m34 = transform.m34
+            m41 = transform.m41; m42 = transform.m42; m43 = transform.m43; m44 = transform.m44
+        }
+
+        var transform: CATransform3D {
+            var result = CATransform3DIdentity
+            result.m11 = m11; result.m12 = m12; result.m13 = m13; result.m14 = m14
+            result.m21 = m21; result.m22 = m22; result.m23 = m23; result.m24 = m24
+            result.m31 = m31; result.m32 = m32; result.m33 = m33; result.m34 = m34
+            result.m41 = m41; result.m42 = m42; result.m43 = m43; result.m44 = m44
+            return result
+        }
+    }
+    // swiftlint:enable identifier_name
+
+    private enum CodingKeys: String, CodingKey {
+        case skewSublayerTransform
+        case scrollContentOffset
+        case scrollBoundsSize
+        case imageContainerFrame
+        case scrollViewTransform
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        skewSublayerTransform = try container.decode(Transform3DBox.self, forKey: .skewSublayerTransform).transform
+        scrollContentOffset = try container.decode(CGPoint.self, forKey: .scrollContentOffset)
+        scrollBoundsSize = try container.decode(CGSize.self, forKey: .scrollBoundsSize)
+        imageContainerFrame = try container.decode(CGRect.self, forKey: .imageContainerFrame)
+        scrollViewTransform = try container.decode(AffineTransformBox.self, forKey: .scrollViewTransform).transform
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(Transform3DBox(skewSublayerTransform), forKey: .skewSublayerTransform)
+        try container.encode(scrollContentOffset, forKey: .scrollContentOffset)
+        try container.encode(scrollBoundsSize, forKey: .scrollBoundsSize)
+        try container.encode(imageContainerFrame, forKey: .imageContainerFrame)
+        try container.encode(AffineTransformBox(scrollViewTransform), forKey: .scrollViewTransform)
     }
 }
 
