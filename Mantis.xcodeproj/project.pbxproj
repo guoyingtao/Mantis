@@ -70,6 +70,7 @@
 		97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */; };
 		A1A1A1A1000000000000AA02 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */; };
 		AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000A2 /* CICropEquivalenceTests.swift */; };
+		AA000000000000000000CDA1 /* CropInfoCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CDA2 /* CropInfoCodableTests.swift */; };
 		AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */; };
 		AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000F2 /* SkewPositioningTests.swift */; };
 		AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000C2 /* GeometryHelperTests.swift */; };
@@ -235,6 +236,7 @@
 		97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformStackTests.swift; sourceTree = "<group>"; };
 		A1A1A1A1000000000000AA01 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA00000000000000000000A2 /* CICropEquivalenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CICropEquivalenceTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000CDA2 /* CropInfoCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropInfoCodableTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectiveTransformHelperTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000F2 /* SkewPositioningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkewPositioningTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000C2 /* GeometryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryHelperTests.swift; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 				97FA9A842BAFA570001E67D9 /* TransformStackTests.swift */,
 				3A0C501E2E1B00010063EE05 /* CropSessionTests.swift */,
 				AA00000000000000000000A2 /* CICropEquivalenceTests.swift */,
+				AA000000000000000000CDA2 /* CropInfoCodableTests.swift */,
 				AA00000000000000000000B2 /* PerspectiveTransformHelperTests.swift */,
 				AA00000000000000000000F2 /* SkewPositioningTests.swift */,
 				AA00000000000000000000C2 /* GeometryHelperTests.swift */,
@@ -810,6 +813,7 @@
 				97FA9A852BAFA570001E67D9 /* TransformStackTests.swift in Sources */,
 				3A0C501F2E1B00010063EE06 /* CropSessionTests.swift in Sources */,
 				AA00000000000000000000A1 /* CICropEquivalenceTests.swift in Sources */,
+				AA000000000000000000CDA1 /* CropInfoCodableTests.swift in Sources */,
 				AA00000000000000000000B1 /* PerspectiveTransformHelperTests.swift in Sources */,
 				AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */,
 				AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */,
