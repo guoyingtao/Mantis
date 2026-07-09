@@ -92,7 +92,7 @@ let cropViewController = Mantis.cropViewController(image: <Your Image>, config: 
     <summary><strong>CocoaPods</strong></summary>
 
 ```ruby
-pod 'Mantis', '~> 3.0.0'
+pod 'Mantis', '~>3.1.0'
 ```
 </details>
 
@@ -108,12 +108,12 @@ github "guoyingtao/Mantis"
  <summary><strong>Swift Packages</strong></summary>
 
 * Repository: https://github.com/guoyingtao/Mantis.git
-* Rules: Version - Up to Next Major - 3.0.0
+* Rules: Version - Up to Next Major - 3.1.0
 
 Or in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/guoyingtao/Mantis.git", from: "3.0.0")
+.package(url: "https://github.com/guoyingtao/Mantis.git", from: "3.1.0")
 ```
 
 </details>
@@ -386,7 +386,7 @@ Please use the transformation information obtained previously from the delegate 
 <details>
 <summary><strong>Persisting and restoring crops (<code>Codable</code>) 🆕</strong></summary>
 
-As of **Mantis 3.1**, `CropInfo` conforms to `Codable`, so you can save a user's exact crop and reproduce it offline in a later session — including rotated, fixed-ratio, perspective-skewed, and large-image crops.
+As of **Mantis 3.1.0**, `CropInfo` conforms to `Codable`, so you can save a user's exact crop and reproduce it offline in a later session — including rotated, fixed-ratio, perspective-skewed, and large-image crops..
 
 ```swift
 // Save the CropInfo delivered by the delegate (or CropResult.cropInfo in SwiftUI).
