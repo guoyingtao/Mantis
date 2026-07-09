@@ -75,6 +75,10 @@
 		AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000F2 /* SkewPositioningTests.swift */; };
 		AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000C2 /* GeometryHelperTests.swift */; };
 		AA00000000000000000000D1 /* UIImageExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000D2 /* UIImageExtensionsTests.swift */; };
+		AA000000000000000000AE01 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000AE02 /* AngleTests.swift */; };
+		AA000000000000000000BC01 /* RotationCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000BC02 /* RotationCalculatorTests.swift */; };
+		AA000000000000000000CF01 /* CropBoxFreeAspectFrameUpdaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CF02 /* CropBoxFreeAspectFrameUpdaterTests.swift */; };
+		AA000000000000000000CL01 /* CropBoxLockedAspectFrameUpdaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CL02 /* CropBoxLockedAspectFrameUpdaterTests.swift */; };
 		F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */; };
 		F2058F272A400508008DEBAA /* SlideDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F262A400508008DEBAA /* SlideDialViewModel.swift */; };
 		F2058F292A417D97008DEBAA /* SlideDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F282A417D97008DEBAA /* SlideDialTests.swift */; };
@@ -241,6 +245,10 @@
 		AA00000000000000000000F2 /* SkewPositioningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkewPositioningTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000C2 /* GeometryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryHelperTests.swift; sourceTree = "<group>"; };
 		AA00000000000000000000D2 /* UIImageExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtensionsTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000AE02 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000BC02 /* RotationCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationCalculatorTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000CF02 /* CropBoxFreeAspectFrameUpdaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFreeAspectFrameUpdaterTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000CL02 /* CropBoxLockedAspectFrameUpdaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdaterTests.swift; sourceTree = "<group>"; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialConfig.swift; sourceTree = "<group>"; };
 		F2058F262A400508008DEBAA /* SlideDialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialViewModel.swift; sourceTree = "<group>"; };
@@ -570,6 +578,10 @@
 				AA00000000000000000000F2 /* SkewPositioningTests.swift */,
 				AA00000000000000000000C2 /* GeometryHelperTests.swift */,
 				AA00000000000000000000D2 /* UIImageExtensionsTests.swift */,
+				AA000000000000000000AE02 /* AngleTests.swift */,
+				AA000000000000000000BC02 /* RotationCalculatorTests.swift */,
+				AA000000000000000000CF02 /* CropBoxFreeAspectFrameUpdaterTests.swift */,
+				AA000000000000000000CL02 /* CropBoxLockedAspectFrameUpdaterTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -818,6 +830,10 @@
 				AA00000000000000000000F1 /* SkewPositioningTests.swift in Sources */,
 				AA00000000000000000000C1 /* GeometryHelperTests.swift in Sources */,
 				AA00000000000000000000D1 /* UIImageExtensionsTests.swift in Sources */,
+				AA000000000000000000AE01 /* AngleTests.swift in Sources */,
+				AA000000000000000000BC01 /* RotationCalculatorTests.swift in Sources */,
+				AA000000000000000000CF01 /* CropBoxFreeAspectFrameUpdaterTests.swift in Sources */,
+				AA000000000000000000CL01 /* CropBoxLockedAspectFrameUpdaterTests.swift in Sources */,
 				F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */,
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,
