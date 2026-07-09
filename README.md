@@ -31,7 +31,7 @@ Mantis is an open-source **iOS image cropping library** written in Swift, with b
 - 🧩 **Two SwiftUI APIs** — a modern declarative `ImageCropper` view with modifiers and an observable `CropSession`, plus a binding-based `ImageCropperView`
 - 💾 **Persist and restore crops** — `CropInfo` is `Codable` (3.1+); re-crop the original image offline in a later session, or reopen the editor at the saved state
 - 🌗 **Light / dark / system appearance modes**
-- 🌍 **Localized into 14+ languages** (Arabic, Chinese, English, French, German, Italian, Japanese, Korean, Dutch, Portuguese, Russian, Spanish, Turkish, …) with custom localization support
+- 🌍 **Localized into 14 languages** (Arabic, Chinese, English, French, German, Italian, Japanese, Korean, Dutch, Portuguese, Russian, Spanish, Turkish, …) with custom localization support
 - 🧱 **Highly customizable** — embed the cropper in your own view controller, build a custom toolbar, subclass `CropViewController`, tweak colors, borders, dial styles, and more
 - 🐘 **Large-image support** — async crop mode and pixel-count limiting for very large photos
 - 🔒 **Privacy manifest included** (`PrivacyInfo.xcprivacy`)
@@ -135,7 +135,7 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 
 In Xcode: **File → Add Package Dependencies…** and enter:
 
-```
+```text
 https://github.com/guoyingtao/Mantis.git
 ```
 
