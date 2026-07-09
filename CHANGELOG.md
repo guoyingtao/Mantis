@@ -2,6 +2,13 @@
 
 -----
 
+## [3.1.0](https://www.github.com/guoyingtao/Mantis/compare/v3.0.0...v3.1.0) (2026-07-09)
+
+
+### Features
+
+* make CropInfo conform to Codable for cross-session crop persistence ([#538](https://www.github.com/guoyingtao/Mantis/issues/538)) ([8b3737c](https://www.github.com/guoyingtao/Mantis/commit/8b3737c7185c9613e656323b4845abe54a218149)), closes [#536](https://www.github.com/guoyingtao/Mantis/issues/536)
+
 ## [Unreleased]
 
 
