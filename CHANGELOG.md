@@ -2,6 +2,13 @@
 
 -----
 
+### [3.1.1](https://www.github.com/guoyingtao/Mantis/compare/v3.1.0...v3.1.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* confine crop box resizing within the content bounds ([#543](https://www.github.com/guoyingtao/Mantis/issues/543)) ([3cd2b51](https://www.github.com/guoyingtao/Mantis/commit/3cd2b51af21b8f99bdcef822370a33ebc41e42f7))
+
 ## [3.1.0](https://www.github.com/guoyingtao/Mantis/compare/v3.0.0...v3.1.0) (2026-07-09)
 
 
