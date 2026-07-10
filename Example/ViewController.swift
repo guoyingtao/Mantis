@@ -50,7 +50,8 @@ class ViewController: UIViewController {
         let indicatorFrame = CGRect(origin: .zero, size: config.cropViewConfig.cropActivityIndicatorSize)
         config.cropViewConfig.cropActivityIndicator = CustomWaitingIndicator(frame: indicatorFrame)
         config.cropToolbarConfig.toolbarButtonOptions = [.clockwiseRotate, .reset, .ratio, .autoAdjust, .horizontallyFlip]
-        
+        config.cropViewConfig.enableZoomOutWhileExpandingCropBox = true
+
         if let transformation = transformation {
             config.cropViewConfig.presetTransformationType = .presetInfo(info: transformation)
         }

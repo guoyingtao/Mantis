@@ -159,6 +159,9 @@ struct ContentView: View {
             Button("Perspective Correction") {
                 cropperOptions = DeclarativeCropperOptions(enablesPerspectiveCorrection: true)
             }.font(.title)
+            Button("Zoom Out While Expanding") {
+                cropperOptions = DeclarativeCropperOptions(zoomsOutWhileExpandingCropBox: true)
+            }.font(.title)
             Button("Legacy Binding API") {
                 showingLegacyCropper = true
             }.font(.title)
