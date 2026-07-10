@@ -67,6 +67,14 @@ final class CropView: UIView {
     /// or the anchor-point restoration path (user has customized the crop region).
     /// Skew-only changes do NOT set this flag.
     var hasManuallyAdjustedCropBox = false
+
+    /// State captured at the beginning of a crop box resize gesture, used by
+    /// the pull back behavior (enableZoomOutWhileExpandingCropBox) to keep the
+    /// zoom mapping stable and reversible within one gesture.
+    var resizeGestureStartZoomScale: CGFloat = 1
+    var resizeGestureStartMinimumZoomScale: CGFloat = 1
+    var resizeGestureAnchorPointInView: CGPoint = .zero
+    var resizeGestureAnchorPointInContainer: CGPoint = .zero
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
@@ -318,8 +326,15 @@ final class CropView: UIView {
     
     func updateCropBoxFrame(withTouchPoint touchPoint: CGPoint) {
         let imageContainerRect = imageContainer.convert(imageContainer.bounds, to: self)
-        let touchPoint = confineTouchPoint(touchPoint, in: imageContainerRect)
         let contentBounds = getContentBounds()
+
+        // The pull back path uses the unconfined touch point: the crop region
+        // clamp inside the calculator already stops at the image edge exactly
+        if updateCropBoxFrameWithPullBackIfNeeded(touchPoint: touchPoint, contentBounds: contentBounds) {
+            return
+        }
+
+        let touchPoint = confineTouchPoint(touchPoint, in: imageContainerRect)
         let cropViewMinimumBoxSize = cropViewConfig.minimumCropBoxSize
         let newCropBoxFrame = viewModel.getNewCropBoxFrame(withTouchPoint: touchPoint,
                                                            andContentFrame: contentBounds,
@@ -370,6 +385,79 @@ final class CropView: UIView {
             
             viewModel.cropBoxFrame = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
         }
+    }
+}
+
+// MARK: - Pull back (zoom out while expanding the crop box)
+extension CropView {
+    private func isPullBackEnabled() -> Bool {
+        cropViewConfig.enableZoomOutWhileExpandingCropBox
+            && !aspectRatioLockEnabled
+            && viewModel.degrees == 0
+            && viewModel.horizontalSkewDegrees == 0
+            && viewModel.verticalSkewDegrees == 0
+            && viewModel.tappedEdge != .none
+    }
+
+    /// Captures the gesture start state used by the pull back behavior.
+    /// Called from touchesBegan after the view model has been prepared.
+    func prepareForPullBackIfNeeded() {
+        guard isPullBackEnabled() else {
+            return
+        }
+
+        resizeGestureStartZoomScale = cropWorkbenchView.zoomScale
+        resizeGestureStartMinimumZoomScale = cropWorkbenchView.minimumZoomScale
+        resizeGestureAnchorPointInView = CropBoxPullBackCalculator.anchorPoint(for: viewModel.tappedEdge,
+                                                                               in: viewModel.cropBoxOriginFrame)
+        resizeGestureAnchorPointInContainer = imageContainer.convert(resizeGestureAnchorPointInView, from: self)
+    }
+
+    private func updateCropBoxFrameWithPullBackIfNeeded(touchPoint: CGPoint, contentBounds: CGRect) -> Bool {
+        guard isPullBackEnabled() else {
+            return false
+        }
+
+        let xDelta = ceil(touchPoint.x - viewModel.panOriginPoint.x)
+        let yDelta = ceil(touchPoint.y - viewModel.panOriginPoint.y)
+
+        var frameUpdater = CropBoxFreeAspectFrameUpdater(tappedEdge: viewModel.tappedEdge,
+                                                         contentFrame: contentBounds,
+                                                         cropOriginFrame: viewModel.cropBoxOriginFrame,
+                                                         cropBoxFrame: viewModel.cropBoxFrame)
+        frameUpdater.updateCropBoxFrame(xDelta: xDelta, yDelta: yDelta)
+
+        let input = CropBoxPullBackCalculator.Input(tappedEdge: viewModel.tappedEdge,
+                                                    desiredFrame: frameUpdater.cropBoxFrame,
+                                                    cropOriginFrame: viewModel.cropBoxOriginFrame,
+                                                    contentBounds: contentBounds,
+                                                    imageFrameInView: imageContainer.convert(imageContainer.bounds, to: self),
+                                                    startZoomScale: resizeGestureStartZoomScale,
+                                                    currentZoomScale: cropWorkbenchView.zoomScale,
+                                                    minimumCropBoxSize: cropViewConfig.minimumCropBoxSize)
+
+        guard let result = CropBoxPullBackCalculator.calculate(input) else {
+            return false
+        }
+
+        applyPullBack(result)
+        return true
+    }
+
+    private func applyPullBack(_ result: CropBoxPullBackCalculator.Result) {
+        cropWorkbenchView.minimumZoomScale = min(resizeGestureStartMinimumZoomScale, result.zoomScale)
+        cropWorkbenchView.zoomScale = result.zoomScale
+
+        // Keep the image point that was under the anchor edge/corner at the
+        // gesture start fixed at that same view position
+        let anchorNowInView = imageContainer.convert(resizeGestureAnchorPointInContainer, to: self)
+        let anchorNowInScrollView = cropWorkbenchView.convert(anchorNowInView, from: self)
+        let anchorTargetInScrollView = cropWorkbenchView.convert(resizeGestureAnchorPointInView, from: self)
+        cropWorkbenchView.contentOffset = CGPoint(x: cropWorkbenchView.contentOffset.x + anchorNowInScrollView.x - anchorTargetInScrollView.x,
+                                                  y: cropWorkbenchView.contentOffset.y + anchorNowInScrollView.y - anchorTargetInScrollView.y)
+
+        viewModel.cropBoxFrame = result.cropBoxFrame
+        isManuallyZoomed = true
     }
 }
 

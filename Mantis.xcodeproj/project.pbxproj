@@ -78,6 +78,7 @@
 		AA000000000000000000AE01 /* AngleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000AE02 /* AngleTests.swift */; };
 		AA000000000000000000BC01 /* RotationCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000BC02 /* RotationCalculatorTests.swift */; };
 		AA000000000000000000CF01 /* CropBoxFreeAspectFrameUpdaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CF02 /* CropBoxFreeAspectFrameUpdaterTests.swift */; };
+		AA000000000000000000PB03 /* CropBoxPullBackCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000PB04 /* CropBoxPullBackCalculatorTests.swift */; };
 		AA000000000000000000CL01 /* CropBoxLockedAspectFrameUpdaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CL02 /* CropBoxLockedAspectFrameUpdaterTests.swift */; };
 		AA000000000000000000CG01 /* CoreGraphicsExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CG02 /* CoreGraphicsExtensionsTests.swift */; };
 		AA000000000000000000FR01 /* FixedRatioManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000FR02 /* FixedRatioManagerTests.swift */; };
@@ -127,6 +128,7 @@
 		OBJ_120 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_53 /* XCTestManifests.swift */; };
 		OBJ_122 /* Mantis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Mantis::Mantis::Product" /* Mantis.framework */; };
 		OBJ_69 /* CropBoxFreeAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */; };
+		AA000000000000000000PB01 /* CropBoxPullBackCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000PB02 /* CropBoxPullBackCalculator.swift */; };
 		OBJ_70 /* CropBoxLockedAspectFrameUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */; };
 		OBJ_71 /* CropMaskViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* CropMaskViewManager.swift */; };
 		OBJ_72 /* CropAuxiliaryIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* CropAuxiliaryIndicatorView.swift */; };
@@ -253,6 +255,7 @@
 		AA000000000000000000AE02 /* AngleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000BC02 /* RotationCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationCalculatorTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000CF02 /* CropBoxFreeAspectFrameUpdaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFreeAspectFrameUpdaterTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000PB04 /* CropBoxPullBackCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxPullBackCalculatorTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000CL02 /* CropBoxLockedAspectFrameUpdaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdaterTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000CG02 /* CoreGraphicsExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicsExtensionsTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000FR02 /* FixedRatioManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedRatioManagerTests.swift; sourceTree = "<group>"; };
@@ -299,6 +302,7 @@
 		"Mantis::MantisTests::Product" /* MantisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MantisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxFreeAspectFrameUpdater.swift; sourceTree = "<group>"; };
+		AA000000000000000000PB02 /* CropBoxPullBackCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxPullBackCalculator.swift; sourceTree = "<group>"; };
 		OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropBoxLockedAspectFrameUpdater.swift; sourceTree = "<group>"; };
 		OBJ_14 /* CropMaskViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropMaskViewManager.swift; sourceTree = "<group>"; };
 		OBJ_15 /* CropAuxiliaryIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropAuxiliaryIndicatorView.swift; sourceTree = "<group>"; };
@@ -451,6 +455,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_12 /* CropBoxFreeAspectFrameUpdater.swift */,
+				AA000000000000000000PB02 /* CropBoxPullBackCalculator.swift */,
 				OBJ_13 /* CropBoxLockedAspectFrameUpdater.swift */,
 				OBJ_14 /* CropMaskViewManager.swift */,
 				OBJ_15 /* CropAuxiliaryIndicatorView.swift */,
@@ -591,6 +596,7 @@
 				AA000000000000000000AE02 /* AngleTests.swift */,
 				AA000000000000000000BC02 /* RotationCalculatorTests.swift */,
 				AA000000000000000000CF02 /* CropBoxFreeAspectFrameUpdaterTests.swift */,
+				AA000000000000000000PB04 /* CropBoxPullBackCalculatorTests.swift */,
 				AA000000000000000000CL02 /* CropBoxLockedAspectFrameUpdaterTests.swift */,
 				AA000000000000000000CG02 /* CoreGraphicsExtensionsTests.swift */,
 				AA000000000000000000FR02 /* FixedRatioManagerTests.swift */,
@@ -848,6 +854,7 @@
 				AA000000000000000000AE01 /* AngleTests.swift in Sources */,
 				AA000000000000000000BC01 /* RotationCalculatorTests.swift in Sources */,
 				AA000000000000000000CF01 /* CropBoxFreeAspectFrameUpdaterTests.swift in Sources */,
+				AA000000000000000000PB03 /* CropBoxPullBackCalculatorTests.swift in Sources */,
 				AA000000000000000000CL01 /* CropBoxLockedAspectFrameUpdaterTests.swift in Sources */,
 				AA000000000000000000CG01 /* CoreGraphicsExtensionsTests.swift in Sources */,
 				AA000000000000000000FR01 /* FixedRatioManagerTests.swift in Sources */,
@@ -885,6 +892,7 @@
 			files = (
 				66F439882978376F00728B52 /* RotationDialViewModelProtocol.swift in Sources */,
 				OBJ_69 /* CropBoxFreeAspectFrameUpdater.swift in Sources */,
+				AA000000000000000000PB01 /* CropBoxPullBackCalculator.swift in Sources */,
 				OBJ_70 /* CropBoxLockedAspectFrameUpdater.swift in Sources */,
 				OBJ_71 /* CropMaskViewManager.swift in Sources */,
 				66100E11294BAEB6001C8593 /* CropScrollViewProtocol.swift in Sources */,

@@ -68,6 +68,15 @@ public struct CropViewConfig {
     /// When true, enables perspective correction with straighten / horizontal skew / vertical skew
     /// adjustments similar to Apple Photos app.
     public var enablePerspectiveCorrection: Bool = false
+
+    /// When true and the image is zoomed in, dragging a crop box edge outward
+    /// keeps working after the crop box reaches the content bounds: the image
+    /// zooms out to reveal more of itself until its edge meets the dragged
+    /// crop box edge, similar to the Photos app.
+    ///
+    /// Currently only takes effect with a free (unlocked) aspect ratio and
+    /// when no free-angle rotation or perspective correction is applied.
+    public var enableZoomOutWhileExpandingCropBox = false
     
     /// Maximum pixel count (width × height) for input images before enabling large image mode.
     /// When set to a value > 0 and the input image exceeds this limit, Mantis will:

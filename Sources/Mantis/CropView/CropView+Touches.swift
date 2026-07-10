@@ -64,6 +64,7 @@ extension CropView {
         
         let point = touch.location(in: self)
         viewModel.prepareForCrop(byTouchPoint: point)
+        prepareForPullBackIfNeeded()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
