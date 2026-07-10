@@ -32,6 +32,9 @@ struct DeclarativeCropperOptions: Identifiable {
     var showsRotationControl = true
     var usesSlideDial = false
     var enablesPerspectiveCorrection = false
+    /// Zoom the image out when a crop box edge is dragged past the content
+    /// bounds, revealing more of the image (Photos-app-like behavior).
+    var zoomsOutWhileExpandingCropBox = false
     /// Reopen restored to the last saved crop state, like the UIKit
     /// example's normal entry.
     var restoresLastTransformation = false
@@ -95,6 +98,12 @@ struct DeclarativeCropperView: View {
         if options.usesSlideDial {
             cropper = cropper.configure { config in
                 config.cropViewConfig.builtInRotationControlViewType = .slideDial()
+            }
+        }
+
+        if options.zoomsOutWhileExpandingCropBox {
+            cropper = cropper.configure { config in
+                config.cropViewConfig.enableZoomOutWhileExpandingCropBox = true
             }
         }
 
