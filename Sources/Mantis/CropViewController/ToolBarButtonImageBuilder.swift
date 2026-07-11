@@ -37,14 +37,6 @@ struct ToolBarButtonImageBuilder {
         UIImage(systemName: "rotate.right")
     }
 
-    static func flipHorizontally() -> UIImage? {
-        UIImage(systemName: "flip.horizontal")
-    }
-
-    static func flipVertically() -> UIImage? {
-        drawFlipVertically()
-    }
-
     static func clampImage() -> UIImage? {
         UIImage(systemName: "aspectratio")
     }

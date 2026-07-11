@@ -28,23 +28,10 @@
 
 import UIKit
 
-// Hand-drawn fallbacks for toolbar icons that have no SF Symbol equivalent.
-// The rest of the icons use `UIImage(systemName:)` directly (see
-// ToolBarButtonImageBuilder), which is always available on the iOS 15 minimum.
+// Hand-drawn toolbar icon that has no SF Symbol equivalent. The rest of the
+// icons use `UIImage(systemName:)` directly (see ToolBarButtonImageBuilder),
+// which is always available on the iOS 15 minimum.
 extension ToolBarButtonImageBuilder {
-    static func drawFlipVertically() -> UIImage? {
-        guard let flippedHorizontallyImage = self.flipHorizontally(), let cgImage = flippedHorizontallyImage.cgImage else { return nil }
-
-        UIGraphicsBeginImageContextWithOptions(flippedHorizontallyImage.size, false, flippedHorizontallyImage.scale )
-        let context = UIGraphicsGetCurrentContext()
-        context?.rotate(by: -.pi / 2)
-        context?.translateBy(x: -flippedHorizontallyImage.size.height, y: 0)
-        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: flippedHorizontallyImage.size.height, height: flippedHorizontallyImage.size.width))
-        let flippedVerticallyImage: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return flippedVerticallyImage
-    }
-
     static func drawAlterCropper90DegreeImage() -> UIImage? {
         var rotateCropperImage: UIImage?
 
