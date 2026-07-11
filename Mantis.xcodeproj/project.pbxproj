@@ -27,6 +27,7 @@
 		5F7D22AE245BCA8D0015A0D5 /* CropToolbarProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */; };
 		5FCE938724834C57002BBE65 /* ToolbarButtonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */; };
 		660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F39298C01D100C4E11A /* CropToolbarTests.swift */; };
+		BB00000000000000000000B1 /* ToolBarButtonImageBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00000000000000000000B2 /* ToolBarButtonImageBuilderTests.swift */; };
 		660D4F41298C08FA00C4E11A /* CropViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */; };
 		660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F44298CBD2500C4E11A /* CropViewTests.swift */; };
 		660D4F57298CDA8C00C4E11A /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660D4F56298CDA8C00C4E11A /* TestHelper.swift */; };
@@ -189,6 +190,7 @@
 		5F7D22AD245BCA8D0015A0D5 /* CropToolbarProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropToolbarProtocol.swift; sourceTree = "<group>"; };
 		5FCE938624834C57002BBE65 /* ToolbarButtonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonOptions.swift; sourceTree = "<group>"; };
 		660D4F39298C01D100C4E11A /* CropToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropToolbarTests.swift; sourceTree = "<group>"; };
+		BB00000000000000000000B2 /* ToolBarButtonImageBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarButtonImageBuilderTests.swift; sourceTree = "<group>"; };
 		660D4F3C298C06A800C4E11A /* FakeCropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropToolbar.swift; sourceTree = "<group>"; };
 		660D4F3E298C079600C4E11A /* FakeCropViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCropViewControllerDelegate.swift; sourceTree = "<group>"; };
 		660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewControllerTests.swift; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 				66F439892978539700728B52 /* RotationDialViewModelTests.swift */,
 				66F4398F2979472C00728B52 /* CropViewModelTests.swift */,
 				660D4F39298C01D100C4E11A /* CropToolbarTests.swift */,
+				BB00000000000000000000B2 /* ToolBarButtonImageBuilderTests.swift */,
 				660D4F40298C08FA00C4E11A /* CropViewControllerTests.swift */,
 				660D4F44298CBD2500C4E11A /* CropViewTests.swift */,
 				660D4F56298CDA8C00C4E11A /* TestHelper.swift */,
@@ -863,6 +866,7 @@
 				660D4F60298F982200C4E11A /* FakeCropView.swift in Sources */,
 				660D4F45298CBD2500C4E11A /* CropViewTests.swift in Sources */,
 				660D4F3A298C01D100C4E11A /* CropToolbarTests.swift in Sources */,
+				BB00000000000000000000B1 /* ToolBarButtonImageBuilderTests.swift in Sources */,
 				660D4F65298F983700C4E11A /* FakeCropMaskViewManager.swift in Sources */,
 				660D4F5B298D524A00C4E11A /* RotateDialTests.swift in Sources */,
 				66F439902979472C00728B52 /* CropViewModelTests.swift in Sources */,
