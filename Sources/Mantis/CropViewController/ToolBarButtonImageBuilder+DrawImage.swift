@@ -30,7 +30,7 @@ import UIKit
 
 // Hand-drawn toolbar icon that has no SF Symbol equivalent. The rest of the
 // icons use `UIImage(systemName:)` directly (see ToolBarButtonImageBuilder),
-// which is always available on the iOS 15 minimum.
+// which is always available on the iOS/macCatalyst 15 minimum.
 extension ToolBarButtonImageBuilder {
     static func drawAlterCropper90DegreeImage() -> UIImage? {
         var rotateCropperImage: UIImage?
