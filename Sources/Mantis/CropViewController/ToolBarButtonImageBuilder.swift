@@ -30,88 +30,48 @@ import UIKit
 
 struct ToolBarButtonImageBuilder {
     static func rotateCCWImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "rotate.left")
-        }
-        
-        return drawRotateCCWImage()
+        UIImage(systemName: "rotate.left")
     }
-    
+
     static func rotateCWImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "rotate.right")
-        }
-        
-        return drawRotateCWImage()
+        UIImage(systemName: "rotate.right")
     }
-    
-    static func flipHorizontally() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "flip.horizontal")
-        }
-        
-        return drawFlipHorizontally()
-    }
-    
-    static func flipVertically() -> UIImage? {
-        drawFlipVertically()
-    }
-    
+
     static func clampImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "aspectratio")
-        }
-        
-        return drawClampImage()
+        UIImage(systemName: "aspectratio")
     }
-    
+
     static func resetImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "arrow.2.circlepath")
-        }
-        
-        return drawResetImage()
+        UIImage(systemName: "arrow.2.circlepath")
     }
-    
+
     static func alterCropper90DegreeImage() -> UIImage? {
         drawAlterCropper90DegreeImage()
     }
-    
+
     static func horizontallyFlipImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "flip.horizontal")
-        }
-        
-        return nil
+        UIImage(systemName: "flip.horizontal")
     }
-    
+
     static func verticallyFlipImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            guard let horizontallyFlippedImage = horizontallyFlipImage(),
-                  let cgImage = horizontallyFlippedImage.cgImage else {
-                return nil
-            }
-            
-            let rotatedImage = UIImage(cgImage: cgImage, scale: horizontallyFlippedImage.scale, orientation: .leftMirrored)
-            
-            let newSize = CGSize(width: horizontallyFlippedImage.size.height, height: horizontallyFlippedImage.size.width)
-            UIGraphicsBeginImageContextWithOptions(newSize, false, horizontallyFlippedImage.scale)
-            rotatedImage.draw(in: CGRect(origin: .zero, size: newSize))
-            
-            let newImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            return newImage
+        guard let horizontallyFlippedImage = horizontallyFlipImage(),
+              let cgImage = horizontallyFlippedImage.cgImage else {
+            return nil
         }
-        
-        return nil
+
+        let rotatedImage = UIImage(cgImage: cgImage, scale: horizontallyFlippedImage.scale, orientation: .leftMirrored)
+
+        let newSize = CGSize(width: horizontallyFlippedImage.size.height, height: horizontallyFlippedImage.size.width)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, horizontallyFlippedImage.scale)
+        rotatedImage.draw(in: CGRect(origin: .zero, size: newSize))
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage
     }
-    
+
     static func autoAdjustImage() -> UIImage? {
-        if #available(macCatalyst 13.1, iOS 13.0, *) {
-            return UIImage(systemName: "camera.metering.none")
-        }
-        
-        return nil
+        UIImage(systemName: "camera.metering.none")
     }
 }
