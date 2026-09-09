@@ -70,6 +70,7 @@ final class CropView: UIView {
     var forceFixedRatio = false
     var checkForForceFixedRatioFlag = false
     let cropViewConfig: CropViewConfig
+    private var debounceWorkItem: DispatchWorkItem?
     
     var flipOddTimes = false
     
@@ -559,18 +560,25 @@ extension CropView: CropViewProtocol {
             
             let contentRect = getContentBounds()
             
-            adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
-                guard let self = self else { return }
-                self.isManuallyZoomed = savedIsManuallyZoomed
-                if hasSkew {
-                    self.viewModel.horizontalSkewDegrees = savedHSkew
-                    self.viewModel.verticalSkewDegrees = savedVSkew
-                    self.skewState.reset()
-                    self.applySkewTransformIfNeeded()
-                    self.updateContentInsetForSkew()
+            debounceWorkItem?.cancel()
+            
+            let workItem = DispatchWorkItem { [weak self] in
+                self?.adjustUIForNewCrop(contentRect: contentRect) { [weak self] in
+                    guard let self = self else { return }
+                    self.isManuallyZoomed = savedIsManuallyZoomed
+                    if hasSkew {
+                        self.viewModel.horizontalSkewDegrees = savedHSkew
+                        self.viewModel.verticalSkewDegrees = savedVSkew
+                        self.skewState.reset()
+                        self.applySkewTransformIfNeeded()
+                        self.updateContentInsetForSkew()
+                    }
+                    self.viewModel.setBetweenOperationStatus()
                 }
-                self.viewModel.setBetweenOperationStatus()
             }
+            
+            debounceWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: workItem)
         }
     }
     
