@@ -133,10 +133,12 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 
 ### Swift Package Manager (recommended)
 
+Use the lightweight [Mantis-spm](https://github.com/guoyingtao/Mantis-spm) distribution. It contains only the sources and is under 1 MB, whereas this repository's full history (example apps, README media) is about 70 MB and SwiftPM downloads all of it for every project that depends on it.
+
 In Xcode: **File → Add Package Dependencies…** and enter:
 
 ```text
-https://github.com/guoyingtao/Mantis.git
+https://github.com/guoyingtao/Mantis-spm.git
 ```
 
 Rule: **Version — Up to Next Major — 3.1.0**
@@ -144,8 +146,12 @@ Rule: **Version — Up to Next Major — 3.1.0**
 Or in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/guoyingtao/Mantis.git", from: "3.1.0")
+.package(url: "https://github.com/guoyingtao/Mantis-spm.git", from: "3.1.0")
 ```
+
+and in your target's dependencies: `.product(name: "Mantis", package: "Mantis-spm")`. The product and module are unchanged, so `import Mantis` works as before.
+
+Depending on `https://github.com/guoyingtao/Mantis.git` directly still works, but downloads far more. Don't use both URLs in the same project: SwiftPM derives the package identity from the URL (`mantis-spm` vs `mantis`) and would treat them as two packages exporting the same product.
 
 ### CocoaPods
 
