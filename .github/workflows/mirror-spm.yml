@@ -75,7 +75,10 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -A
-            git commit -m "Mantis $VERSION" \
+            # A release that changes nothing under Sources/ (docs, example app)
+            # leaves this tree identical to the previous version; still record
+            # the version and tag it rather than failing on an empty commit.
+            git commit --allow-empty -m "Mantis $VERSION" \
                        -m "Mirrors https://github.com/guoyingtao/Mantis/releases/tag/$TAG"
             git tag -a "$TAG" -m "Mantis $VERSION"
             git push origin main "$TAG"
