@@ -17,8 +17,8 @@ Mantis is an open-source **iOS image cropping library** written in Swift, with b
 
 <p align="center">
     <img height="400" alt="Mantis crop view controller with perspective correction on iOS" src="https://github.com/user-attachments/assets/34932f3b-9174-4bf9-9807-38603f6edf05" />
-    <img src="Images/RotationDial.png" height="400" alt="Mantis rotation dial for straightening photos" />
-    <img src="Images/SlideDial.png" height="400" alt="Mantis slide dial for photo rotation" />
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/rotation-dial.png" height="400" alt="Mantis rotation dial for straightening photos" />
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/slide-dial.png" height="400" alt="Mantis slide dial for photo rotation" />
 </p>
 
 ## Features
@@ -47,15 +47,15 @@ Mantis is an open-source **iOS image cropping library** written in Swift, with b
 </div>
 
 <p align="center">
-    <img src="Images/Normal demos.gif" width="200" alt="Mantis basic image cropping demo" /> 
-    <img src="Images/Rotation dial demos.gif" width="200" alt="Mantis rotation dial demo" /> 
-    <img src="Images/Slide dial with flip demos.gif" width="200" alt="Mantis slide dial and flip demo" />
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/normal-demos.gif" width="200" alt="Mantis basic image cropping demo" /> 
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/rotation-dial-demos.gif" width="200" alt="Mantis rotation dial demo" /> 
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/slide-dial-with-flip-demos.gif" width="200" alt="Mantis slide dial and flip demo" />
 </p>
 
 Mantis provides rich crop shapes, from basic circle/square to polygons to arbitrary paths (we even provide a heart shape ❤️ 😏).
 
 <p align="center">
-    <img src="Images/cropshapes.png" height="450" alt="Mantis crop shapes: circle, ellipse, rounded rectangle, polygon, heart, and custom path" />
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/crop-shapes.png" height="450" alt="Mantis crop shapes: circle, ellipse, rounded rectangle, polygon, heart, and custom path" />
 </p>
 
 ## Table of Contents
@@ -330,7 +330,7 @@ CropToolbar has two modes:
   In normal mode, you can use a set of standard CropViewController photo editing features with "Cancel" and "Done" buttons.
 
 <p align="center">
-    <img src="Images/Screen Shot.png" height="300" alt="Mantis crop toolbar in normal mode with Cancel and Done buttons" />
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/screen-shot.png" height="300" alt="Mantis crop toolbar in normal mode with Cancel and Done buttons" />
 </p>
 
 ```swift
@@ -342,7 +342,7 @@ let cropViewController = Mantis.cropViewController(image: yourImage)
   This mode does not include "Cancel" and "Done" buttons, so you can embed CropViewController into another view controller and build your own surrounding UI.
 
 <p align="center">
-    <img src="Images/customizable.jpg" height="300" alt="Mantis crop view controller embedded in a custom view controller" />
+    <img src="https://raw.githubusercontent.com/guoyingtao/Mantis-assets/main/images/customizable.jpg" height="300" alt="Mantis crop view controller embedded in a custom view controller" />
 </p>
 
 ```swift
