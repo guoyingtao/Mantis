@@ -81,4 +81,13 @@ jobs:
             git commit --allow-empty -m "Mantis $VERSION" \
                        -m "Mirrors https://github.com/guoyingtao/Mantis/releases/tag/$TAG"
             git tag -a "$TAG" -m "Mantis $VERSION"
-            git push origin main "$TAG"
+            # Only advance main when this is the newest version. A backfilled
+            # older release is published as a tag alone so main keeps pointing
+            # at the latest release.
+            NEWEST=$(git tag --list 'v*' --sort=-version:refname | head -n 1)
+            if [ "$NEWEST" = "$TAG" ]; then
+               git push origin main "$TAG"
+            else
+               echo "$TAG is older than $NEWEST; pushing the tag only"
+               git push origin "$TAG"
+            fi
