@@ -1,0 +1,81 @@
+name: Mirror to Mantis-spm
+
+# Publishes a sources-only copy of a release to guoyingtao/Mantis-spm so that
+# SwiftPM consumers don't have to clone this repository's full history.
+#
+# Tags created by release-please use GITHUB_TOKEN and therefore never fire the
+# `push` trigger, so release.yml dispatches this workflow explicitly. The tag
+# trigger still covers tags pushed by hand.
+
+on:
+   push:
+      tags:
+         - "v*"
+   workflow_dispatch:
+      inputs:
+         tag:
+            description: "Release tag to mirror, e.g. v3.1.1"
+            required: true
+
+permissions:
+   contents: read
+
+jobs:
+   mirror:
+      name: Mirror ${{ inputs.tag || github.ref_name }}
+      runs-on: macos-14
+      env:
+         TAG: ${{ inputs.tag || github.ref_name }}
+      steps:
+         - name: Check out Mantis at the tag
+           uses: actions/checkout@v4
+           with:
+            ref: ${{ env.TAG }}
+            path: mantis
+            persist-credentials: false
+
+         - name: Configure SSH for Mantis-spm
+           env:
+            DEPLOY_KEY: ${{ secrets.MANTIS_SPM_DEPLOY_KEY }}
+           run: |
+            mkdir -p ~/.ssh
+            printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/mantis_spm
+            chmod 600 ~/.ssh/mantis_spm
+            ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+            echo "GIT_SSH_COMMAND=ssh -i ~/.ssh/mantis_spm -o IdentitiesOnly=yes" >> "$GITHUB_ENV"
+
+         - name: Check out Mantis-spm
+           run: git clone git@github.com:guoyingtao/Mantis-spm.git spm
+
+         - name: Skip if this tag is already mirrored
+           id: existing
+           run: |
+            if git -C spm rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
+               echo "$TAG already exists in Mantis-spm, nothing to do"
+               echo "skip=true" >> "$GITHUB_OUTPUT"
+            fi
+
+         - name: Assemble the sources-only tree
+           if: steps.existing.outputs.skip != 'true'
+           run: |
+            set -euo pipefail
+            cd spm
+            rm -rf Package.swift Sources Tests LICENSE
+            cp -R ../mantis/Package.swift ../mantis/Sources ../mantis/Tests ../mantis/LICENSE .
+            # Make sure the manifest resolves with only these files present.
+            swift package dump-package > /dev/null
+            rm -rf .build
+
+         - name: Commit, tag and push
+           if: steps.existing.outputs.skip != 'true'
+           run: |
+            set -euo pipefail
+            cd spm
+            VERSION="${TAG#v}"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Mantis $VERSION" \
+                       -m "Mirrors https://github.com/guoyingtao/Mantis/releases/tag/$TAG"
+            git tag -a "$TAG" -m "Mantis $VERSION"
+            git push origin main "$TAG"
