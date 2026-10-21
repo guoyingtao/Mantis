@@ -224,6 +224,28 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     // MARK: - Slide ruler setup
     
+    /// Resizes the dial to a new length (e.g. after the window size changes on a
+    /// foldable or in Split View) while keeping the current rotation value.
+    func updateLength(_ length: CGFloat) {
+        guard length > 0, bounds.width != length else { return }
+
+        bounds.size.width = length
+
+        if config.mode == .simple {
+            indicator?.center.x = length / 2
+        }
+
+        // Resizing the ruler's scroll view clamps its content offset, which would
+        // otherwise be reported as a user scroll. setOffsetRatio restores the delegate.
+        slideRuler.scrollRulerView.delegate = nil
+        slideRuler.frame = CGRect(x: 0,
+                                  y: bounds.height - config.slideRulerHeight,
+                                  width: length,
+                                  height: config.slideRulerHeight)
+        slideRuler.setUIFrames()
+        updateRotationValue(by: viewModel.rotationAngle)
+    }
+
     func setupSlideRuler() {
         let sliderFrame = CGRect(x: 0,
                                  y: frame.height - config.slideRulerHeight,

@@ -113,6 +113,12 @@ extension CropView {
         
         let isSlideDial = rotationControlView is SlideDial
         
+        // The dial length is derived from the CropView size, which can change
+        // without a rotation (e.g. switching displays on a foldable).
+        if let slideDial = rotationControlView as? SlideDial {
+            slideDial.updateLength(min(bounds.width, bounds.height) * slideDial.getLengthRatio())
+        }
+        
         if Orientation.treatAsPortrait {
             rotationControlView.transform = CGAffineTransform(rotationAngle: 0)
             rotationControlView.frame.origin.x = cropAuxiliaryIndicatorView.frame.origin.x +
