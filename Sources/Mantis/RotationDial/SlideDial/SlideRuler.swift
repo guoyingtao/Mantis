@@ -234,6 +234,25 @@ final class SlideRuler: UIView {
         updateLastTickIndex()
     }
 
+    /// Resizes the ruler while keeping the position it currently shows.
+    /// The displayed position is read from the scroll view rather than from the
+    /// dial's view model, which is not updated by programmatic changes
+    /// (flip, undo/redo, preset transformations).
+    func updateFrameKeepingPosition(_ newFrame: CGRect) {
+        let oldWidth = scrollRulerView.bounds.width
+        let relativeOffset = oldWidth > 0 ? scrollRulerView.contentOffset.x / oldWidth : 0
+        
+        // Resizing the scroll view clamps its content offset, which would
+        // otherwise be reported as a user scroll.
+        scrollRulerView.delegate = nil
+        frame = newFrame
+        setUIFrames()
+        scrollRulerView.contentOffset = CGPoint(x: relativeOffset * scrollRulerView.bounds.width, y: 0)
+        scrollRulerView.delegate = self
+        checkCentralDotHiddenStatus()
+        updateLastTickIndex()
+    }
+    
     private func updateLastTickIndex() {
         lastTickIndex = currentTickIndex()
     }
