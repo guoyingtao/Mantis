@@ -19,10 +19,10 @@ extension CropView {
         }
         
         if let rotationControlView = rotationControlView {
-            // In landscape the rotation control is rotated 90° and becomes a narrow
+            // In the landscape layout the rotation control is rotated 90° and becomes a narrow
             // strip. Expand the hit area so touches slightly outside still register
             // on the slider rather than panning the image.
-            let hotPadding: CGFloat = Orientation.isLandscape ? 20 : 0
+            let hotPadding: CGFloat = Orientation.treatAsPortrait ? 0 : 20
             let expandedFrame = rotationControlView.frame.insetBy(dx: -hotPadding, dy: -hotPadding)
             if expandedFrame.contains(newPoint) {
                 let pointInRotationControlView = rotationControlView.convert(newPoint, from: self)
