@@ -231,8 +231,11 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         
         bounds.size.width = length
         
-        if config.mode == .simple {
+        switch config.mode {
+        case .simple:
             indicator?.center.x = length / 2
+        case .withTypeSelector:
+            layoutTypeButtons(animated: false)
         }
         
         slideRuler.updateFrameKeepingPosition(CGRect(x: 0,

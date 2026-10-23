@@ -57,8 +57,17 @@ public struct Orientation {
      such as the inner display of a foldable iPhone.
      */
     public static var treatAsPortrait: Bool {
+        let scene = activeScene
+        return shouldTreatAsPortrait(interfaceOrientation: scene?.interfaceOrientation ?? .portrait,
+                                     userInterfaceIdiom: UIDevice.current.userInterfaceIdiom,
+                                     verticalSizeClass: scene?.traitCollection.verticalSizeClass)
+    }
+    
+    static func shouldTreatAsPortrait(interfaceOrientation: UIInterfaceOrientation,
+                                      userInterfaceIdiom: UIUserInterfaceIdiom,
+                                      verticalSizeClass: UIUserInterfaceSizeClass?) -> Bool {
         interfaceOrientation.isPortrait
-            || UIDevice.current.userInterfaceIdiom != .phone
-            || activeScene?.traitCollection.verticalSizeClass == .regular
+            || userInterfaceIdiom != .phone
+            || verticalSizeClass == .regular
     }
 }
