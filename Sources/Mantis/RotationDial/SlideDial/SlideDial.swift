@@ -258,15 +258,32 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     // MARK: - Accessibility
     
     override func accessibilityIncrement() {
-        viewModel.rotationAngle += Angle(degrees: 1)
-        setAccessibilityValue()
+        adjustRotationAngleForAccessibility(byDegrees: 1)
     }
     
     override func accessibilityDecrement() {
-        viewModel.rotationAngle -= Angle(degrees: -1)
-        setAccessibilityValue()
+        adjustRotationAngleForAccessibility(byDegrees: -1)
     }
+    
+    /// Steps the angle like a short ruler drag: clamped to the active
+    /// limitation, with the ruler moved to match and the change finished
+    /// so CropView settles as it does when a drag ends.
+    private func adjustRotationAngleForAccessibility(byDegrees delta: CGFloat) {
+        let limit = currentLimitation
+        let currentDegrees = viewModel.rotationAngle.degrees
+        let degrees = min(max(currentDegrees + delta, -limit), limit)
+        // Already at the limit. Angle stores radians, so allow for round-trip drift.
+        guard abs(degrees - currentDegrees) > 1e-4 else {
+            return
+        }
         
+        slideRuler?.setOffsetRatio(degrees / limit)
+        slideRuler?.checkCentralDotHiddenStatus()
+        viewModel.rotationAngle = Angle(degrees: degrees)
+        setAccessibilityValue()
+        didFinishRotation()
+    }
+    
     func getTotalRotationValue() -> CGFloat {
         viewModel.rotationAngle.degrees
     }

@@ -84,4 +84,23 @@ final class RotateDialTests: XCTestCase {
         XCTAssertEqual(dial.transform, .identity)
     }
 
+    func testAccessibilityIncrementAndDecrement() {
+        setup(with: RotationDialConfig())
+        
+        var finishCount = 0
+        dial.didFinishRotation = { finishCount += 1 }
+        
+        dial.accessibilityIncrement()
+        dial.accessibilityIncrement()
+        XCTAssertEqual(dial.getRotationAngle().degrees, 2, accuracy: 1e-3)
+        XCTAssertEqual(dial.accessibilityValue, "2 degrees")
+        
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        XCTAssertEqual(dial.getRotationAngle().degrees, -1, accuracy: 1e-3)
+        XCTAssertEqual(dial.accessibilityValue, "-1 degree")
+        XCTAssertEqual(finishCount, 5)
+    }
+
 }

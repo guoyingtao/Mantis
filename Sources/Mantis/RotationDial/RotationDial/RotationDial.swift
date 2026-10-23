@@ -58,14 +58,17 @@ final class RotationDial: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // `rotationAngle` is the step to apply, not the total angle
     override func accessibilityIncrement() {
         viewModel.rotationAngle = Angle(degrees: 1)
         setAccessibilityValue()
+        didFinishRotation()
     }
     
     override func accessibilityDecrement() {
         viewModel.rotationAngle = Angle(degrees: -1)
         setAccessibilityValue()
+        didFinishRotation()
     }
 }
 
