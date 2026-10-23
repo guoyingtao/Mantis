@@ -380,3 +380,105 @@ final class SlideDialTests: XCTestCase {
         dial.typeButtonTapped(tap)
     }
 }
+
+extension SlideDialTests {
+    // MARK: - Accessibility value
+    
+    func testDragRefreshesAccessibilityValue() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        
+        dial.didGetOffsetRatio(from: slideRuler, offsetRatio: -10 / 45)
+        
+        XCTAssertEqual(dial.accessibilityValue, "-10 degrees")
+    }
+    
+    func testResetRefreshesAccessibilityValue() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 20)))
+        XCTAssertEqual(dial.accessibilityValue, "20 degrees")
+        
+        dial.reset()
+        
+        XCTAssertEqual(dial.accessibilityValue, "0 degrees")
+    }
+    
+    // MARK: - Type switching with VoiceOver
+    
+    func testSimpleModeHasNoTypeAccessibilityActions() {
+        setup(with: SlideDialConfig(), allowableFrame: dialFrame)
+        
+        XCTAssertTrue((dial.accessibilityCustomActions ?? []).isEmpty)
+    }
+    
+    func testTypeAccessibilityActionsSwitchType() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        var switchedTypes: [RotationAdjustmentType] = []
+        dial.didSwitchAdjustmentType = { switchedTypes.append($0) }
+        
+        XCTAssertEqual(typeActionNames(), [title(.verticalSkew), title(.horizontalSkew)])
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.straighten)), 0 degrees")
+        
+        try performTypeAction(.horizontalSkew)
+        
+        XCTAssertEqual(viewModel.currentAdjustmentType, .horizontalSkew)
+        XCTAssertEqual(switchedTypes, [.horizontalSkew])
+        XCTAssertEqual(dial.typeButtons[.horizontalSkew]?.isSelectedType, true)
+        XCTAssertEqual(dial.typeButtons[.straighten]?.isSelectedType, false)
+        XCTAssertEqual(typeActionNames(), [title(.straighten), title(.verticalSkew)])
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.horizontalSkew)), 0 degrees")
+        
+        dial.accessibilityIncrement()
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.horizontalSkew)), 1 degree")
+    }
+    
+    func testTypeAccessibilityActionsRestoreEachTypeAngle() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        dial.didGetOffsetRatio(from: slideRuler, offsetRatio: 10 / 45)
+        
+        try performTypeAction(.horizontalSkew)
+        dial.accessibilityIncrement()
+        dial.accessibilityIncrement()
+        try performTypeAction(.straighten)
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 10, accuracy: 1e-6)
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.straighten)), 10 degrees")
+        
+        try performTypeAction(.horizontalSkew)
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 2, accuracy: 1e-6)
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.horizontalSkew)), 2 degrees")
+    }
+    
+    func testResetRestoresTypeAccessibilityActions() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        try performTypeAction(.verticalSkew)
+        
+        dial.reset()
+        
+        XCTAssertEqual(typeActionNames(), [title(.verticalSkew), title(.horizontalSkew)])
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.straighten)), 0 degrees")
+    }
+    
+    private func title(_ type: RotationAdjustmentType) -> String {
+        type.localizedTitle
+    }
+    
+    private func typeActionNames() -> [String] {
+        (dial.accessibilityCustomActions ?? []).map(\.name)
+    }
+    
+    private func performTypeAction(_ type: RotationAdjustmentType) throws {
+        let action = try XCTUnwrap(dial.accessibilityCustomActions?.first { $0.name == title(type) })
+        XCTAssertEqual(action.actionHandler?(action), true)
+    }
+}

@@ -61,7 +61,7 @@ public protocol RotationControlViewProtocol: UIView {
     func getLengthRatio() -> CGFloat
     
     /**
-     Set accessibilities of the view which includes accessibilityTraits, accessibilityLabel and accessibilityLabel
+     Set accessibilities of the view which includes accessibilityTraits, accessibilityLabel and accessibilityValue
      */
     func setAccessibilities()
     
@@ -96,13 +96,14 @@ extension RotationControlViewProtocol {
     }
     
     func setAccessibilityValue() {
+        accessibilityValue = accessibilityDegreesText()
+    }
+    
+    /// The rounded rotation value as VoiceOver reads it, e.g. "1 degree" or "-5 degrees"
+    func accessibilityDegreesText() -> String {
         let degreeValue = Int(round(getTotalRotationValue()))
-        
-        if degreeValue < 2 {
-            accessibilityValue = "\(degreeValue) degree"
-        } else {
-            accessibilityValue = "\(degreeValue) degrees"
-        }
+        let unit = abs(degreeValue) == 1 ? "degree" : "degrees"
+        return "\(degreeValue) \(unit)"
     }
 }
 

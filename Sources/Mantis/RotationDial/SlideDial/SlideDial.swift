@@ -77,6 +77,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     func handleRotation(by angle: Angle) {
         setIndicator(with: angle)
+        setAccessibilityValue()
         didUpdateRotationValue(angle)
     }
 
@@ -112,7 +113,6 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         // model on the angle the ruler now shows, so VoiceOver steps and type
         // switches start from it.
         updateViewModelAngleSilently(degrees: angle.degrees)
-        setAccessibilityValue()
 
         return true
     }
@@ -270,6 +270,17 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         adjustRotationAngleForAccessibility(byDegrees: -1)
     }
     
+    func setAccessibilityValue() {
+        switch config.mode {
+        case .simple:
+            accessibilityValue = accessibilityDegreesText()
+        case .withTypeSelector:
+            // Name the type, since the same gesture also adjusts skew
+            let typeTitle = viewModel.currentAdjustmentType.localizedTitle
+            accessibilityValue = "\(typeTitle), \(accessibilityDegreesText())"
+        }
+    }
+    
     /// Steps the angle by `delta` degrees within `currentLimitation`, moves the
     /// ruler to match, and calls `didFinishRotation()` so CropView settles as it
     /// does after a drag. Drag haptics are not replayed.
@@ -285,7 +296,6 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         slideRuler?.setOffsetRatio(degrees / limit)
         slideRuler?.checkCentralDotHiddenStatus()
         viewModel.rotationAngle = Angle(degrees: degrees)
-        setAccessibilityValue()
         didFinishRotation()
     }
     

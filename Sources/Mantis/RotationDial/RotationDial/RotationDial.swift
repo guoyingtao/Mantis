@@ -217,14 +217,18 @@ extension RotationDial: RotationDialProtocol {
         guard radians != 0 else { return false }
         
         if (getRotationAngle() * steppingAngle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
+            let previousRadians = getRotationAngle().radians
             
             if radians > 0 {
                 rotateDialPlate(to: angleLimit)
             } else {
                 rotateDialPlate(to: -angleLimit)
             }
+            setAccessibilityValue()
             
-            return false
+            // Report the snap to the limit once. Steps past it leave the plate
+            // where it is, so there is nothing new to report.
+            return abs(getRotationAngle().radians - previousRadians) > 1e-5
         }
 
         dialPlate.transform = dialPlate.transform.rotated(by: radians)
@@ -277,6 +281,7 @@ extension RotationDial: RotationDialProtocol {
         transform = .identity
         dialPlate?.reset()
         config.rotationCenterType = .useDefault
+        setAccessibilityValue()
     }
     
     func getLengthRatio() -> CGFloat {
