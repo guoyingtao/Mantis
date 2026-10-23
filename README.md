@@ -141,12 +141,12 @@ In Xcode: **File → Add Package Dependencies…** and enter:
 https://github.com/guoyingtao/Mantis-spm.git
 ```
 
-Rule: **Version — Up to Next Major — 3.1.0**
+Rule: **Version — Up to Next Major — 3.1.1**
 
 Or in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/guoyingtao/Mantis-spm.git", from: "3.1.0")
+.package(url: "https://github.com/guoyingtao/Mantis-spm.git", from: "3.1.1")
 ```
 
 and in your target's dependencies: `.product(name: "Mantis", package: "Mantis-spm")`. The product and module are unchanged, so `import Mantis` works as before.
@@ -156,7 +156,7 @@ Depending on `https://github.com/guoyingtao/Mantis.git` directly still works, bu
 ### CocoaPods
 
 ```ruby
-pod 'Mantis', '~> 3.1.0'
+pod 'Mantis', '~> 3.1.1'
 ```
 
 ### Carthage
