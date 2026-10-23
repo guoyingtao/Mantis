@@ -2,6 +2,17 @@
 
 -----
 
+### [3.1.1](https://www.github.com/guoyingtao/Mantis/compare/v3.1.0...v3.1.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* adapt crop layout to foldable iPhone displays ([#551](https://www.github.com/guoyingtao/Mantis/issues/551)) ([#552](https://www.github.com/guoyingtao/Mantis/issues/552)) ([8dc58d6](https://www.github.com/guoyingtao/Mantis/commit/8dc58d615d5fa390960d93b86488509845b6e08f))
+* confine crop box resizing within the content bounds ([#543](https://www.github.com/guoyingtao/Mantis/issues/543)) ([3cd2b51](https://www.github.com/guoyingtao/Mantis/commit/3cd2b51af21b8f99bdcef822370a33ebc41e42f7))
+* finish VoiceOver support on the rotation dials ([#555](https://www.github.com/guoyingtao/Mantis/issues/555)) ([deb9ce8](https://www.github.com/guoyingtao/Mantis/commit/deb9ce8010431f1da12d20c6cda0bed29db4b089))
+* keep the crop box visible when a view transition is skipped ([#553](https://www.github.com/guoyingtao/Mantis/issues/553)) ([b25ffea](https://www.github.com/guoyingtao/Mantis/commit/b25ffea8203d3d75c8d38f3e9d00ca4b38be9e51))
+* make VoiceOver decrement turn the slide dial the other way ([#554](https://www.github.com/guoyingtao/Mantis/issues/554)) ([f435c1f](https://www.github.com/guoyingtao/Mantis/commit/f435c1f2145b187eb622861a88d4afe5e8e2c22a))
+
 ## [3.1.0](https://www.github.com/guoyingtao/Mantis/compare/v3.0.0...v3.1.0) (2026-07-09)
 
 
