@@ -76,25 +76,67 @@ final class CropViewControllerTests: XCTestCase {
         XCTAssertTrue(fakeCropVCDelegate.didEndCrop)
     }
 
-    func testViewWillTransitionWithUnknownOrientationKeepsCropUIVisible() {
+    func testViewWillTransitionWithUnknownOrientationLeavesCropViewUntouched() {
         cropVC.loadViewIfNeeded()
+        cropVC.interfaceOrientationProvider = { .unknown }
+        let handled = expectation(description: "cropView.handleViewWillTransition() called")
+        handled.isInverted = true
+        fakeCropView.onHandleViewWillTransition = { handled.fulfill() }
 
-        cropVC.handleViewWillTransition(interfaceOrientation: .unknown)
+        cropVC.viewWillTransition(to: CGSize(width: 800, height: 400), with: FakeTransitionCoordinator())
 
-        // prepareForViewWillTransition() hides the crop box and rotation control,
-        // so it must not run unless handleViewWillTransition() follows.
-        XCTAssertFalse(fakeCropView.didPrepareForViewWillTransition)
-        XCTAssertFalse(fakeCropView.didHandleViewWillTransition)
+        // cropView.prepareForViewWillTransition() hides the crop box and rotation control,
+        // so it must only run on the path that also calls cropView.handleViewWillTransition().
+        XCTAssertEqual(fakeCropView.prepareForViewWillTransitionCallCount, 0)
+        // cropView.handleViewWillTransition() is dispatched after 0.1 s, so wait past that.
+        wait(for: [handled], timeout: 0.3)
     }
 
-    func testViewWillTransitionToPortraitUpsideDownRestoresCropUI() {
+    func testViewWillTransitionToPortraitUpsideDownPreparesThenRestoresCropView() {
         cropVC.loadViewIfNeeded()
+        cropVC.interfaceOrientationProvider = { .portraitUpsideDown }
         let handled = expectation(description: "cropView.handleViewWillTransition() called")
         fakeCropView.onHandleViewWillTransition = { handled.fulfill() }
 
-        cropVC.handleViewWillTransition(interfaceOrientation: .portraitUpsideDown)
+        cropVC.viewWillTransition(to: CGSize(width: 400, height: 800), with: FakeTransitionCoordinator())
 
-        XCTAssertTrue(fakeCropView.didPrepareForViewWillTransition)
+        XCTAssertEqual(fakeCropView.prepareForViewWillTransitionCallCount, 1)
         wait(for: [handled], timeout: 1)
+        XCTAssertEqual(fakeCropView.handleViewWillTransitionCallCount, 1)
     }
+}
+
+// Lets tests call viewWillTransition(to:with:) directly. Defined here rather than
+// in Mock/ so the Xcode project file doesn't need a new entry.
+private final class FakeTransitionCoordinator: NSObject, UIViewControllerTransitionCoordinator {
+    var isAnimated: Bool { false }
+    var presentationStyle: UIModalPresentationStyle { .none }
+    var initiallyInteractive: Bool { false }
+    var isInterruptible: Bool { false }
+    var isInteractive: Bool { false }
+    var isCancelled: Bool { false }
+    var transitionDuration: TimeInterval { 0 }
+    var percentComplete: CGFloat { 1 }
+    var completionVelocity: CGFloat { 1 }
+    var completionCurve: UIView.AnimationCurve { .linear }
+    var containerView: UIView { UIView() }
+    var targetTransform: CGAffineTransform { .identity }
+
+    func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? { nil }
+    func view(forKey key: UITransitionContextViewKey) -> UIView? { nil }
+
+    func animate(alongsideTransition animation: ((UIViewControllerTransitionCoordinatorContext) -> Void)?,
+                 completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)?) -> Bool {
+        false
+    }
+
+    func animateAlongsideTransition(in view: UIView?,
+                                    animation: ((UIViewControllerTransitionCoordinatorContext) -> Void)?,
+                                    completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)?) -> Bool {
+        false
+    }
+
+    func notifyWhenInteractionEnds(_ handler: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void) {}
+
+    func notifyWhenInteractionChanges(_ handler: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void) {}
 }

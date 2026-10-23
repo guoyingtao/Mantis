@@ -55,6 +55,10 @@ open class CropViewController: UIViewController {
     var initialLayout = false
     var disableRotation = false
     
+    // Only decides whether handleViewWillTransition() skips a transition; layout code
+    // reads Orientation directly. Tests replace it to drive orientations such as .unknown.
+    var interfaceOrientationProvider: () -> UIInterfaceOrientation = { Orientation.interfaceOrientation }
+    
     // swiftlint:disable:next identifier_name
     lazy var _undoManager: UndoManager = {
         return UndoManager()
@@ -179,7 +183,8 @@ open class CropViewController: UIViewController {
         return [.top, .bottom]
     }
     
-    // It is triggered by (1) - device rotation or (2) - split view operations on iPad
+    // Called whenever UIKit changes this view's size: interface rotation, iPad multitasking
+    // (Split View, Stage Manager) or a foldable iPhone switching displays.
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         handleViewWillTransition()
@@ -193,20 +198,19 @@ open class CropViewController: UIViewController {
         cropView.zoomOut()
     }
     
-    @objc func handleViewWillTransition(interfaceOrientation: UIInterfaceOrientation = Orientation.interfaceOrientation) {
+    func handleViewWillTransition() {
         // Bail out before prepareForViewWillTransition(): it hides the crop box and
         // rotation control until cropView.handleViewWillTransition() shows them again,
         // so returning after it would leave them hidden.
-        guard interfaceOrientation != .unknown else { return }
+        guard interfaceOrientationProvider() != .unknown else { return }
 
         cropView.prepareForViewWillTransition()
         updateLayout()
         view.layoutIfNeeded()
         
-        // When it is embedded in a container, the timing of viewDidLayoutSubviews
-        // is different with the normal mode.
-        // So delay the execution to make sure handleRotate runs after the final
-        // viewDidLayoutSubviews
+        // When this controller is embedded in a container, its final viewDidLayoutSubviews
+        // can arrive after this point. Delay cropView.handleViewWillTransition() so it
+        // normally runs after that layout pass. The 0.1 s delay is a heuristic, not a guarantee.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.cropView.handleViewWillTransition()
         }

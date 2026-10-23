@@ -47,16 +47,16 @@ class FakeCropView: UIView, CropViewProtocol {
         
     }
     
-    var didPrepareForViewWillTransition = false
-    var didHandleViewWillTransition = false
+    var prepareForViewWillTransitionCallCount = 0
+    var handleViewWillTransitionCallCount = 0
     var onHandleViewWillTransition: (() -> Void)?
 
     func prepareForViewWillTransition() {
-        didPrepareForViewWillTransition = true
+        prepareForViewWillTransitionCallCount += 1
     }
 
     func handleViewWillTransition() {
-        didHandleViewWillTransition = true
+        handleViewWillTransitionCallCount += 1
         onHandleViewWillTransition?()
     }
 
