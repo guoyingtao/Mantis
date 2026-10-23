@@ -108,4 +108,43 @@ final class CropViewTests: XCTestCase {
         let rightMirroredOrientationImage = UIImage(cgImage: testImage.cgImage!, scale: testImage.scale, orientation: .rightMirrored)
         testGetImageHorizontalToVerticalRatioWithLeftRightAndMirror(testImage: rightMirroredOrientationImage)
     }
+    
+    // MARK: - Rotation control resizing
+    
+    // The CropView size can change without a rotation, e.g. when switching
+    // between the outer and inner displays of a foldable iPhone.
+    func testAdaptRotationControlResizesSlideDialWhenCropViewSizeChanges() {
+        var slideDialConfig = SlideDialConfig()
+        slideDialConfig.limitation = 45
+        let slideRuler = SlideRuler(frame: .zero, config: slideDialConfig)
+        let slideDial = SlideDial(frame: .zero,
+                                  config: slideDialConfig,
+                                  viewModel: SlideDialViewModel(),
+                                  slideRuler: slideRuler)
+        
+        cropView.frame = CGRect(x: 0, y: 0, width: 390, height: 700)
+        cropView.cropAuxiliaryIndicatorView.frame = CGRect(x: 20, y: 100, width: 350, height: 400)
+        cropView.rotationControlView = slideDial
+        cropView.setupRotationDialIfNeeded()
+        
+        XCTAssertEqual(slideDial.bounds.width, 390 * slideDialConfig.lengthRatio, accuracy: 0.001)
+        XCTAssertEqual(slideDial.frame.midX, cropView.cropAuxiliaryIndicatorView.frame.midX, accuracy: 0.001)
+        
+        XCTAssertTrue(slideDial.updateRotationValue(by: Angle(degrees: 20)))
+        var reportedAngles: [Angle] = []
+        slideDial.didUpdateRotationValue = { reportedAngles.append($0) }
+        
+        // Wider than tall, so the length must come from the height.
+        cropView.frame = CGRect(x: 0, y: 0, width: 820, height: 700)
+        cropView.cropAuxiliaryIndicatorView.frame = CGRect(x: 60, y: 80, width: 700, height: 450)
+        cropView.adaptRotationControlViewToCropBoxIfNeeded()
+        
+        XCTAssertEqual(slideDial.bounds.width, 700 * slideDialConfig.lengthRatio, accuracy: 0.001)
+        XCTAssertEqual(slideRuler.frame.width, slideDial.bounds.width, accuracy: 0.001)
+        XCTAssertEqual(slideDial.frame.midX, cropView.cropAuxiliaryIndicatorView.frame.midX, accuracy: 0.001)
+        // UIScrollView rounds the content offset to the pixel grid, so allow one point.
+        XCTAssertEqual(slideRuler.positionInfoHelper.getOffsetRatio(), 20.0 / 45.0, accuracy: 1 / slideRuler.offsetValue)
+        // A resize is not a user scroll.
+        XCTAssertTrue(reportedAngles.isEmpty)
+    }
 }

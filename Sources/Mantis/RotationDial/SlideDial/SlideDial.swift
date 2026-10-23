@@ -224,6 +224,26 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     // MARK: - Slide ruler setup
     
+    /// Resizes the dial to a new length (e.g. after the window size changes on a
+    /// foldable or in Split View) while keeping the current rotation value.
+    func updateLength(_ length: CGFloat) {
+        guard length > 0, bounds.width != length else { return }
+        
+        bounds.size.width = length
+        
+        switch config.mode {
+        case .simple:
+            indicator?.center.x = length / 2
+        case .withTypeSelector:
+            layoutTypeButtons(animated: false)
+        }
+        
+        slideRuler.updateFrameKeepingPosition(CGRect(x: 0,
+                                                     y: bounds.height - config.slideRulerHeight,
+                                                     width: length,
+                                                     height: config.slideRulerHeight))
+    }
+    
     func setupSlideRuler() {
         let sliderFrame = CGRect(x: 0,
                                  y: frame.height - config.slideRulerHeight,
