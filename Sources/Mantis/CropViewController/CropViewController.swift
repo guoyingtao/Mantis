@@ -182,7 +182,6 @@ open class CropViewController: UIViewController {
     // It is triggered by (1) - device rotation or (2) - split view operations on iPad
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        cropView.prepareForViewWillTransition()
         handleViewWillTransition()
     }
     
@@ -194,16 +193,13 @@ open class CropViewController: UIViewController {
         cropView.zoomOut()
     }
     
-    @objc func handleViewWillTransition() {
-        let currentOrientation = Orientation.interfaceOrientation
-        
-        guard currentOrientation != .unknown else { return }
-        
-        if UIDevice.current.userInterfaceIdiom == .phone
-            && currentOrientation == .portraitUpsideDown {
-            return
-        }
-        
+    @objc func handleViewWillTransition(interfaceOrientation: UIInterfaceOrientation = Orientation.interfaceOrientation) {
+        // Bail out before prepareForViewWillTransition(): it hides the crop box and
+        // rotation control until cropView.handleViewWillTransition() shows them again,
+        // so returning after it would leave them hidden.
+        guard interfaceOrientation != .unknown else { return }
+
+        cropView.prepareForViewWillTransition()
         updateLayout()
         view.layoutIfNeeded()
         

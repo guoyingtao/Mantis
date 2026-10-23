@@ -72,7 +72,29 @@ final class CropViewControllerTests: XCTestCase {
         XCTAssertFalse(fakeCropVCDelegate.didEndCrop)
         
         cropVC.cropViewDidEndCrop(cropVC.cropView)
-        
+
         XCTAssertTrue(fakeCropVCDelegate.didEndCrop)
+    }
+
+    func testViewWillTransitionWithUnknownOrientationKeepsCropUIVisible() {
+        cropVC.loadViewIfNeeded()
+
+        cropVC.handleViewWillTransition(interfaceOrientation: .unknown)
+
+        // prepareForViewWillTransition() hides the crop box and rotation control,
+        // so it must not run unless handleViewWillTransition() follows.
+        XCTAssertFalse(fakeCropView.didPrepareForViewWillTransition)
+        XCTAssertFalse(fakeCropView.didHandleViewWillTransition)
+    }
+
+    func testViewWillTransitionToPortraitUpsideDownRestoresCropUI() {
+        cropVC.loadViewIfNeeded()
+        let handled = expectation(description: "cropView.handleViewWillTransition() called")
+        fakeCropView.onHandleViewWillTransition = { handled.fulfill() }
+
+        cropVC.handleViewWillTransition(interfaceOrientation: .portraitUpsideDown)
+
+        XCTAssertTrue(fakeCropView.didPrepareForViewWillTransition)
+        wait(for: [handled], timeout: 1)
     }
 }
