@@ -31,6 +31,7 @@ extension SlideDial {
         // Set initial selection and layout
         typeButtons[.straighten]?.setSelected(true)
         layoutTypeButtons(animated: false)
+        updateTypeAccessibilityActions()
     }
     
     /// Positions buttons in a fixed row, sliding the group horizontally so the
@@ -86,15 +87,28 @@ extension SlideDial {
             return
         }
         
+        switchAdjustmentType(to: newType)
+    }
+    
+    /// Selects another adjustment type, as tapping its button does: saves the
+    /// current type's angle, restores the new type's angle on the ruler and
+    /// notifies CropView.
+    func switchAdjustmentType(to newType: RotationAdjustmentType) {
+        guard newType != viewModel.currentAdjustmentType,
+              let newButton = typeButtons[newType] else {
+            return
+        }
+        
         // Save current angle before switching
         viewModel.storeAngle(viewModel.rotationAngle.degrees, for: viewModel.currentAdjustmentType)
         
         // Update button selection states
         typeButtons[viewModel.currentAdjustmentType]?.setSelected(false)
-        tappedButton.setSelected(true)
+        newButton.setSelected(true)
         
         // Switch type in viewModel
         viewModel.currentAdjustmentType = newType
+        updateTypeAccessibilityActions()
         
         // Animate the selected button to center
         layoutTypeButtons(animated: true)
@@ -129,6 +143,25 @@ extension SlideDial {
         }
         typeButtons[.straighten]?.setSelected(true)
         layoutTypeButtons(animated: false)
+        updateTypeAccessibilityActions()
+    }
+    
+    /// The dial is a single adjustable element, so VoiceOver cannot reach the
+    /// type buttons. Offer each other type as a custom action instead.
+    func updateTypeAccessibilityActions() {
+        guard case .withTypeSelector = config.mode else { return }
+        
+        accessibilityCustomActions = Self.allAdjustmentTypes
+            .filter { $0 != viewModel.currentAdjustmentType }
+            .map { type in
+                UIAccessibilityCustomAction(name: type.localizedTitle) { [weak self] _ in
+                    guard let self = self else { return false }
+                    self.switchAdjustmentType(to: type)
+                    // Read the new type and its angle
+                    UIAccessibility.post(notification: .layoutChanged, argument: self)
+                    return true
+                }
+            }
     }
     
     /// Update type button values from external source (e.g. when CropView restores state)
@@ -191,14 +224,16 @@ extension SlideDial {
     }
     
     /// Updates the viewModel's rotation angle without triggering the external
-    /// `didUpdateRotationValue` callback. Used when restoring stored angles
-    /// during type switches or external sync operations.
+    /// `didUpdateRotationValue` callback, and refreshes the accessibility value.
+    /// Used when restoring stored angles during type switches or external sync
+    /// operations.
     func updateViewModelAngleSilently(degrees: CGFloat) {
         viewModel.didSetRotationAngle = { _ in }
         viewModel.rotationAngle = Angle(degrees: degrees)
         viewModel.didSetRotationAngle = { [weak self] angle in
             self?.handleRotation(by: angle)
         }
+        setAccessibilityValue()
     }
 }
 
