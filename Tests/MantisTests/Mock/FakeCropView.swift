@@ -47,12 +47,17 @@ class FakeCropView: UIView, CropViewProtocol {
         
     }
     
+    var prepareForViewWillTransitionCallCount = 0
+    var handleViewWillTransitionCallCount = 0
+    var onHandleViewWillTransition: (() -> Void)?
+
     func prepareForViewWillTransition() {
-        
+        prepareForViewWillTransitionCallCount += 1
     }
-    
+
     func handleViewWillTransition() {
-        
+        handleViewWillTransitionCallCount += 1
+        onHandleViewWillTransition?()
     }
 
     func setFixedRatio(_ ratio: Double, zoom: Bool, presetFixedRatioType: PresetFixedRatioType) {
