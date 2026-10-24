@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Mantis",
     defaultLocalization: "en",
-    platforms: [.iOS(.v15), .macCatalyst(.v15)],
+    platforms: [.iOS(.v17), .macCatalyst(.v17)],
     products: [
         .library(
             name: "Mantis",
@@ -15,15 +15,12 @@ let package = Package(
     targets: [
         .target(
             name: "Mantis",
-            exclude: ["Info.plist", "Resources/Info.plist"],
-            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
-            swiftSettings: [.define("MANTIS_SPM")]
+            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")]
         ),
         .testTarget(
             name: "MantisTests",
             dependencies: ["Mantis"],
-            path: "Tests/MantisTests",
-            swiftSettings: [.define("MANTIS_SPM")]
+            path: "Tests/MantisTests"
         )
     ]
 )

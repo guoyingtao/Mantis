@@ -67,10 +67,6 @@ public func setupCropViewController(_ cropViewController: Mantis.CropViewControl
     cropViewController.cropToolbar = cropToolbar
 }
 
-public func locateResourceBundle(by hostClass: AnyClass) {
-    LocalizedHelper.setBundle(Bundle(for: hostClass))
-}
-
 /// Crops an image offline (without a crop view controller) using a previously
 /// obtained `CropInfo`.
 ///
@@ -117,10 +113,6 @@ public func resetLanguage() {
 var localizationConfig = LocalizationConfig()
 
 // MARK: - private section
-private(set) var bundle: Bundle? = {
-    return Mantis.Config.bundle
-}()
-
 private func applyAppearanceDefaults(to config: inout Mantis.Config) {
     let mode = config.appearanceMode
     

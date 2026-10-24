@@ -7,9 +7,7 @@
 
 import XCTest
 import Combine
-#if canImport(Observation)
 import Observation
-#endif
 @testable import Mantis
 
 final class CropSessionTests: XCTestCase {
@@ -74,12 +72,7 @@ final class CropSessionTests: XCTestCase {
         XCTAssertEqual(changeCount, 1)
     }
 
-    func testObservationTrackingFiresOniOS17() throws {
-#if canImport(Observation)
-        guard #available(iOS 17.0, macCatalyst 17.0, *) else {
-            throw XCTSkip("Observation requires iOS 17")
-        }
-
+    func testObservationTrackingIsPerProperty() {
         var changeFired = false
         withObservationTracking {
             _ = session.canUndo
@@ -92,9 +85,6 @@ final class CropSessionTests: XCTestCase {
 
         session.canUndo = true
         XCTAssertTrue(changeFired)
-#else
-        throw XCTSkip("Observation framework not available")
-#endif
     }
 
     func testActionsWithoutAttachedCropperAreNoOps() {
