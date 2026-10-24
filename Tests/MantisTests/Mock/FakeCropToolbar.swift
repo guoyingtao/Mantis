@@ -20,13 +20,20 @@ class FakeCropToolbar: UIView, CropToolbarProtocol {
     var didAdjustLayoutWhenOrientationChange = false
     var didHandleCropViewDidBecomeResettable = false
     var didHandleCropViewDidBecomeUnResettable = false
-    
+    var fixedRatiosSetted: [Double] = []
+    var ratioListPresentSourceView: UIView?
+
     func createToolbarUI(config: CropToolbarConfig) {
         self.config = config
     }
-    
+
+    func getRatioListPresentSourceView() -> UIView? {
+        ratioListPresentSourceView
+    }
+
     func handleFixedRatioSetted(ratio: Double) {
         didHandleFixedRatioSetted = true
+        fixedRatiosSetted.append(ratio)
     }
     
     func handleFixedRatioUnSetted() {
