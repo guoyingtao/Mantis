@@ -9,23 +9,69 @@ import UIKit
 @testable import Mantis
 
 class FakeCropView: UIView, CropViewProtocol {
-    func applyCropState(with cropState: Mantis.CropState) {
-        
-    }
-    
-    func makeCropState() -> Mantis.CropState {
-        return CropState(
-            rotationType: .none,
-            degrees: 0.0,
-            aspectRatioLockEnabled: false,
-            aspectRato: 0.0,
-            flipOddTimes: false,
-            transformation: makeTransformation(),
-            horizontalSkewDegrees: 0,
-            verticalSkewDegrees: 0
+    static func makeState(degrees: CGFloat = 0,
+                          rotationType: ImageRotationType = .none,
+                          aspectRatioLockEnabled: Bool = false,
+                          aspectRatio: CGFloat = 0,
+                          flipOddTimes: Bool = false,
+                          horizontalSkewDegrees: CGFloat = 0,
+                          verticalSkewDegrees: CGFloat = 0) -> CropState {
+        CropState(
+            rotationType: rotationType,
+            degrees: degrees,
+            aspectRatioLockEnabled: aspectRatioLockEnabled,
+            aspectRato: aspectRatio,
+            flipOddTimes: flipOddTimes,
+            transformation: makeEmptyTransformation(),
+            horizontalSkewDegrees: horizontalSkewDegrees,
+            verticalSkewDegrees: verticalSkewDegrees
         )
     }
-    
+
+    static func makeEmptyTransformation() -> Transformation {
+        Transformation(offset: .zero,
+                       rotation: .zero,
+                       scale: .zero,
+                       isManuallyZoomed: false,
+                       initialMaskFrame: .zero,
+                       maskFrame: .zero,
+                       cropWorkbenchViewBounds: .zero,
+                       horizontallyFlipped: false,
+                       verticallyFlipped: false)
+    }
+
+    /// Returned by makeCropState(). Change it between calls to simulate a user edit.
+    var cropState = FakeCropView.makeState()
+
+    /// When set, reset() switches cropState to it, as a real reset would.
+    var cropStateAfterReset: CropState?
+
+    /// The image returned by crop() and crop(_:). nil simulates a failed crop.
+    var croppedImage: UIImage?
+
+    var imageHorizontalToVerticalRatio: Double = 0
+
+    private(set) var appliedCropStates: [CropState] = []
+    private(set) var resetCallCount = 0
+    private(set) var setFreeCropCallCount = 0
+    private(set) var horizontallyFlipCallCount = 0
+    private(set) var verticallyFlipCallCount = 0
+    private(set) var setFixedRatioCalls: [(ratio: Double, zoom: Bool)] = []
+    private(set) var rotateBy90Types: [RotateBy90DegreeType] = []
+    /// Completions of rotateBy90 calls, in call order. Call one to finish that rotation.
+    private(set) var pendingRotationCompletions: [() -> Void] = []
+    private(set) var cropCallCount = 0
+    /// Completions of asyncCrop calls, in call order. Call one to finish that crop.
+    private(set) var pendingAsyncCropCompletions: [(CropOutput) -> Void] = []
+
+    func applyCropState(with cropState: Mantis.CropState) {
+        appliedCropStates.append(cropState)
+    }
+
+    func makeCropState() -> Mantis.CropState {
+        cropState
+    }
+
     var image = UIImage()
     
     var aspectRatioLockEnabled = false
@@ -40,7 +86,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func getImageHorizontalToVerticalRatio() -> Double {
-        0
+        imageHorizontalToVerticalRatio
     }
     
     func resetComponents() {
@@ -61,11 +107,12 @@ class FakeCropView: UIView, CropViewProtocol {
     }
 
     func setFixedRatio(_ ratio: Double, zoom: Bool, presetFixedRatioType: PresetFixedRatioType) {
-        
+        setFixedRatioCalls.append((ratio, zoom))
     }
-    
+
     func rotateBy90(withRotateType rotateType: RotateBy90DegreeType, completion: @escaping () -> Void) {
-        
+        rotateBy90Types.append(rotateType)
+        pendingRotationCompletions.append(completion)
     }
     
     func handleAlterCropper90Degree() {
@@ -73,7 +120,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func setFreeCrop() {
-        
+        setFreeCropCallCount += 1
     }
     
     func handlePresetFixedRatio(_ ratio: Double, transformation: Transformation) {
@@ -113,15 +160,18 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func horizontallyFlip() {
-        
+        horizontallyFlipCallCount += 1
     }
-    
+
     func verticallyFlip() {
-        
+        verticallyFlipCallCount += 1
     }
-    
+
     func reset() {
-        
+        resetCallCount += 1
+        if let cropStateAfterReset {
+            cropState = cropStateAfterReset
+        }
     }
     
     func makeCropInfo() -> CropInfo {
@@ -145,7 +195,8 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func crop() -> CropOutput {
-        CropOutput(nil,
+        cropCallCount += 1
+        return CropOutput(croppedImage,
                    Transformation(offset: .zero, 
                                   rotation: .zero,
                                   scale: .zero,
@@ -159,7 +210,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func crop(_ image: UIImage) -> CropOutput {
-        CropOutput(nil,
+        CropOutput(croppedImage,
                    Transformation(offset: .zero, 
                                   rotation: .zero,
                                   scale: .zero,
@@ -173,7 +224,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func asyncCrop(completion: @escaping (CropOutput) -> Void) {
-        
+        pendingAsyncCropCompletions.append(completion)
     }
     
     func getCropInfo() -> CropInfo {

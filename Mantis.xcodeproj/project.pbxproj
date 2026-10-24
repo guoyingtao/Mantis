@@ -84,6 +84,10 @@
 		AA000000000000000000CA01 /* CGAffineTransformExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000CA02 /* CGAffineTransformExtensionsTests.swift */; };
 		AA000000000000000000SR01 /* SlideRulerPositionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000SR02 /* SlideRulerPositionHelperTests.swift */; };
 		AA000000000000000000TR01 /* TransformRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000TR02 /* TransformRecordTests.swift */; };
+		AA000000000000000000MF01 /* MantisFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000MF02 /* MantisFactoryTests.swift */; };
+		AA000000000000000000SM01 /* CropShapeMaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000SM02 /* CropShapeMaskTests.swift */; };
+		AA000000000000000000VT01 /* CropViewTransformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000VT02 /* CropViewTransformTests.swift */; };
+		AA000000000000000000VA01 /* CropViewControllerActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000VA02 /* CropViewControllerActionTests.swift */; };
 		AA000000000000000000OR01 /* OrientationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000OR02 /* OrientationTests.swift */; };
 		F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */; };
 		F2058F272A400508008DEBAA /* SlideDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F262A400508008DEBAA /* SlideDialViewModel.swift */; };
@@ -260,6 +264,10 @@
 		AA000000000000000000CA02 /* CGAffineTransformExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGAffineTransformExtensionsTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000SR02 /* SlideRulerPositionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideRulerPositionHelperTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000TR02 /* TransformRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformRecordTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000MF02 /* MantisFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisFactoryTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000SM02 /* CropShapeMaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropShapeMaskTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000VT02 /* CropViewTransformTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewTransformTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000VA02 /* CropViewControllerActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewControllerActionTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000OR02 /* OrientationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationTests.swift; sourceTree = "<group>"; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialConfig.swift; sourceTree = "<group>"; };
@@ -599,6 +607,10 @@
 				AA000000000000000000CA02 /* CGAffineTransformExtensionsTests.swift */,
 				AA000000000000000000SR02 /* SlideRulerPositionHelperTests.swift */,
 				AA000000000000000000TR02 /* TransformRecordTests.swift */,
+				AA000000000000000000MF02 /* MantisFactoryTests.swift */,
+				AA000000000000000000SM02 /* CropShapeMaskTests.swift */,
+				AA000000000000000000VT02 /* CropViewTransformTests.swift */,
+				AA000000000000000000VA02 /* CropViewControllerActionTests.swift */,
 				AA000000000000000000OR02 /* OrientationTests.swift */,
 			);
 			name = MantisTests;
@@ -857,6 +869,10 @@
 				AA000000000000000000CA01 /* CGAffineTransformExtensionsTests.swift in Sources */,
 				AA000000000000000000SR01 /* SlideRulerPositionHelperTests.swift in Sources */,
 				AA000000000000000000TR01 /* TransformRecordTests.swift in Sources */,
+				AA000000000000000000MF01 /* MantisFactoryTests.swift in Sources */,
+				AA000000000000000000SM01 /* CropShapeMaskTests.swift in Sources */,
+				AA000000000000000000VT01 /* CropViewTransformTests.swift in Sources */,
+				AA000000000000000000VA01 /* CropViewControllerActionTests.swift in Sources */,
 				AA000000000000000000OR01 /* OrientationTests.swift in Sources */,
 				F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */,
 				OBJ_119 /* MantisTests.swift in Sources */,

@@ -17,7 +17,11 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
     var didBeginCrop = false
     var didEndCrop = false
     var didImageTransformed = false
-    
+    var resettableStates: [Bool] = []
+    var undoEnableStates: [Bool] = []
+    var redoEnableStates: [Bool] = []
+    var resetEnableStates: [Bool] = []
+
     func cropViewControllerDidCrop(_ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation, cropInfo: CropInfo) {
         didCrop = true
     }
@@ -48,5 +52,21 @@ class FakeCropViewControllerDelegate: CropViewControllerDelegate {
     
     func cropViewControllerDidImageTransformed(_ cropViewController: CropViewController, transformation: Transformation) {
         didImageTransformed = true
+    }
+
+    func cropViewController(_ cropViewController: CropViewController, didBecomeResettable resettable: Bool) {
+        resettableStates.append(resettable)
+    }
+
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForUndo enable: Bool) {
+        undoEnableStates.append(enable)
+    }
+
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForRedo enable: Bool) {
+        redoEnableStates.append(enable)
+    }
+
+    func cropViewController(_ cropViewController: CropViewController, didUpdateEnableStateForReset enable: Bool) {
+        resetEnableStates.append(enable)
     }
 }
