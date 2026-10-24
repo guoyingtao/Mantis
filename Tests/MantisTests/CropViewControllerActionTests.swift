@@ -342,9 +342,12 @@ final class CropViewControllerActionTests: XCTestCase {
         XCTAssertFalse(fakeDelegate.didCrop)
 
         let finishCrop = try XCTUnwrap(fakeCropView.pendingAsyncCropCompletions.first)
-        finishCrop(fakeCropView.crop())
+        finishCrop(CropOutput(fakeCropView.croppedImage,
+                              fakeCropView.makeTransformation(),
+                              fakeCropView.makeCropInfo()))
 
         XCTAssertTrue(fakeDelegate.didCrop)
+        XCTAssertEqual(fakeCropView.cropCallCount, 0)
     }
 
     // MARK: - 90° rotation
