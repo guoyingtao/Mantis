@@ -15,15 +15,12 @@ let package = Package(
     targets: [
         .target(
             name: "Mantis",
-            exclude: ["Info.plist", "Resources/Info.plist"],
-            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
-            swiftSettings: [.define("MANTIS_SPM")]
+            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")]
         ),
         .testTarget(
             name: "MantisTests",
             dependencies: ["Mantis"],
-            path: "Tests/MantisTests",
-            swiftSettings: [.define("MANTIS_SPM")]
+            path: "Tests/MantisTests"
         )
     ]
 )

@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/Swift-5.0+-orange.svg" alt="Swift 5.0+" />
     <img src="https://img.shields.io/badge/platforms-iOS%20%7C%20Mac%20Catalyst-lightgrey.svg" alt="Platforms: iOS and Mac Catalyst" />
     <img src="https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg" alt="Swift Package Manager compatible" />
-    <img src="https://img.shields.io/badge/CocoaPods-compatible-brightgreen.svg" alt="CocoaPods compatible" />
     <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="MIT license" />
 </p>
 
@@ -65,6 +64,7 @@ Mantis provides rich crop shapes, from basic circle/square to polygons to arbitr
 - [Installation](#installation)
 - [What's New in Mantis 3.x](#whats-new-in-mantis-3x)
 - [Usage](#usage)
+- [Migrating from 3.x](#migrating-from-3x)
 - [Migrating from 2.x](#migrating-from-2x)
 - [Demo Projects](#demo-projects)
 - [FAQ](#faq)
@@ -131,7 +131,9 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 
 ## Installation
 
-### Swift Package Manager (recommended)
+Starting with 4.0, Mantis is distributed through Swift Package Manager only.
+
+### Swift Package Manager
 
 Use the lightweight [Mantis-spm](https://github.com/guoyingtao/Mantis-spm) distribution. It contains only the sources and is under 1 MB, whereas this repository's full history (example apps, README media) is about 70 MB and SwiftPM downloads all of it for every project that depends on it.
 
@@ -153,16 +155,16 @@ and in your target's dependencies: `.product(name: "Mantis", package: "Mantis-sp
 
 Depending on `https://github.com/guoyingtao/Mantis.git` directly still works, but downloads far more. Don't use both URLs in the same project: SwiftPM derives the package identity from the URL (`mantis-spm` vs `mantis`) and would treat them as two packages exporting the same product.
 
-### CocoaPods
+### CocoaPods and Carthage
+
+Mantis 4.0 drops CocoaPods and Carthage. Projects that still use them can stay on Mantis 3.x:
 
 ```ruby
-pod 'Mantis', '~> 3.1.1'
+pod 'Mantis', '~> 3.1'
 ```
 
-### Carthage
-
 ```ruby
-github "guoyingtao/Mantis"
+github "guoyingtao/Mantis" ~> 3.1
 ```
 
 ## What's New in Mantis 3.x
@@ -555,12 +557,6 @@ Mantis ships with built-in localizations for Arabic, Chinese (Simplified and Tra
     
 * **SwiftUI project**: please check [this discussion](https://github.com/guoyingtao/Mantis/discussions/123#discussioncomment-1127611).
 
-* **Static frameworks**: if you use static frameworks in CocoaPods, you need to add the code below in order to find the correct resource bundle.
-    
-```swift
-Mantis.locateResourceBundle(by: Self.self)
-```
-  
 * **Custom localization tables and bundle**
     
 By default Mantis uses its built-in localization tables, and not every language is supported out of the box (see fig 1).
@@ -614,6 +610,14 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 
 </details>
 
+## Migrating from 3.x
+
+Mantis 4.0 changes how Mantis is installed rather than how it is used:
+
+- **Swift Package Manager only.** CocoaPods and Carthage are no longer supported; switch to the [Swift Package Manager](#swift-package-manager) or stay on Mantis 3.x.
+- **`Mantis.locateResourceBundle(by:)` is removed.** It only existed so CocoaPods static frameworks could find the resource bundle; delete the call. To use your own strings, set `config.localizationConfig.bundle` as described in [Localization](#usage).
+- **`import Mantis` no longer brings in UIKit.** The CocoaPods framework re-exported UIKit through its umbrella header; the Swift package does not. Add `import UIKit` to files that use UIKit types with only `import Mantis`.
+
 ## Migrating from 2.x
 
 Mantis 3.0 contains a small set of breaking changes; most apps only need the renames below. Everything else — including the binding-based SwiftUI `ImageCropperView` — is source compatible.
@@ -659,6 +663,8 @@ Mantis provides two demo projects:
 - **MantisSwiftUIExample** (SwiftUI)
   - Demonstrates the **declarative `ImageCropper` + `CropSession` API** (Mantis 3.0+): normal crop with restore, crop shapes, fixed ratio, slide dial, perspective correction, and a custom toolbar driven by session state.
   - Also includes a "Legacy Binding API" entry showing the binding-based `ImageCropperView`, kept as a 2.x migration reference.
+
+Open `Example/MantisExample.xcodeproj` or `SwiftUIExample/MantisSwiftUIExample.xcodeproj` directly; both build Mantis from the package at the repository root.
 
 ## FAQ
 

@@ -48,7 +48,7 @@ jobs:
             # any use of newer APIs that lacks an availability guard. Do NOT
             # override IPHONEOS_DEPLOYMENT_TARGET here — that masks such breaks.
             xcodebuild test \
-               -scheme Mantis-Package \
+               -scheme Mantis \
                -destination "platform=iOS Simulator,name=iPhone 16" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \

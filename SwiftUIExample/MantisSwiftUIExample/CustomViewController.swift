@@ -6,6 +6,7 @@
 //
 
 import Mantis
+import UIKit
 
 class CustomViewController: Mantis.CropViewController {
     override func viewDidLoad() {
