@@ -4,7 +4,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/github/v/release/guoyingtao/Mantis" alt="Latest release" />
-    <img src="https://img.shields.io/badge/Swift-5.0+-orange.svg" alt="Swift 5.0+" />
+    <img src="https://img.shields.io/badge/Swift-5.9+-orange.svg" alt="Swift 5.9+" />
     <img src="https://img.shields.io/badge/platforms-iOS%20%7C%20Mac%20Catalyst-lightgrey.svg" alt="Platforms: iOS and Mac Catalyst" />
     <img src="https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg" alt="Swift Package Manager compatible" />
     <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="MIT license" />
@@ -127,7 +127,7 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 
 - iOS 15.0+
 - macOS 12.0+ (Mac Catalyst)
-- Xcode 13.0+ (Xcode 15+ recommended — enables the iOS 17 Observation-based fine-grained tracking in `CropSession`)
+- Xcode 15.0+ (Swift 5.9+)
 
 ## Installation
 
@@ -617,6 +617,7 @@ Mantis 4.0 changes how Mantis is installed rather than how it is used:
 - **Swift Package Manager only.** CocoaPods and Carthage are no longer supported; switch to the [Swift Package Manager](#swift-package-manager) or stay on Mantis 3.x.
 - **`Mantis.locateResourceBundle(by:)` is removed.** It only existed so CocoaPods static frameworks could find the resource bundle; delete the call. To use your own strings, set `config.localizationConfig.bundle` as described in [Localization](#usage).
 - **`import Mantis` no longer brings in UIKit.** The CocoaPods framework re-exported UIKit through its umbrella header; the Swift package does not. Add `import UIKit` to files that use UIKit types with only `import Mantis`.
+- **Xcode 15 or later.** The package manifest now uses `swift-tools-version:5.9`.
 
 ## Migrating from 2.x
 
