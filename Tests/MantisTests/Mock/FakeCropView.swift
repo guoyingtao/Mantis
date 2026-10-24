@@ -46,7 +46,7 @@ class FakeCropView: UIView, CropViewProtocol {
     /// When set, reset() switches cropState to it, as a real reset would.
     var cropStateAfterReset: CropState?
 
-    /// The image returned by crop(), crop(_:) and asyncCrop(completion:). nil simulates a failed crop.
+    /// The image returned by crop() and crop(_:). nil simulates a failed crop.
     var croppedImage: UIImage?
 
     var imageHorizontalToVerticalRatio: Double = 0
@@ -60,6 +60,9 @@ class FakeCropView: UIView, CropViewProtocol {
     private(set) var rotateBy90Types: [RotateBy90DegreeType] = []
     /// Completions of rotateBy90 calls, in call order. Call one to finish that rotation.
     private(set) var pendingRotationCompletions: [() -> Void] = []
+    private(set) var cropCallCount = 0
+    /// Completions of asyncCrop calls, in call order. Call one to finish that crop.
+    private(set) var pendingAsyncCropCompletions: [(CropOutput) -> Void] = []
 
     func applyCropState(with cropState: Mantis.CropState) {
         appliedCropStates.append(cropState)
@@ -192,7 +195,8 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func crop() -> CropOutput {
-        CropOutput(croppedImage,
+        cropCallCount += 1
+        return CropOutput(croppedImage,
                    Transformation(offset: .zero, 
                                   rotation: .zero,
                                   scale: .zero,
@@ -220,7 +224,7 @@ class FakeCropView: UIView, CropViewProtocol {
     }
     
     func asyncCrop(completion: @escaping (CropOutput) -> Void) {
-        completion(crop())
+        pendingAsyncCropCompletions.append(completion)
     }
     
     func getCropInfo() -> CropInfo {

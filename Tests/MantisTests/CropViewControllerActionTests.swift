@@ -323,17 +323,26 @@ final class CropViewControllerActionTests: XCTestCase {
 
         cropVC.crop()
 
+        XCTAssertEqual(fakeCropView.cropCallCount, 1)
+        XCTAssertTrue(fakeCropView.pendingAsyncCropCompletions.isEmpty)
         XCTAssertTrue(fakeDelegate.didCrop)
         XCTAssertFalse(fakeDelegate.didFailedToCrop)
     }
 
-    func testAsyncCropModeNotifiesDelegate() {
+    func testAsyncCropModeCropsAsynchronouslyThenNotifiesDelegate() throws {
         var config = Mantis.Config()
         config.cropMode = .async
         makeCropViewController(config: config)
         fakeCropView.croppedImage = TestHelper.createATestImage(bySize: CGSize(width: 10, height: 10))
 
         cropVC.crop()
+
+        XCTAssertEqual(fakeCropView.cropCallCount, 0)
+        XCTAssertEqual(fakeCropView.pendingAsyncCropCompletions.count, 1)
+        XCTAssertFalse(fakeDelegate.didCrop)
+
+        let finishCrop = try XCTUnwrap(fakeCropView.pendingAsyncCropCompletions.first)
+        finishCrop(fakeCropView.crop())
 
         XCTAssertTrue(fakeDelegate.didCrop)
     }
