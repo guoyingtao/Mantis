@@ -17,10 +17,11 @@ jobs:
             default-branch: master
 
          # Tags created with GITHUB_TOKEN never trigger other workflows, so the
-         # sources-only mirror has to be dispatched explicitly.
+         # sources-only mirror has to be dispatched explicitly. The job has no
+         # checkout, so gh needs the repository spelled out.
          - name: Mirror the release to Mantis-spm
            if: ${{ steps.release.outputs.release_created }}
            env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             TAG: ${{ steps.release.outputs.tag_name }}
-           run: gh workflow run mirror-spm.yml --ref master -f "tag=$TAG"
+           run: gh workflow run mirror-spm.yml --repo "$GITHUB_REPOSITORY" --ref master -f "tag=$TAG"
