@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Mantis",
     defaultLocalization: "en",
-    platforms: [.iOS(.v15), .macCatalyst(.v15)],
+    platforms: [.iOS(.v17), .macCatalyst(.v17)],
     products: [
         .library(
             name: "Mantis",

@@ -125,8 +125,8 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 
 ## Requirements
 
-- iOS 15.0+
-- macOS 12.0+ (Mac Catalyst)
+- iOS 17.0+
+- Mac Catalyst 17.0+ (macOS 14.0+)
 - Xcode 15.0+ (Swift 5.9+)
 
 ## Installation
@@ -184,7 +184,7 @@ ImageCropper(image: myImage)
     .onCrop { result in croppedImage = result.croppedImage }
 ```
 
-- **`CropSession`** — an observable handle to a live crop session. It exposes `canUndo`, `canRedo`, `isResettable` and the live `transformation` as observable state, and drives the cropper with plain methods (`rotate()`, `flip()`, `crop()`, `undo()`, `redo()`, `reset()`, `setAspectRatio()`) instead of the old enum-binding action pattern. On iOS 17+ it participates in the Observation framework for fine-grained, per-property updates; on iOS 15/16 it behaves as a plain `ObservableObject`.
+- **`CropSession`** — an observable handle to a live crop session. It exposes `canUndo`, `canRedo`, `isResettable` and the live `transformation` as observable state, and drives the cropper with plain methods (`rotate()`, `flip()`, `crop()`, `undo()`, `redo()`, `reset()`, `setAspectRatio()`) instead of the old enum-binding action pattern. It participates in the Observation framework for fine-grained, per-property updates and is also an `ObservableObject`.
 - **Independent undo history per cropper** — the internal transform stack is no longer a global singleton, so two croppers shown at the same time (e.g. iPad multi-window) keep separate undo/redo histories.
 
 The binding-based `ImageCropperView` API remains fully supported. See the [SwiftUI usage section](#usage) for the full API and the MantisSwiftUIExample project for working demos.
@@ -264,7 +264,7 @@ struct MyView: View {
 
 To build your own controls, attach a `CropSession`. It exposes `canUndo`, `canRedo`,
 `isResettable` and the live `transformation` as observable state (fine-grained
-`Observation` tracking on iOS 17+, `ObservableObject` on iOS 15/16), and drives the
+`Observation` tracking, or `ObservableObject` with `@StateObject`), and drives the
 cropper with plain methods instead of enum bindings:
 
 ```swift
@@ -612,12 +612,13 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 
 ## Migrating from 3.x
 
-Mantis 4.0 changes how Mantis is installed rather than how it is used:
+Mantis 4.0 changes how Mantis is installed and which systems it runs on; the API is unchanged apart from one removed function:
 
 - **Swift Package Manager only.** CocoaPods and Carthage are no longer supported; switch to the [Swift Package Manager](#swift-package-manager) or stay on Mantis 3.x.
 - **`Mantis.locateResourceBundle(by:)` is removed.** It only existed so CocoaPods static frameworks could find the resource bundle; delete the call. To use your own strings, set `config.localizationConfig.bundle` as described in [Localization](#usage).
 - **`import Mantis` no longer brings in UIKit.** The CocoaPods framework re-exported UIKit through its umbrella header; the Swift package does not. Add `import UIKit` to files that use UIKit types with only `import Mantis`.
 - **Xcode 15 or later.** The package manifest now uses `swift-tools-version:5.9`.
+- **iOS 17 / Mac Catalyst 17 or later.** Apps that still support iOS 15 or 16 can stay on Mantis 3.x.
 
 ## Migrating from 2.x
 
