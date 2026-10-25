@@ -13,7 +13,6 @@
 		5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B18217A9EDF00582874 /* Main.storyboard */; };
 		5FC10B1C217A9EE100582874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B1B217A9EE100582874 /* Assets.xcassets */; };
 		5FC10B1F217A9EE100582874 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */; };
-		5FC10B2A217A9EE100582874 /* MantisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC10B29217A9EE100582874 /* MantisTests.swift */; };
 		5FD045EA245619D400B9D3D2 /* CustomizedCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD045E9245619D400B9D3D2 /* CustomizedCropToolbar.swift */; };
 		5FEBA88221961E4A0018DE62 /* EmbeddedCropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */; };
 		66F909BD287B601A007E2FC6 /* MyNavigationCropToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F909BC287B601A007E2FC6 /* MyNavigationCropToolbar.swift */; };
@@ -23,16 +22,6 @@
 		F24DCFE529A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24DCFE429A8FA7F00D8E8C1 /* CustomWaitingIndicator.swift */; };
 		F2C58BD82E03AD08006F92CF /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C58BD72E03AD08006F92CF /* DemoViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		5FC10B26217A9EE100582874 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5FC10B09217A9EDF00582874 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5FC10B10217A9EDF00582874;
-			remoteInfo = Mantis;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		5F0852B4237918510031B75D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -46,9 +35,6 @@
 		5FC10B16217A9EDF00582874 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5FC10B1B217A9EE100582874 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5FC10B20217A9EE100582874 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantisExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FC10B29217A9EE100582874 /* MantisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisTests.swift; sourceTree = "<group>"; };
-		5FC10B2B217A9EE100582874 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FD045E9245619D400B9D3D2 /* CustomizedCropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizedCropToolbar.swift; sourceTree = "<group>"; };
 		5FEBA88121961E4A0018DE62 /* EmbeddedCropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedCropViewController.swift; sourceTree = "<group>"; };
 		66F909BC287B601A007E2FC6 /* MyNavigationCropToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNavigationCropToolbar.swift; sourceTree = "<group>"; };
@@ -64,13 +50,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAAFA9646945473AA116FE36 /* Mantis in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5FC10B22217A9EE100582874 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +74,6 @@
 				5FC10B1B217A9EE100582874 /* Assets.xcassets */,
 				5FC10B1D217A9EE100582874 /* LaunchScreen.storyboard */,
 				5FC10B20217A9EE100582874 /* Info.plist */,
-				5FC10B28217A9EE100582874 /* MantisTests */,
 				5FC10B12217A9EDF00582874 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -104,18 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				5FC10B11217A9EDF00582874 /* MantisExample.app */,
-				5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		5FC10B28217A9EE100582874 /* MantisTests */ = {
-			isa = PBXGroup;
-			children = (
-				5FC10B29217A9EE100582874 /* MantisTests.swift */,
-				5FC10B2B217A9EE100582874 /* Info.plist */,
-			);
-			path = MantisTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,24 +109,6 @@
 			productReference = 5FC10B11217A9EDF00582874 /* MantisExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5FC10B24217A9EE100582874 /* MantisExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5FC10B31217A9EE100582874 /* Build configuration list for PBXNativeTarget "MantisExampleTests" */;
-			buildPhases = (
-				5FC10B21217A9EE100582874 /* Sources */,
-				5FC10B22217A9EE100582874 /* Frameworks */,
-				5FC10B23217A9EE100582874 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				5FC10B27217A9EE100582874 /* PBXTargetDependency */,
-			);
-			name = MantisExampleTests;
-			productName = MantisTests;
-			productReference = 5FC10B25217A9EE100582874 /* MantisExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -172,11 +122,6 @@
 					5FC10B10217A9EDF00582874 = {
 						CreatedOnToolsVersion = 10.0;
 						LastSwiftMigration = 1020;
-					};
-					5FC10B24217A9EE100582874 = {
-						CreatedOnToolsVersion = 10.0;
-						LastSwiftMigration = 1020;
-						TestTargetID = 5FC10B10217A9EDF00582874;
 					};
 				};
 			};
@@ -198,7 +143,6 @@
 			projectRoot = "";
 			targets = (
 				5FC10B10217A9EDF00582874 /* MantisExample */,
-				5FC10B24217A9EE100582874 /* MantisExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -211,13 +155,6 @@
 				5FC10B1F217A9EE100582874 /* LaunchScreen.storyboard in Resources */,
 				5FC10B1C217A9EE100582874 /* Assets.xcassets in Resources */,
 				5FC10B1A217A9EDF00582874 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5FC10B23217A9EE100582874 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,23 +178,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5FC10B21217A9EE100582874 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5FC10B2A217A9EE100582874 /* MantisTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		5FC10B27217A9EE100582874 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5FC10B10217A9EDF00582874 /* MantisExample */;
-			targetProxy = 5FC10B26217A9EE100582874 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		5FC10B18217A9EDF00582874 /* Main.storyboard */ = {
@@ -451,50 +372,6 @@
 			};
 			name = Release;
 		};
-		5FC10B32217A9EE100582874 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Z9GT6JU7N2;
-				INFOPLIST_FILE = MantisTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MantisExample.app/MantisExample";
-			};
-			name = Debug;
-		};
-		5FC10B33217A9EE100582874 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Z9GT6JU7N2;
-				INFOPLIST_FILE = MantisTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.echo.MantisTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MantisExample.app/MantisExample";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -512,15 +389,6 @@
 			buildConfigurations = (
 				5FC10B2F217A9EE100582874 /* Debug */,
 				5FC10B30217A9EE100582874 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		5FC10B31217A9EE100582874 /* Build configuration list for PBXNativeTarget "MantisExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5FC10B32217A9EE100582874 /* Debug */,
-				5FC10B33217A9EE100582874 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
