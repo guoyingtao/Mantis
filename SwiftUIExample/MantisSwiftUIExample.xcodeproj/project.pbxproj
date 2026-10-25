@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38550CC1993223B688D9F985 /* Pods_MantisSwiftUIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D522526BBC7FB0BCB92F0553 /* Pods_MantisSwiftUIExample.framework */; };
+		3A0C50212E1B00020063EE12 /* DeclarativeCropperDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0C50202E1B00020063EE11 /* DeclarativeCropperDemoView.swift */; };
 		5F5266B3263B490400615369 /* MantisSwiftUIExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5266B2263B490400615369 /* MantisSwiftUIExampleApp.swift */; };
 		5F5266B5263B490400615369 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5266B4263B490400615369 /* ContentView.swift */; };
 		5F5266B7263B490500615369 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F5266B6263B490500615369 /* Assets.xcassets */; };
 		5F5266BA263B490500615369 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F5266B9263B490500615369 /* Preview Assets.xcassets */; };
+		64C63FA0FC76D0711B026BCC /* Mantis in Frameworks */ = {isa = PBXBuildFile; productRef = C98AEC773DE4D0AA2D9E57A9 /* Mantis */; };
 		F24836F5299DE6AD0008477C /* ImageCropperWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F4299DE6AD0008477C /* ImageCropperWrapper.swift */; };
-		3A0C50212E1B00020063EE12 /* DeclarativeCropperDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0C50202E1B00020063EE11 /* DeclarativeCropperDemoView.swift */; };
 		F24836F7299DE7630008477C /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F6299DE7630008477C /* AdaptiveStack.swift */; };
 		F24836F9299E14B00008477C /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836F8299E14B00008477C /* CustomViewController.swift */; };
 		F24836FB299E46C90008477C /* CropShapeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24836FA299E46C90008477C /* CropShapeListView.swift */; };
@@ -23,17 +23,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		314E15DC6FC372D8CA0DCF12 /* Pods-MantisSwiftUIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisSwiftUIExample.debug.xcconfig"; path = "Target Support Files/Pods-MantisSwiftUIExample/Pods-MantisSwiftUIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		3A0C50202E1B00020063EE11 /* DeclarativeCropperDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclarativeCropperDemoView.swift; sourceTree = "<group>"; };
 		5F5266AF263B490400615369 /* MantisSwiftUIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MantisSwiftUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F5266B2263B490400615369 /* MantisSwiftUIExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MantisSwiftUIExampleApp.swift; sourceTree = "<group>"; };
 		5F5266B4263B490400615369 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5F5266B6263B490500615369 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5F5266B9263B490500615369 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5F5266BB263B490500615369 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7B97999EBC5EA043ADD0C5B3 /* Pods-MantisSwiftUIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantisSwiftUIExample.release.xcconfig"; path = "Target Support Files/Pods-MantisSwiftUIExample/Pods-MantisSwiftUIExample.release.xcconfig"; sourceTree = "<group>"; };
-		D522526BBC7FB0BCB92F0553 /* Pods_MantisSwiftUIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantisSwiftUIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F24836F4299DE6AD0008477C /* ImageCropperWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropperWrapper.swift; sourceTree = "<group>"; };
-		3A0C50202E1B00020063EE11 /* DeclarativeCropperDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclarativeCropperDemoView.swift; sourceTree = "<group>"; };
 		F24836F6299DE7630008477C /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		F24836F8299E14B00008477C /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
 		F24836FA299E46C90008477C /* CropShapeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropShapeListView.swift; sourceTree = "<group>"; };
@@ -47,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38550CC1993223B688D9F985 /* Pods_MantisSwiftUIExample.framework in Frameworks */,
+				64C63FA0FC76D0711B026BCC /* Mantis in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,8 +56,6 @@
 			children = (
 				5F5266B1263B490400615369 /* MantisSwiftUIExample */,
 				5F5266B0263B490400615369 /* Products */,
-				E819AC533891B6E45B1F8361 /* Pods */,
-				8872FBB3C9F016A291C8B7D9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,23 +95,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		8872FBB3C9F016A291C8B7D9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				D522526BBC7FB0BCB92F0553 /* Pods_MantisSwiftUIExample.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E819AC533891B6E45B1F8361 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				314E15DC6FC372D8CA0DCF12 /* Pods-MantisSwiftUIExample.debug.xcconfig */,
-				7B97999EBC5EA043ADD0C5B3 /* Pods-MantisSwiftUIExample.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -124,17 +102,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5F5266BE263B490500615369 /* Build configuration list for PBXNativeTarget "MantisSwiftUIExample" */;
 			buildPhases = (
-				FB1E77EAFBE03D4C41724AEC /* [CP] Check Pods Manifest.lock */,
 				5F5266AB263B490400615369 /* Sources */,
 				5F5266AC263B490400615369 /* Frameworks */,
 				5F5266AD263B490400615369 /* Resources */,
-				7DDA745B779DE5F5F5C67A78 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = MantisSwiftUIExample;
+			packageProductDependencies = (
+				C98AEC773DE4D0AA2D9E57A9 /* Mantis */,
+			);
 			productName = MantisSwiftUIExample;
 			productReference = 5F5266AF263B490400615369 /* MantisSwiftUIExample.app */;
 			productType = "com.apple.product-type.application";
@@ -162,6 +141,9 @@
 				Base,
 			);
 			mainGroup = 5F5266A6263B490400615369;
+			packageReferences = (
+				A322CD5A8D4D43CAF9AFD7E8 /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = 5F5266B0263B490400615369 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -182,48 +164,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7DDA745B779DE5F5F5C67A78 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisSwiftUIExample/Pods-MantisSwiftUIExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MantisSwiftUIExample/Pods-MantisSwiftUIExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MantisSwiftUIExample/Pods-MantisSwiftUIExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FB1E77EAFBE03D4C41724AEC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MantisSwiftUIExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5F5266AB263B490400615369 /* Sources */ = {
@@ -297,7 +237,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -352,7 +292,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -364,7 +304,6 @@
 		};
 		5F5266BF263B490500615369 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 314E15DC6FC372D8CA0DCF12 /* Pods-MantisSwiftUIExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -373,7 +312,7 @@
 				DEVELOPMENT_TEAM = 3V26Q55U3S;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MantisSwiftUIExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -387,7 +326,6 @@
 		};
 		5F5266C0263B490500615369 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B97999EBC5EA043ADD0C5B3 /* Pods-MantisSwiftUIExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -396,7 +334,7 @@
 				DEVELOPMENT_TEAM = 3V26Q55U3S;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MantisSwiftUIExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -430,6 +368,21 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A322CD5A8D4D43CAF9AFD7E8 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C98AEC773DE4D0AA2D9E57A9 /* Mantis */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A322CD5A8D4D43CAF9AFD7E8 /* XCLocalSwiftPackageReference ".." */;
+			productName = Mantis;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5F5266A7263B490400615369 /* Project object */;
 }

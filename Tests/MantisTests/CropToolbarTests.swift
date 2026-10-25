@@ -8,6 +8,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class CropToolbarTests: XCTestCase {
     
     var cropToolbar = CropToolbar(frame: .zero)

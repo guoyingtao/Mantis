@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public protocol RotationControlViewProtocol: UIView {
     /**
      Set it to true if you want CropView to control the frame of your own rotation control view.
@@ -76,7 +77,7 @@ public protocol RotationControlViewProtocol: UIView {
     func getTotalRotationValue() -> CGFloat
 }
 
-extension RotationControlViewProtocol {
+public extension RotationControlViewProtocol {
     func setupUI(withAllowableFrame allowableFrame: CGRect) {}
     func getTouchTarget(with point: CGPoint) -> UIView {
         return self
@@ -98,7 +99,9 @@ extension RotationControlViewProtocol {
     func setAccessibilityValue() {
         accessibilityValue = accessibilityDegreesText()
     }
-    
+}
+
+extension RotationControlViewProtocol {
     /// The rounded rotation value as VoiceOver reads it, e.g. "1 degree" or "-5 degrees"
     func accessibilityDegreesText() -> String {
         let degreeValue = Int(round(getTotalRotationValue()))

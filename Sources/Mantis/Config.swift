@@ -26,7 +26,7 @@ import UIKit
 
 // MARK: - Localization
 public final class LocalizationConfig {
-    public var bundle: Bundle? = Mantis.Config.bundle
+    public var bundle: Bundle?
     public var tableName = "MantisLocalizable"
 }
     
@@ -57,22 +57,6 @@ public struct Config {
     
     var customRatios: [(width: Int, height: Int)] = []
 
-    static private var bundleIdentifier: String = {
-        return "com.echo.framework.Mantis"
-    }()
-
-    static private(set) var bundle: Bundle? = {
-        guard let bundle = Bundle(identifier: bundleIdentifier) else {
-            return nil
-        }
-        
-        guard let url = bundle.url(forResource: "MantisResources", withExtension: "bundle") else {
-            return nil
-        }
-        
-        return Bundle(url: url)
-    }()
-    
     public var enableUndoRedo: Bool = false
     
     static var language: Language?

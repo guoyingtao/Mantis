@@ -53,32 +53,16 @@ final class SlideRuler: UIView {
         
         positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
         positionInfoHelper.slideRuler = self
-        // iOS 17+ uses the modern trait-change registration. Earlier versions
-        // (the library supports iOS 15) fall back to `traitCollectionDidChange`
-        // below, since `registerForTraitChanges` is unavailable before iOS 17.
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previous: UITraitCollection) in
-                if self.traitCollection.hasDifferentColorAppearance(comparedTo: previous) {
-                    self.applyColorsForCurrentTraitCollection()
-                }
+        // Refresh the colors on a light/dark switch.
+        registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previous: UITraitCollection) in
+            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previous) {
+                self.applyColorsForCurrentTraitCollection()
             }
         }
     }
 
     required init?(coder: NSCoder) {
         fatalError()
-    }
-
-    // iOS 16 and earlier: `registerForTraitChanges` is unavailable, so use the
-    // (pre-iOS-17) trait-change hook to refresh colors on a light/dark switch.
-    // On iOS 17+ the registration above handles this instead.
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard #unavailable(iOS 17.0) else { return }
-        if let previousTraitCollection,
-           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            applyColorsForCurrentTraitCollection()
-        }
     }
 
     /// Reapplies the configured colors to all layers. Called on a color-appearance

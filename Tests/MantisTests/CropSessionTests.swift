@@ -7,11 +7,10 @@
 
 import XCTest
 import Combine
-#if canImport(Observation)
 import Observation
-#endif
 @testable import Mantis
 
+@MainActor
 final class CropSessionTests: XCTestCase {
 
     var session: CropSession!
@@ -74,27 +73,19 @@ final class CropSessionTests: XCTestCase {
         XCTAssertEqual(changeCount, 1)
     }
 
-    func testObservationTrackingFiresOniOS17() throws {
-#if canImport(Observation)
-        guard #available(iOS 17.0, macCatalyst 17.0, *) else {
-            throw XCTSkip("Observation requires iOS 17")
-        }
-
-        var changeFired = false
+    func testObservationTrackingIsPerProperty() {
+        let changeFired = ChangeFlag()
         withObservationTracking {
             _ = session.canUndo
         } onChange: {
-            changeFired = true
+            changeFired.value = true
         }
 
         session.canRedo = true
-        XCTAssertFalse(changeFired, "Tracking must be per-property, not object-wide")
+        XCTAssertFalse(changeFired.value, "Tracking must be per-property, not object-wide")
 
         session.canUndo = true
-        XCTAssertTrue(changeFired)
-#else
-        throw XCTSkip("Observation framework not available")
-#endif
+        XCTAssertTrue(changeFired.value)
     }
 
     func testActionsWithoutAttachedCropperAreNoOps() {
@@ -124,6 +115,12 @@ final class CropSessionTests: XCTestCase {
         XCTAssertFalse(session.canRedo)
         XCTAssertFalse(session.isResettable)
     }
+}
+
+/// Lets the `@Sendable` `onChange` closure of `withObservationTracking` record
+/// that it ran. The closure fires synchronously on the main actor in these tests.
+private final class ChangeFlag: @unchecked Sendable {
+    var value = false
 }
 
 final class ImageCropperModifierTests: XCTestCase {
