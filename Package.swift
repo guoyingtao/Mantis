@@ -15,7 +15,8 @@ let package = Package(
     targets: [
         .target(
             name: "Mantis",
-            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")]
+            resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
+            swiftSettings: [.enableUpcomingFeature("IsolatedDefaultValues")]
         ),
         .testTarget(
             name: "MantisTests",

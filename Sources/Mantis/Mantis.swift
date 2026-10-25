@@ -25,6 +25,7 @@
 import UIKit
 
 // MARK: - APIs
+@MainActor
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
@@ -39,6 +40,7 @@ public func cropViewController(image: UIImage,
     return cropViewController
 }
 
+@MainActor
 public func cropViewController<T: CropViewController>(image: UIImage,
                                                       config: Mantis.Config = Mantis.Config(),
                                                       cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
@@ -53,6 +55,7 @@ public func cropViewController<T: CropViewController>(image: UIImage,
     return cropViewController
 }
 
+@MainActor
 public func setupCropViewController(_ cropViewController: Mantis.CropViewController,
                                     with image: UIImage,
                                     and config: Mantis.Config = Mantis.Config(),
@@ -162,6 +165,7 @@ private func applySlideDialAppearance(to config: inout SlideDialConfig, for mode
     config.centralDotColor = AppearanceColorPreset.slideDialCentralDotColor(for: mode)
 }
 
+@MainActor
 private func buildCropView(withImage image: UIImage,
                            config cropViewConfig: CropViewConfig,
                            rotationControlView: RotationControlViewProtocol?) -> CropViewProtocol {
@@ -188,6 +192,7 @@ private func buildCropViewModel(with cropViewConfig: CropViewConfig) -> CropView
     )
 }
 
+@MainActor
 private func buildCropWorkbenchView(with cropViewConfig: CropViewConfig, and imageContainer: ImageContainerProtocol) -> CropWorkbenchViewProtocol {
     CropWorkbenchView(frame: .zero,
                    minimumZoomScale: cropViewConfig.minimumZoomScale,
@@ -195,6 +200,7 @@ private func buildCropWorkbenchView(with cropViewConfig: CropViewConfig, and ima
                    imageContainer: imageContainer)
 }
 
+@MainActor
 private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> CropMaskViewManagerProtocol {
     
     let dimmingView = CropDimmingView(cropShapeType: cropViewConfig.cropShapeType)
@@ -214,6 +220,7 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
 }
 
+@MainActor
 private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig,
                                               cropView: CropView,
                                               rotationControlView: RotationControlViewProtocol?) {

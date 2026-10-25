@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 public protocol ActivityIndicatorProtocol: UIView {
     func startAnimating()
     func stopAnimating()

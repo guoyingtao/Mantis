@@ -56,7 +56,8 @@ public enum CropAspectRatio: Equatable, Sendable {
 ///
 /// The session is both an `ObservableObject` and `Observable`, so it can be
 /// stored with `@StateObject` or with `@State` and fine-grained, per-property
-/// Observation tracking. All members must be used from the main thread.
+/// Observation tracking. It is isolated to the main actor.
+@MainActor
 public final class CropSession: ObservableObject {
 
     weak var cropViewController: CropViewController?

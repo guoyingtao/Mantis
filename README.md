@@ -612,10 +612,12 @@ let cropViewController: CustomViewController = Mantis.cropViewController(image: 
 
 ## Migrating from 3.x
 
-Mantis 4.0 changes how Mantis is installed and which systems it runs on; the API is unchanged apart from one removed function:
+Mantis 4.0 changes how Mantis is installed and which systems it runs on, removes one function, and isolates the UI API to the main actor:
 
 - **Swift Package Manager only.** CocoaPods and Carthage are no longer supported; switch to the [Swift Package Manager](#swift-package-manager) or stay on Mantis 3.x.
 - **`Mantis.locateResourceBundle(by:)` is removed.** It only existed so CocoaPods static frameworks could find the resource bundle; delete the call. To use your own strings, set `config.localizationConfig.bundle` as described in [Localization](#usage).
+- **The UI API is `@MainActor`.** `CropToolbarProtocol`, `CropToolbarDelegate`, `CropToolbarIconProvider`, `RotationControlViewProtocol`, `ActivityIndicatorProtocol`, `CropSession`, `Mantis.cropViewController(...)` and `Mantis.setupCropViewController(...)` are now main-actor isolated, as `CropViewControllerDelegate` already was. In the Swift 6 language mode, custom toolbars, rotation controls, activity indicators and icon providers now conform without isolation errors. Calls from view controllers and SwiftUI views need no change; move calls made from a nonisolated context, such as a detached task or a plain helper function, onto the main actor (for example by marking the caller `@MainActor`). `Mantis.crop(image:by:)` and `Mantis.downsample(image:maxPixelCount:sourceData:)` stay nonisolated, so offline cropping can still run in the background.
+- **Custom rotation controls only need the required members.** The default implementations of `RotationControlViewProtocol` (`setupUI(withAllowableFrame:)`, `getTouchTarget(with:)`, `handleDeviceRotation()`, `getLengthRatio()`, `setAccessibilities()` and `setAccessibilityValue()`) are now public. In 3.x they were internal, so a rotation control outside Mantis had to implement all of them.
 - **`import Mantis` no longer brings in UIKit.** The CocoaPods framework re-exported UIKit through its umbrella header; the Swift package does not. Add `import UIKit` to files that use UIKit types with only `import Mantis`.
 - **Xcode 15 or later.** The package manifest now uses `swift-tools-version:5.9`.
 - **iOS 17 / Mac Catalyst 17 or later.** Apps that still support iOS 15 or 16 can stay on Mantis 3.x.
