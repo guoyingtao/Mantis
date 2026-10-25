@@ -85,6 +85,7 @@
 		AA000000000000000000SR01 /* SlideRulerPositionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000SR02 /* SlideRulerPositionHelperTests.swift */; };
 		AA000000000000000000TR01 /* TransformRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000TR02 /* TransformRecordTests.swift */; };
 		AA000000000000000000OR01 /* OrientationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000OR02 /* OrientationTests.swift */; };
+		AA000000000000000000LI01 /* LayoutInvariantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000LI02 /* LayoutInvariantTests.swift */; };
 		F2058F252A4004E3008DEBAA /* SlideDialConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */; };
 		F2058F272A400508008DEBAA /* SlideDialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F262A400508008DEBAA /* SlideDialViewModel.swift */; };
 		F2058F292A417D97008DEBAA /* SlideDialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2058F282A417D97008DEBAA /* SlideDialTests.swift */; };
@@ -261,6 +262,7 @@
 		AA000000000000000000SR02 /* SlideRulerPositionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideRulerPositionHelperTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000TR02 /* TransformRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformRecordTests.swift; sourceTree = "<group>"; };
 		AA000000000000000000OR02 /* OrientationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationTests.swift; sourceTree = "<group>"; };
+		AA000000000000000000LI02 /* LayoutInvariantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutInvariantTests.swift; sourceTree = "<group>"; };
 		E86127BD26206D01008365BC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/MantisLocalizable.strings; sourceTree = "<group>"; };
 		F2058F242A4004E3008DEBAA /* SlideDialConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialConfig.swift; sourceTree = "<group>"; };
 		F2058F262A400508008DEBAA /* SlideDialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideDialViewModel.swift; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 				AA000000000000000000SR02 /* SlideRulerPositionHelperTests.swift */,
 				AA000000000000000000TR02 /* TransformRecordTests.swift */,
 				AA000000000000000000OR02 /* OrientationTests.swift */,
+				AA000000000000000000LI02 /* LayoutInvariantTests.swift */,
 			);
 			name = MantisTests;
 			path = Tests/MantisTests;
@@ -858,6 +861,7 @@
 				AA000000000000000000SR01 /* SlideRulerPositionHelperTests.swift in Sources */,
 				AA000000000000000000TR01 /* TransformRecordTests.swift in Sources */,
 				AA000000000000000000OR01 /* OrientationTests.swift in Sources */,
+				AA000000000000000000LI01 /* LayoutInvariantTests.swift in Sources */,
 				F24DCFE629A9E53E00D8E8C1 /* UIViewExtensions.swift in Sources */,
 				OBJ_119 /* MantisTests.swift in Sources */,
 				660D4F5D298E33F800C4E11A /* ImageContainerTests.swift in Sources */,

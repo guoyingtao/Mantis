@@ -106,9 +106,10 @@ final class CropViewControllerTests: XCTestCase {
     }
 }
 
-// Lets tests call viewWillTransition(to:with:) directly. Defined here rather than
-// in Mock/ so the Xcode project file doesn't need a new entry.
-private final class FakeTransitionCoordinator: NSObject, UIViewControllerTransitionCoordinator {
+// Lets tests call viewWillTransition(to:with:) directly. Also used by
+// LayoutInvariantTests. Defined here rather than in Mock/ so the Xcode project
+// file doesn't need a new entry.
+final class FakeTransitionCoordinator: NSObject, UIViewControllerTransitionCoordinator {
     var isAnimated: Bool { false }
     var presentationStyle: UIModalPresentationStyle { .none }
     var initiallyInteractive: Bool { false }
