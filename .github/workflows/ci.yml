@@ -56,6 +56,31 @@ jobs:
            env:
             NSUnbufferedIO: YES
 
+   oldest-xcode:
+      name: Build (oldest supported Xcode)
+      # The README promises Xcode 15.0+, and newer toolchains hide breaks such
+      # as an upcoming-feature flag or an SDK annotation the old one lacks.
+      # Build only: the test job above already runs the suite.
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+           with:
+            persist-credentials: false
+
+         - name: Select Xcode
+           uses: maxim-lobanov/setup-xcode@v1
+           with:
+            xcode-version: "15.0.1"
+
+         - name: Build package and tests
+           run: |
+            xcodebuild -version
+            xcodebuild build-for-testing \
+               -quiet \
+               -scheme Mantis \
+               -destination "generic/platform=iOS Simulator" \
+               CODE_SIGNING_ALLOWED=NO
+
    swiftlint:
       name: SwiftLint
       # Run inside the official SwiftLint image on Linux: no install step and
