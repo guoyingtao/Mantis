@@ -247,7 +247,13 @@ extension CGImage {
         // values. The flip() method builds the transform via
         //   R(rot) · S(flip) · R(extra)
         // which does not decompose cleanly into a single rotation + scale pair.
-        let inverseTransform = reconstruction.scrollViewTransform.inverted()
+        //
+        // `inverted()` returns a singular transform unchanged, which would map the
+        // crop box onto the wrong region. A decoded CropInfo can carry one, so refuse it.
+        let scrollViewTransform = reconstruction.scrollViewTransform
+        let determinant = scrollViewTransform.a * scrollViewTransform.d - scrollViewTransform.b * scrollViewTransform.c
+        guard determinant.isFinite, abs(determinant) > 1e-10 else { return nil }
+        let inverseTransform = scrollViewTransform.inverted()
         let contentCorners = screenCorners.map { $0.applying(inverseTransform) }
 
         // Step 3: Inverse-project through sublayerTransform to find un-warped content positions

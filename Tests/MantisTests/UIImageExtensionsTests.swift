@@ -263,10 +263,25 @@ final class UIImageExtensionsTests: XCTestCase {
 
         let expected = CGSize(width: 400, height: 320) // 1000/500 * 200, 800/400 * 160
         XCTAssertEqual(image.getOutputCropImageSize(by: info), expected)
+
+        // Same pixels at scale 1 give the reference content.
+        let reference = try XCTUnwrap(UIImage(cgImage: cgImage, scale: 1, orientation: .up).crop(by: info))
+        let samplePoints = [CGPoint(x: 0.25, y: 0.25), CGPoint(x: 0.75, y: 0.25),
+                            CGPoint(x: 0.25, y: 0.75), CGPoint(x: 0.75, y: 0.75)]
         for cropped in [image.crop(by: info), image.cropWithCIImage(by: info)] {
             XCTAssertEqual(cropped?.cgImage?.width, Int(expected.width))
             XCTAssertEqual(cropped?.cgImage?.height, Int(expected.height))
             XCTAssertEqual(cropped?.scale, 1)
+
+            let output = try XCTUnwrap(cropped)
+            for point in samplePoints {
+                let actualPixel = try XCTUnwrap(pixel(of: output, atNormalized: point))
+                let referencePixel = try XCTUnwrap(pixel(of: reference, atNormalized: point))
+                for channel in 0..<3 {
+                    XCTAssertEqual(actualPixel[channel], referencePixel[channel], accuracy: 0.01,
+                                   "pixel mismatch at \(point) channel \(channel)")
+                }
+            }
         }
     }
 }

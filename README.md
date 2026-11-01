@@ -155,7 +155,7 @@ Or in `Package.swift`:
 
 and in your target's dependencies: `.product(name: "Mantis", package: "Mantis-spm")`. The product and module are unchanged, so `import Mantis` works as before.
 
-A native macOS app, or any target that only replays saved crops, depends on `.product(name: "MantisCore", package: "Mantis-spm")` instead. See [Cropping on macOS with MantisCore](#usage).
+A native macOS app, or any target that only replays saved crops, depends on `.product(name: "MantisCore", package: "Mantis-spm")` instead. `MantisCore` is available from Mantis 4.0. See [Cropping on macOS with MantisCore](#usage).
 
 Depending on `https://github.com/guoyingtao/Mantis.git` directly still works, but downloads far more. Don't use both URLs in the same project: SwiftPM derives the package identity from the URL (`mantis-spm` vs `mantis`) and would treat them as two packages exporting the same product.
 
@@ -483,6 +483,8 @@ let recropped = Mantis.crop(image: originalImage, by: cropInfo)
 As of **Mantis 4.0**, the crop engine lives in a separate, UIKit-free module, `MantisCore`, which also builds for native macOS (AppKit) apps. It has no crop UI: it applies a `CropInfo` that the Mantis UI produced on iOS, iPadOS or Mac Catalyst — for example one your iOS app saved and synced — to the full-resolution original.
 
 ```swift
+import Foundation
+import ImageIO
 import MantisCore
 
 let cropInfo = try JSONDecoder().decode(CropInfo.self, from: data)

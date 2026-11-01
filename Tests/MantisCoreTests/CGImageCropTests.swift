@@ -42,6 +42,23 @@ final class CGImageCropTests: XCTestCase {
                        decode: nil, shouldInterpolate: true, intent: .defaultIntent)!
     }
 
+    /// Four flat color quadrants. Survives JPEG compression well enough that any
+    /// rotation or mirroring still shows up as swapped quadrants.
+    private func makeQuadrantImage(width: Int, height: Int) -> CGImage {
+        let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+                                space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        let halfWidth = CGFloat(width) / 2
+        let halfHeight = CGFloat(height) / 2
+        let colors: [(red: CGFloat, green: CGFloat, blue: CGFloat)] = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 0)]
+        for (index, color) in colors.enumerated() {
+            context.setFillColor(CGColor(srgbRed: color.red, green: color.green, blue: color.blue, alpha: 1))
+            context.fill(CGRect(x: CGFloat(index % 2) * halfWidth, y: CGFloat(index / 2) * halfHeight,
+                                width: halfWidth, height: halfHeight))
+        }
+        return context.makeImage()!
+    }
+
     private struct Pixels {
         var width: Int
         var height: Int
@@ -236,6 +253,21 @@ final class CGImageCropTests: XCTestCase {
         XCTAssertNil(crop(image, by: plain, maxImagePixelCount: 100))
     }
 
+    func testSingularScrollViewTransformReturnsNil() {
+        // A corrupted decoded CropInfo must not be inverted into a wrong region.
+        let image = makePatternImage()
+        let size = image.orientedSize(.up)
+        for singular in [CGAffineTransform(scaleX: 0, y: 1), CGAffineTransform(a: 1, b: 2, c: 2, d: 4, tx: 0, ty: 0)] {
+            var skewed = makeCropInfo(uprightSize: size, horizontalSkewDegrees: 5)
+            skewed.viewReconstruction?.scrollViewTransform = singular
+            XCTAssertNil(crop(image, by: skewed), "perspective path with \(singular)")
+
+            var plain = makeCropInfo(uprightSize: size)
+            plain.viewReconstruction?.scrollViewTransform = singular
+            XCTAssertNil(crop(image, by: plain, maxImagePixelCount: 100), "CIImage path with \(singular)")
+        }
+    }
+
     func testCropInfoCodableRoundTripKeepsViewReconstruction() throws {
         let image = makePatternImage()
         let info = makeCropInfo(uprightSize: image.orientedSize(.up), zoom: 1.5, offset: CGPoint(x: 5, y: 3))
@@ -260,16 +292,31 @@ final class CGImageCropTests: XCTestCase {
     func testNSImageLoadedFromEXIFTaggedDataIsUpright() throws {
         // The NSImage overload crops as `.up`; that is only right because AppKit
         // applies the EXIF orientation on load. Guard that assumption.
+        let source = makeQuadrantImage(width: 80, height: 40)
         let data = NSMutableData()
         let destination = try XCTUnwrap(CGImageDestinationCreateWithData(data, "public.jpeg" as CFString, 1, nil))
-        CGImageDestinationAddImage(destination, makePatternImage(width: 40, height: 20),
-                                   [kCGImagePropertyOrientation: CGImagePropertyOrientation.right.rawValue] as CFDictionary)
+        CGImageDestinationAddImage(destination, source,
+                                   [kCGImagePropertyOrientation: CGImagePropertyOrientation.right.rawValue,
+                                    kCGImageDestinationLossyCompressionQuality: 1.0] as CFDictionary)
         XCTAssertTrue(CGImageDestinationFinalize(destination))
 
         let image = try XCTUnwrap(NSImage(data: data as Data))
-        let cgImage = try XCTUnwrap(image.cgImage(forProposedRect: nil, context: nil, hints: nil))
-        XCTAssertEqual(cgImage.width, 20)
-        XCTAssertEqual(cgImage.height, 40)
+        let loaded = try XCTUnwrap(image.cgImage(forProposedRect: nil, context: nil, hints: nil))
+        let expected = try XCTUnwrap(coreImageUpright(source, .right))
+        XCTAssertEqual(loaded.width, 40)
+        XCTAssertEqual(loaded.height, 80)
+
+        // JPEG is lossy, so compare each quadrant's center, away from the color
+        // edges. A mirrored or wrong-way rotation swaps whole quadrants.
+        let loadedPixels = pixels(loaded)
+        let expectedPixels = pixels(expected)
+        for (posX, posY) in [(10, 20), (30, 20), (10, 60), (30, 60)] {
+            let index = (posY * loaded.width + posX) * 4
+            for channel in 0..<3 {
+                XCTAssertEqual(Int(loadedPixels.rgba[index + channel]), Int(expectedPixels.rgba[index + channel]),
+                               accuracy: 32, "pixel (\(posX), \(posY)) channel \(channel)")
+            }
+        }
     }
     #endif
 }
