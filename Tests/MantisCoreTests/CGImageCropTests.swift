@@ -259,7 +259,12 @@ final class CGImageCropTests: XCTestCase {
         // A corrupted decoded CropInfo must not be inverted into a wrong region.
         let image = makePatternImage()
         let size = image.orientedSize(.up)
-        for singular in [CGAffineTransform(scaleX: 0, y: 1), CGAffineTransform(a: 1, b: 2, c: 2, d: 4, tx: 0, ty: 0)] {
+        let invalidTransforms = [
+            CGAffineTransform(scaleX: 0, y: 1),
+            CGAffineTransform(a: 1, b: 2, c: 2, d: 4, tx: 0, ty: 0),
+            CGAffineTransform(a: .infinity, b: 0, c: 0, d: 1, tx: 0, ty: 0) // non-finite determinant
+        ]
+        for singular in invalidTransforms {
             var skewed = makeCropInfo(uprightSize: size, horizontalSkewDegrees: 5)
             skewed.viewReconstruction?.scrollViewTransform = singular
             XCTAssertNil(crop(image, by: skewed), "perspective path with \(singular)")
