@@ -6,15 +6,23 @@ import PackageDescription
 let package = Package(
     name: "Mantis",
     defaultLocalization: "en",
-    platforms: [.iOS(.v17), .macCatalyst(.v17)],
+    // macOS is for MantisCore only; the Mantis UI product needs UIKit.
+    platforms: [.iOS(.v17), .macCatalyst(.v17), .macOS(.v14)],
     products: [
         .library(
             name: "Mantis",
-            targets: ["Mantis"])
+            targets: ["Mantis"]),
+        .library(
+            name: "MantisCore",
+            targets: ["MantisCore"])
     ],
     targets: [
         .target(
+            name: "MantisCore"
+        ),
+        .target(
             name: "Mantis",
+            dependencies: ["MantisCore"],
             resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
             swiftSettings: [.enableUpcomingFeature("IsolatedDefaultValues")]
         ),
@@ -22,6 +30,11 @@ let package = Package(
             name: "MantisTests",
             dependencies: ["Mantis"],
             path: "Tests/MantisTests"
+        ),
+        .testTarget(
+            name: "MantisCoreTests",
+            dependencies: ["MantisCore"],
+            path: "Tests/MantisCoreTests"
         )
     ]
 )

@@ -1,6 +1,6 @@
 //
 //  CGImageExtensions.swift
-//  Mantis
+//  MantisCore
 //
 //  Created by Echo on 10/30/18.
 //
@@ -9,7 +9,7 @@
 //
 // Copyright Vitalii Parovishnyk. All rights reserved.
 
-import UIKit
+import CoreGraphics
 
 enum ImageProcessError: Error {
     case noColorSpace
@@ -69,7 +69,7 @@ extension CGImage {
                                                          bitsPerComponent: bitsPerComponent)
         }
         
-        context.setFillColor(UIColor.clear.cgColor)
+        context.setFillColor(CGColor(gray: 0, alpha: 0))
         context.fill(CGRect(origin: .zero, size: outputSize))
         
         var uiCoords = CGAffineTransform(scaleX: outputSize.width / cropSize.width,

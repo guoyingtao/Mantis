@@ -1,6 +1,6 @@
 //
 //  CGAffineTransformExtensionsTests.swift
-//  MantisTests
+//  MantisCoreTests
 //
 //  Covers CGAffineTransform.transformed(by:), which composes a CropInfo's
 //  translation, rotation, and scale onto the receiver in that fixed order.
@@ -10,7 +10,7 @@
 //
 
 import XCTest
-@testable import Mantis
+@testable import MantisCore
 
 final class CGAffineTransformExtensionsTests: XCTestCase {
 

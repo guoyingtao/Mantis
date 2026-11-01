@@ -47,9 +47,43 @@ jobs:
             # Build at the package's declared minimum (iOS 17) so CI catches
             # any use of newer APIs that lacks an availability guard. Do NOT
             # override IPHONEOS_DEPLOYMENT_TARGET here — that masks such breaks.
+            # Mantis-Package runs both MantisTests and MantisCoreTests.
             xcodebuild test \
-               -scheme Mantis \
+               -scheme Mantis-Package \
                -destination "platform=iOS Simulator,name=iPhone 16" \
+               -skipPackagePluginValidation \
+               CODE_SIGNING_ALLOWED=NO \
+               | "$FORMATTER"
+           env:
+            NSUnbufferedIO: YES
+
+   core-macos:
+      name: MantisCore on macOS
+      runs-on: macos-14
+      steps:
+         - uses: actions/checkout@v4
+           with:
+            persist-credentials: false
+
+         - name: Select Xcode
+           uses: maxim-lobanov/setup-xcode@v1
+           with:
+            xcode-version: latest-stable
+
+         # The Mantis UI target needs UIKit, so `swift test` (which builds every
+         # target) cannot run on macOS. The shared MantisCore scheme builds and
+         # tests only the UIKit-free core.
+         - name: Build & test
+           run: |
+            set -o pipefail
+            if command -v xcbeautify >/dev/null 2>&1; then
+               FORMATTER="xcbeautify"
+            else
+               FORMATTER="cat"
+            fi
+            xcodebuild test \
+               -scheme MantisCore \
+               -destination "platform=macOS" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
