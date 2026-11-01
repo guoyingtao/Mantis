@@ -42,6 +42,8 @@ final class CGImageCropTests: XCTestCase {
                        decode: nil, shouldInterpolate: true, intent: .defaultIntent)!
     }
 
+    private static let quadrantColors: [[Int]] = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0]]
+
     /// Four flat color quadrants. Survives JPEG compression well enough that any
     /// rotation or mirroring still shows up as swapped quadrants.
     private func makeQuadrantImage(width: Int, height: Int) -> CGImage {
@@ -50,9 +52,9 @@ final class CGImageCropTests: XCTestCase {
                                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
         let halfWidth = CGFloat(width) / 2
         let halfHeight = CGFloat(height) / 2
-        let colors: [(red: CGFloat, green: CGFloat, blue: CGFloat)] = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 0)]
-        for (index, color) in colors.enumerated() {
-            context.setFillColor(CGColor(srgbRed: color.red, green: color.green, blue: color.blue, alpha: 1))
+        for (index, color) in Self.quadrantColors.enumerated() {
+            context.setFillColor(CGColor(srgbRed: CGFloat(color[0]) / 255, green: CGFloat(color[1]) / 255,
+                                         blue: CGFloat(color[2]) / 255, alpha: 1))
             context.fill(CGRect(x: CGFloat(index % 2) * halfWidth, y: CGFloat(index / 2) * halfHeight,
                                 width: halfWidth, height: halfHeight))
         }
@@ -306,17 +308,25 @@ final class CGImageCropTests: XCTestCase {
         XCTAssertEqual(loaded.width, 40)
         XCTAssertEqual(loaded.height, 80)
 
-        // JPEG is lossy, so compare each quadrant's center, away from the color
-        // edges. A mirrored or wrong-way rotation swaps whole quadrants.
+        // JPEG loss and AppKit's color matching shift the exact values (by up to
+        // 50/255 on macOS 14), so compare which quadrant color each quadrant's
+        // center is nearest to. A mirrored or wrong-way rotation swaps whole quadrants.
         let loadedPixels = pixels(loaded)
         let expectedPixels = pixels(expected)
-        for (posX, posY) in [(10, 20), (30, 20), (10, 60), (30, 60)] {
-            let index = (posY * loaded.width + posX) * 4
-            for channel in 0..<3 {
-                XCTAssertEqual(Int(loadedPixels.rgba[index + channel]), Int(expectedPixels.rgba[index + channel]),
-                               accuracy: 32, "pixel (\(posX), \(posY)) channel \(channel)")
-            }
+        let centers = [(10, 20), (30, 20), (10, 60), (30, 60)]
+        let expectedColors = centers.map { nearestQuadrantColor(in: expectedPixels, posX: $0.0, posY: $0.1) }
+        XCTAssertEqual(Set(expectedColors).count, 4, "the reference must show four different quadrants")
+        XCTAssertEqual(centers.map { nearestQuadrantColor(in: loadedPixels, posX: $0.0, posY: $0.1) }, expectedColors)
+    }
+
+    /// Index into `quadrantColors` of the color nearest to the pixel at (posX, posY).
+    private func nearestQuadrantColor(in pixels: Pixels, posX: Int, posY: Int) -> Int {
+        let index = (posY * pixels.width + posX) * 4
+        let sample = (0..<3).map { Int(pixels.rgba[index + $0]) }
+        func distance(_ color: [Int]) -> Int {
+            zip(color, sample).map { ($0 - $1) * ($0 - $1) }.reduce(0, +)
         }
+        return Self.quadrantColors.indices.min { distance(Self.quadrantColors[$0]) < distance(Self.quadrantColors[$1]) }!
     }
     #endif
 }
