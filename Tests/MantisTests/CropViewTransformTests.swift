@@ -85,6 +85,7 @@ final class CropViewTransformTests: XCTestCase {
         viewModel.horizontalSkewDegrees = 5
         viewModel.verticalSkewDegrees = -7
         cropView.cropWorkbenchView.transform = CGAffineTransform(rotationAngle: 0.3)
+        cropView.cropWorkbenchView.contentOffset = CGPoint(x: 12, y: 34)
 
         let cropInfo = cropView.getCropInfo()
 
@@ -93,6 +94,7 @@ final class CropViewTransformTests: XCTestCase {
         XCTAssertEqual(cropInfo.verticalSkewDegrees, -7)
         let reconstruction = try XCTUnwrap(cropInfo.viewReconstruction)
         XCTAssertEqual(reconstruction.scrollViewTransform, cropView.cropWorkbenchView.transform)
+        XCTAssertEqual(reconstruction.scrollContentOffset, CGPoint(x: 12, y: 34))
     }
 
     // MARK: - decomposeRotation
