@@ -12,6 +12,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class CropViewTransformTests: XCTestCase {
     private var viewModel: CropViewModel!
     private var cropView: CropView!

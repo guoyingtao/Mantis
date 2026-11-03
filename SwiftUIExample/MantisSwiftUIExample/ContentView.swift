@@ -179,10 +179,8 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(ColorScheme.allCases, id: \.self) {
             ContentView().preferredColorScheme($0)
-            if #available(iOS 15.0, *) {
-                ContentView()
-                    .previewInterfaceOrientation(.landscapeLeft)
-            }
+            ContentView()
+                .previewInterfaceOrientation(.landscapeLeft)
         }
     }
 }

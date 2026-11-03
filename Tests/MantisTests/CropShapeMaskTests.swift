@@ -12,6 +12,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class CropShapeMaskTests: XCTestCase {
     private let imageSize = CGSize(width: 100, height: 100)
     private let triangle = [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)]

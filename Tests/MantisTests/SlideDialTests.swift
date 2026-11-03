@@ -8,6 +8,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class SlideDialTests: XCTestCase {
     
     var dial: SlideDial!
