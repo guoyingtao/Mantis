@@ -18,7 +18,7 @@ concurrency:
 jobs:
    test:
       name: Build & Test
-      runs-on: macos-14
+      runs-on: macos-15
       steps:
          - uses: actions/checkout@v4
            with:
@@ -44,17 +44,42 @@ jobs:
             else
                FORMATTER="cat"
             fi
-            # Build at the package's declared minimum (iOS 15) so CI catches
+            # Build at the package's declared minimum (iOS 17) so CI catches
             # any use of newer APIs that lacks an availability guard. Do NOT
             # override IPHONEOS_DEPLOYMENT_TARGET here — that masks such breaks.
             xcodebuild test \
-               -scheme Mantis-Package \
+               -scheme Mantis \
                -destination "platform=iOS Simulator,name=iPhone 16" \
                -skipPackagePluginValidation \
                CODE_SIGNING_ALLOWED=NO \
                | "$FORMATTER"
            env:
             NSUnbufferedIO: YES
+
+   oldest-xcode:
+      name: Build (oldest supported Xcode)
+      # The README promises Xcode 16.0+, and a newer toolchain can hide a break
+      # such as an SDK annotation the old one lacks.
+      # Build only: the test job above already runs the suite.
+      runs-on: macos-15
+      steps:
+         - uses: actions/checkout@v4
+           with:
+            persist-credentials: false
+
+         - name: Select Xcode
+           uses: maxim-lobanov/setup-xcode@v1
+           with:
+            xcode-version: "16.0"
+
+         - name: Build package and tests
+           run: |
+            xcodebuild -version
+            xcodebuild build-for-testing \
+               -quiet \
+               -scheme Mantis \
+               -destination "generic/platform=iOS Simulator" \
+               CODE_SIGNING_ALLOWED=NO
 
    swiftlint:
       name: SwiftLint

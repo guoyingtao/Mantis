@@ -118,8 +118,8 @@ struct DeclarativeCropperDemoView: View {
     @Binding var croppedImage: UIImage?
     @Binding var savedTransformation: Transformation?
 
-    /// CropSession is an ObservableObject on iOS 15/16 and additionally
-    /// supports fine-grained Observation tracking on iOS 17+.
+    /// CropSession is an ObservableObject and also supports fine-grained
+    /// Observation tracking.
     @StateObject private var session = CropSession()
 
     @Environment(\.presentationMode) var presentationMode
