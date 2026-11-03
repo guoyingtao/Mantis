@@ -29,6 +29,7 @@ Mantis is an open-source **iOS image cropping library** written in Swift, with b
 - ↩️ **Undo / Redo / Revert to original** — independent history per cropper, with localized Mac Catalyst menus
 - 🧩 **Two SwiftUI APIs** — a modern declarative `ImageCropper` view with modifiers and an observable `CropSession`, plus a binding-based `ImageCropperView`
 - 💾 **Persist and restore crops** — `CropInfo` is `Codable` (3.1+); re-crop the original image offline in a later session, or reopen the editor at the saved state
+- 🖥 **Crop engine for macOS** — the UIKit-free `MantisCore` product (4.0+) applies a saved `CropInfo` to a `CGImage` or `NSImage` in a native macOS app
 - 🌗 **Light / dark / system appearance modes**
 - 🌍 **Localized into 14 languages** (Arabic, Chinese, English, French, German, Italian, Japanese, Korean, Dutch, Portuguese, Russian, Spanish, Turkish, …) with custom localization support
 - 🧱 **Highly customizable** — embed the cropper in your own view controller, build a custom toolbar, subclass `CropViewController`, tweak colors, borders, dial styles, and more
@@ -127,6 +128,7 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 
 - iOS 17.0+
 - Mac Catalyst 17.0+ (macOS 14.0+)
+- macOS 14.0+ for the `MantisCore` product only (offline cropping, no crop UI)
 - Xcode 16.0+ (Swift 6.0+)
 
 ## Installation
@@ -152,6 +154,8 @@ Or in `Package.swift`:
 ```
 
 and in your target's dependencies: `.product(name: "Mantis", package: "Mantis-spm")`. The product and module are unchanged, so `import Mantis` works as before.
+
+A native macOS app, or any target that only replays saved crops, depends on `.product(name: "MantisCore", package: "Mantis-spm")` instead. `MantisCore` is available from Mantis 4.0. See [Cropping on macOS with MantisCore](#usage).
 
 Depending on `https://github.com/guoyingtao/Mantis.git` directly still works, but downloads far more. Don't use both URLs in the same project: SwiftPM derives the package identity from the URL (`mantis-spm` vs `mantis`) and would treat them as two packages exporting the same product.
 
@@ -474,6 +478,36 @@ let recropped = Mantis.crop(image: originalImage, by: cropInfo)
 </details>
 
 <details>
+<summary><strong>Cropping on macOS with MantisCore 🆕</strong></summary>
+
+As of **Mantis 4.0**, the crop engine lives in a separate, UIKit-free module, `MantisCore`, which also builds for native macOS (AppKit) apps. It has no crop UI: it applies a `CropInfo` that the Mantis UI produced on iOS, iPadOS or Mac Catalyst — for example one your iOS app saved and synced — to the full-resolution original.
+
+```swift
+import Foundation
+import ImageIO
+import MantisCore
+
+let cropInfo = try JSONDecoder().decode(CropInfo.self, from: data)
+
+// NSImage
+let cropped = MantisCore.crop(nsImage, by: cropInfo)
+
+// Or a CGImage read straight from the file, with its EXIF orientation
+let source = CGImageSourceCreateWithURL(url as CFURL, nil)!
+let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil)!
+let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any]
+let orientation = (properties?[kCGImagePropertyOrientation] as? UInt32)
+    .flatMap(CGImagePropertyOrientation.init) ?? .up
+let croppedCGImage = MantisCore.crop(cgImage, orientation: orientation, by: cropInfo)
+```
+
+* The result matches what `Mantis.crop(image:by:)` produces on iOS for the same image and `CropInfo`.
+* `Mantis` re-exports `MantisCore`, so on iOS `import Mantis` is enough to use the `CGImage` overload too.
+* The same rule as on iOS applies: a `CropInfo` you build by hand crops on the standard path, but the perspective-skew and `maxImagePixelCount` paths need a `CropInfo` that Mantis produced.
+
+</details>
+
+<details>
 <summary><strong>Undo / Redo support</strong></summary>
 
 * Mantis offers full support for Undo, Redo, and Revert to Original on both iOS and Mac Catalyst.
@@ -619,6 +653,8 @@ Mantis 4.0 changes how Mantis is installed and which systems it runs on, removes
 - **The UI API is `@MainActor`.** `CropToolbarProtocol`, `CropToolbarDelegate`, `CropToolbarIconProvider`, `RotationControlViewProtocol`, `ActivityIndicatorProtocol`, `CropSession`, `Orientation`, `Mantis.cropViewController(...)` and `Mantis.setupCropViewController(...)` are now main-actor isolated, as `CropViewControllerDelegate` already was. In the Swift 6 language mode, custom toolbars, rotation controls, activity indicators and icon providers now conform without isolation errors. Calls from view controllers and SwiftUI views need no change; move calls made from a nonisolated context, such as a detached task or a plain helper function, onto the main actor (for example by marking the caller `@MainActor`). `Mantis.crop(image:by:)` and `Mantis.downsample(image:maxPixelCount:sourceData:)` stay nonisolated, so offline cropping can still run in the background.
 - **Custom rotation controls can rely on the default implementations.** The default implementations of `RotationControlViewProtocol` (`setupUI(withAllowableFrame:)`, `getTouchTarget(with:)`, `handleDeviceRotation()`, `getLengthRatio()`, `setAccessibilities()` and `setAccessibilityValue()`) are now public. In 3.x they were internal, so a rotation control outside Mantis had to implement all of them. The default `setupUI(withAllowableFrame:)` sets the control's `frame` to the allowable frame, as the built-in dials do; override it if an attached control needs a different size or lays out subviews there.
 - **`import Mantis` no longer brings in UIKit.** The CocoaPods framework re-exported UIKit through its umbrella header; the Swift package does not. Add `import UIKit` to files that use UIKit types with only `import Mantis`.
+- **`CropInfo` and `CropRegion` moved to the new `MantisCore` module.** `Mantis` re-exports `MantisCore`, so code that uses `CropInfo` or `Mantis.CropInfo` compiles unchanged.
+- **Crops of images with `scale` > 1 keep their full pixel resolution.** Mantis 3.x cropped such an image (for example one drawn with `UIGraphicsImageRenderer` at screen scale) at its point size and discarded the extra pixels, unless `maxImagePixelCount` sent it through the large-image path. Both paths now return the source's pixel resolution at scale 1, so the cropped image's `size` in points is `scale` times what 3.x returned; `getExpectedCropImageSize()` reports the new size. Images with scale 1, such as photos from the camera or photo library, are unaffected.
 - **Xcode 16 or later.** The package manifest now uses `swift-tools-version:6.0`. Mantis itself still compiles in the Swift 5 language mode, and apps can use either language mode.
 - **iOS 17 / Mac Catalyst 17 or later.** Apps that still support iOS 15 or 16 can stay on Mantis 3.x.
 
@@ -699,7 +735,7 @@ Two options:
 <details>
 <summary><strong>Does Mantis work on macOS or iPad?</strong></summary>
 
-Yes — Mantis supports iOS and Mac Catalyst, including localized Catalyst menus for undo/redo and independent undo histories for multiple croppers (e.g. iPad multi-window).
+Yes — the crop UI supports iOS and Mac Catalyst, including localized Catalyst menus for undo/redo and independent undo histories for multiple croppers (e.g. iPad multi-window). Native macOS (AppKit) apps can use the `MantisCore` product to apply saved crops; it has no crop UI. See [Cropping on macOS with MantisCore](#usage).
 
 </details>
 

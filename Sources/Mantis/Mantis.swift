@@ -23,6 +23,7 @@
 //  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
+@_exported import MantisCore
 
 // MARK: - APIs
 @MainActor
@@ -78,10 +79,7 @@ public func setupCropViewController(_ cropViewController: Mantis.CropViewControl
 ///   the CGContext pipeline. Pass the same value used in
 ///   `CropViewConfig.maxImagePixelCount`. Defaults to 0 (disabled).
 public func crop(image: UIImage, by cropInfo: CropInfo, maxImagePixelCount: Int = 0) -> UIImage? {
-    if image.exceedsPixelCount(maxImagePixelCount) {
-        return image.cropWithCIImage(by: cropInfo)
-    }
-    return image.crop(by: cropInfo)
+    return image.crop(by: cropInfo, maxImagePixelCount: maxImagePixelCount)
 }
 
 /// Returns a downsampled copy of `image` when its pixel count exceeds

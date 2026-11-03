@@ -10,12 +10,8 @@ import UIKit
 // MARK: - Public Crop API
 extension CropViewController {
     public func crop(by cropInfo: CropInfo) {
-        let croppedImage: UIImage?
-        if cropView.image.exceedsPixelCount(config.cropViewConfig.maxImagePixelCount) {
-            croppedImage = cropView.image.cropWithCIImage(by: cropInfo)
-        } else {
-            croppedImage = cropView.image.crop(by: cropInfo)
-        }
+        let croppedImage = cropView.image.crop(by: cropInfo,
+                                               maxImagePixelCount: config.cropViewConfig.maxImagePixelCount)
 
         guard let image = croppedImage else {
             Task { @MainActor [weak self] in
