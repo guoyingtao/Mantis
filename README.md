@@ -4,7 +4,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/github/v/release/guoyingtao/Mantis" alt="Latest release" />
-    <img src="https://img.shields.io/badge/Swift-5.9+-orange.svg" alt="Swift 5.9+" />
+    <img src="https://img.shields.io/badge/Swift-6.0+-orange.svg" alt="Swift 6.0+" />
     <img src="https://img.shields.io/badge/platforms-iOS%20%7C%20Mac%20Catalyst-lightgrey.svg" alt="Platforms: iOS and Mac Catalyst" />
     <img src="https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg" alt="Swift Package Manager compatible" />
     <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="MIT license" />
@@ -129,7 +129,7 @@ See [Usage](#usage) below for aspect ratios, crop shapes, undo/redo, persistence
 - iOS 17.0+
 - Mac Catalyst 17.0+ (macOS 14.0+)
 - macOS 14.0+ for the `MantisCore` product only (offline cropping, no crop UI)
-- Xcode 15.0+ (Swift 5.9+)
+- Xcode 16.0+ (Swift 6.0+)
 
 ## Installation
 
@@ -650,12 +650,12 @@ Mantis 4.0 changes how Mantis is installed and which systems it runs on, removes
 
 - **Swift Package Manager only.** CocoaPods and Carthage are no longer supported; switch to the [Swift Package Manager](#swift-package-manager) or stay on Mantis 3.x.
 - **`Mantis.locateResourceBundle(by:)` is removed.** It only existed so CocoaPods static frameworks could find the resource bundle; delete the call. To use your own strings, set `config.localizationConfig.bundle` as described in [Localization](#usage).
-- **The UI API is `@MainActor`.** `CropToolbarProtocol`, `CropToolbarDelegate`, `CropToolbarIconProvider`, `RotationControlViewProtocol`, `ActivityIndicatorProtocol`, `CropSession`, `Mantis.cropViewController(...)` and `Mantis.setupCropViewController(...)` are now main-actor isolated, as `CropViewControllerDelegate` already was. In the Swift 6 language mode, custom toolbars, rotation controls, activity indicators and icon providers now conform without isolation errors. Calls from view controllers and SwiftUI views need no change; move calls made from a nonisolated context, such as a detached task or a plain helper function, onto the main actor (for example by marking the caller `@MainActor`). `Mantis.crop(image:by:)` and `Mantis.downsample(image:maxPixelCount:sourceData:)` stay nonisolated, so offline cropping can still run in the background.
-- **Custom rotation controls only need the required members.** The default implementations of `RotationControlViewProtocol` (`setupUI(withAllowableFrame:)`, `getTouchTarget(with:)`, `handleDeviceRotation()`, `getLengthRatio()`, `setAccessibilities()` and `setAccessibilityValue()`) are now public. In 3.x they were internal, so a rotation control outside Mantis had to implement all of them.
+- **The UI API is `@MainActor`.** `CropToolbarProtocol`, `CropToolbarDelegate`, `CropToolbarIconProvider`, `RotationControlViewProtocol`, `ActivityIndicatorProtocol`, `CropSession`, `Orientation`, `Mantis.cropViewController(...)` and `Mantis.setupCropViewController(...)` are now main-actor isolated, as `CropViewControllerDelegate` already was. In the Swift 6 language mode, custom toolbars, rotation controls, activity indicators and icon providers now conform without isolation errors. Calls from view controllers and SwiftUI views need no change; move calls made from a nonisolated context, such as a detached task or a plain helper function, onto the main actor (for example by marking the caller `@MainActor`). `Mantis.crop(image:by:)` and `Mantis.downsample(image:maxPixelCount:sourceData:)` stay nonisolated, so offline cropping can still run in the background.
+- **Custom rotation controls can rely on the default implementations.** The default implementations of `RotationControlViewProtocol` (`setupUI(withAllowableFrame:)`, `getTouchTarget(with:)`, `handleDeviceRotation()`, `getLengthRatio()`, `setAccessibilities()` and `setAccessibilityValue()`) are now public. In 3.x they were internal, so a rotation control outside Mantis had to implement all of them. The default `setupUI(withAllowableFrame:)` sets the control's `frame` to the allowable frame, as the built-in dials do; override it if an attached control needs a different size or lays out subviews there.
 - **`import Mantis` no longer brings in UIKit.** The CocoaPods framework re-exported UIKit through its umbrella header; the Swift package does not. Add `import UIKit` to files that use UIKit types with only `import Mantis`.
 - **`CropInfo` and `CropRegion` moved to the new `MantisCore` module.** `Mantis` re-exports `MantisCore`, so code that uses `CropInfo` or `Mantis.CropInfo` compiles unchanged.
 - **Crops of images with `scale` > 1 keep their full pixel resolution.** Mantis 3.x cropped such an image (for example one drawn with `UIGraphicsImageRenderer` at screen scale) at its point size and discarded the extra pixels, unless `maxImagePixelCount` sent it through the large-image path. Both paths now return the source's pixel resolution at scale 1, so the cropped image's `size` in points is `scale` times what 3.x returned; `getExpectedCropImageSize()` reports the new size. Images with scale 1, such as photos from the camera or photo library, are unaffected.
-- **Xcode 15 or later.** The package manifest now uses `swift-tools-version:5.9`.
+- **Xcode 16 or later.** The package manifest now uses `swift-tools-version:6.0`. Mantis itself still compiles in the Swift 5 language mode, and apps can use either language mode.
 - **iOS 17 / Mac Catalyst 17 or later.** Apps that still support iOS 15 or 16 can stay on Mantis 3.x.
 
 ## Migrating from 2.x

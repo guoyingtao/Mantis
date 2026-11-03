@@ -6,6 +6,7 @@
 //
 import UIKit
 
+@MainActor
 public struct Orientation {
     static var interfaceOrientation: UIInterfaceOrientation {
         activeScene?.interfaceOrientation ?? .portrait
@@ -63,9 +64,9 @@ public struct Orientation {
                                      verticalSizeClass: scene?.traitCollection.verticalSizeClass)
     }
     
-    static func shouldTreatAsPortrait(interfaceOrientation: UIInterfaceOrientation,
-                                      userInterfaceIdiom: UIUserInterfaceIdiom,
-                                      verticalSizeClass: UIUserInterfaceSizeClass?) -> Bool {
+    nonisolated static func shouldTreatAsPortrait(interfaceOrientation: UIInterfaceOrientation,
+                                                  userInterfaceIdiom: UIUserInterfaceIdiom,
+                                                  verticalSizeClass: UIUserInterfaceSizeClass?) -> Bool {
         interfaceOrientation.isPortrait
             || userInterfaceIdiom != .phone
             || verticalSizeClass == .regular

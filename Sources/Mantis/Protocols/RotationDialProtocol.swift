@@ -42,9 +42,10 @@ public protocol RotationControlViewProtocol: UIView {
      */
     func handleDeviceRotation()
         
-    // MARK: If isAttachedToCropView is true, implement functions below
+    // MARK: Used when isAttachedToCropView is true
     /**
-     The allowableFrame is set by CropView.
+     CropView passes the frame the control should occupy and afterwards only moves it,
+     so the control's size comes from here. The default implementation sets `frame` to `allowableFrame`.
      No need to implement it if isAttachedToCropView is false
      */
     func setupUI(withAllowableFrame allowableFrame: CGRect)
@@ -78,7 +79,10 @@ public protocol RotationControlViewProtocol: UIView {
 }
 
 public extension RotationControlViewProtocol {
-    func setupUI(withAllowableFrame allowableFrame: CGRect) {}
+    func setupUI(withAllowableFrame allowableFrame: CGRect) {
+        frame = allowableFrame
+    }
+
     func getTouchTarget(with point: CGPoint) -> UIView {
         return self
     }
