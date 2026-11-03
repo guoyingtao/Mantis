@@ -24,10 +24,13 @@ jobs:
            with:
             persist-credentials: false
 
+         # Pin the image's default Xcode: its iOS simulators (and the iPhone 16
+         # destination below) are always installed. On macos-15, latest-stable
+         # (Xcode 26.3) currently sees no iOS simulator at all.
          - name: Select Xcode
            uses: maxim-lobanov/setup-xcode@v1
            with:
-            xcode-version: latest-stable
+            xcode-version: "16.4"
 
          - name: Show environment
            run: |
