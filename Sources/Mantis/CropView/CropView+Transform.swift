@@ -98,7 +98,7 @@ extension CropView {
     
     /// Decompose a total rotation (in radians) into the nearest 90° step
     /// (`ImageRotationType`) and the remaining free rotation.
-    private func decomposeRotation(totalRadians: CGFloat) -> (ImageRotationType, CGFloat) {
+    func decomposeRotation(totalRadians: CGFloat) -> (ImageRotationType, CGFloat) {
         let totalDegrees = totalRadians * 180 / .pi
         
         // Find the nearest multiple of 90° to the total degrees

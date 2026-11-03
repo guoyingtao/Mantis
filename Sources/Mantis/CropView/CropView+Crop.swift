@@ -69,6 +69,7 @@ extension CropView {
         switch cropViewConfig.cropShapeType {
         case .rect,
                 .square,
+                .ellipse(maskOnly: true),
                 .circle(maskOnly: true),
                 .roundedRect(_, maskOnly: true),
                 .path(_, maskOnly: true),
