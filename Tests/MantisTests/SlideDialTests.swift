@@ -44,7 +44,8 @@ final class SlideDialTests: XCTestCase {
     /// UIScrollView snaps `contentOffset` to the pixel grid, so a fractional ratio reads back
     /// exactly only on 3x screens (1° is 1/3 pt on this ruler). Allow one pixel of slack.
     private var rulerOffsetRatioAccuracy: CGFloat {
-        1 / (slideRuler.offsetValue * max(slideRuler.traitCollection.displayScale, 1))
+        XCTAssertGreaterThan(slideRuler.offsetValue, 0, "Ruler offset must be set before reading the ratio")
+        return 1 / (slideRuler.offsetValue * max(slideRuler.traitCollection.displayScale, 1))
     }
     
     func testSlidingSlideDial() {
