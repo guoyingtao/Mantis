@@ -2,6 +2,24 @@
 
 -----
 
+## [4.0.0](https://www.github.com/guoyingtao/Mantis/compare/v3.1.1...v4.0.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* The crop pipeline moves into a new MantisCore target and product that works on CGImage + CGImagePropertyOrientation and builds for iOS, Mac Catalyst, macOS 14 and visionOS. A native macOS app can now depend on MantisCore alone and replay a CropInfo produced by the Mantis UI on iOS:
+* * feat!: drop CocoaPods and Carthage support
+
+### Features
+
+* add MantisCore, a UIKit-free crop engine that also runs on macOS ([#559](https://www.github.com/guoyingtao/Mantis/issues/559)) ([7b56bc2](https://www.github.com/guoyingtao/Mantis/commit/7b56bc20b989dfafbc2410df276342e5e604dbfc))
+* Mantis 4.0 — SwiftPM only, iOS 17, Xcode 16 ([#556](https://www.github.com/guoyingtao/Mantis/issues/556)) ([3a88f10](https://www.github.com/guoyingtao/Mantis/commit/3a88f107b818f8970b171eb7dcc430b27bcd0129))
+
+
+### Bug Fixes
+
+* keep ellipse(maskOnly:) crops rectangular and add core unit tests ([#557](https://www.github.com/guoyingtao/Mantis/issues/557)) ([97f84f1](https://www.github.com/guoyingtao/Mantis/commit/97f84f10691842031d96135ffe3ab37e6f7834b0))
+
 ### [3.1.1](https://www.github.com/guoyingtao/Mantis/compare/v3.1.0...v3.1.1) (2026-10-23)
 
 
