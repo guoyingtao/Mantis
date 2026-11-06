@@ -19,14 +19,17 @@ jobs:
    test:
       name: Build & Test
       runs-on: macos-15
+      # A wedged simulator must not hold the runner for the 6-hour default. A
+      # normal run takes about 5 minutes, one with the retry below about 20.
+      timeout-minutes: 45
       steps:
          - uses: actions/checkout@v4
            with:
             persist-credentials: false
 
-         # Pin the image's default Xcode: its iOS simulators (and the iPhone 16
-         # destination below) are always installed. On macos-15, latest-stable
-         # (Xcode 26.3) currently sees no iOS simulator at all.
+         # Pin the image's default Xcode: its iOS simulators are always
+         # installed. On macos-15, latest-stable (Xcode 26.3) currently sees no
+         # iOS simulator at all.
          - name: Select Xcode
            uses: maxim-lobanov/setup-xcode@v1
            with:
@@ -36,6 +39,93 @@ jobs:
            run: |
             xcodebuild -version
             swift --version
+
+         # Choose and boot the simulator here rather than letting xcodebuild
+         # resolve "name=iPhone 16" itself:
+         # - The first simctl call of a job can take minutes while simdiskimaged
+         #   mounts the simulator runtimes (actions/runner-images#15247).
+         #   xcodebuild gives up sooner and then reports no iOS simulator at all.
+         # - "OS:latest" resolved to the iOS 26.2 runtime, newer than the iOS
+         #   18.5 SDK of Xcode 16.4. Use the runtime that matches the SDK.
+         # - With the simulator already booted, xcodebuild does not have to boot
+         #   it while it launches the test runner.
+         - name: Boot iOS simulator
+           id: simulator
+           shell: python3 {0}
+           env:
+            PYTHONUNBUFFERED: "1"
+           run: |
+            import json, os, subprocess, sys, time
+
+            def run(*args, timeout=None):
+                return subprocess.run(args, check=True, capture_output=True,
+                                      text=True, timeout=timeout).stdout
+
+            def version(text):
+                return tuple(int(part) for part in text.split("."))
+
+            def fail(message):
+                print(f"::error::{message}")
+                sys.exit(1)
+
+            sdk_text = run("xcrun", "--sdk", "iphonesimulator", "--show-sdk-version").strip()
+            sdk = version(sdk_text)
+            print(f"iOS Simulator SDK: {sdk_text}")
+
+            # The first call blocks until the runtimes are mounted; poll in case
+            # it returns before the iOS ones are.
+            for attempt in range(1, 7):
+                started = time.monotonic()
+                listing = json.loads(run("xcrun", "simctl", "list", "-j", timeout=600))
+                print(f"simctl list took {time.monotonic() - started:.0f} s")
+                runtimes = [r for r in listing["runtimes"]
+                            if r.get("platform") == "iOS" and r.get("isAvailable")]
+                if runtimes:
+                    break
+                print(f"No iOS runtime available yet (attempt {attempt}); waiting 20 s")
+                time.sleep(20)
+            else:
+                fail("No iOS simulator runtime became available")
+
+            # The runtime that matches the SDK, else the newest one.
+            runtime = max(runtimes, key=lambda r: (version(r["version"])[:2] == sdk[:2],
+                                                   version(r["version"])))
+            print(f"Runtime: {runtime['name']} ({runtime['identifier']})")
+
+            def preferred(items):
+                # iPhone 16 when the runtime has one: it was the CI device so far.
+                return min(items, key=lambda item: (item["name"] != "iPhone 16", item["name"]))
+
+            iphones = [d for d in listing["devices"].get(runtime["identifier"], [])
+                       if d.get("isAvailable") and d["name"].startswith("iPhone")]
+            if iphones:
+                device = preferred(iphones)
+                name, udid = device["name"], device["udid"]
+            else:
+                types = [t for t in runtime.get("supportedDeviceTypes", [])
+                         if t.get("productFamily") == "iPhone"]
+                if not types:
+                    fail(f"{runtime['name']} supports no iPhone")
+                device_type = preferred(types)
+                name = f"CI {device_type['name']}"
+                udid = run("xcrun", "simctl", "create", name,
+                           device_type["identifier"], runtime["identifier"]).strip()
+            print(f"Device: {name} ({udid})")
+
+            # bootstatus -b boots the device and returns once it has finished booting.
+            for attempt in (1, 2):
+                try:
+                    subprocess.run(["xcrun", "simctl", "bootstatus", udid, "-b"],
+                                   check=True, timeout=600)
+                    break
+                except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+                    print(f"::warning::Booting the simulator failed (attempt {attempt}): {error}")
+                    subprocess.run(["xcrun", "simctl", "shutdown", udid])
+            else:
+                fail(f"Could not boot {name} ({udid})")
+
+            with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+                print(f"udid={udid}", file=output)
 
          - name: Build & test
            run: |
@@ -47,18 +137,46 @@ jobs:
             else
                FORMATTER="cat"
             fi
+            # The raw log, stderr included, decides whether to retry below.
+            LOG="$RUNNER_TEMP/xcodebuild-test.log"
             # Build at the package's declared minimum (iOS 17) so CI catches
             # any use of newer APIs that lacks an availability guard. Do NOT
             # override IPHONEOS_DEPLOYMENT_TARGET here — that masks such breaks.
             # Mantis-Package runs both MantisTests and MantisCoreTests.
-            xcodebuild test \
-               -scheme Mantis-Package \
-               -destination "platform=iOS Simulator,name=iPhone 16" \
-               -skipPackagePluginValidation \
-               CODE_SIGNING_ALLOWED=NO \
-               | "$FORMATTER"
+            run_tests() {
+               xcodebuild test \
+                  -scheme Mantis-Package \
+                  -destination "id=$SIMULATOR_UDID" \
+                  -skipPackagePluginValidation \
+                  CODE_SIGNING_ALLOWED=NO \
+                  2>&1 | tee "$LOG" | "$FORMATTER"
+            }
+            show_raw_tail() {
+               echo "::group::Last 60 lines of raw xcodebuild output"
+               tail -n 60 "$LOG"
+               echo "::endgroup::"
+            }
+            if run_tests; then
+               exit 0
+            fi
+            show_raw_tail
+            # Retry once, on a freshly booted simulator, only when the simulator
+            # rather than the code failed. On these runners the test runner of
+            # one bundle sometimes never starts while the other bundle passes.
+            if ! grep -qE "never began executing tests|Unable to boot" "$LOG"; then
+               exit 1
+            fi
+            echo "::warning title=Simulator failure, retried::The test runner never started or the simulator did not boot; rebooting the simulator and running the tests once more."
+            xcrun simctl shutdown "$SIMULATOR_UDID" || true
+            xcrun simctl bootstatus "$SIMULATOR_UDID" -b
+            if run_tests; then
+               exit 0
+            fi
+            show_raw_tail
+            exit 1
            env:
             NSUnbufferedIO: YES
+            SIMULATOR_UDID: ${{ steps.simulator.outputs.udid }}
 
    oldest-xcode:
       name: Build (oldest supported Xcode)
