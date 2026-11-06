@@ -199,14 +199,22 @@ extension LayoutInvariantTests {
     }
 
     /// Zooms into the image center so the image extends below the crop view,
-    /// under the rotation control and the toolbar.
+    /// under the rotation control and the toolbar. The crop view reaches further
+    /// down on some simulators (on an iPad, 3x leaves the image short of it), so
+    /// this zooms further until the image gets there.
     private func zoomInUntilImageReachesBelowCropView(_ cropView: CropView,
                                                       file: StaticString = #filePath,
                                                       line: UInt = #line) throws {
         let imageContainer = try XCTUnwrap(cropView.cropWorkbenchView.imageContainer, file: file, line: line)
-        let zoomRect = imageContainer.bounds.insetBy(dx: imageContainer.bounds.width / 3,
-                                                     dy: imageContainer.bounds.height / 3)
-        cropView.cropWorkbenchView.zoom(to: zoomRect, animated: false)
+        for zoomFactor: CGFloat in [3, 5, 8] {
+            let inset = (1 - 1 / zoomFactor) / 2
+            let zoomRect = imageContainer.bounds.insetBy(dx: imageContainer.bounds.width * inset,
+                                                         dy: imageContainer.bounds.height * inset)
+            cropView.cropWorkbenchView.zoom(to: zoomRect, animated: false)
+            if frame(of: imageContainer, in: cropView).maxY > cropView.bounds.maxY {
+                break
+            }
+        }
 
         let imageFrame = frame(of: imageContainer, in: cropView)
         XCTAssertGreaterThan(imageFrame.maxY, cropView.bounds.maxY,
