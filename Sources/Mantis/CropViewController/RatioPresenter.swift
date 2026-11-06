@@ -82,14 +82,8 @@ public extension UIAlertController {
             popoverPresentationController?.sourceRect = sourceView.bounds
         }
 
-        if #available(macCatalyst 14.0, iOS 14.0, *) {
-            if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
-                handlePopupInBigScreen(sourceView: sourceView, permittedArrowDirections: permittedArrowDirections)
-            }
-        } else {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                handlePopupInBigScreen(sourceView: sourceView, permittedArrowDirections: permittedArrowDirections)
-            }
+        if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
+            handlePopupInBigScreen(sourceView: sourceView, permittedArrowDirections: permittedArrowDirections)
         }
     }
 }

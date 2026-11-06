@@ -133,10 +133,8 @@ public final class CropToolbar: UIView, CropToolbarProtocol {
                 
         backgroundColor = config.backgroundColor
                 
-        if #available(macCatalyst 14.0, iOS 14.0, *) {
-            if UIDevice.current.userInterfaceIdiom == .mac {
-                backgroundColor = AppearanceColorPreset.toolbarBackground(for: appearanceMode)
-            }
+        if UIDevice.current.userInterfaceIdiom == .mac {
+            backgroundColor = AppearanceColorPreset.toolbarBackground(for: appearanceMode)
         }
 
         createButtonContainer()
