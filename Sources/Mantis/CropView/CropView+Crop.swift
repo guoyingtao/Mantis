@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MantisCore
 
 // MARK: - Crop Output
 extension CropView {
@@ -17,12 +18,7 @@ extension CropView {
         let maxPixelCount = cropViewConfig.maxImagePixelCount
 
         DispatchQueue.global(qos: .userInteractive).async {
-            let croppedImage: UIImage?
-            if image.exceedsPixelCount(maxPixelCount) {
-                croppedImage = image.cropWithCIImage(by: cropInfo)
-            } else {
-                croppedImage = image.crop(by: cropInfo)
-            }
+            let croppedImage = image.crop(by: cropInfo, maxImagePixelCount: maxPixelCount)
             let cropOutput = (croppedImage, transformation, cropInfo)
             let maskedCropOutput = self.addImageMask(to: cropOutput)
             DispatchQueue.main.async {
@@ -73,6 +69,7 @@ extension CropView {
         switch cropViewConfig.cropShapeType {
         case .rect,
                 .square,
+                .ellipse(maskOnly: true),
                 .circle(maskOnly: true),
                 .roundedRect(_, maskOnly: true),
                 .path(_, maskOnly: true),

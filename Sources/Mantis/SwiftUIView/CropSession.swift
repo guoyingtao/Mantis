@@ -9,9 +9,7 @@ import UIKit
 #if canImport(Combine)
 import Combine
 #endif
-#if canImport(Observation)
 import Observation
-#endif
 
 /// Direction for the 90-degree rotations triggered from a ``CropSession``.
 public enum RotationDirection: Sendable {
@@ -56,10 +54,10 @@ public enum CropAspectRatio: Equatable, Sendable {
 /// }
 /// ```
 ///
-/// On iOS 17 and later the session also participates in the Observation
-/// framework, so it can be stored with `@State` and observed with the
-/// fine-grained `@Observable` tracking; on earlier systems it behaves as a
-/// plain `ObservableObject`. All members must be used from the main thread.
+/// The session is both an `ObservableObject` and `Observable`, so it can be
+/// stored with `@StateObject` or with `@State` and fine-grained, per-property
+/// Observation tracking. It is isolated to the main actor.
+@MainActor
 public final class CropSession: ObservableObject {
 
     weak var cropViewController: CropViewController?
@@ -186,42 +184,17 @@ public final class CropSession: ObservableObject {
         isResettable = false
     }
 
-    // MARK: - iOS 17+ Observation bridging
+    // MARK: - Observation bridging
 
-    // Stored as Any so the class itself stays available on iOS 15/16;
-    // ObservationRegistrar is a struct wrapping shared reference storage,
-    // so copying it out of the Any box preserves registration state.
-    private let registrarBox: Any? = {
-#if canImport(Observation)
-        if #available(iOS 17.0, macCatalyst 17.0, *) {
-            return ObservationRegistrar()
-        }
-#endif
-        return nil
-    }()
+    private let registrar = ObservationRegistrar()
 
     private func access<Member>(_ keyPath: KeyPath<CropSession, Member>) {
-#if canImport(Observation)
-        if #available(iOS 17.0, macCatalyst 17.0, *),
-           let registrar = registrarBox as? ObservationRegistrar {
-            registrar.access(self, keyPath: keyPath)
-        }
-#endif
+        registrar.access(self, keyPath: keyPath)
     }
 
     private func withMutation<Member>(_ keyPath: KeyPath<CropSession, Member>, _ mutation: () -> Void) {
-#if canImport(Observation)
-        if #available(iOS 17.0, macCatalyst 17.0, *),
-           let registrar = registrarBox as? ObservationRegistrar {
-            registrar.withMutation(of: self, keyPath: keyPath, mutation)
-            return
-        }
-#endif
-        mutation()
+        registrar.withMutation(of: self, keyPath: keyPath, mutation)
     }
 }
 
-#if canImport(Observation)
-@available(iOS 17.0, macCatalyst 17.0, *)
 extension CropSession: Observable {}
-#endif

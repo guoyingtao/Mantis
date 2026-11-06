@@ -8,6 +8,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class SlideDialTests: XCTestCase {
     
     var dial: SlideDial!
@@ -38,6 +39,13 @@ final class SlideDialTests: XCTestCase {
     
     private var rulerOffsetRatio: CGFloat {
         slideRuler.positionInfoHelper.getOffsetRatio()
+    }
+    
+    /// UIScrollView snaps `contentOffset` to the pixel grid, so a fractional ratio reads back
+    /// exactly only on 3x screens (1° is 1/3 pt on this ruler). Allow one pixel of slack.
+    private var rulerOffsetRatioAccuracy: CGFloat {
+        XCTAssertGreaterThan(slideRuler.offsetValue, 0, "Ruler offset must be set before reading the ratio")
+        return 1 / (slideRuler.offsetValue * max(slideRuler.traitCollection.displayScale, 1))
     }
     
     func testSlidingSlideDial() {
@@ -173,7 +181,7 @@ final class SlideDialTests: XCTestCase {
         dial.accessibilityIncrement()
         
         XCTAssertEqual(viewModel.rotationAngle.degrees, 1, accuracy: 1e-6)
-        XCTAssertEqual(rulerOffsetRatio, 1 / 45, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, 1 / 45, accuracy: rulerOffsetRatioAccuracy)
         XCTAssertEqual(dial.accessibilityValue, "1 degree")
     }
     
@@ -185,7 +193,7 @@ final class SlideDialTests: XCTestCase {
         dial.accessibilityDecrement()
         
         XCTAssertEqual(viewModel.rotationAngle.degrees, -1, accuracy: 1e-6)
-        XCTAssertEqual(rulerOffsetRatio, -1 / 45, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -1 / 45, accuracy: rulerOffsetRatioAccuracy)
         XCTAssertEqual(dial.accessibilityValue, "-1 degree")
     }
     
@@ -203,7 +211,7 @@ final class SlideDialTests: XCTestCase {
         dial.accessibilityDecrement()
         dial.accessibilityDecrement()
         XCTAssertEqual(viewModel.rotationAngle.degrees, 9, accuracy: 1e-6)
-        XCTAssertEqual(rulerOffsetRatio, 9 / 45, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, 9 / 45, accuracy: rulerOffsetRatioAccuracy)
         XCTAssertEqual(dial.accessibilityValue, "9 degrees")
     }
     
@@ -337,7 +345,7 @@ final class SlideDialTests: XCTestCase {
         dial.accessibilityIncrement()
         XCTAssertEqual(updatedDegrees.count, 1)
         XCTAssertEqual(updatedDegrees.last ?? 0, -9, accuracy: 1e-6)
-        XCTAssertEqual(rulerOffsetRatio, -9 / 45, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -9 / 45, accuracy: rulerOffsetRatioAccuracy)
         
         dial.accessibilityDecrement()
         dial.accessibilityDecrement()
@@ -371,7 +379,7 @@ final class SlideDialTests: XCTestCase {
         try tapTypeButton(.straighten)
         
         XCTAssertEqual(viewModel.rotationAngle.degrees, -10, accuracy: 1e-6)
-        XCTAssertEqual(rulerOffsetRatio, -10 / 45, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -10 / 45, accuracy: rulerOffsetRatioAccuracy)
     }
     
     private func tapTypeButton(_ type: RotationAdjustmentType) throws {

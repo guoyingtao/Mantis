@@ -23,7 +23,7 @@ permissions:
 jobs:
    mirror:
       name: Mirror ${{ inputs.tag || github.ref_name }}
-      runs-on: macos-14
+      runs-on: macos-15
       env:
          TAG: ${{ inputs.tag || github.ref_name }}
       steps:

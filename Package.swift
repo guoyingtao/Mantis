@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,24 +6,37 @@ import PackageDescription
 let package = Package(
     name: "Mantis",
     defaultLocalization: "en",
-    platforms: [.iOS(.v15), .macCatalyst(.v15)],
+    // macOS is for MantisCore only; the Mantis UI product needs UIKit.
+    platforms: [.iOS(.v17), .macCatalyst(.v17), .macOS(.v14)],
     products: [
         .library(
             name: "Mantis",
-            targets: ["Mantis"])
+            targets: ["Mantis"]),
+        .library(
+            name: "MantisCore",
+            targets: ["MantisCore"])
     ],
     targets: [
         .target(
+            name: "MantisCore"
+        ),
+        .target(
             name: "Mantis",
-            exclude: ["Info.plist", "Resources/Info.plist"],
+            dependencies: ["MantisCore"],
             resources: [.process("Resources"), .copy("PrivacyInfo.xcprivacy")],
-            swiftSettings: [.define("MANTIS_SPM")]
+            swiftSettings: [.enableUpcomingFeature("IsolatedDefaultValues")]
         ),
         .testTarget(
             name: "MantisTests",
             dependencies: ["Mantis"],
-            path: "Tests/MantisTests",
-            swiftSettings: [.define("MANTIS_SPM")]
+            path: "Tests/MantisTests"
+        ),
+        .testTarget(
+            name: "MantisCoreTests",
+            dependencies: ["MantisCore"],
+            path: "Tests/MantisCoreTests"
         )
-    ]
+    ],
+    // Tools 6.0 defaults to the Swift 6 language mode; Mantis still builds in Swift 5 mode.
+    swiftLanguageModes: [.v5]
 )

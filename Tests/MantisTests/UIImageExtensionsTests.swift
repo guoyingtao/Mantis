@@ -250,4 +250,38 @@ final class UIImageExtensionsTests: XCTestCase {
         info.imageViewSize = .zero
         XCTAssertNil(image.crop(by: info), "zero imageViewSize must not crash or return garbage")
     }
+
+    // MARK: - Image scale
+
+    func testCropKeepsFullPixelResolutionForScaledImages() throws {
+        // A @2x image: 1000x800 pixels, 500x400 points. Both pipelines work in
+        // pixels, so the crop keeps the source resolution and comes back at scale 1.
+        let cgImage = try XCTUnwrap(makePatternImage(width: 1000, height: 800).cgImage)
+        let image = UIImage(cgImage: cgImage, scale: 2, orientation: .up)
+        let info = makeCropInfo(viewSize: CGSize(width: 500, height: 400), cropSize: CGSize(width: 200, height: 160),
+                                zoom: 1, contentOffset: CGPoint(x: 150, y: 120), horizontalSkewDegrees: 0)
+
+        let expected = CGSize(width: 400, height: 320) // 1000/500 * 200, 800/400 * 160
+        XCTAssertEqual(image.getOutputCropImageSize(by: info), expected)
+
+        // Same pixels at scale 1 give the reference content.
+        let reference = try XCTUnwrap(UIImage(cgImage: cgImage, scale: 1, orientation: .up).crop(by: info))
+        let samplePoints = [CGPoint(x: 0.25, y: 0.25), CGPoint(x: 0.75, y: 0.25),
+                            CGPoint(x: 0.25, y: 0.75), CGPoint(x: 0.75, y: 0.75)]
+        for cropped in [image.crop(by: info), image.cropWithCIImage(by: info)] {
+            XCTAssertEqual(cropped?.cgImage?.width, Int(expected.width))
+            XCTAssertEqual(cropped?.cgImage?.height, Int(expected.height))
+            XCTAssertEqual(cropped?.scale, 1)
+
+            let output = try XCTUnwrap(cropped)
+            for point in samplePoints {
+                let actualPixel = try XCTUnwrap(pixel(of: output, atNormalized: point))
+                let referencePixel = try XCTUnwrap(pixel(of: reference, atNormalized: point))
+                for channel in 0..<3 {
+                    XCTAssertEqual(actualPixel[channel], referencePixel[channel], accuracy: 0.01,
+                                   "pixel mismatch at \(point) channel \(channel)")
+                }
+            }
+        }
+    }
 }

@@ -8,6 +8,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class RotateDialTests: XCTestCase {
     
     var dial: RotationDial!
