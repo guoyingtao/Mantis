@@ -59,13 +59,32 @@ final class RotationDial: UIView {
     }
     
     override func accessibilityIncrement() {
-        viewModel.rotationAngle = Angle(degrees: 1)
-        setAccessibilityValue()
+        adjustRotationAngleForAccessibility(byDegrees: 1)
     }
     
     override func accessibilityDecrement() {
-        viewModel.rotationAngle = Angle(degrees: -1)
+        adjustRotationAngleForAccessibility(byDegrees: -1)
+    }
+    
+    /// Turns the dial plate by `delta` degrees within `angleLimit`, reports the
+    /// new angle and calls `didFinishRotation()`, as lifting a finger does.
+    /// It sets the plate directly: the touch path's stepping refuses a step
+    /// that would cross the limit without reporting it.
+    private func adjustRotationAngleForAccessibility(byDegrees delta: CGFloat) {
+        let limit = angleLimit.degrees
+        let currentDegrees = getRotationAngle().degrees
+        let degrees = min(max(currentDegrees + delta, -limit), limit)
+        // Already at the limit. The plate angle is read back with atan2f, so
+        // allow for single-precision error.
+        guard abs(degrees - currentDegrees) > 1e-3 else {
+            return
+        }
+        
+        let angle = Angle(degrees: degrees)
+        rotateDialPlate(to: angle)
         setAccessibilityValue()
+        didUpdateRotationValue(angle)
+        didFinishRotation()
     }
 }
 
@@ -198,14 +217,18 @@ extension RotationDial: RotationDialProtocol {
         guard radians != 0 else { return false }
         
         if (getRotationAngle() * steppingAngle).radians >= 0 && abs(getRotationAngle().radians + radians) > angleLimit.radians {
+            let previousRadians = getRotationAngle().radians
             
             if radians > 0 {
                 rotateDialPlate(to: angleLimit)
             } else {
                 rotateDialPlate(to: -angleLimit)
             }
+            setAccessibilityValue()
             
-            return false
+            // Report the snap to the limit once. Steps past it leave the plate
+            // where it is, so there is nothing new to report.
+            return abs(getRotationAngle().radians - previousRadians) > 1e-5
         }
 
         dialPlate.transform = dialPlate.transform.rotated(by: radians)
@@ -258,6 +281,7 @@ extension RotationDial: RotationDialProtocol {
         transform = .identity
         dialPlate?.reset()
         config.rotationCenterType = .useDefault
+        setAccessibilityValue()
     }
     
     func getLengthRatio() -> CGFloat {

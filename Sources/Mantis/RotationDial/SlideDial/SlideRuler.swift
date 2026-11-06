@@ -53,32 +53,16 @@ final class SlideRuler: UIView {
         
         positionInfoHelper = BilateralTypeSlideRulerPositionHelper()
         positionInfoHelper.slideRuler = self
-        // iOS 17+ uses the modern trait-change registration. Earlier versions
-        // (the library supports iOS 15) fall back to `traitCollectionDidChange`
-        // below, since `registerForTraitChanges` is unavailable before iOS 17.
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previous: UITraitCollection) in
-                if self.traitCollection.hasDifferentColorAppearance(comparedTo: previous) {
-                    self.applyColorsForCurrentTraitCollection()
-                }
+        // Refresh the colors on a light/dark switch.
+        registerForTraitChanges(UITraitCollection.systemTraitsAffectingColorAppearance) { (self: Self, previous: UITraitCollection) in
+            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previous) {
+                self.applyColorsForCurrentTraitCollection()
             }
         }
     }
 
     required init?(coder: NSCoder) {
         fatalError()
-    }
-
-    // iOS 16 and earlier: `registerForTraitChanges` is unavailable, so use the
-    // (pre-iOS-17) trait-change hook to refresh colors on a light/dark switch.
-    // On iOS 17+ the registration above handles this instead.
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard #unavailable(iOS 17.0) else { return }
-        if let previousTraitCollection,
-           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            applyColorsForCurrentTraitCollection()
-        }
     }
 
     /// Reapplies the configured colors to all layers. Called on a color-appearance
@@ -234,6 +218,25 @@ final class SlideRuler: UIView {
         updateLastTickIndex()
     }
 
+    /// Resizes the ruler while keeping the position it currently shows.
+    /// The displayed position is read from the scroll view rather than from the
+    /// dial's view model, because the two can differ: the dial leaves the ruler
+    /// centered for stored angles of 0.5° or less.
+    func updateFrameKeepingPosition(_ newFrame: CGRect) {
+        let oldWidth = scrollRulerView.bounds.width
+        let relativeOffset = oldWidth > 0 ? scrollRulerView.contentOffset.x / oldWidth : 0
+        
+        // Resizing the scroll view clamps its content offset, which would
+        // otherwise be reported as a user scroll.
+        scrollRulerView.delegate = nil
+        frame = newFrame
+        setUIFrames()
+        scrollRulerView.contentOffset = CGPoint(x: relativeOffset * scrollRulerView.bounds.width, y: 0)
+        scrollRulerView.delegate = self
+        checkCentralDotHiddenStatus()
+        updateLastTickIndex()
+    }
+    
     private func updateLastTickIndex() {
         lastTickIndex = currentTickIndex()
     }

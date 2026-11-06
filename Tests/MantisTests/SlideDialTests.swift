@@ -8,11 +8,15 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class SlideDialTests: XCTestCase {
     
     var dial: SlideDial!
     var slideRuler: SlideRuler!
     var viewModel: SlideDialViewModel!
+    
+    /// A non-zero frame so the ruler's offset ratio can be read back
+    private let dialFrame = CGRect(x: 0, y: 0, width: 300, height: 60)
 
     override func setUpWithError() throws {
         let config = SlideDialConfig()
@@ -23,14 +27,25 @@ final class SlideDialTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    private func setup(with config: SlideDialConfig) {
+    private func setup(with config: SlideDialConfig, allowableFrame: CGRect = .zero) {
         viewModel = SlideDialViewModel()
         slideRuler = SlideRuler(frame: .zero, config: config)
         dial = SlideDial(frame: .zero,
                          config: config,
                          viewModel: viewModel,
                          slideRuler: slideRuler)
-        dial.setupUI(withAllowableFrame: .zero)
+        dial.setupUI(withAllowableFrame: allowableFrame)
+    }
+    
+    private var rulerOffsetRatio: CGFloat {
+        slideRuler.positionInfoHelper.getOffsetRatio()
+    }
+    
+    /// UIScrollView snaps `contentOffset` to the pixel grid, so a fractional ratio reads back
+    /// exactly only on 3x screens (1° is 1/3 pt on this ruler). Allow one pixel of slack.
+    private var rulerOffsetRatioAccuracy: CGFloat {
+        XCTAssertGreaterThan(slideRuler.offsetValue, 0, "Ruler offset must be set before reading the ratio")
+        return 1 / (slideRuler.offsetValue * max(slideRuler.traitCollection.displayScale, 1))
     }
     
     func testSlidingSlideDial() {
@@ -62,5 +77,416 @@ final class SlideDialTests: XCTestCase {
         dial.reset()
         XCTAssertEqual(viewModel.rotationAngle.degrees, 0)
         XCTAssertEqual(dial.transform, .identity)
+    }
+
+    // MARK: - updateLength
+
+    private func setupForResizing(width: CGFloat,
+                                  height: CGFloat = 80,
+                                  mode: SlideDialMode = .simple) -> SlideDialConfig {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        config.mode = mode
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: width, height: height))
+        return config
+    }
+
+    func testUpdateLengthResizesDialAndRuler() {
+        let config = setupForResizing(width: 300)
+
+        dial.updateLength(500)
+
+        XCTAssertEqual(dial.bounds.width, 500)
+        XCTAssertEqual(slideRuler.frame, CGRect(x: 0,
+                                                y: 80 - config.slideRulerHeight,
+                                                width: 500,
+                                                height: config.slideRulerHeight))
+        XCTAssertEqual(slideRuler.scrollRulerView.contentSize.width, 1000)
+        XCTAssertEqual(dial.indicator.center.x, 250)
+    }
+
+    func testUpdateLengthResizesTypeSelectorDial() throws {
+        let config = setupForResizing(width: 300, height: 120, mode: .withTypeSelector)
+
+        dial.updateLength(500)
+
+        XCTAssertEqual(dial.bounds.width, 500)
+        XCTAssertEqual(slideRuler.frame, CGRect(x: 0,
+                                                y: 120 - config.slideRulerHeight,
+                                                width: 500,
+                                                height: config.slideRulerHeight))
+        // The selected button stays centered above the ruler pointer.
+        XCTAssertEqual(try XCTUnwrap(dial.typeButtons[.straighten]).frame.midX, 250, accuracy: 0.001)
+    }
+
+    func testUpdateLengthKeepsRotationPosition() {
+        for degrees: CGFloat in [-44, -20, 20, 44] {
+            _ = setupForResizing(width: 300)
+            XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: degrees)))
+            let expectedRatio = degrees / 45.0
+
+            var reportedAngles: [Angle] = []
+            dial.didUpdateRotationValue = { reportedAngles.append($0) }
+
+            dial.updateLength(500)
+
+            // UIScrollView rounds the content offset to the pixel grid, so allow one point.
+            XCTAssertEqual(slideRuler.positionInfoHelper.getOffsetRatio(), expectedRatio,
+                           accuracy: 1 / slideRuler.offsetValue, "\(degrees)°")
+            XCTAssertFalse(slideRuler.centralDot.isHidden, "\(degrees)°")
+            // A resize is not a user scroll.
+            XCTAssertTrue(reportedAngles.isEmpty, "\(degrees)°")
+
+            dial.updateLength(200)
+
+            XCTAssertEqual(slideRuler.positionInfoHelper.getOffsetRatio(), expectedRatio,
+                           accuracy: 1 / slideRuler.offsetValue, "\(degrees)°")
+            XCTAssertTrue(reportedAngles.isEmpty, "\(degrees)°")
+        }
+    }
+
+    func testUpdateLengthKeepsCenteredPosition() {
+        _ = setupForResizing(width: 300)
+
+        dial.updateLength(500)
+
+        XCTAssertEqual(slideRuler.positionInfoHelper.getOffsetRatio(), 0, accuracy: 0.0001)
+        XCTAssertTrue(slideRuler.centralDot.isHidden)
+    }
+
+    func testUpdateLengthIgnoresInvalidOrUnchangedLength() {
+        _ = setupForResizing(width: 300)
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 20)))
+        let offset = slideRuler.scrollRulerView.contentOffset
+        // A resize would show the central dot at 20°, so this tells whether one ran.
+        slideRuler.centralDot.isHidden = true
+
+        dial.updateLength(0)
+        dial.updateLength(-10)
+        dial.updateLength(300)
+
+        XCTAssertEqual(dial.bounds.width, 300)
+        XCTAssertEqual(slideRuler.frame.width, 300)
+        XCTAssertEqual(slideRuler.scrollRulerView.contentOffset, offset)
+        XCTAssertTrue(slideRuler.centralDot.isHidden)
+    }
+    
+    // MARK: - Accessibility
+    
+    func testAccessibilityIncrementAddsOneDegree() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        
+        dial.accessibilityIncrement()
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 1, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, 1 / 45, accuracy: rulerOffsetRatioAccuracy)
+        XCTAssertEqual(dial.accessibilityValue, "1 degree")
+    }
+    
+    func testAccessibilityDecrementSubtractsOneDegree() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        
+        dial.accessibilityDecrement()
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, -1, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -1 / 45, accuracy: rulerOffsetRatioAccuracy)
+        XCTAssertEqual(dial.accessibilityValue, "-1 degree")
+    }
+    
+    func testAccessibilityIncrementAndDecrementMoveInOppositeDirections() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 10)))
+        
+        dial.accessibilityIncrement()
+        dial.accessibilityIncrement()
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 12, accuracy: 1e-6)
+        
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 9, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, 9 / 45, accuracy: rulerOffsetRatioAccuracy)
+        XCTAssertEqual(dial.accessibilityValue, "9 degrees")
+    }
+    
+    func testAccessibilityAdjustmentStopsAtLimitation() {
+        var config = SlideDialConfig()
+        config.limitation = 2
+        setup(with: config, allowableFrame: dialFrame)
+        
+        for _ in 0..<3 {
+            dial.accessibilityIncrement()
+        }
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 2, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, 1, accuracy: 1e-6)
+        
+        for _ in 0..<5 {
+            dial.accessibilityDecrement()
+        }
+        XCTAssertEqual(viewModel.rotationAngle.degrees, -2, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -1, accuracy: 1e-6)
+    }
+    
+    func testAccessibilityAdjustmentUsesSkewLimitationForSkewTypes() {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        config.straightenLimitation = 45
+        config.skewLimitation = 2
+        setup(with: config, allowableFrame: dialFrame)
+        viewModel.currentAdjustmentType = .horizontalSkew
+        
+        for _ in 0..<3 {
+            dial.accessibilityIncrement()
+        }
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 2, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, 1, accuracy: 1e-6)
+        
+        for _ in 0..<5 {
+            dial.accessibilityDecrement()
+        }
+        XCTAssertEqual(viewModel.rotationAngle.degrees, -2, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -1, accuracy: 1e-6)
+    }
+    
+    func testAccessibilityAdjustmentNotifiesUpdateAndFinish() {
+        var config = SlideDialConfig()
+        config.limitation = 1
+        setup(with: config, allowableFrame: dialFrame)
+        
+        var updatedDegrees: [CGFloat] = []
+        var finishCount = 0
+        dial.didUpdateRotationValue = { updatedDegrees.append($0.degrees) }
+        dial.didFinishRotation = { finishCount += 1 }
+        
+        dial.accessibilityIncrement()
+        XCTAssertEqual(updatedDegrees.count, 1)
+        XCTAssertEqual(updatedDegrees.last ?? 0, 1, accuracy: 1e-6)
+        XCTAssertEqual(finishCount, 1)
+        
+        // Already at the limitation: nothing changes, so nothing is reported
+        dial.accessibilityIncrement()
+        XCTAssertEqual(updatedDegrees.count, 1)
+        XCTAssertEqual(finishCount, 1)
+        
+        dial.accessibilityDecrement()
+        XCTAssertEqual(updatedDegrees.count, 2)
+        XCTAssertEqual(updatedDegrees.last ?? 0, 0, accuracy: 1e-6)
+        XCTAssertEqual(finishCount, 2)
+    }
+    
+    func testAccessibilityAdjustmentClampsPartialStepToLimitation() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        
+        for sign: CGFloat in [1, -1] {
+            setup(with: config, allowableFrame: dialFrame)
+            XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 44.6 * sign)))
+            
+            var updateCount = 0
+            var finishCount = 0
+            dial.didUpdateRotationValue = { _ in updateCount += 1 }
+            dial.didFinishRotation = { finishCount += 1 }
+            
+            if sign > 0 {
+                dial.accessibilityIncrement()
+            } else {
+                dial.accessibilityDecrement()
+            }
+            
+            XCTAssertEqual(viewModel.rotationAngle.degrees, 45 * sign, accuracy: 1e-6, "\(sign)")
+            XCTAssertEqual(rulerOffsetRatio, sign, accuracy: 1e-6, "\(sign)")
+            XCTAssertEqual(updateCount, 1, "\(sign)")
+            XCTAssertEqual(finishCount, 1, "\(sign)")
+        }
+    }
+    
+    func testAccessibilityAdjustmentReachesDefaultLimitationOnce() {
+        setup(with: SlideDialConfig(), allowableFrame: dialFrame)
+        
+        var updateCount = 0
+        var finishCount = 0
+        dial.didUpdateRotationValue = { _ in updateCount += 1 }
+        dial.didFinishRotation = { finishCount += 1 }
+        
+        for _ in 0..<50 {
+            dial.accessibilityIncrement()
+        }
+        
+        // 45 one-degree steps land a hair under 45° after the radians round trip,
+        // which must still count as being at the limitation.
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 45, accuracy: 1e-6)
+        XCTAssertEqual(updateCount, 45)
+        XCTAssertEqual(finishCount, 45)
+    }
+    
+    // MARK: - Angles set by CropView
+    
+    func testAccessibilityAdjustmentStartsFromAngleSetByCropView() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        
+        // Drag to 10°, then flip, which makes CropView move the dial to -10°
+        dial.didGetOffsetRatio(from: slideRuler, offsetRatio: 10 / 45)
+        var updatedDegrees: [CGFloat] = []
+        dial.didUpdateRotationValue = { updatedDegrees.append($0.degrees) }
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: -10)))
+        
+        // CropView already applied this angle, so it is not reported back
+        XCTAssertTrue(updatedDegrees.isEmpty)
+        XCTAssertEqual(viewModel.rotationAngle.degrees, -10, accuracy: 1e-6)
+        
+        dial.accessibilityIncrement()
+        XCTAssertEqual(updatedDegrees.count, 1)
+        XCTAssertEqual(updatedDegrees.last ?? 0, -9, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -9 / 45, accuracy: rulerOffsetRatioAccuracy)
+        
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        XCTAssertEqual(viewModel.rotationAngle.degrees, -11, accuracy: 1e-6)
+    }
+    
+    func testAccessibilityValueFollowsAngleSetByCropView() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        
+        // Auto-adjust applies a fractional angle
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 3.2)))
+        XCTAssertEqual(dial.accessibilityValue, "3 degrees")
+        
+        dial.accessibilityIncrement()
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 4.2, accuracy: 1e-6)
+        XCTAssertEqual(dial.accessibilityValue, "4 degrees")
+    }
+    
+    func testTypeSwitchRestoresStraightenAngleSetByCropView() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        
+        // Drag straighten to 10°, then flip, which makes CropView move the dial to -10°
+        dial.didGetOffsetRatio(from: slideRuler, offsetRatio: 10 / 45)
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: -10)))
+        
+        try tapTypeButton(.horizontalSkew)
+        try tapTypeButton(.straighten)
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, -10, accuracy: 1e-6)
+        XCTAssertEqual(rulerOffsetRatio, -10 / 45, accuracy: rulerOffsetRatioAccuracy)
+    }
+    
+    private func tapTypeButton(_ type: RotationAdjustmentType) throws {
+        let tap = UITapGestureRecognizer()
+        try XCTUnwrap(dial.typeButtons[type]).addGestureRecognizer(tap)
+        dial.typeButtonTapped(tap)
+    }
+}
+
+extension SlideDialTests {
+    // MARK: - Accessibility value
+    
+    func testDragRefreshesAccessibilityValue() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        
+        dial.didGetOffsetRatio(from: slideRuler, offsetRatio: -10 / 45)
+        
+        XCTAssertEqual(dial.accessibilityValue, "-10 degrees")
+    }
+    
+    func testResetRefreshesAccessibilityValue() {
+        var config = SlideDialConfig()
+        config.limitation = 45
+        setup(with: config, allowableFrame: dialFrame)
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 20)))
+        XCTAssertEqual(dial.accessibilityValue, "20 degrees")
+        
+        dial.reset()
+        
+        XCTAssertEqual(dial.accessibilityValue, "0 degrees")
+    }
+    
+    // MARK: - Type switching with VoiceOver
+    
+    func testSimpleModeHasNoTypeAccessibilityActions() {
+        setup(with: SlideDialConfig(), allowableFrame: dialFrame)
+        
+        XCTAssertTrue((dial.accessibilityCustomActions ?? []).isEmpty)
+    }
+    
+    func testTypeAccessibilityActionsSwitchType() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        var switchedTypes: [RotationAdjustmentType] = []
+        dial.didSwitchAdjustmentType = { switchedTypes.append($0) }
+        
+        XCTAssertEqual(typeActionNames(), [title(.verticalSkew), title(.horizontalSkew)])
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.straighten)), 0 degrees")
+        
+        try performTypeAction(.horizontalSkew)
+        
+        XCTAssertEqual(viewModel.currentAdjustmentType, .horizontalSkew)
+        XCTAssertEqual(switchedTypes, [.horizontalSkew])
+        XCTAssertEqual(dial.typeButtons[.horizontalSkew]?.isSelectedType, true)
+        XCTAssertEqual(dial.typeButtons[.straighten]?.isSelectedType, false)
+        XCTAssertEqual(typeActionNames(), [title(.straighten), title(.verticalSkew)])
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.horizontalSkew)), 0 degrees")
+        
+        dial.accessibilityIncrement()
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.horizontalSkew)), 1 degree")
+    }
+    
+    func testTypeAccessibilityActionsRestoreEachTypeAngle() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        dial.didGetOffsetRatio(from: slideRuler, offsetRatio: 10 / 45)
+        
+        try performTypeAction(.horizontalSkew)
+        dial.accessibilityIncrement()
+        dial.accessibilityIncrement()
+        try performTypeAction(.straighten)
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 10, accuracy: 1e-6)
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.straighten)), 10 degrees")
+        
+        try performTypeAction(.horizontalSkew)
+        
+        XCTAssertEqual(viewModel.rotationAngle.degrees, 2, accuracy: 1e-6)
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.horizontalSkew)), 2 degrees")
+    }
+    
+    func testResetRestoresTypeAccessibilityActions() throws {
+        var config = SlideDialConfig()
+        config.mode = .withTypeSelector
+        setup(with: config, allowableFrame: CGRect(x: 0, y: 0, width: 300, height: 120))
+        try performTypeAction(.verticalSkew)
+        
+        dial.reset()
+        
+        XCTAssertEqual(typeActionNames(), [title(.verticalSkew), title(.horizontalSkew)])
+        XCTAssertEqual(dial.accessibilityValue, "\(title(.straighten)), 0 degrees")
+    }
+    
+    private func title(_ type: RotationAdjustmentType) -> String {
+        type.localizedTitle
+    }
+    
+    private func typeActionNames() -> [String] {
+        (dial.accessibilityCustomActions ?? []).map(\.name)
+    }
+    
+    private func performTypeAction(_ type: RotationAdjustmentType) throws {
+        let action = try XCTUnwrap(dial.accessibilityCustomActions?.first { $0.name == title(type) })
+        XCTAssertEqual(action.actionHandler?(action), true)
     }
 }

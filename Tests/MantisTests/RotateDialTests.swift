@@ -8,6 +8,7 @@
 import XCTest
 @testable import Mantis
 
+@MainActor
 final class RotateDialTests: XCTestCase {
     
     var dial: RotationDial!
@@ -84,4 +85,100 @@ final class RotateDialTests: XCTestCase {
         XCTAssertEqual(dial.transform, .identity)
     }
 
+    func testAccessibilityIncrementAndDecrement() {
+        setup(with: RotationDialConfig())
+        
+        var updatedDegrees: [CGFloat] = []
+        var finishCount = 0
+        dial.didUpdateRotationValue = { updatedDegrees.append($0.degrees) }
+        dial.didFinishRotation = { finishCount += 1 }
+        
+        dial.accessibilityIncrement()
+        dial.accessibilityIncrement()
+        XCTAssertEqual(dial.getRotationAngle().degrees, 2, accuracy: 1e-3)
+        XCTAssertEqual(dial.accessibilityValue, "2 degrees")
+        
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        dial.accessibilityDecrement()
+        XCTAssertEqual(dial.getRotationAngle().degrees, -1, accuracy: 1e-3)
+        XCTAssertEqual(dial.accessibilityValue, "-1 degree")
+        XCTAssertEqual(updatedDegrees.count, 5)
+        XCTAssertEqual(updatedDegrees.last ?? 0, -1, accuracy: 1e-3)
+        XCTAssertEqual(finishCount, 5)
+    }
+    
+    func testAccessibilityAdjustmentStopsAtAngleLimit() {
+        for sign: CGFloat in [1, -1] {
+            setup(with: RotationDialConfig())
+            XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 44.5 * sign)))
+            
+            var updatedDegrees: [CGFloat] = []
+            var finishCount = 0
+            dial.didUpdateRotationValue = { updatedDegrees.append($0.degrees) }
+            dial.didFinishRotation = { finishCount += 1 }
+            let stepOutward = sign > 0 ? dial.accessibilityIncrement : dial.accessibilityDecrement
+            
+            // The last half step lands on the limit and is reported
+            stepOutward()
+            XCTAssertEqual(dial.getRotationAngle().degrees, 45 * sign, accuracy: 1e-3, "\(sign)")
+            XCTAssertEqual(updatedDegrees.count, 1, "\(sign)")
+            XCTAssertEqual(updatedDegrees.last ?? 0, 45 * sign, accuracy: 1e-3, "\(sign)")
+            XCTAssertEqual(finishCount, 1, "\(sign)")
+            
+            // Already at the limit: nothing changes, so nothing is reported
+            stepOutward()
+            XCTAssertEqual(dial.getRotationAngle().degrees, 45 * sign, accuracy: 1e-3, "\(sign)")
+            XCTAssertEqual(updatedDegrees.count, 1, "\(sign)")
+            XCTAssertEqual(finishCount, 1, "\(sign)")
+        }
+    }
+    
+    func testAccessibilityValueUsesSingularOnlyForOneDegree() {
+        let expectations: [(degrees: CGFloat, value: String)] = [
+            (-5, "-5 degrees"),
+            (-1, "-1 degree"),
+            (0, "0 degrees"),
+            (1, "1 degree"),
+            (2, "2 degrees")
+        ]
+        
+        for expectation in expectations {
+            setup(with: RotationDialConfig())
+            XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: expectation.degrees)))
+            XCTAssertEqual(dial.accessibilityValue, expectation.value)
+        }
+    }
+    
+    func testResetRefreshesAccessibilityValue() {
+        setup(with: RotationDialConfig())
+        XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 20)))
+        XCTAssertEqual(dial.accessibilityValue, "20 degrees")
+        
+        dial.reset()
+        
+        XCTAssertEqual(dial.accessibilityValue, "0 degrees")
+    }
+    
+    func testTouchStepPastLimitReportsSnapOnce() {
+        for sign: CGFloat in [1, -1] {
+            setup(with: RotationDialConfig())
+            XCTAssertTrue(dial.updateRotationValue(by: Angle(degrees: 44.5 * sign)))
+            
+            var updatedDegrees: [CGFloat] = []
+            dial.didUpdateRotationValue = { updatedDegrees.append($0.degrees) }
+            
+            // A touch move sets the view model to the step since the last move
+            viewModel.rotationAngle = Angle(degrees: sign)
+            XCTAssertEqual(dial.getRotationAngle().degrees, 45 * sign, accuracy: 1e-3, "\(sign)")
+            XCTAssertEqual(updatedDegrees.count, 1, "\(sign)")
+            XCTAssertEqual(updatedDegrees.last ?? 0, 45 * sign, accuracy: 1e-3, "\(sign)")
+            XCTAssertEqual(dial.accessibilityValue, sign > 0 ? "45 degrees" : "-45 degrees")
+            
+            // Moving further past the limit leaves the plate where it is
+            viewModel.rotationAngle = Angle(degrees: sign)
+            XCTAssertEqual(updatedDegrees.count, 1, "\(sign)")
+        }
+    }
+    
 }

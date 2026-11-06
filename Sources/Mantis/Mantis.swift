@@ -23,8 +23,10 @@
 //  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
+@_exported import MantisCore
 
 // MARK: - APIs
+@MainActor
 public func cropViewController(image: UIImage,
                                config: Mantis.Config = Mantis.Config(),
                                cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
@@ -39,6 +41,7 @@ public func cropViewController(image: UIImage,
     return cropViewController
 }
 
+@MainActor
 public func cropViewController<T: CropViewController>(image: UIImage,
                                                       config: Mantis.Config = Mantis.Config(),
                                                       cropToolbar: CropToolbarProtocol = CropToolbar(frame: .zero),
@@ -53,6 +56,7 @@ public func cropViewController<T: CropViewController>(image: UIImage,
     return cropViewController
 }
 
+@MainActor
 public func setupCropViewController(_ cropViewController: Mantis.CropViewController,
                                     with image: UIImage,
                                     and config: Mantis.Config = Mantis.Config(),
@@ -67,10 +71,6 @@ public func setupCropViewController(_ cropViewController: Mantis.CropViewControl
     cropViewController.cropToolbar = cropToolbar
 }
 
-public func locateResourceBundle(by hostClass: AnyClass) {
-    LocalizedHelper.setBundle(Bundle(for: hostClass))
-}
-
 /// Crops an image offline (without a crop view controller) using a previously
 /// obtained `CropInfo`.
 ///
@@ -79,10 +79,7 @@ public func locateResourceBundle(by hostClass: AnyClass) {
 ///   the CGContext pipeline. Pass the same value used in
 ///   `CropViewConfig.maxImagePixelCount`. Defaults to 0 (disabled).
 public func crop(image: UIImage, by cropInfo: CropInfo, maxImagePixelCount: Int = 0) -> UIImage? {
-    if image.exceedsPixelCount(maxImagePixelCount) {
-        return image.cropWithCIImage(by: cropInfo)
-    }
-    return image.crop(by: cropInfo)
+    return image.crop(by: cropInfo, maxImagePixelCount: maxImagePixelCount)
 }
 
 /// Returns a downsampled copy of `image` when its pixel count exceeds
@@ -117,10 +114,6 @@ public func resetLanguage() {
 var localizationConfig = LocalizationConfig()
 
 // MARK: - private section
-private(set) var bundle: Bundle? = {
-    return Mantis.Config.bundle
-}()
-
 private func applyAppearanceDefaults(to config: inout Mantis.Config) {
     let mode = config.appearanceMode
     
@@ -170,6 +163,7 @@ private func applySlideDialAppearance(to config: inout SlideDialConfig, for mode
     config.centralDotColor = AppearanceColorPreset.slideDialCentralDotColor(for: mode)
 }
 
+@MainActor
 private func buildCropView(withImage image: UIImage,
                            config cropViewConfig: CropViewConfig,
                            rotationControlView: RotationControlViewProtocol?) -> CropViewProtocol {
@@ -196,6 +190,7 @@ private func buildCropViewModel(with cropViewConfig: CropViewConfig) -> CropView
     )
 }
 
+@MainActor
 private func buildCropWorkbenchView(with cropViewConfig: CropViewConfig, and imageContainer: ImageContainerProtocol) -> CropWorkbenchViewProtocol {
     CropWorkbenchView(frame: .zero,
                    minimumZoomScale: cropViewConfig.minimumZoomScale,
@@ -203,6 +198,7 @@ private func buildCropWorkbenchView(with cropViewConfig: CropViewConfig, and ima
                    imageContainer: imageContainer)
 }
 
+@MainActor
 private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> CropMaskViewManagerProtocol {
     
     let dimmingView = CropDimmingView(cropShapeType: cropViewConfig.cropShapeType)
@@ -222,6 +218,7 @@ private func buildCropMaskViewManager(with cropViewConfig: CropViewConfig) -> Cr
     return CropMaskViewManager(dimmingView: dimmingView, visualEffectView: visualEffectView)
 }
 
+@MainActor
 private func setupRotationControlViewIfNeeded(withConfig cropViewConfig: CropViewConfig,
                                               cropView: CropView,
                                               rotationControlView: RotationControlViewProtocol?) {

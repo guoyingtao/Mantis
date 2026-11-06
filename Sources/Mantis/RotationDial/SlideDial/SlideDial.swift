@@ -77,6 +77,7 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     func handleRotation(by angle: Angle) {
         setIndicator(with: angle)
+        setAccessibilityValue()
         didUpdateRotationValue(angle)
     }
 
@@ -108,6 +109,10 @@ final class SlideDial: UIView, RotationControlViewProtocol {
         
         slideRuler?.setOffsetRatio(angle.degrees / limit)
         setIndicator(with: angle)
+        // CropView calls this after flips, undo/redo and presets. Keep the view
+        // model on the angle the ruler now shows, so VoiceOver steps and type
+        // switches start from it.
+        updateViewModelAngleSilently(degrees: angle.degrees)
 
         return true
     }
@@ -224,6 +229,26 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     
     // MARK: - Slide ruler setup
     
+    /// Resizes the dial to a new length (e.g. after the window size changes on a
+    /// foldable or in Split View) while keeping the current rotation value.
+    func updateLength(_ length: CGFloat) {
+        guard length > 0, bounds.width != length else { return }
+        
+        bounds.size.width = length
+        
+        switch config.mode {
+        case .simple:
+            indicator?.center.x = length / 2
+        case .withTypeSelector:
+            layoutTypeButtons(animated: false)
+        }
+        
+        slideRuler.updateFrameKeepingPosition(CGRect(x: 0,
+                                                     y: bounds.height - config.slideRulerHeight,
+                                                     width: length,
+                                                     height: config.slideRulerHeight))
+    }
+    
     func setupSlideRuler() {
         let sliderFrame = CGRect(x: 0,
                                  y: frame.height - config.slideRulerHeight,
@@ -238,15 +263,42 @@ final class SlideDial: UIView, RotationControlViewProtocol {
     // MARK: - Accessibility
     
     override func accessibilityIncrement() {
-        viewModel.rotationAngle += Angle(degrees: 1)
-        setAccessibilityValue()
+        adjustRotationAngleForAccessibility(byDegrees: 1)
     }
     
     override func accessibilityDecrement() {
-        viewModel.rotationAngle -= Angle(degrees: -1)
-        setAccessibilityValue()
+        adjustRotationAngleForAccessibility(byDegrees: -1)
     }
+    
+    func setAccessibilityValue() {
+        switch config.mode {
+        case .simple:
+            accessibilityValue = accessibilityDegreesText()
+        case .withTypeSelector:
+            // Name the type, since the same gesture also adjusts skew
+            let typeTitle = viewModel.currentAdjustmentType.localizedTitle
+            accessibilityValue = "\(typeTitle), \(accessibilityDegreesText())"
+        }
+    }
+    
+    /// Steps the angle by `delta` degrees within `currentLimitation`, moves the
+    /// ruler to match, and calls `didFinishRotation()` so CropView settles as it
+    /// does after a drag. Drag haptics are not replayed.
+    private func adjustRotationAngleForAccessibility(byDegrees delta: CGFloat) {
+        let limit = currentLimitation
+        let currentDegrees = viewModel.rotationAngle.degrees
+        let degrees = min(max(currentDegrees + delta, -limit), limit)
+        // Already at the limit. Angle stores radians, so allow for round-trip drift.
+        guard abs(degrees - currentDegrees) > 1e-4 else {
+            return
+        }
         
+        slideRuler?.setOffsetRatio(degrees / limit)
+        slideRuler?.checkCentralDotHiddenStatus()
+        viewModel.rotationAngle = Angle(degrees: degrees)
+        didFinishRotation()
+    }
+    
     func getTotalRotationValue() -> CGFloat {
         viewModel.rotationAngle.degrees
     }

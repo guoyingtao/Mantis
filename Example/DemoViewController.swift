@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreImage
 import Mantis
 
 // swiftlint:disable type_body_length
@@ -149,9 +150,22 @@ class DemoViewController: UIViewController {
     // MARK: - Action Methods
     @objc private func largeImageSwitchChanged(_ sender: UISwitch) {
         useLargeImage = sender.isOn
-        image = UIImage(named: useLargeImage ? "large.jpg" : "sunflower.jpg")
         transformation = nil
-        croppedImageView.image = cachedDisplayImage
+
+        guard useLargeImage else {
+            image = UIImage(named: "sunflower.jpg")
+            croppedImageView.image = cachedDisplayImage
+            return
+        }
+
+        // Generating the fixture takes a moment on first use.
+        sender.isEnabled = false
+        LargeImageFixture.load { [weak self] largeImage in
+            guard let self = self else { return }
+            sender.isEnabled = true
+            self.image = largeImage ?? UIImage(named: "sunflower.jpg")
+            self.croppedImageView.image = self.cachedDisplayImage
+        }
     }
     
     @objc private func selectFromAlbumAction() {
@@ -520,5 +534,71 @@ extension DemoViewController: ImagePickerDelegate {
         // A transformation is only valid for the image it was created from.
         transformation = nil
         croppedImageView.image = cachedDisplayImage
+    }
+}
+
+// MARK: - Large image fixture
+
+/// Builds the oversized image behind the "Large Image" switch.
+///
+/// The demo needs an image well above `maxImagePixelCount` to exercise Mantis'
+/// large image path. Rather than checking a 16 MB JPEG into the repository, the
+/// bundled sunflower is scaled up to that size once and cached under Caches.
+/// Core Image writes the JPEG in tiles, so the full bitmap is never held in
+/// memory, and reading the result back from disk preserves the lazy decoding
+/// behaviour the bundled file had.
+private enum LargeImageFixture {
+    /// Matches the fixture this replaced: 10752 x 16128, roughly ten times the
+    /// example's `maxImagePixelCount` threshold. The bundled sunflower is
+    /// 3648 x 5472, so the aspect ratio is unchanged.
+    static let pixelSize = CGSize(width: 10752, height: 16128)
+
+    /// Loads the fixture, generating it on first use. Calls back on the main queue.
+    static func load(completion: @escaping (UIImage?) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let image = generateIfNeeded().flatMap { UIImage(contentsOfFile: $0.path) }
+            DispatchQueue.main.async { completion(image) }
+        }
+    }
+
+    private static var fileURL: URL {
+        let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        return caches.appendingPathComponent("mantis-large-image-fixture.jpg")
+    }
+
+    private static func generateIfNeeded() -> URL? {
+        let url = fileURL
+
+        if FileManager.default.fileExists(atPath: url.path) {
+            return url
+        }
+
+        guard let seed = UIImage(named: "sunflower.jpg"),
+              let seedImage = CIImage(image: seed) else {
+            return nil
+        }
+
+        let extent = seedImage.extent
+        let scaled = seedImage
+            .transformed(by: CGAffineTransform(scaleX: pixelSize.width / extent.width,
+                                               y: pixelSize.height / extent.height))
+            .cropped(to: CGRect(origin: .zero, size: pixelSize))
+
+        // Core Image renders the output in tiles, so the full 173 MP bitmap is
+        // never materialized. The software renderer is used because the GPU path
+        // is bounded by the maximum Metal texture size, which varies by device.
+        let context = CIContext(options: [.useSoftwareRenderer: true])
+        let quality = CIImageRepresentationOption(rawValue: kCGImageDestinationLossyCompressionQuality as String)
+
+        do {
+            try context.writeJPEGRepresentation(of: scaled,
+                                                to: url,
+                                                colorSpace: CGColorSpaceCreateDeviceRGB(),
+                                                options: [quality: 0.8])
+            return url
+        } catch {
+            assertionFailure("Failed to generate the large image fixture: \(error)")
+            return nil
+        }
     }
 }

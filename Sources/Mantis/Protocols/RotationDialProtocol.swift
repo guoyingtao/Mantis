@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public protocol RotationControlViewProtocol: UIView {
     /**
      Set it to true if you want CropView to control the frame of your own rotation control view.
@@ -41,9 +42,10 @@ public protocol RotationControlViewProtocol: UIView {
      */
     func handleDeviceRotation()
         
-    // MARK: If isAttachedToCropView is true, implement functions below
+    // MARK: Used when isAttachedToCropView is true
     /**
-     The allowableFrame is set by CropView.
+     CropView passes the frame the control should occupy and afterwards only moves it,
+     so the control's size comes from here. The default implementation sets `frame` to `allowableFrame`.
      No need to implement it if isAttachedToCropView is false
      */
     func setupUI(withAllowableFrame allowableFrame: CGRect)
@@ -61,7 +63,7 @@ public protocol RotationControlViewProtocol: UIView {
     func getLengthRatio() -> CGFloat
     
     /**
-     Set accessibilities of the view which includes accessibilityTraits, accessibilityLabel and accessibilityLabel
+     Set accessibilities of the view which includes accessibilityTraits, accessibilityLabel and accessibilityValue
      */
     func setAccessibilities()
     
@@ -76,8 +78,11 @@ public protocol RotationControlViewProtocol: UIView {
     func getTotalRotationValue() -> CGFloat
 }
 
-extension RotationControlViewProtocol {
-    func setupUI(withAllowableFrame allowableFrame: CGRect) {}
+public extension RotationControlViewProtocol {
+    func setupUI(withAllowableFrame allowableFrame: CGRect) {
+        frame = allowableFrame
+    }
+
     func getTouchTarget(with point: CGPoint) -> UIView {
         return self
     }
@@ -96,13 +101,16 @@ extension RotationControlViewProtocol {
     }
     
     func setAccessibilityValue() {
+        accessibilityValue = accessibilityDegreesText()
+    }
+}
+
+extension RotationControlViewProtocol {
+    /// The rounded rotation value as VoiceOver reads it, e.g. "1 degree" or "-5 degrees"
+    func accessibilityDegreesText() -> String {
         let degreeValue = Int(round(getTotalRotationValue()))
-        
-        if degreeValue < 2 {
-            accessibilityValue = "\(degreeValue) degree"
-        } else {
-            accessibilityValue = "\(degreeValue) degrees"
-        }
+        let unit = abs(degreeValue) == 1 ? "degree" : "degrees"
+        return "\(degreeValue) \(unit)"
     }
 }
 
