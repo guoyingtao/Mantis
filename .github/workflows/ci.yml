@@ -73,13 +73,18 @@ jobs:
             print(f"iOS Simulator SDK: {sdk_text}")
 
             # The first call blocks until the runtimes are mounted; poll in case
-            # it returns before the iOS ones are.
+            # it fails, times out or returns before the iOS ones are mounted.
             for attempt in range(1, 7):
                 started = time.monotonic()
-                listing = json.loads(run("xcrun", "simctl", "list", "-j", timeout=600))
-                print(f"simctl list took {time.monotonic() - started:.0f} s")
-                runtimes = [r for r in listing["runtimes"]
-                            if r.get("platform") == "iOS" and r.get("isAvailable")]
+                try:
+                    listing = json.loads(run("xcrun", "simctl", "list", "-j", timeout=300))
+                except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+                    print(f"::warning::simctl list failed (attempt {attempt}): {error}")
+                    runtimes = []
+                else:
+                    print(f"simctl list took {time.monotonic() - started:.0f} s")
+                    runtimes = [r for r in listing["runtimes"]
+                                if r.get("platform") == "iOS" and r.get("isAvailable")]
                 if runtimes:
                     break
                 print(f"No iOS runtime available yet (attempt {attempt}); waiting 20 s")
@@ -163,7 +168,10 @@ jobs:
             # Retry once, on a freshly booted simulator, only when the simulator
             # rather than the code failed. On these runners the test runner of
             # one bundle sometimes never starts while the other bundle passes.
-            if ! grep -qE "never began executing tests|Unable to boot" "$LOG"; then
+            # A failed test case anywhere in the log rules the retry out, so a
+            # real failure can't pass on the second run.
+            if ! grep -qE "never began executing tests|Unable to boot" "$LOG" \
+               || grep -qE "Test Case '.*' failed" "$LOG"; then
                exit 1
             fi
             echo "::warning title=Simulator failure, retried::The test runner never started or the simulator did not boot; rebooting the simulator and running the tests once more."
